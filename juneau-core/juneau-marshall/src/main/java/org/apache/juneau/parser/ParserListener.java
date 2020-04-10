@@ -47,6 +47,18 @@ public class ParserListener {
 	}
 
 	/**
+	 * Called when an exception is thrown when trying to call a bean setter method.
+	 *
+	 * @param session The serializer session.
+	 * @param t The throwable that was thrown by the setter method.
+	 * @param p The bean property we had an issue on.
+	 */
+	public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {
+		onError(session, t, format("Could not call setValue() on property ''{0}'' of class ''{1}'', exception = {2}",
+			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
+	}
+
+	/**
 	 * Called when an error occurs during parsing but is ignored.
 	 *
 	 * @param session The parser session.

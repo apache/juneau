@@ -41,7 +41,7 @@ public class SimpleJsonParser extends JsonParser {
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public SimpleJsonParser(PropertyStore ps) {
-		super(ps, "application/json+simple", "text/json+simple");
+		super(ps, "application/json+simple", "text/json+simple", "application/json", "text/json");
 	}
 
 	@Override /* Context */

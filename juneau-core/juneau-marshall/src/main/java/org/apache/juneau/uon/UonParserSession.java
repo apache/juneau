@@ -544,7 +544,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 								} else {
 									unmark();
 									Object value = convertToType("", pMeta.getClassMeta());
-									pMeta.set(m, currAttr, value);
+									try {
+										pMeta.set(m, currAttr, value);
+									} catch (BeanRuntimeException e) {
+										onBeanSetterException(pMeta, e);
+										throw e;
+									}
 								}
 							}
 							if (c == -1 || c == ')' || c == AMP)
@@ -563,7 +568,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 									ClassMeta<?> cm = pMeta.getClassMeta();
 									Object value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
 									setName(cm, value, currAttr);
-									pMeta.set(m, currAttr, value);
+									try {
+										pMeta.set(m, currAttr, value);
+									} catch (BeanRuntimeException e) {
+										onBeanSetterException(pMeta, e);
+										throw e;
+									}
 									setCurrentProperty(null);
 								}
 							}

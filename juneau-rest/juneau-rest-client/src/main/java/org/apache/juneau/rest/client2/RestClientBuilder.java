@@ -2133,7 +2133,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder listenerS(Class<? extends SerializerListener> value) {
+	public RestClientBuilder serializerListener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
 	}
 
@@ -2625,7 +2625,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder listenerP(Class<? extends ParserListener> value) {
+	public RestClientBuilder parserListener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
 	}
 
@@ -2812,7 +2812,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder paramFormat(String value) {
+	public RestClientBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
 	}
 
@@ -2827,7 +2827,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder paramFormatPlain() {
-		return set(UON_paramFormat, "PLAINTEXT");
+		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
 	// <CONFIGURATION-PROPERTIES>

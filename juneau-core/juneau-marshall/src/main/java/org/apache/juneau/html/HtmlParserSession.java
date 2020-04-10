@@ -521,7 +521,12 @@ public final class HtmlParserSession extends XmlParserSession {
 					ClassMeta<?> cm = pMeta.getClassMeta();
 					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
 					setName(cm, value, key);
-					pMeta.set(m, key, value);
+					try {
+						pMeta.set(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
 				}
 			}
 			HtmlTag t = nextTag(r, xTD, xTR);

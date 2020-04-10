@@ -298,6 +298,20 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
+	 * Specialized warning when an exception is thrown while executing a bean setter.
+	 *
+	 * @param p The bean map entry representing the bean property.
+	 * @param t The throwable that the bean setter threw.
+	 */
+	protected final void onBeanSetterException(BeanPropertyMeta p, Throwable t) {
+		if (listener != null)
+			listener.onBeanSetterException(this, t, p);
+		String prefix = "";
+		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
+			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+	}
+
+	/**
 	 * Method that gets called when an unknown bean property name is encountered.
 	 *
 	 * @param propertyName The unknown bean property name.

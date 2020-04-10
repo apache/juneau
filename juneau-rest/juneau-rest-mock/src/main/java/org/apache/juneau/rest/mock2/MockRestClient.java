@@ -32,6 +32,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -1209,14 +1210,14 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient listenerP(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-		super.listenerP(value);
+	public MockRestClient parserListener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+		super.parserListener(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient listenerS(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-		super.listenerS(value);
+	public MockRestClient serializerListener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+		super.serializerListener(value);
 		return this;
 	}
 
@@ -1287,7 +1288,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient paramFormat(String value) {
+	public MockRestClient paramFormat(ParamFormat value) {
 		super.paramFormat(value);
 		return this;
 	}

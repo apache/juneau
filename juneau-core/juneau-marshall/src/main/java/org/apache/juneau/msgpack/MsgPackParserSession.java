@@ -138,7 +138,12 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 							ClassMeta<?> cm = bpm.getClassMeta();
 							Object value = parseAnything(cm, is, m.getBean(false), bpm);
 							setName(cm, value, pName);
-							bpm.set(m, pName, value);
+							try {
+								bpm.set(m, pName, value);
+							} catch (BeanRuntimeException e) {
+								onBeanSetterException(pMeta, e);
+								throw e;
+							}
 						}
 					}
 					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);

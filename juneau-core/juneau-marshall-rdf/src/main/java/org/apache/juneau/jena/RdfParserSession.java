@@ -185,11 +185,21 @@ public class RdfParserSession extends ReaderParserSession {
 					ClassMeta<?> et = cm.getElementType();
 					Object value = parseAnything(et, o, m.getBean(false), pMeta);
 					setName(et, value, key);
-					pMeta.add(m, key, value);
+					try {
+						pMeta.add(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
 				} else {
 					Object value = parseAnything(cm, o, m.getBean(false), pMeta);
 					setName(cm, value, key);
-					pMeta.set(m, key, value);
+					try {
+						pMeta.set(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
 				}
 			} else if (! (p.equals(pRoot) || p.equals(pType))) {
 				onUnknownProperty(key, m);

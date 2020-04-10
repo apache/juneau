@@ -326,7 +326,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 			},
 			{ 	/* 10 */
 				new ComboInput<>(
-					"WSERIALIZER_maxIndent",
+					"WSERIALIZER_maxIndent/WSERIALIZER_useWhitespace",
 					T10.class,
 					new T10().init()
 				)

@@ -2243,11 +2243,11 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void l10_serializer_listenerSClass() throws Exception {
+	public void l10_serializer_serializerListener() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.listenerS(L10.class)
+			.serializerListener(L10.class)
 			.ws()
 			.build()
 			.post("/echoBody", new L10a())
@@ -2608,44 +2608,141 @@ public class RestClientTest {
 			.run()
 			.getBody().assertValue("{f1:'foo'}");
 	}
-//	public RestClientBuilder sq() {
 
-//	@Test
-//	public void l29_serializer_useWhitespaceBoolean() throws Exception { fail(); }
-////	public RestClientBuilder useWhitespace(boolean value) {
-//
-//	@Test
-//	public void l30_serializer_useWhitespace() throws Exception { fail(); }
-////	public RestClientBuilder useWhitespace() {
-//
-//	@Test
-//	public void l31_serializer_ws() throws Exception { fail(); }
-////	public RestClientBuilder ws() {
-//
-//	@Test
-//	public void l32_serializer_binaryOutputFormat() throws Exception { fail(); }
-////	public RestClientBuilder binaryOutputFormat(BinaryFormat value) {
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Parser properties
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void m01_parser_autoCloseStreamsBoolean() throws Exception { fail(); }
-////	public RestClientBuilder autoCloseStreams(boolean value) {
-//
-//	@Test
-//	public void m02_parser_autoCloseStreams() throws Exception { fail(); }
-////	public RestClientBuilder autoCloseStreams() {
-//
-//	@Test
-//	public void m03_parser_debugOutputLines() throws Exception { fail(); }
-////	public RestClientBuilder debugOutputLines(int value) {
-//
-//	@Test
-//	public void m04_parser_listenerPClass() throws Exception { fail(); }
-////	public RestClientBuilder listenerP(Class<? extends ParserListener> value) {
-//
+	@Test
+	public void l29_serializer_useWhitespace() throws Exception {
+		L27 x = new L27();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.useWhitespace(true)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{\n\tf1: 'foo'\n}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.ws()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{\n\tf1: 'foo'\n}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.useWhitespace(false)
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f1:'foo'}");
+
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parser properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void m01_parser_autoCloseStreams() throws Exception {
+		String x = "foo";
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.autoCloseStreams()
+			.build();
+
+		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams"));
+
+		rc
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("'foo'");
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.autoCloseStreams(true)
+			.build();
+
+		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams"));
+
+		rc
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("'foo'");
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.autoCloseStreams(false)
+			.build();
+
+		assertFalse(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams", false));
+
+		rc
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("'foo'");
+	}
+
+	@Test
+	public void m03_parser_debugOutputLines() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.debugOutputLines(10)
+			.build();
+
+		assertEquals(10, rc.parsers.getParser("application/json").toMap().getMap("Parser").getInt("debugOutputLines").intValue());
+	}
+
+	public static class M4L extends ParserListener {
+		public static Throwable T;
+		public static String MSG;
+
+		@Override
+		public void onError(ParserSession session, Throwable t, String msg) {
+			T = t;
+			MSG = msg;
+		}
+	}
+
+	public static class M4 {
+		public void setF(String f) {
+			throw new RuntimeException("foo");
+		}
+	}
+
+	@Test
+	public void m04_parser_parserListener() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.parser(JsonParser.class)
+			.parserListener(M4L.class)
+			.build();
+
+		try {
+			rc
+				.post("/echoBody", "{f:'1'}")
+				.run()
+				.getBody().as(M4.class);
+			fail("Exception expected");
+		} catch (Exception e) {
+			assertTrue(M4L.T instanceof RuntimeException);
+			assertTrue(M4L.MSG.contains("Error occurred trying to set property 'f'"));
+		}
+	}
+
 //	@Test
 //	public void m05_parser_strictBoolean() throws Exception { fail(); }
 ////	public RestClientBuilder strict(boolean value) {

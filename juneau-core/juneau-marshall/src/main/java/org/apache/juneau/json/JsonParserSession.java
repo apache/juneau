@@ -521,7 +521,12 @@ public final class JsonParserSession extends ReaderParserSession {
 								ClassMeta<?> cm = pMeta.getClassMeta();
 								Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
 								setName(cm, value, currAttr);
-								pMeta.set(m, currAttr, value);
+								try {
+									pMeta.set(m, currAttr, value);
+								} catch (BeanRuntimeException e) {
+									onBeanSetterException(pMeta, e);
+									throw e;
+								}
 							}
 							setCurrentProperty(null);
 						}

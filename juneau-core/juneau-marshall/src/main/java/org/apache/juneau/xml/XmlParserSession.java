@@ -498,7 +498,12 @@ public class XmlParserSession extends ReaderParserSession {
 						onUnknownProperty(key, m);
 					}
 				} else {
-					bpm.set(m, key, val);
+					try {
+						bpm.set(m, key, val);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(bpm, e);
+						throw e;
+					}
 				}
 			}
 		}

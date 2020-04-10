@@ -297,8 +297,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 									// In cases of "&foo=", create an empty instance of the value if createable.
 									// Otherwise, leave it null.
 									ClassMeta<?> cm = pMeta.getClassMeta();
-									if (cm.canCreateNewInstance())
-										pMeta.set(m, currAttr, cm.newInstance());
+									if (cm.canCreateNewInstance()) {
+										try {
+											pMeta.set(m, currAttr, cm.newInstance());
+										} catch (BeanRuntimeException e) {
+											onBeanSetterException(pMeta, e);
+											throw e;
+										}
+									}
 									setCurrentProperty(null);
 								}
 							}
@@ -319,12 +325,22 @@ public class UrlEncodingParserSession extends UonParserSession {
 										ClassMeta et = pMeta.getClassMeta().getElementType();
 										Object value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
 										setName(et, value, currAttr);
-										pMeta.add(m, currAttr, value);
+										try {
+											pMeta.add(m, currAttr, value);
+										} catch (BeanRuntimeException e) {
+											onBeanSetterException(pMeta, e);
+											throw e;
+										}
 									} else {
 										ClassMeta<?> cm = pMeta.getClassMeta();
 										Object value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
 										setName(cm, value, currAttr);
-										pMeta.set(m, currAttr, value);
+										try {
+											pMeta.set(m, currAttr, value);
+										} catch (BeanRuntimeException e) {
+											onBeanSetterException(pMeta, e);
+											throw e;
+										}
 									}
 									setCurrentProperty(null);
 								}
