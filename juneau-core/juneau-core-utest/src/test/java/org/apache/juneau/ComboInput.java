@@ -13,8 +13,11 @@
 package org.apache.juneau;
 
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -23,11 +26,15 @@ import org.apache.juneau.collections.*;
 public class ComboInput<T> {
 
 	final String label;
-	private final T in;
-	private OMap properties;
-	private String exceptionMsg;
+	final Supplier<T> in;
+	OMap properties;
+	String exceptionMsg;
+	private Predicate<String> skipTest;
+	private Function<T,T> convert;
+	private List<Function<T,String>> verify = AList.of();
+	List<Class<?>> swaps = AList.of();
 	final Type type;
-	final String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
+	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
 
 	public ComboInput<T> properties(OMap properties) {
@@ -37,6 +44,123 @@ public class ComboInput<T> {
 
 	public ComboInput<T> exceptionMsg(String exceptionMsg) {
 		this.exceptionMsg = exceptionMsg;
+		return this;
+	}
+
+	public ComboInput<T> skipTest(Predicate<String> skipTest) {
+		this.skipTest = skipTest;
+		return this;
+	}
+
+	public ComboInput<T> convert(Function<T,T> convert) {
+		this.convert = convert;
+		return this;
+	}
+
+	public ComboInput<T> verify(Function<T,String> verify) {
+		this.verify.add(verify);
+		return this;
+	}
+
+	public ComboInput<T> swaps(Class<?>...c) {
+		this.swaps.addAll(Arrays.asList(c));
+		return this;
+	}
+
+	public ComboInput(String label, Type type, T in) {
+		this.label = label;
+		this.type = type;
+		this.in = () -> in;
+	}
+
+	public ComboInput(String label, Type type, Supplier<T> in) {
+		this.label = label;
+		this.type = type;
+		this.in = in;
+	}
+
+	public ComboInput<T> json(String value) {
+		this.json = value;
+		return this;
+	}
+	public ComboInput<T> jsonT(String value) {
+		this.jsonT = value;
+		return this;
+	}
+	public ComboInput<T> jsonR(String value) {
+		this.jsonR = value;
+		return this;
+	}
+	public ComboInput<T> xml(String value) {
+		this.xml = value;
+		return this;
+	}
+	public ComboInput<T> xmlT(String value) {
+		this.xmlT = value;
+		return this;
+	}
+	public ComboInput<T> xmlR(String value) {
+		this.xmlR = value;
+		return this;
+	}
+	public ComboInput<T> xmlNs(String value) {
+		this.xmlNs = value;
+		return this;
+	}
+	public ComboInput<T> html(String value) {
+		this.html = value;
+		return this;
+	}
+	public ComboInput<T> htmlT(String value) {
+		this.htmlT = value;
+		return this;
+	}
+	public ComboInput<T> htmlR(String value) {
+		this.htmlR = value;
+		return this;
+	}
+	public ComboInput<T> uon(String value) {
+		this.uon = value;
+		return this;
+	}
+	public ComboInput<T> uonT(String value) {
+		this.uonT = value;
+		return this;
+	}
+	public ComboInput<T> uonR(String value) {
+		this.uonR = value;
+		return this;
+	}
+	public ComboInput<T> urlEnc(String value) {
+		this.urlEncoding = value;
+		return this;
+	}
+	public ComboInput<T> urlEncT(String value) {
+		this.urlEncodingT = value;
+		return this;
+	}
+	public ComboInput<T> urlEncR(String value) {
+		this.urlEncodingR = value;
+		return this;
+	}
+	public ComboInput<T> msgPack(String value) {
+		this.msgPack = value;
+		return this;
+	}
+	public ComboInput<T> msgPackT(String value) {
+		this.msgPackT = value;
+		return this;
+	}
+	public ComboInput<T> rdfXml(String value) {
+		this.rdfXml = value;
+		return this;
+	}
+	public ComboInput<T> rdfXmlT(String value) {
+		this.rdfXmlT = value;
+		return this;
+	}
+	public ComboInput<T> rdfXmlR(String value) {
+		this.rdfXmlR = value;
 		return this;
 	}
 
@@ -68,7 +192,7 @@ public class ComboInput<T> {
 		) {
 		this.label = label;
 		this.type = type;
-		this.in = in;
+		this.in = () -> in;
 		this.properties = null;
 		this.json = json;
 		this.jsonT = jsonT;
@@ -94,26 +218,14 @@ public class ComboInput<T> {
 	}
 
 	/**
-	 * Returns the input object.
-	 * Override this method if you want it dynamically created each time.
-	 * @throws Exception Subclasses can throw any exception.
+	 * Checks to see if the test should be skipped.
 	 */
-	public T getInput() throws Exception {
-		return in;
+	public boolean isTestSkipped(String testName) throws Exception {
+		return skipTest != null && skipTest.test(testName);
 	}
 
-	/**
-	 * Returns the serializer or parser properties.
-	 */
-	public OMap getProperties() throws Exception {
-		return properties;
-	}
-
-	/**
-	 * Returns the expected exception message if an exception occurs.
-	 */
-	public String exceptionMsg() throws Exception {
-		return exceptionMsg;
+	public T convert(T t) {
+		return convert == null ? t : convert.apply(t);
 	}
 
 	/**
@@ -123,12 +235,12 @@ public class ComboInput<T> {
 	 *
 	 * @param o The object returned by the parser.
 	 */
-	public void verify(T o) {}
-
-	/**
-	 * Returns the expected exception message if an exception occurs.
-	 */
-	public String getExceptionMsg() {
-		return exceptionMsg;
+	public void verify(T o, String testName) {
+		for (Function<T,String> f : verify) {
+			String s = f.apply(o);
+			if (! StringUtils.isEmpty(s)) {
+				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
+			}
+		}
 	}
 }

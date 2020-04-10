@@ -56,58 +56,58 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"BEANTRAVERSE_initialDepth",
 					A.class,
-					new A().init(),
-					/* Json */		"{f:1}",
-					/* JsonT */		"{f:1}",
-					/* JsonR */		"\t\t{\n\t\t\tf: 1\n\t\t}",
-					/* Xml */		"<object><f>1</f></object>",
-					/* XmlT */		"<object><f>1</f></object>",
-					/* XmlR */		"\t\t<object>\n\t\t\t<f>1</f>\n\t\t</object>\n",
-					/* XmlNs */		"<object><f>1</f></object>",
-					/* Html */		"<table><tr><td>f</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>f</td><td>1</td></tr></table>",
-					/* HtmlR */		"\t\t\t\t<table>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>f</td>\n\t\t\t\t\t\t<td>1</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n",
-					/* Uon */		"(f=1)",
-					/* UonT */		"(f=1)",
-					/* UonR */		"\t\t(\n\t\t\tf=1\n\t\t)",
-					/* UrlEnc */	"f=1",
-					/* UrlEncT */	"f=1",
-					/* UrlEncR */	"\t\tf=1",
-					/* MsgPack */	"81A16601",
-					/* MsgPackT */	"81A16601",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new A().init()
 				)
+				.json("{f:1}")
+				.jsonT("{f:1}")
+				.jsonR("\t\t{\n\t\t\tf: 1\n\t\t}")
+				.xml("<object><f>1</f></object>")
+				.xmlT("<object><f>1</f></object>")
+				.xmlR("\t\t<object>\n\t\t\t<f>1</f>\n\t\t</object>\n")
+				.xmlNs("<object><f>1</f></object>")
+				.html("<table><tr><td>f</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>f</td><td>1</td></tr></table>")
+				.htmlR("\t\t\t\t<table>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td>f</td>\n\t\t\t\t\t\t<td>1</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n")
+				.uon("(f=1)")
+				.uonT("(f=1)")
+				.uonR("\t\t(\n\t\t\tf=1\n\t\t)")
+				.urlEnc("f=1")
+				.urlEncT("f=1")
+				.urlEncR("\t\tf=1")
+				.msgPack("81A16601")
+				.msgPackT("81A16601")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 				.properties(OMap.of(BEANTRAVERSE_initialDepth, 2))
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
 					"BEANTRAVERSE_detectRecursions",
 					B.class,
-					new B().initRecursion(),
-					/* Json */		"x",
-					/* JsonT */		"x",
-					/* JsonR */		"x",
-					/* Xml */		"x",
-					/* XmlT */		"x",
-					/* XmlR */		"x",
-					/* XmlNs */		"x",
-					/* Html */		"x",
-					/* HtmlT */		"x",
-					/* HtmlR */		"x",
-					/* Uon */		"x",
-					/* UonT */		"x",
-					/* UonR */		"x",
-					/* UrlEnc */	"x",
-					/* UrlEncT */	"x",
-					/* UrlEncR */	"x",
-					/* MsgPack */	"x",
-					/* MsgPackT */	"x",
-					/* RdfXml */	"x",
-					/* RdfXmlT */	"x",
-					/* RdfXmlR */	"x"
+					new B().initRecursion()
 				)
+				.json("x")
+				.jsonT("x")
+				.jsonR("x")
+				.xml("x")
+				.xmlT("x")
+				.xmlR("x")
+				.xmlNs("x")
+				.html("x")
+				.htmlT("x")
+				.htmlR("x")
+				.uon("x")
+				.uonT("x")
+				.uonR("x")
+				.urlEnc("x")
+				.urlEncT("x")
+				.urlEncR("x")
+				.msgPack("x")
+				.msgPackT("x")
+				.rdfXml("x")
+				.rdfXmlT("x")
+				.rdfXmlR("x")
 				.properties(OMap.of(BEANTRAVERSE_detectRecursions, true))
 				.exceptionMsg("Recursion occurred")
 			},
@@ -115,58 +115,58 @@ public class BeanTraversePropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"BEANTRAVERSE_ignoreRecursions",
 					B.class,
-					new B().initRecursion(),
-					/* Json */		"{}",
-					/* JsonT */		"{}",
-					/* JsonR */		"{\n}",
-					/* Xml */		"<object/>",
-					/* XmlT */		"<object/>",
-					/* XmlR */		"<object/>\n",
-					/* XmlNs */		"<object/>",
-					/* Html */		"<table></table>",
-					/* HtmlT */		"<table></table>",
-					/* HtmlR */		"<table>\n</table>\n",
-					/* Uon */		"()",
-					/* UonT */		"()",
-					/* UonR */		"(\n)",
-					/* UrlEnc */	"",
-					/* UrlEncT */	"",
-					/* UrlEncR */	"",
-					/* MsgPack */	"80",
-					/* MsgPackT */	"80",
-					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+					new B().initRecursion()
 				)
+				.json("{}")
+				.jsonT("{}")
+				.jsonR("{\n}")
+				.xml("<object/>")
+				.xmlT("<object/>")
+				.xmlR("<object/>\n")
+				.xmlNs("<object/>")
+				.html("<table></table>")
+				.htmlT("<table></table>")
+				.htmlR("<table>\n</table>\n")
+				.uon("()")
+				.uonT("()")
+				.uonR("(\n)")
+				.urlEnc("")
+				.urlEncT("")
+				.urlEncR("")
+				.msgPack("80")
+				.msgPackT("80")
+				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
 				.properties(OMap.of(BEANTRAVERSE_ignoreRecursions, true))
 			},
 			{ 	/* 3 */
 				new ComboInput<>(
 					"BEANTRAVERSE_maxDepth",
 					B.class,
-					new B().initA(),
-					/* Json */		"{}",
-					/* JsonT */		"{}",
-					/* JsonR */		"{\n}",
-					/* Xml */		"<object/>",
-					/* XmlT */		"<object/>",
-					/* XmlR */		"<object/>\n",
-					/* XmlNs */		"<object/>",
-					/* Html */		"<table></table>",
-					/* HtmlT */		"<table></table>",
-					/* HtmlR */		"<table>\n</table>\n",
-					/* Uon */		"()",
-					/* UonT */		"()",
-					/* UonR */		"(\n)",
-					/* UrlEnc */	"",
-					/* UrlEncT */	"",
-					/* UrlEncR */	"",
-					/* MsgPack */	"80",
-					/* MsgPackT */	"80",
-					/* RdfXml */	"<rdf:RDF>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n</rdf:RDF>\n"
+					new B().initA()
 				)
+				.json("{}")
+				.jsonT("{}")
+				.jsonR("{\n}")
+				.xml("<object/>")
+				.xmlT("<object/>")
+				.xmlR("<object/>\n")
+				.xmlNs("<object/>")
+				.html("<table></table>")
+				.htmlT("<table></table>")
+				.htmlR("<table>\n</table>\n")
+				.uon("()")
+				.uonT("()")
+				.uonR("(\n)")
+				.urlEnc("")
+				.urlEncT("")
+				.urlEncR("")
+				.msgPack("80")
+				.msgPackT("80")
+				.rdfXml("<rdf:RDF>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n</rdf:RDF>\n")
 				.properties(OMap.of(BEANTRAVERSE_maxDepth, 1))
 			},
 		});

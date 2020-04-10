@@ -413,7 +413,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
 		}
@@ -430,8 +430,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}
@@ -448,7 +448,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		public Ns(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(XML_enableNamespaces, true)
+					.setDefault(XML_enableNamespaces, true)
 					.build(),
 				"text/xml",
 				"text/xml+simple"
@@ -467,8 +467,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		public NsSq(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(XML_enableNamespaces, true)
-					.set(WSERIALIZER_quoteChar, '\'')
+					.setDefault(XML_enableNamespaces, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
 		}
@@ -485,9 +485,9 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		public NsSqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(XML_enableNamespaces, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.setDefault(XML_enableNamespaces, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
 				);
 		}

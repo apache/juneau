@@ -30,6 +30,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -2486,36 +2487,129 @@ public class RestClientTest {
 			.run()
 			.getBody().assertValue("{f:' foo '}");
 	}
-//	public RestClientBuilder trimStringsS(boolean value) {
 
-//	@Test
-//	public void l22_serializer_trimStringsS() throws Exception { fail(); }
-////	public RestClientBuilder trimStringsS() {
-//
-//	@Test
-//	public void l23_serializer_uriContext() throws Exception { fail(); }
-////	public RestClientBuilder uriContext(UriContext value) {
-//
-//	@Test
-//	public void l24_serializer_uriRelativity() throws Exception { fail(); }
-////	public RestClientBuilder uriRelativity(UriRelativity value) {
-//
-//	@Test
-//	public void l25_serializer_uriResolution() throws Exception { fail(); }
-////	public RestClientBuilder uriResolution(UriResolution value) {
-//
-//	@Test
-//	public void l26_serializer_maxIndent() throws Exception { fail(); }
-////	public RestClientBuilder maxIndent(int value) {
-//
-//	@Test
-//	public void l27_serializer_quoteChar() throws Exception { fail(); }
-////	public RestClientBuilder quoteChar(char value) {
-//
-//	@Test
-//	public void l28_serializer_sq() throws Exception { fail(); }
-////	public RestClientBuilder sq() {
-//
+	public static class L23 {
+		@URI
+		public String f = "foo";
+	}
+
+	@Test
+	public void l23_serializer_uriContext_uriResolution_uriRelativity() throws Exception {
+		L23 x = new L23();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.uriResolution(UriResolution.ABSOLUTE)
+			.uriRelativity(UriRelativity.PATH_INFO)
+			.uriContext(new UriContext("http://localhost:80", "/context", "/resource", "/path"))
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f:'http://localhost:80/context/resource/foo'}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.uriResolution(UriResolution.NONE)
+			.uriRelativity(UriRelativity.RESOURCE)
+			.uriContext(new UriContext("http://localhost:80", "/context", "/resource", "/path"))
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f:'foo'}");
+	}
+
+	public static class L26 {
+		public int f1;
+		public L26 f2;
+
+		public L26 init() {
+			L26 x2 = new L26(), x3 = new L26();
+			this.f1 = 1;
+			x2.f1 = 2;
+			x3.f1 = 3;
+			this.f2 = x2;
+			x2.f2 = x3;
+			return this;
+		}
+	}
+
+	@Test
+	public void l26_serializer_maxIndent() throws Exception {
+		L26 x = new L26().init();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.maxIndent(2)
+			.ws()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
+	}
+
+	public static class L27 {
+		public String f1 = "foo";
+	}
+
+	@Test
+	public void l27_serializer_quoteChar() throws Exception {
+		L27 x = new L27();
+
+		MockRestClient
+			.create(A.class)
+			.json()
+			.quoteChar('\'')
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{'f1':'foo'}");
+
+		MockRestClient
+			.create(A.class)
+			.json()
+			.quoteChar('|')
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{|f1|:|foo|}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.quoteChar('|')
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f1:|foo|}");
+	}
+
+	@Test
+	public void l28_serializer_sq() throws Exception {
+		L27 x = new L27();
+
+		MockRestClient
+			.create(A.class)
+			.json()
+			.sq()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{'f1':'foo'}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sq()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.getBody().assertValue("{f1:'foo'}");
+	}
+//	public RestClientBuilder sq() {
+
 //	@Test
 //	public void l29_serializer_useWhitespaceBoolean() throws Exception { fail(); }
 ////	public RestClientBuilder useWhitespace(boolean value) {

@@ -37,64 +37,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"rawtypes"})
 public abstract class ComboSerializeTest {
 
-	/* Parameter template */
-//	{
-//		"MyLabel",
-//		myInput,
-//		/* Json */		"xxx",
-//		/* JsonT */		"xxx",
-//		/* JsonR */		"xxx",
-//		/* Xml */		"xxx",
-//		/* XmlT */		"xxx",
-//		/* XmlR */		"xxx",
-//		/* XmlNs */		"xxx",
-//		/* Html */		"xxx",
-//		/* HtmlT */		"xxx",
-//		/* HtmlR */		"xxx",
-//		/* Uon */		"xxx",
-//		/* UonT */		"xxx",
-//		/* UonR */		"xxx",
-//		/* UrlEnc */	"xxx",
-//		/* UrlEncT */	"xxx",
-//		/* UrlEncR */	"xxx",
-//		/* MsgPack */	"xxx",
-//		/* MsgPackT */	"xxx",
-//		/* RdfXml */	"xxx",
-//		/* RdfXmlT */	"xxx",
-//		/* RdfXmlR */	"xxx",
-//	},
-
 	private final ComboInput comboInput;
-
-	// These are the names of all the tests.
-	// You can comment out the names here to skip them.
-	private static final String[] runTests = {
-		"serializeJson",
-		"serializeJsonT",
-		"serializeJsonR",
-		"serializeXml",
-		"serializeXmlT",
-		"serializeXmlR",
-		"serializeXmlNs",
-		"serializeHtml",
-		"serializeHtmlT",
-		"serializeHtmlR",
-		"serializeUon",
-		"serializeUonT",
-		"serializeUonR",
-		"serializeUrlEncoding",
-		"serializeUrlEncodingT",
-		"serializeUrlEncodingR",
-		"serializeMsgPack",
-		"serializeMsgPackT",
-		"serializeRdfXml",
-		"serializeRdfXmlT",
-		"serializeRdfXmlR",
-	};
-
-	private static final Set<String> runTestsSet = new HashSet<>(Arrays.asList(runTests));
-
-	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
 
 	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<>();
 
@@ -111,23 +54,29 @@ public abstract class ComboSerializeTest {
 		return s2;
 	}
 
+	private boolean isSkipped(String testName, String expected) throws Exception {
+		if ("SKIP".equals(expected) || comboInput.isTestSkipped(testName)) {
+			System.err.println(getClass().getName() + ": " + comboInput.label + "/" + testName + " skipped.");  // NOT DEBUG
+			return true;
+		}
+		return false;
+	}
+
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
+			if (isSkipped(testName, expected))
+				return;
+
 			s = getSerializer(s);
 
-			OMap properties = comboInput.getProperties();
+			OMap properties = comboInput.properties;
 			if (properties != null) {
 				s = s.builder().add(properties).build();
 			}
 
 			boolean isRdf = s instanceof RdfSerializer;
 
-			if ((isRdf && SKIP_RDF_TESTS) || expected.equals("SKIP") || ! runTestsSet.contains(testName) ) {
-				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
-				return;
-			}
-
-			String r = s.serializeToString(comboInput.getInput());
+			String r = s.serializeToString(comboInput.in.get());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
@@ -151,15 +100,15 @@ public abstract class ComboSerializeTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} serialize-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			if (comboInput.getExceptionMsg() == null)
+			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		} catch (Exception e) {
-			if (comboInput.getExceptionMsg() == null) {
+			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		}
 	}
 

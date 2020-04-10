@@ -131,7 +131,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	public UrlEncodingParser(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(UON_decoding, true)
+				.setDefault(UON_decoding, true)
 				.build(),
 			"application/x-www-form-urlencoded"
 		);

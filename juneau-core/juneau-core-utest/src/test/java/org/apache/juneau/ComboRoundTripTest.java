@@ -38,87 +38,7 @@ import org.junit.runners.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public abstract class ComboRoundTripTest {
 
-	/* Parameter template */
-//	{
-//		"MyLabel",
-//		myInput,
-//		/* Json */		"xxx",
-//		/* JsonT */		"xxx",
-//		/* JsonR */		"xxx",
-//		/* Xml */		"xxx",
-//		/* XmlT */		"xxx",
-//		/* XmlR */		"xxx",
-//		/* XmlNs */		"xxx",
-//		/* Html */		"xxx",
-//		/* HtmlT */		"xxx",
-//		/* HtmlR */		"xxx",
-//		/* Uon */		"xxx",
-//		/* UonT */		"xxx",
-//		/* UonR */		"xxx",
-//		/* UrlEnc */	"xxx",
-//		/* UrlEncT */	"xxx",
-//		/* UrlEncR */	"xxx",
-//		/* MsgPack */	"xxx",
-//		/* MsgPackT */	"xxx",
-//		/* RdfXml */	"xxx",
-//		/* RdfXmlT */	"xxx",
-//		/* RdfXmlR */	"xxx",
-//	},
-
 	private final ComboInput comboInput;
-
-	// These are the names of all the tests.
-	// You can comment out the names here to skip them.
-	private static final String[] runTests = {
-		"serializeJson",
-		"parseJson",
-		"serializeJsonT",
-		"parseJsonT",
-		"serializeJsonR",
-		"parseJsonR",
-		"serializeXml",
-		"parseXml",
-		"serializeXmlT",
-		"parseXmlT",
-		"serializeXmlR",
-		"parseXmlR",
-		"serializeXmlNs",
-		"parseXmlNs",
-		"serializeHtml",
-		"parseHtml",
-		"serializeHtmlT",
-		"parseHtmlT",
-		"serializeHtmlR",
-		"parseHtmlR",
-		"serializeUon",
-		"parseUon",
-		"serializeUonT",
-		"parseUonT",
-		"serializeUonR",
-		"parseUonR",
-		"serializeUrlEncoding",
-		"parseUrlEncoding",
-		"serializeUrlEncodingT",
-		"parseUrlEncodingT",
-		"serializeUrlEncodingR",
-		"parseUrlEncodingR",
-		"serializeMsgPack",
-		"parseMsgPack",
-		"parseMsgPackJsonEquivalency",
-		"serializeMsgPackT",
-		"parseMsgPackT",
-		"parseMsgPackTJsonEquivalency",
-		"serializeRdfXml",
-		"parseRdfXml",
-		"serializeRdfXmlT",
-		"parseRdfXmlT",
-		"serializeRdfXmlR",
-		"parseRdfXmlR",
-	};
-
-	private static final Set<String> runTestsSet = new HashSet<>(Arrays.asList(runTests));
-
-	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
 
 	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<>();
 	private Map<Parser,Parser> parserMap = new IdentityHashMap<>();
@@ -131,6 +51,8 @@ public abstract class ComboRoundTripTest {
 		Serializer s2 = serializerMap.get(s);
 		if (s2 == null) {
 			s2 = applySettings(s);
+			if (! comboInput.swaps.isEmpty())
+				s2 = s2.builder().pojoSwaps(comboInput.swaps.toArray()).build();
 			serializerMap.put(s, s2);
 		}
 		return s2;
@@ -140,28 +62,34 @@ public abstract class ComboRoundTripTest {
 		Parser p2 = parserMap.get(p);
 		if (p2 == null) {
 			p2 = applySettings(p);
+			if (! comboInput.swaps.isEmpty())
+				p2 = p2.builder().pojoSwaps(comboInput.swaps.toArray()).build();
 			parserMap.put(p, p2);
 		}
 		return p2;
 	}
 
+	private boolean isSkipped(String testName, String expected) throws Exception {
+		if ("SKIP".equals(expected) || comboInput.isTestSkipped(testName)) {
+			return true;
+		}
+		return false;
+	}
+
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
-			s = getSerializer(s);
+			if (isSkipped(testName, expected))
+				return;
 
-			OMap properties = comboInput.getProperties();
+			s = getSerializer(s);
+			boolean isRdf = s instanceof RdfSerializer;
+
+			OMap properties = comboInput.properties;
 			if (properties != null) {
 				s = s.builder().add(properties).build();
 			}
 
-			boolean isRdf = s instanceof RdfSerializer;
-
-			if ((isRdf && SKIP_RDF_TESTS) || "SKIP".equals(expected) || ! runTestsSet.contains(testName) ) {
-				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
-				return;
-			}
-
-			String r = s.serializeToString(comboInput.getInput());
+			String r = s.serializeToString(comboInput.in.get());
 
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
@@ -172,7 +100,7 @@ public abstract class ComboRoundTripTest {
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
-				System.out.println(comboInput.label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
+				System.out.println(getClass().getName() + ": " + comboInput.label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 			}
 
@@ -182,39 +110,38 @@ public abstract class ComboRoundTripTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			if (comboInput.getExceptionMsg() == null)
+			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		} catch (Exception e) {
-			if (comboInput.getExceptionMsg() == null) {
+			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 
 			}
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		}
 	}
 
 	private void testParse(String testName, Serializer s, Parser p, String expected) throws Exception {
 		try {
+			if (isSkipped(testName, expected))
+				return;
+
 			s = getSerializer(s);
 			p = getParser(p);
 
-			OMap properties = comboInput.getProperties();
+			boolean isRdf = s instanceof RdfSerializer;
+
+			OMap properties = comboInput.properties;
 			if (properties != null) {
 				s = s.builder().add(properties).build();
 				p = p.builder().add(properties).build();
 			}
 
-			boolean isRdf = s instanceof RdfSerializer;
-
-			if ((isRdf && SKIP_RDF_TESTS) || "SKIP".equals(expected) || ! runTestsSet.contains(testName) ) {
-				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
-				return;
-			}
-
-			String r = s.serializeToString(comboInput.getInput());
+			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
+			o = comboInput.convert(o);
 			r = s.serializeToString(o);
 
 			if (isRdf)
@@ -226,43 +153,46 @@ public abstract class ComboRoundTripTest {
 				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
-			if (comboInput.getExceptionMsg() == null)
+			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		} catch (Throwable e) {
-			if (comboInput.getExceptionMsg() == null) {
+			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		}
 	}
 
 	private void testParseVerify(String testName, Serializer s, Parser p) throws Exception {
 		try {
+			if (isSkipped(testName, ""))
+				return;
+
 			s = getSerializer(s);
 			p = getParser(p);
 
-			OMap properties = comboInput.getProperties();
+			OMap properties = comboInput.properties;
 			if (properties != null) {
 				s = s.builder().add(properties).build();
 				p = p.builder().add(properties).build();
 			}
 
-			String r = s.serializeToString(comboInput.getInput());
+			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
 
-			comboInput.verify(o);
+			comboInput.verify(o, testName);
 		} catch (AssertionError e) {
-			if (comboInput.getExceptionMsg() == null)
+			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		} catch (Exception e) {
-			if (comboInput.getExceptionMsg() == null) {
+			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		}
 	}
 
@@ -273,26 +203,27 @@ public abstract class ComboRoundTripTest {
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
 
-			if (comboInput.getProperties() != null) {
-				s = (OutputStreamSerializer)s.builder().add(comboInput.getProperties()).build();
-				p = (InputStreamParser)p.builder().add(comboInput.getProperties()).build();
-				sJson = (WriterSerializer)sJson.builder().add(comboInput.getProperties()).build();
+			OMap properties = comboInput.properties;
+			if (properties != null) {
+				s = (OutputStreamSerializer)s.builder().add(properties).build();
+				p = (InputStreamParser)p.builder().add(properties).build();
+				sJson = (WriterSerializer)sJson.builder().add(properties).build();
 			}
 
-			String r = s.serializeToString(comboInput.getInput());
+			String r = s.serializeToString(comboInput.in.get());
 			Object o = p.parse(r, comboInput.type);
 			r = sJson.serialize(o);
 			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
 		} catch (AssertionError e) {
-			if (comboInput.getExceptionMsg() == null)
+			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		} catch (Exception e) {
-			if (comboInput.getExceptionMsg() == null) {
+			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertExceptionContainsMessage(e, comboInput.getExceptionMsg());
+			assertExceptionContainsMessage(e, comboInput.exceptionMsg);
 		}
 	}
 
@@ -731,7 +662,7 @@ public abstract class ComboRoundTripTest {
 
 	@Test
 	public void g23_verifyRdfXmlT() throws Exception {
-		testParseVerify("parseRdfXmlTVerify", sRdfXmlT, pRdfXmlT);
+		testParseVerify("verifyRdfXmlT", sRdfXmlT, pRdfXmlT);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -752,6 +683,6 @@ public abstract class ComboRoundTripTest {
 
 	@Test
 	public void g33_verifyRdfXmlR() throws Exception {
-		testParseVerify("Verify", sRdfXmlR, pRdfXmlR);
+		testParseVerify("verifyRdfXmlR", sRdfXmlR, pRdfXmlR);
 	}
 }

@@ -219,7 +219,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Expanded(PropertyStore ps) {
-			super(ps.builder().set(URLENC_expandedParams, true).build());
+			super(ps.builder().setDefault(URLENC_expandedParams, true).build());
 		}
 	}
 
@@ -234,7 +234,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
-			super(ps.builder().set(WSERIALIZER_useWhitespace, true).build());
+			super(ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -249,7 +249,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public PlainText(PropertyStore ps) {
-			super(ps.builder().set(UON_paramFormat, "PLAINTEXT").build());
+			super(ps.builder().setDefault(UON_paramFormat, "PLAINTEXT").build());
 		}
 	}
 
@@ -302,7 +302,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	public UrlEncodingSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
-				.set(UON_encoding, true)
+				.setDefault(UON_encoding, true)
 				.build(),
 			produces,
 			accept

@@ -81,8 +81,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
-				.set(BEANTRAVERSE_detectRecursions, true)
-				.set(BEANTRAVERSE_ignoreRecursions, true)
+				.setDefault(BEANTRAVERSE_detectRecursions, true)
+				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
 			produces,
 			accept

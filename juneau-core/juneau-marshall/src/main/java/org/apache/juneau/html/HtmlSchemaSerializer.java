@@ -77,7 +77,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
+				ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -93,7 +93,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		public Simple(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 				);
 		}
@@ -110,8 +110,8 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		public SimpleReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}
@@ -132,8 +132,8 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	public HtmlSchemaSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(BEANTRAVERSE_detectRecursions, true)
-				.set(BEANTRAVERSE_ignoreRecursions, true)
+				.setDefault(BEANTRAVERSE_detectRecursions, true)
+				.setDefault(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
 			"text/html", "text/html+schema"
 		);

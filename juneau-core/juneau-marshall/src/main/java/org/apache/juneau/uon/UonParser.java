@@ -163,7 +163,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Decoding(PropertyStore ps) {
-			super(ps.builder().set(UON_decoding, true).build());
+			super(ps.builder().setDefault(UON_decoding, true).build());
 		}
 	}
 

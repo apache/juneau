@@ -1870,6 +1870,14 @@ public class PropertyStoreTest {
 	@HtmlConfig(applyHtml={@Html(on="B2", format=HtmlFormat.HTML)})
 	public static class B2 {}
 
+	@Test
+	public void testSetDefault() {
+		PropertyStoreBuilder psb = PropertyStore.create();
+		psb.setDefault("Foo", "1");
+		psb.setDefault("Foo", "2");
+		assertEquals("1", psb.peek("Foo"));
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-------------------------------------------------------------------------------------------------------------------

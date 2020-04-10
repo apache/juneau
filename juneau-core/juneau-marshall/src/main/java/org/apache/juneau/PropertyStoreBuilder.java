@@ -191,6 +191,43 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
+	 * Sets a configuration property value on this object but only if it's not already set.
+	 *
+	 * @param key The configuration property key (e.g <js>"BeanContext.foo.ss"</js>).
+	 * 	<ul>
+	 * 		<li>Unlike {@link #set(String, Object)}, this method does not support appending or removing.
+	 * 	</ul>
+	 * @param value The new value.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, the property value is deleted.
+	 * 		<li>In general, the value type can be anything.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder setDefault(String key, Object value) {
+		propertyStore = null;
+
+		String g = group(key);
+
+		int i = key.indexOf('/');
+		if (i != -1) {
+			throw new ConfigException("Invalid key specified: ''{0}''", key);
+		}
+
+		String n = g.isEmpty() ? key : key.substring(g.length()+1);
+
+		PropertyGroupBuilder gb = groups.get(g);
+		if (gb == null) {
+			gb = new PropertyGroupBuilder();
+			groups.put(g, gb);
+		}
+
+		gb.setDefault(n, value);
+
+		return this;
+	}
+
+	/**
 	 * Removes the property with the specified key.
 	 *
 	 * <p>
@@ -534,6 +571,15 @@ public class PropertyStoreBuilder {
 				if (p.isEmpty())
 					properties.remove(key);
 				else
+					properties.put(key, p);
+			}
+		}
+
+		synchronized void setDefault(String key, Object value) {
+			MutableProperty p = properties.get(key);
+			if (p == null) {
+				p = MutableProperty.create(key, value);
+				if (! p.isEmpty())
 					properties.put(key, p);
 			}
 		}

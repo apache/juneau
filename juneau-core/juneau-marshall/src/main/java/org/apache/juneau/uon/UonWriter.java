@@ -30,6 +30,7 @@ public final class UonWriter extends SerializerWriter {
 
 	private final UonSerializerSession session;
 	private final boolean encodeChars, plainTextParams;
+	private final char quoteChar;
 
 	// Characters that do not need to be URL-encoded in strings.
 	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~=").build();
@@ -55,14 +56,16 @@ public final class UonWriter extends SerializerWriter {
 	 * @param encodeChars If <jk>true</jk>, special characters should be encoded.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param plainTextParams If <jk>true</jk>, don't use UON notation for values.
+	 * @param quoteChar The quote character to use.  If <c>0</c>, defaults to <js>'\''</js>.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
 	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent,
-			boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
-		super(out, useWhitespace, maxIndent, trimStrings, '\'', uriResolver);
+			boolean encodeChars, boolean trimStrings, boolean plainTextParams, char quoteChar, UriResolver uriResolver) {
+		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;
 		this.plainTextParams = plainTextParams;
+		this.quoteChar = quoteChar;
 	}
 
 	/**
@@ -90,7 +93,7 @@ public final class UonWriter extends SerializerWriter {
 		AsciiSet esc = plainTextParams ? noChars : escapedChars;
 
 		if (needsQuotes)
-			append('\'');
+			append(quoteChar);
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (esc.contains(c))
@@ -119,7 +122,7 @@ public final class UonWriter extends SerializerWriter {
 			}
 		}
 		if (needsQuotes)
-			append('\'');
+			append(quoteChar);
 
 		return this;
 	}

@@ -185,7 +185,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Strict(PropertyStore ps) {
-			super(ps.builder().set(PARSER_strict, true).set(JSON_validateEnd, true).build());
+			super(ps.builder().setDefault(PARSER_strict, true).setDefault(JSON_validateEnd, true).build());
 		}
 	}
 

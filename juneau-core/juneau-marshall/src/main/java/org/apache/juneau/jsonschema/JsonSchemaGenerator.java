@@ -349,7 +349,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @param ps Initialize with the specified config property store.
 	 */
 	public JsonSchemaGenerator(PropertyStore ps) {
-		super(ps.builder().set(BEANTRAVERSE_detectRecursions, true).set(BEANTRAVERSE_ignoreRecursions, true).build());
+		super(ps.builder().setDefault(BEANTRAVERSE_detectRecursions, true).setDefault(BEANTRAVERSE_ignoreRecursions, true).build());
 
 		useBeanDefs = getBooleanProperty(JSONSCHEMA_useBeanDefs, false);
 		allowNestedExamples = getBooleanProperty(JSONSCHEMA_allowNestedExamples, false);

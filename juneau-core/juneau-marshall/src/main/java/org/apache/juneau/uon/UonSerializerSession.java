@@ -62,13 +62,13 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getUriResolver());
+		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
 
 	private final UonWriter getUonWriter(Writer out) throws Exception {
-		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getUriResolver());
+		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 	}
 
 	@Override /* Serializer */
@@ -328,6 +328,18 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 */
 	protected final ParamFormat getParamFormat() {
 		return ctx.getParamFormat();
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 *
+	 * @see WriterSerializer#WSERIALIZER_quoteChar
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	@Override
+	protected final char getQuoteChar() {
+		return ctx.getQuoteChar();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

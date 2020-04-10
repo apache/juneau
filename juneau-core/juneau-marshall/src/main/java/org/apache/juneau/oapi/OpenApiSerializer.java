@@ -81,7 +81,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	public OpenApiSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
-				.set(UON_encoding, false)
+				.setDefault(UON_encoding, false)
 				.build(),
 			produces,
 			accept

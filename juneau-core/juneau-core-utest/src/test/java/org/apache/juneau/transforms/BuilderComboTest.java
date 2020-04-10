@@ -13,7 +13,6 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.testutils.TestUtils.*;
-import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -35,211 +34,181 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				new ComboInput<A>(
 					"A",
 					A.class,
-					new A(null).init(),
-					/* Json */		"{a:1}",
-					/* JsonT */		"{a:1}",
-					/* JsonR */		"{\n\ta: 1\n}",
-					/* Xml */		"<object><a>1</a></object>",
-					/* XmlT */		"<object><a>1</a></object>",
-					/* XmlR */		"<object>\n\t<a>1</a>\n</object>\n",
-					/* XmlNs */		"<object><a>1</a></object>",
-					/* Html */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(a=1)",
-					/* UonT */		"(a=1)",
-					/* UonR */		"(\n\ta=1\n)",
-					/* UrlEnc */		"a=1",
-					/* UrlEncT */	"a=1",
-					/* UrlEncR */	"a=1",
-					/* MsgPack */	"81A16101",
-					/* MsgPackT */	"81A16101",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new A(null).init()
 				)
-				{
-					@Override
-					public void verify(A o) {
-						assertInstanceOf(A.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{a:1}")
+				.jsonT("{a:1}")
+				.jsonR("{\n\ta: 1\n}")
+				.xml("<object><a>1</a></object>")
+				.xmlT("<object><a>1</a></object>")
+				.xmlR("<object>\n\t<a>1</a>\n</object>\n")
+				.xmlNs("<object><a>1</a></object>")
+				.html("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(a=1)")
+				.uonT("(a=1)")
+				.uonR("(\n\ta=1\n)")
+				.urlEnc("a=1")
+				.urlEncT("a=1")
+				.urlEncR("a=1")
+				.msgPack("81A16101")
+				.msgPackT("81A16101")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 			{ 	/* 1 */
 				new ComboInput<B>(
 					"B",
 					B.class,
-					new B(null).init(),
-					/* Json */		"{a:1}",
-					/* JsonT */		"{a:1}",
-					/* JsonR */		"{\n\ta: 1\n}",
-					/* Xml */		"<object><a>1</a></object>",
-					/* XmlT */		"<object><a>1</a></object>",
-					/* XmlR */		"<object>\n\t<a>1</a>\n</object>\n",
-					/* XmlNs */		"<object><a>1</a></object>",
-					/* Html */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(a=1)",
-					/* UonT */		"(a=1)",
-					/* UonR */		"(\n\ta=1\n)",
-					/* UrlEnc */		"a=1",
-					/* UrlEncT */	"a=1",
-					/* UrlEncR */	"a=1",
-					/* MsgPack */	"81A16101",
-					/* MsgPackT */	"81A16101",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new B(null).init()
 				)
-				{
-					@Override
-					public void verify(B o) {
-						assertInstanceOf(B.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{a:1}")
+				.jsonT("{a:1}")
+				.jsonR("{\n\ta: 1\n}")
+				.xml("<object><a>1</a></object>")
+				.xmlT("<object><a>1</a></object>")
+				.xmlR("<object>\n\t<a>1</a>\n</object>\n")
+				.xmlNs("<object><a>1</a></object>")
+				.html("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(a=1)")
+				.uonT("(a=1)")
+				.uonR("(\n\ta=1\n)")
+				.urlEnc("a=1")
+				.urlEncT("a=1")
+				.urlEncR("a=1")
+				.msgPack("81A16101")
+				.msgPackT("81A16101")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(B.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 			{ 	/* 2 */
 				new ComboInput<C>(
 					"C",
 					C.class,
-					new C(null).init(),
-					/* Json */		"{a:1}",
-					/* JsonT */		"{a:1}",
-					/* JsonR */		"{\n\ta: 1\n}",
-					/* Xml */		"<object><a>1</a></object>",
-					/* XmlT */		"<object><a>1</a></object>",
-					/* XmlR */		"<object>\n\t<a>1</a>\n</object>\n",
-					/* XmlNs */		"<object><a>1</a></object>",
-					/* Html */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(a=1)",
-					/* UonT */		"(a=1)",
-					/* UonR */		"(\n\ta=1\n)",
-					/* UrlEnc */		"a=1",
-					/* UrlEncT */	"a=1",
-					/* UrlEncR */	"a=1",
-					/* MsgPack */	"81A16101",
-					/* MsgPackT */	"81A16101",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new C(null).init()
 				)
-				{
-					@Override
-					public void verify(C o) {
-						assertInstanceOf(C.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{a:1}")
+				.jsonT("{a:1}")
+				.jsonR("{\n\ta: 1\n}")
+				.xml("<object><a>1</a></object>")
+				.xmlT("<object><a>1</a></object>")
+				.xmlR("<object>\n\t<a>1</a>\n</object>\n")
+				.xmlNs("<object><a>1</a></object>")
+				.html("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(a=1)")
+				.uonT("(a=1)")
+				.uonR("(\n\ta=1\n)")
+				.urlEnc("a=1")
+				.urlEncT("a=1")
+				.urlEncR("a=1")
+				.msgPack("81A16101")
+				.msgPackT("81A16101")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(C.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 			{ 	/* 3 */
 				new ComboInput<D>(
 					"D",
 					D.class,
-					new D(null).init(),
-					/* Json */		"{a:1}",
-					/* JsonT */		"{a:1}",
-					/* JsonR */		"{\n\ta: 1\n}",
-					/* Xml */		"<object><a>1</a></object>",
-					/* XmlT */		"<object><a>1</a></object>",
-					/* XmlR */		"<object>\n\t<a>1</a>\n</object>\n",
-					/* XmlNs */		"<object><a>1</a></object>",
-					/* Html */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(a=1)",
-					/* UonT */		"(a=1)",
-					/* UonR */		"(\n\ta=1\n)",
-					/* UrlEnc */		"a=1",
-					/* UrlEncT */	"a=1",
-					/* UrlEncR */	"a=1",
-					/* MsgPack */	"81A16101",
-					/* MsgPackT */	"81A16101",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new D(null).init()
 				)
-				{
-					@Override
-					public void verify(D o) {
-						assertInstanceOf(D.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{a:1}")
+				.jsonT("{a:1}")
+				.jsonR("{\n\ta: 1\n}")
+				.xml("<object><a>1</a></object>")
+				.xmlT("<object><a>1</a></object>")
+				.xmlR("<object>\n\t<a>1</a>\n</object>\n")
+				.xmlNs("<object><a>1</a></object>")
+				.html("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(a=1)")
+				.uonT("(a=1)")
+				.uonR("(\n\ta=1\n)")
+				.urlEnc("a=1")
+				.urlEncT("a=1")
+				.urlEncR("a=1")
+				.msgPack("81A16101")
+				.msgPackT("81A16101")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(D.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 			{ 	/* 4 */
 				new ComboInput<E>(
 					"E",
 					E.class,
-					new E(null).init(),
-					/* Json */		"{a:1}",
-					/* JsonT */		"{a:1}",
-					/* JsonR */		"{\n\ta: 1\n}",
-					/* Xml */		"<object><a>1</a></object>",
-					/* XmlT */		"<object><a>1</a></object>",
-					/* XmlR */		"<object>\n\t<a>1</a>\n</object>\n",
-					/* XmlNs */		"<object><a>1</a></object>",
-					/* Html */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>a</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(a=1)",
-					/* UonT */		"(a=1)",
-					/* UonR */		"(\n\ta=1\n)",
-					/* UrlEnc */		"a=1",
-					/* UrlEncT */	"a=1",
-					/* UrlEncR */	"a=1",
-					/* MsgPack */	"81A16101",
-					/* MsgPackT */	"81A16101",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new E(null).init()
 				)
-				{
-					@Override
-					public void verify(E o) {
-						assertInstanceOf(E.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{a:1}")
+				.jsonT("{a:1}")
+				.jsonR("{\n\ta: 1\n}")
+				.xml("<object><a>1</a></object>")
+				.xmlT("<object><a>1</a></object>")
+				.xmlR("<object>\n\t<a>1</a>\n</object>\n")
+				.xmlNs("<object><a>1</a></object>")
+				.html("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>a</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(a=1)")
+				.uonT("(a=1)")
+				.uonR("(\n\ta=1\n)")
+				.urlEnc("a=1")
+				.urlEncT("a=1")
+				.urlEncR("a=1")
+				.msgPack("81A16101")
+				.msgPackT("81A16101")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(E.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 			{ 	/* 5 */
 				new ComboInput<H>(
 					"H",
 					H.class,
-					new H(null).init(),
-					/* Json */		"{fooBar:1}",
-					/* JsonT */		"{fooBar:1}",
-					/* JsonR */		"{\n\tfooBar: 1\n}",
-					/* Xml */		"<object><fooBar>1</fooBar></object>",
-					/* XmlT */		"<object><fooBar>1</fooBar></object>",
-					/* XmlR */		"<object>\n\t<fooBar>1</fooBar>\n</object>\n",
-					/* XmlNs */		"<object><fooBar>1</fooBar></object>",
-					/* Html */		"<table><tr><td>fooBar</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>fooBar</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>fooBar</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"(fooBar=1)",
-					/* UonT */		"(fooBar=1)",
-					/* UonR */		"(\n\tfooBar=1\n)",
-					/* UrlEnc */		"fooBar=1",
-					/* UrlEncT */	"fooBar=1",
-					/* UrlEncR */	"fooBar=1",
-					/* MsgPack */	"81A6666F6F42617201",
-					/* MsgPackT */	"81A6666F6F42617201",
-					/* RdfXml */		"<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:fooBar>1</jp:fooBar>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new H(null).init()
 				)
-				{
-					@Override
-					public void verify(H o) {
-						assertInstanceOf(H.class, o);
-						assertTrue(o.createdByBuilder);
-					}
-				}
+				.json("{fooBar:1}")
+				.jsonT("{fooBar:1}")
+				.jsonR("{\n\tfooBar: 1\n}")
+				.xml("<object><fooBar>1</fooBar></object>")
+				.xmlT("<object><fooBar>1</fooBar></object>")
+				.xmlR("<object>\n\t<fooBar>1</fooBar>\n</object>\n")
+				.xmlNs("<object><fooBar>1</fooBar></object>")
+				.html("<table><tr><td>fooBar</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>fooBar</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>fooBar</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("(fooBar=1)")
+				.uonT("(fooBar=1)")
+				.uonR("(\n\tfooBar=1\n)")
+				.urlEnc("fooBar=1")
+				.urlEncT("fooBar=1")
+				.urlEncR("fooBar=1")
+				.msgPack("81A6666F6F42617201")
+				.msgPackT("81A6666F6F42617201")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:fooBar>1</jp:fooBar>\n  </rdf:Description>\n</rdf:RDF>\n")
+				.verify(x -> verifyInstanceOf(H.class, x))
+				.verify(x -> verifyTrue(x.createdByBuilder))
 			},
 		});
 	}

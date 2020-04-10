@@ -448,10 +448,46 @@ public class TestUtils {
 	/**
 	 * Throws an AssertionError if the object isn't of the specified type.
 	 */
-	public static final void assertInstanceOf(Class<?> type, Object o) {
+	public static final <T> T assertInstanceOf(Class<?> type, T o) {
 		if (type.isInstance(o))
-			return;
+			return o;
 		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
+	}
+
+	public static final String verifyInstanceOf(Class<?> type, Object o) {
+		if (type.isInstance(o))
+			return null;
+		return new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())).toString();
+	}
+
+	public static final String verifyEquals(Object expected, Object actual) {
+		if (expected == actual)
+			return null;
+		if (expected == null || actual == null)
+			return StringUtils.format("Expected {0} but was {1}", expected, actual);
+		if (! expected.equals(actual))
+			return StringUtils.format("Expected {0} but was {1}", expected, actual);
+		return null;
+	}
+
+	public static final String verifyTrue(boolean b) {
+		return verifyEquals(true, b);
+	}
+
+	public static final String verifyFalse(boolean b) {
+		return verifyEquals(false, b);
+	}
+
+	public static final String verifyNull(Object o) {
+		if (o == null)
+			return null;
+		return StringUtils.format("Expected {0} but was {1}", null, o);
+	}
+
+	public static final String verifyNotNull(Object o) {
+		if (o != null)
+			return null;
+		return StringUtils.format("Expected non null value but was null");
 	}
 
 	/**

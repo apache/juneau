@@ -49,7 +49,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	public XmlSchemaSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(XML_enableNamespaces, true)
+				.setDefault(XML_enableNamespaces, true)
 				.build(),
 			"text/xml",
 			"text/xml+schema"

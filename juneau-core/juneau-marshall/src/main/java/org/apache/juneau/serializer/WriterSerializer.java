@@ -431,7 +431,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	protected final char getQuoteChar() {
+	protected char getQuoteChar() {
 		return quoteChar;
 	}
 

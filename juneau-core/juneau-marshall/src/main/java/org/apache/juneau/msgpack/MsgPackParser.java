@@ -63,7 +63,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		public SpacedHex(PropertyStore ps) {
 			super(
-				ps.builder().set(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+				ps.builder().setDefault(ISPARSER_binaryFormat, BinaryFormat.SPACED_HEX).build()
 			);
 		}
 	}
@@ -78,7 +78,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		public Base64(PropertyStore ps) {
 			super(
-				ps.builder().set(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
+				ps.builder().setDefault(ISPARSER_binaryFormat, BinaryFormat.BASE64).build()
 			);
 		}
 	}

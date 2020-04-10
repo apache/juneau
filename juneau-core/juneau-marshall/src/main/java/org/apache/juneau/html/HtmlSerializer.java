@@ -639,7 +639,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		public Sq(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_quoteChar, '\'')
 					.build()
 			);
 		}
@@ -656,8 +656,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		public SqReadable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

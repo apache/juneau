@@ -63,9 +63,9 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		public Readable(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.setDefault(JSON_simpleMode, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}
@@ -79,8 +79,8 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	public SimpleJsonSerializer(PropertyStore ps) {
 		super(
 			ps.builder()
-				.set(JSON_simpleMode, true)
-				.set(WSERIALIZER_quoteChar, '\'')
+				.setDefault(JSON_simpleMode, true)
+				.setDefault(WSERIALIZER_quoteChar, '\'')
 				.build(),
 			"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
 		);

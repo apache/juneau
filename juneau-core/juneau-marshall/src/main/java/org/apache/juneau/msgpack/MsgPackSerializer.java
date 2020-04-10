@@ -99,7 +99,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		public SpacedHex(PropertyStore ps) {
 			super(
-				ps.builder().set(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
+				ps.builder().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX).build()
 			);
 		}
 	}
@@ -114,7 +114,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		public Base64(PropertyStore ps) {
 			super(
-				ps.builder().set(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
+				ps.builder().setDefault(OSSERIALIZER_binaryFormat, BinaryFormat.BASE64).build()
 			);
 		}
 	}

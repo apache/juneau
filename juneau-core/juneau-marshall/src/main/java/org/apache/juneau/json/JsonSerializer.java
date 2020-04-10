@@ -299,7 +299,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
+				ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -318,10 +318,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		public ReadableSafe(PropertyStore ps) {
 			super(
 				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
-					.set(BEANTRAVERSE_detectRecursions, true)
+					.setDefault(JSON_simpleMode, true)
+					.setDefault(WSERIALIZER_quoteChar, '\'')
+					.setDefault(WSERIALIZER_useWhitespace, true)
+					.setDefault(BEANTRAVERSE_detectRecursions, true)
 					.build()
 			);
 		}

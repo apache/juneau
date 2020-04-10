@@ -307,7 +307,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
-			super(ps.builder().set(WSERIALIZER_useWhitespace, true).build());
+			super(ps.builder().setDefault(WSERIALIZER_useWhitespace, true).build());
 		}
 	}
 
@@ -322,7 +322,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Encoding(PropertyStore ps) {
-			super(ps.builder().set(UON_encoding, true).build());
+			super(ps.builder().setDefault(UON_encoding, true).build());
 		}
 	}
 
@@ -354,6 +354,9 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	private final boolean
 		encoding,
 		addBeanTypes;
+
+	private final char
+		quoteChar;
 
 	private final ParamFormat
 		paramFormat;
@@ -402,6 +405,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		encoding = getBooleanProperty(UON_encoding, false);
 		addBeanTypes = getBooleanProperty(UON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
+		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "'").charAt(0);
 	}
 
 	@Override /* Context */
@@ -508,6 +512,18 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	protected final ParamFormat getParamFormat() {
 		return paramFormat;
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 *
+	 * @see WriterSerializer#WSERIALIZER_quoteChar
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	@Override
+	protected final char getQuoteChar() {
+		return quoteChar;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

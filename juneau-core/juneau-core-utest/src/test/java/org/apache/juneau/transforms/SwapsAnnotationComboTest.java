@@ -37,454 +37,454 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 				new ComboInput<>(
 					"TestMediaTypeLiterals",
 					TestMediaTypeLiterals.class,
-					new TestMediaTypeLiterals(),
-					/* Json */		"'JSON'",
-					/* JsonT */		"'JSON'",
-					/* JsonR */		"'JSON'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>HTML</string>",
-					/* HtmlT */		"<string>HTML</string>",
-					/* HtmlR */		"<string>HTML</string>",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"_value=URLENCODING",
-					/* UrlEncT */	"_value=URLENCODING",
-					/* UrlEncR */	"_value=URLENCODING",
-					/* MsgPack */	"A74D53475041434B",
-					/* MsgPackT */	"A74D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypeLiterals()
 				)
+				.json("'JSON'")
+				.jsonT("'JSON'")
+				.jsonR("'JSON'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>HTML</string>")
+				.htmlT("<string>HTML</string>")
+				.htmlR("<string>HTML</string>")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("_value=URLENCODING")
+				.urlEncT("_value=URLENCODING")
+				.urlEncR("_value=URLENCODING")
+				.msgPack("A74D53475041434B")
+				.msgPackT("A74D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 1 */
 				new ComboInput<>(
 					"TestMediaTypePatterns",
 					TestMediaTypePatterns.class,
-					new TestMediaTypePatterns(),
-					/* Json */		"'JSON'",
-					/* JsonT */		"'JSON'",
-					/* JsonR */		"'JSON'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>HTML</string>",
-					/* HtmlT */		"<string>HTML</string>",
-					/* HtmlR */		"<string>HTML</string>",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"_value=URLENCODING",
-					/* UrlEncT */	"_value=URLENCODING",
-					/* UrlEncR */	"_value=URLENCODING",
-					/* MsgPack */	"A74D53475041434B",
-					/* MsgPackT */	"A74D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatterns()
 				)
+				.json("'JSON'")
+				.jsonT("'JSON'")
+				.jsonR("'JSON'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>HTML</string>")
+				.htmlT("<string>HTML</string>")
+				.htmlR("<string>HTML</string>")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("_value=URLENCODING")
+				.urlEncT("_value=URLENCODING")
+				.urlEncR("_value=URLENCODING")
+				.msgPack("A74D53475041434B")
+				.msgPackT("A74D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 2 */
 				new ComboInput<>(
 					"TestMediaTypePatternsReversed",
 					TestMediaTypePatternsReversed.class,
-					new TestMediaTypePatternsReversed(),
-					/* Json */		"'JSON'",
-					/* JsonT */		"'JSON'",
-					/* JsonR */		"'JSON'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>HTML</string>",
-					/* HtmlT */		"<string>HTML</string>",
-					/* HtmlR */		"<string>HTML</string>",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"_value=URLENCODING",
-					/* UrlEncT */	"_value=URLENCODING",
-					/* UrlEncR */	"_value=URLENCODING",
-					/* MsgPack */	"A74D53475041434B",
-					/* MsgPackT */	"A74D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsReversed()
 				)
+				.json("'JSON'")
+				.jsonT("'JSON'")
+				.jsonR("'JSON'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>HTML</string>")
+				.htmlT("<string>HTML</string>")
+				.htmlR("<string>HTML</string>")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("_value=URLENCODING")
+				.urlEncT("_value=URLENCODING")
+				.urlEncR("_value=URLENCODING")
+				.msgPack("A74D53475041434B")
+				.msgPackT("A74D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 3 */
 				new ComboInput<>(
 					"TestMediaTypePatternsMulti",
 					TestMediaTypePatternsMulti.class,
-					new TestMediaTypePatternsMulti(),
-					/* Json */		"'JSON'",
-					/* JsonT */		"'JSON'",
-					/* JsonR */		"'JSON'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>HTML</string>",
-					/* HtmlT */		"<string>HTML</string>",
-					/* HtmlR */		"<string>HTML</string>",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"_value=URLENCODING",
-					/* UrlEncT */	"_value=URLENCODING",
-					/* UrlEncR */	"_value=URLENCODING",
-					/* MsgPack */	"A74D53475041434B",
-					/* MsgPackT */	"A74D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsMulti()
 				)
+				.json("'JSON'")
+				.jsonT("'JSON'")
+				.jsonR("'JSON'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>HTML</string>")
+				.htmlT("<string>HTML</string>")
+				.htmlR("<string>HTML</string>")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("_value=URLENCODING")
+				.urlEncT("_value=URLENCODING")
+				.urlEncR("_value=URLENCODING")
+				.msgPack("A74D53475041434B")
+				.msgPackT("A74D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 4 */
 				// In this case, "text/xml" should NOT match "text/xml+rdf".
 				new ComboInput<>(
 					"TestMediaTypePatternsPartial1",
 					TestMediaTypePatternsPartial1.class,
-					new TestMediaTypePatternsPartial1(),
-					/* Json */		"'JSON'",
-					/* JsonT */		"'JSON'",
-					/* JsonR */		"'JSON'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>HTML</string>",
-					/* HtmlT */		"<string>HTML</string>",
-					/* HtmlR */		"<string>HTML</string>",
-					/* Uon */		"foo",
-					/* UonT */		"foo",
-					/* UonR */		"foo",
-					/* UrlEnc */	"_value=foo",
-					/* UrlEncT */	"_value=foo",
-					/* UrlEncR */	"_value=foo",
-					/* MsgPack */	"A3666F6F",
-					/* MsgPackT */	"A3666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsPartial1()
 				)
+				.json("'JSON'")
+				.jsonT("'JSON'")
+				.jsonR("'JSON'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>HTML</string>")
+				.htmlT("<string>HTML</string>")
+				.htmlR("<string>HTML</string>")
+				.uon("foo")
+				.uonT("foo")
+				.uonR("foo")
+				.urlEnc("_value=foo")
+				.urlEncT("_value=foo")
+				.urlEncR("_value=foo")
+				.msgPack("A3666F6F")
+				.msgPackT("A3666F6F")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 5 */
 				// In this case, "text/xml+rdf" should NOT match "text/xml".
 				new ComboInput<>(
 					"TestMediaTypePatternsPartial2",
 					TestMediaTypePatternsPartial2.class,
-					new TestMediaTypePatternsPartial2(),
-					/* Json */		"'foo'",
-					/* JsonT */		"'foo'",
-					/* JsonR */		"'foo'",
-					/* Xml */		"<string>foo</string>",
-					/* XmlT */		"<string>foo</string>",
-					/* XmlR */		"<string>foo</string>\n",
-					/* XmlNs */		"<string>foo</string>",
-					/* Html */		"<string>foo</string>",
-					/* HtmlT */		"<string>foo</string>",
-					/* HtmlR */		"<string>foo</string>",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"_value=URLENCODING",
-					/* UrlEncT */	"_value=URLENCODING",
-					/* UrlEncR */	"_value=URLENCODING",
-					/* MsgPack */	"A74D53475041434B",
-					/* MsgPackT */	"A74D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsPartial2()
 				)
+				.json("'foo'")
+				.jsonT("'foo'")
+				.jsonR("'foo'")
+				.xml("<string>foo</string>")
+				.xmlT("<string>foo</string>")
+				.xmlR("<string>foo</string>\n")
+				.xmlNs("<string>foo</string>")
+				.html("<string>foo</string>")
+				.htmlT("<string>foo</string>")
+				.htmlR("<string>foo</string>")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("_value=URLENCODING")
+				.urlEncT("_value=URLENCODING")
+				.urlEncR("_value=URLENCODING")
+				.msgPack("A74D53475041434B")
+				.msgPackT("A74D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 6 */
-				// In this case, "text/xml+*" should match both the XML and RDF serializers.
+				// XML and RDF serializers.
 				new ComboInput<>(
 					"TestMediaTypePatternsXmlPlus",
 					TestMediaTypePatternsXmlPlus.class,
-					new TestMediaTypePatternsXmlPlus(),
-					/* Json */		"'foo'",
-					/* JsonT */		"'foo'",
-					/* JsonR */		"'foo'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>foo</string>",
-					/* HtmlT */		"<string>foo</string>",
-					/* HtmlR */		"<string>foo</string>",
-					/* Uon */		"foo",
-					/* UonT */		"foo",
-					/* UonR */		"foo",
-					/* UrlEnc */	"_value=foo",
-					/* UrlEncT */	"_value=foo",
-					/* UrlEncR */	"_value=foo",
-					/* MsgPack */	"A3666F6F",
-					/* MsgPackT */	"A3666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsXmlPlus()
 				)
+				.json("'foo'")
+				.jsonT("'foo'")
+				.jsonR("'foo'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>foo</string>")
+				.htmlT("<string>foo</string>")
+				.htmlR("<string>foo</string>")
+				.uon("foo")
+				.uonT("foo")
+				.uonR("foo")
+				.urlEnc("_value=foo")
+				.urlEncT("_value=foo")
+				.urlEncR("_value=foo")
+				.msgPack("A3666F6F")
+				.msgPackT("A3666F6F")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 7 */
-				// In this case, "text/*+xml" should match both the XML and RDF serializers.
+				// XML and RDF serializers.
 				new ComboInput<>(
 					"TestMediaTypePatternsXmlPlusReversed",
 					TestMediaTypePatternsXmlPlusReversed.class,
-					new TestMediaTypePatternsXmlPlusReversed(),
-					/* Json */		"'foo'",
-					/* JsonT */		"'foo'",
-					/* JsonR */		"'foo'",
-					/* Xml */		"<string>XML</string>",
-					/* XmlT */		"<string>XML</string>",
-					/* XmlR */		"<string>XML</string>\n",
-					/* XmlNs */		"<string>XML</string>",
-					/* Html */		"<string>foo</string>",
-					/* HtmlT */		"<string>foo</string>",
-					/* HtmlR */		"<string>foo</string>",
-					/* Uon */		"foo",
-					/* UonT */		"foo",
-					/* UonR */		"foo",
-					/* UrlEnc */	"_value=foo",
-					/* UrlEncT */	"_value=foo",
-					/* UrlEncR */	"_value=foo",
-					/* MsgPack */	"A3666F6F",
-					/* MsgPackT */	"A3666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsXmlPlusReversed()
 				)
+				.json("'foo'")
+				.jsonT("'foo'")
+				.jsonR("'foo'")
+				.xml("<string>XML</string>")
+				.xmlT("<string>XML</string>")
+				.xmlR("<string>XML</string>\n")
+				.xmlNs("<string>XML</string>")
+				.html("<string>foo</string>")
+				.htmlT("<string>foo</string>")
+				.htmlR("<string>foo</string>")
+				.uon("foo")
+				.uonT("foo")
+				.uonR("foo")
+				.urlEnc("_value=foo")
+				.urlEncT("_value=foo")
+				.urlEncR("_value=foo")
+				.msgPack("A3666F6F")
+				.msgPackT("A3666F6F")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 8 */
-				// In this case, "text/rdf+*" should match only the RDF serializer.
+				// RDF serializer.
 				new ComboInput<>(
 					"TestMediaTypePatternsRdfPlus",
 					TestMediaTypePatternsRdfPlus.class,
-					new TestMediaTypePatternsRdfPlus(),
-					/* Json */		"'foo'",
-					/* JsonT */		"'foo'",
-					/* JsonR */		"'foo'",
-					/* Xml */		"<string>foo</string>",
-					/* XmlT */		"<string>foo</string>",
-					/* XmlR */		"<string>foo</string>\n",
-					/* XmlNs */		"<string>foo</string>",
-					/* Html */		"<string>foo</string>",
-					/* HtmlT */		"<string>foo</string>",
-					/* HtmlR */		"<string>foo</string>",
-					/* Uon */		"foo",
-					/* UonT */		"foo",
-					/* UonR */		"foo",
-					/* UrlEnc */	"_value=foo",
-					/* UrlEncT */	"_value=foo",
-					/* UrlEncR */	"_value=foo",
-					/* MsgPack */	"A3666F6F",
-					/* MsgPackT */	"A3666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestMediaTypePatternsRdfPlus()
 				)
+				.json("'foo'")
+				.jsonT("'foo'")
+				.jsonR("'foo'")
+				.xml("<string>foo</string>")
+				.xmlT("<string>foo</string>")
+				.xmlR("<string>foo</string>\n")
+				.xmlNs("<string>foo</string>")
+				.html("<string>foo</string>")
+				.htmlT("<string>foo</string>")
+				.htmlR("<string>foo</string>")
+				.uon("foo")
+				.uonT("foo")
+				.uonR("foo")
+				.urlEnc("_value=foo")
+				.urlEncT("_value=foo")
+				.urlEncR("_value=foo")
+				.msgPack("A3666F6F")
+				.msgPackT("A3666F6F")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>XML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>XML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 9 */
 				new ComboInput<>(
 					"TestTemplate",
 					TestTemplate.class,
-					new TestTemplate(),
-					/* Json */		"foo",
-					/* JsonT */		"foo",
-					/* JsonR */		"foo",
-					/* Xml */		"foo",
-					/* XmlT */		"foo",
-					/* XmlR */		"foo\n",
-					/* XmlNs */		"foo",
-					/* Html */		"foo",
-					/* HtmlT */		"foo",
-					/* HtmlR */		"foo",
-					/* Uon */		"foo",
-					/* UonT */		"foo",
-					/* UonR */		"foo",
-					/* UrlEnc */	"foo",
-					/* UrlEncT */	"foo",
-					/* UrlEncR */	"foo",
-					/* MsgPack */	"666F6F",
-					/* MsgPackT */	"666F6F",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestTemplate()
 				)
+				.json("foo")
+				.jsonT("foo")
+				.jsonR("foo")
+				.xml("foo")
+				.xmlT("foo")
+				.xmlR("foo\n")
+				.xmlNs("foo")
+				.html("foo")
+				.htmlT("foo")
+				.htmlR("foo")
+				.uon("foo")
+				.uonT("foo")
+				.uonR("foo")
+				.urlEnc("foo")
+				.urlEncT("foo")
+				.urlEncR("foo")
+				.msgPack("666F6F")
+				.msgPackT("666F6F")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>foo</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>foo</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 10 */
 				new ComboInput<>(
 					"TestTemplates",
 					TestTemplates.class,
-					new TestTemplates(),
-					/* Json */		"JSON",
-					/* JsonT */		"JSON",
-					/* JsonR */		"JSON",
-					/* Xml */		"XML",
-					/* XmlT */		"XML",
-					/* XmlR */		"XML\n",
-					/* XmlNs */		"XML",
-					/* Html */		"HTML",
-					/* HtmlT */		"HTML",
-					/* HtmlR */		"HTML",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"URLENCODING",
-					/* UrlEncT */	"URLENCODING",
-					/* UrlEncR */	"URLENCODING",
-					/* MsgPack */	"4D53475041434B",
-					/* MsgPackT */	"4D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestTemplates()
 				)
+				.json("JSON")
+				.jsonT("JSON")
+				.jsonR("JSON")
+				.xml("XML")
+				.xmlT("XML")
+				.xmlR("XML\n")
+				.xmlNs("XML")
+				.html("HTML")
+				.htmlT("HTML")
+				.htmlR("HTML")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("URLENCODING")
+				.urlEncT("URLENCODING")
+				.urlEncR("URLENCODING")
+				.msgPack("4D53475041434B")
+				.msgPackT("4D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 11 */
 				new ComboInput<>(
 					"TestProgrammaticTemplates",
 					TestProgrammaticTemplates.class,
-					new TestProgrammaticTemplates(),
-					/* Json */		"JSON",
-					/* JsonT */		"JSON",
-					/* JsonR */		"JSON",
-					/* Xml */		"XML",
-					/* XmlT */		"XML",
-					/* XmlR */		"XML\n",
-					/* XmlNs */		"XML",
-					/* Html */		"HTML",
-					/* HtmlT */		"HTML",
-					/* HtmlR */		"HTML",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"URLENCODING",
-					/* UrlEncT */	"URLENCODING",
-					/* UrlEncR */	"URLENCODING",
-					/* MsgPack */	"4D53475041434B",
-					/* MsgPackT */	"4D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestProgrammaticTemplates()
 				)
+				.json("JSON")
+				.jsonT("JSON")
+				.jsonR("JSON")
+				.xml("XML")
+				.xmlT("XML")
+				.xmlR("XML\n")
+				.xmlNs("XML")
+				.html("HTML")
+				.htmlT("HTML")
+				.htmlR("HTML")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("URLENCODING")
+				.urlEncT("URLENCODING")
+				.urlEncR("URLENCODING")
+				.msgPack("4D53475041434B")
+				.msgPackT("4D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 12 */
 				new ComboInput<>(
 					"TestContextSwap",
 					TestContextSwap.class,
-					new TestContextSwap(),
-					/* Json */		"TEMPLATE",
-					/* JsonT */		"TEMPLATE",
-					/* JsonR */		"TEMPLATE",
-					/* Xml */		"TEMPLATE",
-					/* XmlT */		"TEMPLATE",
-					/* XmlR */		"TEMPLATE\n",
-					/* XmlNs */		"TEMPLATE",
-					/* Html */		"TEMPLATE",
-					/* HtmlT */		"TEMPLATE",
-					/* HtmlR */		"TEMPLATE",
-					/* Uon */		"TEMPLATE",
-					/* UonT */		"TEMPLATE",
-					/* UonR */		"TEMPLATE",
-					/* UrlEnc */	"TEMPLATE",
-					/* UrlEncT */	"TEMPLATE",
-					/* UrlEncR */	"TEMPLATE",
-					/* MsgPack */	"54454D504C415445",
-					/* MsgPackT */	"54454D504C415445",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>TEMPLATE</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestContextSwap()
 				)
+				.json("TEMPLATE")
+				.jsonT("TEMPLATE")
+				.jsonR("TEMPLATE")
+				.xml("TEMPLATE")
+				.xmlT("TEMPLATE")
+				.xmlR("TEMPLATE\n")
+				.xmlNs("TEMPLATE")
+				.html("TEMPLATE")
+				.htmlT("TEMPLATE")
+				.htmlR("TEMPLATE")
+				.uon("TEMPLATE")
+				.uonT("TEMPLATE")
+				.uonR("TEMPLATE")
+				.urlEnc("TEMPLATE")
+				.urlEncT("TEMPLATE")
+				.urlEncR("TEMPLATE")
+				.msgPack("54454D504C415445")
+				.msgPackT("54454D504C415445")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>TEMPLATE</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>TEMPLATE</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 13 */
 				new ComboInput<>(
 					"TestContextSwaps",
 					TestContextSwaps.class,
-					new TestContextSwaps(),
-					/* Json */		"JSON",
-					/* JsonT */		"JSON",
-					/* JsonR */		"JSON",
-					/* Xml */		"XML",
-					/* XmlT */		"XML",
-					/* XmlR */		"XML\n",
-					/* XmlNs */		"XML",
-					/* Html */		"HTML",
-					/* HtmlT */		"HTML",
-					/* HtmlR */		"HTML",
-					/* Uon */		"UON",
-					/* UonT */		"UON",
-					/* UonR */		"UON",
-					/* UrlEnc */	"URLENCODING",
-					/* UrlEncT */	"URLENCODING",
-					/* UrlEncR */	"URLENCODING",
-					/* MsgPack */	"4D53475041434B",
-					/* MsgPackT */	"4D53475041434B",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new TestContextSwaps()
 				)
+				.json("JSON")
+				.jsonT("JSON")
+				.jsonR("JSON")
+				.xml("XML")
+				.xmlT("XML")
+				.xmlR("XML\n")
+				.xmlNs("XML")
+				.html("HTML")
+				.htmlT("HTML")
+				.htmlR("HTML")
+				.uon("UON")
+				.uonT("UON")
+				.uonR("UON")
+				.urlEnc("URLENCODING")
+				.urlEncT("URLENCODING")
+				.urlEncR("URLENCODING")
+				.msgPack("4D53475041434B")
+				.msgPackT("4D53475041434B")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>RDFXML</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>RDFXML</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 14 */
 				new ComboInput<>(
 					"BeanA",
 					BeanA.class,
-					new BeanA(),
-					/* Json */		"SWAPPED",
-					/* JsonT */		"SWAPPED",
-					/* JsonR */		"SWAPPED",
-					/* Xml */		"SWAPPED",
-					/* XmlT */		"SWAPPED",
-					/* XmlR */		"SWAPPED\n",
-					/* XmlNs */		"SWAPPED",
-					/* Html */		"SWAPPED",
-					/* HtmlT */		"SWAPPED",
-					/* HtmlR */		"SWAPPED",
-					/* Uon */		"(f=1)",
-					/* UonT */		"(f=1)",
-					/* UonR */		"(\n\tf=1\n)",
-					/* UrlEnc */	"f=1",
-					/* UrlEncT */	"f=1",
-					/* UrlEncR */	"f=1",
-					/* MsgPack */	"81A16601",
-					/* MsgPackT */	"81A16601",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new BeanA()
 				)
+				.json("SWAPPED")
+				.jsonT("SWAPPED")
+				.jsonR("SWAPPED")
+				.xml("SWAPPED")
+				.xmlT("SWAPPED")
+				.xmlR("SWAPPED\n")
+				.xmlNs("SWAPPED")
+				.html("SWAPPED")
+				.htmlT("SWAPPED")
+				.htmlR("SWAPPED")
+				.uon("(f=1)")
+				.uonT("(f=1)")
+				.uonR("(\n\tf=1\n)")
+				.urlEnc("f=1")
+				.urlEncT("f=1")
+				.urlEncR("f=1")
+				.msgPack("81A16601")
+				.msgPackT("81A16601")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f>1</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f>1</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 			{ 	/* 15 */
 				new ComboInput<>(
 					"BeanB",
 					BeanB.class,
-					new BeanB(),
-					/* Json */		"{f:1}",
-					/* JsonT */		"{f:1}",
-					/* JsonR */		"{\n\tf: 1\n}",
-					/* Xml */		"<object><f>1</f></object>",
-					/* XmlT */		"<object><f>1</f></object>",
-					/* XmlR */		"<object>\n\t<f>1</f>\n</object>\n",
-					/* XmlNs */		"<object><f>1</f></object>",
-					/* Html */		"<table><tr><td>f</td><td>1</td></tr></table>",
-					/* HtmlT */		"<table><tr><td>f</td><td>1</td></tr></table>",
-					/* HtmlR */		"<table>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n",
-					/* Uon */		"SWAPPED",
-					/* UonT */		"SWAPPED",
-					/* UonR */		"SWAPPED",
-					/* UrlEnc */	"SWAPPED",
-					/* UrlEncT */	"SWAPPED",
-					/* UrlEncR */	"SWAPPED",
-					/* MsgPack */	"53574150504544",
-					/* MsgPackT */	"53574150504544",
-					/* RdfXml */	"<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
-					/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>SWAPPED</j:value>\n  </rdf:Description>\n</rdf:RDF>\n"
+					new BeanB()
 				)
+				.json("{f:1}")
+				.jsonT("{f:1}")
+				.jsonR("{\n\tf: 1\n}")
+				.xml("<object><f>1</f></object>")
+				.xmlT("<object><f>1</f></object>")
+				.xmlR("<object>\n\t<f>1</f>\n</object>\n")
+				.xmlNs("<object><f>1</f></object>")
+				.html("<table><tr><td>f</td><td>1</td></tr></table>")
+				.htmlT("<table><tr><td>f</td><td>1</td></tr></table>")
+				.htmlR("<table>\n\t<tr>\n\t\t<td>f</td>\n\t\t<td>1</td>\n\t</tr>\n</table>\n")
+				.uon("SWAPPED")
+				.uonT("SWAPPED")
+				.uonR("SWAPPED")
+				.urlEnc("SWAPPED")
+				.urlEncT("SWAPPED")
+				.urlEncR("SWAPPED")
+				.msgPack("53574150504544")
+				.msgPackT("53574150504544")
+				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>SWAPPED</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
+				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>SWAPPED</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
 			},
 		});
 	}
