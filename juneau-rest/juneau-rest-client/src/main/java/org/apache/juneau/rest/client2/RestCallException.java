@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
-import static java.lang.String.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.format;
 
 import java.io.*;
 import java.net.*;
@@ -25,6 +22,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -82,7 +80,7 @@ public final class RestCallException extends HttpException {
 	 * @param e The inner cause of the exception.
 	 */
 	public RestCallException(Exception e) {
-		super(e.getLocalizedMessage(), e);
+		super(clean(e.getLocalizedMessage()), e);
 		if (e instanceof FileNotFoundException) {
 			responseCode = 404;
 		} else if (e.getMessage() != null) {
@@ -101,15 +99,7 @@ public final class RestCallException extends HttpException {
 	 * @param response The HTTP response object.
 	 */
 	public RestCallException(String msg, HttpResponse response) {
-		super(format("{0}\n{1}\nstatus=''{2}''\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), readEntity(response)));
-	}
-
-	private static String readEntity(HttpResponse response) {
-		try {
-			return EntityUtils.toString(response.getEntity(), UTF8);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		super(clean(format("{0}\n{1}\nstatus=''{2}''\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), readEntity(response))));
 	}
 
 	/**
@@ -247,19 +237,52 @@ public final class RestCallException extends HttpException {
 		return responseStatusMessage;
 	}
 
-	/**
-	 * Finds the message.
-	 *
-	 * @param cause The cause.
-	 * @param msg The message.
-	 * @param def The default value if both above are <jk>null</jk>.
-	 * @return The resolved message.
-	 */
-	protected static final String getMessage(Throwable cause, String msg, String def) {
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static String getMessage(Throwable cause, String msg, String def) {
 		if (msg != null)
-			return msg;
+			return clean(msg);
 		if (cause != null)
-			return cause.getMessage();
+			return clean(cause.getMessage());
 		return def;
+	}
+
+	private static String format(String msg, Object...args) {
+		if (args.length == 0)
+			return clean(msg);
+		return clean(StringUtils.format(msg, args));
+	}
+
+	// HttpException has a bug involving ASCII control characters so just replace them with spaces.
+	private static String clean(String message) {
+
+		if (message == null)
+			return null;
+
+		boolean needsCleaning = false;
+		for (int i = 0; i < message.length() && !needsCleaning; i++)
+			if (message.charAt(i) < 32)
+				needsCleaning = true;
+
+		if (!needsCleaning)
+			return message;
+
+		StringBuilder sb = new StringBuilder(message.length());
+		for (int i = 0; i < message.length(); i++) {
+			char c = message.charAt(i);
+			sb.append(c < 32 ? ' ' : c);
+		}
+
+		return sb.toString();
+	}
+
+	private static String readEntity(HttpResponse response) {
+		try {
+			return EntityUtils.toString(response.getEntity(), UTF8);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

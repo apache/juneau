@@ -2723,16 +2723,12 @@ public class RestClientTest {
 
 	@Test
 	public void m04_parser_parserListener() throws Exception {
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.parser(JsonParser.class)
-			.parserListener(M4L.class)
-			.build();
-
 		try {
-			rc
+			MockRestClient
+				.create(A.class)
+				.parser(JsonParser.class)
+				.parserListener(M4L.class)
+				.build()
 				.post("/echoBody", "{f:'1'}")
 				.run()
 				.getBody().as(M4.class);
@@ -2743,18 +2739,57 @@ public class RestClientTest {
 		}
 	}
 
-//	@Test
-//	public void m05_parser_strictBoolean() throws Exception { fail(); }
-////	public RestClientBuilder strict(boolean value) {
-//
-//	@Test
-//	public void m06_parser_strict() throws Exception { fail(); }
-////	public RestClientBuilder strict() {
-//
-//	@Test
-//	public void m07_parser_trimStringsPBoolean() throws Exception { fail(); }
-////	public RestClientBuilder trimStringsP(boolean value) {
-//
+	public static class M5 {
+		public int f;
+	}
+
+	@Test
+	public void m05_parser_strict() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.json()
+				.strict()
+				.build()
+				.post("/echoBody", new StringReader("{f:1}"))
+				.run()
+				.getBody().as(M5.class);
+			fail("Exception expected");
+		} catch (Exception e) {
+			assertTrue(e.getMessage().contains("Unquoted attribute detected."));
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.json()
+				.strict(true)
+				.build()
+				.post("/echoBody", new StringReader("{f:1}"))
+				.run()
+				.getBody().as(M5.class);
+			fail("Exception expected");
+		} catch (Exception e) {
+			assertTrue(e.getMessage().contains("Unquoted attribute detected."));
+		}
+
+		MockRestClient
+			.create(A.class)
+			.json()
+			.strict(false)
+			.build()
+			.post("/echoBody", new StringReader("{f:1}"))
+			.run()
+			.getBody().as(M5.class);
+	}
+
+	@Test
+	public void m07_parser_trimStringsOnRead() throws Exception {
+
+
+	}
+//	public RestClientBuilder trimStringsP(boolean value) {
+
 //	@Test
 //	public void m08_parser_trimStringsP() throws Exception { fail(); }
 ////	public RestClientBuilder trimStringsP() {
