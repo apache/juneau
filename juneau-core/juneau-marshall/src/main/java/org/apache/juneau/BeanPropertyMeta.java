@@ -845,7 +845,6 @@ public final class BeanPropertyMeta {
 			} catch (BeanRuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				e.printStackTrace();
 				if (beanContext.isIgnoreInvocationExceptionsOnSetters()) {
 						if (rawTypeMeta.isPrimitive())
 							return rawTypeMeta.getPrimitiveDefault();
