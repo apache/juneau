@@ -288,6 +288,7 @@ public class JettyMicroserviceBuilder extends MicroserviceBuilder {
 
 	@Override /* MicroserviceBuilder */
 	public JettyMicroserviceBuilder logConfig(LogConfig logConfig) {
+		super.logConfig(logConfig);
 		return this;
 	}
 
