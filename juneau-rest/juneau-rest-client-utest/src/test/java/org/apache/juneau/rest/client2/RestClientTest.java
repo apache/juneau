@@ -2457,13 +2457,13 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void l21_serializer_trimStringsS() throws Exception {
+	public void l21_serializer_trimStringsOnWrite() throws Exception {
 		L21 x = new L21();
 
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.trimStringsS()
+			.trimStringsOnWrite()
 			.build()
 			.post("/echoBody", x)
 			.run()
@@ -2472,7 +2472,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.trimStringsS(true)
+			.trimStringsOnWrite(true)
 			.build()
 			.post("/echoBody", x)
 			.run()
@@ -2481,7 +2481,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.trimStringsS(false)
+			.trimStringsOnWrite(false)
 			.build()
 			.post("/echoBody", x)
 			.run()
@@ -2783,37 +2783,117 @@ public class RestClientTest {
 			.getBody().as(M5.class);
 	}
 
+	public static class M7 {
+		public String f;
+	}
+
 	@Test
 	public void m07_parser_trimStringsOnRead() throws Exception {
+		M7 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsOnRead()
+			.build()
+			.post("/echoBody", new StringReader("{f:' 1 '}"))
+			.run()
+			.getBody().as(M7.class);
+		assertEquals("1", x.f);
 
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsOnRead(true)
+			.build()
+			.post("/echoBody", new StringReader("{f:' 1 '}"))
+			.run()
+			.getBody().as(M7.class);
+		assertEquals("1", x.f);
 
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.trimStringsOnRead(false)
+			.build()
+			.post("/echoBody", new StringReader("{f:' 1 '}"))
+			.run()
+			.getBody().as(M7.class);
+		assertEquals(" 1 ", x.f);
 	}
-//	public RestClientBuilder trimStringsP(boolean value) {
 
-//	@Test
-//	public void m08_parser_trimStringsP() throws Exception { fail(); }
-////	public RestClientBuilder trimStringsP() {
-//
-//	@Test
-//	public void m09_parser_unbufferedBoolean() throws Exception { fail(); }
-////	public RestClientBuilder unbuffered(boolean value) {
-//
-//	@Test
-//	public void m10_parser_unbuffered() throws Exception { fail(); }
-////	public RestClientBuilder unbuffered() {
-//
-//	@Test
-//	public void m11_parser_fileCharset() throws Exception { fail(); }
-////	public RestClientBuilder fileCharset(String value) {
-//
-//	@Test
-//	public void m12_parser_inputStreamCharset() throws Exception { fail(); }
-////	public RestClientBuilder inputStreamCharset(String value) {
-//
-//	@Test
-//	public void m13_parser_binaryInputFormat() throws Exception { fail(); }
-////	public RestClientBuilder binaryInputFormat(BinaryFormat value) {
-//
+	@Test
+	public void m09_parser_unbufferedBoolean() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.unbuffered()
+			.build();
+
+		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered"));
+
+		M7 x = rc
+			.post("/echoBody", new StringReader("{f:'1'}"))
+			.run()
+			.getBody().as(M7.class);
+		assertEquals("1", x.f);
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.unbuffered(true)
+			.build();
+
+		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered"));
+
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.unbuffered(false)
+			.build();
+
+		assertFalse(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered", false));
+	}
+
+	@Test
+	public void m11_parser_fileCharset() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.json()
+			.fileCharset("UTF-8")
+			.build();
+
+		assertEquals("UTF-8", rc.parsers.getParser("application/json").toMap().getMap("ReaderParser").getString("fileCharset"));
+	}
+
+	@Test
+	public void m12_parser_inputStreamCharset() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.json()
+			.inputStreamCharset("UTF-8")
+			.build();
+
+		assertEquals("UTF-8", rc.parsers.getParser("application/json").toMap().getMap("ReaderParser").getString("streamCharset"));
+	}
+
+	@Test
+	public void m13_parser_binaryInputFormat() throws Exception {
+		RestClient rc = null;
+
+		rc = MockRestClient
+			.create(A.class)
+			.msgPack()
+			.binaryInputFormat(BinaryFormat.BASE64)
+			.build();
+
+		assertEquals("BASE64", rc.parsers.getParser("octal/msgpack").toMap().getMap("InputStreamParser").getString("binaryFormat"));
+	}
+
 //	@Test
 //	public void m14_parser_paramFormat() throws Exception { fail(); }
 ////	public RestClientBuilder paramFormat(String value) {

@@ -2343,7 +2343,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder trimStringsS(boolean value) {
+	public RestClientBuilder trimStringsOnWrite(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
 	}
 
@@ -2360,7 +2360,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder trimStringsS() {
+	public RestClientBuilder trimStringsOnWrite() {
 		return set(SERIALIZER_trimStrings, true);
 	}
 
@@ -2683,7 +2683,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder trimStringsP(boolean value) {
+	public RestClientBuilder trimStringsOnRead(boolean value) {
 		return set(PARSER_trimStrings, value);
 	}
 
@@ -2700,7 +2700,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public RestClientBuilder trimStringsP() {
+	public RestClientBuilder trimStringsOnRead() {
 		return set(PARSER_trimStrings, true);
 	}
 

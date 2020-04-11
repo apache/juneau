@@ -1530,26 +1530,26 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsP() {
-		super.trimStringsP();
+	public MockRestClient trimStringsOnRead() {
+		super.trimStringsOnRead();
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsP(boolean value) {
-		super.trimStringsP(value);
+	public MockRestClient trimStringsOnRead(boolean value) {
+		super.trimStringsOnRead(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsS() {
-		super.trimStringsS();
+	public MockRestClient trimStringsOnWrite() {
+		super.trimStringsOnWrite();
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsS(boolean value) {
-		super.trimStringsS(value);
+	public MockRestClient trimStringsOnWrite(boolean value) {
+		super.trimStringsOnWrite(value);
 		return this;
 	}
 
