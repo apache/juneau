@@ -179,8 +179,8 @@ public class HttpPartSchemaTest_Body {
 	public void a05_basic_nestedItems_onClass() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A05.class).noValidate().build();
 
-		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
-		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());
+		assertEquals(HttpPartDataType.NUMBER, s.getType());
+		assertEquals(HttpPartFormat.INT32, s.getFormat());
 		assertEquals(1, s.getMaximum());
 		assertEquals(2, s.getMinimum());
 		assertEquals(3, s.getMultipleOf());
@@ -198,9 +198,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals("c1\nc2", s.getDefault());
 
 		HttpPartSchema items = s.getItems();
-		assertEquals(HttpPartSchema.Type.INTEGER, items.getType());
-		assertEquals(HttpPartSchema.Format.INT64, items.getFormat());
-		assertEquals(HttpPartSchema.CollectionFormat.SSV, items.getCollectionFormat());
+		assertEquals(HttpPartDataType.INTEGER, items.getType());
+		assertEquals(HttpPartFormat.INT64, items.getFormat());
+		assertEquals(HttpPartCollectionFormat.SSV, items.getCollectionFormat());
 		assertEquals(5, items.getMaximum());
 		assertEquals(6, items.getMinimum());
 		assertEquals(7, items.getMultipleOf());
@@ -216,9 +216,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
-		assertEquals(HttpPartSchema.Type.STRING, items.getType());
-		assertEquals(HttpPartSchema.Format.FLOAT, items.getFormat());
-		assertEquals(HttpPartSchema.CollectionFormat.TSV, items.getCollectionFormat());
+		assertEquals(HttpPartDataType.STRING, items.getType());
+		assertEquals(HttpPartFormat.FLOAT, items.getFormat());
+		assertEquals(HttpPartCollectionFormat.TSV, items.getCollectionFormat());
 		assertEquals(9, items.getMaximum());
 		assertEquals(10, items.getMinimum());
 		assertEquals(11, items.getMultipleOf());
@@ -234,9 +234,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
-		assertEquals(HttpPartSchema.Type.ARRAY, items.getType());
-		assertEquals(HttpPartSchema.Format.DOUBLE, items.getFormat());
-		assertEquals(HttpPartSchema.CollectionFormat.PIPES, items.getCollectionFormat());
+		assertEquals(HttpPartDataType.ARRAY, items.getType());
+		assertEquals(HttpPartFormat.DOUBLE, items.getFormat());
+		assertEquals(HttpPartCollectionFormat.PIPES, items.getCollectionFormat());
 		assertEquals(13, items.getMaximum());
 		assertEquals(14, items.getMinimum());
 		assertEquals(15, items.getMultipleOf());

@@ -25,8 +25,6 @@ import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.httppart.HttpPartSchema.*;
-import org.apache.juneau.httppart.HttpPartSchema.Type;
 
 /**
  * The builder class for creating {@link HttpPartSchema} objects.
@@ -37,9 +35,9 @@ public class HttpPartSchemaBuilder {
 	Set<Integer> codes;
 	Set<String> _enum;
 	Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
-	CollectionFormat collectionFormat = CollectionFormat.NO_COLLECTION_FORMAT;
-	Type type = Type.NO_TYPE;
-	Format format = Format.NO_FORMAT;
+	HttpPartCollectionFormat collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
+	HttpPartDataType type = HttpPartDataType.NO_TYPE;
+	HttpPartFormat format = HttpPartFormat.NO_FORMAT;
 	Pattern pattern;
 	Number maximum, minimum, multipleOf;
 	Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
@@ -575,9 +573,9 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder type(String value) {
 		try {
 			if (isNotEmpty(value))
-				type = Type.fromString(value);
+				type = HttpPartDataType.fromString(value);
 		} catch (Exception e) {
-			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, Type.values());
+			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
 		}
 		return this;
 	}
@@ -651,9 +649,9 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder format(String value) {
 		try {
 			if (isNotEmpty(value))
-				format = Format.fromString(value);
+				format = HttpPartFormat.fromString(value);
 		} catch (Exception e) {
-			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, Format.values());
+			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
 		}
 		return this;
 	}
@@ -801,9 +799,9 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder collectionFormat(String value) {
 		try {
 			if (isNotEmpty(value))
-				this.collectionFormat = CollectionFormat.fromString(value);
+				this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 		} catch (Exception e) {
-			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, CollectionFormat.values());
+			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
 		}
 		return this;
 	}

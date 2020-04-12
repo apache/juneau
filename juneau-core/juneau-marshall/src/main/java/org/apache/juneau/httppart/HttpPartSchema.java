@@ -13,8 +13,8 @@
 package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.httppart.HttpPartDataType.*;
+import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -63,9 +63,9 @@ public class HttpPartSchema {
 	final Set<String> _enum;
 	final Map<String,HttpPartSchema> properties;
 	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
-	final CollectionFormat collectionFormat;
-	final Type type;
-	final Format format;
+	final HttpPartCollectionFormat collectionFormat;
+	final HttpPartDataType type;
+	final HttpPartFormat format;
 	final Pattern pattern;
 	final HttpPartSchema items, additionalProperties;
 	final Number maximum, minimum, multipleOf;
@@ -292,7 +292,7 @@ public class HttpPartSchema {
 				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
 				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maximum != null, "maximum");
 				notAllowed.aif(minimum != null, "minimum");
@@ -300,7 +300,7 @@ public class HttpPartSchema {
 				notAllowed.aif(maxItems != null, "maxItems");
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.BYTE, Format.BINARY, Format.BINARY_SPACED, Format.DATE, Format.DATE_TIME, Format.PASSWORD, Format.UON, Format.NO_FORMAT);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
@@ -316,7 +316,7 @@ public class HttpPartSchema {
 				notAllowed.aif(minLength != null, "minLength");
 				notAllowed.aif(maxProperties != null, "maxProperties");
 				notAllowed.aif(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
@@ -326,7 +326,7 @@ public class HttpPartSchema {
 				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
 				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(pattern != null, "pattern");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maximum != null, "maximum");
@@ -338,7 +338,7 @@ public class HttpPartSchema {
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minLength != null, "minLength");
 				notAllowed.aif(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case FILE: {
@@ -348,7 +348,7 @@ public class HttpPartSchema {
 				notAllowed.aif(properties != null, "properties");
 				notAllowed.aif(additionalProperties != null, "additionalProperties");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(pattern != null, "pattern");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maxItems != null, "maxItems");
@@ -357,14 +357,14 @@ public class HttpPartSchema {
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minLength != null, "minLength");
 				notAllowed.aif(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.INT32, Format.INT64);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
 				notAllowed.aif(properties != null, "properties");
 				notAllowed.aif(additionalProperties != null, "additionalProperties");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(pattern != null, "pattern");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maxItems != null, "maxItems");
@@ -373,14 +373,14 @@ public class HttpPartSchema {
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minLength != null, "minLength");
 				notAllowed.aif(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.FLOAT, Format.DOUBLE);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
 			case OBJECT: {
 				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
 				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
+				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(pattern != null, "pattern");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maximum != null, "maximum");
@@ -390,7 +390,7 @@ public class HttpPartSchema {
 				notAllowed.aif(maxLength != null, "maxLength");
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minLength != null, "minLength");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			default:
@@ -427,207 +427,11 @@ public class HttpPartSchema {
 			errors.add("minProperties cannot be less than zero.");
 		if (maxProperties != null && maxProperties < 0)
 			errors.add("maxProperties cannot be less than zero.");
-		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != Format.NO_FORMAT))
+		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != HttpPartFormat.NO_FORMAT))
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
 			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"), new Object[0]);
-	}
-
-	/**
-	 * Valid values for the <c>collectionFormat</c> field.
-	 */
-	public static enum CollectionFormat {
-
-		/**
-		 * Comma-separated values (e.g. <js>"foo,bar"</js>).
-		 */
-		CSV,
-
-		/**
-		 * Space-separated values (e.g. <js>"foo bar"</js>).
-		 */
-		SSV,
-
-		/**
-		 * Tab-separated values (e.g. <js>"foo\tbar"</js>).
-		 */
-		TSV,
-
-		/**
-		 * Pipe-separated values (e.g. <js>"foo|bar"</js>).
-		 */
-		PIPES,
-
-		/**
-		 * Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-		 */
-		MULTI,
-
-		/**
-		 * UON notation (e.g. <js>"@(foo,bar)"</js>).
-		 */
-		UON,
-
-		/**
-		 * Not specified.
-		 */
-		NO_COLLECTION_FORMAT;
-
-		static CollectionFormat fromString(String value) {
-
-			return valueOf(value.toUpperCase());
-		}
-
-		@Override
-		public String toString() {
-			return name().toLowerCase();
-		}
-	}
-
-	/**
-	 * Valid values for the <c>type</c> field.
-	 */
-	public static enum Type {
-
-		/**
-		 * String.
-		 */
-		STRING,
-
-		/**
-		 * Floating point number.
-		 */
-		NUMBER,
-
-		/**
-		 * Decimal number.
-		 */
-		INTEGER,
-
-		/**
-		 * Boolean.
-		 */
-		BOOLEAN,
-
-		/**
-		 * Array or collection.
-		 */
-		ARRAY,
-
-		/**
-		 * Map or bean.
-		 */
-		OBJECT,
-
-		/**
-		 * File.
-		 */
-		FILE,
-
-		/**
-		 * Not specified.
-		 */
-		NO_TYPE;
-
-		static Type fromString(String value) {
-			return valueOf(value.toUpperCase());
-		}
-
-		@Override
-		public String toString() {
-			return name().toLowerCase();
-		}
-	}
-
-	/**
-	 * Valid values for the <c>format</c> field.
-	 */
-	public static enum Format {
-
-		/**
-		 * Signed 32 bits.
-		 */
-		INT32,
-
-		/**
-		 * Signed 64 bits.
-		 */
-		INT64,
-
-		/**
-		 * 32-bit floating point number.
-		 */
-		FLOAT,
-
-		/**
-		 * 64-bit floating point number.
-		 */
-		DOUBLE,
-
-		/**
-		 * BASE-64 encoded characters.
-		 */
-		BYTE,
-
-		/**
-		 * Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-		 */
-		BINARY,
-
-		/**
-		 * Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-		 */
-		BINARY_SPACED,
-
-		/**
-		 * An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-		 */
-		DATE,
-
-		/**
-		 *  An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-		 */
-		DATE_TIME,
-
-		/**
-		 * Used to hint UIs the input needs to be obscured.
-		 */
-		PASSWORD,
-
-		/**
-		 * UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
-		 */
-		UON,
-
-		/**
-		 * Not specified.
-		 */
-		NO_FORMAT;
-
-		static Format fromString(String value) {
-			value = value.toUpperCase().replace('-','_');
-			return valueOf(value);
-		}
-
-		@Override
-		public String toString() {
-			String s = name().toLowerCase().replace('_','-');
-			return s;
-		}
-
-		/**
-		 * Returns <jk>true</jk> if this format is in the provided list.
-		 *
-		 * @param list The list of formats to check against.
-		 * @return <jk>true</jk> if this format is in the provided list.
-		 */
-		public boolean isOneOf(Format...list) {
-			for (Format ff : list)
-				if (this == ff)
-					return true;
-			return false;
-		}
 	}
 
 	/**
@@ -698,7 +502,7 @@ public class HttpPartSchema {
 	 * @return The <c>type</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchemaBuilder#type(String)
 	 */
-	public Type getType() {
+	public HttpPartDataType getType() {
 		return type;
 	}
 
@@ -711,21 +515,21 @@ public class HttpPartSchema {
 	 * @return The format field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchemaBuilder#format(String)
 	 */
-	public Type getType(ClassMeta<?> cm) {
-		if (type != Type.NO_TYPE)
+	public HttpPartDataType getType(ClassMeta<?> cm) {
+		if (type != HttpPartDataType.NO_TYPE)
 			return type;
 		if (cm.isMapOrBean())
-			return Type.OBJECT;
+			return HttpPartDataType.OBJECT;
 		if (cm.isCollectionOrArray())
-			return Type.ARRAY;
+			return HttpPartDataType.ARRAY;
 		if (cm.isNumber()) {
 			if (cm.isDecimal())
-				return Type.NUMBER;
-			return Type.INTEGER;
+				return HttpPartDataType.NUMBER;
+			return HttpPartDataType.INTEGER;
 		}
 		if (cm.isBoolean())
-			return Type.BOOLEAN;
-		return Type.STRING;
+			return HttpPartDataType.BOOLEAN;
+		return HttpPartDataType.STRING;
 	}
 
 	/**
@@ -744,7 +548,7 @@ public class HttpPartSchema {
 	 * @return The <c>collectionFormat</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchemaBuilder#collectionFormat(String)
 	 */
-	public CollectionFormat getCollectionFormat() {
+	public HttpPartCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
 
@@ -754,7 +558,7 @@ public class HttpPartSchema {
 	 * @see HttpPartSchemaBuilder#format(String)
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 */
-	public Format getFormat() {
+	public HttpPartFormat getFormat() {
 		return format;
 	}
 
@@ -767,18 +571,18 @@ public class HttpPartSchema {
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchemaBuilder#format(String)
 	 */
-	public Format getFormat(ClassMeta<?> cm) {
-		if (format != Format.NO_FORMAT)
+	public HttpPartFormat getFormat(ClassMeta<?> cm) {
+		if (format != HttpPartFormat.NO_FORMAT)
 			return format;
 		if (cm.isNumber()) {
 			if (cm.isDecimal()) {
 				if (cm.isDouble())
-					return Format.DOUBLE;
-				return Format.FLOAT;
+					return HttpPartFormat.DOUBLE;
+				return HttpPartFormat.FLOAT;
 			}
 			if (cm.isLong())
-				return Format.INT64;
-			return Format.INT32;
+				return HttpPartFormat.INT64;
+			return HttpPartFormat.INT32;
 		}
 		return format;
 	}
@@ -1326,7 +1130,7 @@ public class HttpPartSchema {
 				.asf("required", required)
 				.asf("uniqueItems", uniqueItems)
 				.asf("skipIfEmpty", skipIfEmpty)
-				.aif(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+				.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
 				.ase("pattern", pattern)
 				.asn("items", items)
 				.asn("additionalProperties", additionalProperties)

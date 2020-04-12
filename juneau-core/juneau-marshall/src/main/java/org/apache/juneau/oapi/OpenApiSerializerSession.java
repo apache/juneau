@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
+import static org.apache.juneau.httppart.HttpPartDataType.*;
+import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.IOException;
@@ -94,9 +94,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		ClassMeta<?> type = getClassMetaForObject(value);
 		if (type == null)
 			type = object();
-		HttpPartSchema.Type t = schema.getType(type);
-		HttpPartSchema.Format f = schema.getFormat(type);
-		HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
+		HttpPartDataType t = schema.getType(type);
+		HttpPartFormat f = schema.getFormat(type);
+		HttpPartCollectionFormat cf = schema.getCollectionFormat();
 
 		String out = null;
 
@@ -126,14 +126,14 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					out = toIsoDate(toType(value, CM_Calendar));
 				else if (f == DATE_TIME)
 					out = toIsoDateTime(toType(value, CM_Calendar));
-				else if (f == HttpPartSchema.Format.UON)
+				else if (f == HttpPartFormat.UON)
 					out = super.serialize(partType, schema, value);
 				else
 					out = toType(value, string());
 
 			} else if (t == ARRAY) {
 
-				if (cf == HttpPartSchema.CollectionFormat.UON)
+				if (cf == HttpPartCollectionFormat.UON)
 					out = super.serialize(partType, null, toList(partType, type, value, schema));
 				else {
 					List<String> l = new ArrayList<>();
@@ -165,14 +165,14 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == BOOLEAN) {
 
-				if (f == HttpPartSchema.Format.UON)
+				if (f == HttpPartFormat.UON)
 					out = super.serialize(partType, null, value);
 				else
 					out = stringify(toType(value, CM_Boolean));
 
 			} else if (t == INTEGER) {
 
-				if (f == HttpPartSchema.Format.UON)
+				if (f == HttpPartFormat.UON)
 					out = super.serialize(partType, null, value);
 				else if (f == INT64)
 					out = stringify(toType(value, CM_Long));
@@ -181,7 +181,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == NUMBER) {
 
-				if (f == HttpPartSchema.Format.UON)
+				if (f == HttpPartFormat.UON)
 					out = super.serialize(partType, null, value);
 				else if (f == DOUBLE)
 					out = stringify(toType(value, CM_Double));
@@ -190,7 +190,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == OBJECT) {
 
-				if (f == HttpPartSchema.Format.UON) {
+				if (f == HttpPartFormat.UON) {
 					out = super.serialize(partType, null, value);
 				} else if (schema.hasProperties() && type.isMapOrBean()) {
 					out = super.serialize(partType, null, toMap(partType, type, value, schema));
@@ -264,9 +264,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
 		ClassMeta cm = getClassMetaForObject(o);
-		HttpPartSchema.Type t = s.getType(cm);
-		HttpPartSchema.Format f = s.getFormat(cm);
-		HttpPartSchema.CollectionFormat cf = s.getCollectionFormat();
+		HttpPartDataType t = s.getType(cm);
+		HttpPartFormat f = s.getFormat(cm);
+		HttpPartCollectionFormat cf = s.getCollectionFormat();
 
 		if (t == STRING) {
 			if (f == BYTE)

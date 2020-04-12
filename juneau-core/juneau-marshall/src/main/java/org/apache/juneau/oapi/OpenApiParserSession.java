@@ -13,9 +13,9 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
-import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
+import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
+import static org.apache.juneau.httppart.HttpPartDataType.*;
+import static org.apache.juneau.httppart.HttpPartFormat.*;
 
 import java.util.*;
 
@@ -100,8 +100,8 @@ public class OpenApiParserSession extends UonParserSession {
 				return null;
 			in = schema.getDefault();
 		} else {
-			HttpPartSchema.Type t = schema.getType(type);
-			HttpPartSchema.Format f = schema.getFormat(type);
+			HttpPartDataType t = schema.getType(type);
+			HttpPartFormat f = schema.getFormat(type);
 
 			if (t == STRING) {
 				if (type.isObject()) {
@@ -113,7 +113,7 @@ public class OpenApiParserSession extends UonParserSession {
 						return (T)fromHex(in);
 					if (f == BINARY_SPACED)
 						return (T)fromSpacedHex(in);
-					if (f == HttpPartSchema.Format.UON)
+					if (f == HttpPartFormat.UON)
 						return super.parse(partType, schema, in, type);
 					return (T)in;
 				}
@@ -125,7 +125,7 @@ public class OpenApiParserSession extends UonParserSession {
 					return toType(fromHex(in), type);
 				if (f == BINARY_SPACED)
 					return toType(fromSpacedHex(in), type);
-				if (f == HttpPartSchema.Format.UON)
+				if (f == HttpPartFormat.UON)
 					return super.parse(partType, schema, in, type);
 				return toType(in, type);
 
@@ -137,7 +137,7 @@ public class OpenApiParserSession extends UonParserSession {
 				if (eType == null)
 					eType = schema.getParsedType().getElementType();
 
-				HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
+				HttpPartCollectionFormat cf = schema.getCollectionFormat();
 				String[] ss = new String[0];
 
 				if (cf == MULTI)
@@ -150,7 +150,7 @@ public class OpenApiParserSession extends UonParserSession {
 					ss = splitQuoted(in);
 				else if (cf == TSV)
 					ss = split(in, '\t');
-				else if (cf == HttpPartSchema.CollectionFormat.UON)
+				else if (cf == HttpPartCollectionFormat.UON)
 					return super.parse(partType, null, in, type);
 				else if (cf == NO_COLLECTION_FORMAT) {
 					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')

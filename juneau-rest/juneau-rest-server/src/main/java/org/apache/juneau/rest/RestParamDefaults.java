@@ -457,7 +457,7 @@ class RestParamDefaults {
 			super(FORM_DATA, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(FormData.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 			if (multi && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
@@ -500,7 +500,7 @@ class RestParamDefaults {
 			super(QUERY, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(Query.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			this.multi = getMulti(mpi) || schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 			if (multi && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
