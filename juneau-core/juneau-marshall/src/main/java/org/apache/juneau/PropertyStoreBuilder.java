@@ -517,6 +517,13 @@ public class PropertyStoreBuilder {
 		this.groups.clear();
 	}
 
+	/**
+	 * Clears the PropertyStore cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
+	}
+
 	private static boolean isSet(String key) {
 		String s = key.substring(key.lastIndexOf('.')+1);
 		return s.length() == 2 && s.charAt(0) == 's';
