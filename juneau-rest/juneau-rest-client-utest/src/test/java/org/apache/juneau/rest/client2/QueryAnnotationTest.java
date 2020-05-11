@@ -71,14 +71,14 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="a") String getA03b(@Query("*") Bean b);
 		@RemoteMethod(path="a") String getA03c(@Query Bean b);
 		@RemoteMethod(path="a") String getA04a(@Query("x") Bean[] b);
-		@RemoteMethod(path="a") String getA04b(@Query(name="x",collectionFormat="uon") Bean[] b);
+		@RemoteMethod(path="a") String getA04b(@Query(n="x",collectionFormat="uon") Bean[] b);
 		@RemoteMethod(path="a") String getA05a(@Query("x") List<Bean> b);
-		@RemoteMethod(path="a") String getA05b(@Query(name="x",collectionFormat="uon") List<Bean> b);
+		@RemoteMethod(path="a") String getA05b(@Query(n="x",collectionFormat="uon") List<Bean> b);
 		@RemoteMethod(path="a") String getA06a(@Query("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06b(@Query("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06c(@Query Map<String,Bean> b);
-		@RemoteMethod(path="a") String getA06d(@Query(name="x",format="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getA06e(@Query(format="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String getA06d(@Query(n="x",collectionFormat="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String getA06e(@Query(collectionFormat="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA07a(@Query("*") Reader b);
 		@RemoteMethod(path="a") String getA07b(@Query Reader b);
 		@RemoteMethod(path="a") String getA08a(@Query("*") InputStream b);
@@ -99,7 +99,7 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a03a_Bean() throws Exception {
-		assertEquals("{x:'(f=1)'}", a01.getA03a(Bean.create()));
+		assertEquals("{x:'f=1'}", a01.getA03a(Bean.create()));
 	}
 	@Test
 	public void a03b_Bean() throws Exception {
@@ -111,7 +111,7 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a04a_BeanArray() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.getA04a(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}", a01.getA04a(new Bean[]{Bean.create(),Bean.create()}));
 	}
 	@Test
 	public void a04b_BeanArray() throws Exception {
@@ -119,7 +119,7 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.getA05a(AList.of(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}", a01.getA05a(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
@@ -127,15 +127,15 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.getA06a(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}", a01.getA06a(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06b(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06b(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06c(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06c(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
@@ -143,7 +143,7 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06e(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06e(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a07a_Reader() throws Exception {
@@ -184,10 +184,10 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface BR {
-		@RemoteMethod(path="/") String getB01(@Query(name="x",_default="foo") String b);
-		@RemoteMethod(path="/") String getB02(@Query(name="x",_default="foo",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String getB03(@Query(name="x",_default="") String b);
-		@RemoteMethod(path="/") String getB04(@Query(name="x",_default="",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getB01(@Query(n="x",_default="foo") String b);
+		@RemoteMethod(path="/") String getB02(@Query(n="x",_default="foo",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getB03(@Query(n="x",_default="") String b);
+		@RemoteMethod(path="/") String getB04(@Query(n="x",_default="",allowEmptyValue=true) String b);
 	}
 
 	private static BR br = MockRemote.build(BR.class, B.class);
@@ -251,20 +251,20 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface CR {
-		@RemoteMethod(path="/a") String getC01a(@Query(name="x") String...b);
-		@RemoteMethod(path="/b") String getC01b(@Query(name="x") String...b);
-		@RemoteMethod(path="/a") String getC02a(@Query(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/b") String getC02b(@Query(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/a") String getC03a(@Query(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/b") String getC03b(@Query(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/a") String getC04a(@Query(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/b") String getC04b(@Query(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/a") String getC05a(@Query(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/b") String getC05b(@Query(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/a") String getC06a(@Query(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/b") String getC06b(@Query(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/a") String getC07a(@Query(name="x",collectionFormat="uon") String...b);
-		@RemoteMethod(path="/b") String getC07b(@Query(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/a") String getC01a(@Query(n="x") String...b);
+		@RemoteMethod(path="/b") String getC01b(@Query(n="x") String...b);
+		@RemoteMethod(path="/a") String getC02a(@Query(n="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/b") String getC02b(@Query(n="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/a") String getC03a(@Query(n="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/b") String getC03b(@Query(n="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/a") String getC04a(@Query(n="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/b") String getC04b(@Query(n="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/a") String getC05a(@Query(n="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/b") String getC05b(@Query(n="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/a") String getC06a(@Query(n="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/b") String getC06b(@Query(n="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/a") String getC07a(@Query(n="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/b") String getC07b(@Query(n="x",collectionFormat="uon") String...b);
 	}
 
 	private static CR cr = MockRemote.build(CR.class, C.class);
@@ -342,48 +342,48 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface DR {
-		@RemoteMethod(path="/") String getC01a(@Query(name="x",minimum="1",maximum="10") int b);
-		@RemoteMethod(path="/") String getC01b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
-		@RemoteMethod(path="/") String getC01c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
-		@RemoteMethod(path="/") String getC02a(@Query(name="x",minimum="1",maximum="10") short b);
-		@RemoteMethod(path="/") String getC02b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
-		@RemoteMethod(path="/") String getC02c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
-		@RemoteMethod(path="/") String getC03a(@Query(name="x",minimum="1",maximum="10") long b);
-		@RemoteMethod(path="/") String getC03b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) long b);
-		@RemoteMethod(path="/") String getC03c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) long b);
-		@RemoteMethod(path="/") String getC04a(@Query(name="x",minimum="1",maximum="10") float b);
-		@RemoteMethod(path="/") String getC04b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) float b);
-		@RemoteMethod(path="/") String getC04c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) float b);
-		@RemoteMethod(path="/") String getC05a(@Query(name="x",minimum="1",maximum="10") double b);
-		@RemoteMethod(path="/") String getC05b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) double b);
-		@RemoteMethod(path="/") String getC05c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) double b);
-		@RemoteMethod(path="/") String getC06a(@Query(name="x",minimum="1",maximum="10") byte b);
-		@RemoteMethod(path="/") String getC06b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) byte b);
-		@RemoteMethod(path="/") String getC06c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) byte b);
-		@RemoteMethod(path="/") String getC07a(@Query(name="x",minimum="1",maximum="10") AtomicInteger b);
-		@RemoteMethod(path="/") String getC07b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) AtomicInteger b);
-		@RemoteMethod(path="/") String getC07c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) AtomicInteger b);
-		@RemoteMethod(path="/") String getC08a(@Query(name="x",minimum="1",maximum="10") BigDecimal b);
-		@RemoteMethod(path="/") String getC08b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) BigDecimal b);
-		@RemoteMethod(path="/") String getC08c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) BigDecimal b);
-		@RemoteMethod(path="/") String getC11a(@Query(name="x",minimum="1",maximum="10") Integer b);
-		@RemoteMethod(path="/") String getC11b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Integer b);
-		@RemoteMethod(path="/") String getC11c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Integer b);
-		@RemoteMethod(path="/") String getC12a(@Query(name="x",minimum="1",maximum="10") Short b);
-		@RemoteMethod(path="/") String getC12b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Short b);
-		@RemoteMethod(path="/") String getC12c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Short b);
-		@RemoteMethod(path="/") String getC13a(@Query(name="x",minimum="1",maximum="10") Long b);
-		@RemoteMethod(path="/") String getC13b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Long b);
-		@RemoteMethod(path="/") String getC13c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Long b);
-		@RemoteMethod(path="/") String getC14a(@Query(name="x",minimum="1",maximum="10") Float b);
-		@RemoteMethod(path="/") String getC14b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Float b);
-		@RemoteMethod(path="/") String getC14c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Float b);
-		@RemoteMethod(path="/") String getC15a(@Query(name="x",minimum="1",maximum="10") Double b);
-		@RemoteMethod(path="/") String getC15b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Double b);
-		@RemoteMethod(path="/") String getC15c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Double b);
-		@RemoteMethod(path="/") String getC16a(@Query(name="x",minimum="1",maximum="10") Byte b);
-		@RemoteMethod(path="/") String getC16b(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Byte b);
-		@RemoteMethod(path="/") String getC16c(@Query(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
+		@RemoteMethod(path="/") String getC01a(@Query(n="x",minimum="1",maximum="10") int b);
+		@RemoteMethod(path="/") String getC01b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
+		@RemoteMethod(path="/") String getC01c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
+		@RemoteMethod(path="/") String getC02a(@Query(n="x",minimum="1",maximum="10") short b);
+		@RemoteMethod(path="/") String getC02b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
+		@RemoteMethod(path="/") String getC02c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
+		@RemoteMethod(path="/") String getC03a(@Query(n="x",minimum="1",maximum="10") long b);
+		@RemoteMethod(path="/") String getC03b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) long b);
+		@RemoteMethod(path="/") String getC03c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) long b);
+		@RemoteMethod(path="/") String getC04a(@Query(n="x",minimum="1",maximum="10") float b);
+		@RemoteMethod(path="/") String getC04b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) float b);
+		@RemoteMethod(path="/") String getC04c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) float b);
+		@RemoteMethod(path="/") String getC05a(@Query(n="x",minimum="1",maximum="10") double b);
+		@RemoteMethod(path="/") String getC05b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) double b);
+		@RemoteMethod(path="/") String getC05c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) double b);
+		@RemoteMethod(path="/") String getC06a(@Query(n="x",minimum="1",maximum="10") byte b);
+		@RemoteMethod(path="/") String getC06b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) byte b);
+		@RemoteMethod(path="/") String getC06c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) byte b);
+		@RemoteMethod(path="/") String getC07a(@Query(n="x",minimum="1",maximum="10") AtomicInteger b);
+		@RemoteMethod(path="/") String getC07b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) AtomicInteger b);
+		@RemoteMethod(path="/") String getC07c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) AtomicInteger b);
+		@RemoteMethod(path="/") String getC08a(@Query(n="x",minimum="1",maximum="10") BigDecimal b);
+		@RemoteMethod(path="/") String getC08b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) BigDecimal b);
+		@RemoteMethod(path="/") String getC08c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) BigDecimal b);
+		@RemoteMethod(path="/") String getC11a(@Query(n="x",minimum="1",maximum="10") Integer b);
+		@RemoteMethod(path="/") String getC11b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Integer b);
+		@RemoteMethod(path="/") String getC11c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Integer b);
+		@RemoteMethod(path="/") String getC12a(@Query(n="x",minimum="1",maximum="10") Short b);
+		@RemoteMethod(path="/") String getC12b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Short b);
+		@RemoteMethod(path="/") String getC12c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Short b);
+		@RemoteMethod(path="/") String getC13a(@Query(n="x",minimum="1",maximum="10") Long b);
+		@RemoteMethod(path="/") String getC13b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Long b);
+		@RemoteMethod(path="/") String getC13c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Long b);
+		@RemoteMethod(path="/") String getC14a(@Query(n="x",minimum="1",maximum="10") Float b);
+		@RemoteMethod(path="/") String getC14b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Float b);
+		@RemoteMethod(path="/") String getC14c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Float b);
+		@RemoteMethod(path="/") String getC15a(@Query(n="x",minimum="1",maximum="10") Double b);
+		@RemoteMethod(path="/") String getC15b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Double b);
+		@RemoteMethod(path="/") String getC15c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Double b);
+		@RemoteMethod(path="/") String getC16a(@Query(n="x",minimum="1",maximum="10") Byte b);
+		@RemoteMethod(path="/") String getC16b(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Byte b);
+		@RemoteMethod(path="/") String getC16c(@Query(n="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
 	}
 
 	private static DR dr = MockRemote.build(DR.class, D.class);
@@ -715,12 +715,12 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface ER {
-		@RemoteMethod(path="/") String getE01(@Query(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
-		@RemoteMethod(path="/") String getE02(@Query(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
-		@RemoteMethod(path="/") String getE03(@Query(name="x",collectionFormat="pipes",uniqueItems=false) String...b);
-		@RemoteMethod(path="/") String getE04(@Query(name="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
-		@RemoteMethod(path="/") String getE05(@Query(name="x",collectionFormat="pipes",uniqueItems=true) String...b);
-		@RemoteMethod(path="/") String getE06(@Query(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
+		@RemoteMethod(path="/") String getE01(@Query(n="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
+		@RemoteMethod(path="/") String getE02(@Query(n="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
+		@RemoteMethod(path="/") String getE03(@Query(n="x",collectionFormat="pipes",uniqueItems=false) String...b);
+		@RemoteMethod(path="/") String getE04(@Query(n="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
+		@RemoteMethod(path="/") String getE05(@Query(n="x",collectionFormat="pipes",uniqueItems=true) String...b);
+		@RemoteMethod(path="/") String getE06(@Query(n="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
 	}
 
 	private static ER er = MockRemote.build(ER.class, E.class);
@@ -731,7 +731,7 @@ public class QueryAnnotationTest {
 		assertEquals("{x:'1|2'}", er.getE01("1","2"));
 		try { er.getE01(); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.getE01("1","2","3"); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.getE01((String)null));
+		assertEquals("{x:null}", er.getE01((String)null));
 	}
 	@Test
 	public void e02_minMax_items() throws Exception {
@@ -739,7 +739,7 @@ public class QueryAnnotationTest {
 		assertEquals("{x:'1|2'}", er.getE02(new String[]{"1","2"}));
 		try { er.getE02(new String[]{}); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.getE02(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.getE02(new String[]{null}));
+		assertEquals("{x:null}", er.getE02(new String[]{null}));
 	}
 	@Test
 	public void e03_uniqueItems_false() throws Exception {
@@ -774,12 +774,12 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface FR {
-		@RemoteMethod(path="/") String getF01(@Query(name="x",minLength=2,maxLength=3) String b);
-		@RemoteMethod(path="/") String getF02(@Query(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
-		@RemoteMethod(path="/") String getF03(@Query(name="x",_enum={"foo"}) String b);
-		@RemoteMethod(path="/") String getF04(@Query(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
-		@RemoteMethod(path="/") String getF05(@Query(name="x",pattern="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/") String getF06(@Query(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+		@RemoteMethod(path="/") String getF01(@Query(n="x",minLength=2,maxLength=3) String b);
+		@RemoteMethod(path="/") String getF02(@Query(n="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
+		@RemoteMethod(path="/") String getF03(@Query(n="x",_enum={"foo"}) String b);
+		@RemoteMethod(path="/") String getF04(@Query(n="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
+		@RemoteMethod(path="/") String getF05(@Query(n="x",pattern="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/") String getF06(@Query(n="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
 	}
 
 	private static FR fr = MockRemote.build(FR.class, F.class);
@@ -810,7 +810,7 @@ public class QueryAnnotationTest {
 	public void f04_enum_items() throws Exception {
 		assertEquals("{x:'foo'}", fr.getF04("foo"));
 		try { fr.getF04("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
-		assertEquals("{x:'null'}", fr.getF04((String)null));
+		assertEquals("{x:null}", fr.getF04((String)null));
 	}
 	@Test
 	public void f05_pattern() throws Exception {
@@ -822,7 +822,7 @@ public class QueryAnnotationTest {
 	public void f06_pattern_items() throws Exception {
 		assertEquals("{x:'foo123'}", fr.getF06("foo123"));
 		try { fr.getF06("foo"); fail(); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
-		assertEquals("{x:'null'}", fr.getF06((String)null));
+		assertEquals("{x:null}", fr.getF06((String)null));
 	}
 
 	//=================================================================================================================
@@ -839,20 +839,20 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface GR {
-		@RemoteMethod(path="/") String getG01(@Query(name="x",multipleOf="2") int b);
-		@RemoteMethod(path="/") String getG02(@Query(name="x",multipleOf="2") short b);
-		@RemoteMethod(path="/") String getG03(@Query(name="x",multipleOf="2") long b);
-		@RemoteMethod(path="/") String getG04(@Query(name="x",multipleOf="2") float b);
-		@RemoteMethod(path="/") String getG05(@Query(name="x",multipleOf="2") double b);
-		@RemoteMethod(path="/") String getG06(@Query(name="x",multipleOf="2") byte b);
-		@RemoteMethod(path="/") String getG07(@Query(name="x",multipleOf="2") AtomicInteger b);
-		@RemoteMethod(path="/") String getG08(@Query(name="x",multipleOf="2") BigDecimal b);
-		@RemoteMethod(path="/") String getG11(@Query(name="x",multipleOf="2") Integer b);
-		@RemoteMethod(path="/") String getG12(@Query(name="x",multipleOf="2") Short b);
-		@RemoteMethod(path="/") String getG13(@Query(name="x",multipleOf="2") Long b);
-		@RemoteMethod(path="/") String getG14(@Query(name="x",multipleOf="2") Float b);
-		@RemoteMethod(path="/") String getG15(@Query(name="x",multipleOf="2") Double b);
-		@RemoteMethod(path="/") String getG16(@Query(name="x",multipleOf="2") Byte b);
+		@RemoteMethod(path="/") String getG01(@Query(n="x",multipleOf="2") int b);
+		@RemoteMethod(path="/") String getG02(@Query(n="x",multipleOf="2") short b);
+		@RemoteMethod(path="/") String getG03(@Query(n="x",multipleOf="2") long b);
+		@RemoteMethod(path="/") String getG04(@Query(n="x",multipleOf="2") float b);
+		@RemoteMethod(path="/") String getG05(@Query(n="x",multipleOf="2") double b);
+		@RemoteMethod(path="/") String getG06(@Query(n="x",multipleOf="2") byte b);
+		@RemoteMethod(path="/") String getG07(@Query(n="x",multipleOf="2") AtomicInteger b);
+		@RemoteMethod(path="/") String getG08(@Query(n="x",multipleOf="2") BigDecimal b);
+		@RemoteMethod(path="/") String getG11(@Query(n="x",multipleOf="2") Integer b);
+		@RemoteMethod(path="/") String getG12(@Query(n="x",multipleOf="2") Short b);
+		@RemoteMethod(path="/") String getG13(@Query(n="x",multipleOf="2") Long b);
+		@RemoteMethod(path="/") String getG14(@Query(n="x",multipleOf="2") Float b);
+		@RemoteMethod(path="/") String getG15(@Query(n="x",multipleOf="2") Double b);
+		@RemoteMethod(path="/") String getG16(@Query(n="x",multipleOf="2") Byte b);
 	}
 
 	private static GR gr = MockRemote.build(GR.class, G.class);
@@ -942,9 +942,9 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface HR {
-		@RemoteMethod(path="/") String getH01(@Query(name="x") String b);
-		@RemoteMethod(path="/") String getH02(@Query(name="x",required=false) String b);
-		@RemoteMethod(path="/") String getH03(@Query(name="x",required=true) String b);
+		@RemoteMethod(path="/") String getH01(@Query(n="x") String b);
+		@RemoteMethod(path="/") String getH02(@Query(n="x",required=false) String b);
+		@RemoteMethod(path="/") String getH03(@Query(n="x",required=true) String b);
 	}
 
 	private static HR hr = MockRemote.build(HR.class, H.class);
@@ -977,9 +977,9 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface IR {
-		@RemoteMethod(path="/") String getI01(@Query(name="x",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String getI02(@Query(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
-		@RemoteMethod(path="/") String getI03(@Query(name="x",skipIfEmpty=true) String b);
+		@RemoteMethod(path="/") String getI01(@Query(n="x",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getI02(@Query(n="x",allowEmptyValue=true,skipIfEmpty=false) String b);
+		@RemoteMethod(path="/") String getI03(@Query(n="x",skipIfEmpty=true) String b);
 	}
 
 	private static IR ir = MockRemote.build(IR.class, I.class);
@@ -1011,7 +1011,7 @@ public class QueryAnnotationTest {
 
 	@Remote
 	public static interface JR {
-		@RemoteMethod(path="/") String getJ01(@Query(name="x",serializer=XPartSerializer.class) String b);
+		@RemoteMethod(path="/") String getJ01(@Query(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	private static JR jr = MockRemote.build(JR.class, J.class);

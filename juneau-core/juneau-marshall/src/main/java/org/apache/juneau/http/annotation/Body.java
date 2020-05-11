@@ -180,6 +180,11 @@ public @interface Body {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -224,6 +229,11 @@ public @interface Body {
 	 * </ul>
 	 */
 	boolean required() default false;
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
 
 	//=================================================================================================================
 	// Attributes specific to in=body
@@ -383,6 +393,11 @@ public @interface Body {
 	String[] example() default {};
 
 	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
+
+	/**
 	 * Serialized examples of the body of a request.
 	 *
 	 * <p>
@@ -424,6 +439,11 @@ public @interface Body {
 	 * </ul>
 	 */
 	String[] examples() default {};
+
+	/**
+	 * Synonym for {@link #examples()}.
+	 */
+	String[] exs() default {};
 
 	/**
 	 * Free-form value for the {@doc SwaggerParameterObject}.

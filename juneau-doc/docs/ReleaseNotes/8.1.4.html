@@ -146,7 +146,7 @@
 			<li>Collections of beans with <c><ja>@Bean</ja>(bpi)</c> were not being serialized in the correct column order.			
 		</ul>
 	<li>
-		Fixed a bug where a copy constructor can erroneously be recognised as a builder constructor if the class also
+		Fixed a bug where a copy constructor can erroneously be recognized as a builder constructor if the class also
 		has a static <c>create</c> method.  Net effect was that the copy constructor would needlessly be called during parsing.
 	<li>
 		New {@link oaj.collections} package containing various convenience fluent-style collection classes:
@@ -195,6 +195,31 @@
 		Fixed bug in HTML serializer where tables of maps were not sorted if <jsf>SERIALIZER_sortMaps</jsf> was specified.
 	<li>
 		<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}.
+	<li>
+		Improvements to OpenAPI serializer and parser:
+		<ul>
+			<li>Collection format can now be specified on OBJECTs to allow key/value pairs to be delimited with the same support as ARRAYs.
+			<li>New {@link oaj.oapi.OpenApiCommon#OAPI_format OAPI_format} and {@link oaj.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat} properties.
+		</ul>
+	<li>
+		Convenience methods added to {@link oaj.httppart.HttpPartSchema} and related classes to simplify schema definitions:
+		<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+		
+	<jc>// Old</jc>
+	HttpPartSchema s = <jsm>schema</jsm>(<js>"object"</js>)
+		.property(<js>"f01"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>)))
+		.property(<js>"f02"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>)))
+		.property(<js>"f03"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>)))
+		.build();
+
+	<jc>// New</jc>
+	HttpPartSchema s = <jsm>tObject</jsm>()
+		.p(<js>"f01"</js>, <jsm>tArray</jsm>(<jsm>tString()</jsm>))
+		.p(<js>"f02"</js>, <jsm>tArray</jsm>(<jsm>tByte()</jsm>))
+		.p(<js>"f03"</js>, <jsm>tArray</jsm>(<jsm>tDateTime()</jsm>))
+		.build();
+		</p>
 	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
 	<li>

@@ -755,27 +755,30 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			for (Annotation a : pa[i]) {
 				if (a instanceof Header) {
 					Header h = (Header)a;
-					if (h._default().length > 0) {
+					String def = joinnlFirstNonEmptyArray(h._default(), h.df());
+					if (def != null) {
 						try {
-							_reqHeaders.put(firstNonEmpty(h.name(), h.value()), parseAnything(joinnl(h._default())));
+							_reqHeaders.put(firstNonEmpty(h.name(), h.n(), h.value()), parseAnything(def));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
 					}
 				} else if (a instanceof Query) {
 					Query q = (Query)a;
-					if (q._default().length > 0) {
+					String def = joinnlFirstNonEmptyArray(q._default(), q.df());
+					if (def != null) {
 						try {
-							_defaultQuery.put(firstNonEmpty(q.name(), q.value()), parseAnything(joinnl(q._default())));
+							_defaultQuery.put(firstNonEmpty(q.name(), q.n(), q.value()), parseAnything(def));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
 					}
 				} else if (a instanceof FormData) {
 					FormData f = (FormData)a;
-					if (f._default().length > 0) {
+					String def = joinnlFirstNonEmptyArray(f._default(), f.df());
+					if (def != null) {
 						try {
-							_defaultFormData.put(firstNonEmpty(f.name(), f.value()), parseAnything(joinnl(f._default())));
+							_defaultFormData.put(firstNonEmpty(f.name(), f.value(), f.n()), parseAnything(def));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @FormData annotation");
 						}
@@ -810,6 +813,13 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			this.callLoggerConfig = RestCallLoggerConfig.create().parent(context.getCallLoggerConfig()).apply((OMap)clc).build();
 		else
 			this.callLoggerConfig = context.getCallLoggerConfig();
+	}
+
+	private String joinnlFirstNonEmptyArray(String[]...s) {
+		for (String[] ss : s)
+			if (ss.length > 0)
+				return joinnl(ss);
+		return null;
 	}
 
 	ResponseBeanMeta getResponseBeanMeta(Object o) {

@@ -156,15 +156,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/beanHeaders")
 	public String beanHeaders(
-			@Header("a") ABean a,
-			@Header("an") ABean an,
-			@Header("b") ABean[][][] b,
-			@Header("c") List<ABean> c,
-			@Header("d") List<ABean[][][]> d,
-			@Header("e") Map<String,ABean> e,
-			@Header("f") Map<String,List<ABean>> f,
-			@Header("g") Map<String,List<ABean[][][]>> g,
-			@Header("h") Map<Integer,List<ABean>> h
+			@Header(name="a",cf="uon") ABean a,
+			@Header(name="an",cf="uon") ABean an,
+			@Header(name="b",cf="uon") ABean[][][] b,
+			@Header(name="c",cf="uon") List<ABean> c,
+			@Header(name="d",cf="uon") List<ABean[][][]> d,
+			@Header(name="e",cf="uon") Map<String,ABean> e,
+			@Header(name="f",cf="uon") Map<String,List<ABean>> f,
+			@Header(name="g",cf="uon") Map<String,List<ABean[][][]>> g,
+			@Header(name="h",cf="uon") Map<Integer,List<ABean>> h
 		) throws Exception {
 
 		assertObjectEquals("{a:1,b:'foo'}", a);
@@ -189,15 +189,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/typedBeanHeaders")
 	public String typedBeanHeaders(
-			@Header("a") TypedBean a,
-			@Header("an") TypedBean an,
-			@Header("b") TypedBean[][][] b,
-			@Header("c") List<TypedBean> c,
-			@Header("d") List<TypedBean[][][]> d,
-			@Header("e") Map<String,TypedBean> e,
-			@Header("f") Map<String,List<TypedBean>> f,
-			@Header("g") Map<String,List<TypedBean[][][]>> g,
-			@Header("h") Map<Integer,List<TypedBean>> h
+			@Header(n="a",cf="uon") TypedBean a,
+			@Header(n="an",cf="uon") TypedBean an,
+			@Header(n="b",cf="uon") TypedBean[][][] b,
+			@Header(n="c",cf="uon") List<TypedBean> c,
+			@Header(n="d",cf="uon") List<TypedBean[][][]> d,
+			@Header(n="e",cf="uon") Map<String,TypedBean> e,
+			@Header(n="f",cf="uon") Map<String,List<TypedBean>> f,
+			@Header(n="g",cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@Header(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
@@ -225,10 +225,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/swappedPojoHeaders")
 	public String swappedPojoHeaders(
-			@Header("a") SwappedPojo a,
-			@Header("b") SwappedPojo[][][] b,
-			@Header("c") Map<SwappedPojo,SwappedPojo> c,
-			@Header("d") Map<SwappedPojo,SwappedPojo[][][]> d
+			@Header(n="a",cf="uon") SwappedPojo a,
+			@Header(n="b",cf="uon") SwappedPojo[][][] b,
+			@Header(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
+			@Header(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -248,10 +248,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/implicitSwappedPojoHeaders")
 	public String implicitSwappedPojoHeaders(
-			@Header("a") ImplicitSwappedPojo a,
-			@Header("b") ImplicitSwappedPojo[][][] b,
-			@Header("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Header("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+			@Header(n="a",cf="uon") ImplicitSwappedPojo a,
+			@Header(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
+			@Header(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Header(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -271,15 +271,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/enumHeaders")
 	public String enumHeaders(
-			@Header("a") TestEnum a,
-			@Header("an") TestEnum an,
-			@Header("b") TestEnum[][][] b,
-			@Header("c") List<TestEnum> c,
-			@Header("d") List<List<List<TestEnum>>> d,
-			@Header("e") List<TestEnum[][][]> e,
-			@Header("f") Map<TestEnum,TestEnum> f,
-			@Header("g") Map<TestEnum,TestEnum[][][]> g,
-			@Header("h") Map<TestEnum,List<TestEnum[][][]>> h
+			@Header(n="a",cf="uon") TestEnum a,
+			@Header(n="an",cf="uon") TestEnum an,
+			@Header(n="b",cf="uon") TestEnum[][][] b,
+			@Header(n="c",cf="uon") List<TestEnum> c,
+			@Header(n="d",cf="uon") List<List<List<TestEnum>>> d,
+			@Header(n="e",cf="uon") List<TestEnum[][][]> e,
+			@Header(n="f",cf="uon") Map<TestEnum,TestEnum> f,
+			@Header(n="g",cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@Header(n="h",cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);
@@ -468,15 +468,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/beanQueries")
 	public String beanQueries(
-			@Query("a") ABean a,
-			@Query("an") ABean an,
-			@Query("b") ABean[][][] b,
-			@Query("c") List<ABean> c,
-			@Query("d") List<ABean[][][]> d,
-			@Query("e") Map<String,ABean> e,
-			@Query("f") Map<String,List<ABean>> f,
-			@Query("g") Map<String,List<ABean[][][]>> g,
-			@Query("h") Map<Integer,List<ABean>> h
+			@Query(n="a",cf="uon") ABean a,
+			@Query(n="an",cf="uon") ABean an,
+			@Query(n="b",cf="uon") ABean[][][] b,
+			@Query(n="c",cf="uon") List<ABean> c,
+			@Query(n="d",cf="uon") List<ABean[][][]> d,
+			@Query(n="e",cf="uon") Map<String,ABean> e,
+			@Query(n="f",cf="uon") Map<String,List<ABean>> f,
+			@Query(n="g",cf="uon") Map<String,List<ABean[][][]>> g,
+			@Query(n="h",cf="uon") Map<Integer,List<ABean>> h
 		) throws Exception {
 
 		assertObjectEquals("{a:1,b:'foo'}", a);
@@ -501,15 +501,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/typedBeanQueries")
 	public String typedBeanQueries(
-			@Query("a") TypedBean a,
-			@Query("an") TypedBean an,
-			@Query("b") TypedBean[][][] b,
-			@Query("c") List<TypedBean> c,
-			@Query("d") List<TypedBean[][][]> d,
-			@Query("e") Map<String,TypedBean> e,
-			@Query("f") Map<String,List<TypedBean>> f,
-			@Query("g") Map<String,List<TypedBean[][][]>> g,
-			@Query("h") Map<Integer,List<TypedBean>> h
+			@Query(n="a",cf="uon") TypedBean a,
+			@Query(n="an",cf="uon") TypedBean an,
+			@Query(n="b",cf="uon") TypedBean[][][] b,
+			@Query(n="c",cf="uon") List<TypedBean> c,
+			@Query(n="d",cf="uon") List<TypedBean[][][]> d,
+			@Query(n="e",cf="uon") Map<String,TypedBean> e,
+			@Query(n="f",cf="uon") Map<String,List<TypedBean>> f,
+			@Query(n="g",cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@Query(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
@@ -537,10 +537,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/swappedPojoQueries")
 	public String swappedPojoQueries(
-			@Query("a") SwappedPojo a,
-			@Query("b") SwappedPojo[][][] b,
-			@Query("c") Map<SwappedPojo,SwappedPojo> c,
-			@Query("d") Map<SwappedPojo,SwappedPojo[][][]> d
+			@Query(n="a",cf="uon") SwappedPojo a,
+			@Query(n="b",cf="uon") SwappedPojo[][][] b,
+			@Query(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
+			@Query(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -560,10 +560,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/implicitSwappedPojoQueries")
 	public String implicitSwappedPojoQueries(
-			@Query("a") ImplicitSwappedPojo a,
-			@Query("b") ImplicitSwappedPojo[][][] b,
-			@Query("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@Query("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+			@Query(n="a",cf="uon") ImplicitSwappedPojo a,
+			@Query(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
+			@Query(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Query(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -583,15 +583,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/enumQueries")
 	public String enumQueries(
-			@Query("a") TestEnum a,
-			@Query("an") TestEnum an,
-			@Query("b") TestEnum[][][] b,
-			@Query("c") List<TestEnum> c,
-			@Query("d") List<List<List<TestEnum>>> d,
-			@Query("e") List<TestEnum[][][]> e,
-			@Query("f") Map<TestEnum,TestEnum> f,
-			@Query("g") Map<TestEnum,TestEnum[][][]> g,
-			@Query("h") Map<TestEnum,List<TestEnum[][][]>> h
+			@Query(n="a",cf="uon") TestEnum a,
+			@Query(n="an",cf="uon") TestEnum an,
+			@Query(n="b",cf="uon") TestEnum[][][] b,
+			@Query(n="c",cf="uon") List<TestEnum> c,
+			@Query(n="d",cf="uon") List<List<List<TestEnum>>> d,
+			@Query(n="e",cf="uon") List<TestEnum[][][]> e,
+			@Query(n="f",cf="uon") Map<TestEnum,TestEnum> f,
+			@Query(n="g",cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@Query(n="h",cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);
@@ -656,7 +656,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/beanQuery")
 	public String beanQuery(
 			@Query("a") String a,
-			@Query(name="b",allowEmptyValue=true) String b,
+			@Query(n="b",allowEmptyValue=true) String b,
 			@Query("c") String c
 		) throws Exception {
 
@@ -670,7 +670,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=GET, path="/nameValuePairsQuery")
 	public String nameValuePairsQuery(
 		@Query("a") String a,
-		@Query(name="b",allowEmptyValue=true) String b,
+		@Query(n="b",allowEmptyValue=true) String b,
 		@Query("c") String c
 	) throws Exception {
 
@@ -802,15 +802,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/beanFormData")
 	public String beanFormData(
-			@FormData("a") ABean a,
-			@FormData("an") ABean an,
-			@FormData("b") ABean[][][] b,
-			@FormData("c") List<ABean> c,
-			@FormData("d") List<ABean[][][]> d,
-			@FormData("e") Map<String,ABean> e,
-			@FormData("f") Map<String,List<ABean>> f,
-			@FormData("g") Map<String,List<ABean[][][]>> g,
-			@FormData("h") Map<Integer,List<ABean>> h
+			@FormData(n="a",cf="uon") ABean a,
+			@FormData(n="an",cf="uon") ABean an,
+			@FormData(n="b",cf="uon") ABean[][][] b,
+			@FormData(n="c",cf="uon") List<ABean> c,
+			@FormData(n="d",cf="uon") List<ABean[][][]> d,
+			@FormData(n="e",cf="uon") Map<String,ABean> e,
+			@FormData(n="f",cf="uon") Map<String,List<ABean>> f,
+			@FormData(n="g",cf="uon") Map<String,List<ABean[][][]>> g,
+			@FormData(n="h",cf="uon") Map<Integer,List<ABean>> h
 		) throws Exception {
 
 		assertObjectEquals("{a:1,b:'foo'}", a);
@@ -835,15 +835,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/typedBeanFormData")
 	public String typedBeanFormData(
-			@FormData("a") TypedBean a,
-			@FormData("an") TypedBean an,
-			@FormData("b") TypedBean[][][] b,
-			@FormData("c") List<TypedBean> c,
-			@FormData("d") List<TypedBean[][][]> d,
-			@FormData("e") Map<String,TypedBean> e,
-			@FormData("f") Map<String,List<TypedBean>> f,
-			@FormData("g") Map<String,List<TypedBean[][][]>> g,
-			@FormData("h") Map<Integer,List<TypedBean>> h
+			@FormData(n="a",cf="uon") TypedBean a,
+			@FormData(n="an",cf="uon") TypedBean an,
+			@FormData(n="b",cf="uon") TypedBean[][][] b,
+			@FormData(n="c",cf="uon") List<TypedBean> c,
+			@FormData(n="d",cf="uon") List<TypedBean[][][]> d,
+			@FormData(n="e",cf="uon") Map<String,TypedBean> e,
+			@FormData(n="f",cf="uon") Map<String,List<TypedBean>> f,
+			@FormData(n="g",cf="uon") Map<String,List<TypedBean[][][]>> g,
+			@FormData(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
@@ -871,10 +871,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/swappedPojoFormData")
 	public String swappedPojoFormData(
-			@FormData("a") SwappedPojo a,
-			@FormData("b") SwappedPojo[][][] b,
-			@FormData("c") Map<SwappedPojo,SwappedPojo> c,
-			@FormData("d") Map<SwappedPojo,SwappedPojo[][][]> d
+			@FormData(n="a",cf="uon") SwappedPojo a,
+			@FormData(n="b",cf="uon") SwappedPojo[][][] b,
+			@FormData(n="c",cf="uon") Map<SwappedPojo,SwappedPojo> c,
+			@FormData(n="d",cf="uon") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -894,10 +894,10 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/implicitSwappedPojoFormData")
 	public String implicitSwappedPojoFormData(
-			@FormData("a") ImplicitSwappedPojo a,
-			@FormData("b") ImplicitSwappedPojo[][][] b,
-			@FormData("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
-			@FormData("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
+			@FormData(n="a",cf="uon") ImplicitSwappedPojo a,
+			@FormData(n="b",cf="uon") ImplicitSwappedPojo[][][] b,
+			@FormData(n="c",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@FormData(n="d",cf="uon") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
 		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
@@ -917,15 +917,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/enumFormData")
 	public String enumFormData(
-			@FormData("a") TestEnum a,
-			@FormData("an") TestEnum an,
-			@FormData("b") TestEnum[][][] b,
-			@FormData("c") List<TestEnum> c,
-			@FormData("d") List<List<List<TestEnum>>> d,
-			@FormData("e") List<TestEnum[][][]> e,
-			@FormData("f") Map<TestEnum,TestEnum> f,
-			@FormData("g") Map<TestEnum,TestEnum[][][]> g,
-			@FormData("h") Map<TestEnum,List<TestEnum[][][]>> h
+			@FormData(n="a",cf="uon") TestEnum a,
+			@FormData(n="an",cf="uon") TestEnum an,
+			@FormData(n="b",cf="uon") TestEnum[][][] b,
+			@FormData(n="c",cf="uon") List<TestEnum> c,
+			@FormData(n="d",cf="uon") List<List<List<TestEnum>>> d,
+			@FormData(n="e",cf="uon") List<TestEnum[][][]> e,
+			@FormData(n="f",cf="uon") Map<TestEnum,TestEnum> f,
+			@FormData(n="g",cf="uon") Map<TestEnum,TestEnum[][][]> g,
+			@FormData(n="h",cf="uon") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
 		assertEquals(TestEnum.TWO, a);

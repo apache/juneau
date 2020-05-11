@@ -31,10 +31,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a._default(), a.example(), a.api())
-			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.description(), a.d(), a._default(), a.df(), a.example(), a.ex(), a.api())
+			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 
@@ -48,10 +48,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
+			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 
@@ -65,10 +65,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.collectionFormat(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.allowEmptyValue(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.required(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
+			&& allEmpty(a.name(), a.value(), a.n(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 
@@ -82,7 +82,7 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a.example(), a.examples(), a.api())
+			allEmpty(a.description(), a.d(), a.example(), a.ex(), a.examples(), a.exs(), a.api())
 			&& a.headers().length == 0
 			&& empty(a.schema())
 		;
@@ -98,10 +98,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a._default(), a._enum(), a.example(), a.api())
-			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.collectionFormat(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
+			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 
@@ -115,11 +115,11 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.value(), a.description(), a._default(), a._enum(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.examples())
-			&& allEmpty(a.$ref(), a.format(), a.title(), a.multipleOf(), a.maximum(), a.minimum(), a.pattern(), a.type(), a.discriminator())
-			&& allMinusOne(a.maxProperties(), a.minProperties())
-			&& allFalse(a.ignore(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.readOnly(), a.required(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.value(), a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.ex(), a.examples(), a.exs())
+			&& allEmpty(a.$ref(), a.format(), a.f(), a.title(), a.multipleOf(), a.mo(), a.maximum(), a.max(), a.minimum(), a.min(), a.pattern(), a.p(), a.type(), a.t(), a.discriminator())
+			&& allMinusOne(a.maxProperties(), a.maxp(), a.minProperties(), a.minp())
+			&& allFalse(a.ignore(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.readOnly(), a.ro(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items())
 			&& empty(a.externalDocs());
 	}
@@ -148,8 +148,8 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a.example(), a.examples(), a.api(), a.value())
-			&& allFalse(a.required())
+			allEmpty(a.description(), a.d(), a.example(), a.ex(), a.examples(), a.exs(), a.api(), a.value())
+			&& allFalse(a.required(), a.r())
 			&& empty(a.schema());
 	}
 
@@ -191,10 +191,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.value(), a._default(), a._enum())
-			&& allEmpty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.value(), a._default(), a.df(), a._enum(), a.e())
+			&& allEmpty(a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.pattern(), a.p(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 
@@ -208,10 +208,10 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.value(), a._default(), a._enum(), a.items())
-			&& allEmpty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems());
+			allEmpty(a.value(), a._default(), a.df(), a._enum(), a.e(), a.items())
+			&& allEmpty(a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.pattern(), a.p(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini());
 	}
 
 	/**
@@ -224,11 +224,11 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a._enum(), a.example(), a.api())
-			&& allEmpty(a.name(), a.value(), a.type(), a.format(), a.pattern(), a.maximum(), a.minimum(), a.multipleOf())
-			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
-			&& allTrue(a.required())
-			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			allEmpty(a.description(), a.d(), a._enum(), a.e(), a.example(), a.ex(), a.api())
+			&& allEmpty(a.name(), a.value(), a.n(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
+			&& allTrue(a.required(), a.r())
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items());
 	}
 

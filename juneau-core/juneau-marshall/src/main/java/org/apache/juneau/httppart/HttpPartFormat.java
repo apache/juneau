@@ -79,7 +79,7 @@ public enum HttpPartFormat {
 
 	/**
 	 * Create from lowercase dashed name.
-	 * 
+	 *
 	 * @param value The enum name.
 	 * @return The enum.
 	 */

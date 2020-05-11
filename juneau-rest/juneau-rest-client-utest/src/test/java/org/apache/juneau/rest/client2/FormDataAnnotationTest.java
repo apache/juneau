@@ -99,7 +99,7 @@ public class FormDataAnnotationTest {
 	}
 	@Test
 	public void a03a_Bean() throws Exception {
-		assertEquals("{x:'(f=1)'}", ar.postA03a(Bean.create()));
+		assertEquals("{x:'f=1'}", ar.postA03a(Bean.create()));
 	}
 	@Test
 	public void a03b_Bean() throws Exception {
@@ -111,7 +111,7 @@ public class FormDataAnnotationTest {
 	}
 	@Test
 	public void a04a_BeanArray() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", ar.postA04a(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}", ar.postA04a(new Bean[]{Bean.create(),Bean.create()}));
 	}
 	@Test
 	public void a04b_BeanArray() throws Exception {
@@ -119,7 +119,7 @@ public class FormDataAnnotationTest {
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", ar.postA05a(AList.of(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}", ar.postA05a(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
@@ -127,23 +127,23 @@ public class FormDataAnnotationTest {
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", ar.postA06a(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}", ar.postA06a(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", ar.postA06b(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", ar.postA06b(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", ar.postA06c(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", ar.postA06c(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", ar.postA06d(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}", ar.postA06d(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", ar.postA06e(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", ar.postA06e(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a07a_Reader() throws Exception {
@@ -732,7 +732,7 @@ public class FormDataAnnotationTest {
 		assertEquals("{x:'1|2'}", er.postE01("1","2"));
 		try { er.postE01(); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.postE01("1","2","3"); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.postE01((String)null));
+		assertEquals("{x:null}", er.postE01((String)null));
 	}
 	@Test
 	public void e02_minMax_items() throws Exception {
@@ -740,7 +740,7 @@ public class FormDataAnnotationTest {
 		assertEquals("{x:'1|2'}", er.postE02(new String[]{"1","2"}));
 		try { er.postE02(new String[]{}); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.postE02(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.postE02(new String[]{null}));
+		assertEquals("{x:null}", er.postE02(new String[]{null}));
 	}
 	@Test
 	public void e03_uniqueItems_false() throws Exception {
@@ -811,7 +811,7 @@ public class FormDataAnnotationTest {
 	public void f04_enum_items() throws Exception {
 		assertEquals("{x:'foo'}", fr.postF04("foo"));
 		try { fr.postF04("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
-		assertEquals("{x:'null'}", fr.postF04((String)null));
+		assertEquals("{x:null}", fr.postF04((String)null));
 	}
 	@Test
 	public void f05_pattern() throws Exception {
@@ -823,7 +823,7 @@ public class FormDataAnnotationTest {
 	public void f06_pattern_items() throws Exception {
 		assertEquals("{x:'foo123'}", fr.postF06("foo123"));
 		try { fr.postF06("foo"); fail(); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
-		assertEquals("{x:'null'}", fr.postF06((String)null));
+		assertEquals("{x:null}", fr.postF06((String)null));
 	}
 
 	//=================================================================================================================

@@ -27,26 +27,42 @@ public class ItemsAnnotation implements Items {
 
 	private String
 		type = "",
+		t = "",
 		format = "",
+		f = "",
 		collectionFormat = "",
+		cf = "",
 		pattern = "",
+		p = "",
 		maximum = "",
+		max = "",
 		minimum = "",
+		min = "",
 		multipleOf = "",
+		mo = "",
 		$ref = "";
 	private String[]
 		_default = new String[0],
+		df = new String[0],
 		_enum = new String[0],
+		e = new String[0],
 		value = new String[0];
 	private long
 		maxLength = -1,
+		maxl = -1,
 		minLength = -1,
+		minl= -1,
 		maxItems = -1,
-		minItems = -1;
+		maxi = -1,
+		minItems = -1,
+		mini = -1;
 	private boolean
 		exclusiveMaximum = false,
+		emax = false,
 		exclusiveMinimum = false,
-		uniqueItems = false;
+		emin = false,
+		uniqueItems = false,
+		ui = false;
 	private SubItems items = new SubItemsAnnotation();
 
 	@Override
@@ -71,6 +87,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public String t() {
+		return t;
+	}
+
+	/**
+	 * Sets the <c>t</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation t(String value) {
+		this.t = value;
+		return this;
+	}
+
+	@Override
 	public String format() {
 		return format;
 	}
@@ -83,6 +115,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation format(String value) {
 		this.format = value;
+		return this;
+	}
+
+	@Override
+	public String f() {
+		return f;
+	}
+
+	/**
+	 * Sets the <c>f</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation f(String value) {
+		this.f = value;
 		return this;
 	}
 
@@ -103,6 +151,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public String cf() {
+		return cf;
+	}
+
+	/**
+	 * Sets the <c>cf</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation cf(String value) {
+		this.cf = value;
+		return this;
+	}
+
+	@Override
 	public String pattern() {
 		return pattern;
 	}
@@ -115,6 +179,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation pattern(String value) {
 		this.pattern = value;
+		return this;
+	}
+
+	@Override
+	public String p() {
+		return p;
+	}
+
+	/**
+	 * Sets the <c>p</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation p(String value) {
+		this.p = value;
 		return this;
 	}
 
@@ -135,6 +215,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public String max() {
+		return max;
+	}
+
+	/**
+	 * Sets the <c>max</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation max(String value) {
+		this.max = value;
+		return this;
+	}
+
+	@Override
 	public String minimum() {
 		return minimum;
 	}
@@ -147,6 +243,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation minimum(String value) {
 		this.minimum = value;
+		return this;
+	}
+
+	@Override
+	public String min() {
+		return min;
+	}
+
+	/**
+	 * Sets the <c>min</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation min(String value) {
+		this.min = value;
 		return this;
 	}
 
@@ -167,6 +279,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public String mo() {
+		return mo;
+	}
+
+	/**
+	 * Sets the <c>mo</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation mo(String value) {
+		this.mo = value;
+		return this;
+	}
+
+	@Override
 	public long maxLength() {
 		return maxLength;
 	}
@@ -179,6 +307,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation maxLength(long value) {
 		this.maxLength = value;
+		return this;
+	}
+
+	@Override
+	public long maxl() {
+		return maxl;
+	}
+
+	/**
+	 * Sets the <c>maxl</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation maxl(long value) {
+		this.maxl = value;
 		return this;
 	}
 
@@ -199,6 +343,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public long minl() {
+		return minl;
+	}
+
+	/**
+	 * Sets the <c>minl</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation minl(long value) {
+		this.minl = value;
+		return this;
+	}
+
+	@Override
 	public long maxItems() {
 		return maxItems;
 	}
@@ -211,6 +371,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation maxItems(long value) {
 		this.maxItems = value;
+		return this;
+	}
+
+	@Override
+	public long maxi() {
+		return maxi;
+	}
+
+	/**
+	 * Sets the <c>maxi</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation maxi(long value) {
+		this.maxi = value;
 		return this;
 	}
 
@@ -231,6 +407,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public long mini() {
+		return mini;
+	}
+
+	/**
+	 * Sets the <c>mini</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation mini(long value) {
+		this.mini = value;
+		return this;
+	}
+
+	@Override
 	public boolean exclusiveMaximum() {
 		return exclusiveMaximum;
 	}
@@ -243,6 +435,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation exclusiveMaximum(boolean value) {
 		this.exclusiveMaximum = value;
+		return this;
+	}
+
+	@Override
+	public boolean emax() {
+		return emax;
+	}
+
+	/**
+	 * Sets the <c>emax</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation emax(boolean value) {
+		this.emax = value;
 		return this;
 	}
 
@@ -263,6 +471,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public boolean emin() {
+		return emin;
+	}
+
+	/**
+	 * Sets the <c>emin</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation emin(boolean value) {
+		this.emin = value;
+		return this;
+	}
+
+	@Override
 	public boolean uniqueItems() {
 		return uniqueItems;
 	}
@@ -275,6 +499,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation uniqueItems(boolean value) {
 		this.uniqueItems = value;
+		return this;
+	}
+
+	@Override
+	public boolean ui() {
+		return ui;
+	}
+
+	/**
+	 * Sets the <c>ui</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation ui(boolean value) {
+		this.ui = value;
 		return this;
 	}
 
@@ -295,6 +535,22 @@ public class ItemsAnnotation implements Items {
 	}
 
 	@Override
+	public String[] df() {
+		return df;
+	}
+
+	/**
+	 * Sets the <c>df</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation df(String[] value) {
+		this.df = value;
+		return this;
+	}
+
+	@Override
 	public String[] _enum() {
 		return _enum;
 	}
@@ -307,6 +563,22 @@ public class ItemsAnnotation implements Items {
 	 */
 	public ItemsAnnotation _enum(String[] value) {
 		this._enum = value;
+		return this;
+	}
+
+	@Override
+	public String[] e() {
+		return e;
+	}
+
+	/**
+	 * Sets the <c>e</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ItemsAnnotation e(String[] value) {
+		this.e = value;
 		return this;
 	}
 

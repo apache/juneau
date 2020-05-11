@@ -175,6 +175,11 @@ public @interface Path {
 	String name() default "";
 
 	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
+
+	/**
 	 * A synonym for {@link #name()}.
 	 *
 	 * <p>
@@ -223,6 +228,11 @@ public @interface Path {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -268,6 +278,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	boolean required() default true;
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default true;
 
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
@@ -329,6 +344,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	String type() default "";
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
 
 	/**
 	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
@@ -394,6 +414,11 @@ public @interface Path {
 	String format() default "";
 
 	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
 	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -413,6 +438,11 @@ public @interface Path {
 	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
 	 */
 	boolean allowEmptyValue() default false;
+
+	/**
+	 * Synonym for {@link #allowEmptyValue()}.
+	 */
+	boolean aev() default false;
 
 	/**
 	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
@@ -476,6 +506,11 @@ public @interface Path {
 	String collectionFormat() default "";
 
 	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -501,6 +536,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	String maximum() default "";
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
@@ -530,6 +570,11 @@ public @interface Path {
 	boolean exclusiveMaximum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -557,6 +602,11 @@ public @interface Path {
 	String minimum() default "";
 
 	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -582,6 +632,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
 
 	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
@@ -612,6 +667,11 @@ public @interface Path {
 	long maxLength() default -1;
 
 	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -640,6 +700,11 @@ public @interface Path {
 	long minLength() default -1;
 
 	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -664,6 +729,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	String pattern() default "";
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
 
 	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -692,6 +762,11 @@ public @interface Path {
 	long maxItems() default -1;
 
 	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -716,6 +791,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
 
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -746,6 +826,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
 
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
@@ -797,6 +882,11 @@ public @interface Path {
 	String[] _enum() default {};
 
 	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
+
+	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -822,6 +912,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	String multipleOf() default "";
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
 
 	//=================================================================================================================
 	// Other
@@ -879,6 +974,11 @@ public @interface Path {
 	 * </ul>
 	 */
 	String[] example() default {};
+
+	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
 
 	/**
 	 * Free-form value for the {@doc SwaggerParameterObject}.

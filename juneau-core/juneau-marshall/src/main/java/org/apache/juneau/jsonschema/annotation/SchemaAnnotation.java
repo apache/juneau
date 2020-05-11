@@ -29,42 +29,65 @@ public class SchemaAnnotation implements Schema {
 	private String
 		$ref = "",
 		format = "",
+		f = "",
 		title = "",
 		multipleOf = "",
+		mo = "",
 		maximum = "",
+		max = "",
 		minimum = "",
+		min = "",
 		pattern = "",
+		p = "",
 		type = "",
+		t = "",
 		collectionFormat = "",
+		cf = "",
 		discriminator = "";
 
 	private String[]
 		description = new String[0],
+		d = new String[0],
 		_default = new String[0],
+		df = new String[0],
 		_enum = new String[0],
+		e = new String[0],
 		allOf = new String[0],
 		properties = new String[0],
 		additionalProperties = new String[0],
 		xml = new String[0],
 		example = new String[0],
+		ex = new String[0],
 		examples = new String[0],
+		exs = new String[0],
 		value = new String[0];
 
 	private boolean
 		exclusiveMaximum = false,
+		emax = false,
 		exclusiveMinimum = false,
+		emin = false,
 		uniqueItems = false,
+		ui = false,
 		required = false,
+		r = false,
 		readOnly = false,
+		ro = false,
 		ignore = false;
 
 	private long
 		maxLength = -1,
+		maxl = -1,
 		minLength = -1,
+		minl = -1,
 		maxItems = -1,
+		maxi = -1,
 		minItems = -1,
+		mini = -1,
 		maxProperties = -1,
-		minProperties = -1;
+		maxp = -1,
+		minProperties = -1,
+		minp = -1;
 
 	private Items items = new ItemsAnnotation();
 	private ExternalDocs externalDocs = new ExternalDocsAnnotation();
@@ -102,6 +125,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String[] df() {
+		return df;
+	}
+
+	/**
+	 * Sets the <c>df</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation df(String[] value) {
+		this.df = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public String[] _enum() {
 		return _enum;
 	}
@@ -114,6 +153,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation _enum(String[] value) {
 		this._enum = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public String[] e() {
+		return e;
+	}
+
+	/**
+	 * Sets the <c>e</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation e(String[] value) {
+		this.e = value;
 		return this;
 	}
 
@@ -182,6 +237,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String cf() {
+		return cf;
+	}
+
+	/**
+	 * Sets the <c>cf</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation cf(String value) {
+		this.cf = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public String[] description() {
 		return description;
 	}
@@ -194,6 +265,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation description(String[] value) {
 		this.description = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public String[] d() {
+		return d;
+	}
+
+	/**
+	 * Sets the <c>d</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation d(String[] value) {
+		this.d = value;
 		return this;
 	}
 
@@ -230,6 +317,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String[] ex() {
+		return ex;
+	}
+
+	/**
+	 * Sets the <c>ex</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation ex(String[] value) {
+		this.ex = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public String[] examples() {
 		return examples;
 	}
@@ -242,6 +345,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation examples(String[] value) {
 		this.examples = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public String[] exs() {
+		return exs;
+	}
+
+	/**
+	 * Sets the <c>exs</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation exs(String[] value) {
+		this.exs = value;
 		return this;
 	}
 
@@ -262,6 +381,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public boolean emax() {
+		return emax;
+	}
+
+	/**
+	 * Sets the <c>emax</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation emax(boolean value) {
+		this.emax = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public boolean exclusiveMinimum() {
 		return exclusiveMinimum;
 	}
@@ -274,6 +409,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation exclusiveMinimum(boolean value) {
 		this.exclusiveMinimum = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public boolean emin() {
+		return emin;
+	}
+
+	/**
+	 * Sets the <c>emin</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation emin(boolean value) {
+		this.emin = value;
 		return this;
 	}
 
@@ -306,6 +457,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation format(String value) {
 		this.format = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public String f() {
+		return f;
+	}
+
+	/**
+	 * Sets the <c>f</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation f(String value) {
+		this.f = value;
 		return this;
 	}
 
@@ -358,6 +525,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String max() {
+		return max;
+	}
+
+	/**
+	 * Sets the <c>max</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation max(String value) {
+		this.max = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public long maxItems() {
 		return maxItems;
 	}
@@ -370,6 +553,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation maxItems(long value) {
 		this.maxItems = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public long maxi() {
+		return maxi;
+	}
+
+	/**
+	 * Sets the <c>maxi</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation maxi(long value) {
+		this.maxi = value;
 		return this;
 	}
 
@@ -390,6 +589,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public long maxl() {
+		return maxl;
+	}
+
+	/**
+	 * Sets the <c>maxl</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation maxl(long value) {
+		this.maxl = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public long maxProperties() {
 		return maxProperties;
 	}
@@ -402,6 +617,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation maxProperties(long value) {
 		this.maxProperties = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public long maxp() {
+		return maxp;
+	}
+
+	/**
+	 * Sets the <c>maxp</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation maxp(long value) {
+		this.maxp = value;
 		return this;
 	}
 
@@ -422,6 +653,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String min() {
+		return min;
+	}
+
+	/**
+	 * Sets the <c>min</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation min(String value) {
+		this.min = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public long minItems() {
 		return minItems;
 	}
@@ -434,6 +681,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation minItems(long value) {
 		this.minItems = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public long mini() {
+		return mini;
+	}
+
+	/**
+	 * Sets the <c>mini</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation mini(long value) {
+		this.mini = value;
 		return this;
 	}
 
@@ -454,6 +717,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public long minl() {
+		return minl;
+	}
+
+	/**
+	 * Sets the <c>minl</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation minl(long value) {
+		this.minl = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public long minProperties() {
 		return minProperties;
 	}
@@ -470,6 +749,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public long minp() {
+		return minp;
+	}
+
+	/**
+	 * Sets the <c>minp</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation minp(long value) {
+		this.minp = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public String multipleOf() {
 		return multipleOf;
 	}
@@ -482,6 +777,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation multipleOf(String value) {
 		this.multipleOf = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public String mo() {
+		return mo;
+	}
+
+	/**
+	 * Sets the <c>mo</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation mo(String value) {
+		this.mo = value;
 		return this;
 	}
 
@@ -518,6 +829,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String p() {
+		return p;
+	}
+
+	/**
+	 * Sets the <c>p</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation p(String value) {
+		this.p = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public String[] properties() {
 		return properties;
 	}
@@ -550,6 +877,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public boolean ro() {
+		return ro;
+	}
+
+	/**
+	 * Sets the <c>ro</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation ro(boolean value) {
+		this.ro = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public boolean required() {
 		return required;
 	}
@@ -562,6 +905,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation required(boolean value) {
 		this.required = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public boolean r() {
+		return r;
+	}
+
+	/**
+	 * Sets the <c>r</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation r(boolean value) {
+		this.r = value;
 		return this;
 	}
 
@@ -598,6 +957,22 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
+	public String t() {
+		return t;
+	}
+
+	/**
+	 * Sets the <c>t</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation t(String value) {
+		this.t = value;
+		return this;
+	}
+
+	@Override /* Schema */
 	public boolean uniqueItems() {
 		return uniqueItems;
 	}
@@ -610,6 +985,22 @@ public class SchemaAnnotation implements Schema {
 	 */
 	public SchemaAnnotation uniqueItems(boolean value) {
 		this.uniqueItems = value;
+		return this;
+	}
+
+	@Override /* Schema */
+	public boolean ui() {
+		return ui;
+	}
+
+	/**
+	 * Sets the <c>ui</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaAnnotation ui(boolean value) {
+		this.ui = value;
 		return this;
 	}
 

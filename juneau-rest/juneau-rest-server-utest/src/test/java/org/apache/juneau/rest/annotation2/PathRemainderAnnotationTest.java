@@ -93,7 +93,7 @@ public class PathRemainderAnnotationTest {
 
 	@Test
 	public void b02_optionalParam_bean() throws Exception {
-		b.get("/b/(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		b.get("/b/a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
 	}
 
 	@Test

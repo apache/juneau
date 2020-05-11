@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi.annotation;
 
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.oapi.OpenApiCommon.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -39,5 +40,9 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 
 		if (a.applyOpenApi().length > 0)
 			psb.prependTo(BEAN_annotations, a.applyOpenApi());
+		if (! a.format().isEmpty())
+			psb.set(OAPI_format, string(a.format()));
+		if (! a.collectionFormat().isEmpty())
+			psb.set(OAPI_collectionFormat, string(a.collectionFormat()));
 	}
 }

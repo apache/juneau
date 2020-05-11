@@ -118,6 +118,11 @@ public @interface Response {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>schema</mk> field of the {@doc SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
@@ -261,6 +266,11 @@ public @interface Response {
 	String[] example() default {};
 
 	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
+
+	/**
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
@@ -302,6 +312,11 @@ public @interface Response {
 	 * </ul>
 	 */
 	String[] examples() default {};
+
+	/**
+	 * Synonym for {@link #examples()}.
+	 */
+	String[] exs() default {};
 
 	/**
 	 * Free-form value for the {@doc SwaggerResponseObject}.

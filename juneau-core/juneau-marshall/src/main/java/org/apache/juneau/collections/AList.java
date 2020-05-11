@@ -118,6 +118,20 @@ public final class AList<T> extends ArrayList<T> {
 	 * Convenience method for creating a list of objects.
 	 *
 	 * <p>
+	 * Identical to {@link #of(Object...)} but allows you to distinguish from {@link #of(Collection)} when creating
+	 * multi-dimensional lists.
+	 *
+	 * @param t The initial values.
+	 * @return A new list.
+	 */
+	public static <T> AList<T> ofa(T...t) {
+		return new AList<T>(t.length).a(t);
+	}
+
+	/**
+	 * Convenience method for creating a list of objects.
+	 *
+	 * <p>
 	 * Creates a list with the same capacity as the array.
 	 *
 	 * @param c The initial values.

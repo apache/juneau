@@ -395,7 +395,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo", bean)
 			.run()
-			.getBody().assertValue("['(f=1)','(f=1)']");
+			.getBody().assertValue("['f=1','f=1']");
 	}
 
 	@Test

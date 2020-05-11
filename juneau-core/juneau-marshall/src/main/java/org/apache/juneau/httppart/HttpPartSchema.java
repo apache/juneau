@@ -84,6 +84,337 @@ public class HttpPartSchema {
 	}
 
 	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>BOOLEAN</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tBoolean() {
+		return create().tBoolean();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>FILE</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tFile() {
+		return create().tFile();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>INTEGER</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tInteger() {
+		return create().tInteger();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>INTEGER</jsf>).format(HttpPartFormat.<jsf>INT32</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tInt32() {
+		return create().tInteger().fInt32();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>INTEGER</jsf>).format(HttpPartFormat.<jsf>INT64</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tInt64() {
+		return create().tInteger().fInt64();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>NONE</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tNone() {
+		return create().tNone();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>NUMBER</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tNumber() {
+		return create().tNumber();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>NUMBER</jsf>).format(HttpPartFormat.<jsf>FLOAT</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tFloat() {
+		return create().tNumber().fFloat();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>NUMBER</jsf>).format(HttpPartFormat.<jsf>DOUBLE</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tDouble() {
+		return create().tNumber().fDouble();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tString() {
+		return create().tString();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>BYTE</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tByte() {
+		return create().tString().fByte();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>BINARY</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tBinary() {
+		return create().tString().fBinary();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>BINARY_SPACED</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tBinarySpaced() {
+		return create().tString().fBinarySpaced();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>DATE</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tDate() {
+		return create().tString().fDate();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>DATE_TIME</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tDateTime() {
+		return create().tString().fDateTime();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>UON</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tUon() {
+		return create().tString().fUon();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArray() {
+		return create().tArray();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArray(HttpPartSchemaBuilder items) {
+		return create().tArray().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>CSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayCsv() {
+		return create().tArray().cfCsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>CSV</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayCsv(HttpPartSchemaBuilder items) {
+		return create().tArray().cfCsv().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>PIPES</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayPipes() {
+		return create().tArray().cfPipes();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>PIPES</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayPipes(HttpPartSchemaBuilder items) {
+		return create().tArray().cfPipes().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>SSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArraySsv() {
+		return create().tArray().cfSsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>SSV</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArraySsv(HttpPartSchemaBuilder items) {
+		return create().tArray().cfSsv().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>TSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayTsv() {
+		return create().tArray().cfTsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>TSV</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayTsv(HttpPartSchemaBuilder items) {
+		return create().tArray().cfTsv().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>UONC</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayUon() {
+		return create().tArray().cfUon();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>UONC</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayUon(HttpPartSchemaBuilder items) {
+		return create().tArray().cfUon().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>MULTI</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayMulti() {
+		return create().tArray().cfMulti();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>ARRAY</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>MULTI</jsf>).items(items)</c>.
+	 *
+	 * @param items The schema of the array items.
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tArrayMulti(HttpPartSchemaBuilder items) {
+		return create().tArray().cfMulti().items(items);
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObject() {
+		return create().tObject();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>CSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObjectCsv() {
+		return create().tObject().cfCsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>PIPES</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObjectPipes() {
+		return create().tObject().cfPipes();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>SSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObjectSsv() {
+		return create().tObject().cfSsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>TSV</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObjectTsv() {
+		return create().tObject().cfTsv();
+	}
+
+	/**
+	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>OBJECT</jsf>).collectionFormat(HttpPartCollectionFormat.<jsf>UON</jsf>)</c>.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static HttpPartSchemaBuilder tObjectUon() {
+		return create().tObject().cfUon();
+	}
+
+	/**
 	 * Finds the schema information for the specified method parameter.
 	 *
 	 * <p>
@@ -380,7 +711,6 @@ public class HttpPartSchema {
 				notAllowed.aif(exclusiveMaximum, "exclusiveMaximum");
 				notAllowed.aif(exclusiveMinimum, "exclusiveMinimum");
 				notAllowed.aif(uniqueItems, "uniqueItems");
-				notAllowed.aif(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
 				notAllowed.aif(pattern != null, "pattern");
 				notAllowed.aif(items != null, "items");
 				notAllowed.aif(maximum != null, "maximum");
@@ -390,7 +720,7 @@ public class HttpPartSchema {
 				notAllowed.aif(maxLength != null, "maxLength");
 				notAllowed.aif(minItems != null, "minItems");
 				notAllowed.aif(minLength != null, "minLength");
-				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
+				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			default:
@@ -518,10 +848,8 @@ public class HttpPartSchema {
 	public HttpPartDataType getType(ClassMeta<?> cm) {
 		if (type != HttpPartDataType.NO_TYPE)
 			return type;
-		if (cm.isMapOrBean())
-			return HttpPartDataType.OBJECT;
-		if (cm.isCollectionOrArray())
-			return HttpPartDataType.ARRAY;
+		if (cm.isTemporal() || cm.isDateOrCalendar())
+			return HttpPartDataType.STRING;
 		if (cm.isNumber()) {
 			if (cm.isDecimal())
 				return HttpPartDataType.NUMBER;
@@ -529,6 +857,10 @@ public class HttpPartSchema {
 		}
 		if (cm.isBoolean())
 			return HttpPartDataType.BOOLEAN;
+		if (cm.isMapOrBean())
+			return HttpPartDataType.OBJECT;
+		if (cm.isCollectionOrArray())
+			return HttpPartDataType.ARRAY;
 		return HttpPartDataType.STRING;
 	}
 
@@ -1073,8 +1405,11 @@ public class HttpPartSchema {
 		return b == null ? false : b;
 	}
 
-	final static Set<String> toSet(String[] s) {
-		return toSet(joinnl(s));
+	final static Set<String> toSet(String[]...s) {
+		for (String[] ss : s)
+			if (ss != null && ss.length > 0)
+				return toSet(joinnl(ss));
+		return null;
 	}
 
 	final static Set<String> toSet(String s) {
@@ -1090,10 +1425,11 @@ public class HttpPartSchema {
 		return set;
 	}
 
-	final static Number toNumber(String s) {
+	final static Number toNumber(String...s) {
 		try {
-			if (isNotEmpty(s))
-				return parseNumber(s, Number.class);
+			for (String ss : s)
+				if (isNotEmpty(ss))
+					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);

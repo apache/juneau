@@ -547,7 +547,30 @@ public class ReflectionMap<V> {
 
 		MethodEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = i == -1 ? null : split(name.substring(i+1, name.length()-1));
+			this.args = i == -1 ? null : splitMethodArgs(name.substring(i+1, name.length()-1));
+			if (args != null) {
+				for (int j = 0; j < args.length; j++) {
+
+					// Strip off generic parameters.
+					int k = args[j].indexOf('<');
+					if (k > 0)
+						args[j] = args[j].substring(0, k);
+
+					// Convert from xxx[][] to [[Lxxx; notation.
+					if (args[j].endsWith("[]")) {
+						int l = 0;
+						while (args[j].endsWith("[]")) {
+							l++;
+							args[j] = args[j].substring(0, args[j].length()-2);
+						}
+						StringBuilder sb = new StringBuilder(args[j].length() + l + 2);
+						for (int m = 0; m < l; m++)
+							sb.append('[');
+						sb.append('L').append(args[j]).append(';');
+						args[j] = sb.toString();
+					}
+				}
+			}
 			name = i == -1 ? name : name.substring(0, i);
 			i = name.lastIndexOf('.');
 			String s1 = name.substring(0, i).trim(), s2 = name.substring(i+1).trim();

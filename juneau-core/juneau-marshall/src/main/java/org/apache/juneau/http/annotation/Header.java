@@ -105,6 +105,11 @@ public @interface Header {
 	boolean skipIfEmpty() default false;
 
 	/**
+	 * Synonym for {@link #skipIfEmpty()}.
+	 */
+	boolean sie() default false;
+
+	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
@@ -201,6 +206,11 @@ public @interface Header {
 	String name() default "";
 
 	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
+
+	/**
 	 * A synonym for {@link #name()}.
 	 *
 	 * <p>
@@ -241,6 +251,11 @@ public @interface Header {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -262,6 +277,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	boolean required() default false;
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
 
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
@@ -323,6 +343,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	String type() default "";
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
 
 	/**
 	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
@@ -387,6 +412,10 @@ public @interface Header {
 	 */
 	String format() default "";
 
+	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
 
 	/**
 	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
@@ -408,6 +437,11 @@ public @interface Header {
 	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
 	 */
 	boolean allowEmptyValue() default false;
+
+	/**
+	 * Synonym for {@link #allowEmptyValue()}.
+	 */
+	boolean aev() default false;
 
 	/**
 	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
@@ -472,6 +506,11 @@ public @interface Header {
 	String collectionFormat() default "";
 
 	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
 	 * <mk>default</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -508,6 +547,11 @@ public @interface Header {
 	String[] _default() default {};
 
 	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
+
+	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -533,6 +577,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	String maximum() default "";
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
@@ -562,6 +611,11 @@ public @interface Header {
 	boolean exclusiveMaximum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -589,6 +643,11 @@ public @interface Header {
 	String minimum() default "";
 
 	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -614,6 +673,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
 
 	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
@@ -644,6 +708,11 @@ public @interface Header {
 	long maxLength() default -1;
 
 	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -672,6 +741,11 @@ public @interface Header {
 	long minLength() default -1;
 
 	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -696,6 +770,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	String pattern() default "";
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
 
 	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -724,6 +803,11 @@ public @interface Header {
 	long maxItems() default -1;
 
 	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -748,6 +832,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
 
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -778,6 +867,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
 
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
@@ -827,6 +921,11 @@ public @interface Header {
 	String[] _enum() default {};
 
 	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
+
+	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -852,6 +951,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	String multipleOf() default "";
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
 
 	//=================================================================================================================
 	// Other
@@ -909,6 +1013,11 @@ public @interface Header {
 	 * </ul>
 	 */
 	String[] example() default {};
+
+	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
 
 	/**
 	 * Free-form value for the {@doc SwaggerParameterObject}.

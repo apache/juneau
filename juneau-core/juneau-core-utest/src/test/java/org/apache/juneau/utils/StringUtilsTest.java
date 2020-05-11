@@ -1006,4 +1006,16 @@ public class StringUtilsTest {
 		assertEquals("f...", abbreviate("foooo", 4));
 		assertEquals("foo", abbreviate("foo", 2));
 	}
+
+	//====================================================================================================
+	// splitMethodArgs(String)
+	//====================================================================================================
+	@Test
+	public void testSplitMethodArgs() throws Exception {
+		assertObjectEquals("['java.lang.String']", splitMethodArgs("java.lang.String"));
+		assertObjectEquals("['java.lang.String','java.lang.Integer']", splitMethodArgs("java.lang.String,java.lang.Integer"));
+		assertObjectEquals("['x','y']", splitMethodArgs("x,y"));
+		assertObjectEquals("['x','y<a,b>','z']", splitMethodArgs("x,y<a,b>,z"));
+		assertObjectEquals("['x','y<a<b,c>,d<e,f>>','z']", splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"));
+	}
 }

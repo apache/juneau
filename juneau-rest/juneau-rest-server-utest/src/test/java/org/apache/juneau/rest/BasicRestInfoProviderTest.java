@@ -1710,7 +1710,7 @@ public class BasicRestInfoProviderTest {
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class NS04 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
-		public Foo doFoo(@Body(examples="{foo:'d'}") Foo foo) {
+		public Foo doFoo(@Body(exs="{foo:'d'}") Foo foo) {
 			return null;
 		}
 	}
@@ -1724,7 +1724,7 @@ public class BasicRestInfoProviderTest {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class NS05 {
 		@RestMethod(name=GET,path="/path/{foo}/body")
-		public Foo doFoo(@Body(examples="{foo:'$L{foo}'}") Foo foo) {
+		public Foo doFoo(@Body(exs="{foo:'$L{foo}'}") Foo foo) {
 			return null;
 		}
 	}

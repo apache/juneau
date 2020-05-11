@@ -18,6 +18,8 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
@@ -51,6 +53,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 
 	private final Map<ClassMeta<?>,OpenApiClassMeta> openApiClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,OpenApiBeanPropertyMeta> openApiBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final HttpPartFormat format;
+	private final HttpPartCollectionFormat collectionFormat;
 
 	/**
 	 * Constructor.
@@ -71,6 +75,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	 */
 	public OpenApiParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
+		format = getProperty(OAPI_format, HttpPartFormat.class, HttpPartFormat.NO_FORMAT);
+		collectionFormat = getProperty(OAPI_collectionFormat, HttpPartCollectionFormat.class, HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	@Override /* Context */
@@ -104,6 +110,11 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 	}
 
 	@Override
+	public OpenApiParserSession createSession(ParserSessionArgs args) {
+		return new OpenApiParserSession(this, args);
+	}
+
+	@Override
 	public OpenApiParserSession createPartSession(ParserSessionArgs args) {
 		return new OpenApiParserSession(this, args);
 	}
@@ -132,6 +143,28 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider, Ope
 			openApiBeanPropertyMetas.put(bpm, m);
 		}
 		return m;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the default format to use when not otherwise specified via {@link Schema#format()}
+	 *
+	 * @return The default format to use when not otherwise specified via {@link Schema#format()}
+	 */
+	protected final HttpPartFormat getFormat() {
+		return format;
+	}
+
+	/**
+	 * Returns the default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
+	 *
+	 * @return The default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
+	 */
+	protected final HttpPartCollectionFormat getCollectionFormat() {
+		return collectionFormat;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

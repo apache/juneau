@@ -22,6 +22,7 @@ import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.net.URI;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
@@ -1344,6 +1345,15 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isDate() {
 		return cc == DATE && info.isChildOf(Date.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link Temporal}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Temporal}.
+	 */
+	public boolean isTemporal() {
+		return info.isChildOf(Temporal.class);
 	}
 
 	/**

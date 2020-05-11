@@ -95,6 +95,11 @@ public @interface Items {
 	String type() default "";
 
 	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
+
+	/**
 	 * <mk>format</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -106,6 +111,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	String format() default "";
+
+	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
 
 	/**
 	 * <mk>collectionFormat</mk> field of the {@doc SwaggerItemsObject}.
@@ -121,6 +131,11 @@ public @interface Items {
 	String collectionFormat() default "";
 
 	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -132,6 +147,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	String pattern() default "";
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
 
 	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerItemsObject}.
@@ -147,6 +167,11 @@ public @interface Items {
 	String maximum() default "";
 
 	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
+
+	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -158,6 +183,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	String minimum() default "";
+
+	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
 
 	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerItemsObject}.
@@ -173,6 +203,11 @@ public @interface Items {
 	String multipleOf() default "";
 
 	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
+
+	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -184,6 +219,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	long maxLength() default -1;
+
+	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
 
 	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerItemsObject}.
@@ -199,6 +239,11 @@ public @interface Items {
 	long minLength() default -1;
 
 	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -210,6 +255,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	long maxItems() default -1;
+
+	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
 
 	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerItemsObject}.
@@ -225,6 +275,11 @@ public @interface Items {
 	long minItems() default -1;
 
 	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
+
+	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -236,6 +291,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	boolean exclusiveMaximum() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
 
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerItemsObject}.
@@ -251,6 +311,11 @@ public @interface Items {
 	boolean exclusiveMinimum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
+
+	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -262,6 +327,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
 
 	/**
 	 * <mk>default</mk> field of the {@doc SwaggerItemsObject}.
@@ -277,6 +347,11 @@ public @interface Items {
 	String[] _default() default {};
 
 	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
+
+	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -288,6 +363,11 @@ public @interface Items {
 	 * </ul>
 	 */
 	String[] _enum() default {};
+
+	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
 
 	/**
 	 * <mk>$ref</mk> field of the {@doc SwaggerItemsObject}.

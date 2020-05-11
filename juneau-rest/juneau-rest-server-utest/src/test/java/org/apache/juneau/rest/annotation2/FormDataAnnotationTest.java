@@ -193,7 +193,7 @@ public class FormDataAnnotationTest {
 
 	@Test
 	public void d02_optionalParam_bean() throws Exception {
-		d.post("/b", "f1=(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		d.post("/b", "f1=a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
 		d.post("/b", "null").execute().assertStatus(200).assertBody("null");
 	}
 

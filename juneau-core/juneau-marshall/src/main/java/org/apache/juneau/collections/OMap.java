@@ -507,18 +507,20 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * A no-op if the value is <jk>null</jk> or an empty string/map/collection.
 	 *
 	 * @param key The key.
-	 * @param value The value.
+	 * @param values The values.
 	 * @return This object (for method chaining).
 	 */
-	public OMap ase(String key, Object value) {
-		return aif(true, true, true, key, value);
+	public OMap ase(String key, Object...values) {
+		for (Object v : values)
+			aif(true, true, true, key, v);
+		return this;
 	}
 
 	/**
 	 * Add skip empty.
 	 *
 	 * <p>
-	 * Same as {@link #ase(String, Object)}.
+	 * Same as {@link #ase(String, Object...)}.
 	 *
 	 * @param key The key.
 	 * @param value The value.
@@ -567,12 +569,13 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * A no-op if the value is <c>-1</c>.
 	 *
 	 * @param key The key.
-	 * @param value The value.
+	 * @param values The values.
 	 * @return This object (for method chaining).
 	 */
-	public OMap asmo(String key, Number value) {
-		if (value != null && value.intValue() != -1)
-			a(key, value);
+	public OMap asmo(String key, Number...values) {
+		for (Number v : values)
+			if (v != null && v.intValue() != -1)
+				a(key, v);
 		return this;
 	}
 
@@ -580,7 +583,7 @@ public class OMap extends ObjectMap /* In 9.0 - LinkedHashMap<String,Object> */ 
 	 * Add skip minus one.
 	 *
 	 * <p>
-	 * Same as {@link #asmo(String, Number)}.
+	 * Same as {@link #asmo(String, Number...)}.
 	 *
 	 * @param key The key.
 	 * @param value The value.

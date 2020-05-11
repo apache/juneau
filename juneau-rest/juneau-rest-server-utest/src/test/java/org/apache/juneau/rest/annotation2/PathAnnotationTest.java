@@ -713,7 +713,7 @@ public class PathAnnotationTest {
 
 	@Test
 	public void j02_optionalParam_bean() throws Exception {
-		j.get("/b/(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		j.get("/b/a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
 	}
 
 	@Test
@@ -1112,7 +1112,7 @@ public class PathAnnotationTest {
 	@Rest(path="/u1/{u1}",children=U2.class)
 	public static class U1 {
 	}
-	@Rest(path="/u2")
+	@Rest(path="/u2",debug="true")
 	public static class U2 {
 		@RestMethod(path="/")
 		public String doGet(@Path(name="u1",required=false) String u1) {

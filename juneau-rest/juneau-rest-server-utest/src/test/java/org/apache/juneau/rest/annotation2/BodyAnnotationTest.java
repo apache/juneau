@@ -853,7 +853,7 @@ public class BodyAnnotationTest {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestMethod(name=POST,path="/")
-		public DTOs.B g(@Body(required=true) DTOs.B content) throws Exception {
+		public DTOs.B g(@Body(r=true) DTOs.B content) throws Exception {
 			return content;
 		}
 	}
@@ -870,7 +870,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=POST,path="/")
 		@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
 		@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
-		public DTOs2.B g(@Body(required=true) DTOs2.B content) throws Exception {
+		public DTOs2.B g(@Body(r=true) DTOs2.B content) throws Exception {
 			return content;
 		}
 	}
@@ -948,11 +948,11 @@ public class BodyAnnotationTest {
 	public static class SA {
 
 		@Body(
-			description={"a","b"},
-			required=true,
+			d={"a","b"},
+			r=true,
 			schema=@Schema(type="string"),
-			example=" 'a' ",
-			examples="{foo:'bar'}"
+			ex=" 'a' ",
+			exs="{foo:'bar'}"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -981,10 +981,10 @@ public class BodyAnnotationTest {
 				"x-example:'\\'a\\'',",
 				"x-examples:{foo:'bar'}"
 			},
-			description={"b","c"},
+			d={"b","c"},
 			schema=@Schema(type="string"),
-			example="'b'",
-			examples="{foo:'baz'}"
+			ex="'b'",
+			exs="{foo:'baz'}"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
@@ -1085,14 +1085,14 @@ public class BodyAnnotationTest {
 	@Rest
 	public static class SC {
 
-		@Body(example=" {f1:'b'} ")
+		@Body(ex=" {f1:'b'} ")
 		public static class SC01 {
 			public String f1;
 		}
 		@RestMethod
 		public void sc01(SC01 h) {}
 
-		@Body(examples={" foo:'bar' "})
+		@Body(exs={" foo:'bar' "})
 		public static class SC02 {}
 		@RestMethod
 		public void sc02(SC02 h) {}
@@ -1129,11 +1129,11 @@ public class BodyAnnotationTest {
 		@RestMethod
 		public void ta01(
 			@Body(
-				description= {"a","b"},
-				required=true,
+				d= {"a","b"},
+				r=true,
 				schema=@Schema(type="string"),
-				example="a",
-				examples=" {foo:'bar'} "
+				ex="a",
+				exs=" {foo:'bar'} "
 			) TA01 b) {}
 
 		public static class TA02 {
@@ -1164,10 +1164,10 @@ public class BodyAnnotationTest {
 					"x-example:'a',",
 					"x-examples:{foo:'bar'}"
 				},
-				description= {"b","c"},
+				d= {"b","c"},
 				schema=@Schema(type="string"),
-				example="b",
-				examples=" {foo:'baz'} "
+				ex="b",
+				exs=" {foo:'baz'} "
 			) TA03 b) {}
 	}
 
@@ -1279,11 +1279,11 @@ public class BodyAnnotationTest {
 			public String f1;
 		}
 		@RestMethod
-		public void tc01(@Body(example="{f1:'b'}") TC01 b) {}
+		public void tc01(@Body(ex="{f1:'b'}") TC01 b) {}
 
 		public static class TC02 {}
 		@RestMethod
-		public void tc02(@Body(examples={" foo:'bar' "}) TC02 b) {}
+		public void tc02(@Body(exs={" foo:'bar' "}) TC02 b) {}
 	}
 
 	static Swagger tc = getSwagger(TC.class);

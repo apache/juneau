@@ -70,7 +70,7 @@ public class HeaderAnnotationTest {
 
 	@Test
 	public void a02_optionalParam_bean() throws Exception {
-		a.get("/b").header("f1", "(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		a.get("/b").header("f1", "a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
 		a.get("/b").execute().assertStatus(200).assertBody("null");
 	}
 

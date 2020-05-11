@@ -121,142 +121,136 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Body a) {
-		required(a.required());
-		allowEmptyValue(! a.required());
+		required(a.required() || a.r());
+		allowEmptyValue(! (a.required() || a.r()));
 		apply(a.schema());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(Header a) {
-		name(a.value());
-		name(a.name());
-		required(a.required());
-		type(a.type());
-		format(a.format());
-		allowEmptyValue(a.allowEmptyValue());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
+		required(a.required() || a.r());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
+		allowEmptyValue(a.allowEmptyValue() || a.aev());
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(a.skipIfEmpty());
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
+		skipIfEmpty(a.skipIfEmpty() || a.sie());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(ResponseHeader a) {
-		name(a.value());
-		name(a.name());
-		codes(a.code());
-		type(a.type());
-		format(a.format());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
 		allowEmptyValue(false);
 		serializer(a.serializer());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(FormData a) {
-		name(a.value());
-		name(a.name());
-		required(a.required());
-		type(a.type());
-		format(a.format());
-		allowEmptyValue(a.allowEmptyValue());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
+		required(a.required() || a.r());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
+		allowEmptyValue(a.allowEmptyValue() || a.aev());
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(a.skipIfEmpty());
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
+		skipIfEmpty(a.skipIfEmpty() || a.sie());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(Query a) {
-		name(a.value());
-		name(a.name());
-		required(a.required());
-		type(a.type());
-		format(a.format());
-		allowEmptyValue(a.allowEmptyValue());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
+		required(a.required() || a.r());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
+		allowEmptyValue(a.allowEmptyValue() || a.aev());
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(a.skipIfEmpty());
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
+		skipIfEmpty(a.skipIfEmpty() || a.sie());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(Path a) {
-		name(a.value());
-		name(a.name());
-		type(a.type());
-		format(a.format());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
 		items(a.items());
-		allowEmptyValue(a.allowEmptyValue());
-		collectionFormat(a.collectionFormat());
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
+		allowEmptyValue(a.allowEmptyValue() || a.aev());
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
 		parser(a.parser());
 		serializer(a.serializer());
 
@@ -265,7 +259,7 @@ public class HttpPartSchemaBuilder {
 			allowEmptyValue();
 			required(false);
 		} else {
-			required(a.required());
+			required(a.required() && a.r());
 		}
 
 		return this;
@@ -283,81 +277,79 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Items a) {
-		type(a.type());
-		format(a.format());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(SubItems a) {
-		type(a.type());
-		format(a.format());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
 		items(HttpPartSchema.toOMap(a.items()));
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(Schema a) {
-		type(a.type());
-		format(a.format());
+		type(firstNonEmpty(a.type(), a.t()));
+		format(firstNonEmpty(a.format(), a.f()));
 		items(a.items());
-		collectionFormat(a.collectionFormat());
-		_default(a._default().length == 0 ? null : joinnl(a._default()));
-		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(a.exclusiveMaximum());
-		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(a.exclusiveMinimum());
-		maxLength(a.maxLength());
-		minLength(a.minLength());
-		pattern(a.pattern());
-		maxItems(a.maxItems());
-		minItems(a.minItems());
-		uniqueItems(a.uniqueItems());
-		_enum(HttpPartSchema.toSet(a._enum()));
-		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		maxProperties(a.maxProperties());
-		minProperties(a.minProperties());
+		collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
+		_default(joinnlOrNull(a._default(), a.df()));
+		maximum(toNumber(a.maximum(), a.max()));
+		exclusiveMaximum(a.exclusiveMaximum() || a.emax());
+		minimum(toNumber(a.minimum(), a.min()));
+		exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+		maxLength(firstNmo(a.maxLength(), a.maxl()));
+		minLength(firstNmo(a.minLength(), a.minl()));
+		pattern(firstNonEmpty(a.pattern(), a.p()));
+		maxItems(firstNmo(a.maxItems(), a.maxi()));
+		minItems(firstNmo(a.minItems(), a.mini()));
+		uniqueItems(a.uniqueItems() || a.ui());
+		_enum(toSet(a._enum(), a.e()));
+		multipleOf(toNumber(a.multipleOf(), a.mo()));
+		maxProperties(firstNmo(a.maxProperties(), a.maxp()));
+		minProperties(firstNmo(a.minProperties(), a.minp()));
 		properties(HttpPartSchema.toOMap(a.properties()));
 		additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(HasQuery a) {
-		name(a.value());
-		name(a.name());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(HasFormData a) {
-		name(a.value());
-		name(a.name());
+		name(firstNonEmpty(a.name(), a.n(), a.value()));
 		return this;
 	}
 
@@ -581,6 +573,152 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Shortcut for <c>type(HttpPartDataType.STRING)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tString() {
+		type = HttpPartDataType.STRING;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.NUMBER)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tNumber() {
+		type = HttpPartDataType.NUMBER;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.INTEGER)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tInteger() {
+		type = HttpPartDataType.INTEGER;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.BOOLEAN)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tBoolean() {
+		type = HttpPartDataType.BOOLEAN;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.ARRAY)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tArray() {
+		type = HttpPartDataType.ARRAY;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.OBJECT)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tObject() {
+		type = HttpPartDataType.OBJECT;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.FILE)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tFile() {
+		type = HttpPartDataType.FILE;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>type(HttpPartDataType.NO_TYPE)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder tNone() {
+		type = HttpPartDataType.NO_TYPE;
+		return this;
+	}
+
+	/**
+	 * <mk>type</mk> field.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='javatree'>
+	 * 	<li class='jc'>{@link HttpPartDataType}
+	 * 	<ul>
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#STRING STRING}
+	 * 			<br>Parameter must be a string or a POJO convertible from a string.
+	 * 			<li>
+	 * 			{@link HttpPartDataType#NUMBER NUMBER}
+	 * 			<br>Parameter must be a number primitive or number object.
+	 * 			<br>If parameter is <c>Object</c>, creates either a <c>Float</c> or <c>Double</c> depending on the size of the number.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#INTEGER INTEGER}
+	 * 			<br>Parameter must be a integer/long primitive or integer/long object.
+	 * 			<br>If parameter is <c>Object</c>, creates either a <c>Short</c>, <c>Integer</c>, or <c>Long</c> depending on the size of the number.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#BOOLEAN BOOLEAN}
+	 * 			<br>Parameter must be a boolean primitive or object.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#ARRAY ARRAY}
+	 * 			<br>Parameter must be an array or collection.
+	 * 			<br>Elements must be strings or POJOs convertible from strings.
+	 * 			<br>If parameter is <c>Object</c>, creates an {@link OList}.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#OBJECT OBJECT}
+	 * 			<br>Parameter must be a map or bean.
+	 * 			<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+	 * 			<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartDataType#FILE FILE}
+	 * 			<br>This type is currently not supported.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <p>
+	 * If the type is not specified, it will be auto-detected based on the parameter class type.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerSecuritySchemeObject SecurityScheme}
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder type(HttpPartDataType value) {
+		this.type = value;
+		return this;
+	}
+
+	/**
 	 * <mk>format</mk> field.
 	 *
 	 * <p>
@@ -643,7 +781,7 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * 	<br>Ignored if value is <jk>null</jk> or an empty string.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder format(String value) {
@@ -653,6 +791,199 @@ public class HttpPartSchemaBuilder {
 		} catch (Exception e) {
 			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
 		}
+		return this;
+	}
+
+	/**
+	 * <mk>format</mk> field.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='javatree'>
+	 * 	<ul class='jc'>{@link HttpPartFormat}
+	 * 	<ul>
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.
+	 * 			<br>Only valid with type <js>"integer"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.
+	 * 			<br>Only valid with type <js>"integer"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+	 * 			<br>Only valid with type <js>"number"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+	 * 			<br>Only valid with type <js>"number"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+	 * 			<br>Only valid with type <js>"string"</js>.
+	 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 			<br>Only valid with type <js>"string"</js>.
+	 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Hexadecimal encoded octets, spaced (e.g. <js>"00 FF"</js>).
+	 * 			<br>Only valid with type <js>"string"</js>.
+	 * 			<br>Parameters of type POJO convertible from string are converted after the string has been decoded.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 			<br>Only valid with type <js>"string"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 			<br>Only valid with type <js>"string"</js>.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+	 * 			<br>This format does not affect the serialization or parsing of the parameter.
+	 * 		<li class='jf'>
+	 * 			{@link HttpPartFormat#UON UON} - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+	 * 			<br>Only valid with type <js>"object"</js>.
+	 * 			<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder format(HttpPartFormat value) {
+		format = value;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.INT32)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fInt32() {
+		format = HttpPartFormat.INT32;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.INT64)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fInt64() {
+		format = HttpPartFormat.INT64;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.FLOAT)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fFloat() {
+		format = HttpPartFormat.FLOAT;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.DOUBLE)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fDouble() {
+		format = HttpPartFormat.DOUBLE;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.BYTE)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fByte() {
+		format = HttpPartFormat.BYTE;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.BINARY)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fBinary() {
+		format = HttpPartFormat.BINARY;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.BINARY_SPACED)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fBinarySpaced() {
+		format = HttpPartFormat.BINARY_SPACED;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.DATE)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fDate() {
+		format = HttpPartFormat.DATE;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.DATE_TIME)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fDateTime() {
+		format = HttpPartFormat.DATE_TIME;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.PASSWORD)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fPassword() {
+		format = HttpPartFormat.PASSWORD;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.UON)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fUon() {
+		format = HttpPartFormat.UON;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>format(HttpPartFormat.NO_FORMAT)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder fNone() {
+		format = HttpPartFormat.NO_FORMAT;
 		return this;
 	}
 
@@ -804,6 +1135,115 @@ public class HttpPartSchemaBuilder {
 			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
 		}
 		return this;
+	}
+
+	/**
+	 * <mk>collectionFormat</mk> field.
+	 *
+	 * <p>
+	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+	 *
+	 * <br>Possible values are:
+	 * <ul class='javatree'>
+	 * 	<ul class='jc'>{@link HttpPartCollectionFormat}
+	 * 	<ul>
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#CSV CSV} (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 		<li>
+	 * 			{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder collectionFormat(HttpPartCollectionFormat value) {
+		collectionFormat = value;
+		return this;
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.CSV)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfCsv() {
+		return collectionFormat(HttpPartCollectionFormat.CSV);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.SSV)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfSsv() {
+		return collectionFormat(HttpPartCollectionFormat.SSV);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.TSV)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfTsv() {
+		return collectionFormat(HttpPartCollectionFormat.TSV);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.PIPES)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfPipes() {
+		return collectionFormat(HttpPartCollectionFormat.PIPES);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.MULTI)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfMulti() {
+		return collectionFormat(HttpPartCollectionFormat.MULTI);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.UONC)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfUon() {
+		return collectionFormat(HttpPartCollectionFormat.UONC);
+	}
+
+	/**
+	 * Shortcut for <c>collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cfNone() {
+		return collectionFormat(HttpPartCollectionFormat.NO_COLLECTION_FORMAT);
 	}
 
 	/**
@@ -1485,6 +1925,26 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
+	/**
+	 * Shortcut for <c>property(key, value)</c>.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param key
+	 *	The property name.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder p(String key, HttpPartSchemaBuilder value) {
+		return property(key, value);
+	}
+
 	private HttpPartSchemaBuilder properties(OMap value) {
 		if (value != null && ! value.isEmpty())
 		for (Map.Entry<String,Object> e : value.entrySet())
@@ -1510,6 +1970,24 @@ public class HttpPartSchemaBuilder {
 		if (value != null)
 			additionalProperties = value;
 		return this;
+	}
+
+	/**
+	 * Shortcut for <c>additionalProperties(value)</c>
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder ap(HttpPartSchemaBuilder value) {
+		return additionalProperties(value);
 	}
 
 	private HttpPartSchemaBuilder additionalProperties(OMap value) {
@@ -1584,5 +2062,27 @@ public class HttpPartSchemaBuilder {
 
 	private Long resolve(Long newValue, Long oldValue) {
 		return (newValue == null || newValue == -1) ? oldValue : newValue;
+	}
+
+	private Set<String> toSet(String[]...s) {
+		return HttpPartSchema.toSet(s);
+	}
+
+	private Number toNumber(String...s) {
+		return HttpPartSchema.toNumber(s);
+	}
+
+	private Long firstNmo(Long...l) {
+		for (Long ll : l)
+			if (ll != null && ll != -1)
+				return ll;
+		return null;
+	}
+
+	private String joinnlOrNull(String[]...s) {
+		for (String[] ss : s)
+			if (ss.length > 0)
+				return joinnl(ss);
+		return null;
 	}
 }

@@ -92,7 +92,7 @@ public class HeaderAnnotationTest {
 	}
 	@Test
 	public void a03a_Bean() throws Exception {
-		assertEquals("{x:'(f=1)'}", a01.getA03a(Bean.create()));
+		assertEquals("{x:'f=1'}", a01.getA03a(Bean.create()));
 	}
 	@Test
 	public void a03b_Bean() throws Exception {
@@ -104,7 +104,7 @@ public class HeaderAnnotationTest {
 	}
 	@Test
 	public void a04a_BeanArray() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.getA04a(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}", a01.getA04a(new Bean[]{Bean.create(),Bean.create()}));
 	}
 	@Test
 	public void a04b_BeanArray() throws Exception {
@@ -112,7 +112,7 @@ public class HeaderAnnotationTest {
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.getA05a(AList.of(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}", a01.getA05a(AList.of(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
@@ -120,23 +120,23 @@ public class HeaderAnnotationTest {
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.getA06a(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}", a01.getA06a(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06b(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06b(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06c(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06c(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.getA06d(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}", a01.getA06d(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.getA06e(AMap.of("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}", a01.getA06e(AMap.of("k1",Bean.create())));
 	}
 	@Test
 	public void a09a_NameValuePairs() throws Exception {
@@ -672,7 +672,7 @@ public class HeaderAnnotationTest {
 		assertEquals("{x:'1|2'}", er.getE01("1","2"));
 		try { er.getE01(); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.getE01("1","2","3"); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.getE01((String)null));
+		assertEquals("{x:null}", er.getE01((String)null));
 	}
 	@Test
 	public void e02_minMax_items() throws Exception {
@@ -680,7 +680,7 @@ public class HeaderAnnotationTest {
 		assertEquals("{x:'1|2'}", er.getE02(new String[]{"1","2"}));
 		try { er.getE02(new String[]{}); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
 		try { er.getE02(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
-		assertEquals("{x:'null'}", er.getE02(new String[]{null}));
+		assertEquals("{x:null}", er.getE02(new String[]{null}));
 	}
 	@Test
 	public void e03_uniqueItems_false() throws Exception {
@@ -752,7 +752,7 @@ public class HeaderAnnotationTest {
 	public void f04_enum_items() throws Exception {
 		assertEquals("{x:'foo'}", fr.getF04("foo"));
 		try { fr.getF04("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
-		assertEquals("{x:'null'}", fr.getF04((String)null));
+		assertEquals("{x:null}", fr.getF04((String)null));
 	}
 	@Test
 	public void f05_pattern() throws Exception {
@@ -764,7 +764,7 @@ public class HeaderAnnotationTest {
 	public void f06_pattern_items() throws Exception {
 		assertEquals("{x:'foo123'}", fr.getF06("foo123"));
 		try { fr.getF06("foo"); fail(); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
-		assertEquals("{x:'null'}", fr.getF06((String)null));
+		assertEquals("{x:null}", fr.getF06((String)null));
 	}
 
 	//=================================================================================================================

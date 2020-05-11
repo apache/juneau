@@ -17,6 +17,8 @@ import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 
+import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -24,6 +26,8 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.transform.*;
+import org.apache.juneau.transforms.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -71,6 +75,9 @@ public class OpenApiParserSession extends UonParserSession {
 	@SuppressWarnings("unchecked")
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
+		if (partType == null)
+			partType = HttpPartType.OTHER;
+
 		boolean isOptional = type.isOptional();
 
 		while (type != null && type.isOptional())
@@ -92,35 +99,83 @@ public class OpenApiParserSession extends UonParserSession {
 		return t;
 	}
 
+	@Override /* ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return parseInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
-		if (in == null) {
+		if (in == null || "null".equals(in)) {
 			if (schema.getDefault() == null)
 				return null;
 			in = schema.getDefault();
 		} else {
-			HttpPartDataType t = schema.getType(type);
-			HttpPartFormat f = schema.getFormat(type);
+
+			PojoSwap<T,Object> swap = (PojoSwap<T,Object>)type.getPojoSwap(this);
+			BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
+			ClassMeta<?> sType = null;
+			if (builder != null)
+				sType = builder.getBuilderClassMeta(this);
+			else if (swap != null)
+				sType = swap.getSwapClassMeta(this);
+			else
+				sType = type;
+
+			if (sType.isOptional())
+				return (T)Optional.ofNullable(parseInner(partType, schema, in, sType.getElementType()));
+
+			HttpPartDataType t = schema.getType(sType);
+			if (partType == null)
+				partType = HttpPartType.OTHER;
+
+			HttpPartFormat f = schema.getFormat(sType);
+			if (f == HttpPartFormat.NO_FORMAT)
+				f = ctx.getFormat();
 
 			if (t == STRING) {
-				if (type.isObject()) {
+				if (sType.isObject()) {
 					if (f == BYTE)
-						return (T)base64Decode(in);
+						return toType(base64Decode(in), type);
 					if (f == DATE || f == DATE_TIME)
-						return (T)parseIsoCalendar(in);
+						return toType(parseIsoCalendar(in), type);
 					if (f == BINARY)
-						return (T)fromHex(in);
+						return toType(fromHex(in), type);
 					if (f == BINARY_SPACED)
-						return (T)fromSpacedHex(in);
+						return toType(fromSpacedHex(in), type);
 					if (f == HttpPartFormat.UON)
 						return super.parse(partType, schema, in, type);
-					return (T)in;
+					return toType(in, type);
 				}
 				if (f == BYTE)
 					return toType(base64Decode(in), type);
-				if (f == DATE || f == DATE_TIME)
-					return toType(parseIsoCalendar(in), type);
+				if (f == DATE) {
+					try {
+						if (type.isCalendar())
+							return toType(TemporalCalendarSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
+						if (type.isDate())
+							return toType(TemporalDateSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
+						if (type.isTemporal())
+							return toType(TemporalSwap.IsoDate.DEFAULT.unswap(this, in, type), type);
+						return toType(in, type);
+					} catch (Exception e) {
+						throw new ParseException(e);
+					}
+				}
+				if (f == DATE_TIME) {
+					try {
+						if (type.isCalendar())
+							return toType(TemporalCalendarSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
+						if (type.isDate())
+							return toType(TemporalDateSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
+						if (type.isTemporal())
+							return toType(TemporalSwap.IsoDateTime.DEFAULT.unswap(this, in, type), type);
+						return toType(in, type);
+					} catch (Exception e) {
+						throw new ParseException(e);
+					}
+				}
 				if (f == BINARY)
 					return toType(fromHex(in), type);
 				if (f == BINARY_SPACED)
@@ -128,45 +183,6 @@ public class OpenApiParserSession extends UonParserSession {
 				if (f == HttpPartFormat.UON)
 					return super.parse(partType, schema, in, type);
 				return toType(in, type);
-
-			} else if (t == ARRAY) {
-				if (type.isObject())
-					type = (ClassMeta<T>)CM_OList;
-
-				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
-				if (eType == null)
-					eType = schema.getParsedType().getElementType();
-
-				HttpPartCollectionFormat cf = schema.getCollectionFormat();
-				String[] ss = new String[0];
-
-				if (cf == MULTI)
-					ss = new String[]{in};
-				else if (cf == CSV)
-					ss = split(in, ',');
-				else if (cf == PIPES)
-					ss = split(in, '|');
-				else if (cf == SSV)
-					ss = splitQuoted(in);
-				else if (cf == TSV)
-					ss = split(in, '\t');
-				else if (cf == HttpPartCollectionFormat.UON)
-					return super.parse(partType, null, in, type);
-				else if (cf == NO_COLLECTION_FORMAT) {
-					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-						return super.parse(partType, null, in, type);
-					ss = split(in, ',');
-				}
-
-				HttpPartSchema items = schema.getItems();
-				if (items == null)
-					items = HttpPartSchema.DEFAULT;
-				Object[] o = new Object[ss.length];
-				for (int i = 0; i < ss.length; i++)
-					o[i] = parse(partType, items, ss[i], eType);
-				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
-					return toType(toType(o, schema.getParsedType()), type);
-				return toType(o, type);
 
 			} else if (t == BOOLEAN) {
 				if (type.isObject())
@@ -195,33 +211,128 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 				if (type.isNumber())
 					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Integer), type);
+				return toType(super.parse(partType, schema, in, CM_Double), type);
+
+			} else if (t == ARRAY) {
+
+				HttpPartCollectionFormat cf = schema.getCollectionFormat();
+				if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+					cf = ctx.getCollectionFormat();
+
+				if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, schema, in, type);
+
+				if (type.isObject())
+					type = (ClassMeta<T>)CM_OList;
+
+				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
+				if (eType == null)
+					eType = schema.getParsedType().getElementType();
+				if (eType == null)
+					eType = string();
+
+				String[] ss = new String[0];
+
+				if (cf == MULTI)
+					ss = new String[]{in};
+				else if (cf == CSV)
+					ss = split(in, ',');
+				else if (cf == PIPES)
+					ss = split(in, '|');
+				else if (cf == SSV)
+					ss = splitQuoted(in);
+				else if (cf == TSV)
+					ss = split(in, '\t');
+				else if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, null, in, type);
+				else if (cf == NO_COLLECTION_FORMAT) {
+					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
+						return super.parse(partType, null, in, type);
+					ss = split(in, ',');
+				}
+
+				HttpPartSchema items = schema.getItems();
+				if (items == null)
+					items = HttpPartSchema.DEFAULT;
+				Object o = Array.newInstance(eType.getInnerClass(), ss.length);
+				for (int i = 0; i < ss.length; i++)
+					Array.set(o, i, parse(partType, items, ss[i], eType));
+				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
+					return toType(toType(o, schema.getParsedType()), type);
+				return toType(o, type);
 
 			} else if (t == OBJECT) {
+
+				HttpPartCollectionFormat cf = schema.getCollectionFormat();
+				if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+					cf = ctx.getCollectionFormat();
+
+				if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, schema, in, type);
+
 				if (type.isObject())
 					type = (ClassMeta<T>)CM_OMap;
-				if (schema.hasProperties() && type.isMapOrBean()) {
-					try {
-						if (type.isBean()) {
-							BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
-							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_OMap).entrySet()) {
-								String key = e.getKey();
-								BeanPropertyMeta bpm = m.getPropertyMeta(key);
-								m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), bpm == null ? object() : (ClassMeta<Object>) bpm.getClassMeta()));
-							}
-							return m.getBean();
-						}
-						Map<String,Object> m = (Map<String,Object>)type.newInstance();
-						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_OMap).entrySet()) {
-							String key = e.getKey();
-							m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), object()));
-						}
-						return (T)m;
-					} catch (Exception e1) {
-						throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
-					}
+
+				if (! type.isMapOrBean())
+					throw new ParseException("Invalid type {0} for part type OBJECT.", type);
+
+				String[] ss = new String[0];
+
+				if (cf == MULTI)
+					ss = new String[]{in};
+				else if (cf == CSV)
+					ss = split(in, ',');
+				else if (cf == PIPES)
+					ss = split(in, '|');
+				else if (cf == SSV)
+					ss = splitQuoted(in);
+				else if (cf == TSV)
+					ss = split(in, '\t');
+				else if (cf == HttpPartCollectionFormat.UONC)
+					return super.parse(partType, null, in, type);
+				else if (cf == NO_COLLECTION_FORMAT) {
+					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
+						return super.parse(partType, null, in, type);
+					ss = split(in, ',');
 				}
-				return super.parse(partType, schema, in, type);
+
+				if (type.isBean()) {
+					BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
+					for (String s : ss) {
+						String[] kv = split(s, '=', 2);
+						if (kv.length != 2)
+							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+						String key = kv[0], value = kv[1];
+						BeanPropertyMeta bpm = m.getPropertyMeta(key);
+						if (bpm == null && ! isIgnoreUnknownBeanProperties())
+							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+						m.put(key, parse(partType, schema.getProperty(key), value, bpm == null ? object() : bpm.getClassMeta()));
+					}
+					return m.getBean();
+				}
+
+				ClassMeta<?> eType = type.isObject() ? string() : type.getValueType();
+				if (eType == null)
+					eType = schema.getParsedType().getValueType();
+				if (eType == null)
+					eType = string();
+
+				try {
+					Map<String,Object> m = (Map<String,Object>)type.newInstance();
+					if (m == null)
+						m = OMap.of();
+
+					for (String s : ss) {
+						String[] kv = split(s, '=', 2);
+						if (kv.length != 2)
+							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+						String key = kv[0], value = kv[1];
+						m.put(key, parse(partType, schema.getProperty(key), value, eType));
+					}
+					return (T)m;
+				} catch (ExecutableException e) {
+					throw new ParseException(e);
+				}
 
 			} else if (t == FILE) {
 				throw new ParseException("File part not supported.");

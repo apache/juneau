@@ -20,7 +20,9 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
+import org.junit.runners.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicBeanTests {
 
 	//------------------------------------------------------------------------------------------------------------------

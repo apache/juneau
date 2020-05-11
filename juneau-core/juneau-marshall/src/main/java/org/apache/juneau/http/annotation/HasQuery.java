@@ -52,6 +52,11 @@ public @interface HasQuery {
 	String name() default "";
 
 	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
+
+	/**
 	 * A synonym for {@link #name()}.
 	 *
 	 * <p>

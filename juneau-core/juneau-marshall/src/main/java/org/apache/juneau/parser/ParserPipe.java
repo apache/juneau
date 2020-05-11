@@ -291,6 +291,18 @@ public final class ParserPipe implements Closeable {
 	}
 
 	/**
+	 * Returns the contents of this pipe as a string.
+	 *
+	 * @return The contents of this pipe as a string.
+	 * @throws IOException If thrown from inner reader.
+	 */
+	public String asString() throws IOException {
+		if (inputString == null)
+			inputString = IOUtils.read(getReader());
+		return inputString;
+	}
+
+	/**
 	 * Converts this pipe into a {@link ParserReader}.
 	 *
 	 * @return The converted pipe.

@@ -70,8 +70,8 @@ public class RequestBeanProxyTest {
 	public static interface A01_BeanInterface {
 		@Query String getA();
 		@Query("b") String getX1();
-		@Query(name="c") String getX2();
-		@Query(name="e",allowEmptyValue=true) String getX4();
+		@Query(n="c") String getX2();
+		@Query(n="e",allowEmptyValue=true) String getX4();
 		@Query("f") String getX5();
 		@Query("g") String getX6();
 		@Query("h") String getX7();
@@ -126,7 +126,7 @@ public class RequestBeanProxyTest {
 		public Map<String,Object> getB() {
 			return AMap.of("b1","true","b2","123","b3","null");
 		}
-		@Query(name="*",allowEmptyValue=true)
+		@Query(n="*",allowEmptyValue=true)
 		public Map<String,Object> getC() {
 			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -142,7 +142,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void a02a_query_maps_plainText() throws Exception {
 		String r = a02a.normal(new A02_Bean());
-		assertEquals("{a:'(a1=v1,a2=123,a3=null,a4=\\'\\')',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 	@Test
 	public void a02b_query_maps_uon() throws Exception {
@@ -178,7 +178,7 @@ public class RequestBeanProxyTest {
 		public NameValuePairs getB() {
 			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
 		}
-		@Query(name="*",allowEmptyValue=true)
+		@Query(n="*",allowEmptyValue=true)
 		public NameValuePairs getC() {
 			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
 		}
@@ -280,11 +280,11 @@ public class RequestBeanProxyTest {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Query(name="c", serializer=ListSerializer.class)
+		@Query(n="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Query(name="d",allowEmptyValue=true)
+		@Query(n="d",allowEmptyValue=true)
 		public List<Object> getX3() {
 			return AList.of();
 		}
@@ -296,11 +296,11 @@ public class RequestBeanProxyTest {
 		public Object[] getX5() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@Query(name="g", serializer=ListSerializer.class)
+		@Query(n="g", serializer=ListSerializer.class)
 		public Object[] getX6() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@Query(name="h",allowEmptyValue=true)
+		@Query(n="h",allowEmptyValue=true)
 		public Object[] getX7() {
 			return new Object[]{};
 		}
@@ -444,7 +444,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void c02a_formData_maps_plainText() throws Exception {
 		String r = c02a.normal(new C02_Bean());
-		assertEquals("{a:'(a1=v1,a2=123,a3=null,a4=\\'\\')',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 	@Test
 	public void c02b_formData_maps_uon() throws Exception {
@@ -747,7 +747,7 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e02a_header_maps_plainText() throws Exception {
 		String r = e02a.normal(new E02_Bean());
-		assertEquals("{a:'(a1=v1,a2=123,a3=null,a4=\\'\\')',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
 	}
 	@Test
 	public void e02b_header_maps_uon() throws Exception {

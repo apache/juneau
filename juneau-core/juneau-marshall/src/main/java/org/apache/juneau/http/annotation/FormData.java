@@ -132,6 +132,11 @@ public @interface FormData {
 	boolean skipIfEmpty() default false;
 
 	/**
+	 * Synonym for {@link #skipIfEmpty()}.
+	 */
+	boolean sie() default false;
+
+	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
@@ -233,6 +238,11 @@ public @interface FormData {
 	String name() default "";
 
 	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
+
+	/**
 	 * A synonym for {@link #name()}.
 	 *
 	 * <p>
@@ -273,6 +283,11 @@ public @interface FormData {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -294,6 +309,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	boolean required() default false;
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
 
 	//=================================================================================================================
 	// Attributes specific to parameters other than body
@@ -360,6 +380,11 @@ public @interface FormData {
 	String type() default "";
 
 	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
+
+	/**
 	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -423,6 +448,11 @@ public @interface FormData {
 	String format() default "";
 
 	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
 	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -441,6 +471,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	boolean allowEmptyValue() default false;
+
+	/**
+	 * Synonym for {@link #allowEmptyValue()}.
+	 */
+	boolean aev() default false;
 
 	/**
 	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
@@ -507,6 +542,11 @@ public @interface FormData {
 	String collectionFormat() default "";
 
 	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
 	 * <mk>default</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -543,6 +583,11 @@ public @interface FormData {
 	String[] _default() default {};
 
 	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
+
+	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -568,6 +613,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	String maximum() default "";
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
@@ -597,6 +647,11 @@ public @interface FormData {
 	boolean exclusiveMaximum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -624,6 +679,11 @@ public @interface FormData {
 	String minimum() default "";
 
 	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -649,6 +709,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
 
 	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
@@ -679,6 +744,11 @@ public @interface FormData {
 	long maxLength() default -1;
 
 	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -707,6 +777,11 @@ public @interface FormData {
 	long minLength() default -1;
 
 	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -731,6 +806,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	String pattern() default "";
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
 
 	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -759,6 +839,11 @@ public @interface FormData {
 	long maxItems() default -1;
 
 	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -783,6 +868,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
 
 	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
@@ -813,6 +903,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
 
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
@@ -862,6 +957,11 @@ public @interface FormData {
 	String[] _enum() default {};
 
 	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
+
+	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
@@ -886,6 +986,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	String multipleOf() default "";
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
 
 	//=================================================================================================================
 	// Other
@@ -943,6 +1048,11 @@ public @interface FormData {
 	 * </ul>
 	 */
 	String[] example() default {};
+
+	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
 
 	/**
 	 * Free-form value for the {@doc SwaggerParameterObject}.

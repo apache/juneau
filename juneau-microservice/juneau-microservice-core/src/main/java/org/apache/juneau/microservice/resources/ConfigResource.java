@@ -98,7 +98,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap getConfigSection(
-			@Path(name="section", description="Section name in config file.", example="REST") String section
+			@Path(n="section", d="Section name in config file.", ex="REST") String section
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section);
@@ -116,8 +116,8 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String getConfigEntry(
-			@Path(name="section", description="Section name in config file.", example="REST") String section,
-			@Path(name="key", description="Key name in section.", example="theme") String key
+			@Path(n="section", d="Section name in config file.", ex="REST") String section,
+			@Path(n="key", d="Key name in section.", ex="theme") String key
 		) throws SectionNotFound, BadConfig {
 
 		return getSection(section).getString(key);
@@ -135,7 +135,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigContentsFormPost(
-			@FormData(name="contents", description="New contents in INI file format.") String contents
+			@FormData(n="contents", d="New contents in INI file format.") String contents
 		) throws Exception {
 
 		return setConfigContents(new StringReader(contents));
@@ -153,7 +153,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigContents(
-			@Body(description="New contents in INI file format.") Reader contents
+			@Body(d="New contents in INI file format.") Reader contents
 		) throws Exception {
 
 		return getServletConfig().getConfig().load(contents, true).toMap();
@@ -173,8 +173,8 @@ public class ConfigResource extends BasicRestServlet {
 	public OMap setConfigSection(
 			@Path(name="section", description="Section name in config file.", example="REST") String section,
 			@Body(
-				description="New contents of config section as a simple map of key/value pairs.",
-				example="{theme:'servlet:/htdocs/themes/dark.css'}"
+				d="New contents of config section as a simple map of key/value pairs.",
+				ex="{theme:'servlet:/htdocs/themes/dark.css'}"
 			) Map<String,Object> contents
 		) throws Exception {
 
@@ -194,9 +194,9 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public String setConfigValue(
-			@Path(name="section", description="Section name in config file.", example="REST") String section,
-			@Path(name="key", description="Key name in section.", example="theme") String key,
-			@Body(description="New value for entry.", example="servlet:/htdocs/themes/dark.css") String value
+			@Path(n="section", d="Section name in config file.", ex="REST") String section,
+			@Path(n="key", d="Key name in section.", ex="theme") String key,
+			@Body(d="New value for entry.", ex="servlet:/htdocs/themes/dark.css") String value
 		) throws SectionNotFound, BadConfig {
 
 		getServletConfig().getConfig().set(section + '/' + key, value);

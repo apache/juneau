@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;
+import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transforms.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -87,6 +89,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override /* PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
@@ -94,9 +97,16 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		ClassMeta<?> type = getClassMetaForObject(value);
 		if (type == null)
 			type = object();
+
 		HttpPartDataType t = schema.getType(type);
+
 		HttpPartFormat f = schema.getFormat(type);
+		if (f == HttpPartFormat.NO_FORMAT)
+			f = ctx.getFormat();
+
 		HttpPartCollectionFormat cf = schema.getCollectionFormat();
+		if (cf == HttpPartCollectionFormat.NO_COLLECTION_FORMAT)
+			cf = ctx.getCollectionFormat();
 
 		String out = null;
 
@@ -116,86 +126,115 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			if (t == STRING) {
 
-				if (f == BYTE)
+				if (f == BYTE) {
 					out = base64Encode(toType(value, CM_ByteArray));
-				else if (f == BINARY)
+				} else if (f == BINARY) {
 					out = toHex(toType(value, CM_ByteArray));
-				else if (f == BINARY_SPACED)
+				} else if (f == BINARY_SPACED) {
 					out = toSpacedHex(toType(value, CM_ByteArray));
-				else if (f == DATE)
-					out = toIsoDate(toType(value, CM_Calendar));
-				else if (f == DATE_TIME)
-					out = toIsoDateTime(toType(value, CM_Calendar));
-				else if (f == HttpPartFormat.UON)
-					out = super.serialize(partType, schema, value);
-				else
-					out = toType(value, string());
-
-			} else if (t == ARRAY) {
-
-				if (cf == HttpPartCollectionFormat.UON)
-					out = super.serialize(partType, null, toList(partType, type, value, schema));
-				else {
-					List<String> l = new ArrayList<>();
-
-					HttpPartSchema items = schema.getItems();
-					ClassMeta<?> vt = getClassMetaForObject(value);
-
-					if (type.isArray()) {
-						for (int i = 0; i < Array.getLength(value); i++)
-							l.add(serialize(partType, items, Array.get(value, i)));
-					} else if (type.isCollection()) {
-						for (Object o : (Collection<?>)value)
-							l.add(serialize(partType, items, o));
-					} else if (vt.hasMutaterTo(String[].class)) {
-						String[] ss = toType(value, CM_StringArray);
-						for (int i = 0; i < ss.length; i++)
-							l.add(serialize(partType, items, ss[i]));
+				} else if (f == DATE) {
+					try {
+						if (value instanceof Calendar)
+							out = TemporalCalendarSwap.IsoDate.DEFAULT.swap(this, (Calendar)value);
+						else if (value instanceof Date)
+							out = TemporalDateSwap.IsoDate.DEFAULT.swap(this, (Date)value);
+						else if (value instanceof Temporal)
+							out = TemporalSwap.IsoDate.DEFAULT.swap(this, (Temporal)value);
+						else
+							out = value.toString();
+					} catch (Exception e) {
+						throw new SerializeException(e);
 					}
-
-					if (cf == PIPES)
-						out = joine(l, '|');
-					else if (cf == SSV)
-						out = join(l, ' ');
-					else if (cf == TSV)
-						out = join(l, '\t');
-					else
-						out = joine(l, ',');
+				} else if (f == DATE_TIME) {
+					try {
+						if (value instanceof Calendar)
+							out = TemporalCalendarSwap.IsoInstant.DEFAULT.swap(this, (Calendar)value);
+						else if (value instanceof Date)
+							out = TemporalDateSwap.IsoInstant.DEFAULT.swap(this, (Date)value);
+						else if (value instanceof Temporal)
+							out = TemporalSwap.IsoInstant.DEFAULT.swap(this, (Temporal)value);
+						else
+							out = value.toString();
+					} catch (Exception e) {
+						throw new SerializeException(e);
+					}
+				} else if (f == HttpPartFormat.UON) {
+					out = super.serialize(partType, schema, value);
+				} else {
+					out = toType(value, string());
 				}
 
 			} else if (t == BOOLEAN) {
 
-				if (f == HttpPartFormat.UON)
-					out = super.serialize(partType, null, value);
-				else
-					out = stringify(toType(value, CM_Boolean));
+				out = stringify(toType(value, CM_Boolean));
 
 			} else if (t == INTEGER) {
 
-				if (f == HttpPartFormat.UON)
-					out = super.serialize(partType, null, value);
-				else if (f == INT64)
+				if (f == INT64)
 					out = stringify(toType(value, CM_Long));
 				else
 					out = stringify(toType(value, CM_Integer));
 
 			} else if (t == NUMBER) {
 
-				if (f == HttpPartFormat.UON)
-					out = super.serialize(partType, null, value);
-				else if (f == DOUBLE)
+				if (f == DOUBLE)
 					out = stringify(toType(value, CM_Double));
 				else
 					out = stringify(toType(value, CM_Float));
 
+			} else if (t == ARRAY) {
+
+				if (cf == HttpPartCollectionFormat.UONC)
+					out = super.serialize(partType, null, toList(partType, type, value, schema));
+				else {
+
+					HttpPartSchema items = schema.getItems();
+					ClassMeta<?> vt = getClassMetaForObject(value);
+					OapiStringBuilder sb = new OapiStringBuilder(cf);
+
+					if (type.isArray()) {
+						for (int i = 0; i < Array.getLength(value); i++)
+							sb.append(serialize(partType, items, Array.get(value, i)));
+					} else if (type.isCollection()) {
+						for (Object o : (Collection<?>)value)
+							sb.append(serialize(partType, items, o));
+					} else if (vt.hasMutaterTo(String[].class)) {
+						String[] ss = toType(value, CM_StringArray);
+						for (int i = 0; i < ss.length; i++)
+							sb.append(serialize(partType, items, ss[i]));
+					} else {
+						throw new SerializeException("Input is not a valid array type: " + type);
+					}
+
+					out = sb.toString();
+				}
+
 			} else if (t == OBJECT) {
 
-				if (f == HttpPartFormat.UON) {
+				if (cf == HttpPartCollectionFormat.UONC) {
+					if (schema.hasProperties() && type.isMapOrBean())
+						value = toMap(partType, type, value, schema);
 					out = super.serialize(partType, null, value);
-				} else if (schema.hasProperties() && type.isMapOrBean()) {
-					out = super.serialize(partType, null, toMap(partType, type, value, schema));
+
+				} else if (type.isBean()) {
+					OapiStringBuilder sb = new OapiStringBuilder(cf);
+					for (BeanPropertyValue p : toBeanMap(value).getValues(isKeepNullProperties())) {
+						if (p.getMeta().canRead()) {
+							Throwable x = p.getThrown();
+							if (x == null)
+								sb.append(p.getName(), serialize(partType, schema.getProperty(p.getName()), p.getValue()));
+						}
+					}
+					out = sb.toString();
+
+				} else if (type.isMap()) {
+					OapiStringBuilder sb = new OapiStringBuilder(cf);
+					for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet())
+						sb.append(e.getKey(), serialize(partType, schema.getProperty(stringify(e.getKey())), e.getValue()));
+					out = sb.toString();
+
 				} else {
-					out = super.serialize(partType, null, value);
+					throw new SerializeException("Input is not a valid object type: " + type);
 				}
 
 			} else if (t == FILE) {
@@ -215,8 +254,66 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
+	private static class OapiStringBuilder {
+		static final AsciiSet EQ = AsciiSet.create("=\\");
+		static final AsciiSet PIPE = AsciiSet.create("|\\");
+		static final AsciiSet PIPE_OR_EQ = AsciiSet.create("|=\\");
+		static final AsciiSet COMMA = AsciiSet.create(",\\");
+		static final AsciiSet COMMA_OR_EQ = AsciiSet.create(",=\\");
+
+		private final StringBuilder sb = new StringBuilder();
+		private final HttpPartCollectionFormat cf;
+		private boolean first = true;
+
+		OapiStringBuilder(HttpPartCollectionFormat cf) {
+			this.cf = cf;
+		}
+
+		private void delim(HttpPartCollectionFormat cf) {
+			if (cf == PIPES)
+				sb.append('|');
+			else if (cf == SSV)
+				sb.append(' ');
+			else if (cf == TSV)
+				sb.append('\t');
+			else
+				sb.append(',');
+		}
+
+		OapiStringBuilder append(Object o) {
+			if (! first)
+				delim(cf);
+			first = false;
+			if (cf == PIPES)
+				sb.append(escapeChars(stringify(o), PIPE));
+			else if (cf == SSV || cf == TSV)
+				sb.append(stringify(o));
+			else
+				sb.append(escapeChars(stringify(o), COMMA));
+			return this;
+		}
+
+		OapiStringBuilder append(Object key, Object val) {
+			if (! first)
+				delim(cf);
+			first = false;
+			if (cf == PIPES)
+				sb.append(escapeChars(stringify(key), PIPE_OR_EQ)).append('=').append(escapeChars(stringify(val), PIPE_OR_EQ));
+			else if (cf == SSV || cf == TSV)
+				sb.append(escapeChars(stringify(key), EQ)).append('=').append(escapeChars(stringify(val), EQ));
+			else
+				sb.append(escapeChars(stringify(key), COMMA_OR_EQ)).append('=').append(escapeChars(stringify(val), COMMA_OR_EQ));
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return sb.toString();
+		}
+	}
+
 	@SuppressWarnings({ "rawtypes" })
-	private Map toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+	private Map<String,Object> toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
 		OMap m = new OMap();
@@ -302,7 +399,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		try {
 			return convertToType(in, type);
 		} catch (InvalidDataConversionException e) {
-			throw new SerializeException(e.getMessage());
+			throw new SerializeException(e);
 		}
 	}
 

@@ -1398,12 +1398,36 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts the specified object to an ISO8601 date string.
+	 *
+	 * @param d The object to convert.
+	 * @return The converted object.
+	 */
+	public static String toIsoDate(Date d) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(d);
+		return DatatypeConverter.printDate(c);
+	}
+
+	/**
 	 * Converts the specified object to an ISO8601 date-time string.
 	 *
 	 * @param c The object to convert.
 	 * @return The converted object.
 	 */
 	public static String toIsoDateTime(Calendar c) {
+		return DatatypeConverter.printDateTime(c);
+	}
+
+	/**
+	 * Converts the specified object to an ISO8601 date-time string.
+	 *
+	 * @param d The object to convert.
+	 * @return The converted object.
+	 */
+	public static String toIsoDateTime(Date d) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(d);
 		return DatatypeConverter.printDateTime(c);
 	}
 
@@ -2763,5 +2787,40 @@ public final class StringUtils {
 	 */
 	public static String asString(Object value) {
 		return value == null ? null : value.toString();
+	}
+
+	/**
+	 * Splits the method arguments in the signature of a method.
+	 *
+	 * @param s The arguments to split.
+	 * @return The split arguments.
+	 */
+	public static String[] splitMethodArgs(String s) {
+		if (s == null)
+			return null;
+		if (isEmpty(s))
+			return new String[0];
+		if (s.indexOf(',') == -1)
+			return new String[]{s};
+
+		List<String> l = new LinkedList<>();
+		char[] sArray = s.toCharArray();
+		int x1 = 0, paramDepth = 0;
+		for (int i = 0; i < sArray.length; i++) {
+			char c = s.charAt(i);
+			if (c == '>')
+				paramDepth++;
+			else if (c == '<')
+				paramDepth--;
+			else if (c == ',' && paramDepth == 0) {
+				String s2 = new String(sArray, x1, i-x1);
+				l.add(s2.trim());
+				x1 = i+1;
+			}
+		}
+		String s2 = new String(sArray, x1, sArray.length-x1);
+		l.add(s2.trim());
+
+		return l.toArray(new String[l.size()]);
 	}
 }

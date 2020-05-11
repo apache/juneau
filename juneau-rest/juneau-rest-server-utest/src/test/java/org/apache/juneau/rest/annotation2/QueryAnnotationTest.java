@@ -43,12 +43,12 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public String get(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
+		public String get(RestRequest req, @Query(n="p1",allowEmptyValue=true) String p1, @Query(n="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
 		@RestMethod
-		public String post(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
+		public String post(RestRequest req, @Query(n="p1",allowEmptyValue=true) String p1, @Query(n="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
@@ -93,22 +93,22 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class B {
 		@RestMethod(name=GET,path="/get1")
-		public String get1(RestRequest req, @Query(name="p1") String p1) throws Exception {
+		public String get1(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 		@RestMethod(name=GET,path="/get2")
-		public String get2(RestRequest req, @Query(name="p1",format="uon") String p1) throws Exception {
+		public String get2(RestRequest req, @Query(n="p1",format="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 		@RestMethod(name=POST,path="/post1")
-		public String post1(RestRequest req, @Query(name="p1") String p1) throws Exception {
+		public String post1(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 		@RestMethod(name=POST,path="/post2")
-		public String post2(RestRequest req, @Query(name="p1",format="uon") String p1) throws Exception {
+		public String post2(RestRequest req, @Query(n="p1",format="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
@@ -197,13 +197,13 @@ public class QueryAnnotationTest {
 	}
 	@Test
 	public void c05_BeanArray() throws Exception {
-		c.get("/c05?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/c05?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c05?x=a=1,b=2,c=false").execute().assertBody("[{a:'1',b:2,c:false}]");
+		c.get("/c05?x=a=1,b=2,c=false&x=a=3,b=4,c=true").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 	@Test
 	public void c06_ListOfBeans() throws Exception {
-		c.get("/c06?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/c06?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c06?x=a=1,b=2,c=false").execute().assertBody("[{a:'1',b:2,c:false}]");
+		c.get("/c06?x=a=1,b=2,c=false&x=a=3,b=4,c=true").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 
 	//=================================================================================================================
@@ -303,7 +303,7 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void e02_optionalParam_bean() throws Exception {
-		e.get("/b?f1=(a=1,b=foo)").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		e.get("/b?f1=a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
 		e.get("/b").execute().assertStatus(200).assertBody("null");
 	}
 
@@ -332,7 +332,7 @@ public class QueryAnnotationTest {
 	public static class SA {
 
 		@Query(
-			name="Q",
+			n="Q",
 			description= {"a","b"},
 			type="string"
 		)
@@ -343,7 +343,7 @@ public class QueryAnnotationTest {
 		public void sa01(SA01 q) {}
 
 		@Query(
-			name="Q",
+			n="Q",
 			api={
 				"description: 'a\nb',",
 				"type:'string'"
@@ -356,7 +356,7 @@ public class QueryAnnotationTest {
 		public void sa02(SA02 q) {}
 
 		@Query(
-			name="Q",
+			n="Q",
 			api={
 				"description: 'b\nc',",
 				"type:'string'"

@@ -18,12 +18,15 @@ import static org.apache.juneau.BeanContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
+
+import javax.xml.bind.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
@@ -484,6 +487,11 @@ public class BeanSession extends Session {
 					return (T)IOUtils.readBytes((InputStream)value, 1024);
 				if (from.isReader())
 					return (T)IOUtils.read((Reader)value).getBytes();
+				if (to.hasMutaterFrom(from))
+					return to.mutateFrom(value);
+				if (from.hasMutaterTo(to))
+					return from.mutateTo(value, to);
+				return (T) value.toString().getBytes(Charset.forName("UTF-8"));
 			}
 
 			// Handle setting of array properties
@@ -679,11 +687,13 @@ public class BeanSession extends Session {
 						return (T)c2;
 					}
 				}
+				return (T)DatatypeConverter.parseDateTime(DateUtils.toValidISO8601DT(value.toString()));
 			}
 
 			if (to.isDate() && to.getInnerClass() == Date.class) {
 				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
+				return (T)DatatypeConverter.parseDateTime(DateUtils.toValidISO8601DT(value.toString())).getTime();
 			}
 
 			if (to.hasMutaterFrom(from))

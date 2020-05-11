@@ -43,9 +43,9 @@ public enum HttpPartCollectionFormat {
 	MULTI,
 
 	/**
-	 * UON notation (e.g. <js>"@(foo,bar)"</js>).
+	 * UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 	 */
-	UON,
+	UONC,
 
 	/**
 	 * Not specified.
@@ -54,11 +54,15 @@ public enum HttpPartCollectionFormat {
 
 	/**
 	 * Create from lowercase string.
-	 * 
+	 *
 	 * @param value The enum name.
 	 * @return The enum.
 	 */
 	public static HttpPartCollectionFormat fromString(String value) {
+		if (value == null)
+			return null;
+		if (value.equalsIgnoreCase("UON"))
+			return UONC;
 		return valueOf(value.toUpperCase());
 	}
 

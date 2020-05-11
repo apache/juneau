@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
@@ -202,12 +203,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi, UrlPathPattern pathPattern) {
 			String p = null;
-			for (Path h : mpi.getAnnotations(Path.class)) {
-				if (! h.name().isEmpty())
-					p = h.name();
-				if (! h.value().isEmpty())
-					p = h.value();
-			}
+			for (Path h : mpi.getAnnotations(Path.class))
+				p = firstNonEmpty(h.name(), h.n(), h.value(), p);
 			if (p != null)
 				return p;
 			if (pathPattern != null) {
@@ -272,12 +269,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Header h : mpi.getAnnotations(Header.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (Header h : mpi.getAnnotations(Header.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@Header used without name or value on method parameter ''{0}''.", mpi);
 			return n;
@@ -306,12 +299,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Attr h : mpi.getAnnotations(Attr.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (Attr h : mpi.getAnnotations(Attr.class))
+				n = firstNonEmpty(h.name(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@Attr used without name or value on method parameter ''{0}''.", mpi);
 			return n;
@@ -351,12 +340,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (ResponseHeader h : mpi.getAnnotations(ResponseHeader.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (ResponseHeader h : mpi.getAnnotations(ResponseHeader.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@ResponseHeader used without name or value on method parameter ''{0}''.", mpi);
 			return n;
@@ -465,12 +450,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (FormData h : mpi.getAnnotations(FormData.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (FormData h : mpi.getAnnotations(FormData.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@FormData used without name or value on method parameter ''{0}''.", mpi);
 			return n;
@@ -508,12 +489,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (Query h : mpi.getAnnotations(Query.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (Query h : mpi.getAnnotations(Query.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@Query used without name or value on method param ''{0}''.", mpi);
 			return n;
@@ -544,12 +521,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (HasFormData h : mpi.getAnnotations(HasFormData.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (HasFormData h : mpi.getAnnotations(HasFormData.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@HasFormData used without name or value on method parameter ''{o}''.", mpi);
 			return n;
@@ -572,12 +545,8 @@ class RestParamDefaults {
 
 		private static String getName(ParamInfo mpi) {
 			String n = null;
-			for (HasQuery h : mpi.getAnnotations(HasQuery.class)) {
-				if (! h.name().isEmpty())
-					n = h.name();
-				if (! h.value().isEmpty())
-					n = h.value();
-			}
+			for (HasQuery h : mpi.getAnnotations(HasQuery.class))
+				n = firstNonEmpty(h.name(), h.n(), h.value(), n);
 			if (n == null)
 				throw new InternalServerError("@HasQuery used without name or value on method parameter ''{0}''.", mpi);
 			return n;

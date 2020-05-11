@@ -57,6 +57,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"20111203"</js>
 	 */
 	public static class BasicIsoDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new BasicIsoDate();
+
 		/** Constructor.*/
 		public BasicIsoDate() {
 			super("BASIC_ISO_DATE", true);
@@ -69,6 +73,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03+01:00"</js> or <js>"2011-12-03"</js>
 	 */
 	public static class IsoDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoDate();
+
 		/** Constructor.*/
 		public IsoDate() {
 			super("ISO_DATE", true);
@@ -81,6 +89,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03T10:15:30+01:00[Europe/Paris]"</js>
 	 */
 	public static class IsoDateTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoDateTime();
+
 		/** Constructor.*/
 		public IsoDateTime() {
 			super("ISO_DATE_TIME", true);
@@ -93,6 +105,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03T10:15:30Z"</js>
 	 */
 	public static class IsoInstant extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoInstant();
+
 		/** Constructor.*/
 		public IsoInstant() {
 			super("ISO_INSTANT", false);
@@ -105,6 +121,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03"</js>
 	 */
 	public static class IsoLocalDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoLocalDate();
+
 		/** Constructor.*/
 		public IsoLocalDate() {
 			super("ISO_LOCAL_DATE", false);
@@ -117,6 +137,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03T10:15:30"</js>
 	 */
 	public static class IsoLocalDateTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoLocalDateTime();
+
 		/** Constructor.*/
 		public IsoLocalDateTime() {
 			super("ISO_LOCAL_DATE_TIME", true);
@@ -129,6 +153,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"10:15:30"</js>
 	 */
 	public static class IsoLocalTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoLocalTime();
+
 		/** Constructor.*/
 		public IsoLocalTime() {
 			super("ISO_LOCAL_TIME", true);
@@ -141,6 +169,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03"</js>
 	 */
 	public static class IsoOffsetDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoOffsetDate();
+
 		/** Constructor.*/
 		public IsoOffsetDate() {
 			super("ISO_OFFSET_DATE", false);
@@ -153,6 +185,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03T10:15:30+01:00"</js>
 	 */
 	public static class IsoOffsetDateTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoOffsetDateTime();
+
 		/** Constructor.*/
 		public IsoOffsetDateTime() {
 			super("ISO_OFFSET_DATE_TIME", false);
@@ -165,6 +201,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"10:15:30+01:00"</js>
 	 */
 	public static class IsoOffsetTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoOffsetTime();
+
 		/** Constructor.*/
 		public IsoOffsetTime() {
 			super("ISO_OFFSET_TIME", false);
@@ -177,6 +217,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2012-337"</js>
 	 */
 	public static class IsoOrdinalDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoOrdinalDate();
+
 		/** Constructor.*/
 		public IsoOrdinalDate() {
 			super("ISO_ORDINAL_DATE", true);
@@ -189,6 +233,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"10:15:30+01:00"</js> or <js>"10:15:30"</js>
 	 */
 	public static class IsoTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoTime();
+
 		/** Constructor.*/
 		public IsoTime() {
 			super("ISO_TIME", true);
@@ -201,6 +249,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2012-W48-6"</js>
 	 */
 	public static class IsoWeekDate extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoWeekDate();
+
 		/** Constructor.*/
 		public IsoWeekDate() {
 			super("ISO_WEEK_DATE", true);
@@ -213,6 +265,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011"</js>
 	 */
 	public static class IsoYear extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoYear();
+
 		/** Constructor.*/
 		public IsoYear() {
 			super("uuuu", true);
@@ -225,6 +281,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12"</js>
 	 */
 	public static class IsoYearMonth extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoYearMonth();
+
 		/** Constructor.*/
 		public IsoYearMonth() {
 			super("uuuu-MM", true);
@@ -237,6 +297,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"2011-12-03T10:15:30+01:00[Europe/Paris]"</js>
 	 */
 	public static class IsoZonedDateTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new IsoZonedDateTime();
+
 		/** Constructor.*/
 		public IsoZonedDateTime() {
 			super("ISO_ZONED_DATE_TIME", false);
@@ -249,6 +313,10 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * Example: <js>"Tue, 3 Jun 2008 11:05:30 GMT"</js>
 	 */
 	public static class Rfc1123DateTime extends TemporalSwap {
+
+		/** Default instance.*/
+		public static final TemporalSwap DEFAULT = new Rfc1123DateTime();
+
 		/** Constructor.*/
 		public Rfc1123DateTime() {
 			super("RFC_1123_DATE_TIME", false);

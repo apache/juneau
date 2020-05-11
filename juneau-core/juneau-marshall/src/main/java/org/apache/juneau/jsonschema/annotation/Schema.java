@@ -120,6 +120,11 @@ public @interface Schema {
 	String format() default "";
 
 	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
 	 * <mk>title</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -167,6 +172,11 @@ public @interface Schema {
 	String[] description() default {};
 
 	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
 	 * <mk>default</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -179,6 +189,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String[] _default() default {};
+
+	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
 
 	/**
 	 * <mk>multipleOf</mk> field of the {@doc SwaggerSchemaObject}.
@@ -194,6 +209,11 @@ public @interface Schema {
 	String multipleOf() default "";
 
 	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
+
+	/**
 	 * <mk>maximum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -205,6 +225,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String maximum() default "";
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerSchemaObject}.
@@ -220,6 +245,11 @@ public @interface Schema {
 	boolean exclusiveMaximum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
 	 * <mk>minimum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -231,6 +261,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String minimum() default "";
+
+	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
 
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerSchemaObject}.
@@ -246,6 +281,11 @@ public @interface Schema {
 	boolean exclusiveMinimum() default false;
 
 	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
+
+	/**
 	 * <mk>maxLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -259,6 +299,11 @@ public @interface Schema {
 	long maxLength() default -1;
 
 	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
 	 * <mk>minLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -270,6 +315,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	long minLength() default -1;
+
+	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
 
 	/**
 	 * <mk>pattern</mk> field of the {@doc SwaggerSchemaObject}.
@@ -293,6 +343,11 @@ public @interface Schema {
 	String pattern() default "";
 
 	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
+
+	/**
 	 * <mk>maxItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -304,6 +359,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	long maxItems() default -1;
+
+	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
 
 	/**
 	 * <mk>minItems</mk> field of the {@doc SwaggerSchemaObject}.
@@ -319,6 +379,11 @@ public @interface Schema {
 	long minItems() default -1;
 
 	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
+
+	/**
 	 * <mk>uniqueItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -331,6 +396,10 @@ public @interface Schema {
 	 */
 	boolean uniqueItems() default false;
 
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
 
 	/**
 	 * <mk>maxProperties</mk> field of the {@doc SwaggerSchemaObject}.
@@ -346,6 +415,10 @@ public @interface Schema {
 	 */
 	long maxProperties() default -1;
 
+	/**
+	 * Synonym for {@link #maxProperties()}.
+	 */
+	long maxp() default -1;
 
 	/**
 	 * <mk>minProperties</mk> field of the {@doc SwaggerSchemaObject}.
@@ -360,6 +433,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	long minProperties() default -1;
+
+	/**
+	 * Synonym for {@link #minProperties()}.
+	 */
+	long minp() default -1;
 
 	/**
 	 * <mk>required</mk> field of the {@doc SwaggerSchemaObject}.
@@ -396,6 +474,11 @@ public @interface Schema {
 	boolean required() default false;
 
 	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
+
+	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -408,6 +491,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String[] _enum() default {};
+
+	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
 
 	/**
 	 * <mk>type</mk> field of the {@doc SwaggerSchemaObject}.
@@ -454,6 +542,11 @@ public @interface Schema {
 	 *
 	 */
 	String type() default "";
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
 
 	/**
 	 * <mk>items</mk> field of the {@doc SwaggerSchemaObject}.
@@ -513,6 +606,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String collectionFormat() default "";
+
+	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
 
 	/**
 	 * <mk>allOf</mk> field of the {@doc SwaggerSchemaObject}.
@@ -585,6 +683,11 @@ public @interface Schema {
 	boolean readOnly() default false;
 
 	/**
+	 * Synonym for {@link #readOnly()}.
+	 */
+	boolean ro() default false;
+
+	/**
 	 * <mk>xml</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -634,6 +737,11 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
+	 * Synonym for {@link #readOnly()}.
+	 */
+	String[] ex() default {};
+
+	/**
 	 * <mk>x-examples</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
@@ -649,6 +757,11 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String[] examples() default {};
+
+	/**
+	 * Synonym for {@link #examples()}.
+	 */
+	String[] exs() default {};
 
 	/**
 	 * Specifies that schema information for this part should not be shown in the generated Swagger documentation.
