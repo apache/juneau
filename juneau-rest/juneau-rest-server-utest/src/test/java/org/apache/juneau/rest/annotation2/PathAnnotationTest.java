@@ -108,35 +108,35 @@ public class PathAnnotationTest {
 	@Rest
 	public static class B  {
 		@RestMethod(name=GET, path="/int/{x}/foo")
-		public String b01(@Path(name="x") int x) {
+		public String b01(@Path("x") int x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/short/{x}/foo")
-		public String b02(@Path(name="x") short x) {
+		public String b02(@Path("x") short x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/long/{x}/foo")
-		public String b03(@Path(name="x") long x) {
+		public String b03(@Path("x") long x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/char/{x}/foo")
-		public String b04(@Path(name="x") char x) {
+		public String b04(@Path("x") char x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/float/{x}/foo")
-		public String b05(@Path(name="x") float x) {
+		public String b05(@Path("x") float x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/double/{x}/foo")
-		public String b06(@Path(name="x") double x) {
+		public String b06(@Path("x") double x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/byte/{x}/foo")
-		public String b07(@Path(name="x") byte x) {
+		public String b07(@Path("x") byte x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/boolean/{x}/foo")
-		public String b08(@Path(name="x") boolean x) {
+		public String b08(@Path("x") boolean x) {
 			return String.valueOf(x);
 		}
 	}
@@ -190,35 +190,35 @@ public class PathAnnotationTest {
 	@Rest
 	public static class C  {
 		@RestMethod(name=GET, path="/Integer/{x}/foo")
-		public String c01(@Path(name="x") Integer x) {
+		public String c01(@Path("x") Integer x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Short/{x}/foo")
-		public String c02(@Path(name="x") Short x) {
+		public String c02(@Path("x") Short x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Long/{x}/foo")
-		public String c03(@Path(name="x") Long x) {
+		public String c03(@Path("x") Long x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Character/{x}/foo")
-		public String c04(@Path(name="x") Character x) {
+		public String c04(@Path("x") Character x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Float/{x}/foo")
-		public String c05(@Path(name="x") Float x) {
+		public String c05(@Path("x") Float x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Double/{x}/foo")
-		public String c06(@Path(name="x") Double x) {
+		public String c06(@Path("x") Double x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Byte/{x}/foo")
-		public String c07(@Path(name="x") Byte x) {
+		public String c07(@Path("x") Byte x) {
 			return String.valueOf(x);
 		}
 		@RestMethod(name=GET, path="/Boolean/{x}/foo")
-		public String c08(@Path(name="x") Boolean x) {
+		public String c08(@Path("x") Boolean x) {
 			return String.valueOf(x);
 		}
 	}
@@ -273,7 +273,7 @@ public class PathAnnotationTest {
 	public static class D {
 		// Object with forString(String) method
 		@RestMethod(name=GET, path="/uuid/{uuid}")
-		public UUID uuid(RestResponse res, @Path(name="uuid") UUID uuid) {
+		public UUID uuid(RestResponse res, @Path("uuid") UUID uuid) {
 			return uuid;
 		}
 	}
@@ -739,11 +739,11 @@ public class PathAnnotationTest {
 	public static class SA {
 
 		@Path(
-			name="P",
-			description={"a","b"},
-			type="string",
-			_enum="a,b",
-			example="a"
+			n="P",
+			d={"a","b"},
+			t="string",
+			e="a,b",
+			ex="a"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -756,7 +756,7 @@ public class PathAnnotationTest {
 		public void sa01(SA01 f) {}
 
 		@Path(
-			name="P",
+			n="P",
 			api={
 				"description:'a\nb',",
 				"type:'string',",
@@ -775,17 +775,17 @@ public class PathAnnotationTest {
 		public void sa02(SA02 f) {}
 
 		@Path(
-			name="P",
+			n="P",
 			api={
 				"description:'b\nc',",
 				"type:'string',",
 				"enum:['b','c'],",
 				"x-example:'b'"
 			},
-			description={"a","b"},
-			type="string",
-			_enum="a,b",
-			example="a"
+			d={"a","b"},
+			t="string",
+			e="a,b",
+			ex="a"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
@@ -808,7 +808,7 @@ public class PathAnnotationTest {
 		@RestMethod(name=GET,path="/value/{P}")
 		public void sa04(SA04 f) {}
 
-		@Path(name="P", _enum={" ['a','b'] "})
+		@Path(n="P",e={" ['a','b'] "})
 		public static class SA19 {
 			@Override
 			public String toString() {
@@ -871,7 +871,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class SB {
 
-		@Path(name="P")
+		@Path(n="P")
 		public static class SB01 {}
 		@RestMethod(name=GET,path="/schemaValue/{P}")
 		public void sb01(SB01 f) {}
@@ -926,7 +926,7 @@ public class PathAnnotationTest {
 	@Rest
 	public static class SC {
 
-		@Path(name="P", example={" {f1:'a'} "})
+		@Path(n="P",ex={" {f1:'a'} "})
 		public static class SC01 {
 			public String f1;
 		}
@@ -956,14 +956,14 @@ public class PathAnnotationTest {
 
 		@RestMethod(name=GET,path="/basic/{P}")
 		public void ta01(@Path(
-			name="P",
-			description="a",
-			type="string"
+			n="P",
+			d="a",
+			t="string"
 		) String h) {}
 
 		@RestMethod(name=GET,path="/api/{P}")
 		public void ta02(@Path(
-			name="P",
+			n="P",
 			api={
 				"description:'a',",
 				"type:'string'"
@@ -972,20 +972,20 @@ public class PathAnnotationTest {
 
 		@RestMethod(name=GET,path="/mixed/{P}")
 		public void ta03(@Path(
-			name="P",
+			n="P",
 			api={
 				"description:'b',",
 				"type:'string'"
 			},
-			description="a",
-			type="string"
+			d="a",
+			t="string"
 		) String h) {}
 
 		@RestMethod(name=GET,path="/value/{P}")
 		public void ta04(@Path("P") String h) {}
 
 		@RestMethod(name=GET,path="/enum/{P}")
-		public void ta05(@Path(name="P", _enum={" ['a','b'] "}) String h) {}
+		public void ta05(@Path(n="P",e={" ['a','b'] "}) String h) {}
 	}
 
 	static Swagger ta = getSwagger(TA.class);
@@ -1027,7 +1027,7 @@ public class PathAnnotationTest {
 	public static class TB {
 
 		@RestMethod(name=GET,path="/schemaValue/{P}")
-		public void tb01(@Path(name="P") String h) {}
+		public void tb01(@Path("P") String h) {}
 
 		public static class TB02 {
 			public String f1;
@@ -1093,7 +1093,7 @@ public class PathAnnotationTest {
 	public static class TC {
 
 		@RestMethod(name=GET,path="/example/{P}")
-		public void ta21(@Path(name="P", example="{f1:'b'}") String h) {}
+		public void ta21(@Path(n="P",ex="{f1:'b'}") String h) {}
 	}
 
 	static Swagger tc = getSwagger(TC.class);
@@ -1112,14 +1112,14 @@ public class PathAnnotationTest {
 	@Rest(path="/u1/{u1}",children=U2.class)
 	public static class U1 {
 	}
-	@Rest(path="/u2",debug="true")
+	@Rest(path="/u2")
 	public static class U2 {
 		@RestMethod(path="/")
-		public String doGet(@Path(name="u1",required=false) String u1) {
+		public String doGet(@Path(n="u1",r=false) String u1) {
 			return u1 == null ? "nil" : u1;
 		}
 		@RestMethod(path="/foo/{bar}")
-		public String doGetFoo(@Path(name="u1", required=false) String u1, @Path(name="bar",required=false) String bar) {
+		public String doGetFoo(@Path(n="u1",r=false) String u1, @Path(n="bar",r=false) String bar) {
 			return (u1 == null ? "nil" : u1) + "," + (bar == null ? "nil" : bar);
 		}
 	}
@@ -1145,11 +1145,11 @@ public class PathAnnotationTest {
 	@Rest(path="/v2")
 	public static class V2 {
 		@RestMethod(paths={"/","/{foo}"})
-		public String doGet(@Path(name="v1",required=false) String v1, @Path(name="foo",required=false) String foo) {
+		public String doGet(@Path(n="v1",r=false) String v1, @Path(n="foo",r=false) String foo) {
 			return "1," + (v1 == null ? "nil" : v1) + "," + (foo == null ? "nil" : foo);
 		}
 		@RestMethod(paths={"/foo","/foo/{foo}"})
-		public String doGet2(@Path(name="v1",required=false) String v1, @Path(name="foo",required=false) String foo) {
+		public String doGet2(@Path(n="v1",r=false) String v1, @Path(n="foo",r=false) String foo) {
 			return "2," + (v1 == null ? "nil" : v1) + "," + (foo == null ? "nil" : foo);
 		}
 	}

@@ -71,14 +71,14 @@ public class FormDataAnnotationTest {
 		@RemoteMethod(path="a") String postA03b(@FormData("*") Bean b);
 		@RemoteMethod(path="a") String postA03c(@FormData Bean b);
 		@RemoteMethod(path="a") String postA04a(@FormData("x") Bean[] b);
-		@RemoteMethod(path="a") String postA04b(@FormData(name="x",collectionFormat="uon") Bean[] b);
+		@RemoteMethod(path="a") String postA04b(@FormData(n="x",cf="uon") Bean[] b);
 		@RemoteMethod(path="a") String postA05a(@FormData("x") List<Bean> b);
-		@RemoteMethod(path="a") String postA05b(@FormData(name="x",collectionFormat="uon") List<Bean> b);
+		@RemoteMethod(path="a") String postA05b(@FormData(n="x",cf="uon") List<Bean> b);
 		@RemoteMethod(path="a") String postA06a(@FormData("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String postA06b(@FormData("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String postA06c(@FormData Map<String,Bean> b);
-		@RemoteMethod(path="a") String postA06d(@FormData(name="x",format="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String postA06e(@FormData(format="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String postA06d(@FormData(n="x",f="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String postA06e(@FormData(f="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String postA07a(@FormData("*") Reader b);
 		@RemoteMethod(path="a") String postA07b(@FormData Reader b);
 		@RemoteMethod(path="a") String postA08a(@FormData("*") InputStream b);
@@ -184,10 +184,10 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface BR {
-		@RemoteMethod(path="/") String postB01(@FormData(name="x",_default="foo") String b);
-		@RemoteMethod(path="/") String postB02(@FormData(name="x",_default="foo",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String postB03(@FormData(name="x",_default="") String b);
-		@RemoteMethod(path="/") String postB04(@FormData(name="x",_default="",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String postB01(@FormData(n="x",df="foo") String b);
+		@RemoteMethod(path="/") String postB02(@FormData(n="x",df="foo",aev=true) String b);
+		@RemoteMethod(path="/") String postB03(@FormData(n="x",df="") String b);
+		@RemoteMethod(path="/") String postB04(@FormData(n="x",df="",aev=true) String b);
 	}
 
 	private static BR br = MockRemote.build(BR.class, B.class);
@@ -251,20 +251,20 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface CR {
-		@RemoteMethod(path="/a") String postC01a(@FormData(name="x") String...b);
-		@RemoteMethod(path="/b") String postC01b(@FormData(name="x") String...b);
-		@RemoteMethod(path="/a") String postC02a(@FormData(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/b") String postC02b(@FormData(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/a") String postC03a(@FormData(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/b") String postC03b(@FormData(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/a") String postC04a(@FormData(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/b") String postC04b(@FormData(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/a") String postC05a(@FormData(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/b") String postC05b(@FormData(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/a") String postC06a(@FormData(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/b") String postC06b(@FormData(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/a") String postC07a(@FormData(name="x",collectionFormat="uon") String...b);
-		@RemoteMethod(path="/b") String postC07b(@FormData(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/a") String postC01a(@FormData(n="x") String...b);
+		@RemoteMethod(path="/b") String postC01b(@FormData(n="x") String...b);
+		@RemoteMethod(path="/a") String postC02a(@FormData(n="x",cf="csv") String...b);
+		@RemoteMethod(path="/b") String postC02b(@FormData(n="x",cf="csv") String...b);
+		@RemoteMethod(path="/a") String postC03a(@FormData(n="x",cf="ssv") String...b);
+		@RemoteMethod(path="/b") String postC03b(@FormData(n="x",cf="ssv") String...b);
+		@RemoteMethod(path="/a") String postC04a(@FormData(n="x",cf="tsv") String...b);
+		@RemoteMethod(path="/b") String postC04b(@FormData(n="x",cf="tsv") String...b);
+		@RemoteMethod(path="/a") String postC05a(@FormData(n="x",cf="pipes") String...b);
+		@RemoteMethod(path="/b") String postC05b(@FormData(n="x",cf="pipes") String...b);
+		@RemoteMethod(path="/a") String postC06a(@FormData(n="x",cf="multi") String...b);
+		@RemoteMethod(path="/b") String postC06b(@FormData(n="x",cf="multi") String...b);
+		@RemoteMethod(path="/a") String postC07a(@FormData(n="x",cf="uon") String...b);
+		@RemoteMethod(path="/b") String postC07b(@FormData(n="x",cf="uon") String...b);
 	}
 
 	private static CR cr = MockRemote.build(CR.class, C.class);
@@ -342,49 +342,49 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface DR {
-		@RemoteMethod(path="/") String postC01a(@FormData(name="x",minimum="1",maximum="10") int b);
-		@RemoteMethod(path="/") String postC01b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
-		@RemoteMethod(path="/") String postC01c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
-		@RemoteMethod(path="/") String postC01d(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
-		@RemoteMethod(path="/") String postC02a(@FormData(name="x",minimum="1",maximum="10") short b);
-		@RemoteMethod(path="/") String postC02b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
-		@RemoteMethod(path="/") String postC02c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
-		@RemoteMethod(path="/") String postC03a(@FormData(name="x",minimum="1",maximum="10") long b);
-		@RemoteMethod(path="/") String postC03b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) long b);
-		@RemoteMethod(path="/") String postC03c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) long b);
-		@RemoteMethod(path="/") String postC04a(@FormData(name="x",minimum="1",maximum="10") float b);
-		@RemoteMethod(path="/") String postC04b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) float b);
-		@RemoteMethod(path="/") String postC04c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) float b);
-		@RemoteMethod(path="/") String postC05a(@FormData(name="x",minimum="1",maximum="10") double b);
-		@RemoteMethod(path="/") String postC05b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) double b);
-		@RemoteMethod(path="/") String postC05c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) double b);
-		@RemoteMethod(path="/") String postC06a(@FormData(name="x",minimum="1",maximum="10") byte b);
-		@RemoteMethod(path="/") String postC06b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) byte b);
-		@RemoteMethod(path="/") String postC06c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) byte b);
-		@RemoteMethod(path="/") String postC07a(@FormData(name="x",minimum="1",maximum="10") AtomicInteger b);
-		@RemoteMethod(path="/") String postC07b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) AtomicInteger b);
-		@RemoteMethod(path="/") String postC07c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) AtomicInteger b);
-		@RemoteMethod(path="/") String postC08a(@FormData(name="x",minimum="1",maximum="10") BigDecimal b);
-		@RemoteMethod(path="/") String postC08b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) BigDecimal b);
-		@RemoteMethod(path="/") String postC08c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) BigDecimal b);
-		@RemoteMethod(path="/") String postC11a(@FormData(name="x",minimum="1",maximum="10") Integer b);
-		@RemoteMethod(path="/") String postC11b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Integer b);
-		@RemoteMethod(path="/") String postC11c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Integer b);
-		@RemoteMethod(path="/") String postC12a(@FormData(name="x",minimum="1",maximum="10") Short b);
-		@RemoteMethod(path="/") String postC12b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Short b);
-		@RemoteMethod(path="/") String postC12c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Short b);
-		@RemoteMethod(path="/") String postC13a(@FormData(name="x",minimum="1",maximum="10") Long b);
-		@RemoteMethod(path="/") String postC13b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Long b);
-		@RemoteMethod(path="/") String postC13c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Long b);
-		@RemoteMethod(path="/") String postC14a(@FormData(name="x",minimum="1",maximum="10") Float b);
-		@RemoteMethod(path="/") String postC14b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Float b);
-		@RemoteMethod(path="/") String postC14c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Float b);
-		@RemoteMethod(path="/") String postC15a(@FormData(name="x",minimum="1",maximum="10") Double b);
-		@RemoteMethod(path="/") String postC15b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Double b);
-		@RemoteMethod(path="/") String postC15c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Double b);
-		@RemoteMethod(path="/") String postC16a(@FormData(name="x",minimum="1",maximum="10") Byte b);
-		@RemoteMethod(path="/") String postC16b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Byte b);
-		@RemoteMethod(path="/") String postC16c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
+		@RemoteMethod(path="/") String postC01a(@FormData(n="x",min="1",max="10") int b);
+		@RemoteMethod(path="/") String postC01b(@FormData(n="x",min="1",max="10",emin=false,emax=false) int b);
+		@RemoteMethod(path="/") String postC01c(@FormData(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteMethod(path="/") String postC01d(@FormData(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteMethod(path="/") String postC02a(@FormData(n="x",min="1",max="10") short b);
+		@RemoteMethod(path="/") String postC02b(@FormData(n="x",min="1",max="10",emin=false,emax=false) short b);
+		@RemoteMethod(path="/") String postC02c(@FormData(n="x",min="1",max="10",emin=true,emax=true) short b);
+		@RemoteMethod(path="/") String postC03a(@FormData(n="x",min="1",max="10") long b);
+		@RemoteMethod(path="/") String postC03b(@FormData(n="x",min="1",max="10",emin=false,emax=false) long b);
+		@RemoteMethod(path="/") String postC03c(@FormData(n="x",min="1",max="10",emin=true,emax=true) long b);
+		@RemoteMethod(path="/") String postC04a(@FormData(n="x",min="1",max="10") float b);
+		@RemoteMethod(path="/") String postC04b(@FormData(n="x",min="1",max="10",emin=false,emax=false) float b);
+		@RemoteMethod(path="/") String postC04c(@FormData(n="x",min="1",max="10",emin=true,emax=true) float b);
+		@RemoteMethod(path="/") String postC05a(@FormData(n="x",min="1",max="10") double b);
+		@RemoteMethod(path="/") String postC05b(@FormData(n="x",min="1",max="10",emin=false,emax=false) double b);
+		@RemoteMethod(path="/") String postC05c(@FormData(n="x",min="1",max="10",emin=true,emax=true) double b);
+		@RemoteMethod(path="/") String postC06a(@FormData(n="x",min="1",max="10") byte b);
+		@RemoteMethod(path="/") String postC06b(@FormData(n="x",min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteMethod(path="/") String postC06c(@FormData(n="x",min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteMethod(path="/") String postC07a(@FormData(n="x",min="1",max="10") AtomicInteger b);
+		@RemoteMethod(path="/") String postC07b(@FormData(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteMethod(path="/") String postC07c(@FormData(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteMethod(path="/") String postC08a(@FormData(n="x",min="1",max="10") BigDecimal b);
+		@RemoteMethod(path="/") String postC08b(@FormData(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteMethod(path="/") String postC08c(@FormData(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteMethod(path="/") String postC11a(@FormData(n="x",min="1",max="10") Integer b);
+		@RemoteMethod(path="/") String postC11b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteMethod(path="/") String postC11c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteMethod(path="/") String postC12a(@FormData(n="x",min="1",max="10") Short b);
+		@RemoteMethod(path="/") String postC12b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteMethod(path="/") String postC12c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteMethod(path="/") String postC13a(@FormData(n="x",min="1",max="10") Long b);
+		@RemoteMethod(path="/") String postC13b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteMethod(path="/") String postC13c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteMethod(path="/") String postC14a(@FormData(n="x",min="1",max="10") Float b);
+		@RemoteMethod(path="/") String postC14b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteMethod(path="/") String postC14c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteMethod(path="/") String postC15a(@FormData(n="x",min="1",max="10") Double b);
+		@RemoteMethod(path="/") String postC15b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteMethod(path="/") String postC15c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteMethod(path="/") String postC16a(@FormData(n="x",min="1",max="10") Byte b);
+		@RemoteMethod(path="/") String postC16b(@FormData(n="x",min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteMethod(path="/") String postC16c(@FormData(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	private static DR dr = MockRemote.build(DR.class, D.class);
@@ -716,12 +716,12 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface ER {
-		@RemoteMethod(path="/") String postE01(@FormData(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
-		@RemoteMethod(path="/") String postE02(@FormData(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
-		@RemoteMethod(path="/") String postE03(@FormData(name="x",collectionFormat="pipes",uniqueItems=false) String...b);
-		@RemoteMethod(path="/") String postE04(@FormData(name="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
-		@RemoteMethod(path="/") String postE05(@FormData(name="x",collectionFormat="pipes",uniqueItems=true) String...b);
-		@RemoteMethod(path="/") String postE06(@FormData(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
+		@RemoteMethod(path="/") String postE01(@FormData(n="x",cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteMethod(path="/") String postE02(@FormData(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteMethod(path="/") String postE03(@FormData(n="x",cf="pipes",ui=false) String...b);
+		@RemoteMethod(path="/") String postE04(@FormData(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteMethod(path="/") String postE05(@FormData(n="x",cf="pipes",ui=true) String...b);
+		@RemoteMethod(path="/") String postE06(@FormData(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	private static ER er = MockRemote.build(ER.class, E.class);
@@ -775,12 +775,12 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface FR {
-		@RemoteMethod(path="/") String postF01(@FormData(name="x",minLength=2,maxLength=3) String b);
-		@RemoteMethod(path="/") String postF02(@FormData(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
-		@RemoteMethod(path="/") String postF03(@FormData(name="x",_enum={"foo"}) String b);
-		@RemoteMethod(path="/") String postF04(@FormData(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
-		@RemoteMethod(path="/") String postF05(@FormData(name="x",pattern="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/") String postF06(@FormData(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+		@RemoteMethod(path="/") String postF01(@FormData(n="x",minl=2,maxl=3) String b);
+		@RemoteMethod(path="/") String postF02(@FormData(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteMethod(path="/") String postF03(@FormData(n="x",e={"foo"}) String b);
+		@RemoteMethod(path="/") String postF04(@FormData(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteMethod(path="/") String postF05(@FormData(n="x",p="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/") String postF06(@FormData(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	private static FR fr = MockRemote.build(FR.class, F.class);
@@ -840,20 +840,20 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface GR {
-		@RemoteMethod(path="/") String postG01(@FormData(name="x",multipleOf="2") int b);
-		@RemoteMethod(path="/") String postG02(@FormData(name="x",multipleOf="2") short b);
-		@RemoteMethod(path="/") String postG03(@FormData(name="x",multipleOf="2") long b);
-		@RemoteMethod(path="/") String postG04(@FormData(name="x",multipleOf="2") float b);
-		@RemoteMethod(path="/") String postG05(@FormData(name="x",multipleOf="2") double b);
-		@RemoteMethod(path="/") String postG06(@FormData(name="x",multipleOf="2") byte b);
-		@RemoteMethod(path="/") String postG07(@FormData(name="x",multipleOf="2") AtomicInteger b);
-		@RemoteMethod(path="/") String postG08(@FormData(name="x",multipleOf="2") BigDecimal b);
-		@RemoteMethod(path="/") String postG11(@FormData(name="x",multipleOf="2") Integer b);
-		@RemoteMethod(path="/") String postG12(@FormData(name="x",multipleOf="2") Short b);
-		@RemoteMethod(path="/") String postG13(@FormData(name="x",multipleOf="2") Long b);
-		@RemoteMethod(path="/") String postG14(@FormData(name="x",multipleOf="2") Float b);
-		@RemoteMethod(path="/") String postG15(@FormData(name="x",multipleOf="2") Double b);
-		@RemoteMethod(path="/") String postG16(@FormData(name="x",multipleOf="2") Byte b);
+		@RemoteMethod(path="/") String postG01(@FormData(n="x",mo="2") int b);
+		@RemoteMethod(path="/") String postG02(@FormData(n="x",mo="2") short b);
+		@RemoteMethod(path="/") String postG03(@FormData(n="x",mo="2") long b);
+		@RemoteMethod(path="/") String postG04(@FormData(n="x",mo="2") float b);
+		@RemoteMethod(path="/") String postG05(@FormData(n="x",mo="2") double b);
+		@RemoteMethod(path="/") String postG06(@FormData(n="x",mo="2") byte b);
+		@RemoteMethod(path="/") String postG07(@FormData(n="x",mo="2") AtomicInteger b);
+		@RemoteMethod(path="/") String postG08(@FormData(n="x",mo="2") BigDecimal b);
+		@RemoteMethod(path="/") String postG11(@FormData(n="x",mo="2") Integer b);
+		@RemoteMethod(path="/") String postG12(@FormData(n="x",mo="2") Short b);
+		@RemoteMethod(path="/") String postG13(@FormData(n="x",mo="2") Long b);
+		@RemoteMethod(path="/") String postG14(@FormData(n="x",mo="2") Float b);
+		@RemoteMethod(path="/") String postG15(@FormData(n="x",mo="2") Double b);
+		@RemoteMethod(path="/") String postG16(@FormData(n="x",mo="2") Byte b);
 	}
 
 	private static GR gr = MockRemote.build(GR.class, G.class);
@@ -943,9 +943,9 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface HR {
-		@RemoteMethod(path="/") String postH01(@FormData(name="x") String b);
-		@RemoteMethod(path="/") String postH02(@FormData(name="x",required=false) String b);
-		@RemoteMethod(path="/") String postH03(@FormData(name="x",required=true) String b);
+		@RemoteMethod(path="/") String postH01(@FormData(n="x") String b);
+		@RemoteMethod(path="/") String postH02(@FormData(n="x",r=false) String b);
+		@RemoteMethod(path="/") String postH03(@FormData(n="x",r=true) String b);
 	}
 
 	private static HR hr = MockRemote.build(HR.class, H.class);
@@ -978,9 +978,9 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface IR {
-		@RemoteMethod(path="/") String postI01(@FormData(name="x",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String postI02(@FormData(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
-		@RemoteMethod(path="/") String postI03(@FormData(name="x",skipIfEmpty=true) String b);
+		@RemoteMethod(path="/") String postI01(@FormData(n="x",aev=true) String b);
+		@RemoteMethod(path="/") String postI02(@FormData(n="x",aev=true,sie=false) String b);
+		@RemoteMethod(path="/") String postI03(@FormData(n="x",sie=true) String b);
 	}
 
 	private static IR ir = MockRemote.build(IR.class, I.class);
@@ -1012,7 +1012,7 @@ public class FormDataAnnotationTest {
 
 	@Remote
 	public static interface JR {
-		@RemoteMethod(path="/") String postJ01(@FormData(name="x",serializer=XPartSerializer.class) String b);
+		@RemoteMethod(path="/") String postJ01(@FormData(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	private static JR jr = MockRemote.build(JR.class, J.class);

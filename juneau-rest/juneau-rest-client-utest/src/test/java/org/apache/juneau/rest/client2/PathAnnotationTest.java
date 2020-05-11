@@ -67,14 +67,14 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="a/{x}") String getA03b(@Path("*") Bean b);
 		@RemoteMethod(path="a/{x}") String getA03c(@Path Bean b);
 		@RemoteMethod(path="a/{x}") String getA04a(@Path("x") Bean[] b);
-		@RemoteMethod(path="a/{x}") String getA04b(@Path(name="x",collectionFormat="uon") Bean[] b);
+		@RemoteMethod(path="a/{x}") String getA04b(@Path(n="x",cf="uon") Bean[] b);
 		@RemoteMethod(path="a/{x}") String getA05a(@Path("x") List<Bean> b);
-		@RemoteMethod(path="a/{x}") String getA05b(@Path(name="x",collectionFormat="uon") List<Bean> b);
+		@RemoteMethod(path="a/{x}") String getA05b(@Path(n="x",cf="uon") List<Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06a(@Path("x") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06b(@Path("*") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06c(@Path Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getA06d(@Path(name="x",collectionFormat="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getA06e(@Path(format="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a/{x}") String getA06d(@Path(n="x",cf="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a/{x}") String getA06e(@Path(f="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getA09a(@Path("*") NameValuePairs b);
 		@RemoteMethod(path="a/{x}") String getA09b(@Path NameValuePairs b);
 	}
@@ -161,13 +161,13 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface CR {
-		@RemoteMethod(path="/a/{x}") String getC01(@Path(name="x") String...b);
-		@RemoteMethod(path="/a/{x}") String getC02(@Path(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/a/{x}") String getC03(@Path(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/a/{x}") String getC04(@Path(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/a/{x}") String getC05(@Path(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/a/{x}") String getC06(@Path(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/a/{x}") String getC07(@Path(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/a/{x}") String getC01(@Path(n="x") String...b);
+		@RemoteMethod(path="/a/{x}") String getC02(@Path(n="x",cf="csv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC03(@Path(n="x",cf="ssv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC04(@Path(n="x",cf="tsv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC05(@Path(n="x",cf="pipes") String...b);
+		@RemoteMethod(path="/a/{x}") String getC06(@Path(n="x",cf="multi") String...b);
+		@RemoteMethod(path="/a/{x}") String getC07(@Path(n="x",cf="uon") String...b);
 	}
 
 	private static CR cr = MockRemote.build(CR.class, C.class);
@@ -217,48 +217,48 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface DR {
-		@RemoteMethod(path="/a/{x}") String getC01a(@Path(name="x",minimum="1",maximum="10") int b);
-		@RemoteMethod(path="/a/{x}") String getC01b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
-		@RemoteMethod(path="/a/{x}") String getC01c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
-		@RemoteMethod(path="/a/{x}") String getC02a(@Path(name="x",minimum="1",maximum="10") short b);
-		@RemoteMethod(path="/a/{x}") String getC02b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
-		@RemoteMethod(path="/a/{x}") String getC02c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
-		@RemoteMethod(path="/a/{x}") String getC03a(@Path(name="x",minimum="1",maximum="10") long b);
-		@RemoteMethod(path="/a/{x}") String getC03b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) long b);
-		@RemoteMethod(path="/a/{x}") String getC03c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) long b);
-		@RemoteMethod(path="/a/{x}") String getC04a(@Path(name="x",minimum="1",maximum="10") float b);
-		@RemoteMethod(path="/a/{x}") String getC04b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) float b);
-		@RemoteMethod(path="/a/{x}") String getC04c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) float b);
-		@RemoteMethod(path="/a/{x}") String getC05a(@Path(name="x",minimum="1",maximum="10") double b);
-		@RemoteMethod(path="/a/{x}") String getC05b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) double b);
-		@RemoteMethod(path="/a/{x}") String getC05c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) double b);
-		@RemoteMethod(path="/a/{x}") String getC06a(@Path(name="x",minimum="1",maximum="10") byte b);
-		@RemoteMethod(path="/a/{x}") String getC06b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) byte b);
-		@RemoteMethod(path="/a/{x}") String getC06c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) byte b);
-		@RemoteMethod(path="/a/{x}") String getC07a(@Path(name="x",minimum="1",maximum="10") AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getC07b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getC07c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) AtomicInteger b);
-		@RemoteMethod(path="/a/{x}") String getC08a(@Path(name="x",minimum="1",maximum="10") BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getC08b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getC08c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) BigDecimal b);
-		@RemoteMethod(path="/a/{x}") String getC11a(@Path(name="x",minimum="1",maximum="10") Integer b);
-		@RemoteMethod(path="/a/{x}") String getC11b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Integer b);
-		@RemoteMethod(path="/a/{x}") String getC11c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Integer b);
-		@RemoteMethod(path="/a/{x}") String getC12a(@Path(name="x",minimum="1",maximum="10") Short b);
-		@RemoteMethod(path="/a/{x}") String getC12b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Short b);
-		@RemoteMethod(path="/a/{x}") String getC12c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Short b);
-		@RemoteMethod(path="/a/{x}") String getC13a(@Path(name="x",minimum="1",maximum="10") Long b);
-		@RemoteMethod(path="/a/{x}") String getC13b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Long b);
-		@RemoteMethod(path="/a/{x}") String getC13c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Long b);
-		@RemoteMethod(path="/a/{x}") String getC14a(@Path(name="x",minimum="1",maximum="10") Float b);
-		@RemoteMethod(path="/a/{x}") String getC14b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Float b);
-		@RemoteMethod(path="/a/{x}") String getC14c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Float b);
-		@RemoteMethod(path="/a/{x}") String getC15a(@Path(name="x",minimum="1",maximum="10") Double b);
-		@RemoteMethod(path="/a/{x}") String getC15b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Double b);
-		@RemoteMethod(path="/a/{x}") String getC15c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Double b);
-		@RemoteMethod(path="/a/{x}") String getC16a(@Path(name="x",minimum="1",maximum="10") Byte b);
-		@RemoteMethod(path="/a/{x}") String getC16b(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Byte b);
-		@RemoteMethod(path="/a/{x}") String getC16c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
+		@RemoteMethod(path="/a/{x}") String getC01a(@Path(n="x",min="1",max="10") int b);
+		@RemoteMethod(path="/a/{x}") String getC01b(@Path(n="x",min="1",max="10",emin=false,emax=false) int b);
+		@RemoteMethod(path="/a/{x}") String getC01c(@Path(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteMethod(path="/a/{x}") String getC02a(@Path(n="x",min="1",max="10") short b);
+		@RemoteMethod(path="/a/{x}") String getC02b(@Path(n="x",min="1",max="10",emin=false,emax=false) short b);
+		@RemoteMethod(path="/a/{x}") String getC02c(@Path(n="x",min="1",max="10",emin=true,emax=true) short b);
+		@RemoteMethod(path="/a/{x}") String getC03a(@Path(n="x",min="1",max="10") long b);
+		@RemoteMethod(path="/a/{x}") String getC03b(@Path(n="x",min="1",max="10",emin=false,emax=false) long b);
+		@RemoteMethod(path="/a/{x}") String getC03c(@Path(n="x",min="1",max="10",emin=true,emax=true) long b);
+		@RemoteMethod(path="/a/{x}") String getC04a(@Path(n="x",min="1",max="10") float b);
+		@RemoteMethod(path="/a/{x}") String getC04b(@Path(n="x",min="1",max="10",emin=false,emax=false) float b);
+		@RemoteMethod(path="/a/{x}") String getC04c(@Path(n="x",min="1",max="10",emin=true,emax=true) float b);
+		@RemoteMethod(path="/a/{x}") String getC05a(@Path(n="x",min="1",max="10") double b);
+		@RemoteMethod(path="/a/{x}") String getC05b(@Path(n="x",min="1",max="10",emin=false,emax=false) double b);
+		@RemoteMethod(path="/a/{x}") String getC05c(@Path(n="x",min="1",max="10",emin=true,emax=true) double b);
+		@RemoteMethod(path="/a/{x}") String getC06a(@Path(n="x",min="1",max="10") byte b);
+		@RemoteMethod(path="/a/{x}") String getC06b(@Path(n="x",min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteMethod(path="/a/{x}") String getC06c(@Path(n="x",min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteMethod(path="/a/{x}") String getC07a(@Path(n="x",min="1",max="10") AtomicInteger b);
+		@RemoteMethod(path="/a/{x}") String getC07b(@Path(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteMethod(path="/a/{x}") String getC07c(@Path(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteMethod(path="/a/{x}") String getC08a(@Path(n="x",min="1",max="10") BigDecimal b);
+		@RemoteMethod(path="/a/{x}") String getC08b(@Path(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteMethod(path="/a/{x}") String getC08c(@Path(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteMethod(path="/a/{x}") String getC11a(@Path(n="x",min="1",max="10") Integer b);
+		@RemoteMethod(path="/a/{x}") String getC11b(@Path(n="x",min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteMethod(path="/a/{x}") String getC11c(@Path(n="x",min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteMethod(path="/a/{x}") String getC12a(@Path(n="x",min="1",max="10") Short b);
+		@RemoteMethod(path="/a/{x}") String getC12b(@Path(n="x",min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteMethod(path="/a/{x}") String getC12c(@Path(n="x",min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteMethod(path="/a/{x}") String getC13a(@Path(n="x",min="1",max="10") Long b);
+		@RemoteMethod(path="/a/{x}") String getC13b(@Path(n="x",min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteMethod(path="/a/{x}") String getC13c(@Path(n="x",min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteMethod(path="/a/{x}") String getC14a(@Path(n="x",min="1",max="10") Float b);
+		@RemoteMethod(path="/a/{x}") String getC14b(@Path(n="x",min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteMethod(path="/a/{x}") String getC14c(@Path(n="x",min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteMethod(path="/a/{x}") String getC15a(@Path(n="x",min="1",max="10") Double b);
+		@RemoteMethod(path="/a/{x}") String getC15b(@Path(n="x",min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteMethod(path="/a/{x}") String getC15c(@Path(n="x",min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteMethod(path="/a/{x}") String getC16a(@Path(n="x",min="1",max="10") Byte b);
+		@RemoteMethod(path="/a/{x}") String getC16b(@Path(n="x",min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteMethod(path="/a/{x}") String getC16c(@Path(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	private static DR dr = MockRemote.build(DR.class, D.class);
@@ -573,12 +573,12 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface ER {
-		@RemoteMethod(path="/{x}") String getE01(@Path(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
-		@RemoteMethod(path="/{x}") String getE02(@Path(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
-		@RemoteMethod(path="/{x}") String getE03(@Path(name="x",collectionFormat="pipes",uniqueItems=false) String...b);
-		@RemoteMethod(path="/{x}") String getE04(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
-		@RemoteMethod(path="/{x}") String getE05(@Path(name="x",collectionFormat="pipes",uniqueItems=true) String...b);
-		@RemoteMethod(path="/{x}") String getE06(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
+		@RemoteMethod(path="/{x}") String getE01(@Path(n="x",cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteMethod(path="/{x}") String getE02(@Path(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteMethod(path="/{x}") String getE03(@Path(n="x",cf="pipes",ui=false) String...b);
+		@RemoteMethod(path="/{x}") String getE04(@Path(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteMethod(path="/{x}") String getE05(@Path(n="x",cf="pipes",ui=true) String...b);
+		@RemoteMethod(path="/{x}") String getE06(@Path(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	private static ER er = MockRemote.build(ER.class, E.class);
@@ -633,12 +633,12 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface FR {
-		@RemoteMethod(path="/{x}") String getF01(@Path(name="x",minLength=2,maxLength=3) String b);
-		@RemoteMethod(path="/{x}") String getF02(@Path(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
-		@RemoteMethod(path="/{x}") String getF03(@Path(name="x",_enum={"foo"}) String b);
-		@RemoteMethod(path="/{x}") String getF04(@Path(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
-		@RemoteMethod(path="/{x}") String getF05(@Path(name="x",pattern="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/{x}") String getF06(@Path(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+		@RemoteMethod(path="/{x}") String getF01(@Path(n="x",minl=2,maxl=3) String b);
+		@RemoteMethod(path="/{x}") String getF02(@Path(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteMethod(path="/{x}") String getF03(@Path(n="x",e={"foo"}) String b);
+		@RemoteMethod(path="/{x}") String getF04(@Path(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteMethod(path="/{x}") String getF05(@Path(n="x",p="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/{x}") String getF06(@Path(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	private static FR fr = MockRemote.build(FR.class, F.class);
@@ -696,20 +696,20 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface GR {
-		@RemoteMethod(path="/{x}") String getG01(@Path(name="x",multipleOf="2") int b);
-		@RemoteMethod(path="/{x}") String getG02(@Path(name="x",multipleOf="2") short b);
-		@RemoteMethod(path="/{x}") String getG03(@Path(name="x",multipleOf="2") long b);
-		@RemoteMethod(path="/{x}") String getG04(@Path(name="x",multipleOf="2") float b);
-		@RemoteMethod(path="/{x}") String getG05(@Path(name="x",multipleOf="2") double b);
-		@RemoteMethod(path="/{x}") String getG06(@Path(name="x",multipleOf="2") byte b);
-		@RemoteMethod(path="/{x}") String getG07(@Path(name="x",multipleOf="2") AtomicInteger b);
-		@RemoteMethod(path="/{x}") String getG08(@Path(name="x",multipleOf="2") BigDecimal b);
-		@RemoteMethod(path="/{x}") String getG11(@Path(name="x",multipleOf="2") Integer b);
-		@RemoteMethod(path="/{x}") String getG12(@Path(name="x",multipleOf="2") Short b);
-		@RemoteMethod(path="/{x}") String getG13(@Path(name="x",multipleOf="2") Long b);
-		@RemoteMethod(path="/{x}") String getG14(@Path(name="x",multipleOf="2") Float b);
-		@RemoteMethod(path="/{x}") String getG15(@Path(name="x",multipleOf="2") Double b);
-		@RemoteMethod(path="/{x}") String getG16(@Path(name="x",multipleOf="2") Byte b);
+		@RemoteMethod(path="/{x}") String getG01(@Path(n="x",mo="2") int b);
+		@RemoteMethod(path="/{x}") String getG02(@Path(n="x",mo="2") short b);
+		@RemoteMethod(path="/{x}") String getG03(@Path(n="x",mo="2") long b);
+		@RemoteMethod(path="/{x}") String getG04(@Path(n="x",mo="2") float b);
+		@RemoteMethod(path="/{x}") String getG05(@Path(n="x",mo="2") double b);
+		@RemoteMethod(path="/{x}") String getG06(@Path(n="x",mo="2") byte b);
+		@RemoteMethod(path="/{x}") String getG07(@Path(n="x",mo="2") AtomicInteger b);
+		@RemoteMethod(path="/{x}") String getG08(@Path(n="x",mo="2") BigDecimal b);
+		@RemoteMethod(path="/{x}") String getG11(@Path(n="x",mo="2") Integer b);
+		@RemoteMethod(path="/{x}") String getG12(@Path(n="x",mo="2") Short b);
+		@RemoteMethod(path="/{x}") String getG13(@Path(n="x",mo="2") Long b);
+		@RemoteMethod(path="/{x}") String getG14(@Path(n="x",mo="2") Float b);
+		@RemoteMethod(path="/{x}") String getG15(@Path(n="x",mo="2") Double b);
+		@RemoteMethod(path="/{x}") String getG16(@Path(n="x",mo="2") Byte b);
 	}
 
 	private static GR gr = MockRemote.build(GR.class, G.class);
@@ -800,7 +800,7 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface HR {
-		@RemoteMethod(path="/{x}") String getH01(@Path(name="x") String b);
+		@RemoteMethod(path="/{x}") String getH01(@Path("x") String b);
 	}
 
 	private static HR hr = MockRemote.build(HR.class, H.class);
@@ -825,7 +825,7 @@ public class PathAnnotationTest {
 
 	@Remote
 	public static interface JR {
-		@RemoteMethod(path="/{x}") String getJ01(@Path(name="x",serializer=XPartSerializer.class) String b);
+		@RemoteMethod(path="/{x}") String getJ01(@Path(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	private static JR jr = MockRemote.build(JR.class, J.class);

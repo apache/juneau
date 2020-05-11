@@ -171,7 +171,7 @@ public class ConfigResource extends BasicRestServlet {
 		)
 	)
 	public OMap setConfigSection(
-			@Path(name="section", description="Section name in config file.", example="REST") String section,
+			@Path(n="section", d="Section name in config file.", ex="REST") String section,
 			@Body(
 				d="New contents of config section as a simple map of key/value pairs.",
 				ex="{theme:'servlet:/htdocs/themes/dark.css'}"

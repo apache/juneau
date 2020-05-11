@@ -42,10 +42,10 @@ public class HttpPartSchemaTest_Body {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Body(
-		required=true,
-		description={"b1","b2"},
+		r=true,
+		d={"b1","b2"},
 		schema=@Schema($ref="c1"),
-		example="f1",
+		ex="f1",
 		api="{g1:true}"
 	)
 	public static class A02 {}
@@ -59,10 +59,10 @@ public class HttpPartSchemaTest_Body {
 	public static class A03 {
 		public void a(
 				@Body(
-					required=true,
-					description={"b1","b2"},
+					r=true,
+					d={"b1","b2"},
 					schema=@Schema($ref="c1"),
-					example="f1",
+					ex="f1",
 					api="{g1:true}"
 				) String x
 			) {
@@ -80,10 +80,10 @@ public class HttpPartSchemaTest_Body {
 	public static class A04 {
 		public void a(
 				@Body(
-					description={"b3","b3"},
-					required=true,
+					d={"b3","b3"},
+					r=true,
 					schema=@Schema($ref="c3"),
-					example="f2",
+					ex="f2",
 					api="{g2:true}"
 				) A02 x
 			) {
@@ -100,57 +100,57 @@ public class HttpPartSchemaTest_Body {
 
 	@Body(
 		schema=@Schema(
-			type="number",
-			format="int32",
-			maximum="1",
-			minimum="2",
-			multipleOf="3",
-			pattern="4",
-			maxLength=1,
-			minLength=2,
-			maxItems=3,
-			minItems=4,
-			maxProperties=5,
-			minProperties=6,
-			exclusiveMaximum=true,
-			exclusiveMinimum=true,
-			uniqueItems=true,
-			_default={"c1","c2"},
-			_enum="e1,e2",
+			t="number",
+			f="int32",
+			max="1",
+			min="2",
+			mo="3",
+			p="4",
+			maxl=1,
+			minl=2,
+			maxi=3,
+			mini=4,
+			maxp=5,
+			minp=6,
+			emax=true,
+			emin=true,
+			ui=true,
+			df={"c1","c2"},
+			e="e1,e2",
 			items=@Items(
-				type="integer",
-				format="int64",
-				collectionFormat="ssv",
-				maximum="5",
-				minimum="6",
-				multipleOf="7",
-				pattern="8",
-				maxLength=5,
-				minLength=6,
-				maxItems=7,
-				minItems=8,
-				exclusiveMaximum=false,
-				exclusiveMinimum=false,
-				uniqueItems=false,
-				_default={"c3","c4"},
-				_enum="e3,e4",
+				t="integer",
+				f="int64",
+				cf="ssv",
+				max="5",
+				min="6",
+				mo="7",
+				p="8",
+				maxl=5,
+				minl=6,
+				maxi=7,
+				mini=8,
+				emax=false,
+				emin=false,
+				ui=false,
+				df={"c3","c4"},
+				e="e3,e4",
 				items=@SubItems(
-					type="string",
-					format="float",
-					collectionFormat="tsv",
-					maximum="9",
-					minimum="10",
-					multipleOf="11",
-					pattern="12",
-					maxLength=9,
-					minLength=10,
-					maxItems=11,
-					minItems=12,
-					exclusiveMaximum=true,
-					exclusiveMinimum=true,
-					uniqueItems=true,
-					_default={"c5","c6"},
-					_enum="e5,e6",
+					t="string",
+					f="float",
+					cf="tsv",
+					max="9",
+					min="10",
+					mo="11",
+					p="12",
+					maxl=9,
+					minl=10,
+					maxi=11,
+					mini=12,
+					emax=true,
+					emin=true,
+					ui=true,
+					df={"c5","c6"},
+					e="e5,e6",
 					items={
 						"type:'array',",
 						"format:'double',",
@@ -281,7 +281,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Body(
 		schema=@Schema(
-			pattern="x.*"
+			p="x.*"
 		)
 	)
 	public static class B02a {}
@@ -310,9 +310,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				pattern="w.*",
+				p="w.*",
 				items=@SubItems(
-					pattern="x.*",
+					p="x.*",
 					items={
 						"pattern:'y.*',",
 						"items:{pattern:'z.*'}"
@@ -325,7 +325,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Body(
 		schema=@Schema(
-			minLength=2, maxLength=3
+			minl=2, maxl=3
 		)
 	)
 	public static class B03a {}
@@ -353,9 +353,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minLength=2, maxLength=3,
+				minl=2, maxl=3,
 				items=@SubItems(
-					minLength=3, maxLength=4,
+					minl=3, maxl=4,
 					items={
 						"minLength:4,maxLength:5,",
 						"items:{minLength:5,maxLength:6}"
@@ -436,7 +436,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(_enum="X,Y"))
+	@Body(schema=@Schema(e="X,Y"))
 	public static class B04a {}
 
 	@Test
@@ -453,7 +453,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(_enum=" X , Y "))
+	@Body(schema=@Schema(e=" X , Y "))
 	public static class B04b {}
 
 	@Test
@@ -470,7 +470,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(_enum="['X','Y']"))
+	@Body(schema=@Schema(e="['X','Y']"))
 	public static class B04c {}
 
 	@Test
@@ -490,9 +490,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				_enum="['W']",
+				e="['W']",
 				items=@SubItems(
-					_enum="['X']",
+					e="['X']",
 					items={
 						"enum:['Y'],",
 						"items:{enum:['Z']}"
@@ -542,7 +542,7 @@ public class HttpPartSchemaTest_Body {
 	// Numeric validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Body(schema=@Schema(minimum="10", maximum="100"))
+	@Body(schema=@Schema(min="10", max="100"))
 	public static class C01a {}
 
 	@Test
@@ -568,9 +568,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minimum="10", maximum="100",
+				min="10", max="100",
 				items=@SubItems(
-					minimum="100", maximum="1000",
+					min="100", max="1000",
 					items={
 						"minimum:1000,maximum:10000,",
 						"items:{minimum:10000,maximum:100000}"
@@ -646,7 +646,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true))
+	@Body(schema=@Schema(min="10", max="100", emin=true, emax=true))
 	public static class C02a {}
 
 	@Test
@@ -672,9 +672,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true,
+				min="10", max="100", emin=true, emax=true,
 				items=@SubItems(
-					minimum="100", maximum="1000", exclusiveMinimum=true, exclusiveMaximum=true,
+					min="100", max="1000", emin=true, emax=true,
 					items={
 						"minimum:1000,maximum:10000,exclusiveMinimum:true,exclusiveMaximum:true,",
 						"items:{minimum:10000,maximum:100000,exclusiveMinimum:true,exclusiveMaximum:true}"
@@ -750,7 +750,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(minimum="10.1", maximum="100.1"))
+	@Body(schema=@Schema(min="10.1", max="100.1"))
 	public static class C03a {}
 
 	@Test
@@ -776,9 +776,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minimum="10.1", maximum="100.1",
+				min="10.1", max="100.1",
 				items=@SubItems(
-					minimum="100.1", maximum="1000.1",
+					min="100.1", max="1000.1",
 					items={
 						"minimum:1000.1,maximum:10000.1,",
 						"items:{minimum:10000.1,maximum:100000.1}"
@@ -854,7 +854,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true))
+	@Body(schema=@Schema(min="10.1", max="100.1", emin=true, emax=true))
 	public static class C04a {}
 
 	@Test
@@ -880,9 +880,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true,
+				min="10.1", max="100.1", emin=true, emax=true,
 				items=@SubItems(
-					minimum="100.1", maximum="1000.1", exclusiveMinimum=true, exclusiveMaximum=true,
+					min="100.1", max="1000.1", emin=true, emax=true,
 					items={
 						"minimum:1000.1,maximum:10000.1,exclusiveMinimum:true,exclusiveMaximum:true,",
 						"items:{minimum:10000.1,maximum:100000.1,exclusiveMinimum:true,exclusiveMaximum:true}"
@@ -958,7 +958,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(multipleOf="10"))
+	@Body(schema=@Schema(mo="10"))
 	public static class C05a {}
 
 	@Test
@@ -981,9 +981,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				multipleOf="10",
+				mo="10",
 				items=@SubItems(
-					multipleOf="100",
+					mo="100",
 					items={
 						"multipleOf:1000,",
 						"items:{multipleOf:10000}"
@@ -1049,7 +1049,7 @@ public class HttpPartSchemaTest_Body {
 		}
 	}
 
-	@Body(schema=@Schema(multipleOf="10.1"))
+	@Body(schema=@Schema(mo="10.1"))
 	public static class C06a {}
 
 	@Test
@@ -1070,9 +1070,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				multipleOf="10.1",
+				mo="10.1",
 				items=@SubItems(
-					multipleOf="100.1",
+					mo="100.1",
 					items={
 						"multipleOf:1000.1,",
 						"items:{multipleOf:10000.1}"
@@ -1135,9 +1135,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				uniqueItems=true,
+				ui=true,
 				items=@SubItems(
-					uniqueItems=true,
+					ui=true,
 					items={
 						"uniqueItems:true,",
 						"items:{uniqueItems:true}"
@@ -1229,9 +1229,9 @@ public class HttpPartSchemaTest_Body {
 	@Body(
 		schema=@Schema(
 			items=@Items(
-				minItems=1, maxItems=2,
+				mini=1, maxi=2,
 				items=@SubItems(
-					minItems=2, maxItems=3,
+					mini=2, maxi=3,
 					items={
 						"minItems:3,maxItems:4,",
 						"items:{minItems:4,maxItems:5}"

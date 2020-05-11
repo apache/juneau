@@ -2008,7 +2008,7 @@ public class RestClientTest {
 		}
 	}
 
-	@Rest(partSerializer=XPartSerializer.class, partParser=XPartParser.class,debug="true")
+	@Rest(partSerializer=XPartSerializer.class, partParser=XPartParser.class)
 	public static class K extends BasicRest {
 		@RestMethod(path="/")
 		public Ok get(@Header(name="Foo",multi=true) Bean[] foo, org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws Exception {

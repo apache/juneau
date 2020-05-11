@@ -42,7 +42,7 @@ public class BeanContextPropertiesTest  {
 	@BeanConfig(pojoSwaps=TemporalDateSwap.IsoInstant.class)
 	public static class A {
 		@RestMethod(name=GET, path="/{d1}")
-		public String testClassTransforms(@Path(name="d1") Date d1, @Query(name="d2") Date d2, @Header(name="X-D3") Date d3) throws Exception {
+		public String testClassTransforms(@Path("d1") Date d1, @Query("d2") Date d2, @Header("X-D3") Date d3) throws Exception {
 			TemporalDateSwap df = TemporalDateSwap.IsoInstant.class.newInstance();
 			BeanSession session = BeanContext.DEFAULT.createSession();
 			return "d1="+df.swap(session, d1)+",d2="+df.swap(session, d2)+",d3="+df.swap(session, d3)+"";

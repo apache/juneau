@@ -68,13 +68,13 @@ public class HeaderAnnotationTest {
 		@RemoteMethod(path="a") String getA03b(@Header("*") Bean b);
 		@RemoteMethod(path="a") String getA03c(@Header Bean b);
 		@RemoteMethod(path="a") String getA04a(@Header("x") Bean[] b);
-		@RemoteMethod(path="a") String getA04b(@Header(name="x",collectionFormat="uon") Bean[] b);
+		@RemoteMethod(path="a") String getA04b(@Header(n="x",cf="uon") Bean[] b);
 		@RemoteMethod(path="a") String getA05a(@Header("x") List<Bean> b);
-		@RemoteMethod(path="a") String getA05b(@Header(name="x",collectionFormat="uon") List<Bean> b);
+		@RemoteMethod(path="a") String getA05b(@Header(n="x",cf="uon") List<Bean> b);
 		@RemoteMethod(path="a") String getA06a(@Header("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06b(@Header("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06c(@Header Map<String,Bean> b);
-		@RemoteMethod(path="a") String getA06d(@Header(name="x",format="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String getA06d(@Header(n="x",f="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06e(@Header(format="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA09a(@Header("*") NameValuePairs b);
 		@RemoteMethod(path="a") String getA09b(@Header NameValuePairs b);
@@ -162,10 +162,10 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface BR {
-		@RemoteMethod(path="/") String getB01(@Header(name="x",_default="foo") String b);
-		@RemoteMethod(path="/") String getB02(@Header(name="x",_default="foo",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String getB03(@Header(name="x",_default="") String b);
-		@RemoteMethod(path="/") String getB04(@Header(name="x",_default="",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getB01(@Header(n="x",df="foo") String b);
+		@RemoteMethod(path="/") String getB02(@Header(n="x",df="foo",aev=true) String b);
+		@RemoteMethod(path="/") String getB03(@Header(n="x",df="") String b);
+		@RemoteMethod(path="/") String getB04(@Header(n="x",df="",aev=true) String b);
 	}
 
 	private static BR br = MockRemote.build(BR.class, B.class);
@@ -226,13 +226,13 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface CR {
-		@RemoteMethod(path="/a") String getC01(@Header(name="x") String...b);
-		@RemoteMethod(path="/a") String getC02(@Header(name="x",collectionFormat="csv") String...b);
-		@RemoteMethod(path="/a") String getC03(@Header(name="x",collectionFormat="ssv") String...b);
-		@RemoteMethod(path="/a") String getC04(@Header(name="x",collectionFormat="tsv") String...b);
-		@RemoteMethod(path="/a") String getC05(@Header(name="x",collectionFormat="pipes") String...b);
-		@RemoteMethod(path="/a") String getC06(@Header(name="x",collectionFormat="multi") String...b);
-		@RemoteMethod(path="/a") String getC07(@Header(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/a") String getC01(@Header(n="x") String...b);
+		@RemoteMethod(path="/a") String getC02(@Header(n="x",cf="csv") String...b);
+		@RemoteMethod(path="/a") String getC03(@Header(n="x",cf="ssv") String...b);
+		@RemoteMethod(path="/a") String getC04(@Header(n="x",cf="tsv") String...b);
+		@RemoteMethod(path="/a") String getC05(@Header(n="x",cf="pipes") String...b);
+		@RemoteMethod(path="/a") String getC06(@Header(n="x",cf="multi") String...b);
+		@RemoteMethod(path="/a") String getC07(@Header(n="x",cf="uon") String...b);
 	}
 
 	private static CR cr = MockRemote.build(CR.class, C.class);
@@ -282,48 +282,48 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface DR {
-		@RemoteMethod(path="/") String getC01a(@Header(name="x",minimum="1",maximum="10") int b);
-		@RemoteMethod(path="/") String getC01b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
-		@RemoteMethod(path="/") String getC01c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
-		@RemoteMethod(path="/") String getC02a(@Header(name="x",minimum="1",maximum="10") short b);
-		@RemoteMethod(path="/") String getC02b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
-		@RemoteMethod(path="/") String getC02c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
-		@RemoteMethod(path="/") String getC03a(@Header(name="x",minimum="1",maximum="10") long b);
-		@RemoteMethod(path="/") String getC03b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) long b);
-		@RemoteMethod(path="/") String getC03c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) long b);
-		@RemoteMethod(path="/") String getC04a(@Header(name="x",minimum="1",maximum="10") float b);
-		@RemoteMethod(path="/") String getC04b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) float b);
-		@RemoteMethod(path="/") String getC04c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) float b);
-		@RemoteMethod(path="/") String getC05a(@Header(name="x",minimum="1",maximum="10") double b);
-		@RemoteMethod(path="/") String getC05b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) double b);
-		@RemoteMethod(path="/") String getC05c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) double b);
-		@RemoteMethod(path="/") String getC06a(@Header(name="x",minimum="1",maximum="10") byte b);
-		@RemoteMethod(path="/") String getC06b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) byte b);
-		@RemoteMethod(path="/") String getC06c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) byte b);
-		@RemoteMethod(path="/") String getC07a(@Header(name="x",minimum="1",maximum="10") AtomicInteger b);
-		@RemoteMethod(path="/") String getC07b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) AtomicInteger b);
-		@RemoteMethod(path="/") String getC07c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) AtomicInteger b);
-		@RemoteMethod(path="/") String getC08a(@Header(name="x",minimum="1",maximum="10") BigDecimal b);
-		@RemoteMethod(path="/") String getC08b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) BigDecimal b);
-		@RemoteMethod(path="/") String getC08c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) BigDecimal b);
-		@RemoteMethod(path="/") String getC11a(@Header(name="x",minimum="1",maximum="10") Integer b);
-		@RemoteMethod(path="/") String getC11b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Integer b);
-		@RemoteMethod(path="/") String getC11c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Integer b);
-		@RemoteMethod(path="/") String getC12a(@Header(name="x",minimum="1",maximum="10") Short b);
-		@RemoteMethod(path="/") String getC12b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Short b);
-		@RemoteMethod(path="/") String getC12c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Short b);
-		@RemoteMethod(path="/") String getC13a(@Header(name="x",minimum="1",maximum="10") Long b);
-		@RemoteMethod(path="/") String getC13b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Long b);
-		@RemoteMethod(path="/") String getC13c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Long b);
-		@RemoteMethod(path="/") String getC14a(@Header(name="x",minimum="1",maximum="10") Float b);
-		@RemoteMethod(path="/") String getC14b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Float b);
-		@RemoteMethod(path="/") String getC14c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Float b);
-		@RemoteMethod(path="/") String getC15a(@Header(name="x",minimum="1",maximum="10") Double b);
-		@RemoteMethod(path="/") String getC15b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Double b);
-		@RemoteMethod(path="/") String getC15c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Double b);
-		@RemoteMethod(path="/") String getC16a(@Header(name="x",minimum="1",maximum="10") Byte b);
-		@RemoteMethod(path="/") String getC16b(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) Byte b);
-		@RemoteMethod(path="/") String getC16c(@Header(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
+		@RemoteMethod(path="/") String getC01a(@Header(n="x",min="1",max="10") int b);
+		@RemoteMethod(path="/") String getC01b(@Header(n="x",min="1",max="10",emin=false,emax=false) int b);
+		@RemoteMethod(path="/") String getC01c(@Header(n="x",min="1",max="10",emin=true,emax=true) int b);
+		@RemoteMethod(path="/") String getC02a(@Header(n="x",min="1",max="10") short b);
+		@RemoteMethod(path="/") String getC02b(@Header(n="x",min="1",max="10",emin=false,emax=false) short b);
+		@RemoteMethod(path="/") String getC02c(@Header(n="x",min="1",max="10",emin=true,emax=true) short b);
+		@RemoteMethod(path="/") String getC03a(@Header(n="x",min="1",max="10") long b);
+		@RemoteMethod(path="/") String getC03b(@Header(n="x",min="1",max="10",emin=false,emax=false) long b);
+		@RemoteMethod(path="/") String getC03c(@Header(n="x",min="1",max="10",emin=true,emax=true) long b);
+		@RemoteMethod(path="/") String getC04a(@Header(n="x",min="1",max="10") float b);
+		@RemoteMethod(path="/") String getC04b(@Header(n="x",min="1",max="10",emin=false,emax=false) float b);
+		@RemoteMethod(path="/") String getC04c(@Header(n="x",min="1",max="10",emin=true,emax=true) float b);
+		@RemoteMethod(path="/") String getC05a(@Header(n="x",min="1",max="10") double b);
+		@RemoteMethod(path="/") String getC05b(@Header(n="x",min="1",max="10",emin=false,emax=false) double b);
+		@RemoteMethod(path="/") String getC05c(@Header(n="x",min="1",max="10",emin=true,emax=true) double b);
+		@RemoteMethod(path="/") String getC06a(@Header(n="x",min="1",max="10") byte b);
+		@RemoteMethod(path="/") String getC06b(@Header(n="x",min="1",max="10",emin=false,emax=false) byte b);
+		@RemoteMethod(path="/") String getC06c(@Header(n="x",min="1",max="10",emin=true,emax=true) byte b);
+		@RemoteMethod(path="/") String getC07a(@Header(n="x",min="1",max="10") AtomicInteger b);
+		@RemoteMethod(path="/") String getC07b(@Header(n="x",min="1",max="10",emin=false,emax=false) AtomicInteger b);
+		@RemoteMethod(path="/") String getC07c(@Header(n="x",min="1",max="10",emin=true,emax=true) AtomicInteger b);
+		@RemoteMethod(path="/") String getC08a(@Header(n="x",min="1",max="10") BigDecimal b);
+		@RemoteMethod(path="/") String getC08b(@Header(n="x",min="1",max="10",emin=false,emax=false) BigDecimal b);
+		@RemoteMethod(path="/") String getC08c(@Header(n="x",min="1",max="10",emin=true,emax=true) BigDecimal b);
+		@RemoteMethod(path="/") String getC11a(@Header(n="x",min="1",max="10") Integer b);
+		@RemoteMethod(path="/") String getC11b(@Header(n="x",min="1",max="10",emin=false,emax=false) Integer b);
+		@RemoteMethod(path="/") String getC11c(@Header(n="x",min="1",max="10",emin=true,emax=true) Integer b);
+		@RemoteMethod(path="/") String getC12a(@Header(n="x",min="1",max="10") Short b);
+		@RemoteMethod(path="/") String getC12b(@Header(n="x",min="1",max="10",emin=false,emax=false) Short b);
+		@RemoteMethod(path="/") String getC12c(@Header(n="x",min="1",max="10",emin=true,emax=true) Short b);
+		@RemoteMethod(path="/") String getC13a(@Header(n="x",min="1",max="10") Long b);
+		@RemoteMethod(path="/") String getC13b(@Header(n="x",min="1",max="10",emin=false,emax=false) Long b);
+		@RemoteMethod(path="/") String getC13c(@Header(n="x",min="1",max="10",emin=true,emax=true) Long b);
+		@RemoteMethod(path="/") String getC14a(@Header(n="x",min="1",max="10") Float b);
+		@RemoteMethod(path="/") String getC14b(@Header(n="x",min="1",max="10",emin=false,emax=false) Float b);
+		@RemoteMethod(path="/") String getC14c(@Header(n="x",min="1",max="10",emin=true,emax=true) Float b);
+		@RemoteMethod(path="/") String getC15a(@Header(n="x",min="1",max="10") Double b);
+		@RemoteMethod(path="/") String getC15b(@Header(n="x",min="1",max="10",emin=false,emax=false) Double b);
+		@RemoteMethod(path="/") String getC15c(@Header(n="x",min="1",max="10",emin=true,emax=true) Double b);
+		@RemoteMethod(path="/") String getC16a(@Header(n="x",min="1",max="10") Byte b);
+		@RemoteMethod(path="/") String getC16b(@Header(n="x",min="1",max="10",emin=false,emax=false) Byte b);
+		@RemoteMethod(path="/") String getC16c(@Header(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
 	private static DR dr = MockRemote.build(DR.class, D.class);
@@ -656,12 +656,12 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface ER {
-		@RemoteMethod(path="/") String getE01(@Header(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
-		@RemoteMethod(path="/") String getE02(@Header(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
-		@RemoteMethod(path="/") String getE03(@Header(name="x",collectionFormat="pipes",uniqueItems=false) String...b);
-		@RemoteMethod(path="/") String getE04(@Header(name="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
-		@RemoteMethod(path="/") String getE05(@Header(name="x",collectionFormat="pipes",uniqueItems=true) String...b);
-		@RemoteMethod(path="/") String getE06(@Header(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
+		@RemoteMethod(path="/") String getE01(@Header(n="x",cf="pipes",mini=1,maxi=2) String...b);
+		@RemoteMethod(path="/") String getE02(@Header(n="x",items=@Items(cf="pipes",mini=1,maxi=2)) String[]...b);
+		@RemoteMethod(path="/") String getE03(@Header(n="x",cf="pipes",ui=false) String...b);
+		@RemoteMethod(path="/") String getE04(@Header(n="x",items=@Items(cf="pipes",ui=false)) String[]...b);
+		@RemoteMethod(path="/") String getE05(@Header(n="x",cf="pipes",ui=true) String...b);
+		@RemoteMethod(path="/") String getE06(@Header(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
 	private static ER er = MockRemote.build(ER.class, E.class);
@@ -716,12 +716,12 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface FR {
-		@RemoteMethod(path="/") String getF01(@Header(name="x",minLength=2,maxLength=3) String b);
-		@RemoteMethod(path="/") String getF02(@Header(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
-		@RemoteMethod(path="/") String getF03(@Header(name="x",_enum={"foo"}) String b);
-		@RemoteMethod(path="/") String getF04(@Header(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
-		@RemoteMethod(path="/") String getF05(@Header(name="x",pattern="foo\\d{1,3}") String b);
-		@RemoteMethod(path="/") String getF06(@Header(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+		@RemoteMethod(path="/") String getF01(@Header(n="x",minl=2,maxl=3) String b);
+		@RemoteMethod(path="/") String getF02(@Header(n="x",cf="pipes",items=@Items(minl=2,maxl=3)) String...b);
+		@RemoteMethod(path="/") String getF03(@Header(n="x",e={"foo"}) String b);
+		@RemoteMethod(path="/") String getF04(@Header(n="x",cf="pipes",items=@Items(e={"foo"})) String...b);
+		@RemoteMethod(path="/") String getF05(@Header(n="x",p="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/") String getF06(@Header(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
 	private static FR fr = MockRemote.build(FR.class, F.class);
@@ -782,20 +782,20 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface GR {
-		@RemoteMethod(path="/") String getG01(@Header(name="x",multipleOf="2") int b);
-		@RemoteMethod(path="/") String getG02(@Header(name="x",multipleOf="2") short b);
-		@RemoteMethod(path="/") String getG03(@Header(name="x",multipleOf="2") long b);
-		@RemoteMethod(path="/") String getG04(@Header(name="x",multipleOf="2") float b);
-		@RemoteMethod(path="/") String getG05(@Header(name="x",multipleOf="2") double b);
-		@RemoteMethod(path="/") String getG06(@Header(name="x",multipleOf="2") byte b);
-		@RemoteMethod(path="/") String getG07(@Header(name="x",multipleOf="2") AtomicInteger b);
-		@RemoteMethod(path="/") String getG08(@Header(name="x",multipleOf="2") BigDecimal b);
-		@RemoteMethod(path="/") String getG11(@Header(name="x",multipleOf="2") Integer b);
-		@RemoteMethod(path="/") String getG12(@Header(name="x",multipleOf="2") Short b);
-		@RemoteMethod(path="/") String getG13(@Header(name="x",multipleOf="2") Long b);
-		@RemoteMethod(path="/") String getG14(@Header(name="x",multipleOf="2") Float b);
-		@RemoteMethod(path="/") String getG15(@Header(name="x",multipleOf="2") Double b);
-		@RemoteMethod(path="/") String getG16(@Header(name="x",multipleOf="2") Byte b);
+		@RemoteMethod(path="/") String getG01(@Header(n="x",mo="2") int b);
+		@RemoteMethod(path="/") String getG02(@Header(n="x",mo="2") short b);
+		@RemoteMethod(path="/") String getG03(@Header(n="x",mo="2") long b);
+		@RemoteMethod(path="/") String getG04(@Header(n="x",mo="2") float b);
+		@RemoteMethod(path="/") String getG05(@Header(n="x",mo="2") double b);
+		@RemoteMethod(path="/") String getG06(@Header(n="x",mo="2") byte b);
+		@RemoteMethod(path="/") String getG07(@Header(n="x",mo="2") AtomicInteger b);
+		@RemoteMethod(path="/") String getG08(@Header(n="x",mo="2") BigDecimal b);
+		@RemoteMethod(path="/") String getG11(@Header(n="x",mo="2") Integer b);
+		@RemoteMethod(path="/") String getG12(@Header(n="x",mo="2") Short b);
+		@RemoteMethod(path="/") String getG13(@Header(n="x",mo="2") Long b);
+		@RemoteMethod(path="/") String getG14(@Header(n="x",mo="2") Float b);
+		@RemoteMethod(path="/") String getG15(@Header(n="x",mo="2") Double b);
+		@RemoteMethod(path="/") String getG16(@Header(n="x",mo="2") Byte b);
 	}
 
 	private static GR gr = MockRemote.build(GR.class, G.class);
@@ -886,9 +886,9 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface HR {
-		@RemoteMethod(path="/") String getH01(@Header(name="x") String b);
-		@RemoteMethod(path="/") String getH02(@Header(name="x",required=false) String b);
-		@RemoteMethod(path="/") String getH03(@Header(name="x",required=true) String b);
+		@RemoteMethod(path="/") String getH01(@Header(n="x") String b);
+		@RemoteMethod(path="/") String getH02(@Header(n="x",r=false) String b);
+		@RemoteMethod(path="/") String getH03(@Header(n="x",r=true) String b);
 	}
 
 	private static HR hr = MockRemote.build(HR.class, H.class);
@@ -922,9 +922,9 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface IR {
-		@RemoteMethod(path="/") String getI01(@Header(name="x",allowEmptyValue=true) String b);
-		@RemoteMethod(path="/") String getI02(@Header(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
-		@RemoteMethod(path="/") String getI03(@Header(name="x",skipIfEmpty=true) String b);
+		@RemoteMethod(path="/") String getI01(@Header(n="x",aev=true) String b);
+		@RemoteMethod(path="/") String getI02(@Header(n="x",aev=true,sie=false) String b);
+		@RemoteMethod(path="/") String getI03(@Header(n="x",sie=true) String b);
 	}
 
 	private static IR ir = MockRemote.build(IR.class, I.class);
@@ -957,7 +957,7 @@ public class HeaderAnnotationTest {
 
 	@Remote
 	public static interface JR {
-		@RemoteMethod(path="/") String getJ01(@Header(name="x",serializer=XPartSerializer.class) String b);
+		@RemoteMethod(path="/") String getJ01(@Header(n="x",serializer=XPartSerializer.class) String b);
 	}
 
 	private static JR jr = MockRemote.build(JR.class, J.class);

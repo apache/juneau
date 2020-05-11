@@ -1636,7 +1636,7 @@ public class BasicRestInfoProviderTest {
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR04 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",example="{id:4}") Foo foo) {
+		public Foo doFoo(@Query(n="foo",ex="{id:4}") Foo foo) {
 			return null;
 		}
 	}
@@ -1650,7 +1650,7 @@ public class BasicRestInfoProviderTest {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class NR05 {
 		@RestMethod(name=GET,path="/path/{foo}/query")
-		public Foo doFoo(@Query(name="foo",example="{id:$L{5}}") Foo foo) {
+		public Foo doFoo(@Query(n="foo",ex="{id:$L{5}}") Foo foo) {
 			return null;
 		}
 	}

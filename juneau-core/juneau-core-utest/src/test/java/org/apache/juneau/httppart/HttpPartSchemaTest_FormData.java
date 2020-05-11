@@ -50,28 +50,28 @@ public class HttpPartSchemaTest_FormData {
 	}
 
 	@FormData(
-		name="x",
-		type="number",
-		format="int32",
-		collectionFormat="csv",
-		maximum="1",
-		minimum="2",
-		multipleOf="3",
-		pattern="4",
-		maxLength=1,
-		minLength=2,
-		maxItems=3,
-		minItems=4,
-		exclusiveMaximum=true,
-		exclusiveMinimum=true,
-		uniqueItems=true,
-		required=true,
-		skipIfEmpty=true,
-		description={"b1","b2"},
-		_default={"c1","c2"},
+		n="x",
+		t="number",
+		f="int32",
+		cf="csv",
+		max="1",
+		min="2",
+		mo="3",
+		p="4",
+		maxl=1,
+		minl=2,
+		maxi=3,
+		mini=4,
+		emax=true,
+		emin=true,
+		ui=true,
+		r=true,
+		sie=true,
+		d={"b1","b2"},
+		df={"c1","c2"},
 		items=@Items($ref="d1"),
-		_enum="e1,e2,e3",
-		example="f1",
+		e="e1,e2,e3",
+		ex="f1",
 		api="{g1:true}"
 	)
 	public static class A02 {}
@@ -103,28 +103,28 @@ public class HttpPartSchemaTest_FormData {
 	public static class A03 {
 		public void a(
 				@FormData(
-					name="x",
-					type="number",
-					format="int32",
-					collectionFormat="csv",
-					maximum="1",
-					minimum="2",
-					multipleOf="3",
-					pattern="4",
-					maxLength=1,
-					minLength=2,
-					maxItems=3,
-					minItems=4,
-					exclusiveMaximum=true,
-					exclusiveMinimum=true,
-					uniqueItems=true,
-					required=true,
-					skipIfEmpty=true,
-					description={"b1","b2"},
-					_default={"c1","c2"},
+					n="x",
+					t="number",
+					f="int32",
+					cf="csv",
+					max="1",
+					min="2",
+					mo="3",
+					p="4",
+					maxl=1,
+					minl=2,
+					maxi=3,
+					mini=4,
+					emax=true,
+					emin=true,
+					ui=true,
+					r=true,
+					sie=true,
+					d={"b1","b2"},
+					df={"c1","c2"},
 					items=@Items($ref="d1"),
-					_enum="e1,e2,e3",
-					example="f1",
+					e="e1,e2,e3",
+					ex="f1",
 					api="{g1:true}"
 				) String x
 			) {
@@ -160,28 +160,28 @@ public class HttpPartSchemaTest_FormData {
 	public static class A04 {
 		public void a(
 				@FormData(
-					name="y",
-					type="integer",
-					format="int64",
-					collectionFormat="ssv",
-					maximum="5",
-					minimum="6",
-					multipleOf="7",
-					pattern="8",
-					maxLength=5,
-					minLength=6,
-					maxItems=7,
-					minItems=8,
-					exclusiveMaximum=false,
-					exclusiveMinimum=false,
-					uniqueItems=false,
-					required=false,
-					skipIfEmpty=false,
-					description={"b3","b3"},
-					_default={"c3","c4"},
+					n="y",
+					t="integer",
+					f="int64",
+					cf="ssv",
+					max="5",
+					min="6",
+					mo="7",
+					p="8",
+					maxl=5,
+					minl=6,
+					maxi=7,
+					mini=8,
+					emax=false,
+					emin=false,
+					ui=false,
+					r=false,
+					sie=false,
+					d={"b3","b3"},
+					df={"c3","c4"},
 					items=@Items($ref="d2"),
-					_enum="e4,e5,e6",
-					example="f2",
+					e="e4,e5,e6",
+					ex="f2",
 					api="{g2:true}"
 				) A01 x
 			) {
@@ -215,41 +215,41 @@ public class HttpPartSchemaTest_FormData {
 	}
 
 	@FormData(
-		name="x",
+		n="x",
 		items=@Items(
-			type="number",
-			format="int32",
-			collectionFormat="csv",
-			maximum="1",
-			minimum="2",
-			multipleOf="3",
-			pattern="4",
-			maxLength=1,
-			minLength=2,
-			maxItems=3,
-			minItems=4,
-			exclusiveMaximum=true,
-			exclusiveMinimum=true,
-			uniqueItems=true,
-			_default={"c1","c2"},
-			_enum="e1,e2",
+			t="number",
+			f="int32",
+			cf="csv",
+			max="1",
+			min="2",
+			mo="3",
+			p="4",
+			maxl=1,
+			minl=2,
+			maxi=3,
+			mini=4,
+			emax=true,
+			emin=true,
+			ui=true,
+			df={"c1","c2"},
+			e="e1,e2",
 			items=@SubItems(
-				type="integer",
-				format="int64",
-				collectionFormat="ssv",
-				maximum="5",
-				minimum="6",
-				multipleOf="7",
-				pattern="8",
-				maxLength=5,
-				minLength=6,
-				maxItems=7,
-				minItems=8,
-				exclusiveMaximum=false,
-				exclusiveMinimum=false,
-				uniqueItems=false,
-				_default={"c3","c4"},
-				_enum="e3,e4",
+				t="integer",
+				f="int64",
+				cf="ssv",
+				max="5",
+				min="6",
+				mo="7",
+				p="8",
+				maxl=5,
+				minl=6,
+				maxi=7,
+				mini=8,
+				emax=false,
+				emin=false,
+				ui=false,
+				df={"c3","c4"},
+				e="e3,e4",
 				items={
 					"type:'string',",
 					"format:'float',",
@@ -373,7 +373,7 @@ public class HttpPartSchemaTest_FormData {
 	// String input validations.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@FormData(required=true)
+	@FormData(r=true)
 	public static class B01a {}
 
 	@Test
@@ -396,7 +396,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(allowEmptyValue=true)
+	@FormData(aev=true)
 	public static class B01b {}
 
 	@Test
@@ -407,7 +407,7 @@ public class HttpPartSchemaTest_FormData {
 		s.validateInput(null);
 	}
 
-	@FormData(required=true,allowEmptyValue=true)
+	@FormData(r=true,aev=true)
 	public static class B01c {}
 
 	@Test
@@ -424,7 +424,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(pattern="x.*")
+	@FormData(p="x.*")
 	public static class B02a {}
 
 	@Test
@@ -452,7 +452,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(minLength=2, maxLength=3)
+	@FormData(minl=2, maxl=3)
 	public static class B03a {}
 
 	@Test
@@ -477,9 +477,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minLength=2, maxLength=3,
+			minl=2, maxl=3,
 			items=@SubItems(
-				minLength=3, maxLength=4,
+				minl=3, maxl=4,
 				items={
 					"minLength:4,maxLength:5,",
 					"items:{minLength:5,maxLength:6}"
@@ -559,7 +559,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(_enum="X,Y")
+	@FormData(e="X,Y")
 	public static class B04a {}
 
 	@Test
@@ -576,7 +576,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(_enum=" X , Y ")
+	@FormData(e=" X , Y ")
 	public static class B04b {}
 
 	@Test
@@ -593,7 +593,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(_enum="['X','Y']")
+	@FormData(e="['X','Y']")
 	public static class B04c {}
 
 	@Test
@@ -612,9 +612,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			_enum="['W']",
+			e="['W']",
 			items=@SubItems(
-				_enum="['X']",
+				e="['X']",
 				items={
 					"enum:['Y'],",
 					"items:{enum:['Z']}"
@@ -663,7 +663,7 @@ public class HttpPartSchemaTest_FormData {
 	// Numeric validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@FormData(minimum="10", maximum="100")
+	@FormData(min="10", max="100")
 	public static class C01a {}
 
 	@Test
@@ -688,9 +688,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minimum="10", maximum="100",
+			min="10", max="100",
 			items=@SubItems(
-				minimum="100", maximum="1000",
+				min="100", max="1000",
 				items={
 					"minimum:1000,maximum:10000,",
 					"items:{minimum:10000,maximum:100000}"
@@ -765,7 +765,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true)
+	@FormData(min="10", max="100", emin=true, emax=true)
 	public static class C02a {}
 
 	@Test
@@ -790,9 +790,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minimum="10", maximum="100", exclusiveMinimum=true, exclusiveMaximum=true,
+			min="10", max="100", emin=true, emax=true,
 			items=@SubItems(
-				minimum="100", maximum="1000", exclusiveMinimum=true, exclusiveMaximum=true,
+				min="100", max="1000", emin=true, emax=true,
 				items={
 					"minimum:1000,maximum:10000,exclusiveMinimum:true,exclusiveMaximum:true,",
 					"items:{minimum:10000,maximum:100000,exclusiveMinimum:true,exclusiveMaximum:true}"
@@ -867,7 +867,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(minimum="10.1", maximum="100.1")
+	@FormData(min="10.1", max="100.1")
 	public static class C03a {}
 
 	@Test
@@ -892,9 +892,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minimum="10.1", maximum="100.1",
+			min="10.1", max="100.1",
 			items=@SubItems(
-				minimum="100.1", maximum="1000.1",
+				min="100.1", max="1000.1",
 				items={
 					"minimum:1000.1,maximum:10000.1,",
 					"items:{minimum:10000.1,maximum:100000.1}"
@@ -969,7 +969,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true)
+	@FormData(min="10.1", max="100.1", emin=true, emax=true)
 	public static class C04a {}
 
 	@Test
@@ -994,9 +994,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minimum="10.1", maximum="100.1", exclusiveMinimum=true, exclusiveMaximum=true,
+			min="10.1", max="100.1", emin=true, emax=true,
 			items=@SubItems(
-				minimum="100.1", maximum="1000.1", exclusiveMinimum=true, exclusiveMaximum=true,
+				min="100.1", max="1000.1", emin=true, emax=true,
 				items={
 					"minimum:1000.1,maximum:10000.1,exclusiveMinimum:true,exclusiveMaximum:true,",
 					"items:{minimum:10000.1,maximum:100000.1,exclusiveMinimum:true,exclusiveMaximum:true}"
@@ -1071,7 +1071,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(multipleOf="10")
+	@FormData(mo="10")
 	public static class C05a {}
 
 	@Test
@@ -1093,9 +1093,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			multipleOf="10",
+			mo="10",
 			items=@SubItems(
-				multipleOf="100",
+				mo="100",
 				items={
 					"multipleOf:1000,",
 					"items:{multipleOf:10000}"
@@ -1160,7 +1160,7 @@ public class HttpPartSchemaTest_FormData {
 		}
 	}
 
-	@FormData(multipleOf="10.1")
+	@FormData(mo="10.1")
 	public static class C06a {}
 
 	@Test
@@ -1180,9 +1180,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			multipleOf="10.1",
+			mo="10.1",
 			items=@SubItems(
-				multipleOf="100.1",
+				mo="100.1",
 				items={
 					"multipleOf:1000.1,",
 					"items:{multipleOf:10000.1}"
@@ -1243,9 +1243,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			uniqueItems=true,
+			ui=true,
 			items=@SubItems(
-				uniqueItems=true,
+				ui=true,
 				items={
 					"uniqueItems:true,",
 					"items:{uniqueItems:true}"
@@ -1336,9 +1336,9 @@ public class HttpPartSchemaTest_FormData {
 
 	@FormData(
 		items=@Items(
-			minItems=1, maxItems=2,
+			mini=1, maxi=2,
 			items=@SubItems(
-				minItems=2, maxItems=3,
+				mini=2, maxi=3,
 				items={
 					"minItems:3,maxItems:4,",
 					"items:{minItems:4,maxItems:5}"

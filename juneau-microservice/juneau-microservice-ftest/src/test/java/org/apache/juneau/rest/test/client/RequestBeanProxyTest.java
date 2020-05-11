@@ -364,11 +364,11 @@ public class RequestBeanProxyTest {
 		public String getX1() {
 			return "b1";
 		}
-		@FormData(name="c")
+		@FormData(n="c")
 		public String getX2() {
 			return "c1";
 		}
-		@FormData(name="e",allowEmptyValue=true)
+		@FormData(n="e",aev=true)
 		public String getX4() {
 			return "";
 		}
@@ -428,7 +428,7 @@ public class RequestBeanProxyTest {
 		public Map<String,Object> getB() {
 			return AMap.of("b1","true","b2","123","b3","null");
 		}
-		@FormData(name="*",allowEmptyValue=true)
+		@FormData(n="*",aev=true)
 		public Map<String,Object> getC() {
 			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -480,7 +480,7 @@ public class RequestBeanProxyTest {
 		public NameValuePairs getB() {
 			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
 		}
-		@FormData(name="*")
+		@FormData(n="*")
 		public NameValuePairs getC() {
 			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
 		}
@@ -582,11 +582,11 @@ public class RequestBeanProxyTest {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@FormData(name="c", serializer=ListSerializer.class)
+		@FormData(n="c",serializer=ListSerializer.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@FormData(name="d",allowEmptyValue=true)
+		@FormData(n="d",aev=true)
 		public List<Object> getX3() {
 			return AList.of();
 		}
@@ -598,11 +598,11 @@ public class RequestBeanProxyTest {
 		public Object[] getX5() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@FormData(name="g", serializer=ListSerializer.class)
+		@FormData(n="g",serializer=ListSerializer.class)
 		public Object[] getX6() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@FormData(name="h",allowEmptyValue=true)
+		@FormData(n="h",aev=true)
 		public Object[] getX7() {
 			return new Object[]{};
 		}
@@ -919,11 +919,11 @@ public class RequestBeanProxyTest {
 		public String getX1() {
 			return "b1";
 		}
-		@Path(name="c")
+		@Path(n="c")
 		public String getX2() {
 			return "c1";
 		}
-		@Path(name="e",allowEmptyValue=true)
+		@Path(n="e",aev=true)
 		public String getX4() {
 			return "";
 		}
@@ -971,7 +971,7 @@ public class RequestBeanProxyTest {
 	}
 
 	public static class G02_Bean {
-		@Path(name="*",allowEmptyValue=true)
+		@Path(n="*",aev=true)
 		public Map<String,Object> getA() {
 			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
 		}
@@ -979,7 +979,7 @@ public class RequestBeanProxyTest {
 		public Map<String,Object> getB() {
 			return AMap.of("b1","true","b2","123","b3","null");
 		}
-		@Path(name="*",allowEmptyValue=true)
+		@Path(n="*",aev=true)
 		public Map<String,Object> getC() {
 			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
 		}
@@ -1023,7 +1023,7 @@ public class RequestBeanProxyTest {
 	}
 
 	public static class G03_Bean {
-		@Path(name="*",allowEmptyValue=true)
+		@Path(n="*",aev=true)
 		public NameValuePairs getA() {
 			return new NameValuePairs().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
 		}
@@ -1031,7 +1031,7 @@ public class RequestBeanProxyTest {
 		public NameValuePairs getB() {
 			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
 		}
-		@Path(name="*",allowEmptyValue=true)
+		@Path(n="*",aev=true)
 		public NameValuePairs getC() {
 			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
 		}
@@ -1083,11 +1083,11 @@ public class RequestBeanProxyTest {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Path(name="c", serializer=ListSerializer.class)
+		@Path(n="c", serializer=ListSerializer.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Path(name="d",allowEmptyValue=true)
+		@Path(n="d",aev=true)
 		public List<Object> getX3() {
 			return AList.of();
 		}
@@ -1095,11 +1095,11 @@ public class RequestBeanProxyTest {
 		public Object[] getX5() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@Path(name="g", serializer=ListSerializer.class)
+		@Path(n="g", serializer=ListSerializer.class)
 		public Object[] getX6() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
 		}
-		@Path(name="h",allowEmptyValue=true)
+		@Path(n="h",aev=true)
 		public Object[] getX7() {
 			return new Object[]{};
 		}

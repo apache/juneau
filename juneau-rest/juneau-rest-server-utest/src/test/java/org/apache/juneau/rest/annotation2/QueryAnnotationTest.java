@@ -43,12 +43,12 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class A {
 		@RestMethod
-		public String get(RestRequest req, @Query(n="p1",allowEmptyValue=true) String p1, @Query(n="p2",allowEmptyValue=true) int p2) throws Exception {
+		public String get(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
 		@RestMethod
-		public String post(RestRequest req, @Query(n="p1",allowEmptyValue=true) String p1, @Query(n="p2",allowEmptyValue=true) int p2) throws Exception {
+		public String post(RestRequest req, @Query(n="p1",aev=true) String p1, @Query(n="p2",aev=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
@@ -98,7 +98,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 		@RestMethod(name=GET,path="/get2")
-		public String get2(RestRequest req, @Query(n="p1",format="uon") String p1) throws Exception {
+		public String get2(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
@@ -108,7 +108,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 		@RestMethod(name=POST,path="/post2")
-		public String post2(RestRequest req, @Query(n="p1",format="uon") String p1) throws Exception {
+		public String post2(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
@@ -149,27 +149,27 @@ public class QueryAnnotationTest {
 		}
 
 		@RestMethod
-		public Object c01(@Query(value="x",collectionFormat="multi") String[] x) {
+		public Object c01(@Query(n="x",cf="multi") String[] x) {
 			return x;
 		}
 		@RestMethod
-		public Object c02(@Query(value="x",collectionFormat="multi") int[] x) {
+		public Object c02(@Query(n="x",cf="multi") int[] x) {
 			return x;
 		}
 		@RestMethod
-		public Object c03(@Query(value="x",collectionFormat="multi") List<String> x) {
+		public Object c03(@Query(n="x",cf="multi") List<String> x) {
 			return x;
 		}
 		@RestMethod
-		public Object c04(@Query(value="x",collectionFormat="multi") List<Integer> x) {
+		public Object c04(@Query(n="x",cf="multi") List<Integer> x) {
 			return x;
 		}
 		@RestMethod
-		public Object c05(@Query(value="x",collectionFormat="multi",items=@Items(format="uon")) C01[] x) {
+		public Object c05(@Query(n="x",cf="multi",items=@Items(f="uon")) C01[] x) {
 			return x;
 		}
 		@RestMethod
-		public Object c06(@Query(value="x",collectionFormat="multi",items=@Items(format="uon")) List<C01> x) {
+		public Object c06(@Query(n="x",cf="multi",items=@Items(f="uon")) List<C01> x) {
 			return x;
 		}
 	}
@@ -227,14 +227,14 @@ public class QueryAnnotationTest {
 				.a("f3", f3);
 		}
 		@RestMethod
-		public OMap d03(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
+		public OMap d03(@Query(n="f1",df="1") String f1, @Query(n="f2",df="2") String f2, @Query(n="f3",df="3") String f3) {
 			return OMap.of()
 				.a("f1", f1)
 				.a("f2", f2)
 				.a("f3", f3);
 		}
 		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
-		public OMap d04(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
+		public OMap d04(@Query(n="f1",df="4") String f1, @Query(n="f2",df="5") String f2, @Query(n="f3",df="6") String f3) {
 			return OMap.of()
 				.a("f1", f1)
 				.a("f2", f2)
@@ -333,8 +333,8 @@ public class QueryAnnotationTest {
 
 		@Query(
 			n="Q",
-			description= {"a","b"},
-			type="string"
+			d= {"a","b"},
+			t="string"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -361,8 +361,8 @@ public class QueryAnnotationTest {
 				"description: 'b\nc',",
 				"type:'string'"
 			},
-			description= {"a","b"},
-			type="string"
+			d={"a","b"},
+			t="string"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
@@ -412,7 +412,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class SB {
 
-		@Query(name="Q")
+		@Query(n="Q")
 		public static class SB01 {}
 		@RestMethod
 		public void sb01(SB01 q) {}
@@ -467,7 +467,7 @@ public class QueryAnnotationTest {
 	@Rest
 	public static class SC {
 
-		@Query(name="Q", example={"{f1:'a'}"})
+		@Query(n="Q", ex={"{f1:'a'}"})
 		public static class SC01 {
 			public String f1;
 		}
@@ -497,16 +497,16 @@ public class QueryAnnotationTest {
 		@RestMethod
 		public void ta01(
 			@Query(
-				name="Q",
-				description= {"a","b"},
-				type="string"
+				n="Q",
+				d= {"a","b"},
+				t="string"
 			)
 			String q) {}
 
 		@RestMethod
 		public void ta02(
 			@Query(
-				name="Q",
+				n="Q",
 				api={
 					"description: 'a\nb',",
 					"type:'string'"
@@ -517,13 +517,13 @@ public class QueryAnnotationTest {
 		@RestMethod
 		public void ta03(
 			@Query(
-				name="Q",
+				n="Q",
 				api={
 					"description: 'b\nc',",
 					"type:'string'"
 				},
-				description= {"a","b"},
-				type="string"
+				d= {"a","b"},
+				t="string"
 			)
 			String q) {}
 
@@ -568,7 +568,7 @@ public class QueryAnnotationTest {
 	public static class TB {
 
 		@RestMethod
-		public void tb01(@Query(name="Q") String q) {}
+		public void tb01(@Query("Q") String q) {}
 	}
 
 	static Swagger tb = getSwagger(TB.class);
@@ -587,7 +587,7 @@ public class QueryAnnotationTest {
 	public static class TC {
 
 		@RestMethod
-		public void tc01(@Query(name="Q", example={"a","b"}) String q) {}
+		public void tc01(@Query(n="Q",ex={"a","b"}) String q) {}
 	}
 
 	static Swagger tc = getSwagger(TC.class);

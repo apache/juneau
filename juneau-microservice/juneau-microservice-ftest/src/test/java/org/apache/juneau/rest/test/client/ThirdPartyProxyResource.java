@@ -954,7 +954,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/mapFormData")
 	public String mapFormData(
 		@FormData("a") String a,
-		@FormData(name="b",allowEmptyValue=true) String b,
+		@FormData(n="b",aev=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
@@ -968,7 +968,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/beanFormData2")
 	public String beanFormData(
 		@FormData("a") String a,
-		@FormData(name="b",allowEmptyValue=true) String b,
+		@FormData(n="b",aev=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
@@ -982,7 +982,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/nameValuePairsFormData")
 	public String nameValuePairsFormData(
 		@FormData("a") String a,
-		@FormData(name="b",allowEmptyValue=true) String b,
+		@FormData(n="b",aev=true) String b,
 		@FormData("c") String c
 	) throws Exception {
 
