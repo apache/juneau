@@ -193,32 +193,14 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder beanFilters(java.lang.Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
-		super.beanFiltersReplace(values);
 		return this;
 	}
 

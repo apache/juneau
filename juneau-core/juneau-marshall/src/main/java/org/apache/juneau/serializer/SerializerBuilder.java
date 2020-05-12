@@ -688,32 +688,14 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanFilters(java.lang.Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
-		super.beanFiltersReplace(values);
 		return this;
 	}
 

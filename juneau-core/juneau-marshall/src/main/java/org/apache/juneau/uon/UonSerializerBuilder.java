@@ -291,32 +291,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder beanFilters(java.lang.Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder beanFiltersRemove(java.lang.Class<?>...values) {
-		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder beanFiltersReplace(java.lang.Class<?>...values) {
-		super.beanFiltersReplace(values);
 		return this;
 	}
 

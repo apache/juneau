@@ -48,6 +48,7 @@ import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -2939,12 +2940,12 @@ public class RestClientTest {
 	// BeanContext properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	protected static class O001 {
+	protected static class O1 {
 		public int f = 1;
 
 		@Override
 		public String toString() {
-			return "O001";
+			return "O1";
 		}
 	}
 
@@ -2961,47 +2962,47 @@ public class RestClientTest {
 			.simpleJson()
 			.build();
 
-		rc1.post("/echoBody", new O001())
+		rc1.post("/echoBody", new O1())
 			.run()
-			.getBody().assertValue("'O001'");
-		rc2.post("/echoBody", new O001())
+			.getBody().assertValue("'O1'");
+		rc2.post("/echoBody", new O1())
 			.run()
 			.getBody().assertValue("{f:1}");
 
 		rc1.get("/checkQuery")
-			.query("foo", new O001())
+			.query("foo", new O1())
 			.run()
-			.getBody().assertValue("foo=O001");
+			.getBody().assertValue("foo=O1");
 		rc2.get("/checkQuery")
-			.query("foo", new O001())
+			.query("foo", new O1())
 			.run()
 			.getBody().assertValue("foo=f%3D1");
 
 		rc1.formPost("/checkFormData")
-			.formData("foo", new O001())
+			.formData("foo", new O1())
 			.run()
-			.getBody().assertValue("foo=O001");
+			.getBody().assertValue("foo=O1");
 		rc2.formPost("/checkFormData")
-			.formData("foo", new O001())
+			.formData("foo", new O1())
 			.run()
 			.getBody().assertValue("foo=f%3D1");
 
 		rc1.get("/checkHeader")
-			.header("foo", new O001())
+			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
-			.getBody().assertValue("['O001']");
+			.getBody().assertValue("['O1']");
 		rc2.get("/checkHeader")
-			.header("foo", new O001())
+			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
 			.getBody().assertValue("['f=1']");
 	}
 
-	public static class O002 {
+	public static class O2 {
 		private int f;
 
-		protected O002(int f) {
+		protected O2(int f) {
 			this.f = f;
 		}
 
@@ -3010,85 +3011,179 @@ public class RestClientTest {
 		}
 	}
 
-	@Test
-	public void o002_beanContext_beanConstructorVisibility() throws Exception {
-		RestClient rc1 = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.build();
-
-		RestClient rc2 = MockRestClient
-			.create(A.class)
-			.beanConstructorVisibility(Visibility.PROTECTED)
-			.simpleJson()
-			.build();
-
-		try {
-			rc1.post("/echoBody", new O002(1))
-				.run()
-				.getBody().as(O002.class);
-				fail("Exception expected.");
-		} catch (RestCallException e) {
-			assertEquals("No unparse methodology found for object.", e.getMessage());
+	@Rest
+	public static class O2R extends BasicRest {
+		@RestMethod
+		public Reader postTest(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
+			res.setHeader("X", req.getHeaders().getString("X"));
+			return req.getBody().getReader();
 		}
-
-		assertEquals(1, rc2.post("/echoBody", new O002(1))
-			.run()
-			.getBody().as(O002.class).f);
 	}
 
-//	@Test
-//	public void o003_beanContext_beanDictionaryClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionary(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o004_beanContext_beanDictionaryObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionary(Object...values) {
-//
-//	@Test
-//	public void o005_beanContext_beanDictionaryRemoveClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o006_beanContext_beanDictionaryRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionaryRemove(Object...values) {
-//
-//	@Test
-//	public void o007_beanContext_beanDictionaryReplaceClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o008_beanContext_beanDictionaryReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanDictionaryReplace(Object...values) {
-//
-//	@Test
-//	public void o009_beanContext_beanFieldVisibility() throws Exception { fail(); }
-////	public RestClientBuilder beanFieldVisibility(Visibility value) {
-//
-//	@Test
-//	public void o010_beanContext_beanFiltersClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanFilters(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o011_beanContext_beanFiltersObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanFilters(Object...values) {
-//
-//	@Test
-//	public void o012_beanContext_beanFiltersRemoveClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanFiltersRemove(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o013_beanContext_beanFiltersRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanFiltersRemove(Object...values) {
-//
-//	@Test
-//	public void o014_beanContext_beanFiltersReplaceClasses() throws Exception { fail(); }
-////	public RestClientBuilder beanFiltersReplace(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o015_beanContext_beanFiltersReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder beanFiltersReplace(Object...values) {
-//
+	@Test
+	public void o002_beanContext_beanConstructorVisibility() throws Exception {
+		RestResponse rr = MockRestClient
+			.create(O2R.class)
+			.beanConstructorVisibility(Visibility.PROTECTED)
+			.simpleJson()
+			.build()
+			.post("/test", new O2(1))
+			.header("X", new O2(1))
+			.run()
+			.getBody().cache().assertValue("1")
+			.getHeader("X").assertValue("1")
+		;
+		assertEquals(1, rr.getBody().as(O2.class).f);
+		assertEquals(1, rr.getHeader("X").as(O2.class).f);
+	}
+
+
+	public static class O9 {
+		public int f1;
+		protected int f2;
+
+		O9 init() {
+			f1 = 1;
+			f2 = 2;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return f1 + "/" + f2;
+		}
+	}
+
+	@Test
+	public void o009_beanContext_beanFieldVisibility() throws Exception {
+		RestResponse rr = MockRestClient
+			.create(O2R.class)
+			.beanFieldVisibility(Visibility.PROTECTED)
+			.simpleJson()
+			.build()
+			.post("/test", new O9().init())
+			.header("X", new O9().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		assertEquals(2, rr.getBody().as(O9.class).f2);
+		assertEquals(2, rr.getHeader("X").as(O9.class).f2);
+	}
+
+	public static interface O10I {
+		int getF3();
+		void setF3(int f3);
+	}
+
+
+	public static class O10 implements O10I {
+		public int f1, f2;
+		private int f3;
+
+		@Override
+		public int getF3() {
+			return f3;
+		}
+
+		@Override
+		public void setF3(int f3) {
+			this.f3 = f3;
+		}
+
+		O10 init() {
+			f1 = 1;
+			f2 = 2;
+			f3 = 3;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return f1 + "/" + f2;
+		}
+	}
+
+	public static class O10Filter extends org.apache.juneau.transform.BeanFilterBuilder<O10> {
+		public O10Filter() {
+			bpi("f1");
+		}
+	}
+
+	@Test
+	public void o010_beanContext_beanFilters() throws Exception {
+		RestResponse rr = MockRestClient
+			.create(O2R.class)
+			.beanFilters(O10Filter.class)
+			.simpleJson()
+			.build()
+			.post("/test", new O10().init())
+			.header("X", new O10().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals(0, rr.getBody().as(O10.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.beanFilters(new O10Filter())
+			.simpleJson()
+			.build()
+			.post("/test", new O10().init())
+			.header("X", new O10().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals(0, rr.getBody().as(O10.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.beanFilters(BeanFilter.create(O10.class).bpi("f1").build())
+			.simpleJson()
+			.build()
+			.post("/test", new O10().init())
+			.header("X", new O10().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals(0, rr.getBody().as(O10.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.beanFilters(BeanFilter.create(O10.class).bpi("f1"))
+			.simpleJson()
+			.build()
+			.post("/test", new O10().init())
+			.header("X", new O10().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals(0, rr.getBody().as(O10.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.beanFilters(O10I.class)
+			.simpleJson()
+			.build()
+			.post("/test", new O10().init())
+			.header("X", new O10().init())
+			.run()
+			.getBody().cache().assertValue("{f3:3}")
+			.getHeader("X").assertValue("f3=3")
+		;
+		assertEquals(3, rr.getBody().as(O10.class).f3);
+		assertEquals(3, rr.getHeader("X").as(O10.class).f3);
+	}
+
 //	@Test
 //	public void o016_beanContext_beanMapPutReturnsOldValue() throws Exception { fail(); }
 ////	public RestClientBuilder beanMapPutReturnsOldValue() {

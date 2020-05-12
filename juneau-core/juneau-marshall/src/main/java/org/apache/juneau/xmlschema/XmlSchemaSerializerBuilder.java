@@ -363,32 +363,14 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
 		return this;
 	}
 

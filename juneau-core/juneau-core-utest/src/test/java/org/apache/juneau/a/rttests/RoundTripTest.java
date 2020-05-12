@@ -206,8 +206,8 @@ public abstract class RoundTripTest {
 	}
 
 
-	public Class<?>[] getBeanFilters() {
-		return new Class<?>[0];
+	public Object[] getBeanFilters() {
+		return new Object[0];
 	}
 
 	public Class<?>[] getPojoSwaps() {
@@ -254,7 +254,7 @@ public abstract class RoundTripTest {
 		return p;
 	}
 
-	protected void beanFilters(Class<?>...c) {
+	protected void beanFilters(Object...c) {
 		s = s.builder().beanFilters(c).build();
 		if (p != null)
 			p = p.builder().beanFilters(c).build();

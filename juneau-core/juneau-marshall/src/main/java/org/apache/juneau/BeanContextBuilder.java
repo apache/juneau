@@ -399,11 +399,16 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<p>
+	 * 	Values can consist of any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
+	 * 			<br>These must have a public no-arg constructor when a class.
+	 * 		<li>Any instance of {@link BeanFilter}.
+	 * 		<li>Any bean interfaces.
+	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
+	 * 			All other bean properties will be ignored.
 	 * 		<li>Any array or collection of the objects above.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -417,25 +422,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean filters.
 	 *
 	 * <p>
-	 * Same as {@link #beanFilters(Object...)} but takes in an array of classes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder beanFilters(Class<?>...values) {
-		return prependTo(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Configuration property:  Bean filters.
-	 *
-	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
 	 *
 	 * <ul class='seealso'>
@@ -444,36 +430,16 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values
 	 * 	The new values for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder beanFiltersReplace(Class<?>...values) {
-		return set(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Configuration property:  Bean filters.
-	 *
-	 * <p>
-	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<p>
+	 * 	Values can consist of any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
+	 * 			<br>These must have a public no-arg constructor when a class.
+	 * 		<li>Any instance of {@link BeanFilter}.
+	 * 		<li>Any bean interfaces.
+	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
+	 * 			All other bean properties will be ignored.
 	 * 		<li>Any array or collection of the objects above.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -495,36 +461,16 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values
 	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder beanFiltersRemove(Class<?>...values) {
-		return removeFrom(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * Configuration property:  Bean filters.
-	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean filters in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<p>
+	 * 	Values can consist of any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
+	 * 			<br>These must have a public no-arg constructor when a class.
+	 * 		<li>Any instance of {@link BeanFilter}.
+	 * 		<li>Any bean interfaces.
+	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
+	 * 			All other bean properties will be ignored.
 	 * 		<li>Any array or collection of the objects above.
 	 * 	</ul>
 	 * @return This object (for method chaining).

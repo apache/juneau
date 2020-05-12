@@ -576,32 +576,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFilters(Class<?>...values) {
-		super.beanFilters(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFiltersReplace(Class<?>...values) {
-		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beanFiltersReplace(Object...values) {
 		super.beanFiltersReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanFiltersRemove(Class<?>...values) {
-		super.beanFiltersRemove(values);
 		return this;
 	}
 

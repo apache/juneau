@@ -492,8 +492,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Class&gt;</c>
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lo"</js>
+	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -520,8 +520,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul class='spaced-list'>
-	 * 	<li>Any subclass of {@link BeanFilterBuilder}.
+	 * 	<li>Any subclass or instance of {@link BeanFilterBuilder}.
 	 * 		<br>These must have a public no-arg constructor.
+	 * 	<li>Any instance of {@link BeanFilter}.
 	 * 	<li>Any bean interfaces.
 	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
 	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
@@ -551,6 +552,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_beanFilters</jsf>, MyBeanFilter.<jk>class</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Same but pass in constructed filter.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBeanFilter.<jk>class</jk>).bpi(<js>"foo,bar,baz"</js>).build())
+	 * 		.build();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -558,17 +565,17 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * </ul>
 	 */
-	public static final String BEAN_beanFilters = PREFIX + ".beanFilters.lc";
+	public static final String BEAN_beanFilters = PREFIX + ".beanFilters.lo";
 
 	/**
 	 * Configuration property:  Add to bean filters.
 	 */
-	public static final String BEAN_beanFilters_add = PREFIX + ".beanFilters.lc/add";
+	public static final String BEAN_beanFilters_add = PREFIX + ".beanFilters.lo/add";
 
 	/**
 	 * Configuration property:  Remove from bean filters.
 	 */
-	public static final String BEAN_beanFilters_remove = PREFIX + ".beanFilters.lc/remove";
+	public static final String BEAN_beanFilters_remove = PREFIX + ".beanFilters.lo/remove";
 
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
@@ -2529,14 +2536,14 @@ public class BeanContext extends Context implements MetaProvider {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<BeanFilter> lbf = new LinkedList<>();
-		for (Class<?> c : getClassListProperty(BEAN_beanFilters)) {
-			ClassInfo ci = ClassInfo.of(c);
+		for (Object o : getListProperty(BEAN_beanFilters, Object[].class)) {
+			ClassInfo ci = o instanceof Class ? ClassInfo.of((Class)o) : ClassInfo.of(o);
 			if (ci.isChildOf(BeanFilter.class))
-				lbf.add(castOrCreate(BeanFilter.class, c));
+				lbf.add(castOrCreate(BeanFilter.class, o));
 			else if (ci.isChildOf(BeanFilterBuilder.class))
-				lbf.add(castOrCreate(BeanFilterBuilder.class, c).build());
-			else
-				lbf.add(new InterfaceBeanFilterBuilder(c, this).build());
+				lbf.add(castOrCreate(BeanFilterBuilder.class, o).build());
+			else if (o instanceof Class)
+				lbf.add(new InterfaceBeanFilterBuilder((Class<?>)o, this).build());
 		}
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 

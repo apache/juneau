@@ -297,7 +297,7 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 
 				if (type.isBean()) {
-					BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
+					BeanMap<T> m = ctx.createBeanSession().newBeanMap(type.getInnerClass());
 					for (String s : ss) {
 						String[] kv = split(s, '=', 2);
 						if (kv.length != 2)
@@ -305,7 +305,7 @@ public class OpenApiParserSession extends UonParserSession {
 						String key = kv[0], value = kv[1];
 						BeanPropertyMeta bpm = m.getPropertyMeta(key);
 						if (bpm == null && ! isIgnoreUnknownBeanProperties())
-							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+							throw new ParseException("Invalid input {0} for part type OBJECT.  Cannot find property {1}", in, key);
 						m.put(key, parse(partType, schema.getProperty(key), value, bpm == null ? object() : bpm.getClassMeta()));
 					}
 					return m.getBean();

@@ -70,6 +70,17 @@ public final class BeanFilter {
 	}
 
 	/**
+	 * Static creator.
+	 *
+	 * @param <T> The class being filtered.
+	 * @param c The class being filtered.
+	 * @return A new instance of BeanFilterBuilder.
+	 */
+	public static <T> BeanFilterBuilder<T> create(Class<T> c) {
+		return new BeanFilterBuilder<>(c);
+	}
+
+	/**
 	 * Returns the bean class that this filter applies to.
 	 *
 	 * @return The bean class that this filter applies to.
