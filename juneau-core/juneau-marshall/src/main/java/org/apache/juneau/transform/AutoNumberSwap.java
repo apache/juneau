@@ -116,20 +116,21 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 			return null;
 
 		// Find swap() method if present.
-		for (MethodInfo m : ci.getPublicMethods()) {
+		for (MethodInfo m : ci.getAllMethods()) {
+
 			if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 
-				for (MethodInfo m2 : ci.getPublicMethods())
+				for (MethodInfo m2 : ci.getAllMethods())
 					if (isUnswapMethod(bc, m2, ci, rt))
-						return new AutoNumberSwap(ci, m, m2, null);
+						return new AutoNumberSwap(bc, ci, m, m2, null);
 
-				for (ConstructorInfo cs : ci.getPublicConstructors())
+				for (ConstructorInfo cs : ci.getDeclaredConstructors())
 					if (isUnswapConstructor(bc, cs, rt))
-						return new AutoNumberSwap(ci, m, null, cs);
+						return new AutoNumberSwap(bc, ci, m, null, cs);
 
-				return new AutoNumberSwap(ci, m, null, null);
+				return new AutoNumberSwap(bc, ci, m, null, null);
 			}
 		}
 
@@ -149,6 +150,7 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& (rt.isChildOf(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
@@ -159,6 +161,7 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
@@ -168,6 +171,7 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
 		return
 			cs.isNotDeprecated()
+			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
 			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
 	}
@@ -178,11 +182,11 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 	private final Constructor<?> unswapConstructor;
 	private final Class<?> unswapType;
 
-	private AutoNumberSwap(ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoNumberSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
-		this.swapMethod = swapMethod.inner();
-		this.unswapMethod = unswapMethod == null ? null : unswapMethod.inner();
-		this.unswapConstructor = unswapConstructor == null ? null : unswapConstructor.inner();
+		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
+		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
+		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 
 		Class<?> unswapType = null;
 		if (unswapMethod != null) {
@@ -209,6 +213,8 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 	@SuppressWarnings("unchecked")
 	@Override /* PojoSwap */
 	public T unswap(BeanSession session, Number o, ClassMeta<?> hint) throws ParseException {
+		if (unswapType == null)
+			throw new ParseException("No unparse methodology found for object.");
 		try {
 			Object o2 = ObjectUtils.toType(o, unswapType);
 			if (unswapMethod != null)

@@ -2894,82 +2894,149 @@ public class RestClientTest {
 		assertEquals("BASE64", rc.parsers.getParser("octal/msgpack").toMap().getMap("InputStreamParser").getString("binaryFormat"));
 	}
 
-//	@Test
-//	public void m14_parser_paramFormat() throws Exception { fail(); }
-////	public RestClientBuilder paramFormat(String value) {
-//
-//	@Test
-//	public void m15_parser_paramFormatPlain() throws Exception { fail(); }
-////	public RestClientBuilder paramFormatPlain() {
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Context properties
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void n01_context_addMap() throws Exception { fail(); }
-////	public RestClientBuilder add(Map<String,Object> properties) {
-//
-//	@Test
-//	public void n02_context_addToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder addTo(String name, Object value) {
-//
-//	@Test
-//	public void n03_context_appendToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder appendTo(String name, Object value) {
-//
-//	@Test
-//	public void n04_context_prependToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder prependTo(String name, Object value) {
-//
-//	@Test
-//	public void n05_context_addToStringStringObject() throws Exception { fail(); }
-////	public RestClientBuilder addTo(String name, String key, Object value) {
-//
-//	@Test
-//	public void n06_context_apply() throws Exception { fail(); }
-////	public RestClientBuilder apply(PropertyStore copyFrom) {
-//
-//	@Test
-//	public void n07_context_applyAnnotationsClasses() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
-//
-//	@Test
-//	public void n08_context_applyAnnotationsMethods() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(Method...fromMethods) {
-//
-//	@Test
-//	public void n09_context_applyAnnotationsAnnotationList() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-//
-//	@Test
-//	public void n10_context_removeFrom() throws Exception { fail(); }
-////	public RestClientBuilder removeFrom(String name, Object value) {
-//
-//	@Test
-//	public void n11_context_setMap() throws Exception { fail(); }
-////	public RestClientBuilder set(Map<String,Object> properties) {
-//
-//	@Test
-//	public void n12_context_setStringObject() throws Exception { fail(); }
-////	public RestClientBuilder set(String name, Object value) {
-//
-//	@Test
-//	public void n13_context_annotations() throws Exception { fail(); }
-////	public RestClientBuilder annotations(Annotation...values) {
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// BeanContext properties
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void o001_beanContext_beanClassVisibility() throws Exception { fail(); }
-////	public RestClientBuilder beanClassVisibility(Visibility value) {
-//
-//	@Test
-//	public void o002_beanContext_beanConstructorVisibility() throws Exception { fail(); }
-////	public RestClientBuilder beanConstructorVisibility(Visibility value) {
-//
+	//-----------------------------------------------------------------------------------------------------------------
+	// OpenApi properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void n01_openApi_oapiFormat() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.oapiFormat(HttpPartFormat.UON)
+			.build()
+			.get("/checkQuery")
+			.query("Foo", "bar baz")
+			.run()
+			.getBody().assertValue("Foo=%27bar+baz%27");
+	}
+
+	@Test
+	public void n02_openApi_oapiCollectionFormat() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.oapiCollectionFormat(HttpPartCollectionFormat.PIPES)
+			.build();
+
+		rc.get("/checkQuery")
+			.query("Foo", new String[]{"bar","baz"})
+			.run()
+			.getBody().assertValue("Foo=bar%7Cbaz");
+
+		rc.post("/checkFormData")
+			.formData("Foo", new String[]{"bar","baz"})
+			.run()
+			.getBody().assertValue("Foo=bar%7Cbaz");
+
+		rc.get("/checkHeader")
+			.header("Check", "Foo")
+			.header("Foo", new String[]{"bar","baz"})
+			.accept("text/json+simple")
+			.run()
+			.getBody().assertValue("['bar|baz']");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BeanContext properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	protected static class O001 {
+		public int f = 1;
+
+		@Override
+		public String toString() {
+			return "O001";
+		}
+	}
+
+	@Test
+	public void o001_beanContext_beanClassVisibility() throws Exception {
+		RestClient rc1 = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build();
+
+		RestClient rc2 = MockRestClient
+			.create(A.class)
+			.beanClassVisibility(Visibility.PROTECTED)
+			.simpleJson()
+			.build();
+
+		rc1.post("/echoBody", new O001())
+			.run()
+			.getBody().assertValue("'O001'");
+		rc2.post("/echoBody", new O001())
+			.run()
+			.getBody().assertValue("{f:1}");
+
+		rc1.get("/checkQuery")
+			.query("foo", new O001())
+			.run()
+			.getBody().assertValue("foo=O001");
+		rc2.get("/checkQuery")
+			.query("foo", new O001())
+			.run()
+			.getBody().assertValue("foo=f%3D1");
+
+		rc1.formPost("/checkFormData")
+			.formData("foo", new O001())
+			.run()
+			.getBody().assertValue("foo=O001");
+		rc2.formPost("/checkFormData")
+			.formData("foo", new O001())
+			.run()
+			.getBody().assertValue("foo=f%3D1");
+
+		rc1.get("/checkHeader")
+			.header("foo", new O001())
+			.header("Check", "foo")
+			.run()
+			.getBody().assertValue("['O001']");
+		rc2.get("/checkHeader")
+			.header("foo", new O001())
+			.header("Check", "foo")
+			.run()
+			.getBody().assertValue("['f=1']");
+	}
+
+	public static class O002 {
+		private int f;
+
+		protected O002(int f) {
+			this.f = f;
+		}
+
+		public int toInt() {
+			return f;
+		}
+	}
+
+	@Test
+	public void o002_beanContext_beanConstructorVisibility() throws Exception {
+		RestClient rc1 = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build();
+
+		RestClient rc2 = MockRestClient
+			.create(A.class)
+			.beanConstructorVisibility(Visibility.PROTECTED)
+			.simpleJson()
+			.build();
+
+		try {
+			rc1.post("/echoBody", new O002(1))
+				.run()
+				.getBody().as(O002.class);
+				fail("Exception expected.");
+		} catch (RestCallException e) {
+			assertEquals("No unparse methodology found for object.", e.getMessage());
+		}
+
+		assertEquals(1, rc2.post("/echoBody", new O002(1))
+			.run()
+			.getBody().as(O002.class).f);
+	}
+
 //	@Test
 //	public void o003_beanContext_beanDictionaryClasses() throws Exception { fail(); }
 ////	public RestClientBuilder beanDictionary(java.lang.Class<?>...values) {
@@ -3369,4 +3436,62 @@ public class RestClientTest {
 //	@Test
 //	public void o102_beanContext_useJavaBeanIntrospectorBoolean() throws Exception { fail(); }
 ////	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
+
+
+	//	//-----------------------------------------------------------------------------------------------------------------
+//	// Context properties
+//	//-----------------------------------------------------------------------------------------------------------------
+//
+//	@Test
+//	public void p01_context_addMap() throws Exception { fail(); }
+////	public RestClientBuilder add(Map<String,Object> properties) {
+//
+//	@Test
+//	public void p02_context_addToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder addTo(String name, Object value) {
+//
+//	@Test
+//	public void p03_context_appendToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder appendTo(String name, Object value) {
+//
+//	@Test
+//	public void p04_context_prependToStringObject() throws Exception { fail(); }
+////	public RestClientBuilder prependTo(String name, Object value) {
+//
+//	@Test
+//	public void p05_context_addToStringStringObject() throws Exception { fail(); }
+////	public RestClientBuilder addTo(String name, String key, Object value) {
+//
+//	@Test
+//	public void p06_context_apply() throws Exception { fail(); }
+////	public RestClientBuilder apply(PropertyStore copyFrom) {
+//
+//	@Test
+//	public void p07_context_applyAnnotationsClasses() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
+//
+//	@Test
+//	public void p08_context_applyAnnotationsMethods() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(Method...fromMethods) {
+//
+//	@Test
+//	public void p09_context_applyAnnotationsAnnotationList() throws Exception { fail(); }
+////	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+//
+//	@Test
+//	public void p10_context_removeFrom() throws Exception { fail(); }
+////	public RestClientBuilder removeFrom(String name, Object value) {
+//
+//	@Test
+//	public void p11_context_setMap() throws Exception { fail(); }
+////	public RestClientBuilder set(Map<String,Object> properties) {
+//
+//	@Test
+//	public void p12_context_setStringObject() throws Exception { fail(); }
+////	public RestClientBuilder set(String name, Object value) {
+//
+//	@Test
+//	public void p13_context_annotations() throws Exception { fail(); }
+////	public RestClientBuilder annotations(Annotation...values) {
+//
 }

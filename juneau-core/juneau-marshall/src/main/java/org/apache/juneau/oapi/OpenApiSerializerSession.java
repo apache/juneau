@@ -27,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.uon.*;
 
@@ -93,10 +94,23 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	@Override /* PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
-		schema = ObjectUtils.firstNonNull(schema, DEFAULT_SCHEMA);
 		ClassMeta<?> type = getClassMetaForObject(value);
 		if (type == null)
 			type = object();
+
+		// Swap if necessary
+		PojoSwap swap = type.getPojoSwap(this);
+		if (swap != null && ! type.isDateOrCalendarOrTemporal()) {
+			value = swap(swap, value);
+			type = swap.getSwapClassMeta(this);
+
+			// If the getSwapClass() method returns Object, we need to figure out
+			// the actual type now.
+			if (type.isObject())
+				type = getClassMetaForObject(value);
+		}
+
+		schema = ObjectUtils.firstNonNull(schema, DEFAULT_SCHEMA);
 
 		HttpPartDataType t = schema.getType(type);
 

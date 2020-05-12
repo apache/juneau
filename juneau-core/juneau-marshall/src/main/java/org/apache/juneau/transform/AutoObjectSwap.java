@@ -95,20 +95,20 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 			return null;
 
 		// Find swap() method if present.
-		for (MethodInfo m : ci.getPublicMethods()) {
+		for (MethodInfo m : ci.getAllMethods()) {
 			if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 
-				for (MethodInfo m2 : ci.getPublicMethods())
+				for (MethodInfo m2 : ci.getAllMethods())
 					if (isUnswapMethod(bc, m2, ci, rt))
-						return new AutoObjectSwap(ci, m, m2, null);
+						return new AutoObjectSwap(bc, ci, m, m2, null);
 
-				for (ConstructorInfo cs : ci.getPublicConstructors())
+				for (ConstructorInfo cs : ci.getDeclaredConstructors())
 					if (isUnswapConstructor(bc, cs, rt))
-						return new AutoObjectSwap(ci, m, null, cs);
+						return new AutoObjectSwap(bc, ci, m, null, cs);
 
-				return new AutoObjectSwap(ci, m, null, null);
+				return new AutoObjectSwap(bc, ci, m, null, null);
 			}
 		}
 
@@ -125,6 +125,7 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
 			&& ! bc.hasAnnotation(BeanIgnore.class, mi);
@@ -134,6 +135,7 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
@@ -143,6 +145,7 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
 		return
 			cs.isNotDeprecated()
+			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
 			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
 	}
@@ -152,11 +155,11 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 	private final Method swapMethod, unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
-	private AutoObjectSwap(ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoObjectSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
-		this.swapMethod = swapMethod.inner();
-		this.unswapMethod = unswapMethod == null ? null : unswapMethod.inner();
-		this.unswapConstructor = unswapConstructor == null ? null : unswapConstructor.inner();
+		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
+		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
+		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 	}
 
 	@Override /* PojoSwap */

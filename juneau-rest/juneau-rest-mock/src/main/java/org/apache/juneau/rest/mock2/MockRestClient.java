@@ -1210,18 +1210,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient parserListener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-		super.parserListener(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient serializerListener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-		super.serializerListener(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient logTo(Level level, Logger log) {
 		super.logTo(level, log);
 		return this;
@@ -1276,6 +1264,18 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient oapiCollectionFormat(HttpPartCollectionFormat value) {
+		super.oapiCollectionFormat(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient oapiFormat(HttpPartFormat value) {
+		super.oapiFormat(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient openApi() {
 		super.openApi();
 		return this;
@@ -1308,6 +1308,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient parser(Parser value) {
 		super.parser(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient parserListener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+		super.parserListener(value);
 		return this;
 	}
 
@@ -1429,6 +1435,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient serializer(Serializer value) {
 		super.serializer(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient serializerListener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+		super.serializerListener(value);
 		return this;
 	}
 

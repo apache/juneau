@@ -93,20 +93,20 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 			return null;
 
 		// Find swap() method if present.
-		for (MethodInfo m : ci.getPublicMethods()) {
+		for (MethodInfo m : ci.getAllMethods()) {
 			if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 
-				for (MethodInfo m2 : ci.getPublicMethods())
+				for (MethodInfo m2 : ci.getAllMethods())
 					if (isUnswapMethod(bc, m2, ci, rt))
-						return new AutoListSwap(ci, m, m2, null);
+						return new AutoListSwap(bc, ci, m, m2, null);
 
-				for (ConstructorInfo cs : ci.getPublicConstructors())
+				for (ConstructorInfo cs : ci.getDeclaredConstructors())
 					if (isUnswapConstructor(bc, cs, rt))
-						return new AutoListSwap(ci, m, null, cs);
+						return new AutoListSwap(bc, ci, m, null, cs);
 
-				return new AutoListSwap(ci, m, null, null);
+				return new AutoListSwap(bc, ci, m, null, null);
 			}
 		}
 
@@ -123,6 +123,7 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(List.class)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
@@ -133,6 +134,7 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
+			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
@@ -142,6 +144,7 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
 		return
 			cs.isNotDeprecated()
+			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
 			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
 	}
@@ -151,11 +154,11 @@ public class AutoListSwap<T> extends PojoSwap<T,List<?>> {
 	private final Method swapMethod, unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
-	private AutoListSwap(ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoListSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.getReturnType().inner());
-		this.swapMethod = swapMethod.inner();
-		this.unswapMethod = unswapMethod == null ? null : unswapMethod.inner();
-		this.unswapConstructor = unswapConstructor == null ? null : unswapConstructor.inner();
+		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
+		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
+		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 	}
 
 	@Override /* PojoSwap */

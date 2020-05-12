@@ -3752,7 +3752,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
-	protected final Visibility getBeanClassVisibility() {
+	public final Visibility getBeanClassVisibility() {
 		return beanClassVisibility;
 	}
 
@@ -3763,7 +3763,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanConstructorVisibility() {
+	public final Visibility getBeanConstructorVisibility() {
 		return beanConstructorVisibility;
 	}
 
@@ -3786,7 +3786,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanFieldVisibility() {
+	public final Visibility getBeanFieldVisibility() {
 		return beanFieldVisibility;
 	}
 
@@ -3821,7 +3821,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanMethodVisibility() {
+	public final Visibility getBeanMethodVisibility() {
 		return beanMethodVisibility;
 	}
 

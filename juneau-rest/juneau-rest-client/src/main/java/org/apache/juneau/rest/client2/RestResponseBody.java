@@ -1591,8 +1591,17 @@ public class RestResponseBody implements HttpEntity {
 	public RestResponse assertContains(String...values) throws RestCallException, AssertionError {
 		String text = asString();
 		for (String substring : values)
-			if (! StringUtils.contains(text, substring))
+			if (! StringUtils.contains(text, substring)) {
+				if (substring.startsWith("x")) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Response did not have the expected substring for body.");
+					sb.append("\nExpected: [").append(substring.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+					sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+					System.err.println(sb);
+				}
 				throw new BasicAssertionError("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
+
+			}
 		return response;
 	}
 

@@ -259,7 +259,7 @@ public final class RestCallException extends HttpException {
 	private static String clean(String message) {
 
 		if (message == null)
-			return null;
+			return "";
 
 		boolean needsCleaning = false;
 		for (int i = 0; i < message.length() && !needsCleaning; i++)

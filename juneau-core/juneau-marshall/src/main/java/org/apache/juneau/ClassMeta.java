@@ -1339,6 +1339,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is a {@link Date} or {@link Calendar} or {@link Temporal}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar} or {@link Temporal}.
+	 */
+	public boolean isDateOrCalendarOrTemporal() {
+		return cc == DATE || info.isChildOf(Temporal.class);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a {@link Date}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date}.

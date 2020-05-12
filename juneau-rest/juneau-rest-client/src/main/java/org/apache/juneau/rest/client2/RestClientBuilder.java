@@ -20,6 +20,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
+import static org.apache.juneau.oapi.OpenApiCommon.*;
 import static org.apache.juneau.uon.UonSerializer.*;
 
 import java.lang.annotation.*;
@@ -2802,7 +2803,50 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Default OpenAPI format for HTTP parts.
+	 *
+	 * <p>
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder oapiFormat(HttpPartFormat value) {
+		return set(OAPI_format, value);
+	}
+
+	/**
+	 * Configuration property:  Default collection format for HTTP parts.
+	 *
+	 * <p>
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder oapiCollectionFormat(HttpPartCollectionFormat value) {
+		return set(OAPI_collectionFormat, value);
+	}
+
+	/**
 	 * Configuration property:  Parameter format.
+	 * 
+	 * <p>
+	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
@@ -2818,6 +2862,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Configuration property:  Parameter format.
+	 * 
+	 * <p>
+	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
