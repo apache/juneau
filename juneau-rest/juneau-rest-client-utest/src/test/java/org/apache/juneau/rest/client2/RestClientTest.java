@@ -3076,7 +3076,6 @@ public class RestClientTest {
 		void setF3(int f3);
 	}
 
-
 	public static class O10 implements O10I {
 		public int f1, f2;
 		private int f3;
@@ -3184,53 +3183,229 @@ public class RestClientTest {
 		assertEquals(3, rr.getHeader("X").as(O10.class).f3);
 	}
 
-//	@Test
-//	public void o016_beanContext_beanMapPutReturnsOldValue() throws Exception { fail(); }
-////	public RestClientBuilder beanMapPutReturnsOldValue() {
-//
-//	@Test
-//	public void o017_beanContext_beanMapPutReturnsOldValueBoolean() throws Exception { fail(); }
-////	public RestClientBuilder beanMapPutReturnsOldValue(boolean value) {
-//
-//	@Test
-//	public void o018_beanContext_beanMethodVisibility() throws Exception { fail(); }
-////	public RestClientBuilder beanMethodVisibility(Visibility value) {
-//
-//	@Test
-//	public void o019_beanContext_beanTypePropertyName() throws Exception { fail(); }
-////	public RestClientBuilder beanTypePropertyName(String value) {
-//
-//	@Test
-//	public void o020_beanContext_beansDontRequireSomeProperties() throws Exception { fail(); }
-////	public RestClientBuilder beansDontRequireSomeProperties() {
-//
-//	@Test
-//	public void o021_beanContext_beansRequireDefaultConstructor() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireDefaultConstructor() {
-//
-//	@Test
-//	public void o022_beanContext_beansRequireDefaultConstructorBoolean() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
-//
-//	@Test
-//	public void o023_beanContext_beansRequireSerializable() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireSerializable() {
-//
-//	@Test
-//	public void o024_beanContext_beansRequireSerializableBoolean() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireSerializable(boolean value) {
-//
-//	@Test
-//	public void o025_beanContext_beansRequireSettersForGetters() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireSettersForGetters() {
-//
-//	@Test
-//	public void o026_beanContext_beansRequireSettersForGettersBoolean() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireSettersForGetters(boolean value) {
-//
-//	@Test
-//	public void o027_beanContext_beansRequireSomePropertiesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder beansRequireSomeProperties(boolean value) {
+	public static class O18  {
+		private int f1, f2;
+
+		public int getF1() {
+			return f1;
+		}
+		public void setF1(int f1) {
+			this.f1 = f1;
+		}
+		protected int getF2() {
+			return f2;
+		}
+		protected void setF2(int f2) {
+			this.f2 = f2;
+		}
+
+		O18 init() {
+			f1 = 1;
+			f2 = 2;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return f1 + "/" + f2;
+		}
+	}
+
+	@Test
+	public void o018_beanContext_beanMethodVisibility() throws Exception {
+		RestResponse rr = MockRestClient
+			.create(O2R.class)
+			.beanMethodVisibility(Visibility.PROTECTED)
+			.simpleJson()
+			.build()
+			.post("/test", new O18().init())
+			.header("X", new O18().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		assertEquals(2, rr.getBody().as(O18.class).f2);
+		assertEquals(2, rr.getHeader("X").as(O18.class).f2);
+	}
+
+	public static class O21  {
+		public String f1;
+
+		public O21(String i) {
+			f1 = i;
+		}
+
+		@Override
+		public String toString() {
+			return f1;
+		}
+	}
+
+	@Test
+	public void o021_beanContext_beansRequireDefaultConstructor() throws Exception {
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("{f1:'1'}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireDefaultConstructor(false)
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("{f1:'1'}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireDefaultConstructor()
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("'1'")
+			.getHeader("X").assertValue("1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireDefaultConstructor(true)
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("'1'")
+			.getHeader("X").assertValue("1")
+		;
+	}
+
+	@Test
+	public void o022_beanContext_beansRequireSerializable() throws Exception {
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("{f1:'1'}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSerializable(false)
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("{f1:'1'}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSerializable()
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("'1'")
+			.getHeader("X").assertValue("1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSerializable(true)
+			.build()
+			.post("/test", new O21("1"))
+			.header("X", new O21("1"))
+			.run()
+			.getBody().cache().assertValue("'1'")
+			.getHeader("X").assertValue("1")
+		;
+	}
+
+	public static class O25  {
+		private int f1, f2;
+
+		public int getF1() {
+			return f1;
+		}
+		public void setF1(int f1) {
+			this.f1 = f1;
+		}
+		public int getF2() {
+			return f2;
+		}
+
+		O25 init() {
+			f1 = 1;
+			f2 = 2;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return f1 + "/" + f2;
+		}
+	}
+
+	@Test
+	public void o025_beanContext_beansRequireSettersForGetters() throws Exception {
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSettersForGetters(false)
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSettersForGetters()
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.beansRequireSettersForGetters(true)
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+	}
 //
 //	@Test
 //	public void o028_beanContext_bpiMap() throws Exception { fail(); }
