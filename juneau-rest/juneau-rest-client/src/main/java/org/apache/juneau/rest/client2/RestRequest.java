@@ -13,8 +13,8 @@
 package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.client2.AddFlag.*;
 import static org.apache.juneau.rest.client2.RestClientUtils.*;
 
 import java.io.*;
@@ -22,7 +22,6 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.client.config.*;
@@ -42,7 +41,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.client2.logging.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -188,36 +186,6 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 */
 	public RestRequest requestConfig(RequestConfig config) {
 		setConfig(config);
-		return this;
-	}
-
-	/**
-	 * Adds a {@link RestCallLogger} to the list of interceptors on this class.
-	 *
-	 * @param level The log level to log events at.
-	 * @param log The logger.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest logTo(Level level, Logger log) {
-		try {
-			interceptors(new BasicRestCallLogger(level, log));
-		} catch (RestCallException e) {
-			e.printStackTrace();
-		}
-		return this;
-	}
-
-	/**
-	 * Adds a {@link ConsoleRestCallLogger} to the list of interceptors on this class.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest logToConsole() {
-		try {
-			interceptors(new ConsoleRestCallLogger());
-		} catch (RestCallException e) {
-			e.printStackTrace();
-		}
 		return this;
 	}
 
@@ -2359,6 +2327,9 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 			} catch (Exception e) {
 				throw e;
 			}
+
+			if (client.logRequests == DetailLevel.FULL)
+				response.getBody().cache();
 
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);

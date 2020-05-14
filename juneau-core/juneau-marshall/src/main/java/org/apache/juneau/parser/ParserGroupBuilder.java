@@ -601,7 +601,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpi(Map<String,String> values) {
+	public ParserGroupBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -619,7 +619,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpro(Map<String,String> values) {
+	public ParserGroupBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -637,7 +637,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpwo(Map<String,String> values) {
+	public ParserGroupBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -655,7 +655,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpx(Map<String,String> values) {
+	public ParserGroupBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}

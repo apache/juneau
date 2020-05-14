@@ -283,7 +283,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder bpi(Map<String,String> values) {
+	public JsoSerializerBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -301,7 +301,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder bpro(Map<String,String> values) {
+	public JsoSerializerBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -319,7 +319,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder bpwo(Map<String,String> values) {
+	public JsoSerializerBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -337,7 +337,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder bpx(Map<String,String> values) {
+	public JsoSerializerBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}

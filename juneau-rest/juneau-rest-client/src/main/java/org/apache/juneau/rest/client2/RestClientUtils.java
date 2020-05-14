@@ -12,14 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.client2.AddFlag.*;
 
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.message.BasicHeader;
+import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 

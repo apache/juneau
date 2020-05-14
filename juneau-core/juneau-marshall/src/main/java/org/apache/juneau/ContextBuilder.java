@@ -378,4 +378,8 @@ public abstract class ContextBuilder {
 		psb.removeFrom(name, value);
 		return this;
 	}
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

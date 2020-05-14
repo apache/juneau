@@ -358,7 +358,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder bpi(Map<String,String> values) {
+	public OpenApiSerializerBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -376,7 +376,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder bpro(Map<String,String> values) {
+	public OpenApiSerializerBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -394,7 +394,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder bpwo(Map<String,String> values) {
+	public OpenApiSerializerBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -412,7 +412,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder bpx(Map<String,String> values) {
+	public OpenApiSerializerBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}

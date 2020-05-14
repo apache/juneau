@@ -1003,7 +1003,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder bpi(Map<String,String> values) {
+	public RdfParserBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -1021,7 +1021,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder bpro(Map<String,String> values) {
+	public RdfParserBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -1039,7 +1039,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder bpwo(Map<String,String> values) {
+	public RdfParserBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -1057,7 +1057,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder bpx(Map<String,String> values) {
+	public RdfParserBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}

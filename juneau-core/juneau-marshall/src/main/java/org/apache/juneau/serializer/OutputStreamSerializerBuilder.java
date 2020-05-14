@@ -322,7 +322,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpi(Map<String,String> values) {
+	public OutputStreamSerializerBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -340,7 +340,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpro(Map<String,String> values) {
+	public OutputStreamSerializerBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -358,7 +358,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpwo(Map<String,String> values) {
+	public OutputStreamSerializerBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -376,7 +376,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder bpx(Map<String,String> values) {
+	public OutputStreamSerializerBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}

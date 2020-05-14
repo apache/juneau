@@ -83,7 +83,7 @@ public class MockRemote<T> {
 	 */
 	public T build() {
 		MockRest mr = mrb.build();
-		return rcb.httpClientConnectionManager(new MockHttpClientConnectionManager(mr)).rootUrl("http://localhost").headers(mr.getHeaders()).build().getRemote(intf);
+		return rcb.connectionManager(new MockHttpClientConnectionManager(mr)).rootUrl("http://localhost").headers(mr.getHeaders()).build().getRemote(intf);
 	}
 
 	/**

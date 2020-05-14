@@ -105,8 +105,7 @@ public class TestMicroservice {
 				.json()
 				.rootUrl(microserviceURI)
 				.noTrace();
-			rc.getHttpClientBuilder()
-				.setRetryHandler(
+			rc.retryHandler(
 					new HttpRequestRetryHandler() {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {

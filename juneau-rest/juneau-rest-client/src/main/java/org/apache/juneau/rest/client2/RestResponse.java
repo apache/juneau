@@ -619,6 +619,48 @@ public final class RestResponse implements HttpResponse {
 			return;
 		isClosed = true;
 		EntityUtils.consumeQuietly(response.getEntity());
+
+		if (client.logRequestsPredicate.test(request, this)) {
+			if (client.logRequests == DetailLevel.SIMPLE) {
+				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
+			} else if (client.logRequests == DetailLevel.FULL) {
+				String output = getBody().asString();
+				StringBuilder sb = new StringBuilder();
+				sb.append("\n=== HTTP Call (outgoing) ======================================================");
+				sb.append("\n=== REQUEST ===\n");
+				sb.append(request.getMethod()).append(" ").append(request.getURI());
+				sb.append("\n---request headers---");
+				for (Header h : request.getAllHeaders())
+					sb.append("\n\t").append(h);
+				if (request.hasHttpEntity()) {
+					sb.append("\n---request entity---");
+					HttpEntity e = request.getHttpEntity();
+					if (e == null)
+						sb.append("\nEntity is null");
+					else {
+						if (e.getContentType() != null)
+							sb.append("\n").append(e.getContentType());
+						if (e.getContentEncoding() != null)
+							sb.append("\n").append(e.getContentEncoding());
+						if (e.isRepeatable()) {
+							try {
+								sb.append("\n---request content---\n").append(EntityUtils.toString(e));
+							} catch (Exception ex) {
+								throw new RuntimeException(ex);
+							}
+						}
+					}
+				}
+				sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
+				sb.append("\n---response headers---");
+				for (Header h : getAllHeaders())
+					sb.append("\n\t").append(h);
+				sb.append("\n---response content---\n").append(output);
+				sb.append("\n=== END =======================================================================");
+				client.log(client.logRequestsLevel, sb.toString());
+			}
+		}
+
 		for (RestCallInterceptor r : request.interceptors) {
 			try {
 				r.onClose(request, this);

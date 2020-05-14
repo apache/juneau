@@ -748,9 +748,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder bpi(Map<String,String> values) {
-		for (Map.Entry<String,String> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
+	public BeanContextBuilder bpi(Map<String,Object> values) {
+		for (Map.Entry<String,Object> e : values.entrySet())
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(asString(e.getValue())));
 		return this;
 	}
 
@@ -812,9 +812,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder bpx(Map<String,String> values) {
-		for (Map.Entry<String,String> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
+	public BeanContextBuilder bpx(Map<String,Object> values) {
+		for (Map.Entry<String,Object> e : values.entrySet())
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(asString(e.getValue())));
 		return this;
 	}
 
@@ -873,9 +873,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder bpro(Map<String,String> values) {
-		for (Map.Entry<String,String> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
+	public BeanContextBuilder bpro(Map<String,Object> values) {
+		for (Map.Entry<String,Object> e : values.entrySet())
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(asString(e.getValue())));
 		return this;
 	}
 
@@ -937,9 +937,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder bpwo(Map<String,String> values) {
-		for (Map.Entry<String,String> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
+	public BeanContextBuilder bpwo(Map<String,Object> values) {
+		for (Map.Entry<String,Object> e : values.entrySet())
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(asString(e.getValue())));
 		return this;
 	}
 

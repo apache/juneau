@@ -453,7 +453,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder bpi(Map<String,String> values) {
+	public XmlSchemaSerializerBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -471,7 +471,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder bpx(Map<String,String> values) {
+	public XmlSchemaSerializerBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}
@@ -489,7 +489,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder bpro(Map<String,String> values) {
+	public XmlSchemaSerializerBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -507,7 +507,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder bpwo(Map<String,String> values) {
+	public XmlSchemaSerializerBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}

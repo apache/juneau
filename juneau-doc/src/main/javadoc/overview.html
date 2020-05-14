@@ -173,7 +173,7 @@
 		<li><p><a class='doclink' href='#juneau-marshall.HttpPartParsers'>HTTP Part Parsers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a><span class='update'>8.1.3-updated</span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a><span class='update'>8.1.0-new, 8.1.3-updated, <b>8.1.4-updated</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>OMap and OList</a><span class='update'>updated-8.1.4</span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a></p>
@@ -205,7 +205,7 @@
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.VirtualBeans'>Virtual Beans</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Recursion'>Non-Tree Models and Recursion Detection</a></p>
-		<li><p><a class='doclink' href='#juneau-marshall.ParsingIntoGenericModels'>Parsing into Generic Models</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.ParsingIntoGenericModels'>Parsing into Generic Models</a><span class='update'>updated-8.1.4</span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
@@ -463,7 +463,7 @@
 		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Remote'>@Remote</a><span class='update'>8.1.2-updated</span></p>
-			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a></p>
+			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Body'>@Body</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.FormData'>@FormData</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Query'>@Query</a></p>
@@ -1573,10 +1573,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ObjectMap' id='juneau-marshall.ObjectMap'>2.8 - ObjectMap and ObjectList</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ObjectMap' id='juneau-marshall.ObjectMap'>2.8 - OMap and OList</a><span class='update'>updated-8.1.4</span></h3>
 <div class='topic'><!-- START: 2.8 - juneau-marshall.ObjectMap -->
 <p>
-	The {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} classes are generic Java 
+	The {@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} classes are generic Java 
 	representations of JSON objects and arrays.  
 	These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
 	models consisting of beans).  
@@ -1591,19 +1591,19 @@
 		{@link java.util.LinkedHashMap java.util.LinkedHashMap}
 		<ul>
 			<li class='jc'> 
-			{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectMap}
+			{@link org.apache.juneau.collections.OMap org.apache.juneau.collections.OMap}
 		</ul>
 	</li>
 	<li class='jc'> 
 		{@link java.util.LinkedList java.util.LinkedList}
 		<ul>
 			<li class='jc'> 
-				{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectList}
+				{@link org.apache.juneau.collections.OList org.apache.juneau.collections.OList}
 		</ul>
 	</li>
 </ul>
 <p>
-	The <l>ObjectMap</l> and <l>ObjectList</l> classes are very similar to the <l>JSONObject</l> and 
+	The <l>OMap</l> and <l>OList</l> classes are very similar to the <l>JSONObject</l> and 
 	<l>JSONArray</l> classes found in other libraries.  
 	However, the names were chosen because the concepts of <l>Maps</l> and <l>Lists</l> are already familiar to 
 	Java programmers, and these classes can be used with any of the serializers or parsers.
@@ -1613,30 +1613,30 @@
 </p>
 <ol class='spaced-list'>
 	<li>
-		Using the provided {@link org.apache.juneau.ObjectMap#serializeTo(java.io.Writer)} or 
-		{@link org.apache.juneau.ObjectList#serializeTo(java.io.Writer)} methods.
+		Using the provided {@link org.apache.juneau.collections.OMap#serializeTo(java.io.Writer)} or 
+		{@link org.apache.juneau.collections.OList#serializeTo(java.io.Writer)} methods.
 	<li>
 		Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
 	<li>
-		Simply calling the {@link org.apache.juneau.ObjectMap#toString()} or {@link org.apache.juneau.ObjectList#toString()}
+		Simply calling the {@link org.apache.juneau.collections.OMap#toString()} or {@link org.apache.juneau.collections.OList#toString()}
 		methods which will serialize it as Simplified JSON.
 </ol>
 <p>
 	Any valid JSON can be parsed into an unstructured model consisting of generic 
-	{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
+	{@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} objects. 
 	
 	(In theory, any valid XML can also be parsed into an unstructured model, although this has not been 
 	officially 'tested')
 </p>
 <p class='bpcode w800'>
 	<jc>// Parse an arbitrary JSON document into an unstructered data model
-	// consisting of ObjectMaps, ObjectLists, and java primitive objects.</jc>
+	// consisting of OMaps, OLists, and java primitive objects.</jc>
 	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
 	String json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-	ObjectMap m = parser.parse(json, ObjectMap.<jk>class</jk>);
+	OMap m = parser.parse(json, OMap.<jk>class</jk>);
 
-	<jc>// Use ObjectMap API to extract data from the unstructured model.</jc>
-	<jk>int</jk> johnSmithAge = m.getObjectMap(<js>"a"</js>).getInt(<js>"age"</js>);
+	<jc>// Use OMap API to extract data from the unstructured model.</jc>
+	<jk>int</jk> johnSmithAge = m.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
 	
 	<jc>// Convert it back into JSON.</jc>
 	json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(m);
@@ -1648,38 +1648,38 @@
 	json = m.toString();
 </p>
 <p>
-	The <c>ObjectMap</c> and <c>ObjectList</c> classes have many convenience features:
+	The <c>OMap</c> and <c>OList</c> classes have many convenience features:
 </p>
 <p class='bpcode w800'>	
 	<jc>// Convert the map to a bean.</jc>		
-	MyBean m = objectMap.cast(MyBean.<jk>class</jk>);
+	MyBean m = omap.cast(MyBean.<jk>class</jk>);
 			
 	<jc>// Find entries by multiple keys.</jc>
-	MyBean m = objectMap.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
+	MyBean m = omap.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
 	
 	<jc>// Fluent-style appenders.</jc>
-	objectMap.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
+	omap.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
 			
 	<jc>// REST-like functions for manipulating nodes in the data structure using URL-like notation.</jc>
-	objectMap.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
-	objectMap.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
-	objectMap.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
-	objectMap.deleteAt(<js>"foo/bar/myBean"</js>);		
+	omap.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+	omap.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+	omap.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
+	omap.deleteAt(<js>"foo/bar/myBean"</js>);		
 	
 	<jc>// Copy with inclusion or exclusion.</jc>
-	ObjectMap m2 = objectMap.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
-	ObjectMap m3 = objectMap.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+	OMap m2 = omap.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+	OMap m3 = omap.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
 	
 	<jc>// Serialize using another serializer.</jc>
-	String xml = objectMap.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
+	String xml = omap.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
 	
 	<jc>// Nested maps.</jc>
-	objectMap.setInner(objectMapInner);
+	omap.inner(omapInner);
 </p>
 
 <div class='info'>
 	As a general rule, if you do not specify a target type during parsing, or if the target type cannot be 
-	determined through reflection, the parsers automatically generate <l>ObjectMaps</l> and <l>ObjectLists</l>.
+	determined through reflection, the parsers automatically generate <l>OMaps</l> and <l>OLists</l>.
 </div>
 </div><!-- END: 2.8 - juneau-marshall.ObjectMap -->
 
@@ -1944,17 +1944,17 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
-	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,ObjectMap&gt; {
+	<jk>public class</jk> MyBeanSwap <jk>extends</jk> PojoSwap&lt;MyBean,OMap&gt; {
 		
 		<jc>// Converts a bean to a generic map.</jc>
 		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> ObjectMap swap(BeanSession session, MyBean o) {
-			<jk>return new</jk> ObjectMap().append(<js>"foo"</js>, o.getBar());
+		<jk>public</jk> OMap swap(BeanSession session, MyBean o) {
+			<jk>return</jk> OMap.<jsm>of</jsm>(<js>"foo"</js>, o.getBar());
 		}
 		
 		<jc>// Converts the generic map back into a bean.</jc>
 		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-		<jk>public</jk> MyBean unswap(BeanSession session, ObjectMap o, ClassMeta hint) <jk>throws</jk> Exception {
+		<jk>public</jk> MyBean unswap(BeanSession session, OMap o, ClassMeta hint) <jk>throws</jk> Exception {
 			MyBean b = <jk>new</jk> MyBean();
 			b.setBar(o.getString(<js>"foo"</js>));
 			<jk>return</jk> b;
@@ -2189,13 +2189,13 @@
 </p>			
 <ul>
 	<li><c><jk>public</jk> Map toMap()</c> method.  Can be any type of map with string keys and object vals. 
-	<li><c><jk>public</jk> ObjectMap toMap()</c> method. 
+	<li><c><jk>public</jk> OMap toMap()</c> method. 
 	<li><c><jk>public</jk> Map toMap(BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
-	<li><c><jk>public</jk> ObjectMap toMap(BeanSession)</c> method.
+	<li><c><jk>public</jk> OMap toMap(BeanSession)</c> method.
 	<li><c><jk>public static</jk> MyPojo fromMap(Map)</c> method.  Can be any type of map with string keys and object vals. 
-	<li><c><jk>public static</jk> MyPojo fromMap(ObjectMap)</c> method.
+	<li><c><jk>public static</jk> MyPojo fromMap(OMap)</c> method.
 	<li><c><jk>public static</jk> MyPojo fromMap(Map,BeanSession)</c> method.  Can be any type of map with string keys and object vals. 
-	<li><c><jk>public static</jk> MyPojo fromMap(ObjectMap,BeanSession)</c> method.
+	<li><c><jk>public static</jk> MyPojo fromMap(OMap,BeanSession)</c> method.
 </ul>
 <p>
 	The <c>BeanSession</c> parameter allows you access to various information about the current 
@@ -2428,7 +2428,7 @@
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
-	Iterator i = <jk>new</jk> ObjectList(1,2,3).iterator();
+	Iterator i = OList.<jsm>of</jsm>(1,2,3).iterator();
 	
 	<jc>// Serialize our Iterator</jc>
 	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>
@@ -4053,7 +4053,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ParsingIntoGenericModels' id='juneau-marshall.ParsingIntoGenericModels'>2.16 - Parsing into Generic Models</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ParsingIntoGenericModels' id='juneau-marshall.ParsingIntoGenericModels'>2.16 - Parsing into Generic Models</a><span class='update'>updated-8.1.4</span></h3>
 <div class='topic'><!-- START: 2.16 - juneau-marshall.ParsingIntoGenericModels -->
 <p>
 	The Juneau parsers are not limited to parsing back into the original bean classes.
@@ -4063,15 +4063,15 @@
 </p>
 <p>
 	You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
-	using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
+	using {@link org.apache.juneau.collections.OMap} is recommended since it has many convenience methods
 	for converting values to various types.
 	The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
 	<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
-	<c>String[][]</c>), but using {@link org.apache.juneau.ObjectList} is recommended.
+	<c>String[][]</c>), but using {@link org.apache.juneau.collections.OList} is recommended.
 </p>
 <p>
 	When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
-	or <c>List</c> types, the parser will use <c>ObjectMap</c> and <c>ObjectList</c> by 
+	or <c>List</c> types, the parser will use <c>OMap</c> and <c>OList</c> by 
 	default.
 </p>
 <p>
@@ -4099,11 +4099,11 @@
 	}
 </p>
 <p>
-	We can parse this into a generic <c>ObjectMap</c>:
+	We can parse this into a generic <c>OMap</c>:
 </p>
 <p class='bpcode w800'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+	OMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, OMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
 	String json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(m);
@@ -4135,12 +4135,12 @@
 	}
 </p>
 <p>
-	Once parsed into a generic model, various convenience methods are provided on the <c>ObjectMap</c>
-		and <c>ObjectList</c> classes to retrieve values:
+	Once parsed into a generic model, various convenience methods are provided on the <c>OMap</c>
+		and <c>OList</c> classes to retrieve values:
 </p>
 <p class='bpcode w800'>
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+	OMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, OMap.<jk>class</jk>);
 
 	<jc>// Get some simple values.</jc>
 	String name = m.getString(<js>"name"</js>);
@@ -4154,7 +4154,7 @@
 	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>
-	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
+	OList addresses = m.getList(<js>"addresses"</js>);
 
 	<jc>// Get the first address and convert it to a bean.</jc>
 	Address address = addresses.get(Address.<jk>class</jk>, 0);
@@ -4193,8 +4193,8 @@
 	Reader r;
 
 	r = new StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
-	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
-	x = p.parse(r, ObjectMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
+	x = p.parse(r, OMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
+	x = p.parse(r, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
 
 	r = reader(<js>"[123][456]"</js>);
 	x = p.parse(r, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>
@@ -5021,13 +5021,14 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Some free-form JSON.</jc>
-	ObjectMap m = <jk>new</jk> ObjectMap()
-		.append(<js>"foo"</js>, <js>"x1"</js>)
-		.append(<js>"_bar"</js>, <js>"x2"</js>)
-		.append(<js>" baz "</js>, <js>"x3"</js>)
-	 	.append(<js>"123"</js>, <js>"x4"</js>)
-	 	.append(<js>"return"</js>, <js>"x5"</js>);
-	 	.append(<js>""</js>, <js>"x6"</js>);
+	OMap m = OMap.of(
+		<js>"foo"</js>, <js>"x1"</js>,
+		<js>"_bar"</js>, <js>"x2"</js>,
+		<js>" baz "</js>, <js>"x3"</js>,
+		<js>"123"</js>, <js>"x4"</js>,
+		<js>"return"</js>, <js>"x5"</js>,
+		<js>""</js>, <js>"x6"</js>
+	);
 </p>
 <p class='bpcode w800'>
 	<joc>// Serialized to standard JSON</joc>
@@ -9319,14 +9320,12 @@
 	Under-the-covers, this gets converted to the following schema object:
 </p>
 <p class='bpcode w800'>
-	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-
-	HttpPartSchema schema = <jsm>create</jsm>()
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>()
 		.items(
-			<jsm>create</jsm>()
+			HttpPartSchema.<jsm>create</jsm>()
 				.collectionFormat(<js>"pipes"</js>)
 				.items(
-					<jsm>create</jsm>()
+					HttpPartSchema.<jsm>create</jsm>()
 						.collectionFormat(<js>"csv"</js>)
 						.type(<js>"integer"</js>) 
 						.format(<js>"int64"</js>)
@@ -10036,7 +10035,7 @@
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
 	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
-	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
+	OMap m = p.parse(schema, input, OMap.<jk>class</jk>);
 </p>
 <ul class='notes'>
 	<li>
@@ -12074,12 +12073,12 @@
 	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 </p>
 <p>
-	Oftentimes, it might be useful to parse into the {@link org.apache.juneau.ObjectList} and {@link org.apache.juneau.ObjectMap}
+	Oftentimes, it might be useful to parse into the {@link org.apache.juneau.collections.OList} and {@link org.apache.juneau.collections.OMap}
 	classes that provide the various convenience methods for working with JSON-like data structures:
 </p>
 <p class='bpcode w800'>
-	ObjectMap m = c.getObject(<js>"key1"</js>, ObjectMap.<jk>class</jk>);
-	ObjectList l = c.getObject(<js>"key2"</js>, ObjectList.<jk>class</jk>);
+	OMap m = c.getObject(<js>"key1"</js>, OMap.<jk>class</jk>);
+	OList l = c.getObject(<js>"key2"</js>, OList.<jk>class</jk>);
 </p>
 </div><!-- END: 5.2.4 - juneau-config.EntryTypes.Collections -->
 
@@ -12351,7 +12350,7 @@
 	<jc>// Example usage</jc>
 	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 	
-	ObjectMap m = c.getSectionAsMap(<js>"MyAddress"</js>);
+	OMap m = c.getSectionAsMap(<js>"MyAddress"</js>);
 	
 	String street = m.getString(<js>"street"</js>);
 	String city = m.getString(<js>"city"</js>);
@@ -14829,7 +14828,7 @@
 	It wraps the request attributes in a {@link java.util.Map} interface and provides several convenience methods.
 </p>
 <p>
-	The <c>RequestAttributes</c> object extends from {@link org.apache.juneau.ObjectMap} so all the convenience methods defined on
+	The <c>RequestAttributes</c> object extends from {@link org.apache.juneau.collections.OMap} so all the convenience methods defined on
 	that API are also available when working with request attributes: 
 </p>
 <p class='bpcode w800'>
@@ -16458,7 +16457,7 @@
  	at runtime, and CGLIB was written before generics were introduced into Java and is a virtually-unsupported library.
  	Therefore, parameterized types will often be stripped from class definitions and replaced with unparameterized types
 	(e.g. <code>List</code>).  Under these circumstances, you are likely to get <code>ClassCastExceptions</code>
-	when trying to access generalized <code>ObjectMaps</code> as beans.  The best solution to this issue is to either
+	when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
 	specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
 	will not try to recompile it.
 </div>
@@ -16642,7 +16641,7 @@
  	at runtime, and CGLIB was written before generics were introduced into Java and is a virtually-unsupported library.
  	Therefore, parameterized types will often be stripped from class definitions and replaced with unparameterized types
 	(e.g. <code>List</code>).  Under these circumstances, you are likely to get <code>ClassCastExceptions</code>
-	when trying to access generalized <code>ObjectMaps</code> as beans.  The best solution to this issue is to either
+	when trying to access generalized <code>OMaps</code> as beans.  The best solution to this issue is to either
 	specify the parameter as a bean array (e.g. <code>MyBean[]</code>) or declare the method as final so that CGLIB
 	will not try to recompile it.
 </div>
@@ -22573,8 +22572,8 @@
 		String url = <js>"http://localhost:10000/addressBook"</js>;
 		
 		<jc>// Do a REST GET against a remote REST interface and convert
-		// the response to an unstructured ObjectMap object.</jc>
-		ObjectMap m1 = client.get(url).run().getBody().as(ObjectMap.<jk>class</jk>);
+		// the response to an unstructured OMap object.</jc>
+		OMap m1 = client.get(url).run().getBody().as(OMap.<jk>class</jk>);
 		
 		<jc>// Same as above, except parse the JSON as a bean.</jc>
 		AddressBook a2 = client.get(url).run().getBody().as(AddressBook.<jk>class</jk>);
@@ -22661,17 +22660,17 @@
 				
 		<jc>// GET request, getting output as an untyped map</jc>
 		<jc>// Input must be an object (e.g. "{...}")</jc>
-		ObjectMap m = client
+		OMap m = client
 			.get(<js>"http://localhost:10000/addressBook/0"</js>)
 			.run()
-			.getBody().as(ObjectMap.<jk>class</jk>);
+			.getBody().as(OMap.<jk>class</jk>);
 				
 		<jc>// GET request, getting output as an untyped list</jc>
 		<jc>// Input must be an array (e.g. "[...]")</jc>
-		ObjectList l = client
+		OList l = client
 			.get(<js>"http://localhost:10000/addressBook"</js>)
 			.run()
-			.getBody().as(ObjectList.<jk>class</jk>);
+			.getBody().as(OList.<jk>class</jk>);
 				
 		<jc>// GET request, getting output as a parsed bean</jc>
 		<jc>// Input must be an object (e.g. "{...}")</jc>
@@ -22884,7 +22883,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.1.2 - @RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></h4>
 <div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 <p>
 	The {@link org.apache.juneau.http.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
@@ -22996,7 +22995,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		<jk>void</jk> 
+		<jk>void</jk>/{@link java.lang.Void}
 		- Don't parse any response.  
 		<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
 	<li>
@@ -23014,6 +23013,8 @@
 	<li>
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
+	<li>
+		A {@link java.util.concurrent.Future} or {@link java.util.concurrent.CompletableFuture} of anything on this list. 
 </ul>
 
 <p>
@@ -23577,7 +23578,7 @@
 	
 		<ja>@Query</ja>
 	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
-	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 		<jk>return</jk> OMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
 	 	}
 	 	
 	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
@@ -23642,7 +23643,7 @@
 	
 		<ja>@Override</ja>
 	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
-	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 		<jk>return</jk> OMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
 	 	}
 	 	
 		<ja>@Override</ja>
@@ -25099,7 +25100,7 @@
 <p>
 	The manifest file can be retrieved using the the {@link org.apache.juneau.microservice.Microservice#getManifest()} method which 
 	provides an API for accessing manifest file entries.
-	This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.ObjectMap} allowing
+	This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.collections.OMap} allowing
 	you to retrieve entries as any data types supported by that class.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -27659,7 +27660,7 @@
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
 		
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
-		<jk>public</jk> ObjectMap getConfig() <jk>throws</jk> Exception {
+		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {
 			<jk>return</jk> getServletConfig().getConfig().asMap();
 		}
 		
@@ -27687,7 +27688,7 @@
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
+		<jk>public</jk> OMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section); 
 		} 
 		
@@ -27737,7 +27738,7 @@
 				<js>"]"</js>
 			}
 		) 
-		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> OMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
 			getServletConfig().getConfig().setSection(section, contents); 
 			<jk>return</jk> getSection(section); 
 		} 
@@ -27757,8 +27758,8 @@
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
-		<jk>private</jk> ObjectMap getSection(String name) { 
-			ObjectMap m = getServletConfig().getConfig().getSectionMap(name); 
+		<jk>private</jk> OMap getSection(String name) { 
+			OMap m = getServletConfig().getConfig().getSectionMap(name); 
 			<jk>if</jk> (m == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
 			<jk>return</jk> m; 
@@ -29233,7 +29234,7 @@
 		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}</td>
 		<td>Bean filters.</td>
-		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class&gt;</c></td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Object&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -29555,6 +29556,12 @@
 	</tr>
 	<tr>
 		<td></td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}</td>
+		<td>Float aside section contents.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link AsideFloat}</td>
+	</tr>
+	<tr>
+		<td></td>
 		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}</td>
 		<td>Footer section contents.</td>
 		<td style='max-width:250px;overflow:hidden'><c>List&lt;String&gt;</c></td>
@@ -29624,6 +29631,12 @@
 		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_widgets HTMLDOC_widgets}</td>
 		<td>HTML Widgets.</td>
 		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.juneau.html.HtmlWidget}|Class&lt;{@link org.apache.juneau.html.HtmlWidget}&gt;&gt;</c></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializerBuilder}</td>
+		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}</td>
+		<td>Float aside section contents.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link AsideFloat}</td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.html.HtmlSerializer}</td>
@@ -29707,7 +29720,7 @@
 		<td></td>
 		<td>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}</td>
 		<td>Default schemas.</td>
-		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,{@link org.apache.juneau.ObjectMap}&gt;</c></td>
+		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,{@link org.apache.juneau.collections.OMap}&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -29744,6 +29757,12 @@
 		<td>{@link org.apache.juneau.msgpack.MsgPackSerializer#MSGPACK_addBeanTypes MSGPACK_addBeanTypes}</td>
 		<td>Add <js>"_type"</js> properties when needed.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.oapi.OpenApiCommon}</td>
+		<td>{@link org.apache.juneau.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat}</td>
+		<td>Default collection format for HTTP parts.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat}</td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.serializer.OutputStreamSerializer}</td>
@@ -30061,7 +30080,7 @@
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_headers RESTCLIENT_headers}</td>
 		<td>Request headers.</td>
-		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.http.Header} | {@link org.apache.juneau.http.HttpHeader} | {@link org.apache.http.NameValuePair}&gt;</c></td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link org.apache.http.Header} | {@link org.apache.http.NameValuePair}&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -30086,6 +30105,12 @@
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parser RESTCLIENT_parser}</td>
 		<td>Parser.</td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.parser.Parser}&gt;</c><li>{@link org.apache.juneau.parser.Parser}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_parsers RESTCLIENT_parsers}</td>
+		<td>Parsers.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.parser.Parser}&gt;</c><li>{@link org.apache.juneau.parser.Parser}</ul></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -30146,6 +30171,12 @@
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}</td>
 		<td>Serializer.</td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;</c><li>{@link org.apache.juneau.serializer.Serializer}</ul></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_serializers RESTCLIENT_serializers}</td>
+		<td>Serializers.</td>
+		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;? <jk>extends</jk> {@link org.apache.juneau.serializer.Serializer}&gt;</c><li>{@link org.apache.juneau.serializer.Serializer}</ul></td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.rest.RestContext}</td>
@@ -30224,6 +30255,12 @@
 		<td>{@link org.apache.juneau.rest.RestContext#REST_debug REST_debug}</td>
 		<td>Debug mode.</td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.Enablement}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.RestContext#REST_debugOn REST_debugOn}</td>
+		<td>Debug mode on specified classes/methods.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -30449,6 +30486,12 @@
 	</tr>
 	<tr>
 		<td></td>
+		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_paths RESTMETHOD_paths}</td>
+		<td>Resource method paths.</td>
+		<td style='max-width:250px;overflow:hidden'><c>String[]</c></td>
+	</tr>
+	<tr>
+		<td></td>
 		<td>{@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_path RESTMETHOD_path}</td>
 		<td>Resource method path.</td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
@@ -30481,6 +30524,12 @@
 		<td></td>
 		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}</td>
 		<td>Add type attribute to root nodes.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}</td>
+		<td>Don't trim null bean property values.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -30761,8 +30810,8 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Don't do this!</jc>
-	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;ObjectMap,Object&gt; {
-		<jk>public</jk> Object swap(BeanSession session, ObjectMap input) <jk>throws</jk> Exception {
+	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;OMap,Object&gt; {
+		<jk>public</jk> Object swap(BeanSession session, OMap input) <jk>throws</jk> Exception {
 			<jc>// Security hole!</jc>
 			<jk>return</jk> Class.<jsf>forName</jsf>(input.getString(<js>"class"</js>)).newInstance();
 		}
@@ -37781,8 +37830,6 @@
 		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
-		New {@link org.apache.juneau.ObjectMap(Object...)} constructor.
-	<li>
 		New swaps auto-added to all serializers/parsers:
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.transforms.MatchResultSwap} 
@@ -37791,11 +37838,292 @@
 	<li>
 		{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
 	<li>
+		New {@link org.apache.juneau.html.annotation.HtmlDoc#asideFloat} setting so that you can position the contents of the aside section on the page.
+	<li>
+		Various minor fixes surrounding HTML serialization.
+		<ul>
+			<li>Collections of beans that were supposed to be serialized as tables were being serialized as lists.
+			<li>Collections of beans with <c><ja>@Bean</ja>(bpi)</c> were not being serialized in the correct column order.			
+		</ul>
+	<li>
+		Fixed a bug where a copy constructor can erroneously be recognized as a builder constructor if the class also
+		has a static <c>create</c> method.  Net effect was that the copy constructor would needlessly be called during parsing.
+	<li>
+		New {@link org.apache.juneau.collections} package containing various convenience fluent-style collection classes:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.collections.AList}
+			<li class='jc'>{@link org.apache.juneau.collections.ASet}
+			<li class='jc'>{@link org.apache.juneau.collections.ASortedSet}
+			<li class='jc'>{@link org.apache.juneau.collections.AMap}
+			<li class='jc'>{@link org.apache.juneau.collections.ASortedMap}
+			<li class='jc'>{@link org.apache.juneau.collections.OMap}
+			<li class='jc'>{@link org.apache.juneau.collections.OList}
+		</ul>
+	<li>
+		{@link org.apache.juneau.ObjectMap} is being deprecated and replaced with {@link org.apache.juneau.collections.OMap}.
+	<li>
+		{@link org.apache.juneau.ObjectList} is being deprecated and replaced with {@link org.apache.juneau.collections.OList}.
+	<li>
+		All classes in the {@link org.apache.juneau.http.response} and {@link org.apache.juneau.http.exception} now have <c>header(String,Object)</c>
+		methods for adding response headers.
+		<p class='bpcode w800'>
+	<jc>// Method that performs a BASIC Auth handshake.</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> Ok checkBasicAuth(<ja>@Header</ja>(<js>"Authorization"</js>) String auth) <jk>throws</jk> Unauthorized {
+		<jk>if</jk> (auth == <jk>null</jk>) 
+			<jk>throw new</jk> Unauthorized().header(<js>"WWW-Authenticate"</js>, <js>"BASIC realm=\"foo\""</js>);
+		<jk>return</jk> Ok.<jsf>OK</jsf>;
+	}
+		</p>		
+	<li>
+		New annotations for multi-part support:
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.http.annotation.Header#multi()}
+			<li class='jm'>{@link org.apache.juneau.http.annotation.Query#multi()}
+			<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#multi()}
+		</ul>
+	<li>
+		{@link org.apache.juneau.BeanContext#BEAN_ignoreRecursions} setting no longer requires {@link org.apache.juneau.BeanContext#BEAN_detectRecursions} 
+		to be enabled.
+	<li>
+		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialIndent}
+		used.
+	<li>
+		Fixed bug in JSON/UON/URL-Encoding serializers where properties past the max depth were being serialized as null instead
+		of being treated as null and not being serialized at all.
+	<li>
+		Fixed bug in HTML serializer where tables of maps were not sorted if <jsf>SERIALIZER_sortMaps</jsf> was specified.
+	<li>
+		<jsf>SERIALIZER_trimNullProperties</jsf> has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_keepNullProperties SERIALIZER_keepNullProperties}.
+	<li>
+		Improvements to OpenAPI serializer and parser:
+		<ul>
+			<li>Collection format can now be specified on OBJECTs to allow key/value pairs to be delimited with the same support as ARRAYs.
+			<li>New {@link org.apache.juneau.oapi.OpenApiCommon#OAPI_format OAPI_format} and {@link org.apache.juneau.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat} properties.
+		</ul>
+	<li>
+		Convenience methods added to {@link org.apache.juneau.httppart.HttpPartSchema} and related classes to simplify schema definitions:
+		<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+		
+	<jc>// Old</jc>
+	HttpPartSchema s = <jsm>schema</jsm>(<js>"object"</js>)
+		.property(<js>"f01"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>)))
+		.property(<js>"f02"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>)))
+		.property(<js>"f03"</js>, <jsm>schema</jsm>(<js>"array"</js>).collectionFormat(<js>"pipes"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>)))
+		.build();
+
+	<jc>// New</jc>
+	HttpPartSchema s = <jsm>tObject</jsm>()
+		.p(<js>"f01"</js>, <jsm>tArray</jsm>(<jsm>tString()</jsm>))
+		.p(<js>"f02"</js>, <jsm>tArray</jsm>(<jsm>tByte()</jsm>))
+		.p(<js>"f03"</js>, <jsm>tArray</jsm>(<jsm>tDateTime()</jsm>))
+		.build();
+		</p>
+	<li>
+		Fixes where the bean method/constructor visibility wasn't being used when finding swap methods and constructors.
+	<li>
 		HTML-Schema support is being deprecated due to low-use and difficulty in maintaining.  It will be removed in 9.0.
+	<li>
+		<c>JuneauLogger</c> class is being deprecated.  Improvements in logging in Java 8 make it obsolete.
+	<li>
+		Bean filters can now be specified programmatically through a builder API.
+		<p class='bpcode w800'>
+	<jc>// Create a JSON serializer that only includes specified fields on a specific class.</jc>
+	WriterSerializer s = JsonSerializer
+		.<jsm>create</jsm>()
+		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBean.<jk>class</jk>).bpi(<js>"foo,bar,baz"</js>).build())
+		.build();
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li>
+		{@link org.apache.juneau.rest.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
+		to define secondary classes and hook them up through annotations:
+		<ul>
+			<li class='jic'>{@link org.apache.juneau.rest.RestCallHandler} - Normally defined through {@link org.apache.juneau.rest.annotation.Rest#callHandler() @Rest.callHandler()}.
+			<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider} - Normally defined through {@link org.apache.juneau.rest.annotation.Rest#infoProvider() @Rest.infoProvider()}.
+			<li class='jic'>{@link org.apache.juneau.rest.RestCallLogger} - Normally defined through {@link org.apache.juneau.rest.annotation.Rest#callLogger() @Rest.callLogger()}.
+			<li class='jic'>{@link org.apache.juneau.utils.ClasspathResourceFinder} - Normally defined through {@link org.apache.juneau.rest.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
+		</ul>
+	<li>
+		{@link org.apache.juneau.rest.RestServlet} and {@link org.apache.juneau.rest.BasicRest} now implement the {@link org.apache.juneau.rest.RestCallHandler}, {@link org.apache.juneau.rest.RestInfoProvider}, {@link org.apache.juneau.rest.RestCallLogger}, {@link RestResourceResolver},
+		and {@link org.apache.juneau.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link org.apache.juneau.rest.BasicRestCallHandler}, 
+		{@link org.apache.juneau.rest.BasicRestInfoProvider}, {@link org.apache.juneau.rest.BasicRestCallLogger}, {@link BasicRestResourceResolver}, and {@link org.apache.juneau.utils.ClasspathResourceFinderBasic}.  
+		
+		This makes it easier to tweak these methods without having to implement your own classes.
+		<br>The methods added for {@link org.apache.juneau.rest.RestCallHandler} are:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#createRequest(RestCall) createRequest(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#createResponse(RestCall) createResponse(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#handleResponse(RestCall) handleResponse(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#handleNotFound(RestCall) handleNotFound(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#convertThrowable(Throwable) throwable(Throwable)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createRequest(RestCall) createRequest(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#createResponse(RestCall) createResponse(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#handleResponse(RestCall) handleResponse(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#handleNotFound(RestCall) handleNotFound(RestCall)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#convertThrowable(Throwable) throwable(Throwable)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link org.apache.juneau.rest.RestInfoProvider} are:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getSwagger(RestRequest) getSwagger(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getSiteName(RestRequest) getSiteName(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getTitle(RestRequest) getTitle(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getDescription(RestRequest) getDescription(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getSwagger(RestRequest) getSwagger(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getSiteName(RestRequest) getSiteName(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getTitle(RestRequest) getTitle(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getDescription(RestRequest) getDescription(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link org.apache.juneau.rest.RestCallLogger} are:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link org.apache.juneau.utils.ClassspathResourceFinder} are:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#findResource(Class,String,Locale) findResource(Class,String,Locale)}
+			</ul>
+		</ul>
+		<br>The methods added for {@link org.apache.juneau.rest.RestResourceResolver} are:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#resolve(Object,Class,RestContextBuilder,Object...) resolve(Object,Class&lt;T&gt;,RestContextBuilder,Object...)}
+			</ul>
+		</ul>
+	<li>
+		Added the following convenience hook methods on the {@link org.apache.juneau.rest.RestServlet} and {@link org.apache.juneau.rest.BasicRest} classes:
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+			</ul>
+			<li class='jac'>{@link org.apache.juneau.rest.BasicRest}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onInit(RestContextBuilder) onInit(RestContextBuilder)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onPostInit(RestContext) onPostInit(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onDestroy(RestContext) onDestroy(RestContext)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+			</ul>
+		</ul>
+	<li>
+		New {@link Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
+		
+		<h5 class='figure'>Example:</h5>
+		<p class='bcode w800'>
+	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>.
+	<ja>@Rest</ja>(
+		debugOn=<js>"MyResource=per-request,Mysource.doX=true"</js>  <jc>// Typically defined via system or env property</jc>.
+	)
+	<jk>public class</jk> MyResource {
+
+		<ja>@RestMethod</ja>
+		<jk>public void</jk> String doX() {
+			...
+		}
+		 </p>
+	<li>
+		{@link org.apache.juneau.rest.BasicRestConfig} has been broken up into {@link org.apache.juneau.rest.BasicRestConfig} and {@link org.apache.juneau.rest.BasicRestMethods} so that
+		you're not forced to implement methods such as <c>getOptions()</c> and <c>getStats()</c> if you're implementing the interface
+		to configure your REST class.
+	<li>
+		Any of the following classes can now be instantiated with <c><jk>public static</jk> <jsm>create</jsm>()</c> methods:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.rest.RestCallHandler}
+			<li class='jc'>{@link org.apache.juneau.rest.RestCallLogger}
+			<li class='jc'>{@link org.apache.juneau.rest.RestInfoProvider}
+			<li class='jc'>{@link org.apache.juneau.utils.ClasspathResourceFinder}
+			<li class='jc'>{@link org.apache.juneau.rest.RestResourceResolver}
+			<li class='jc'>{@link org.apache.juneau.rest.RestGuard}
+			<li class='jc'>{@link org.apache.juneau.rest.ResponseHandler}
+		</ul>
+	<li>
+		New {@link org.apache.juneau.http.annotation.Path#required() @Path(required)} annotation support.
+		<br>A path can be marked as not-required when the path variable is resolved by a parent resource like so:
+		<p class='bpcode w800'>
+	<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
+	<jk>public class</jk> Parent {
+		...
+	}
+
+	<ja>@Rest</ja>(path="/child")
+	<jk>public class</jk> Child {
+
+		<ja>@RestMethod</ja>(path="/")
+		<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"p1"</js>,required=<jk>false</jk>) String p1) {
+			<jc>// p1 will be null when accessed via "/child"</jc>
+			<jc>// p1 will be non-null when accessed via "/parent/p1/child".</jc>
+		}
+		...
+	}
+		</p>
+		<br>This allows the child resource to be mapped to multiple parents that may resolve various different path variables.
+	<li>
+		New {@link org.apache.juneau.rest.annotation.RestMethod#paths() @RestMethod(paths)} annotation that allows you to map multiple
+		paths to the same Java method.
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		paths={<js>"/"</js>,<js>"/{foo}"</js>}
+	)
+	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>
@@ -37819,6 +38147,21 @@
 			<li>Better integration with HttpClient.
 			<li>New fluent-style methods with many new convenience methods.
 		</ul>
+	<li>
+		<ja>@RemoteMethod</ja>-annotated methods can now return {@link java.util.concurrent.Future Futures} and 
+		{@link java.util.concurrent.CompletableFuture CompletableFutures} for concurrent processing of requests.
+		<br>Example:
+		<p class='bpcode w800'>
+	<ja>@Remote</ja>
+	<jk>public interface</jk> MyInterface {
+		<jk>public</jk> Future&lt;String&gt; doGet();
+	}
+		
+	MyInterface i = client.getRemote(MyInterface.<jk>class</jk>, <js>"http://localhost:12345/myInterface"</js>);
+	Future&lt;String&gt; f = i.doGet();
+	<jc>// Do other stuff.</jc>
+	String result = f.get();	
+		</li>p>
 </ul>
 
 <h5 class='topic w800'>juneau-doc</h5>

@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.logging.Level.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -1553,7 +1554,7 @@ public class RestResponseBody implements HttpEntity {
 				sb.append("Response did not have the expected value for body.");
 				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
 				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb);
+				client.log(WARNING, sb.toString());
 			}
 			throw new BasicAssertionError("Response did not have the expected value for body.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
 		}
@@ -1597,7 +1598,7 @@ public class RestResponseBody implements HttpEntity {
 					sb.append("Response did not have the expected substring for body.");
 					sb.append("\nExpected: [").append(substring.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
 					sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					System.err.println(sb);
+					client.log(WARNING, sb.toString());
 				}
 				throw new BasicAssertionError("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
 

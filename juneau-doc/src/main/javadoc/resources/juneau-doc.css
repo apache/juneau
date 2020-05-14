@@ -440,6 +440,10 @@ ul.notes>li {
   	margin-left: -40px;
 }
 
+ul.notes ul li {
+	padding: 10px;
+}
+
 .topic a {
 	border-bottom: 1px dotted #4c6b87;
 }

@@ -10,19 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
+package org.apache.juneau;
 
 /**
- * Identifies a method as a configurable property setter.
- *
- * Used in conjunction with the ConfigurablePropertyCodeGenerator class to synchronize and copy fluent setters from
- * parent classes to child classes.
+ * Identifies an arbitrary detail level such as the detail of log messages.
  */
-@Target(METHOD)
-@Retention(RUNTIME)
-public @interface ConfigurationProperty {}
+public enum DetailLevel {
+
+	/** Nothing at all. */
+	NONE,
+
+	/** Simple only. */
+	SIMPLE,
+
+	/** Full detailed. */
+	FULL
+}

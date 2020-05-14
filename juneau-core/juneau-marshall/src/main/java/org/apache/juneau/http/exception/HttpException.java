@@ -202,4 +202,8 @@ public class HttpException extends RuntimeException {
 	public String toString() {
 		return emptyIfNull(getLocalizedMessage());
 	}
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

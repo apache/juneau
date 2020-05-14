@@ -69,4 +69,8 @@ public abstract class HttpResponse {
 	public String toString() {
 		return message;
 	}
+
+	// <CONFIGURATION-PROPERTIES>
+
+	// </CONFIGURATION-PROPERTIES>
 }

@@ -20,7 +20,6 @@ import java.util.logging.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
-import org.apache.http.conn.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
@@ -128,7 +127,7 @@ public class MockRestClient extends RestClientBuilder {
 	public RestClient build() {
 		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
 			mrb.debug();
-		httpClientConnectionManager(new MockHttpClientConnectionManager(mrb.build()));
+		connectionManager(new MockHttpClientConnectionManager(mrb.build()));
 		return super.build();
 	}
 
@@ -363,7 +362,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient bpi(Map<String,String> values) {
+	public MockRestClient bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -381,7 +380,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient bpro(Map<String,String> values) {
+	public MockRestClient bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -399,7 +398,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient bpwo(Map<String,String> values) {
+	public MockRestClient bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -417,7 +416,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient bpx(Map<String,String> values) {
+	public MockRestClient bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}
@@ -999,6 +998,12 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient formData(String name, Object value, HttpPartSchema schema) {
+		super.formData(name, value, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		super.formData(name, value, serializer, schema);
 		return this;
@@ -1035,6 +1040,12 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient header(String name, Object value, HttpPartSchema schema) {
+		super.header(name, value, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		super.header(name, value, serializer, schema);
 		return this;
@@ -1065,6 +1076,18 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient htmlDoc() {
+		super.htmlDoc();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient htmlStrippedDoc() {
+		super.htmlStrippedDoc();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient httpClient(CloseableHttpClient value) {
 		super.httpClient(value);
 		return this;
@@ -1073,12 +1096,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient httpClientBuilder(HttpClientBuilder value) {
 		super.httpClientBuilder(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient httpClientConnectionManager(HttpClientConnectionManager httpClientConnectionManager) {
-		super.httpClientConnectionManager(httpClientConnectionManager);
 		return this;
 	}
 
@@ -1192,14 +1209,26 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient logTo(Level level, Logger log) {
-		super.logTo(level, log);
+	public MockRestClient logRequests(DetailLevel detail, Level level) {
+		super.logRequests(detail, level);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient logToConsole() {
 		super.logToConsole();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient logToConsole(boolean value) {
+		super.logToConsole(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient logger(Logger value) {
+		super.logger(value);
 		return this;
 	}
 
@@ -1369,6 +1398,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient query(String name, Object value) {
 		super.query(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClient query(String name, Object value, HttpPartSchema schema) {
+		super.query(name, value, schema);
 		return this;
 	}
 

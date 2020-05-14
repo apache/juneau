@@ -2352,6 +2352,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(UON_paramFormat, "PLAINTEXT");
 	}
 
+	// <CONFIGURATION-PROPERTIES>
+
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
@@ -2503,7 +2505,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpi(Map<String,String> values) {
+	public RestClientBuilder bpi(Map<String,Object> values) {
 		super.bpi(values);
 		return this;
 	}
@@ -2521,7 +2523,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpx(Map<String,String> values) {
+	public RestClientBuilder bpx(Map<String,Object> values) {
 		super.bpx(values);
 		return this;
 	}
@@ -2539,7 +2541,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpro(Map<String,String> values) {
+	public RestClientBuilder bpro(Map<String,Object> values) {
 		super.bpro(values);
 		return this;
 	}
@@ -2557,7 +2559,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder bpwo(Map<String,String> values) {
+	public RestClientBuilder bpwo(Map<String,Object> values) {
 		super.bpwo(values);
 		return this;
 	}
@@ -2930,6 +2932,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 		super.applyAnnotations(fromMethods);
 		return this;
 	}
+
+	// </CONFIGURATION-PROPERTIES>
 
 	//------------------------------------------------------------------------------------------------
 	// Passthrough methods for HttpClientBuilder.

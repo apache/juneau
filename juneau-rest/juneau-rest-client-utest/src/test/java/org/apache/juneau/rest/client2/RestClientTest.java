@@ -149,7 +149,8 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logTo(Level.SEVERE, ml)
+			.logger(ml)
+			.logRequests(DetailLevel.FULL, Level.SEVERE)
 			.build()
 			.post("/bean", bean)
 			.complete();
@@ -1786,7 +1787,7 @@ public class RestClientTest {
 		}
 
 		@Override
-		public void log(String msg) {
+		public void log(Level level, String msg, Object...args) {
 			lastMessage = msg;
 		}
 	}
@@ -3406,11 +3407,23 @@ public class RestClientTest {
 			.getHeader("X").assertValue("f1=1")
 		;
 	}
-//
-//	@Test
-//	public void o028_beanContext_bpiMap() throws Exception { fail(); }
-////	public RestClientBuilder bpi(Map<String,String> values) {
-//
+
+	@Test
+	public void o028_beanContext_bpiMap() throws Exception {
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpi(OMap.of("O25", "f2"))
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+	}
+//	public RestClientBuilder bpi(Map<String,String> values) {
+
 //	@Test
 //	public void o029_beanContext_bpiClassString() throws Exception { fail(); }
 ////	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
@@ -3516,18 +3529,6 @@ public class RestClientTest {
 ////	public RestClientBuilder examples(String json) {
 //
 //	@Test
-//	public void o055_beanContext_excludePropertiesMap() throws Exception { fail(); }
-////	public RestClientBuilder excludeProperties(Map<String,String> values) {
-//
-//	@Test
-//	public void o056_beanContext_excludePropertiesClassString() throws Exception { fail(); }
-////	public RestClientBuilder excludeProperties(Class<?> beanClass, String properties) {
-//
-//	@Test
-//	public void o057_beanContext_excludePropertiesStringString() throws Exception { fail(); }
-////	public RestClientBuilder excludeProperties(String beanClassName, String value) {
-//
-//	@Test
 //	public void o058_beanContext_fluentSetters() throws Exception { fail(); }
 ////	public RestClientBuilder fluentSetters() {
 //
@@ -3578,18 +3579,6 @@ public class RestClientTest {
 //	@Test
 //	public void o070_beanContext_implClasses() throws Exception { fail(); }
 ////	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-//
-//	@Test
-//	public void o071_beanContext_includePropertiesMap() throws Exception { fail(); }
-////	public RestClientBuilder includeProperties(Map<String,String> values) {
-//
-//	@Test
-//	public void o072_beanContext_includePropertiesClassString() throws Exception { fail(); }
-////	public RestClientBuilder includeProperties(Class<?> beanClass, String value) {
-//
-//	@Test
-//	public void o073_beanContext_includePropertiesStringString() throws Exception { fail(); }
-////	public RestClientBuilder includeProperties(String beanClassName, String value) {
 //
 //	@Test
 //	public void o074_beanContext_locale() throws Exception { fail(); }
@@ -3708,7 +3697,7 @@ public class RestClientTest {
 ////	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
 
 
-	//	//-----------------------------------------------------------------------------------------------------------------
+//	//-----------------------------------------------------------------------------------------------------------------
 //	// Context properties
 //	//-----------------------------------------------------------------------------------------------------------------
 //
