@@ -182,6 +182,21 @@ public class ConfigurablePropertyCodeGenerator {
 			System.err.println("Processing " + f.getName());
 			String s = IOUtils.read(f);
 
+			int i1 = s.indexOf("<CONFIGURATION-PROPERTIES>"), i2 = s.indexOf("</CONFIGURATION-PROPERTIES>");
+			String cpSection = null;
+			if (i1 != -1 && i2 != -1) {
+				cpSection = s.substring(i1+26, i2);
+			} else {
+				System.err.println("...skipped " + f.getName());
+				continue;
+			}
+
+			Map<String,String> docs = Stream.of(cpSection.split("[\n]{2,}"))
+				.map(x -> x.trim())
+				.filter(x -> x.startsWith("/*"))
+				.map(x -> x.split("(?s)\\*\\/.*public"))
+				.collect(Collectors.toMap(x -> ("\n\tpublic"+x[1].substring(0, x[1].indexOf("\n"))), x -> ("\t"+x[0]+"*/\n")));
+
 			StringBuilder sb = new StringBuilder();
 			for (ClassInfo pc : ClassInfo.of(c).getParentsParentFirst()) {
 				Class<?> pcc = pc.inner();
@@ -190,8 +205,26 @@ public class ConfigurablePropertyCodeGenerator {
 					if (ms != null) {
 						for (Method m : ms) {
 
+							StringBuilder sigLine = new StringBuilder();
+							sigLine.append("\n\tpublic ");
+							if (m.getTypeParameters().length > 0)
+								sigLine.append("<").append(Arrays.asList(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
+							sigLine.append(c.getSimpleName()).append(" ").append(m.getName()).append("(").append(getArgs(m)).append(") ");
+							if ( m.getExceptionTypes().length > 0)
+								sigLine.append("throws ").append(Arrays.asList(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
+							sigLine.append("{");
+							String sigLine2 = sigLine.toString();
+
+							sb.append("\n\n");
+
+							// Overridden javadocs
+							String javadoc = docs.get(sigLine2);
+							if (javadoc != null) {
+								sb.append(javadoc);
+							}
+
 							// Line 1
-							sb.append("\n\n\t")
+							sb.append("\t")
 								.append(m.getAnnotation(Deprecated.class) == null ? "" : "@Deprecated ")
 								.append("@Override /* GENERATED - ").append(pcc.getSimpleName()).append(" */")
 							;
@@ -206,18 +239,13 @@ public class ConfigurablePropertyCodeGenerator {
 							}
 
 							// Line 2
-							sb.append("\n\tpublic ");
-							if (m.getTypeParameters().length > 0)
-								sb.append("<").append(Arrays.asList(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
-							sb.append(c.getSimpleName()).append(" ").append(m.getName()).append("(").append(getArgs(m)).append(") ");
-							if ( m.getExceptionTypes().length > 0)
-								sb.append("throws ").append(Arrays.asList(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
-							sb.append("{");
+							sb.append(sigLine2);
 
 							// Body
 							sb.append("\n\t\tsuper.").append(m.getName()).append("(").append(getArgVals(m)).append(");");
 							sb.append("\n\t\treturn this;");
 							sb.append("\n\t}");
+
 						}
 					} else if (pc.isAny(Throwable.class, RuntimeException.class, Exception.class)) {
 						// Ignore
@@ -227,15 +255,8 @@ public class ConfigurablePropertyCodeGenerator {
 				}
 			}
 
-			int i1 = s.indexOf("<CONFIGURATION-PROPERTIES>"), i2 = s.indexOf("</CONFIGURATION-PROPERTIES>");
-			if (i1 != -1 && i2 != -1) {
-				s = s.substring(0, i1+26) + sb.toString() + "\n\n\t// " + s.substring(i2);
-				//System.err.println(s);
-				//throw new RuntimeException();
-				IOUtils.write(f, new StringReader(s));
-			} else {
-				System.err.println("...skipped " + f.getName());
-			}
+			s = s.substring(0, i1+26) + sb.toString() + "\n\n\t// " + s.substring(i2);
+			IOUtils.write(f, new StringReader(s));
 		}
 
 		System.err.println("DONE");

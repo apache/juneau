@@ -2995,6 +2995,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <br>In general, unchecked recursions cause stack-overflow-errors.
 	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
@@ -3020,11 +3025,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *		<jc>// Handle exception.</jc>
 	 *	}
 	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
@@ -3074,7 +3074,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Produces request body "{f:null}"</jc>
 	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, a)
 	 * 		.complete();
 	 * </p>
 	 *
@@ -3107,6 +3107,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.ws()
 	 * 		.initialDepth(2)
 	 * 		.build();
+	 *
+	 * 	<jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
 	 *
 	 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
 	 * 	client
@@ -3196,14 +3201,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.addBeanTypes()
 	 * 		.build();
 	 *
-	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<jc>// Our map of beans to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
-	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
-	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
-	 *
-	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	<jc>// Request body will contain {"foo":{"_type":"mybean","foo":"bar"}}.</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
 	 * 		.complete();
@@ -3250,11 +3255,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.addRootType()
 	 * 		.build();
 	 *
-	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<jc>// Our bean to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
 	 *
-	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	<jc>// Request body will contain {"_type":"mybean","foo":"bar"}.</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
 	 * 		.complete();
