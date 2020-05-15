@@ -2683,42 +2683,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionary(java.lang.Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
@@ -2749,12 +2713,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -2779,39 +2737,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
@@ -2893,12 +2827,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder debug(boolean value) {
-		super.debug(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
@@ -2977,33 +2905,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder excludeProperties(String beanClassName, String value) {
-		super.excludeProperties(beanClassName, value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder fluentSetters() {
 		super.fluentSetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder fluentSetters(boolean value) {
-		super.fluentSetters(value);
 		return this;
 	}
 
@@ -3013,51 +2917,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
@@ -3070,24 +2938,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(Class<?> beanClass, String value) {
-		super.includeProperties(beanClass, value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder includeProperties(String beanClassName, String value) {
-		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
@@ -3223,12 +3073,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
@@ -3241,27 +3085,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 

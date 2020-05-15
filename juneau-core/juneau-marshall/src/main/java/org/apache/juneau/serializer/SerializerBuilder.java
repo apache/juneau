@@ -788,42 +788,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionary(java.lang.Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
@@ -854,12 +818,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -884,39 +842,15 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
@@ -998,12 +932,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder debug(boolean value) {
-		super.debug(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
@@ -1082,33 +1010,9 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder excludeProperties(String beanClassName, String value) {
-		super.excludeProperties(beanClassName, value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder fluentSetters() {
 		super.fluentSetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder fluentSetters(boolean value) {
-		super.fluentSetters(value);
 		return this;
 	}
 
@@ -1118,51 +1022,15 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
@@ -1175,24 +1043,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder includeProperties(Class<?> beanClass, String value) {
-		super.includeProperties(beanClass, value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder includeProperties(String beanClassName, String value) {
-		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
@@ -1328,12 +1178,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
@@ -1346,27 +1190,9 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
@@ -1376,21 +1202,9 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public SerializerBuilder detectRecursions(boolean value) {
-		super.detectRecursions(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanTraverseBuilder */
 	public SerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public SerializerBuilder ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
 		return this;
 	}
 

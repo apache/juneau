@@ -198,42 +198,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionary(java.lang.Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
@@ -264,12 +228,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -294,39 +252,15 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
@@ -408,12 +342,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder debug(boolean value) {
-		super.debug(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
@@ -492,33 +420,9 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder excludeProperties(String beanClassName, String value) {
-		super.excludeProperties(beanClassName, value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder fluentSetters() {
 		super.fluentSetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder fluentSetters(boolean value) {
-		super.fluentSetters(value);
 		return this;
 	}
 
@@ -528,51 +432,15 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
@@ -585,24 +453,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(Class<?> beanClass, String value) {
-		super.includeProperties(beanClass, value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder includeProperties(String beanClassName, String value) {
-		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
@@ -738,12 +588,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
@@ -756,27 +600,9 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
@@ -786,21 +612,9 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder detectRecursions(boolean value) {
-		super.detectRecursions(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanTraverseBuilder */
 	public OutputStreamSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public OutputStreamSerializerBuilder ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
 		return this;
 	}
 
@@ -822,39 +636,15 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OutputStreamSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder addRootType(boolean value) {
-		super.addRootType(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder dontTrimNullProperties() {
-		super.dontTrimNullProperties();
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OutputStreamSerializerBuilder keepNullProperties() {
 		super.keepNullProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder keepNullProperties(boolean value) {
-		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -870,21 +660,9 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortCollections(boolean value) {
-		super.sortCollections(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OutputStreamSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder sortMaps(boolean value) {
-		super.sortMaps(value);
 		return this;
 	}
 
@@ -894,39 +672,15 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OutputStreamSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OutputStreamSerializerBuilder trimStrings() {
 		super.trimStrings();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OutputStreamSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
 		return this;
 	}
 

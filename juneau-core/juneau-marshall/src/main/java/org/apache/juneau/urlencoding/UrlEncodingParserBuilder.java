@@ -185,42 +185,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(java.lang.Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
@@ -251,12 +215,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -281,39 +239,15 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
@@ -395,12 +329,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder debug(boolean value) {
-		super.debug(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
@@ -479,33 +407,9 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder excludeProperties(String beanClassName, String value) {
-		super.excludeProperties(beanClassName, value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder fluentSetters() {
 		super.fluentSetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder fluentSetters(boolean value) {
-		super.fluentSetters(value);
 		return this;
 	}
 
@@ -515,51 +419,15 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
@@ -572,24 +440,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(Class<?> beanClass, String value) {
-		super.includeProperties(beanClass, value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder includeProperties(String beanClassName, String value) {
-		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
@@ -725,12 +575,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
@@ -743,39 +587,15 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
-		return this;
-	}
-
 	@Override /* GENERATED - ParserBuilder */
 	public UrlEncodingParserBuilder autoCloseStreams() {
 		super.autoCloseStreams();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder autoCloseStreams(boolean value) {
-		super.autoCloseStreams(value);
 		return this;
 	}
 
@@ -797,33 +617,15 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
 	@Override /* GENERATED - ParserBuilder */
 	public UrlEncodingParserBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
-		return this;
-	}
-
 	@Override /* GENERATED - ParserBuilder */
 	public UrlEncodingParserBuilder unbuffered() {
 		super.unbuffered();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - ParserBuilder */
-	public UrlEncodingParserBuilder unbuffered(boolean value) {
-		super.unbuffered(value);
 		return this;
 	}
 
@@ -854,12 +656,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - UonParserBuilder */
 	public UrlEncodingParserBuilder validateEnd() {
 		super.validateEnd();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - UonParserBuilder */
-	public UrlEncodingParserBuilder validateEnd(boolean value) {
-		super.validateEnd(value);
 		return this;
 	}
 

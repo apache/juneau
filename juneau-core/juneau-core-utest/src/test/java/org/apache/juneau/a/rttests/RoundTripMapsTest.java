@@ -105,22 +105,22 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(new byte[]{4,5,6}, null);
 		t.put(null, "b");
 
-		s = JsonSerializer.create().ssq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
+		s = JsonSerializer.create().ssq().pojoSwaps(getPojoSwaps()).keepNullProperties().build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = XmlSerializer.create().ns().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
+		s = XmlSerializer.create().ns().sq().pojoSwaps(getPojoSwaps()).keepNullProperties().build();
 		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = HtmlSerializer.create().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).addKeyValueTableHeaders().build();
+		s = HtmlSerializer.create().sq().pojoSwaps(getPojoSwaps()).keepNullProperties().addKeyValueTableHeaders().build();
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = UonSerializer.create().encoding().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
+		s = UonSerializer.create().encoding().pojoSwaps(getPojoSwaps()).keepNullProperties().build();
 		e = "(AQID=a,BAUG=null,null=b)";
 		r = s.serialize(t);
 		assertEquals(e, r);

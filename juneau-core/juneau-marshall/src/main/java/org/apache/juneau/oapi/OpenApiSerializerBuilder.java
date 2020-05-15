@@ -277,42 +277,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionary(java.lang.Class<?>...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionary(Object...values) {
-		super.beanDictionary(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionaryRemove(java.lang.Class<?>...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionaryRemove(Object...values) {
-		super.beanDictionaryRemove(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionaryReplace(java.lang.Class<?>...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanDictionaryReplace(Object...values) {
-		super.beanDictionaryReplace(values);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
@@ -343,12 +307,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
-		super.beanMapPutReturnsOldValue(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -373,39 +331,15 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireDefaultConstructor(boolean value) {
-		super.beansRequireDefaultConstructor(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireSerializable(boolean value) {
-		super.beansRequireSerializable(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireSettersForGetters(boolean value) {
-		super.beansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireSomeProperties(boolean value) {
-		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
@@ -487,12 +421,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder debug(boolean value) {
-		super.debug(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder dictionary(java.lang.Class<?>...values) {
 		super.dictionary(values);
@@ -571,33 +499,9 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder excludeProperties(Map<String,String> values) {
-		super.excludeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder excludeProperties(Class<?> beanClass, String properties) {
-		super.excludeProperties(beanClass, properties);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder excludeProperties(String beanClassName, String value) {
-		super.excludeProperties(beanClassName, value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder fluentSetters() {
 		super.fluentSetters();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder fluentSetters(boolean value) {
-		super.fluentSetters(value);
 		return this;
 	}
 
@@ -607,51 +511,15 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		super.ignoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		super.ignoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
-		super.ignorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignoreTransientFields(boolean value) {
-		super.ignoreTransientFields(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
-		super.ignoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
@@ -664,24 +532,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder includeProperties(Map<String,String> values) {
-		super.includeProperties(values);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder includeProperties(Class<?> beanClass, String value) {
-		super.includeProperties(beanClass, value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder includeProperties(String beanClassName, String value) {
-		super.includeProperties(beanClassName, value);
 		return this;
 	}
 
@@ -817,12 +667,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder sortProperties(boolean value) {
-		super.sortProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
@@ -835,27 +679,9 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder useEnumNames(boolean value) {
-		super.useEnumNames(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder useInterfaceProxies(boolean value) {
-		super.useInterfaceProxies(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder useJavaBeanIntrospector(boolean value) {
-		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
@@ -865,21 +691,9 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public OpenApiSerializerBuilder detectRecursions(boolean value) {
-		super.detectRecursions(value);
-		return this;
-	}
-
 	@Override /* GENERATED - BeanTraverseBuilder */
 	public OpenApiSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
-	public OpenApiSerializerBuilder ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
 		return this;
 	}
 
@@ -901,39 +715,15 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder addRootType(boolean value) {
-		super.addRootType(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder dontTrimNullProperties() {
-		super.dontTrimNullProperties();
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder keepNullProperties() {
 		super.keepNullProperties();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder keepNullProperties(boolean value) {
-		super.keepNullProperties(value);
 		return this;
 	}
 
@@ -949,21 +739,9 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder sortCollections(boolean value) {
-		super.sortCollections(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder sortMaps(boolean value) {
-		super.sortMaps(value);
 		return this;
 	}
 
@@ -973,39 +751,15 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder trimStrings() {
 		super.trimStrings();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
 		return this;
 	}
 
@@ -1060,12 +814,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - WriterSerializerBuilder */
 	public OpenApiSerializerBuilder useWhitespace() {
 		super.useWhitespace();
-		return this;
-	}
-
-	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
-	public OpenApiSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
 		return this;
 	}
 

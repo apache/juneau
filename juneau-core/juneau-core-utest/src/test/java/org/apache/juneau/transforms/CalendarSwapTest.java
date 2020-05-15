@@ -56,7 +56,6 @@ public class CalendarSwapTest {
 		return RdfSerializer.create()
 			.sq()
 			.locale(Locale.getDefault())
-			.useWhitespace(false)
 			.set(RdfCommon.RDF_rdfxml_allowBadUris, true)
 			.set(RdfCommon.RDF_rdfxml_showDoctypeDeclaration, false)
 			.set(RdfCommon.RDF_rdfxml_showXmlDeclaration, false)

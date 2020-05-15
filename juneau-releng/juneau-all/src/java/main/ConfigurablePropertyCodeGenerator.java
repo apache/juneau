@@ -205,6 +205,10 @@ public class ConfigurablePropertyCodeGenerator {
 					if (ms != null) {
 						for (Method m : ms) {
 
+							// Don't render deprecated methods.
+							if (m.getAnnotation(Deprecated.class) != null)
+								continue;
+
 							StringBuilder sigLine = new StringBuilder();
 							sigLine.append("\n\tpublic ");
 							if (m.getTypeParameters().length > 0)
