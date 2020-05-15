@@ -259,7 +259,6 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#useWhitespace(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#useWhitespace()}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializerBuilder#ws()}
 	 * 		</ul>

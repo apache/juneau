@@ -642,25 +642,25 @@ public class UriResolutionTest {
 
 	@Test
 	public void c1_testHtmlSerialize() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testSerialize(s, results.html, new TestURI());
 	}
 
 	@Test
 	public void c1c_testHtmlSerialize_usingConfig() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
 		testSerialize(s, results.html, new TestURIc());
 	}
 
 	@Test
 	public void c2_testHtmlParse() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
 		testParse(s, HtmlParser.DEFAULT, new TestURI());
 	}
 
 	@Test
 	public void c2c_testHtmlParse_usingConfig() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().detectLabelParameters(true).uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
 		testParse(s, HtmlParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
 	}
 

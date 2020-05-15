@@ -35,15 +35,14 @@ public class CommonTest {
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.keepNullProperties();
 		String r = s.build().serialize(t1);
-		assertEquals("{s1:null,s2:'s2'}", r);
+		assertEquals("{s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.keepNullProperties(false);
+		s.keepNullProperties();
 		r = s.build().serialize(t1);
-		assertEquals("{s2:'s2'}", r);
+		assertEquals("{s1:null,s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 	}
@@ -68,17 +67,10 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.trimEmptyMaps(false);
 		r = s.build().serialize(t1);
 		assertEquals("{f1:{},f2:{f2a:null,f2b:{s2:'s2'}}}", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyMaps(true);
-		r = s.build().serialize(t1);
-		assertEquals("{f2:{f2a:null,f2b:{s2:'s2'}}}", r);
-		t2 = p.parse(r, B.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -108,17 +100,10 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals("{f2:[null,{s2:'s2'}]}", r);
-		t2 = p.parse(r, C.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -148,17 +133,10 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals("{f2:[null,{s2:'s2'}]}", r);
-		t2 = p.parse(r, D.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

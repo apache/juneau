@@ -129,7 +129,7 @@ public abstract class RoundTripTest {
 			{ /* 13 */
 				"UrlEncoding - expanded params",
 				UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType(),
-				UrlEncodingParser.create().expandedParams(true),
+				UrlEncodingParser.create().expandedParams(),
 				0
 			},
 			{ /* 14 */

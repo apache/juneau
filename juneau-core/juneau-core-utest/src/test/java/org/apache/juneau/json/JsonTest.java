@@ -364,13 +364,13 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapeSolidus() throws Exception {
-		JsonSerializer s = JsonSerializer.create().escapeSolidus(false).build();
+		JsonSerializer s = JsonSerializer.create().build();
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);
 
-		s = JsonSerializer.create().escapeSolidus(true).build();
+		s = JsonSerializer.create().escapeSolidus().build();
 		r = s.serialize("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);

@@ -644,7 +644,7 @@ public class UrlEncodingParserTest {
 		UrlEncodingParser p;
 		String in;
 
-		p = UrlEncodingParser.create().expandedParams(true).build();
+		p = UrlEncodingParser.create().expandedParams().build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"
@@ -698,7 +698,7 @@ public class UrlEncodingParserTest {
 		UrlEncodingParser p;
 		String in;
 
-		p = UrlEncodingParser.create().expandedParams(true).applyAnnotations(DTOs2.Annotations.class).build();
+		p = UrlEncodingParser.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"

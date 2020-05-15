@@ -111,19 +111,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * <p>
-	 * Identifies whether nested descriptions are allowed in schema definitions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #allowNestedDescriptions()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
 		return set(JSONSCHEMA_allowNestedDescriptions, value);
 	}
@@ -148,19 +142,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Configuration property:  Allow nested examples.
 	 *
-	 * <p>
-	 * Identifies whether nested examples are allowed in schema definitions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #allowNestedExamples()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSchemaSerializerBuilder allowNestedExamples(boolean value) {
 		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
@@ -256,21 +244,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	/**
 	 * Configuration property:  Use bean definitions.
 	 *
-	 * <p>
-	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bcode w800'>
-	 * 	{
-	 * 		type: <js>'object'</js>,
-	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #useBeanDefs()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSchemaSerializerBuilder useBeanDefs(boolean value) {
 		return set(JSONSCHEMA_useBeanDefs, value);
 	}
@@ -458,7 +438,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -488,7 +468,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -500,7 +480,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -512,13 +492,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -602,7 +582,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -710,7 +690,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -722,7 +702,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -734,19 +714,19 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -758,13 +738,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -932,7 +912,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -950,13 +930,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -968,7 +948,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -980,7 +960,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlSchemaSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -992,7 +972,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlSchemaSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -1016,7 +996,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -1028,7 +1008,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -1046,7 +1026,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -1064,7 +1044,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -1076,7 +1056,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -1088,7 +1068,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -1100,7 +1080,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -1118,7 +1098,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSchemaSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1178,7 +1158,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public HtmlSchemaSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
@@ -1196,13 +1176,13 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder autoDetectNamespaces(boolean value) {
 		super.autoDetectNamespaces(value);
 		return this;
@@ -1226,7 +1206,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder enableNamespaces(boolean value) {
 		super.enableNamespaces(value);
 		return this;
@@ -1268,19 +1248,19 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		super.addKeyValueTableHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder detectLabelParameters(boolean value) {
 		super.detectLabelParameters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder detectLinksInStrings(boolean value) {
 		super.detectLinksInStrings(value);
 		return this;
@@ -1304,7 +1284,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlSchemaSerializerBuilder uriAnchorText(String value) {
 		super.uriAnchorText(value);
 		return this;

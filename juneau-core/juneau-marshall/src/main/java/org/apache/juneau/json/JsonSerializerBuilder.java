@@ -59,19 +59,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_escapeSolidus}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #escapeSolidus()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public JsonSerializerBuilder escapeSolidus(boolean value) {
 		return set(JSON_escapeSolidus, value);
 	}
@@ -96,20 +90,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Simple JSON mode.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
-	 * <br>Otherwise, they are always quoted.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSerializer#JSON_simpleMode}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #simple()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public JsonSerializerBuilder simple(boolean value) {
 		return set(JSON_simpleMode, value);
 	}
@@ -313,7 +300,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -343,7 +330,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -355,7 +342,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -367,13 +354,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -457,7 +444,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -565,7 +552,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -577,7 +564,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -589,19 +576,19 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -613,13 +600,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -787,7 +774,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -805,13 +792,13 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -823,7 +810,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -835,7 +822,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public JsonSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -847,7 +834,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public JsonSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -871,7 +858,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -883,7 +870,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -901,7 +888,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -919,7 +906,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -931,7 +918,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -943,7 +930,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -955,7 +942,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -973,7 +960,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1033,7 +1020,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public JsonSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;

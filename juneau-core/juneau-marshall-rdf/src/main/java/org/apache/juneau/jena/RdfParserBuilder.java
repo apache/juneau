@@ -936,7 +936,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -966,7 +966,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -978,7 +978,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -990,13 +990,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -1080,7 +1080,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -1188,7 +1188,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -1200,7 +1200,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -1212,19 +1212,19 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -1236,13 +1236,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -1410,7 +1410,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -1428,13 +1428,13 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -1446,7 +1446,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -1458,7 +1458,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public RdfParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -1482,7 +1482,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public RdfParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -1494,7 +1494,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public RdfParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1506,7 +1506,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public RdfParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;

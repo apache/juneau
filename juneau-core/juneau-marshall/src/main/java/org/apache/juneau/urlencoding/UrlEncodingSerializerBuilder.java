@@ -59,20 +59,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 * <p>
-	 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
-	 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UrlEncodingSerializer#URLENC_expandedParams}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #expandedParams()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
@@ -258,7 +251,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -288,7 +281,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -300,7 +293,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -312,13 +305,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -402,7 +395,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -510,7 +503,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -522,7 +515,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -534,19 +527,19 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -558,13 +551,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -732,7 +725,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -750,13 +743,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -768,7 +761,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -780,7 +773,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public UrlEncodingSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -792,7 +785,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public UrlEncodingSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -816,7 +809,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -828,7 +821,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -846,7 +839,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -864,7 +857,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -876,7 +869,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -888,7 +881,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -900,7 +893,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -918,7 +911,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -978,7 +971,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public UrlEncodingSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;

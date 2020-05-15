@@ -56,7 +56,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *

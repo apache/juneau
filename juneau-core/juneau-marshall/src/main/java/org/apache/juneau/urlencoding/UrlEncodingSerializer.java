@@ -142,7 +142,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#expandedParams(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#expandedParams()}
 	 * 		</ul>
 	 * </ul>

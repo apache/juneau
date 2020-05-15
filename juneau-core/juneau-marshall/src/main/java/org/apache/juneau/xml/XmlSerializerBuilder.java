@@ -59,19 +59,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Add namespace URLs to the root element.
 	 *
-	 * <p>
-	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addNamespaceUrisToRoot()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		return set(XML_addNamespaceUrisToRoot, value);
 	}
@@ -96,19 +90,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * <p>
-	 * Detect namespace usage before serialization.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontAutoDetectNamespaces()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		return set(XML_autoDetectNamespaces, value);
 	}
@@ -153,19 +141,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
 	 *
-	 * <p>
-	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #enableNamespaces()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public XmlSerializerBuilder enableNamespaces(boolean value) {
 		return set(XML_enableNamespaces, value);
 	}
@@ -448,7 +430,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -478,7 +460,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -490,7 +472,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -502,13 +484,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -592,7 +574,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -700,7 +682,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -712,7 +694,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -724,19 +706,19 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -748,13 +730,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -922,7 +904,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -940,13 +922,13 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -958,7 +940,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -970,7 +952,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public XmlSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -982,7 +964,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public XmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -1006,7 +988,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -1018,7 +1000,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -1036,7 +1018,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -1054,7 +1036,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -1066,7 +1048,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -1078,7 +1060,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -1090,7 +1072,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -1108,7 +1090,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public XmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1168,7 +1150,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public XmlSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;

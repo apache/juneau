@@ -69,7 +69,7 @@ public class CommonParser_UonTest {
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
 
-		in = UonSerializer.create().addBeanTypes(true).addRootType().build().serialize(b);
+		in = UonSerializer.create().addBeanTypes().addRootType().build().serialize(b);
 		b = (A1)p.parse(in, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 

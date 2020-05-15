@@ -59,19 +59,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only comments or whitespace.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonParser#JSON_validateEnd}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #validateEnd()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public JsonParserBuilder validateEnd(boolean value) {
 		return set(JSON_validateEnd, value);
@@ -258,7 +251,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -288,7 +281,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -300,7 +293,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -312,13 +305,13 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -402,7 +395,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -510,7 +503,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -522,7 +515,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -534,19 +527,19 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -558,13 +551,13 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -732,7 +725,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -750,13 +743,13 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -768,7 +761,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -780,7 +773,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public JsonParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -804,7 +797,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public JsonParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -816,7 +809,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public JsonParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -828,7 +821,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public JsonParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;

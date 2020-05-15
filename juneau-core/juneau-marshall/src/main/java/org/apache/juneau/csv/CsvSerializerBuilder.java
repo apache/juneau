@@ -217,7 +217,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -247,7 +247,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -259,7 +259,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -271,13 +271,13 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -361,7 +361,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -469,7 +469,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -481,7 +481,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -493,19 +493,19 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -517,13 +517,13 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -691,7 +691,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -709,13 +709,13 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -727,7 +727,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public CsvSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -739,7 +739,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public CsvSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -751,7 +751,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public CsvSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -775,7 +775,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -787,7 +787,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -805,7 +805,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -823,7 +823,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -835,7 +835,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -847,7 +847,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -859,7 +859,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -877,7 +877,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public CsvSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -937,7 +937,7 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public CsvSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;

@@ -116,7 +116,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -149,7 +149,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#escapeSolidus()}
 	 * 		</ul>
 	 * </ul>
@@ -201,7 +200,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simple(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simple()}
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#ssq()}
 	 * 		</ul>

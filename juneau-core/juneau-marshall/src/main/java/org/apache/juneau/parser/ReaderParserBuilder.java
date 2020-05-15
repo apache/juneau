@@ -287,7 +287,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -317,7 +317,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -329,7 +329,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -341,13 +341,13 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -431,7 +431,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -539,7 +539,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -551,7 +551,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -563,19 +563,19 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -587,13 +587,13 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -761,7 +761,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -779,13 +779,13 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -797,7 +797,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -809,7 +809,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public ReaderParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -833,7 +833,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public ReaderParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -845,7 +845,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public ReaderParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -857,7 +857,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public ReaderParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;

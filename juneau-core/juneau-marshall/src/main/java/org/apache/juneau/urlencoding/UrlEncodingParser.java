@@ -65,7 +65,6 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingParserBuilder#expandedParams()}
 	 * 			<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams()}
 	 * 		</ul>

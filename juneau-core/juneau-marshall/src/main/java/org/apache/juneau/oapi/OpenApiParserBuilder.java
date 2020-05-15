@@ -334,7 +334,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -364,7 +364,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -376,7 +376,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -388,13 +388,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -478,7 +478,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -586,7 +586,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -598,7 +598,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -610,19 +610,19 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -634,13 +634,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -808,7 +808,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -826,13 +826,13 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -844,7 +844,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -856,7 +856,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public OpenApiParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -880,7 +880,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public OpenApiParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -892,7 +892,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public OpenApiParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -904,7 +904,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public OpenApiParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;
@@ -940,7 +940,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - UonParserBuilder */
+	@Deprecated @Override /* GENERATED - UonParserBuilder */
 	public OpenApiParserBuilder validateEnd(boolean value) {
 		super.validateEnd(value);
 		return this;

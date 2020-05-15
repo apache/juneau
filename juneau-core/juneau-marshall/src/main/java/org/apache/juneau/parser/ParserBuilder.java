@@ -57,33 +57,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Auto-close streams.
 	 *
-	 * <p>
-	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-	 * after parsing is complete.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.autoCloseStreams(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
-	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jsm>assertTrue</jsm>(r.isClosed());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #autoCloseStreams()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public ParserBuilder autoCloseStreams(boolean value) {
 		return set(PARSER_autoCloseStreams, value);
@@ -216,63 +195,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Strict mode.
 	 *
-	 * <p>
-	 * When enabled, strict mode for the parser is enabled.
-	 *
-	 * <p>
-	 * Strict mode can mean different things for different parsers.
-	 *
-	 * <table class='styled'>
-	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-	 * 	<tr>
-	 * 		<td>All reader-based parsers</td>
-	 * 		<td>
-	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-	 * 			Otherwise, malformed input is ignored.
-	 * 		</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>{@link JsonParser}</td>
-	 * 		<td>
-	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-	 * 			<ul>
-	 * 				<li>Unquoted attributes.
-	 * 				<li>Missing attribute values.
-	 * 				<li>Concatenated strings.
-	 * 				<li>Javascript comments.
-	 * 				<li>Numbers and booleans when Strings are expected.
-	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-	 * 			</ul>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.strict(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it.</jc>
-	 *  <jk>try</jk> {
-	 *  	String json = <js>"{unquotedAttr:'value'}"</js>;
-	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
-	 *  } <jk>catch</jk> (ParseException e) {
-	 *  	<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
-	 *  }
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_strict}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #strict()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public ParserBuilder strict(boolean value) {
 		return set(PARSER_strict, value);
@@ -343,35 +271,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Trim parsed strings.
 	 *
-	 * <p>
-	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * the POJO.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.trimStrings(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Use it.</jc>
-	 *  String json = <js>"{' foo ':' bar '}"</js>;
-	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Make sure strings are parsed.</jc>
-	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public ParserBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
@@ -414,56 +319,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Unbuffered.
 	 *
-	 * <p>
-	 * When enabled, don't use internal buffering during parsing.
-	 *
-	 * <p>
-	 * This is useful in cases when you want to parse the same input stream or reader multiple times
-	 * because it may contain multiple independent POJOs to parse.
-	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser.
-	 * 		.<jsm>create</jsm>()
-	 * 		.unbuffered(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
-	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
-	 * 	ReaderParserSession s = p.createSession();
-	 *
-	 * 	<jc>// Read input with multiple POJOs</jc>
-	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
-	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
-	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This only allows for multi-input streams for the following parsers:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link JsonParser}
-	 * 			<li class='jc'>{@link UonParser}
-	 * 		</ul>
-	 * 		It has no effect on the following parsers:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
-	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
-	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #unbuffered()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public ParserBuilder unbuffered(boolean value) {
 		return set(PARSER_unbuffered, value);
@@ -688,7 +549,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -718,7 +579,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -730,7 +591,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -742,13 +603,13 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -832,7 +693,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -940,7 +801,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -952,7 +813,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -964,19 +825,19 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -988,13 +849,13 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -1162,7 +1023,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -1180,13 +1041,13 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -1198,7 +1059,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;

@@ -98,19 +98,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only whitespace.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #validateEnd()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public UonParserBuilder validateEnd(boolean value) {
 		return set(UON_validateEnd, value);
@@ -297,7 +290,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -327,7 +320,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -339,7 +332,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -351,13 +344,13 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -441,7 +434,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -549,7 +542,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -561,7 +554,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -573,19 +566,19 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -597,13 +590,13 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -771,7 +764,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -789,13 +782,13 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -807,7 +800,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -819,7 +812,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public UonParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -843,7 +836,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public UonParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -855,7 +848,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public UonParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -867,7 +860,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public UonParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;

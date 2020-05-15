@@ -595,7 +595,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanMapPutReturnsOldValue()}
 	 * 		</ul>
 	 * </ul>
@@ -696,7 +695,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireDefaultConstructor()}
 	 * 		</ul>
 	 * </ul>
@@ -744,7 +742,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSerializable()}
 	 * 		</ul>
 	 * </ul>
@@ -792,7 +789,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSettersForGetters()}
 	 * 		</ul>
 	 * </ul>
@@ -837,7 +833,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansRequireSomeProperties(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansDontRequireSomeProperties()}
 	 * 		</ul>
 	 * </ul>
@@ -1210,7 +1205,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#debug(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#debug()}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#debug(Boolean)}
 	 * 		</ul>
@@ -1337,7 +1331,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters()}
 	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters()}
@@ -1392,7 +1385,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnGetters()}
 	 * 		</ul>
 	 * </ul>
@@ -1437,7 +1429,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreInvocationExceptionsOnSetters()}
 	 * 		</ul>
 	 * </ul>
@@ -1482,7 +1473,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnorePropertiesWithoutSetters()}
 	 * 		</ul>
 	 * </ul>
@@ -1527,7 +1517,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreTransientFields(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreTransientFields()}
 	 * 		</ul>
 	 * </ul>
@@ -1572,7 +1561,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownBeanProperties()}
 	 * 		</ul>
 	 * </ul>
@@ -1617,7 +1605,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreUnknownNullBeanProperties()}
 	 * 		</ul>
 	 * </ul>
@@ -2133,7 +2120,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
 	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties()}
@@ -2298,7 +2284,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useInterfaceProxies(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontUseInterfaceProxies()}
 	 * 		</ul>
 	 * </ul>
@@ -2344,7 +2329,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useJavaBeanIntrospector(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#useJavaBeanIntrospector()}
 	 * 		</ul>
 	 * </ul>

@@ -1068,7 +1068,7 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debug(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#debug()}
 	 * 		</ul>
 	 * </ul>
 	 *

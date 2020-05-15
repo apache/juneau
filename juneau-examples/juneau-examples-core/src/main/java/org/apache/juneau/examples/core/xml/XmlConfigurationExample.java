@@ -56,13 +56,13 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object><innerPojo><name>name0</name><id>1.0</id></innerPojo><id>pojo</id></object>
-		String mapescaped = XmlSerializer.create().trimEmptyMaps(true).build().serialize(pojoc);
+		String mapescaped = XmlSerializer.create().trimEmptyMaps().build().serialize(pojoc);
 		// the output will have trimmed Empty maps.
 		System.out.println(mapescaped);
 
 		//Produces
 		//<object xmlns="http://www.apache.org/2013/Juneau"><name>&lt;pojo&gt;</name><id>a</id></object>
-		String nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot(true).build().serialize(aPojo);
+		String nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot().build().serialize(aPojo);
 		// the output will add default name space to the xml document root.
 		System.out.println(nspaceToRoot);
 
@@ -70,14 +70,14 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object><id>a</id></object>
-		String nullescaped = XmlSerializer.create().keepNullProperties(false).build().serialize(nPojo);
+		String nullescaped = XmlSerializer.create().build().serialize(nPojo);
 		// the output will have trimmed null properties.
 		System.out.println(nullescaped);
 
 		//Produces
 		//<object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"><name>&lt;pojo&gt;</name><id>a</id></object>
-		String dNamsSpace = XmlSerializer.create().enableNamespaces(true).defaultNamespace("http://www.pierobon.org" +
-			"/iis/review1.htm.html#one").autoDetectNamespaces(true).addNamespaceUrisToRoot(true).build()
+		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace("http://www.pierobon.org" +
+			"/iis/review1.htm.html#one").addNamespaceUrisToRoot().build()
 			.serialize(aPojo);
 		// the output will have new default namespace added.
 		System.out.println(dNamsSpace);

@@ -142,7 +142,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -175,7 +175,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#addNamespaceUrisToRoot()}
 	 * 		</ul>
 	 * </ul>
@@ -211,7 +210,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#dontAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
@@ -294,7 +292,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#enableNamespaces(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#enableNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *

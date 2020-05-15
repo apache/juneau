@@ -147,7 +147,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedDescriptions(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * 		</ul>
 	 * </ul>
@@ -299,7 +298,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#useBeanDefs(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#useBeanDefs()}
 	 * 		</ul>
 	 * </ul>

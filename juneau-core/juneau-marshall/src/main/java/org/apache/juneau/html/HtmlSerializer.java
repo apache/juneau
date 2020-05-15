@@ -153,7 +153,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -186,7 +186,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addKeyValueTableHeaders(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#addKeyValueTableHeaders()}
 	 * 		</ul>
 	 * </ul>
@@ -260,7 +259,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLinksInStrings(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLinksInStrings()}
 	 * 		</ul>
 	 * </ul>
@@ -369,7 +367,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#detectLabelParameters(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLabelParameters()}
 	 * 		</ul>
 	 * </ul>
@@ -452,7 +449,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#uriAnchorText(AnchorText)}
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#uriAnchorText(String)}
 	 * 		</ul>
 	 * </ul>
 	 *

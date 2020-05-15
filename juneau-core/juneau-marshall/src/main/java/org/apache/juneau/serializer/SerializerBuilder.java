@@ -53,51 +53,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * <p>
-	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
-	 * the type of the values.
-	 *
-	 * <p>
-	 * Note the differences between the following settings:
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addBeanTypes()
-	 * 		.build();
-	 *
-	 * 	<jc>// A map of objects we want to serialize.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
-	 *
-	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
-	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
-	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
-	 * 	String json = s.serialize(m);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addBeanTypes()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder addBeanTypes(boolean value) {
 		return set(SERIALIZER_addBeanTypes, value);
 	}
@@ -154,50 +116,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * <p>
-	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
-	 *
-	 * <p>
-	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 *
-	 * <p>
-	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
-	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
-	 *
-	 * <p>
-	 * Note the differences between the following settings:
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addRootType()
-	 * 		.build();
-	 *
-	 * 	<jc>// The bean we want to serialize.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
-	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addRootType()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder addRootType(boolean value) {
 		return set(SERIALIZER_addRootType, value);
 	}
@@ -253,40 +178,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Don't trim null bean property values.
 	 *
-	 * <p>
-	 * When enabled, null bean values will be serialized to the output.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that serializes null properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.keepNullProperties(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * <jc>// Our bean to serialize.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
-	 * 	}
-	 *
-	 * 	<jc>// Will contain "{foo:null}".</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder keepNullProperties(boolean value) {
 		return set(SERIALIZER_keepNullProperties, value);
 	}
@@ -387,37 +285,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * <p>
-	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
-	 *
-	 * <p>
-	 * Note that this introduces a performance penalty since it requires copying the existing collection.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortCollections(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// An unsorted array</jc>
-	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
-	 *
-	 * 	<jc>// Produces ["bar","baz","foo"]</jc>
-	 * 	String json = s.serialize(array);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #sortCollections()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
 	}
@@ -460,37 +334,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * <p>
-	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
-	 *
-	 * <p>
-	 * Note that this introduces a performance penalty.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortMaps(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
-	 *
-	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
-	 * 	String json = s.serialize(map);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #sortMaps()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
 	}
@@ -533,45 +383,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * <p>
-	 * When enabled, empty lists and arrays will not be serialized.
-	 *
-	 * <p>
-	 * Note that enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Map entries with empty list values will be lost.
-	 * 	<li>
-	 * 		Bean properties with empty list values will not be set.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.trimEmptyCollections(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a field with an empty array.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
-	 * 	}
-	 *
-	 * 	<jc>// Produces {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimEmptyCollections()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
 	}
@@ -622,43 +440,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim empty maps.
 	 *
-	 * <p>
-	 * When enabled, empty map values will not be serialized to the output.
-	 *
-	 * <p>
-	 * Note that enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Bean properties with empty map values will not be set.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that skips empty maps.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.trimEmptyMaps(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a field with an empty map.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
-	 * 	}
-	 *
-	 * 	<jc>// Produces {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimEmptyMaps()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
 	}
@@ -707,21 +495,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim null bean property values.
 	 *
-	 * <p>
-	 * When enabled, null bean values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #keepNullProperties(boolean)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
+	 * </div>
 	 */
-	@Deprecated
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
 	}
@@ -729,18 +509,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim null bean property values.
 	 *
-	 * <p>
-	 * When enabled, null bean values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #keepNullProperties()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
+	 * </div>
 	 */
-	@Deprecated
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder dontTrimNullProperties() {
 		return set(SERIALIZER_trimNullProperties, false);
 	}
@@ -748,35 +523,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim strings.
 	 *
-	 * <p>
-	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.trimStrings(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
-	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
-	 *
-	 * 	<jc>// Produces "{foo:'bar'}"</jc>
-	 * 	String json = s.toString(map);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public SerializerBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
 	}
@@ -1101,7 +854,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -1131,7 +884,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -1143,7 +896,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -1155,13 +908,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -1245,7 +998,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -1353,7 +1106,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -1365,7 +1118,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -1377,19 +1130,19 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -1401,13 +1154,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -1575,7 +1328,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -1593,13 +1346,13 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -1611,7 +1364,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -1623,7 +1376,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -1635,7 +1388,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;

@@ -237,7 +237,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -267,7 +267,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -279,7 +279,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -291,13 +291,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -381,7 +381,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -489,7 +489,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -501,7 +501,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -513,19 +513,19 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -537,13 +537,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -711,7 +711,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -729,13 +729,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -747,7 +747,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -759,7 +759,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SoapXmlSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -771,7 +771,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SoapXmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -795,7 +795,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -807,7 +807,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -825,7 +825,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -843,7 +843,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -855,7 +855,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -867,7 +867,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -879,7 +879,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -897,7 +897,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public SoapXmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -957,7 +957,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public SoapXmlSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
@@ -975,13 +975,13 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		super.autoDetectNamespaces(value);
 		return this;
@@ -1005,7 +1005,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public SoapXmlSerializerBuilder enableNamespaces(boolean value) {
 		super.enableNamespaces(value);
 		return this;

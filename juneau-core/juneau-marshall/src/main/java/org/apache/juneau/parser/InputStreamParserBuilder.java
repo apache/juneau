@@ -86,32 +86,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	/**
 	 * Configuration property:  Binary input format.
 	 *
-	 * <p>
-	 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
-	 * when converting the string into a byte array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that parses from BASE64.</jc>
-	 * 	InputStreamParser p = MsgPackParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.binaryFormat(<js>"BASE64"</js>)
-	 * 		.build();
-	 *
-	 * 	String input = <js>"base64-encoded-string"</js>;
-	 *
-	 * 	MyBean myBean = p.parse(input, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is {@link BinaryFormat#HEX}.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public InputStreamParserBuilder binaryFormat(String value) {
 		return set(ISPARSER_binaryFormat, BinaryFormat.valueOf(value));
@@ -281,7 +261,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -311,7 +291,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -323,7 +303,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -335,13 +315,13 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -425,7 +405,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -533,7 +513,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -545,7 +525,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -557,19 +537,19 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -581,13 +561,13 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -755,7 +735,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -773,13 +753,13 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -791,7 +771,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -803,7 +783,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public InputStreamParserBuilder autoCloseStreams(boolean value) {
 		super.autoCloseStreams(value);
 		return this;
@@ -827,7 +807,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public InputStreamParserBuilder strict(boolean value) {
 		super.strict(value);
 		return this;
@@ -839,7 +819,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public InputStreamParserBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -851,7 +831,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - ParserBuilder */
+	@Deprecated @Override /* GENERATED - ParserBuilder */
 	public InputStreamParserBuilder unbuffered(boolean value) {
 		super.unbuffered(value);
 		return this;

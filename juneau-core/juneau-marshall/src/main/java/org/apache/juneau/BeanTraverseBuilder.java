@@ -51,48 +51,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
-	 * <p>
-	 * When enabled, specifies that recursions should be checked for during traversal.
-	 *
-	 * <p>
-	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
-	 * <br>In general, unchecked recursions cause stack-overflow-errors.
-	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.detectRecursions(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #detectRecursions()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanTraverseBuilder detectRecursions(boolean value) {
 		return set(BEANTRAVERSE_detectRecursions, value);
 	}
@@ -146,51 +111,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	/**
 	 * Configuration property:  Ignore recursion errors.
 	 *
-	 * <p>
-	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
-	 *
-	 * <p class='bcode w800'>
-	 * 	{A:{B:{C:<jk>null</jk>}}}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that ignores recursions.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreRecursions(<jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Produces "{f:null}"</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #ignoreRecursions()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanTraverseBuilder ignoreRecursions(boolean value) {
 		return set(BEANTRAVERSE_ignoreRecursions, value);
 	}
@@ -479,7 +406,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -509,7 +436,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -521,7 +448,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -533,13 +460,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -623,7 +550,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -731,7 +658,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -743,7 +670,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -755,19 +682,19 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -779,13 +706,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -953,7 +880,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -971,13 +898,13 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -989,7 +916,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;

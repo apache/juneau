@@ -41,62 +41,62 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{ /* 0 */
 				"JsonSerializer.DEFAULT/JsonParser.DEFAULT",
-				JsonSerializer.create().addBeanTypes(true).addRootType(),
-				new JsonParserBuilder().useInterfaceProxies(false),
+				JsonSerializer.create().addBeanTypes().addRootType(),
+				new JsonParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 1 */
 				"JsonSerializer.DEFAULT_SIMPLE/JsonParser.DEFAULT",
-				new JsonSerializerBuilder().ssq().addBeanTypes(true).addRootType(),
-				new JsonParserBuilder().useInterfaceProxies(false),
+				new JsonSerializerBuilder().ssq().addBeanTypes().addRootType(),
+				new JsonParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 2 */
 				"JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT",
-				new JsonSerializerBuilder().ssq().addBeanTypes(true).addRootType(),
-				new JsonParserBuilder().useInterfaceProxies(false),
+				new JsonSerializerBuilder().ssq().addBeanTypes().addRootType(),
+				new JsonParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 3 */
 				"XmlSerializer.DEFAULT/XmlParser.DEFAULT",
-				new XmlSerializerBuilder().addBeanTypes(true).addRootType(),
-				new XmlParserBuilder().useInterfaceProxies(false),
+				new XmlSerializerBuilder().addBeanTypes().addRootType(),
+				new XmlParserBuilder().dontUseInterfaceProxies(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"HtmlSerializer.DEFAULT/HtmlParser.DEFAULT",
-				new HtmlSerializerBuilder().addBeanTypes(true).addRootType(),
-				new HtmlParserBuilder().useInterfaceProxies(false),
+				new HtmlSerializerBuilder().addBeanTypes().addRootType(),
+				new HtmlParserBuilder().dontUseInterfaceProxies(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING",
-				new UonSerializerBuilder().encoding().addBeanTypes(true).addRootType(),
-				new UonParserBuilder().decoding().useInterfaceProxies(false),
+				new UonSerializerBuilder().encoding().addBeanTypes().addRootType(),
+				new UonParserBuilder().decoding().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 6 */
 				"UonSerializer.DEFAULT/UonParser.DEFAULT",
-				new UonSerializerBuilder().addBeanTypes(true).addRootType(),
-				new UonParserBuilder().useInterfaceProxies(false),
+				new UonSerializerBuilder().addBeanTypes().addRootType(),
+				new UonParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 7 */
 				"UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT",
-				new UrlEncodingSerializerBuilder().addBeanTypes(true).addRootType(),
-				new UrlEncodingParserBuilder().useInterfaceProxies(false),
+				new UrlEncodingSerializerBuilder().addBeanTypes().addRootType(),
+				new UrlEncodingParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 8 */
 				"RdfSerializer.Xml/RdfParser.Xml",
-				new RdfSerializerBuilder().addBeanTypes(true).addRootType(),
-				new RdfParserBuilder().useInterfaceProxies(false),
+				new RdfSerializerBuilder().addBeanTypes().addRootType(),
+				new RdfParserBuilder().dontUseInterfaceProxies(),
 				0
 			},
 			{ /* 9 */
 				"MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT",
-				new MsgPackSerializerBuilder().addBeanTypes(true).addRootType(),
-				new MsgPackParserBuilder().useInterfaceProxies(false),
+				new MsgPackSerializerBuilder().addBeanTypes().addRootType(),
+				new MsgPackParserBuilder().dontUseInterfaceProxies(),
 				0
 			}
 		});

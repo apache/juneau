@@ -50,7 +50,6 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#detectRecursions()}
 	 * 		</ul>
 	 * </ul>
@@ -109,7 +108,6 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanTraverseBuilder#ignoreRecursions()}
 	 * 		</ul>
 	 * </ul>

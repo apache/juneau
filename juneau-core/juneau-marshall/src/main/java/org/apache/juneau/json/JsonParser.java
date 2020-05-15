@@ -130,7 +130,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>

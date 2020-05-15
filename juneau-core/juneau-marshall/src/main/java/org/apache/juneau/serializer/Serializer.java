@@ -67,7 +67,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addBeanTypes()}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addBeanTypes(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -134,7 +133,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addRootType(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#addRootType()}
 	 * 		</ul>
 	 * </ul>
@@ -271,7 +269,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#keepNullProperties()}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#keepNullProperties(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -327,7 +324,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortCollections(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortCollections()}
 	 * 		</ul>
 	 * </ul>
@@ -381,7 +377,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortMaps(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#sortMaps()}
 	 * 		</ul>
 	 * </ul>
@@ -435,7 +430,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyCollections(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyCollections()}
 	 * 		</ul>
 	 * </ul>
@@ -497,7 +491,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyMaps(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimEmptyMaps()}
 	 * 		</ul>
 	 * </ul>
@@ -611,7 +604,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimStrings(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>

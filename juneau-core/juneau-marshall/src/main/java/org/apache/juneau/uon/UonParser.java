@@ -108,7 +108,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#validateEnd(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonParserBuilder#validateEnd()}
 	 * 		</ul>
 	 * </ul>

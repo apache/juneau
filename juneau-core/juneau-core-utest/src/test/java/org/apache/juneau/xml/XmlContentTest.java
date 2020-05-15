@@ -32,7 +32,7 @@ public class XmlContentTest {
 	public void testContentFormat() throws Exception {
 		A t = A.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.builder().keepNullProperties().build(),
-			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).keepNullProperties().build();
+			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
 		WriterSerializerSession session;
 		String r;
@@ -140,7 +140,7 @@ public class XmlContentTest {
 	public void testXmlMixed() throws Exception {
 		B t = B.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.builder().keepNullProperties().build(),
-			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).keepNullProperties().build();
+			s2 = XmlSerializer.create().sq().ws().keepNullProperties().build();
 		XmlParser p = XmlParser.DEFAULT;
 		WriterSerializerSession session;
 		String r;

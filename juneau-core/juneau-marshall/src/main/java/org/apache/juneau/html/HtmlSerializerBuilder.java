@@ -59,16 +59,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_addKeyValueTableHeaders}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addKeyValueTableHeaders()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		return set(HTML_addKeyValueTableHeaders, value);
 	}
@@ -93,20 +90,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
-	 * <p>
-	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontDetectLinksInStrings()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
 		return set(HTML_detectLinksInStrings, value);
 	}
@@ -152,19 +142,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * <p>
-	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLabelParameters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontDetectLabelParameters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSerializerBuilder detectLabelParameters(boolean value) {
 		return set(HTML_detectLabelParameters, value);
 	}
@@ -210,19 +194,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * Configuration property:  Anchor text source.
 	 *
-	 * <p>
-	 * Same as {@link #uriAnchorText(AnchorText)} but takes in a string.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_uriAnchorText}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link AnchorText#TO_STRING}.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #uriAnchorText(AnchorText)}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public HtmlSerializerBuilder uriAnchorText(String value) {
 		return set(HTML_uriAnchorText, value);
 	}
@@ -391,7 +369,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -421,7 +399,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -433,7 +411,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -445,13 +423,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -535,7 +513,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -643,7 +621,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -655,7 +633,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -667,19 +645,19 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -691,13 +669,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -865,7 +843,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -883,13 +861,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -901,7 +879,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -913,7 +891,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -925,7 +903,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -949,7 +927,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -961,7 +939,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -979,7 +957,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -997,7 +975,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -1009,7 +987,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -1021,7 +999,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -1033,7 +1011,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -1051,7 +1029,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1111,7 +1089,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public HtmlSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
@@ -1129,13 +1107,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder autoDetectNamespaces(boolean value) {
 		super.autoDetectNamespaces(value);
 		return this;
@@ -1159,7 +1137,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlSerializerBuilder enableNamespaces(boolean value) {
 		super.enableNamespaces(value);
 		return this;

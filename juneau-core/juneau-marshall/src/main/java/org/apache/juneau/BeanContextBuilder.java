@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
@@ -228,13 +226,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 *
-	 * <p>
-	 * Adds to the list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
@@ -251,18 +242,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionary(Class...)}
 	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
@@ -275,18 +256,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Class...)}
 	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
@@ -299,18 +270,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
 	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionaryReplace(Object...values) {
@@ -323,18 +284,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Class...)}
 	 * </div>
-	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
@@ -347,18 +298,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
 	 * </div>
-	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("javadoc")
 	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beanDictionaryRemove(Object...values) {
@@ -483,21 +424,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
-	 * values.
-	 * <br>Otherwise, it returns <jk>null</jk>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #beanMapPutReturnsOldValue()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		return set(BEAN_beanMapPutReturnsOldValue, value);
 	}
@@ -542,19 +475,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireDefaultConstructor}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #beansRequireDefaultConstructor()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
 		return set(BEAN_beansRequireDefaultConstructor, value);
@@ -580,19 +506,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Beans require Serializable interface.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSerializable}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #beansRequireSerializable()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beansRequireSerializable(boolean value) {
 		return set(BEAN_beansRequireSerializable, value);
@@ -618,19 +537,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Beans require setters for getters.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
-	 * <br>Otherwise, they will be ignored.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSettersForGetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #beansRequireSettersForGetters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
 		return set(BEAN_beansRequireSettersForGetters, value);
@@ -656,19 +568,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Beans require at least one property.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #beansDontRequireSomeProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder beansRequireSomeProperties(boolean value) {
 		return set(BEAN_beansRequireSomeProperties, value);
@@ -968,25 +873,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Debug mode.
 	 *
-	 * <p>
-	 * Enables the following additional information during serialization:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean getters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #debug()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder debug(boolean value) {
 		return set(BEAN_debug, value);
@@ -1235,27 +1127,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Find fluent setters.
 	 *
-	 * <p>
-	 * When enabled, fluent setters are detected on beans.
-	 *
-	 * <p>
-	 * Fluent setters must have the following attributes:
-	 * <ul>
-	 * 	<li>Public.
-	 * 	<li>Not static.
-	 * 	<li>Take in one parameter.
-	 * 	<li>Return the bean itself.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #fluentSetters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder fluentSetters(boolean value) {
 		return set(BEAN_fluentSetters, value);
@@ -1281,19 +1158,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnGetters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
@@ -1319,19 +1189,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore invocation errors on setters.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnSetters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
@@ -1357,19 +1220,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore properties without setters.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #ignorePropertiesWithoutSetters()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignorePropertiesWithoutSetters(boolean value) {
 		return set(BEAN_ignorePropertiesWithoutSetters, value);
@@ -1396,15 +1252,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore transient fields.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreTransientFields()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreTransientFields(boolean value) {
 		return set(BEAN_ignoreTransientFields, value);
@@ -1427,19 +1280,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownBeanProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #ignoreUnknownBeanProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownBeanProperties, value);
@@ -1465,19 +1311,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Ignore unknown properties with null values.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreUnknownNullBeanProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownNullBeanProperties, value);
@@ -1995,19 +1834,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Sort bean properties.
 	 *
-	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #sortProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder sortProperties(boolean value) {
 		return set(BEAN_sortProperties, value);
@@ -2048,18 +1880,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Use enum names.
 	 *
-	 * <p>
-	 * When enabled, enums are always serialized by name instead of using {@link Object#toString()}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #useEnumNames()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder useEnumNames(boolean value) {
 		return set(BEAN_useEnumNames, value);
@@ -2085,19 +1911,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Use interface proxies.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
-	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #dontUseInterfaceProxies()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder useInterfaceProxies(boolean value) {
 		return set(BEAN_useInterfaceProxies, value);
@@ -2124,22 +1943,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Use Java Introspector.
 	 *
-	 * <p>
-	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Most {@link Bean @Bean} annotations will be ignored if you enable this setting.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useJavaBeanIntrospector}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #useJavaBeanIntrospector()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
 		return set(BEAN_useJavaBeanIntrospector, value);

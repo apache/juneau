@@ -834,7 +834,6 @@ import org.apache.http.client.CookieStore;
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#logger(Logger) logger(Logger)}
  * 		<li class='jm'>{@link RestClientBuilder#logToConsole() logToConsole()}
- * 		<li class='jm'>{@link RestClientBuilder#logToConsole(boolean) logToConsole(boolea )}
  * 		<li class='jm'>{@link RestClientBuilder#logRequests(DetailLevel,Level) logRequests(DetailLevel,Level)}
  * 	</ul>
  * </ul>
@@ -1278,7 +1277,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#keepHttpClientOpen(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#keepHttpClientOpen()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1302,7 +1301,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#leakDetection()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#leakDetection(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1360,7 +1358,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logToConsole()}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logToConsole(boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *

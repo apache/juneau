@@ -137,19 +137,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addBeanTypes()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder addBeanTypes(boolean value) {
 		return set(SERIALIZER_addBeanTypes, value);
 	}
@@ -166,6 +160,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder addBeanTypes() {
 		return set(SERIALIZER_addBeanTypes, true);
 	}
@@ -173,19 +168,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * <p>
-	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #addRootType()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder addRootType(boolean value) {
 		return set(SERIALIZER_addRootType, value);
 	}
@@ -202,6 +191,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder addRootType() {
 		return set(SERIALIZER_addRootType, true);
 	}
@@ -209,18 +199,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Don't trim null bean property values.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, null bean values will be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder keepNullProperties(boolean value) {
 		return set(SERIALIZER_keepNullProperties, value);
 	}
@@ -237,6 +222,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder keepNullProperties() {
 		return set(SERIALIZER_keepNullProperties, true);
 	}
@@ -255,6 +241,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
 	}
@@ -262,15 +249,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #sortCollections()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
 	}
@@ -287,6 +272,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder sortCollections() {
 		return set(SERIALIZER_sortCollections, true);
 	}
@@ -294,15 +280,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #sortMaps()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
 	}
@@ -319,6 +303,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
 	}
@@ -326,18 +311,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, empty list values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimEmptyCollections()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
 	}
@@ -354,6 +334,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder trimEmptyCollections() {
 		return set(SERIALIZER_trimEmptyCollections, true);
 	}
@@ -361,18 +342,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim empty maps.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, empty map values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimEmptyMaps()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
 	}
@@ -389,6 +365,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder trimEmptyMaps() {
 		return set(SERIALIZER_trimEmptyMaps, true);
 	}
@@ -396,19 +373,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim null bean property values.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #keepNullProperties(boolean)}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
 	@Deprecated
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
@@ -417,18 +387,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Trim strings.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
 	}
@@ -445,6 +410,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder trimStrings() {
 		return set(SERIALIZER_trimStrings, true);
 	}
@@ -462,6 +428,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
 	}
@@ -481,6 +448,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
 	}
@@ -500,6 +468,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
@@ -522,6 +491,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
@@ -546,6 +516,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder fileCharset(Charset value) {
 		return set(WSERIALIZER_fileCharset, value);
 	}
@@ -565,6 +536,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -584,6 +556,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -600,6 +573,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder sq() {
 		return quoteChar('\'');
 	}
@@ -622,6 +596,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder streamCharset(Charset value) {
 		return set(WSERIALIZER_streamCharset, value);
 	}
@@ -629,18 +604,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	/**
 	 * Configuration property:  Use whitespace.
 	 *
-	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #useWhitespace()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public SerializerGroupBuilder useWhitespace(boolean value) {
 		return set(WSERIALIZER_useWhitespace, value);
 	}
@@ -656,6 +626,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -672,6 +643,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public SerializerGroupBuilder ws() {
 		return useWhitespace();
 	}
@@ -840,7 +812,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -870,7 +842,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -882,7 +854,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -894,13 +866,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -984,7 +956,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -1092,7 +1064,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -1104,7 +1076,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -1116,19 +1088,19 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -1140,13 +1112,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -1314,7 +1286,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -1332,13 +1304,13 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -1350,7 +1322,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -1362,7 +1334,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SerializerGroupBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -1374,7 +1346,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public SerializerGroupBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;

@@ -42,7 +42,7 @@ public class CommonTest {
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.keepNullProperties(false);
+		s = HtmlSerializer.create().sq().addKeyValueTableHeaders();
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table>", r);
 		t2 = p.parse(r, A.class);
@@ -69,17 +69,10 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.trimEmptyMaps(false);
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><table><tr><th>key</th><th>value</th></tr></table></td></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyMaps(true);
-		r = s.build().serialize(t1);
-		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>f2a</td><td><null/></td></tr><tr><td>f2b</td><td><table><tr><th>key</th><th>value</th></tr><tr><td>s2</td><td>s2</td></tr></table></td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, B.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -109,17 +102,10 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><ul></ul></td></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f2</td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td>s2</td></tr></table></td></tr></table>", r);
-		t2 = p.parse(r, C.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -149,7 +135,6 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals(
 			"<table>"
@@ -173,26 +158,6 @@ public class CommonTest {
 
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals(
-			"<table>"
-				+"<tr><th>key</th><th>value</th></tr>"
-				+"<tr>"
-					+"<td>f2</td>"
-					+"<td>"
-						+"<table _type='array'>"
-							+"<tr><th>s1</th><th>s2</th></tr>"
-							+"<tr><null/></tr>"
-							+"<tr><td><null/></td><td>s2</td></tr>"
-						+"</table>"
-					+"</td>"
-				+"</tr>"
-			+"</table>",
-			r);
-		t2 = p.parse(r, D.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

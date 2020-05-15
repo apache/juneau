@@ -72,7 +72,7 @@ public class PojoRestTest {
 		model.put("/person1", p);
 
 		// Make sure it got stored correctly.
-		JsonSerializer serializer = JsonSerializer.create().ssq().addBeanTypes(false).addRootType().build();
+		JsonSerializer serializer = JsonSerializer.create().ssq().addRootType().build();
 		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
 
 		// Get the original Person object back.

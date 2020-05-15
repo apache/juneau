@@ -295,7 +295,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -325,7 +325,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -337,7 +337,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -349,13 +349,13 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -439,7 +439,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -547,7 +547,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -559,7 +559,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -571,19 +571,19 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -595,13 +595,13 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -769,7 +769,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -787,13 +787,13 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -805,7 +805,7 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -842,20 +842,8 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient addRootType() {
 		super.addRootType();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient addRootType(boolean value) {
-		super.addRootType(value);
 		return this;
 	}
 
@@ -928,12 +916,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient detectRecursions() {
 		super.detectRecursions();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient detectRecursions(boolean value) {
-		super.detectRecursions(value);
 		return this;
 	}
 
@@ -1106,12 +1088,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient ignoreRecursions(boolean value) {
-		super.ignoreRecursions(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
@@ -1143,32 +1119,14 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient keepHttpClientOpen(boolean value) {
-		super.keepHttpClientOpen(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient keepNullProperties() {
 		super.keepNullProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient keepNullProperties(boolean value) {
-		super.keepNullProperties(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient leakDetection() {
 		super.leakDetection();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient leakDetection(boolean value) {
-		super.leakDetection(value);
 		return this;
 	}
 
@@ -1181,12 +1139,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient logToConsole() {
 		super.logToConsole();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient logToConsole(boolean value) {
-		super.logToConsole(value);
 		return this;
 	}
 
@@ -1439,20 +1391,8 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient sortCollections(boolean value) {
-		super.sortCollections(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient sortMaps() {
 		super.sortMaps();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient sortMaps(boolean value) {
-		super.sortMaps(value);
 		return this;
 	}
 
@@ -1469,12 +1409,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient strict(boolean value) {
-		super.strict(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient te(Object value) {
 		super.te(value);
 		return this;
@@ -1487,20 +1421,8 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient trimEmptyMaps() {
 		super.trimEmptyMaps();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
 		return this;
 	}
 
@@ -1511,20 +1433,8 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsOnRead(boolean value) {
-		super.trimStringsOnRead(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient trimStringsOnWrite() {
 		super.trimStringsOnWrite();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimStringsOnWrite(boolean value) {
-		super.trimStringsOnWrite(value);
 		return this;
 	}
 
@@ -1567,12 +1477,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient useWhitespace() {
 		super.useWhitespace();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient useWhitespace(boolean value) {
-		super.useWhitespace(value);
 		return this;
 	}
 

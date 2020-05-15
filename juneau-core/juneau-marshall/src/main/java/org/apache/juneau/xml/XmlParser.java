@@ -87,7 +87,6 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#preserveRootElement(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#preserveRootElement()}
 	 * 		</ul>
 	 * </ul>
@@ -197,7 +196,6 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#validating(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlParserBuilder#validating()}
 	 * 		</ul>
 	 * </ul>

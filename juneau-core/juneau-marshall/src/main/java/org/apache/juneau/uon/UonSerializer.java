@@ -145,7 +145,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.uon.UonSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *

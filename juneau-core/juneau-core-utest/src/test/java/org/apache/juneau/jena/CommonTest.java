@@ -31,7 +31,6 @@ public class CommonTest {
 	private RdfSerializerBuilder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
-			.useWhitespace(false)
 			.set(RDF_rdfxml_allowBadUris, true)
 			.set(RDF_rdfxml_showDoctypeDeclaration, false)
 			.set(RDF_rdfxml_showXmlDeclaration, false);
@@ -50,15 +49,14 @@ public class CommonTest {
 		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.keepNullProperties();
 		String r = s.build().serialize(t1);
-		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
+		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.keepNullProperties(false);
+		s.keepNullProperties();
 		r = s.build().serialize(t1);
-		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
+		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 	}
@@ -83,17 +81,10 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.trimEmptyMaps(false);
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1 rdf:parseType='Resource'></jp:f1><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyMaps(true);
-		r = s.build().serialize(t1);
-		assertEquals("<rdf:Description><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
-		t2 = p.parse(r, B.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -123,18 +114,10 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
-		t2 = p.parse(r, C.class);
-		assertNull(t2.f1);
-		t2 = p.parse(r, C.class);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -165,17 +148,10 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.trimEmptyCollections(false);
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
-
-		s.trimEmptyCollections(true);
-		r = s.build().serialize(t1);
-		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
-		t2 = p.parse(r, D.class);
-		assertNull(t2.f1);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

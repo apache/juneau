@@ -217,7 +217,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -247,7 +247,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -259,7 +259,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -271,13 +271,13 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -361,7 +361,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -469,7 +469,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -481,7 +481,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -493,19 +493,19 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -517,13 +517,13 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -691,7 +691,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -709,13 +709,13 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -727,7 +727,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -739,7 +739,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlStrippedDocSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -751,7 +751,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public HtmlStrippedDocSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -775,7 +775,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -787,7 +787,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -805,7 +805,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -823,7 +823,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -835,7 +835,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -847,7 +847,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -859,7 +859,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -877,7 +877,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -937,7 +937,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
@@ -955,13 +955,13 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addNamespaceUrisToRoot(boolean value) {
 		super.addNamespaceUrisToRoot(value);
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder autoDetectNamespaces(boolean value) {
 		super.autoDetectNamespaces(value);
 		return this;
@@ -985,7 +985,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - XmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - XmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder enableNamespaces(boolean value) {
 		super.enableNamespaces(value);
 		return this;
@@ -1027,19 +1027,19 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		super.addKeyValueTableHeaders(value);
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder detectLabelParameters(boolean value) {
 		super.detectLabelParameters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder detectLinksInStrings(boolean value) {
 		super.detectLinksInStrings(value);
 		return this;
@@ -1063,7 +1063,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - HtmlSerializerBuilder */
+	@Deprecated @Override /* GENERATED - HtmlSerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder uriAnchorText(String value) {
 		super.uriAnchorText(value);
 		return this;

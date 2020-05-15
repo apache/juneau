@@ -27,7 +27,6 @@ public class CommonXmlTest {
 	private RdfSerializerBuilder getBasicSerializer() {
 		return RdfSerializer.create()
 			.sq()
-			.useWhitespace(false)
 			.set(RDF_rdfxml_allowBadUris, true)
 			.set(RDF_rdfxml_showDoctypeDeclaration, false)
 			.set(RDF_rdfxml_showXmlDeclaration, false);

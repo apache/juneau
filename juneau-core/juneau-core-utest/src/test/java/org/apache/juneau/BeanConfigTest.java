@@ -626,9 +626,9 @@ public class BeanConfigTest {
 		p2.beansRequireSettersForGetters();
 		assertSameCache(p1, p2);
 
-		p1.beansRequireSomeProperties(false);
+		p1.beansDontRequireSomeProperties();
 		assertDifferentCache(p1, p2);
-		p2.beansRequireSomeProperties(false);
+		p2.beansDontRequireSomeProperties();
 		assertSameCache(p1, p2);
 
 		p1.beanMapPutReturnsOldValue();
@@ -709,9 +709,9 @@ public class BeanConfigTest {
 		p2.useJavaBeanIntrospector();
 		assertSameCache(p1, p2);
 
-		p1.useInterfaceProxies(false);
+		p1.dontUseInterfaceProxies();
 		assertDifferentCache(p1, p2);
-		p2.useInterfaceProxies(false);
+		p2.dontUseInterfaceProxies();
 		assertSameCache(p1, p2);
 
 		p1.ignoreUnknownBeanProperties();
@@ -719,14 +719,14 @@ public class BeanConfigTest {
 		p2.ignoreUnknownBeanProperties();
 		assertSameCache(p1, p2);
 
-		p1.ignoreUnknownNullBeanProperties(false);
+		p1.dontIgnoreUnknownNullBeanProperties();
 		assertDifferentCache(p1, p2);
-		p2.ignoreUnknownNullBeanProperties(false);
+		p2.dontIgnoreUnknownNullBeanProperties();
 		assertSameCache(p1, p2);
 
-		p1.ignorePropertiesWithoutSetters(false);
+		p1.dontIgnorePropertiesWithoutSetters();
 		assertDifferentCache(p1, p2);
-		p2.ignorePropertiesWithoutSetters(false);
+		p2.dontIgnorePropertiesWithoutSetters();
 		assertSameCache(p1, p2);
 
 		p1.ignoreInvocationExceptionsOnGetters();

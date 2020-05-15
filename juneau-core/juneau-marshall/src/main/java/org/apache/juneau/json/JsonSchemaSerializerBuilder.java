@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -74,6 +75,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
@@ -100,6 +102,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
@@ -107,18 +110,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	/**
 	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * <p>
-	 * Identifies whether nested descriptions are allowed in schema definitions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #allowNestedDescriptions()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public JsonSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
 		return set(JSONSCHEMA_allowNestedDescriptions, value);
 	}
@@ -135,6 +133,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
 	}
@@ -142,18 +141,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	/**
 	 * Configuration property:  Allow nested examples.
 	 *
-	 * <p>
-	 * Identifies whether nested examples are allowed in schema definitions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #allowNestedExamples()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public JsonSchemaSerializerBuilder allowNestedExamples(boolean value) {
 		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
@@ -170,6 +164,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder allowNestedExamples() {
 		return set(JSONSCHEMA_allowNestedExamples, true);
 	}
@@ -193,6 +188,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -216,6 +212,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder beanDefMapper(BeanDefMapper value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -238,6 +235,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
@@ -245,20 +243,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	/**
 	 * Configuration property:  Use bean definitions.
 	 *
-	 * <p>
-	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bcode w800'>
-	 * 	{
-	 * 		type: <js>'object'</js>,
-	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #useBeanDefs()}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@ConfigurationProperty
+	@Deprecated
 	public JsonSchemaSerializerBuilder useBeanDefs(boolean value) {
 		return set(JSONSCHEMA_useBeanDefs, value);
 	}
@@ -277,6 +268,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public JsonSchemaSerializerBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
@@ -445,7 +437,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
@@ -475,7 +467,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
@@ -487,7 +479,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
@@ -499,13 +491,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
@@ -589,7 +581,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder debug(boolean value) {
 		super.debug(value);
 		return this;
@@ -697,7 +689,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder fluentSetters(boolean value) {
 		super.fluentSetters(value);
 		return this;
@@ -709,7 +701,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -721,19 +713,19 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignoreTransientFields(boolean value) {
 		super.ignoreTransientFields(value);
 		return this;
@@ -745,13 +737,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
@@ -919,7 +911,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
@@ -937,13 +929,13 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder useEnumNames(boolean value) {
 		super.useEnumNames(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
@@ -955,7 +947,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanContextBuilder */
+	@Deprecated @Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
@@ -967,7 +959,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public JsonSchemaSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
@@ -979,7 +971,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanTraverseBuilder */
+	@Deprecated @Override /* GENERATED - BeanTraverseBuilder */
 	public JsonSchemaSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
@@ -1003,7 +995,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
@@ -1015,7 +1007,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
@@ -1033,7 +1025,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder keepNullProperties(boolean value) {
 		super.keepNullProperties(value);
 		return this;
@@ -1051,7 +1043,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
@@ -1063,7 +1055,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
@@ -1075,7 +1067,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
@@ -1087,7 +1079,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
@@ -1105,7 +1097,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - SerializerBuilder */
+	@Deprecated @Override /* GENERATED - SerializerBuilder */
 	public JsonSchemaSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
@@ -1165,7 +1157,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - WriterSerializerBuilder */
+	@Deprecated @Override /* GENERATED - WriterSerializerBuilder */
 	public JsonSchemaSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
@@ -1183,7 +1175,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - JsonSerializerBuilder */
+	@Deprecated @Override /* GENERATED - JsonSerializerBuilder */
 	public JsonSchemaSerializerBuilder escapeSolidus(boolean value) {
 		super.escapeSolidus(value);
 		return this;
@@ -1195,7 +1187,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	@Override /* GENERATED - JsonSerializerBuilder */
+	@Deprecated @Override /* GENERATED - JsonSerializerBuilder */
 	public JsonSchemaSerializerBuilder simple(boolean value) {
 		super.simple(value);
 		return this;

@@ -144,7 +144,6 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#autoCloseStreams(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#autoCloseStreams()}
 	 * 		</ul>
 	 * </ul>
@@ -318,7 +317,6 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#strict(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#strict()}
 	 * 		</ul>
 	 * </ul>
@@ -399,7 +397,6 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#trimStrings(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#trimStrings()}
 	 * 		</ul>
 	 * </ul>
@@ -452,7 +449,6 @@ public abstract class Parser extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#unbuffered(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.parser.ParserBuilder#unbuffered()}
 	 * 		</ul>
 	 * </ul>
