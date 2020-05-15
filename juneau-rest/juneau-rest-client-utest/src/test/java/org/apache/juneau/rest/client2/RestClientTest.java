@@ -2238,26 +2238,6 @@ public class RestClientTest {
 		}
 	}
 
-	public static class L10a {
-		public int getFoo() {
-			throw new RuntimeException("Foo!");
-		}
-	}
-
-	@Test
-	public void l10_serializer_serializerListener() throws Exception {
-		MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.serializerListener(L10.class)
-			.ws()
-			.build()
-			.post("/echoBody", new L10a())
-			.run();
-		assertTrue(L10.T.getLocalizedMessage().contains("Exception occurred while getting property 'foo'"));
-		assertTrue(L10.MSG.contains("Exception occurred while getting property 'foo'"));
-	}
-
 	public static class L11 {
 		public Bean f;
 
@@ -2648,50 +2628,6 @@ public class RestClientTest {
 	// Parser properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void m01_parser_autoCloseStreams() throws Exception {
-		String x = "foo";
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.autoCloseStreams()
-			.build();
-
-		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams"));
-
-		rc
-			.post("/echoBody", x)
-			.run()
-			.getBody().assertValue("'foo'");
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.autoCloseStreams(true)
-			.build();
-
-		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams"));
-
-		rc
-			.post("/echoBody", x)
-			.run()
-			.getBody().assertValue("'foo'");
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.autoCloseStreams(false)
-			.build();
-
-		assertFalse(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("autoCloseStreams", false));
-
-		rc
-			.post("/echoBody", x)
-			.run()
-			.getBody().assertValue("'foo'");
-	}
 
 	@Test
 	public void m03_parser_debugOutputLines() throws Exception {
@@ -2714,30 +2650,6 @@ public class RestClientTest {
 		public void onError(ParserSession session, Throwable t, String msg) {
 			T = t;
 			MSG = msg;
-		}
-	}
-
-	public static class M4 {
-		public void setF(String f) {
-			throw new RuntimeException("foo");
-		}
-	}
-
-	@Test
-	public void m04_parser_parserListener() throws Exception {
-		try {
-			MockRestClient
-				.create(A.class)
-				.parser(JsonParser.class)
-				.parserListener(M4L.class)
-				.build()
-				.post("/echoBody", "{f:'1'}")
-				.run()
-				.getBody().as(M4.class);
-			fail("Exception expected");
-		} catch (Exception e) {
-			assertTrue(M4L.T instanceof RuntimeException);
-			assertTrue(M4L.MSG.contains("Error occurred trying to set property 'f'"));
 		}
 	}
 
@@ -2820,80 +2732,6 @@ public class RestClientTest {
 			.run()
 			.getBody().as(M7.class);
 		assertEquals(" 1 ", x.f);
-	}
-
-	@Test
-	public void m09_parser_unbufferedBoolean() throws Exception {
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.unbuffered()
-			.build();
-
-		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered"));
-
-		M7 x = rc
-			.post("/echoBody", new StringReader("{f:'1'}"))
-			.run()
-			.getBody().as(M7.class);
-		assertEquals("1", x.f);
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.unbuffered(true)
-			.build();
-
-		assertTrue(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered"));
-
-		rc = MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.unbuffered(false)
-			.build();
-
-		assertFalse(rc.parsers.getParser("application/json").toMap().getMap("Parser").getBoolean("unbuffered", false));
-	}
-
-	@Test
-	public void m11_parser_fileCharset() throws Exception {
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.json()
-			.fileCharset("UTF-8")
-			.build();
-
-		assertEquals("UTF-8", rc.parsers.getParser("application/json").toMap().getMap("ReaderParser").getString("fileCharset"));
-	}
-
-	@Test
-	public void m12_parser_inputStreamCharset() throws Exception {
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.json()
-			.inputStreamCharset("UTF-8")
-			.build();
-
-		assertEquals("UTF-8", rc.parsers.getParser("application/json").toMap().getMap("ReaderParser").getString("streamCharset"));
-	}
-
-	@Test
-	public void m13_parser_binaryInputFormat() throws Exception {
-		RestClient rc = null;
-
-		rc = MockRestClient
-			.create(A.class)
-			.msgPack()
-			.binaryInputFormat(BinaryFormat.BASE64)
-			.build();
-
-		assertEquals("BASE64", rc.parsers.getParser("octal/msgpack").toMap().getMap("InputStreamParser").getString("binaryFormat"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

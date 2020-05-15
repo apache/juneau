@@ -54,10 +54,25 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property: File charset.
 	 *
 	 * <p>
-	 * The character set to use for writing Files to the file system.
+	 * The character set to use for writing <c>Files</c> to the file system.
 	 *
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <p>
+	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+	 * 	s.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), myBean);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_fileCharset}
@@ -79,6 +94,20 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ws()  <jc>// Enable whitespace</jc>
+	 * 		.maxIndent(20)
+	 * 		.build();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
 	 * </ul>
@@ -97,7 +126,28 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Quote character.
 	 *
 	 * <p>
-	 * This is the character used for quoting attributes and values.
+	 * Specifies the character to use for quoting attributes and values.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that uses single quotes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.quoteChar(<js>'\''</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces {'foo':'bar'}</jc>
+	 * 	String json = s.toString(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
@@ -117,7 +167,28 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Quote character.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
+	 * Specifies to use single quotes for quoting attributes and values.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that uses single quotes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sq()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces {'foo':'bar'}</jc>
+	 * 	String json = s.toString(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
@@ -134,10 +205,22 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property: Output stream charset.
 	 *
 	 * <p>
-	 * The character set to use when writing to OutputStreams.
+	 * The character set to use when writing to <c>OutputStreams</c>.
 	 *
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to write to a UTF-8 encoded output stream.</jc>
+	 * 	s.serializer(<jk>new</jk> FileOutputStreamStream(<js>"MyBean.txt"</js>), myBean);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_streamCharset}
@@ -157,7 +240,24 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.useWhitespace(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -177,7 +277,24 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.useWhitespace()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -193,7 +310,24 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.ws()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -1037,32 +1171,14 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public WriterSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public WriterSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public WriterSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public WriterSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public WriterSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 

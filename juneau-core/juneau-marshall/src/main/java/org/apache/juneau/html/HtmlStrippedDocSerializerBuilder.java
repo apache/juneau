@@ -884,32 +884,14 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public HtmlStrippedDocSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public HtmlStrippedDocSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 

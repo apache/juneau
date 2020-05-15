@@ -72,8 +72,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * When enabled, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
 	 *
 	 * <p>
@@ -139,6 +140,10 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+	 *
 	 * <p>
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
@@ -199,6 +204,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
@@ -218,13 +224,13 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	}
 	 *
 	 * 	<jc>// Create a serializer using our listener.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MySerializerListener.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_listener</jsf>, MySerializerListener.<jk>class</jk>)
 	 * 		.build();
@@ -270,14 +276,12 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, null bean values will be serialized to the output.
 	 *
 	 * <p>
-	 * Note that not enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Map entries with <jk>null</jk> values will be lost.
+	 * When enabled, null bean values will be serialized to the output.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -293,6 +297,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_keepNullProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
+	 *
+	 * 	<jc>// Will contain "{foo:null}".</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
 	public static final String SERIALIZER_keepNullProperties = PREFIX + ".keepNullProperties.b";
@@ -323,10 +335,10 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * Copies and sorts the contents of arrays and collections before serializing them.
+	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
 	 *
 	 * <p>
-	 * Note that this introduces a performance penalty.
+	 * Note that this introduces a performance penalty since it requires copying the existing collection.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -341,6 +353,12 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_sortCollections</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted array</jc>
+	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 *
+	 * 	<jc>// Produces ["bar","baz","foo"]</jc>
+	 * 	String json = s.serialize(array);
 	 * </p>
 	 */
 	public static final String SERIALIZER_sortCollections = PREFIX + ".sortCollections.b";
@@ -371,7 +389,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * Copies and sorts the contents of maps by their keys before serializing them.
+	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
 	 *
 	 * <p>
 	 * Note that this introduces a performance penalty.
@@ -389,6 +407,12 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_sortMaps</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted map.</jc>
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 *
+	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	String json = s.serialize(array);
 	 * </p>
 	 */
 	public static final String SERIALIZER_sortMaps = PREFIX + ".sortMaps.b";
@@ -419,7 +443,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, empty lists and arrays will not be serialized.
+	 * When enabled, empty lists and arrays will not be serialized.
 	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
@@ -443,6 +467,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_trimEmptyCollections</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty array.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
 	public static final String SERIALIZER_trimEmptyCollections = PREFIX + ".trimEmptyCollections.b";
@@ -471,8 +503,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, empty map values will not be serialized to the output.
+	 * When enabled, empty map values will not be serialized to the output.
 	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
@@ -494,6 +527,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_trimEmptyMaps</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty map.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
 	public static final String SERIALIZER_trimEmptyMaps = PREFIX + ".trimEmptyMaps.b";
@@ -522,8 +563,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 * When enabled, null bean values will not be serialized to the output.
 	 *
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
@@ -575,8 +617,9 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -592,11 +635,12 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.set(<jsf>SERIALIZER_trimStrings</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
-	 * 	Map&lt;String,String&gt; m = <jk>new</jk> HashMap&lt;&gt;();
+	 *	<jc>// A map with space-padded keys/values</jc>
+	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
 	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
-	 * 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.toString(m);
+	 * 	String json = s.toString(map);
 	 * </p>
 	 */
 	public static final String SERIALIZER_trimStrings = PREFIX + ".trimStrings.b";
@@ -620,11 +664,11 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriContext(UriContext)}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriContext(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
@@ -643,18 +687,24 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(uriContext)
+	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
+	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but specify as a JSON string.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
+	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
+	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
 	 * 		.build();
 	 *
-	 * 	<jc>// Same, but use property.</jc>
+	 * 	<jc>// Same, but use properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>SERIALIZER_uriContext</jsf>, uriContext)
+	 * 		.set(<jsf>SERIALIZER_uriRelativity</jsf>, <js>"RESOURCE"</js>)
+	 * 		.set(<jsf>SERIALIZER_uriResolution</jsf>, <js>"ABSOLUTE"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but define it on the session args instead.</jc>
@@ -662,7 +712,17 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
 	 * 		...
 	 * 	}
+	 *
+	 * 	<jc>// A relative URL</jc>
+	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
+	 *
+	 * 	<jc>// Produces "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
+	 * 	String json = s.toString(url);
 	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * </ul>
 	 */
 	public static final String SERIALIZER_uriContext = PREFIX + ".uriContext.s";
 
@@ -685,11 +745,11 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriRelativity(UriRelativity)}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriRelativity(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
 	 * <ul>
@@ -701,22 +761,14 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * <p>
 	 * Possible values are:
 	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link UriRelativity#RESOURCE}
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
 	 * 		- Relative URIs should be considered relative to the servlet URI.
-	 * 	<li class='jf'>{@link UriRelativity#PATH_INFO}
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
 	 * 		- Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)
-	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
-	 * 		.build();
-	 * </p>
+	 * <p>
+	 * See {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}
@@ -743,11 +795,11 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriResolution(UriResolution)}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#uriResolution(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
 	 * <ul>
@@ -767,16 +819,8 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		- Don't do any URL resolution.
 	 * </ul>
 	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)
-	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)
-	 * 		.build();
-	 * </p>
+	 * <p>
+	 * See {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.URIs}

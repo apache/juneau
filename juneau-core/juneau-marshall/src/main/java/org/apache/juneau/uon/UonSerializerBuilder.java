@@ -99,6 +99,38 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
+	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a normal UON serializer.</jc>
+	 * 	UonSerializer s1 = UonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a plain-text UON serializer.</jc>
+	 * 	UonSerializer s2 = UonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
+	 * 		.build();
+	 *
+	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"bar"</js>,
+	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+	 *  );
+	 *
+	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
+	 * 	String uon1 = s1.serialize(m)
+	 *
+	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
+	 * 	String uon2 = s2.serialize(m)
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>
@@ -117,27 +149,24 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
 	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
+	 * Specifies plain-text for the format to use for URL GET parameter keys and values.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
-	 * </ul>
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a plain-text UON serializer.</jc>
+	 * 	UonSerializer s = UonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.paramFormatPlain()
+	 * 		.build();
 	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is {@link ParamFormat#UON}.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public UonSerializerBuilder paramFormat(String value) {
-		return set(UON_paramFormat, ParamFormat.valueOf(value));
-	}
-
-	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * 	OMap m = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"bar"</js>,
+	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+	 *  );
 	 *
-	 * <p>
-	 * Shortcut for calling <code>paramFormat(<jsf>PLAINTEXT</jsf>)</code>.
+	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
+	 * 	String uon = s.serialize(m)
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
@@ -981,32 +1010,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public UonSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public UonSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public UonSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public UonSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public UonSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 

@@ -866,32 +866,8 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient autoCloseStreams() {
-		super.autoCloseStreams();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient autoCloseStreams(boolean value) {
-		super.autoCloseStreams(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient basicAuth(String host, int port, String user, String pw) {
 		super.basicAuth(host, port, user, pw);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient binaryInputFormat(BinaryFormat value) {
-		super.binaryInputFormat(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient binaryOutputFormat(BinaryFormat value) {
-		super.binaryOutputFormat(value);
 		return this;
 	}
 
@@ -976,12 +952,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient expect(Object value) {
 		super.expect(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient fileCharset(String value) {
-		super.fileCharset(value);
 		return this;
 	}
 
@@ -1144,12 +1114,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient initialDepth(int value) {
 		super.initialDepth(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient inputStreamCharset(String value) {
-		super.inputStreamCharset(value);
 		return this;
 	}
 
@@ -1323,12 +1287,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient parserListener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-		super.parserListener(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	@SuppressWarnings("unchecked")
 	public MockRestClient parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
 		super.parsers(value);
@@ -1456,12 +1414,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient serializerListener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-		super.serializerListener(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
 	@SuppressWarnings("unchecked")
 	public MockRestClient serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
 		super.serializers(value);
@@ -1552,12 +1504,6 @@ public class MockRestClient extends RestClientBuilder {
 		return this;
 	}
 
-	@Deprecated @Override /* GENERATED - RestClientBuilder */
-	public MockRestClient trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient trimStringsOnRead() {
 		super.trimStringsOnRead();
@@ -1579,18 +1525,6 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClient trimStringsOnWrite(boolean value) {
 		super.trimStringsOnWrite(value);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient unbuffered() {
-		super.unbuffered();
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClient unbuffered(boolean value) {
-		super.unbuffered(value);
 		return this;
 	}
 

@@ -55,6 +55,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * The character set to use for writing <c>Files</c> to the file system.
 	 *
@@ -67,13 +68,13 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>WSERIALIZER_fileCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();
@@ -107,24 +108,27 @@ public abstract class WriterSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <p>
-	 * This setting does not apply to the RDF serializers.
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
+	 * 		.ws()  <jc>// Enable whitespace</jc>
 	 * 		.maxIndent(20)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_maxIndent</jsf>, 20)
+	 * 		.set(<jsf>WSERIALIZER_maxIndent</jsf>, 20)
 	 * 		.build();
 	 * </p>
 	 */
@@ -154,11 +158,13 @@ public abstract class WriterSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * This is the character used for quoting attributes and values.
 	 *
 	 * <p>
-	 * This setting does not apply to the RDF serializers.
+	 * Specifies the character to use for quoting attributes and values.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -173,6 +179,14 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
 	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces {'foo':'bar'}</jc>
+	 * 	String json = s.toString(<jk>new</jk> MyBean());
 	 * </p>
 	 */
 	public static final String WSERIALIZER_quoteChar = PREFIX + ".quoteChar.s";
@@ -200,6 +214,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * The character set to use when writing to <c>OutputStreams</c>.
 	 *
@@ -209,13 +224,13 @@ public abstract class WriterSerializer extends Serializer {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer.
+	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>WSERIALIZER_streamCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();
@@ -251,8 +266,9 @@ public abstract class WriterSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * When enabled, whitespace is added to the output to improve readability.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -268,7 +284,12 @@ public abstract class WriterSerializer extends Serializer {
 	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces "\{\n\t"foo": "bar"\n\}\n"</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
@@ -451,7 +472,7 @@ public abstract class WriterSerializer extends Serializer {
 	 *
 	 * @see #WSERIALIZER_useWhitespace
 	 * @return
-	 * 	If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * 	When enabled, whitespace is added to the output to improve readability.
 	 */
 	protected final boolean isUseWhitespace() {
 		return useWhitespace;

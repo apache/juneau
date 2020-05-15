@@ -883,32 +883,14 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public MsgPackSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public MsgPackSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public MsgPackSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public MsgPackSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public MsgPackSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 

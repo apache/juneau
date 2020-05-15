@@ -150,20 +150,21 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.autoCloseStreams()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_autoCloseStreams</jsf>, <jk>true</jk>)
 	 * 		.build();
@@ -199,6 +200,7 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
@@ -206,14 +208,14 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
 	 * 		.debugOuputLines(100)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
 	 * 		.set(<jsf>PARSER_debugOutputLines</jsf>, 100)
@@ -250,6 +252,7 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
@@ -269,13 +272,13 @@ public abstract class Parser extends BeanContext {
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser using our listener.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.listener(MyParserListener.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_listener</jsf>, MyParserListener.<jk>class</jk>)
 	 * 		.build();
@@ -321,8 +324,9 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 * When enabled, strict mode for the parser is enabled.
 	 *
 	 * <p>
 	 * Strict mode can mean different things for different parsers.
@@ -355,24 +359,24 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.strict()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_strict</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
-	 *  	<jk>try</jk> {
-	 *  		String json = <js>"{unquotedAttr:'value'}"</js>;
+	 *  <jk>try</jk> {
+	 *  	String json = <js>"{unquotedAttr:'value'}"</js>;
 	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
-	 *  	} <jk>catch</jk> (ParseException e) {
-	 *  		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
-	 *  	}
+	 *  } <jk>catch</jk> (ParseException e) {
+	 *  	<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+	 *  }
 	 * </p>
 	 */
 	public static final String PARSER_strict = PREFIX + ".strict.b";
@@ -401,28 +405,31 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimStrings()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_trimStrings</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
-	 *  	String json = <js>"{foo:' bar '}"</js>;
-	 * 	Map&lt;String,String&gt; m = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, m.get(<js>"foo"</js>));
+	 *  String json = <js>"{' foo ':' bar '}"</js>;
+	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Make sure strings are parsed.</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
 	 * </p>
 	 */
 	public static final String PARSER_trimStrings = PREFIX + ".trimStrings.b";
@@ -451,8 +458,9 @@ public abstract class Parser extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, don't use internal buffering during parsing.
+	 * When enabled, don't use internal buffering during parsing.
 	 *
 	 * <p>
 	 * This is useful in cases when you want to parse the same input stream or reader multiple times
@@ -462,13 +470,13 @@ public abstract class Parser extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.unbuffered()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>PARSER_unbuffered</jsf>, <jk>true</jk>)
 	 * 		.build();
@@ -497,8 +505,6 @@ public abstract class Parser extends BeanContext {
 	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
 	 * 		</ul>
 	 * </ul>
-	 *
-	 * If <jk>true</jk>, don't use internal buffering during parsing.
 	 */
 	public static final String PARSER_unbuffered = PREFIX + ".unbuffered.b";
 

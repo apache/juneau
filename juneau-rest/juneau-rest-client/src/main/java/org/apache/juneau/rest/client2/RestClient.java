@@ -1396,13 +1396,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 *
 	 * <p>
 	 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800 console'>
 	 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
 	 * </p>
 	 *
 	 * <p>
 	 * <jsf>FULL</jsf> detail produces a log message like the following:
-	 * <p class='bpcode w800 console'>
+	 * <p class='bcode w800 console'>
 	 * 	=== HTTP Call (outgoing) =======================================================
 	 * 	=== REQUEST ===
 	 * 	POST http://localhost:10000/testUrl

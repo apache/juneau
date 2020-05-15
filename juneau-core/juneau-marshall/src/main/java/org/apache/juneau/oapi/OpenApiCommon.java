@@ -46,6 +46,7 @@ public interface OpenApiCommon {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
 	 *
@@ -72,26 +73,23 @@ public interface OpenApiCommon {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a plain-text serializer.</jc>
-	 * 	OpenApiSerializer s1 = OpenApiSerializer.
+	 * 	OpenApiSerializer s1 = OpenApiSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a UON serializer.</jc>
-	 * 	OpenApiSerializer s2 = OpenApiSerializer.
+	 * 	OpenApiSerializer s2 = OpenApiSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.format(<jsf>UON</jsf>)
 	 * 		.build();
 	 *
-	 * 	OMap m = OMap.<jsm>of</jsm>(
-	 * 		<js>"foo"</js>, <js>"bar"</js>,
-	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-	 *  );
+	 * 	String string = <js>"foo bar"</js>;
 	 *
-	 * 	<jc>// Produces: "foo=bar,baz=qux\,true\,123"</jc>
-	 * 	String v1 = s1.serialize(m);
+	 * 	<jc>// Produces: "foo bar"</jc>
+	 * 	String v1 = s.serialize(string);
 	 *
-	 * <jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-	 * 	String v2 = s2.serialize(m);
+	 * 	<jc>// Produces: "'foo bar'"</jc>
+	 * 	String v2 = s2.serialize(string);
 	 * </p>
 	 */
 	public static final String OAPI_format = PREFIX + ".format.s";
@@ -120,6 +118,7 @@ public interface OpenApiCommon {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.
 	 *
@@ -140,20 +139,27 @@ public interface OpenApiCommon {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer using CSV for collections.</jc>
-	 * 	OpenApiSerializer s2 = OpenApiSerializer.
+	 * 	OpenApiSerializer s1 = OpenApiSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.collectionFormat(<jsf>CSV</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a serializer using UON for collections.</jc>
-	 * 	OpenApiSerializer s2 = OpenApiSerializer.
+	 * 	OpenApiSerializer s2 = OpenApiSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.collectionFormat(<jsf>UON</jsf>)
 	 * 		.build();
 	 *
-	 * 	OList l = OList.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	<jc>// An arbitrary data structure.</jc>
+	 * 	OList l = OList.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>,
+	 * 		<js>"bar"</js>,
+	 * 		OMap.<jsm>of</jsm>(
+	 * 			<js>"baz"</js>, OList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+	 *		)
+	 *	);
 	 *
-	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
+	 * 	<jc>// Produces: "foo=bar,baz=qux\,true\,123"</jc>
 	 * 	String v1 = s1.serialize(l)
 	 *
 	 * <jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>

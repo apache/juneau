@@ -53,8 +53,21 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * Configuration property:  Binary input format.
 	 *
 	 * <p>
-	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
+	 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that parses from BASE64.</jc>
+	 * 	InputStreamParser p = MsgPackParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.binaryFormat(<jsf>BASE64</jsf>)
+	 * 		.build();
+	 *
+	 * 	String input = <js>"base64-encoded-string"</js>;
+	 *
+	 * 	MyBean myBean = p.parse(input, MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
@@ -74,8 +87,21 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * Configuration property:  Binary input format.
 	 *
 	 * <p>
-	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
+	 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that parses from BASE64.</jc>
+	 * 	InputStreamParser p = MsgPackParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.binaryFormat(<js>"BASE64"</js>)
+	 * 		.build();
+	 *
+	 * 	String input = <js>"base64-encoded-string"</js>;
+	 *
+	 * 	MyBean myBean = p.parse(input, MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}

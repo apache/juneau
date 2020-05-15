@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.parser.InputStreamParser.*;
-import static org.apache.juneau.parser.ReaderParser.*;
 import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -51,6 +50,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
@@ -61,6 +61,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.client2.ext.*;
@@ -842,7 +843,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * If not specified, uses the following logger:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 * 	Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName());
 	 * </p>
 	 *
@@ -932,13 +933,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800 console'>
 	 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
 	 * </p>
 	 *
 	 * <p>
 	 * <jsf>FULL</jsf> detail produces a log message like the following:
-	 * <p class='bpcode w800 console'>
+	 * <p class='bcode w800 console'>
 	 * 	=== HTTP Call (outgoing) =======================================================
 	 * 	=== REQUEST ===
 	 * 	POST http://localhost:10000/testUrl
@@ -963,8 +964,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * By default, the message is logged to the default logger.  It can be logged to a different logger via the
-	 * {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_logger} setting or logged to the console using the
-	 * {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_logToConsole} setting.
+	 * {@link #logger(Logger)} method or logged to the console using the
+	 * {@link #logToConsole()} method.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequests}
@@ -1811,10 +1812,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.run();
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param name The parameter name.
@@ -1836,10 +1837,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.query(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
+	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
@@ -1888,10 +1889,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.run();
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param pairs The query key/value pairs.
@@ -1994,10 +1995,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
-	 * 		.run();
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param name The parameter name.
@@ -2019,10 +2020,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
 	 * 		.formData(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
-	 * 		.run();
+	 * 		.build();
 	 * </p>
 	 *
 	 * <p>
@@ -2071,10 +2072,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
-	 * 		.run();
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.build();
 	 * </p>
 	 *
 	 * @param pairs The form-data key/value pairs.
@@ -2221,6 +2222,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestRequest#runFuture()}
+	 * 	<li class='jm'>{@link RestRequest#completeFuture()}
+	 * 	<li class='jm'>{@link RestResponseBody#asFuture(Class)} (and similar methods)
 	 * </ul>
 	 *
 	 * <p>
@@ -2240,12 +2243,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>try</jk> {
 	 * 		String body = f.get().getBody().asString();
-	 * 		<jc>// Succeeded!</jc>
 	 * 	} <jk>catch</jk> (RestCallException e) {
-	 * 		<jc>// Failed!</jc>
 	 * 	}
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	Future&lt;MyBean&gt; f
+	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
@@ -2275,7 +2276,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
+	 * 	<jc>// Create a client with a customized client and don't close the http client on close.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.httpClient(myHttpClient)
@@ -2340,7 +2341,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 *  <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
+	 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
 	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
 	 *
 	 * 		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
@@ -2366,7 +2367,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 *		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
 	 *		<jk>public void</jk> close(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 			<jc>// Intercept when the response body is consumed.
+	 * 			<jc>// Intercept when the response body is consumed.</jc>
 	 * 		}
 	 * 	}
 	 *
@@ -2402,10 +2403,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 *  <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
-	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
-	 * 	}
-	 *
 	 * 	<jc>// Create a client with a customized interceptor.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
@@ -2425,7 +2422,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 *				<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
 	 *				<jk>public void</jk> connect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
+	 *					<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *				}
 	 *
 	 *				<ja>@Override</ja> <jc>// HttpResponseInterceptor</jc>
@@ -2435,7 +2432,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 *				<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
 	 *				<jk>public void</jk> close(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 					<jc>// Intercept when the response body is consumed.
+	 * 					<jc>// Intercept when the response body is consumed.</jc>
 	 * 				}
 	 * 			}
 	 * 		)
@@ -2477,6 +2474,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.leakDetection()
+	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
 	 * 		.build();
 	 *
 	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
@@ -2506,6 +2504,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that logs a message if the client is not properly closed.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.leakDetection(<jk>true</jk>)
+	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
+	 * 		.build();
+	 *
+	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_leakDetection}
 	 * </ul>
@@ -2526,6 +2536,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
 	 * using the serializer and parser defined in a marshall.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	parser property setters (e.g. {@link #strict()}), bean context property setters (e.g. {@link #pojoSwaps(Class...)}),
+	 * 	or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshall.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.marshall(SimpleJson.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
@@ -2543,15 +2568,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
 	 * using the serializer and parser defined in a marshall.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	parser property setters (e.g. {@link #strict()}), bean context property setters (e.g. {@link #pojoSwaps(Class...)}),
+	 * 	or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport using existing marshalls.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.marshall(Json.<jsf>DEFAULT_READABLE</jsf>, Xml.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public RestClientBuilder marshalls(Marshall...value) {
-		for (Marshall m : value) {
+		for (Marshall m : value)
 			if (m != null)
 				serializer(m.getSerializer()).parser(m.getParser());
-		}
 		return this;
 	}
 
@@ -2559,7 +2598,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Parser.
 	 *
 	 * <p>
-	 * Shortcut for calling {@link #parsers(Class...)}.
+	 * Associates the specified {@link Parser Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser is used to parse the HTTP response body into a POJO.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jk>class</jk>)
+	 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
@@ -2580,7 +2637,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Parser.
 	 *
 	 * <p>
-	 * Shortcut for calling {@link #parsers(Parser...)}.
+	 * Associates the specified {@link Parser Parser} with the HTTP client.
+	 *
+	 * <p>
+	 * The parser is used to parse the HTTP response body into a POJO.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
@@ -2603,8 +2678,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Associates the specified {@link Parser Parsers} with the HTTP client.
 	 *
 	 * <p>
+	 * The parsers are used to parse the HTTP response body into a POJO.
+	 *
+	 * <p>
 	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
 	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
+	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
@@ -2625,7 +2718,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Parsers.
 	 *
 	 * <p>
-	 * Same as {@link #parsers(Class...)} except takes in a parser instance.
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parsers are used to parse the HTTP response body into a POJO.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_parsers}
@@ -2647,6 +2762,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
 	 *
+	 * <p>
+	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partParser(UonParser.<js>class</js>)
+	 * 		.build();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
 	 * </ul>
@@ -2665,7 +2792,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Part parser.
 	 *
 	 * <p>
-	 * Same as {@link #partParser(Class)} but takes in a parser instance.
+	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
@@ -2687,6 +2826,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
 	 *
+	 * <p>
+	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partSerializer(UonSerializer.<js>class</js>)
+	 * 		.build();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
 	 * </ul>
@@ -2705,7 +2856,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Part serializer.
 	 *
 	 * <p>
-	 * Same as {@link #partSerializer(Class)} but takes in a parser instance.
+	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partSerializer}
@@ -2729,6 +2892,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * will be prefixed with the specified root.
 	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
+	 * 		.build();
+	 *
+	 * 	Bar bar = client
+	 * 		.get(<js>"/bar"</js>)  // Relative to http://localhost:10000/foo
+	 * 		.run()
+	 * 		.getBody().as(Bar.<jk>class</jk>);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_rootUri}
 	 * </ul>
@@ -2748,7 +2925,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Serializer.
 	 *
 	 * <p>
-	 * Shortcut for calling {@link #serializers(Class...)}.
+	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializer(JsonSerializer.<jk>class</jk>)
+	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
@@ -2769,7 +2964,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Serializer.
 	 *
 	 * <p>
-	 * Shortcut for calling {@link #serializers(Serializer...)}.
+	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
@@ -2792,9 +3005,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
 	 *
 	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <p>
 	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
 	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializers(JsonSerializer.<jk>class</jk>,XmlSerializer.<jk>class</jk>)
+	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+	 * 		.build();
+	 * </p>
+
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
 	 * </ul>
@@ -2814,7 +3045,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Serializers.
 	 *
 	 * <p>
-	 * Same as {@link #serializers(Class...)} but takes in serializer instances.
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}),
+	 * 	bean context property setters (e.g. {@link #pojoSwaps(Class...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined
+	 * 	on this builder class have no effect.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>,XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
@@ -2830,87 +3083,47 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return prependTo(RESTCLIENT_serializers, value);
 	}
 
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder addBeanTypes(boolean value) {
-		return set(SERIALIZER_addBeanTypes, value);
-	}
-
-	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder addBeanTypes() {
-		return set(SERIALIZER_addBeanTypes, true);
-	}
-
-	/**
-	 * Configuration property:  Add type attribute to root nodes.
-	 *
-	 * <p>
-	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-	 * type information that might normally be included to determine the data type will not be serialized.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder addRootType(boolean value) {
-		return set(SERIALIZER_addRootType, value);
-	}
-
-	/**
-	 * Configuration property:  Add type attribute to root nodes.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder addRootType() {
-		return set(SERIALIZER_addRootType, true);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// BeanTraverse Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <p>
-	 * Specifies that recursions should be checked for during serialization.
+	 * When enabled, specifies that recursions should be checked for during traversal.
+	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.detectRecursions(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -2935,7 +3148,44 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
+	 * When enabled, specifies that recursions should be checked for during traversal.
+	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.detectRecursions()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
@@ -2952,13 +3202,42 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-	 * Otherwise, an exception is thrown.
+	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 *
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that ignores recursions.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.ignoreRecursions(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Produces request body "{f:null}"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
@@ -2978,7 +3257,42 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Ignore recursion errors.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
+	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 *
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bcode w800'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that ignores recursions.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.ignoreRecursions()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Produces request body "{f:null}"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
@@ -2997,6 +3311,25 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * The initial indentation level at the root.
 	 *
+	 * <p>
+	 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.ws()
+	 * 		.initialDepth(2)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
 	 * </ul>
@@ -3012,10 +3345,286 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Max serialization depth.
+	 *
+	 * <p>
+	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+	 *
+	 * <p>
+	 * If this depth is exceeded, an exception is thrown.
+	 *
+	 * <p>
+	 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.maxDepth(20)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <c>100</c>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder maxDepth(int value) {
+		return set(BEANTRAVERSE_maxDepth, value);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Serializer Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
+	 * the type of the values.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.addBeanTypes(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
+	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder addBeanTypes(boolean value) {
+		return set(SERIALIZER_addBeanTypes, value);
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
+	 * the type of the values.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.addBeanTypes()
+	 * 		.build();
+	 *
+	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
+	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder addBeanTypes() {
+		return set(SERIALIZER_addBeanTypes, true);
+	}
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 *
+	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+	 *
+	 * <p>
+	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
+	 * <p>
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.addRootType(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder addRootType(boolean value) {
+		return set(SERIALIZER_addRootType, value);
+	}
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 *
+	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+	 *
+	 * <p>
+	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
+	 * <p>
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.addRootType()
+	 * 		.build();
+	 *
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	<jc>// Request body will contain '_type' attribute.</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
+	 * 		.complete();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder addRootType() {
+		return set(SERIALIZER_addRootType, true);
+	}
+
+	/**
 	 * Configuration property:  Don't trim null bean property values.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, null bean values will be serialized to the output.
+	 * When enabled, null bean values will be serialized to the output.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.keepNullProperties(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain "{foo:null}".</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
@@ -3037,6 +3646,30 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * When enabled, null bean values will be serialized to the output.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.keepNullProperties()
+	 * 		.build();
+	 *
+	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain "{foo:null}".</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
 	 * </ul>
@@ -3049,51 +3682,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Serializer listener.
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during serialization.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder serializerListener(Class<? extends SerializerListener> value) {
-		return set(SERIALIZER_listener, value);
-	}
-
-	/**
-	 * Configuration property:  Max serialization depth.
-	 *
-	 * <p>
-	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * <br>If this depth is exceeded, an exception is thrown.
-	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <c>100</c>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder maxDepth(int value) {
-		return set(BEANTRAVERSE_maxDepth, value);
-	}
-
-	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
-	 * Copies and sorts the contents of arrays and collections before serializing them.
+	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty since it requires copying the existing collection.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that sorts arrays and collections before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.sortCollections(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted array</jc>
+	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 *
+	 * 	<jc>// Request body will contain ["bar","baz","foo"]</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, array)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -3113,7 +3726,28 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
+	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty since it requires copying the existing collection.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that sorts arrays and collections before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.sortCollections()
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted array</jc>
+	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 *
+	 * 	<jc>// Request body will contain ["bar","baz","foo"]</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, array)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -3130,7 +3764,28 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Sets the {@link Serializer#SERIALIZER_sortMaps} property on all serializers in this group.
 	 *
 	 * <p>
-	 * Copies and sorts the contents of maps before serializing them.
+	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that sorts maps before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.sortMaps(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted map.</jc>
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 *
+	 * 	<jc>// Request body will contain {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -3148,7 +3803,28 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
+	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that sorts maps before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.sortMaps()
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted map.</jc>
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 *
+	 * 	<jc>// Request body will contain {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -3165,7 +3841,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, empty list values will not be serialized to the output.
+	 * When enabled, empty lists and arrays will not be serialized.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with empty list values will be lost.
+	 * 	<li>
+	 * 		Bean properties with empty list values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyCollections(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty array.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -3185,7 +3889,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
+	 * When enabled, empty lists and arrays will not be serialized.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with empty list values will be lost.
+	 * 	<li>
+	 * 		Bean properties with empty list values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyCollections()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty array.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -3202,7 +3934,34 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim empty maps.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, empty map values will not be serialized to the output.
+	 * When enabled, empty map values will not be serialized to the output.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Bean properties with empty map values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that skips empty maps.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimEmptyMaps(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty map.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -3222,7 +3981,34 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim empty maps.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
+	 * When enabled, empty map values will not be serialized to the output.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Bean properties with empty map values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that skips empty maps.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimEmptyMaps()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty map.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -3236,32 +4022,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 * @deprecated Use {@link #keepNullProperties(boolean)}
-	 */
-	@Deprecated
-	@ConfigurationProperty
-	public RestClientBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
-	}
-
-	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that trims strings before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 *	<jc>// A map with space-padded keys/values</jc>
+	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
+	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 *
+	 * 	<jc>// Request body will contain "{"foo":"bar"}"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -3281,7 +4064,26 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that trims strings before serialization.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimStrings()
+	 * 		.build();
+	 *
+	 *	<jc>// A map with space-padded keys/values</jc>
+	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
+	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 *
+	 * 	<jc>// Request body will contain "{"foo":"bar"}"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -3300,8 +4102,38 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our URI contextual information.</jc>
+	 * 	String authority = <js>"http://localhost:10000"</js>;
+	 * 	String contextRoot = <js>"/myContext"</js>;
+	 * 	String servletPath = <js>"/myServlet"</js>;
+	 * 	String pathInfo = <js>"/foo"</js>;
+	 *
+	 * 	<jc>// Create a UriContext object.</jc>
+	 * 	UriContext uriContext = <jk>new</jk> UriContext(authority, contextRoot, servletPath, pathInfo);
+	 *
+	 * 	<jc>// Create a REST client with JSON serializer and associate our context.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.uriContext(uriContext)
+	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
+	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
+	 * 		.build();
+	 *
+	 * 	<jc>// A relative URL</jc>
+	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
+	 *
+	 * 	<jc>// Request body will contain "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, url)
+	 * 		.complete();
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -3316,10 +4148,28 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  URI relativity.
 	 *
 	 * <p>
-	 * Defines what relative URIs are relative to when serializing URI/URL objects.
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value
@@ -3336,10 +4186,30 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
-	 * Defines the resolution level for URIs when serializing URI/URL objects.
+	 * Defines the resolution level for URIs when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li class='jf'>{@link UriResolution#ABSOLUTE}
+	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 	<li class='jf'>{@link UriResolution#ROOT_RELATIVE}
+	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 	<li class='jf'>{@link UriResolution#NONE}
+	 * 		- Don't do any URL resolution.
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value
@@ -3352,11 +4222,30 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(SERIALIZER_uriResolution, value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// WriterSerializer Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Configuration property:  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.ws()  <jc>// Enable whitespace</jc>
+	 * 		.maxIndent(20)
+	 * 		.build();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_maxIndent}
@@ -3376,7 +4265,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Quote character.
 	 *
 	 * <p>
-	 * This is the character used for quoting attributes and values.
+	 * Specifies the character to use for quoting attributes and values.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.quoteChar(<js>'\''</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {'foo':'bar'}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
@@ -3396,7 +4309,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Quote character.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
+	 * Specifies to use single quotes for quoting attributes and values.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.sq()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain {'foo':'bar'}</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_quoteChar}
@@ -3413,7 +4350,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.useWhitespace(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -3433,7 +4390,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.useWhitespace()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -3449,7 +4426,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Use whitespace.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 * When enabled, whitespace is added to the output to improve readability.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.ws()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a single property</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Request body will contain "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	client
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.complete();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
@@ -3462,69 +4459,41 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
 
-	/**
-	 * Configuration property:  Binary string format.
-	 *
-	 * <p>
-	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-	 * when converting the resulting byte array to a string.
-	 *
-	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link BinaryFormat#HEX}.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder binaryOutputFormat(BinaryFormat value) {
-		return set(OSSERIALIZER_binaryFormat, value);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// OutputStreamSerializer Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Configuration property:  Auto-close streams.
-	 *
-	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-	 * after parsing is complete.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder autoCloseStreams(boolean value) {
-		return set(PARSER_autoCloseStreams, value);
-	}
-
-	/**
-	 * Configuration property:  Auto-close streams.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder autoCloseStreams() {
-		return set(PARSER_autoCloseStreams, true);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parser Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Configuration property:  Debug output lines.
 	 *
+	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
+	 * 		.debugOuputLines(100)
+	 * 		.build();
+	 *
+	 * 	<jc>// Try to parse some bad JSON.</jc>
+	 * 	<jk>try</jk> {
+	 * 		client
+	 * 			.get(<js>"/pathToBadJson"</js>)
+	 * 			.run()
+	 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+	 * 	}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
@@ -3542,28 +4511,58 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Parser listener.
-	 *
-	 * <p>
-	 * Class used to listen for errors and warnings that occur during parsing.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_listener}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder parserListener(Class<? extends ParserListener> value) {
-		return set(PARSER_listener, value);
-	}
-
-	/**
 	 * Configuration property:  Strict mode.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 * When enabled, strict mode for the parser is enabled.
+	 *
+	 * <p>
+	 * Strict mode can mean different things for different parsers.
+	 *
+	 * <table class='styled'>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+	 * 	<tr>
+	 * 		<td>All reader-based parsers</td>
+	 * 		<td>
+	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+	 * 			Otherwise, malformed input is ignored.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>{@link JsonParser}</td>
+	 * 		<td>
+	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+	 * 			<ul>
+	 * 				<li>Unquoted attributes.
+	 * 				<li>Missing attribute values.
+	 * 				<li>Concatenated strings.
+	 * 				<li>Javascript comments.
+	 * 				<li>Numbers and booleans when Strings are expected.
+	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+	 * 			</ul>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.strict(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Try to parse some bad JSON.</jc>
+	 * 	<jk>try</jk> {
+	 * 		client
+	 * 			.get(<js>"/pathToBadJson"</js>)
+	 * 			.run()
+	 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 		<jc>// Handle exception.</jc>
+	 * 	}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -3583,7 +4582,55 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Strict mode.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
+	 * When enabled, strict mode for the parser is enabled.
+	 *
+	 * <p>
+	 * Strict mode can mean different things for different parsers.
+	 *
+	 * <table class='styled'>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+	 * 	<tr>
+	 * 		<td>All reader-based parsers</td>
+	 * 		<td>
+	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+	 * 			Otherwise, malformed input is ignored.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>{@link JsonParser}</td>
+	 * 		<td>
+	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+	 * 			<ul>
+	 * 				<li>Unquoted attributes.
+	 * 				<li>Missing attribute values.
+	 * 				<li>Concatenated strings.
+	 * 				<li>Javascript comments.
+	 * 				<li>Numbers and booleans when Strings are expected.
+	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+	 * 			</ul>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.strict(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Try to parse some bad JSON.</jc>
+	 * 	<jk>try</jk> {
+	 * 		client
+	 * 			.get(<js>"/pathToBadJson"</js>)
+	 * 			.run()
+	 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 		<jc>// Handle exception.</jc>
+	 * 	}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -3600,8 +4647,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
+	 * 	Map&lt;String,String&gt; map = client
+	 * 		.get(<js>"/pathToJson"</js>)
+	 * 		.run()
+	 * 		.getBody().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Make sure strings are trimmed.</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -3621,7 +4687,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.json()
+	 * 		.trimStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
+	 * 	Map&lt;String,String&gt; map = client
+	 * 		.get(<js>"/pathToJson"</js>)
+	 * 		.run()
+	 * 		.getBody().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Make sure strings are trimmed.</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -3634,108 +4720,59 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(PARSER_trimStrings, true);
 	}
 
-	/**
-	 * Configuration property:  Unbuffered.
-	 *
-	 * If <jk>true</jk>, don't use internal buffering during parsing.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder unbuffered(boolean value) {
-		return set(PARSER_unbuffered, value);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// ReaderParser Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Configuration property:  Unbuffered.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder unbuffered() {
-		return set(PARSER_unbuffered, true);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// InputStreamParser Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Configuration property:  File charset.
-	 *
-	 * <p>
-	 * The character set to use for reading <c>Files</c> from the file system.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder fileCharset(String value) {
-		return set(RPARSER_fileCharset, value);
-	}
-
-	/**
-	 * Configuration property:  Input stream charset.
-	 *
-	 * <p>
-	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is <js>"UTF-8"</js>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder inputStreamCharset(String value) {
-		return set(RPARSER_streamCharset, value);
-	}
-
-	/**
-	 * Configuration property:  Binary input format.
-	 *
-	 * <p>
-	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
-	 * when converting the string into a byte array.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link InputStreamParser#ISPARSER_binaryFormat}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default value is {@link BinaryFormat#HEX}.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public RestClientBuilder binaryInputFormat(BinaryFormat value) {
-		return set(ISPARSER_binaryFormat, value);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// OpenApi Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Configuration property:  Default OpenAPI format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()} for
+	 * the OpenAPI serializer and parser on this client.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='javatree'>
+	 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
+	 * 	RestClient client  = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.oapiFormat(<jsf>UON</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Set a header with a value in UON format.</jc>
+	 * 	client
+	 * 		.get(<js>"/url"</js>)
+	 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  // Will be serialized as [Foo: 'bar baz']
+	 * 		.run();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
@@ -3755,7 +4792,46 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Configuration property:  Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()} for the
+	 * OpenAPI serializer and parser on this client.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='javatree'>
+	 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.collectionFormat(<jsf>CSV</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An arbitrary data structure.</jc>
+	 * 	OList l = OList.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>,
+	 * 		<js>"bar"</js>,
+	 * 		OMap.<jsm>of</jsm>(
+	 * 			<js>"baz"</js>, OList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+	 *		)
+	 *	);
+	 *
+	 * 	<jc>// Set a header with a comma-separated list.</jc>
+	 * 	client
+	 * 		.get(<js>"/url"</js>)
+	 * 		.header(<js>"Foo"</js>, l)  // Will be serialized as [Foo: foo=bar,baz=qux\,true\,123]
+	 * 		.run();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
@@ -3771,11 +4847,46 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(OAPI_collectionFormat, value);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// UON Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Configuration property:  Parameter format.
 	 *
 	 * <p>
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
+	 *
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
+	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.urlEnc()
+	 * 		.paramFormat(<jsf>PLAINTEXT</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An arbitrary data structure.</jc>
+	 * 	OMap map = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"bar"</js>,
+	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+	 *  );
+	 *
+	 * 	<jc>// Request body will be serialize as "foo=bar,baz=qux,true,123"</jc>
+	 * 	client
+	 * 		.post(<js>"/url"</js>, map)
+	 * 		.run();
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
@@ -3795,6 +4906,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
 	 *
+	 * <p>
+	 * Specifies plaintext as the format to use for URL GET parameter keys and values.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.urlEnc()
+	 * 		.paramFormatPlain()
+	 * 		.build();
+	 *
+	 * 	<jc>// An arbitrary data structure.</jc>
+	 * 	OMap map = OMap.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>, <js>"bar"</js>,
+	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+	 *  );
+	 *
+	 * 	<jc>// Request body will be serialize as "foo=bar,baz=qux,true,123"</jc>
+	 * 	client
+	 * 		.post(<js>"/url"</js>, map)
+	 * 		.run();
+	 * </p>
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>

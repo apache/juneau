@@ -83,6 +83,28 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * 	</ul>
 	 * </ul>
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a plain-text serializer.</jc>
+	 * 	OpenApiSerializer s1 = OpenApiSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a UON serializer.</jc>
+	 * 	OpenApiSerializer s2 = OpenApiSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.format(<jsf>UON</jsf>)
+	 * 		.build();
+	 *
+	 * 	String string = <js>"foo bar"</js>;
+	 *
+	 * 	<jc>// Produces: "foo bar"</jc>
+	 * 	String v1 = s.serialize(string);
+	 *
+	 * 	<jc>// Produces: "'foo bar'"</jc>
+	 * 	String v2 = s2.serialize(string);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
 	 * </ul>
@@ -114,6 +136,36 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	</ul>
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer using CSV for collections.</jc>
+	 * 	OpenApiSerializer s1 = OpenApiSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.collectionFormat(<jsf>CSV</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a serializer using UON for collections.</jc>
+	 * 	OpenApiSerializer s2 = OpenApiSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.collectionFormat(<jsf>UON</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An arbitrary data structure.</jc>
+	 * 	OList l = OList.<jsm>of</jsm>(
+	 * 		<js>"foo"</js>,
+	 * 		<js>"bar"</js>,
+	 * 		OMap.<jsm>of</jsm>(
+	 * 			<js>"baz"</js>, OList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+	 *		)
+	 *	);
+	 *
+	 * 	<jc>// Produces: "foo=bar,baz=qux\,true\,123"</jc>
+	 * 	String v1 = s1.serialize(l)
+	 *
+	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
+	 * 	String v2 = s2.serialize(l)
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}
@@ -958,32 +1010,14 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public OpenApiSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public OpenApiSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 
@@ -1050,12 +1084,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - UonSerializerBuilder */
 	public OpenApiSerializerBuilder encoding(boolean value) {
 		super.encoding(value);
-		return this;
-	}
-
-	@Override /* GENERATED - UonSerializerBuilder */
-	public OpenApiSerializerBuilder paramFormat(String value) {
-		super.paramFormat(value);
 		return this;
 	}
 

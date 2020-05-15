@@ -56,6 +56,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
+	 * <p>
+	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <p>
+	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.fileCharset(<js>"UTF-8"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+	 * 	MyBean myBean = p.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_fileCharset}
 	 * </ul>
@@ -75,6 +93,21 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
+	 *
+	 * <p>
+	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
+	 * 	MyBean myBean = p.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link ReaderParser#RPARSER_streamCharset}

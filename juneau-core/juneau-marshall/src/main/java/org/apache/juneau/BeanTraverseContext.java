@@ -56,8 +56,9 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Specifies that recursions should be checked for during traversal.
+	 * When enabled, specifies that recursions should be checked for during traversal.
 	 *
 	 * <p>
 	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
@@ -71,7 +72,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEANTRAVERSE_detectRecursions</jsf>, <jk>true</jk>)
@@ -114,12 +115,18 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 *
 	 * <p class='bcode w800'>
 	 * 	{A:{B:{C:<jk>null</jk>}}}
@@ -127,7 +134,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
+	 * 	<jc>// Create a serializer ignores recursions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>, <jk>true</jk>)
@@ -169,9 +176,12 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * The initial indentation level at the root.
-	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
+	 *
+	 * <p>
+	 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -218,13 +228,19 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Abort traversal if specified depth is reached in the POJO tree.
-	 * <br>If this depth is exceeded, an exception is thrown.
+	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+	 *
+	 * <p>
+	 * If this depth is exceeded, an exception is thrown.
+	 *
+	 * <p>
+	 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that throws an exception if the depth is greater than 20.</jc>
+	 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.maxDepth(20)

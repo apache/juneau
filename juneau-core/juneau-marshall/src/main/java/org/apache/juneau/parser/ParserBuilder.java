@@ -19,10 +19,15 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Builder class for building instances of parsers.
@@ -53,8 +58,22 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Auto-close streams.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.autoCloseStreams(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
+	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jsm>assertTrue</jsm>(r.isClosed());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
@@ -74,7 +93,22 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Auto-close streams.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>autoCloseStreams(<jk>true</jk>)</code>.
+	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * after parsing is complete.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.autoCloseStreams()
+	 * 		.build();
+	 *
+	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
+	 * 	MyBean myBean = p.parse(r, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jsm>assertTrue</jsm>(r.isClosed());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_autoCloseStreams}
@@ -93,6 +127,23 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
+	 * 		.debugOuputLines(100)
+	 * 		.build();
+	 *
+	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
+	 * 	<jk>try</jk> {
+	 * 		p.parse(r, Object.<jk>class</jk>);
+	 * 	} <jk>catch</jk> (ParseException e) {
+	 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+	 * 	}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_debugOutputLines}
@@ -114,6 +165,42 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our parser listener.</jc>
+	 * 	<jc>// Simply captures all unknown bean property events.</jc>
+	 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
+	 *
+	 * 		<jc>// A simple property to store our events.</jc>
+	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class&lt;T&gt; beanClass, T bean, <jk>int</jk> line, <jk>int</jk> col) {
+	 * 			<jf>events</jf>.add(propertyName + <js>","</js> + line + <js>","</js> + col);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser using our listener.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.listener(MyParserListener.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a session object.</jc>
+	 * 	<jc>// Needed because listeners are created per-session.</jc>
+	 * 	<jk>try</jk> (ReaderParserSession s = p.createSession()) {
+	 *
+	 * 		<jc>// Parse some JSON object.</jc>
+	 * 		MyBean myBean = s.parse(<js>"{...}"</js>, MyBean.<jk>class</jk>);
+	 *
+	 * 		<jc>// Get the listener.</jc>
+	 * 		MyParserListener l = s.getListener(MyParserListener.<jk>class</jk>);
+	 *
+	 * 		<jc>// Dump the results to the console.</jc>
+	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
+	 * 	}
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_listener}
 	 * </ul>
@@ -130,7 +217,52 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Strict mode.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 * When enabled, strict mode for the parser is enabled.
+	 *
+	 * <p>
+	 * Strict mode can mean different things for different parsers.
+	 *
+	 * <table class='styled'>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+	 * 	<tr>
+	 * 		<td>All reader-based parsers</td>
+	 * 		<td>
+	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+	 * 			Otherwise, malformed input is ignored.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>{@link JsonParser}</td>
+	 * 		<td>
+	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+	 * 			<ul>
+	 * 				<li>Unquoted attributes.
+	 * 				<li>Missing attribute values.
+	 * 				<li>Concatenated strings.
+	 * 				<li>Javascript comments.
+	 * 				<li>Numbers and booleans when Strings are expected.
+	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+	 * 			</ul>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.strict(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it.</jc>
+	 *  <jk>try</jk> {
+	 *  	String json = <js>"{unquotedAttr:'value'}"</js>;
+	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
+	 *  } <jk>catch</jk> (ParseException e) {
+	 *  	<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+	 *  }
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -150,7 +282,52 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Strict mode.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>strict(<jk>true</jk>)</code>.
+	 * When enabled, strict mode for the parser is enabled.
+	 *
+	 * <p>
+	 * Strict mode can mean different things for different parsers.
+	 *
+	 * <table class='styled'>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+	 * 	<tr>
+	 * 		<td>All reader-based parsers</td>
+	 * 		<td>
+	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+	 * 			Otherwise, malformed input is ignored.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>{@link JsonParser}</td>
+	 * 		<td>
+	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+	 * 			<ul>
+	 * 				<li>Unquoted attributes.
+	 * 				<li>Missing attribute values.
+	 * 				<li>Concatenated strings.
+	 * 				<li>Javascript comments.
+	 * 				<li>Numbers and booleans when Strings are expected.
+	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+	 * 			</ul>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.strict()
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it.</jc>
+	 *  <jk>try</jk> {
+	 *  	String json = <js>"{unquotedAttr:'value'}"</js>;
+	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
+	 *  } <jk>catch</jk> (ParseException e) {
+	 *  	<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+	 *  }
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_strict}
@@ -167,8 +344,24 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it.</jc>
+	 *  String json = <js>"{' foo ':' bar '}"</js>;
+	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Make sure strings are parsed.</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -188,7 +381,24 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Trim parsed strings.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * the POJO.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimStrings()
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it.</jc>
+	 *  String json = <js>"{' foo ':' bar '}"</js>;
+	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Make sure strings are parsed.</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_trimStrings}
@@ -205,7 +415,45 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Unbuffered.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, don't use internal buffering during parsing.
+	 * When enabled, don't use internal buffering during parsing.
+	 *
+	 * <p>
+	 * This is useful in cases when you want to parse the same input stream or reader multiple times
+	 * because it may contain multiple independent POJOs to parse.
+	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.unbuffered(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
+	 * 	ReaderParserSession s = p.createSession();
+	 *
+	 * 	<jc>// Read input with multiple POJOs</jc>
+	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
+	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This only allows for multi-input streams for the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link JsonParser}
+	 * 			<li class='jc'>{@link UonParser}
+	 * 		</ul>
+	 * 		It has no effect on the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
+	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
+	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
+	 * 		</ul>
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}
@@ -225,7 +473,45 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * Configuration property:  Unbuffered.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>unbuffered(<jk>true</jk>)</code>.
+	 * When enabled, don't use internal buffering during parsing.
+	 *
+	 * <p>
+	 * This is useful in cases when you want to parse the same input stream or reader multiple times
+	 * because it may contain multiple independent POJOs to parse.
+	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using strict mode.</jc>
+	 * 	ReaderParser p = JsonParser.
+	 * 		.<jsm>create</jsm>()
+	 * 		.unbuffered(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
+	 * 	<jc>// It's more efficient because we don't need to recalc the session settings again. </jc>
+	 * 	ReaderParserSession s = p.createSession();
+	 *
+	 * 	<jc>// Read input with multiple POJOs</jc>
+	 * 	Reader json = <jk>new</jk> StringReader(<js>"{foo:'bar'}{foo:'baz'}"</js>);
+	 * 	MyBean myBean1 = s.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean myBean2 = s.parse(json, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		This only allows for multi-input streams for the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link JsonParser}
+	 * 			<li class='jc'>{@link UonParser}
+	 * 		</ul>
+	 * 		It has no effect on the following parsers:
+	 * 		<ul>
+	 * 			<li class='jc'>{@link MsgPackParser} - It already doesn't use buffering.
+	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
+	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
+	 * 		</ul>
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Parser#PARSER_unbuffered}

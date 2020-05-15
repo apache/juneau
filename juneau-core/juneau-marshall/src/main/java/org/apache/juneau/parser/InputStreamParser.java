@@ -59,10 +59,10 @@ public abstract class InputStreamParser extends Parser {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * When using the {@link #parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
-	 *
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -77,6 +77,10 @@ public abstract class InputStreamParser extends Parser {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>ISPARSER_binaryFormat</jsf>, <js>"BASE64"</js>)
 	 * 		.build();
+	 *
+	 * 	String input = <js>"base64-encoded-string"</js>;
+	 *
+	 * 	MyBean myBean = p.parse(input, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String ISPARSER_binaryFormat = PREFIX + ".binaryFormat.s";

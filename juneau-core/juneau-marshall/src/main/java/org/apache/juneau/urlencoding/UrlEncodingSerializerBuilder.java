@@ -925,32 +925,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriContext(String value) {
-		super.uriContext(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* GENERATED - SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriRelativity(String value) {
-		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
 	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
-		return this;
-	}
-
-	@Override /* GENERATED - SerializerBuilder */
-	public UrlEncodingSerializerBuilder uriResolution(String value) {
-		super.uriResolution(value);
 		return this;
 	}
 
@@ -1017,12 +999,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - UonSerializerBuilder */
 	public UrlEncodingSerializerBuilder encoding(boolean value) {
 		super.encoding(value);
-		return this;
-	}
-
-	@Override /* GENERATED - UonSerializerBuilder */
-	public UrlEncodingSerializerBuilder paramFormat(String value) {
-		super.paramFormat(value);
 		return this;
 	}
 

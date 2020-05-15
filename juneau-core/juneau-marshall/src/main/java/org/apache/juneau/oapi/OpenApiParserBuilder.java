@@ -83,6 +83,28 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * 	</ul>
 	 * </ul>
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a plain-text parser.</jc>
+	 * 	OpenApiParser p1 = OpenApiParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a UON parser.</jc>
+	 * 	OpenApiParser p2 = OpenApiParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.format(<jsf>UON</jsf>)
+	 * 		.build();
+	 *
+	 * 	String string = <js>"foo bar"</js>;
+	 *
+	 * 	<jc>// Parse a plain-text string.</jc>
+	 * 	String v1 = s.serialize(<js>"foo bar"</js>);
+	 *
+	 * 	<jc>// Parse a UON string.</jc>
+	 * 	String v2 = s2.serialize(<js>"'foo bar'"</js>);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_format}
 	 * </ul>
@@ -114,6 +136,27 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	</ul>
 	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a parser using CSV for collections.</jc>
+	 * 	OpenApiParser p1 = OpenApiParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.collectionFormat(<jsf>CSV</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a serializer using UON for collections.</jc>
+	 * 	OpenApiParser p2 = OpenApiParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.collectionFormat(<jsf>UON</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse CSV.</jc>
+	 * 	OList l1 = p1.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, OList.<jk>class</jk>)
+	 *
+	 * 	<jc>// Parse UON.</jc>
+	 * 	OList l2 = p2.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, OList.<jk>class</jk>)
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OpenApiCommon#OAPI_collectionFormat}

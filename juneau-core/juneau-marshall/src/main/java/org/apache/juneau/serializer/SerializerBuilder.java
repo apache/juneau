@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -53,8 +54,39 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
+	 *
+	 * <p>
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
+	 * the type of the values.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addBeanTypes()
+	 * 		.build();
+	 *
+	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
+	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	String json = s.serialize(m);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
@@ -74,7 +106,39 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>addBeanTypes(<jk>true</jk>)</code>.
+	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
+	 * the type of the values.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addBeanTypes()
+	 * 		.build();
+	 *
+	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
+	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	String json = s.serialize(m);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addBeanTypes}
@@ -91,8 +155,38 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
 	 * <p>
+	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+	 *
+	 * <p>
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
 	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
+	 * <p>
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addRootType()
+	 * 		.build();
+	 *
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
@@ -112,7 +206,38 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>addRootType(<jk>true</jk>)</code>.
+	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+	 *
+	 * <p>
+	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+	 * type information that might normally be included to determine the data type will not be serialized.
+	 *
+	 * <p>
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+	 *
+	 * <p>
+	 * Note the differences between the following settings:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addRootType(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_addRootType}
@@ -129,7 +254,28 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Don't trim null bean property values.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, null bean values will be serialized to the output.
+	 * When enabled, null bean values will be serialized to the output.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that serializes null properties.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.keepNullProperties(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
+	 *
+	 * 	<jc>// Will contain "{foo:null}".</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
@@ -151,6 +297,27 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * When enabled, null bean values will be serialized to the output.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that serializes null properties.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.keepNullProperties()
+	 * 		.build();
+	 *
+	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+	 * 	}
+	 *
+	 * 	<jc>// Will contain "{foo:null}".</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_keepNullProperties}
 	 * </ul>
@@ -167,6 +334,42 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define our serializer listener.</jc>
+	 * 	<jc>// Simply captures all errors.</jc>
+	 * 	<jk>public class</jk> MySerializerListener <jk>extends</jk> SerializerListener {
+	 *
+	 * 		<jc>// A simple property to store our events.</jc>
+	 * 		<jk>public</jk> List&lt;String&gt; <jf>events</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+	 *
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public</jk> &lt;T&gt; <jk>void</jk> onError(SerializerSession session, Throwable t, String msg) {
+	 * 			<jf>events</jf>.add(session.getLastLocation() + <js>","</js> + msg + <js>","</js> + t);
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer using our listener.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.listener(MySerializerListener.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a session object.</jc>
+	 * 	<jc>// Needed because listeners are created per-session.</jc>
+	 * 	<jk>try</jk> (WriterSerializerSession ss = s.createSession()) {
+	 *
+	 * 		<jc>// Serialize a bean.</jc>
+	 * 		String json = ss.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 		<jc>// Get the listener.</jc>
+	 * 		MySerializerListener l = ss.getListener(MySerializerListener.<jk>class</jk>);
+	 *
+	 * 		<jc>// Dump the results to the console.</jc>
+	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
+	 * 	}
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
@@ -185,7 +388,25 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
-	 * Copies and sorts the contents of arrays and collections before serializing them.
+	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty since it requires copying the existing collection.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortCollections(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted array</jc>
+	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 *
+	 * 	<jc>// Produces ["bar","baz","foo"]</jc>
+	 * 	String json = s.serialize(array);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -205,7 +426,25 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>sortCollections(<jk>true</jk>)</code>.
+	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty since it requires copying the existing collection.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortCollections()
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted array</jc>
+	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 *
+	 * 	<jc>// Produces ["bar","baz","foo"]</jc>
+	 * 	String json = s.serialize(array);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortCollections}
@@ -222,7 +461,25 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <p>
-	 * Copies and sorts the contents of maps before serializing them.
+	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortMaps(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted map.</jc>
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 *
+	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	String json = s.serialize(map);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -242,7 +499,25 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Sort maps alphabetically.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>sortMaps(<jk>true</jk>)</code>.
+	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
+	 *
+	 * <p>
+	 * Note that this introduces a performance penalty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortMaps()
+	 * 		.build();
+	 *
+	 * 	<jc>// An unsorted map.</jc>
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 *
+	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	String json = s.serialize(map);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_sortMaps}
@@ -259,7 +534,33 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, empty list values will not be serialized to the output.
+	 * When enabled, empty lists and arrays will not be serialized.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with empty list values will be lost.
+	 * 	<li>
+	 * 		Bean properties with empty list values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyCollections(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty array.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -279,7 +580,33 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimEmptyCollections(<jk>true</jk>)</code>.
+	 * When enabled, empty lists and arrays will not be serialized.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Map entries with empty list values will be lost.
+	 * 	<li>
+	 * 		Bean properties with empty list values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyCollections()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty array.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyCollections}
@@ -296,7 +623,31 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim empty maps.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, empty map values will not be serialized to the output.
+	 * When enabled, empty map values will not be serialized to the output.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Bean properties with empty map values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty maps.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyMaps(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty map.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -316,7 +667,31 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim empty maps.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimEmptyMaps(<jk>true</jk>)</code>.
+	 * When enabled, empty map values will not be serialized to the output.
+	 *
+	 * <p>
+	 * Note that enabling this setting has the following effects on parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Bean properties with empty map values will not be set.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that skips empty maps.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimEmptyMaps()
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an empty map.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 	}
+	 *
+	 * 	<jc>// Produces {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimEmptyMaps}
@@ -333,7 +708,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim null bean property values.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 * When enabled, null bean values will not be serialized to the output.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
@@ -355,7 +730,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim null bean property values.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 * When enabled, null bean values will not be serialized to the output.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
@@ -374,7 +749,23 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 *	<jc>// A map with space-padded keys/values</jc>
+	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
+	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 *
+	 * 	<jc>// Produces "{foo:'bar'}"</jc>
+	 * 	String json = s.toString(map);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -394,7 +785,23 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>trimStrings(<jk>true</jk>)</code>.
+	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.trimStrings()
+	 * 		.build();
+	 *
+	 *	<jc>// A map with space-padded keys/values</jc>
+	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
+	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 *
+	 * 	<jc>// Produces "{foo:'bar'}"</jc>
+	 * 	String json = s.toString(map);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimStrings}
@@ -413,8 +820,35 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our URI contextual information.</jc>
+	 * 	String authority = <js>"http://localhost:10000"</js>;
+	 * 	String contextRoot = <js>"/myContext"</js>;
+	 * 	String servletPath = <js>"/myServlet"</js>;
+	 * 	String pathInfo = <js>"/foo"</js>;
+	 *
+	 * 	<jc>// Create a UriContext object.</jc>
+	 * 	UriContext uriContext = <jk>new</jk> UriContext(authority, contextRoot, servletPath, pathInfo);
+	 *
+	 * 	<jc>// Associate it with our serializer.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.uriContext(uriContext)
+	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
+	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
+	 * 		.build();
+	 *
+	 * 	<jc>// A relative URL</jc>
+	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
+	 *
+	 * 	<jc>// Produces "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
+	 * 	String json = s.toString(url);
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -426,39 +860,31 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI context bean.
-	 *
-	 * <p>
-	 * Same as {@link #uriContext(UriContext)} but allows you to pass in a JSON string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public SerializerBuilder uriContext(String value) {
-		return set(SERIALIZER_uriContext, value);
-	}
-
-	/**
 	 * Configuration property:  URI relativity.
 	 *
 	 * <p>
-	 * Defines what relative URIs are relative to when serializing URI/URL objects.
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul class='javatree'>
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value
@@ -472,41 +898,33 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
-	 *
-	 * <p>
-	 * Same as {@link #uriRelativity(UriRelativity)} but allows you to pass in a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriRelativity(<js>"PATH_INFO"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link UriRelativity#RESOURCE}
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public SerializerBuilder uriRelativity(String value) {
-		return set(SERIALIZER_uriRelativity, value);
-	}
-
-	/**
 	 * Configuration property:  URI resolution.
 	 *
 	 * <p>
-	 * Defines the resolution level for URIs when serializing URI/URL objects.
+	 * Defines the resolution level for URIs when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 *
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li class='jf'>{@link UriResolution#ABSOLUTE}
+	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 	<li class='jf'>{@link UriResolution#ROOT_RELATIVE}
+	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 	<li class='jf'>{@link UriResolution#NONE}
+	 * 		- Don't do any URL resolution.
+	 * </ul>
+	 *
+	 * <p>
+	 * See {@link #uriContext(UriContext)} for examples.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 *
 	 * @param value
@@ -516,34 +934,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	@ConfigurationProperty
 	public SerializerBuilder uriResolution(UriResolution value) {
-		return set(SERIALIZER_uriResolution, value);
-	}
-
-	/**
-	 * Configuration property:  URI resolution.
-	 *
-	 * <p>
-	 * Same as {@link #uriResolution(UriResolution)} but allows you to pass in a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriResolution(<js>"ROOT_RELATIVE"</js>)
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is {@link UriResolution#NONE}
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public SerializerBuilder uriResolution(String value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
 

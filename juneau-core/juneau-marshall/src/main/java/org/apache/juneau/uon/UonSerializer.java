@@ -240,25 +240,26 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
 	 * <p>
 	 * Possible values:
 	 * <ul class='javatree'>
-	 * 	<li class='jf'>{@link ParamFormat#UON} - Use UON notation for parameters.
+	 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
 	 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a normal UON serializer.</jc>
-	 * 	UonSerializer s1 = UonSerializer.
+	 * 	UonSerializer s1 = UonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a plain-text UON serializer.</jc>
-	 * 	UonSerializer s2 = UonSerializer.
+	 * 	UonSerializer s2 = UonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 	 * 		.build();

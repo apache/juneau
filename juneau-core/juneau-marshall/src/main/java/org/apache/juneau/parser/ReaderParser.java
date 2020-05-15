@@ -62,6 +62,7 @@ public abstract class ReaderParser extends Parser {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
 	 *
@@ -74,13 +75,13 @@ public abstract class ReaderParser extends Parser {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.fileCharset(<js>"UTF-8"</js>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>RPARSER_fileCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();
@@ -114,6 +115,7 @@ public abstract class ReaderParser extends Parser {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 *
@@ -123,13 +125,13 @@ public abstract class ReaderParser extends Parser {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser.
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>RPARSER_streamCharset</jsf>, <js>"UTF-8"</js>)
 	 * 		.build();

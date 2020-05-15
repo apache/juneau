@@ -51,6 +51,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * When using the {@link #serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
