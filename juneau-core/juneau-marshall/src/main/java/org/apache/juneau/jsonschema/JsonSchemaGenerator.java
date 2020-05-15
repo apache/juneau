@@ -272,10 +272,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 			properties={
-	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
-	 * 			}
+	 * 	<ja>@Rest</ja>
+	 * 	<ja>@JsonSchemaConfig</ja>(
+	 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
+	 * 	)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
 	 */

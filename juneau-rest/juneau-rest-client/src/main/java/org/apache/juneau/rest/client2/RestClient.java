@@ -983,8 +983,29 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Allows you to provide a custom handler for making HTTP calls.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.callHandler(
+	 * 			<jk>new</jk> RestCallHandler() {
+	 * 				<ja>@Override</ja>
+	 * 				<jk>public</jk> HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
+	 * 					<jc>// Custom handle requests with request bodies.</jc>
+	 * 				}
+	 * 				<ja>@Override</ja>
+	 * 				<jk>public</jk> HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
+	 * 					<jc>// Custom handle requests without request bodies.</jc>
+	 * 				}
+	 * 			}
+	 * 		)
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
 
@@ -1036,8 +1057,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Defines the predicate used to determine which response status codes are considered errors.
+	 * Defines a predicate to test for error codes.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.errorCodes(x -&gt; x &gt;= 300)
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_errorCodes = PREFIX + "errorCodes.o";
 
@@ -1067,12 +1098,36 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
-	 * 	<li>{@link RestRequest#runFuture()}
+	 * 	<li class='jm'>{@link RestRequest#runFuture()}
+	 * 	<li class='jm'>{@link RestRequest#completeFuture()}
+	 * 	<li class='jm'>{@link RestResponseBody#asFuture(Class)} (and similar methods)
 	 * </ul>
 	 *
 	 * <p>
 	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 	 * and a queue size of 10.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client with a customized executor service.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it to asynchronously run a request.</jc>
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).runFuture();
+	 * 	<jc>// Do some other stuff</jc>
+	 * 	<jk>try</jk> {
+	 * 		String body = f.get().getBody().asString();
+	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 	}
+	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
+	 * </p>
 	 */
 	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
 
@@ -1255,7 +1310,46 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Interceptors that get called immediately after a connection is made.
+	 * Adds an interceptor that can be called to hook into specified events in the lifecycle of a single request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
+	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
+	 *
+	 * 		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
+	 * 		<jk>public void</jk> init(RestRequest req) <jk>throws</jk> Exception {
+	 *			<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
+	 *			// set on the request from the client.</jc>
+	 *		}
+	 *
+	 *		<ja>@Override</ja> <jc>// HttpRequestInterceptor</jc>
+	 *		<jk>public void</jk> process(HttpRequest request, HttpContext context) {
+	 *			<jc>// Intercept before the request is sent to the server.</jc>
+	 *		}
+	 *
+	 *		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
+	 *		<jk>public void</jk> connect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
+	 *		}
+	 *
+	 *		<ja>@Override</ja> <jc>// HttpResponseInterceptor</jc>
+	 *		<jk>public void</jk> process(HttpResponse response, HttpContext context) <jk>throws</jk> HttpException, IOException {
+	 *			<jc>// Intercept before the message body is evaluated.</jc>
+	 *		}
+	 *
+	 *		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
+	 *		<jk>public void</jk> close(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jc>// Intercept when the response body is consumed.</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a client with a customized interceptor.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.interceptors(MyRestCallInterceptor.<jk>class</jk>)
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_interceptors = PREFIX + "interceptors.lo";
 
@@ -1284,6 +1378,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.httpClient(myHttpClient)
+	 * 		.keepHttpClientOpen()
+	 * 		.build();
+	 *
+	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * </p>
 	 */
 	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
 
@@ -1313,7 +1419,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link #RESTCLIENT_debug}.
+	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that logs a message if </jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.leakDetection()
+	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
+	 * 		.build();
+	 *
+	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * </p>
 	 */
 	public static final String RESTCLIENT_leakDetection = PREFIX + "leakDetection.b";
 
@@ -1505,7 +1623,24 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The parsers to use for parsing POJOs in response bodies.
+	 * Associates the specified {@link Parser Parsers} with the HTTP client.
+	 *
+	 * <p>
+	 * The parsers are used to parse the HTTP response body into a POJO.
+	 *
+	 * <p>
+	 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+	 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
+	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_parsers = PREFIX + "parsers.lo";
 
@@ -1532,6 +1667,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partParser(UonParser.<js>class</js>)
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_partParser = PREFIX + "partParser.o";
 
@@ -1558,6 +1705,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+	 *
+	 * <p>
+	 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.partSerializer(UonSerializer.<js>class</js>)
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_partSerializer = PREFIX + "partSerializer.o";
 
@@ -1619,7 +1778,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
 	 * will be prefixed with the specified root.
 	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
-	 * <br>Trailing slashes are trimmed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
+	 * 		.build();
+	 *
+	 * 	Bar bar = client
+	 * 		.get(<js>"/bar"</js>)  // Relative to http://localhost:10000/foo
+	 * 		.run()
+	 * 		.getBody().as(Bar.<jk>class</jk>);
+	 * </p>
 	 */
 	public static final String RESTCLIENT_rootUri = PREFIX + "rootUri.s";
 
@@ -1647,7 +1819,24 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * The serializers to use for serializing POJOs in request bodies.
+	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+	 *
+	 * <p>
+	 * The serializer is used to serialize POJOs into the HTTP request body.
+	 *
+	 * <p>
+	 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+	 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
+	 * 	RestClient client = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.serializers(JsonSerializer.<jk>class</jk>,XmlSerializer.<jk>class</jk>)
+	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+	 * 		.build();
+	 * </p>
 	 */
 	public static final String RESTCLIENT_serializers = PREFIX + "serializers.lo";
 

@@ -72,7 +72,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	String msgPack = s.serializeToString(<jk>new</jk> MyBean());
 	 * </p>
 	 *
-	 * <ul class='javatree'>
+	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
 	 * </ul>
 	 *

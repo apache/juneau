@@ -59,9 +59,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 	 *
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>

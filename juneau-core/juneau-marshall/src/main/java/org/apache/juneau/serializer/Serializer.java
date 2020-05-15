@@ -102,15 +102,15 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<jc>// Our map of beans to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
-	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
-	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
-	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
-	 * 	String json = s.serialize(m);
+	 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
+	 * 	String json = s.serialize(map);
 	 * </p>
 	 */
 	public static final String SERIALIZER_addBeanTypes = PREFIX + ".addBeanTypes.b";
@@ -171,11 +171,13 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.set(<jsf>SERIALIZER_addRootType</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<jc>// Our bean to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
 	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	<jc>// Will contain:  {"_type":"mybean","foo":"bar"}</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
@@ -278,7 +280,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * When enabled, null bean values will be serialized to the output.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+	 * 	<li>Not enabling this setting will cause Maps with <jk>null</jk> values to be lost during parsing.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -286,7 +288,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Create a serializer that serializes null properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.keepNullProperties(<jk>true</jk>)
+	 * 		.keepNullProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -404,10 +406,10 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
 	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
-	 * 	String json = s.serialize(array);
+	 * 	String json = s.serialize(map);
 	 * </p>
 	 */
 	public static final String SERIALIZER_sortMaps = PREFIX + ".sortMaps.b";
@@ -572,7 +574,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Create a serializer that serializes null properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.trimNullProperties(<jk>false</jk>)
+	 * 		.dontTrimNullProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -628,8 +630,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
-	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
 	 * 	String json = s.toString(map);
@@ -679,14 +680,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(uriContext)
-	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
-	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but specify as a JSON string.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
 	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
 	 * 		.build();

@@ -2922,7 +2922,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
 	 * 		.build();
 	 * </p>
-
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_serializers}
 	 * </ul>
@@ -3020,7 +3020,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
 	 * 		client
 	 * 			.doPost(<js>"http://localhost:10000/foo"</js>, a)
-	 * 			.complete();
+	 * 			.run();
 	 *	} <jk>catch</jk> (RestCallException e} {
 	 *		<jc>// Handle exception.</jc>
 	 *	}
@@ -3075,7 +3075,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Produces request body "{f:null}"</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, a)
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3116,7 +3116,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3208,10 +3208,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
-	 * 	<jc>// Request body will contain {"foo":{"_type":"mybean","foo":"bar"}}.</jc>
+	 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
 	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
-	 * 		.complete();
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3261,10 +3261,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain {"_type":"mybean","foo":"bar"}.</jc>
+	 * 	<jc>// Request body will contain:  {"_type":"mybean","foo":"bar"}</jc>
 	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, m)
-	 * 		.complete();
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3297,15 +3297,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.keepNullProperties()
 	 * 		.build();
 	 *
-	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jc>// Our bean to serialize.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain "{foo:null}".</jc>
+	 * 	<jc>// Request body will contain:  {foo:null}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3340,10 +3340,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// An unsorted array</jc>
 	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
 	 *
-	 * 	<jc>// Request body will contain ["bar","baz","foo"]</jc>
+	 * 	<jc>// Request body will contain:  ["bar","baz","foo"]</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, array)
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3376,12 +3376,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
-	 * 	<jc>// Request body will contain {"bar":2,"baz":3,"foo":1}</jc>
+	 * 	<jc>// Request body will contain:  {"bar":2,"baz":3,"foo":1}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3423,10 +3423,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String[] <jf>foo</jf> = {};
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain {}</jc>
+	 * 	<jc>// Request body will contain:  {}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3467,10 +3467,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain {}</jc>
+	 * 	<jc>// Request body will contain:  {}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3500,13 +3500,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
-	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
-	 * 	<jc>// Request body will contain "{"foo":"bar"}"</jc>
+	 * 	<jc>// Request body will contain:  {"foo":"bar"}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3549,10 +3548,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// A relative URL</jc>
 	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
 	 *
-	 * 	<jc>// Request body will contain "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
+	 * 	<jc>// Request body will contain:  "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, url)
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3709,10 +3708,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain {'foo':'bar'}</jc>
+	 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3753,10 +3752,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain {'foo':'bar'}</jc>
+	 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3790,10 +3789,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3826,10 +3825,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Request body will contain "\{\n\t"foo": "bar"\n\}\n"</jc>
+	 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
 	 * 	client
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-	 * 		.complete();
+	 * 		.run();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -3934,7 +3933,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
-	 * 		.strict(<jk>true</jk>)
+	 * 		.strict()
 	 * 		.build();
 	 *
 	 * 	<jc>// Try to parse some bad JSON.</jc>
@@ -3972,7 +3971,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
-	 * 		.trimStringsOnRead(<jk>true</jk>)
+	 * 		.trimStringsOnRead()
 	 * 		.build();
 	 *
 	 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
@@ -4046,7 +4045,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Set a header with a value in UON format.</jc>
 	 * 	client
 	 * 		.get(<js>"/url"</js>)
-	 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  // Will be serialized as [Foo: 'bar baz']
+	 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
 	 * 		.run();
 	 * </p>
 	 *
@@ -4105,7 +4104,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Set a header with a comma-separated list.</jc>
 	 * 	client
 	 * 		.get(<js>"/url"</js>)
-	 * 		.header(<js>"Foo"</js>, l)  // Will be serialized as [Foo: foo=bar,baz=qux\,true\,123]
+	 * 		.header(<js>"Foo"</js>, l)  // Will be serialized as:  <jc>foo=bar,baz=qux\,true\,123</jc>
 	 * 		.run();
 	 * </p>
 	 *
@@ -4158,7 +4157,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 *  );
 	 *
-	 * 	<jc>// Request body will be serialize as "foo=bar,baz=qux,true,123"</jc>
+	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
 	 * 	client
 	 * 		.post(<js>"/url"</js>, map)
 	 * 		.run();
@@ -4199,7 +4198,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 *  );
 	 *
-	 * 	<jc>// Request body will be serialize as "foo=bar,baz=qux,true,123"</jc>
+	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
 	 * 	client
 	 * 		.post(<js>"/url"</js>, map)
 	 * 		.run();

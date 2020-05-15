@@ -62,6 +62,33 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *
+	 * <p>
+	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
+	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
+	 * URL-encoding of non-valid URI characters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a non-encoding UON serializer.</jc>
+	 * 	UonSerializer s1 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create an encoding UON serializer.</jc>
+	 * 	UonSerializer s2 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.encoding()
+	 * 		.build();
+	 *
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
+	 *
+	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
+	 * 	String uon1 = s1.serialize(m)
+	 *
+	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
+	 * 	String uon2 = s2.serialize(m)
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}
 	 * </ul>
@@ -80,7 +107,34 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * Configuration property:  Encode non-valid URI characters.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>encoding(<jk>true</jk>)</code>.
+	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
+	 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
+	 * URL-encoding of non-valid URI characters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a non-encoding UON serializer.</jc>
+	 * 	UonSerializer s1 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create an encoding UON serializer.</jc>
+	 * 	UonSerializer s2 = UonSerializer.
+	 * 		.<jsm>create</jsm>()
+	 * 		.encoding()
+	 * 		.build();
+	 *
+	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
+	 *
+	 * 	<jc>// Produces: "(foo=foo bar)"</jc>
+	 * 	String uon1 = s1.serialize(m)
+	 *
+	 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
+	 * 	String uon2 = s2.serialize(m)
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_encoding}

@@ -72,7 +72,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addBeanTypes(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#addBeanTypes()}
 	 * 		</ul>
 	 * </ul>
 	 *

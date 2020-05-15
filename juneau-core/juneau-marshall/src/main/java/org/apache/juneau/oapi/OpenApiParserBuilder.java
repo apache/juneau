@@ -96,13 +96,11 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * 		.format(<jsf>UON</jsf>)
 	 * 		.build();
 	 *
-	 * 	String string = <js>"foo bar"</js>;
-	 *
 	 * 	<jc>// Parse a plain-text string.</jc>
-	 * 	String v1 = s.serialize(<js>"foo bar"</js>);
+	 * 	String v1 = p1.parse(<js>"foo bar"</js>);
 	 *
 	 * 	<jc>// Parse a UON string.</jc>
-	 * 	String v2 = s2.serialize(<js>"'foo bar'"</js>);
+	 * 	String v2 = p2.parse(<js>"'foo bar'"</js>);
 	 * </p>
 	 *
 	 * <ul class='seealso'>

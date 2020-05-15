@@ -91,15 +91,15 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.addBeanTypes()
 	 * 		.build();
 	 *
-	 * 	<jc>// A map of objects we want to serialize.</jc>
+	 * 	<jc>// Our map of beans to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
-	 * 	Map&lt;String,Object&gt; m = new HashMap&lt;&gt;();
-	 * 	m.put(<js>"foo"</js>, <jk>new</jk> MyBean());
-	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
-	 * 	String json = s.serialize(m);
+	 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
+	 * 	String json = s.serialize(map);
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -153,14 +153,16 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.addRootType(<jk>true</jk>)
+	 * 		.addRootType()
 	 * 		.build();
 	 *
-	 * 	<jc>// The bean we want to serialize.</jc>
+	 * 	<jc>// Our bean to serialize.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-	 * 	<jk>public class</jk> MyBean {...}
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
 	 *
-	 * 	<jc>// Will contain '_type' attribute.</jc>
+	 * 	<jc>// Will contain:  {"_type":"mybean","foo":"bar"}</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 *
@@ -207,7 +209,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.keepNullProperties()
 	 * 		.build();
 	 *
-	 * <jc>// Our bean to serialize.</jc>
+	 * 	<jc>// Our bean to serialize.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
 	 * 	}
@@ -363,7 +365,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap m = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
 	 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
 	 * 	String json = s.serialize(map);
@@ -549,8 +551,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	Map&lt;String,String&gt; map = <jk>new</jk> HashMap&lt;&gt;();
-	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	OMap map = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
 	 * 	String json = s.toString(map);

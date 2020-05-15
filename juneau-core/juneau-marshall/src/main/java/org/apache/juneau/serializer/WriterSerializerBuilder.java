@@ -59,9 +59,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * <p>
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>

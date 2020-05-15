@@ -184,6 +184,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 *

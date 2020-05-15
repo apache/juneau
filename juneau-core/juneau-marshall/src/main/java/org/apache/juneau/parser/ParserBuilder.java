@@ -249,12 +249,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
-	 *  <jk>try</jk> {
-	 *  	String json = <js>"{unquotedAttr:'value'}"</js>;
+	 * 	<jk>try</jk> {
+	 * 		String json = <js>"{unquotedAttr:'value'}"</js>;
 	 * 		MyBean myBean = p.parse(json, MyBean.<jk>class</jk>);
-	 *  } <jk>catch</jk> (ParseException e) {
-	 *  	<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
-	 *  }
+	 * 	} <jk>catch</jk> (ParseException e) {
+	 * 		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -298,7 +298,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
-	 *  String json = <js>"{' foo ':' bar '}"</js>;
+	 * 	String json = <js>"{' foo ':' bar '}"</js>;
 	 * 	Map&lt;String,String&gt; map = p.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Make sure strings are parsed.</jc>
