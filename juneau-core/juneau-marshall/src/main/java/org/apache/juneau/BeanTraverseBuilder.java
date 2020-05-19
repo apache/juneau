@@ -539,12 +539,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

@@ -349,12 +349,6 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

@@ -384,12 +384,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

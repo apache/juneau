@@ -350,12 +350,6 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public CsvParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

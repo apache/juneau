@@ -1069,12 +1069,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

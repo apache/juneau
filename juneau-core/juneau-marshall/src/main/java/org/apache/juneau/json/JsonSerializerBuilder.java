@@ -433,12 +433,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

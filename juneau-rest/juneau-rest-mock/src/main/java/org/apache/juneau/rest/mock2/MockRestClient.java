@@ -428,12 +428,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient fluentSetters() {
 		super.fluentSetters();
 		return this;

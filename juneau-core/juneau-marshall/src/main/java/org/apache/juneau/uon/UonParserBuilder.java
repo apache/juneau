@@ -423,12 +423,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

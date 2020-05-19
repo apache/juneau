@@ -353,12 +353,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

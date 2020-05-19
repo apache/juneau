@@ -1857,33 +1857,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  POJO examples.
-	 *
-	 * <p>
-	 * Specifies an example of the specified class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
-	 * </ul>
-	 *
-	 * @param json The simple JSON representation of the example.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder examples(String json) {
-		if (! isJsonObject(json, true))
-			json = "{" + json + "}";
-		try {
-			OMap m = OMap.ofJson(json);
-			for (Map.Entry<String,Object> e : m.entrySet())
-				putTo(BEAN_examples, e.getKey(), e.getValue());
-			return this;
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean property excludes.
 	 *
 	 * <div class='warn'>

@@ -600,12 +600,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

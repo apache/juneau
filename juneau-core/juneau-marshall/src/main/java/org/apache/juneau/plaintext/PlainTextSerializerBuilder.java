@@ -350,12 +350,6 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public PlainTextSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

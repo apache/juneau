@@ -350,12 +350,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

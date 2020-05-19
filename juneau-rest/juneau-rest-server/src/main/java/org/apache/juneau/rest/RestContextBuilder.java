@@ -2882,12 +2882,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

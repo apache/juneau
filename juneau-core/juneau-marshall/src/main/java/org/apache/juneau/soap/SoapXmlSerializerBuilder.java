@@ -370,12 +370,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SoapXmlSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

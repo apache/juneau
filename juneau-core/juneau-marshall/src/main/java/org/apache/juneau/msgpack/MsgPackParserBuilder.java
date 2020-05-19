@@ -349,12 +349,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

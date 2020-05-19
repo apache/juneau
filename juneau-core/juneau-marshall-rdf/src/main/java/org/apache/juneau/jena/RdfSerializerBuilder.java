@@ -1229,12 +1229,6 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

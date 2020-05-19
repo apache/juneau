@@ -465,12 +465,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

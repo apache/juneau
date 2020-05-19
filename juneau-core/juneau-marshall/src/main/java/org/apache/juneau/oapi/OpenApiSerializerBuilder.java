@@ -476,12 +476,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

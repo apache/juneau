@@ -945,12 +945,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

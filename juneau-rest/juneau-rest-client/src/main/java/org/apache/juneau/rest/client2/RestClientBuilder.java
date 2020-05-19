@@ -4513,12 +4513,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

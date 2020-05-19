@@ -349,12 +349,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsoParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

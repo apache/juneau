@@ -530,12 +530,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

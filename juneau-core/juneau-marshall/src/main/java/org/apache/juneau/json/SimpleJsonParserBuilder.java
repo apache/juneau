@@ -349,12 +349,6 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

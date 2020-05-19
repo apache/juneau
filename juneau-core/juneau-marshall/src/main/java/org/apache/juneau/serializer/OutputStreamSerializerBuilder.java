@@ -397,12 +397,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

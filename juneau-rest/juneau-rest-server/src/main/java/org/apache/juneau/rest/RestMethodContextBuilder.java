@@ -365,12 +365,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

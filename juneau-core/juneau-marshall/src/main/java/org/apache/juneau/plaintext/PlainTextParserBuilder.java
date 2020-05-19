@@ -350,12 +350,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public PlainTextParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

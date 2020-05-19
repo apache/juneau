@@ -349,12 +349,6 @@ public class SimpleJsonSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonSerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonSerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

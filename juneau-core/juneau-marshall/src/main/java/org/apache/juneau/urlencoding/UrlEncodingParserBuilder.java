@@ -384,12 +384,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

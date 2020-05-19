@@ -667,12 +667,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;

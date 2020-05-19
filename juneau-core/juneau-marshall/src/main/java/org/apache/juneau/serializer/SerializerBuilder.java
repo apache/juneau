@@ -988,12 +988,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder examples(String json) {
-		super.examples(json);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder fluentSetters() {
 		super.fluentSetters();
 		return this;
