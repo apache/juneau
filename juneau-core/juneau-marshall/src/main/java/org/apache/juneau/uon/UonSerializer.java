@@ -268,7 +268,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	OMap m = OMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-	 *  );
+	 * 	);
 	 *
 	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
 	 * 	String uon1 = s1.serialize(m)
@@ -482,7 +482,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #UON_addBeanTypes
 	 * @return
@@ -495,7 +495,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
+	 * Encode non-valid URI characters.
 	 *
 	 * @see #UON_encoding
 	 * @return
@@ -506,7 +506,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * Format to use for query/form-data/header values.
 	 *
 	 * @see #UON_paramFormat
 	 * @return
@@ -517,7 +517,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * Quote character.
 	 *
 	 * @see WriterSerializer#WSERIALIZER_quoteChar
 	 * @return

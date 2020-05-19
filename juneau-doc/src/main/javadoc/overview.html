@@ -482,7 +482,7 @@
 		<li><p><a class='doclink' href='#juneau-rest-client.ResponsePatterns'></a><span class='update'>todo</span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.PipingOutput'>Piping Response Output</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.Debugging'>Debugging</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.Logging'>Logging</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.Logging'>Logging</a><span class='update'>todo</span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.Interceptors'>Interceptors</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.Other'></a><span class='update'><b>8.1.4-updated</b></span></p>
 	</ol>
@@ -24260,11 +24260,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.6 - Logging</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.6 - Logging</a><span class='update'>todo</span></h3>
 <div class='topic'><!-- START: 9.6 - juneau-rest-client.Logging -->
 <p>
-	Use the {@link org.apache.juneau.rest.client2.RestClientBuilder#logTo(Level,Logger)} and 
-	{@link org.apache.juneau.rest.client2.RestRequest#logTo(Level,Logger)} methods to log HTTP calls.
+	Use the <dc>org.apache.juneau.rest.client2.RestClientBuilder#logTo(Level,Logger)</dc> and 
+	<dc>org.apache.juneau.rest.client2.RestRequest#logTo(Level,Logger)</dc> methods to log HTTP calls.
 	These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
 </p>
 
@@ -24538,7 +24538,7 @@
 </p>
 <p>
 	The concept of the design is simple.  The {@link org.apache.juneau.rest.mock2.MockRest} class is used to create instances of {@link org.apache.juneau.rest.mock2.MockServletRequest}
-	and {@link org.apache.juneau.rest.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link org.apache.juneau.rest.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	and {@link org.apache.juneau.rest.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link org.apache.juneau.rest.RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
 	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
 	actually having to run in a servlet container.
 </p>
@@ -29203,7 +29203,7 @@
 	<tr>
 		<td>{@link org.apache.juneau.BeanContext}</td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_annotations BEAN_annotations}</td>
-		<td>Annotations.</td>
+		<td>Dynamically applied POJO annotations.</td>
 		<td style='max-width:250px;overflow:hidden'><c>List&lt;{@link java.lang.annotation.Annotation}&gt;</c></td>
 	</tr>
 	<tr>
@@ -29455,97 +29455,97 @@
 	<tr>
 		<td>{@link org.apache.juneau.config.Config}</td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_binaryFormat CONFIG_binaryFormat}</td>
-		<td>Binary value format.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.BinaryFormat}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_binaryLineLength CONFIG_binaryLineLength}</td>
-		<td>Binary value line length.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_encoder CONFIG_encoder}</td>
-		<td>Value encoder.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.encode.ConfigEncoder}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_multiLineValuesOnSeparateLines CONFIG_multiLineValuesOnSeparateLines}</td>
-		<td>Multi-line values should always be on separate lines.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_name CONFIG_name}</td>
-		<td>Configuration name.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_parser CONFIG_parser}</td>
-		<td>POJO parser.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.parser.ReaderParser}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_readOnly CONFIG_readOnly}</td>
-		<td>Read-only.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_serializer CONFIG_serializer}</td>
-		<td>POJO serializer.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.serializer.WriterSerializer}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_store CONFIG_store}</td>
-		<td>Configuration store.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.store.ConfigStore}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.Config#CONFIG_varResolver CONFIG_varResolver}</td>
-		<td>SVL variable resolver.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.svl.VarResolver}</td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore}</td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_charset FILESTORE_charset}</td>
-		<td>Charset.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link java.nio.charset.Charset}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_directory FILESTORE_directory}</td>
-		<td>Local file system directory.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_extensions FILESTORE_extensions}</td>
-		<td>File extensions.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c> (comma-delimited)</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_updateOnWrite FILESTORE_updateOnWrite}</td>
-		<td>Update-on-write.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_useWatcher FILESTORE_useWatcher}</td>
-		<td>Use watcher.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}</td>
-		<td>Watcher sensitivity.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.store.WatcherSensitivity}</td>
 	</tr>
 	<tr>
@@ -29761,7 +29761,7 @@
 	<tr>
 		<td>{@link org.apache.juneau.oapi.OpenApiCommon}</td>
 		<td>{@link org.apache.juneau.oapi.OpenApiCommon#OAPI_collectionFormat OAPI_collectionFormat}</td>
-		<td>Default collection format for HTTP parts.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat}</td>
 	</tr>
 	<tr>
@@ -29809,73 +29809,73 @@
 	<tr>
 		<td>{@link org.apache.juneau.jena.RdfCommon}</td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_collectionFormat RDF_collectionFormat}</td>
-		<td>RDF format for representing collections and arrays.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}</td>
-		<td>N3/Turtle property: <c>abbrevBaseURI</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_indentProperty RDF_n3_indentProperty}</td>
-		<td>N3/Turtle property: <c>indentProperty</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_minGap RDF_n3_minGap}</td>
-		<td>N3/Turtle property: <c>minGap</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}</td>
-		<td>N3/Turtle property: <c>objectLists</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_propertyColumn RDF_n3_propertyColumn}</td>
-		<td>N3/Turtle property: <c>propertyColumn</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_subjectColumn RDF_n3_subjectColumn}</td>
-		<td>N3/Turtle property: <c>subjectColumn</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}</td>
-		<td>N3/Turtle property: <c>useDoubles</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}</td>
-		<td>N3/Turtle property: <c>usePropertySymbols</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}</td>
-		<td>N3/Turtle property: <c>useTripleQuotedStrings</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_n3_widePropertyLen RDF_n3_widePropertyLen}</td>
-		<td>N3/Turtle property: <c>widePropertyLen</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_err_ RDF_arp_err_}</td>
-		<td>RDF/XML ARP property: <c>ERR_xxx</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
@@ -29887,103 +29887,103 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_warn_ RDF_arp_warn_}</td>
-		<td>RDF/XML ARP property: <c>WARN_xxx</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_allowBadUris RDF_rdfxml_allowBadUris}</td>
-		<td>RDF/XML property: <c>allowBadURIs</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_attributeQuoteChar RDF_rdfxml_attributeQuoteChar}</td>
-		<td>RDF/XML property: <c>attributeQuoteChar</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>Character</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_blockRules RDF_rdfxml_blockRules}</td>
-		<td>RDF/XML property: <c>blockRules</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_embedding RDF_arp_embedding}</td>
-		<td>RDF/XML ARP property: <c>embedding</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_errorMode RDF_arp_errorMode}</td>
-		<td>RDF/XML ARP property: <c>error-mode</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_arp_iriRules RDF_arp_iriRules}</td>
-		<td>RDF/XML property: <c>iri_rules</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_longId RDF_rdfxml_longId}</td>
-		<td>RDF/XML property: <c>longId</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_relativeUris RDF_rdfxml_relativeUris}</td>
-		<td>RDF/XML property: <c>relativeURIs</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}</td>
-		<td>RDF/XML property: <c>showDoctypeDeclaration</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showXmlDeclaration RDF_rdfxml_showXmlDeclaration}</td>
-		<td>RDF/XML property: <c>showXmlDeclaration</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_tab RDF_rdfxml_tab}</td>
-		<td>RDF/XML property: <c>tab</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_xmlBase RDF_rdfxml_xmlBase}</td>
-		<td>RDF/XML property: <c>xmlbase</c>.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauBpNs RDF_juneauBpNs}</td>
-		<td>Default XML namespace for bean properties.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.xml.Namespace}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_juneauNs RDF_juneauNs}</td>
-		<td>XML namespace for Juneau properties.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.xml.Namespace}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_language RDF_language}</td>
-		<td>RDF language.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.jena.RdfCommon#RDF_looseCollections RDF_looseCollections}</td>
-		<td>Collections should be serialized and parsed as loose collections.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -30043,13 +30043,13 @@
 	<tr>
 		<td>{@link org.apache.juneau.rest.client.RestClient}</td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}</td>
-		<td>REST call handler.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'>{@link RestCallHandler}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_debug RESTCLIENT_debug}</td>
-		<td>Debug.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -30061,13 +30061,13 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorService RESTCLIENT_executorService}</td>
-		<td>Executor service.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link java.util.concurrent.ExecutorService}&gt;</c><li>{@link java.util.concurrent.ExecutorService}</ul></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_executorServiceShutdownOnClose RESTCLIENT_executorServiceShutdownOnClose}</td>
-		<td>Shut down executor service on close.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -30085,13 +30085,13 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_interceptors RESTCLIENT_interceptors}</td>
-		<td>Call interceptors.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>List&lt;Class&lt;{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;|{@link org.apache.juneau.rest.client.RestCallInterceptor}&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_keepHttpClientOpen RESTCLIENT_keepHttpClientOpen}</td>
-		<td>Keep HttpClient open.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
 	</tr>
 	<tr>
@@ -30133,7 +30133,7 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_parser RESTCLIENT_parser}</td>
-		<td>Parser.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.parser.Parser}&gt;</c><li>{@link org.apache.juneau.parser.Parser}</ul></td>
 	</tr>
 	<tr>
@@ -30145,13 +30145,13 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partParser RESTCLIENT_partParser}</td>
-		<td>Part parser.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartParser}&gt;</c><li>{@link org.apache.juneau.httppart.HttpPartParser}</ul></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_partSerializer RESTCLIENT_partSerializer}</td>
-		<td>Part serializer.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.httppart.HttpPartSerializer}&gt;</c><li>{@link org.apache.juneau.httppart.HttpPartSerializer}</ul></td>
 	</tr>
 	<tr>
@@ -30163,43 +30163,43 @@
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query RESTCLIENT_query}</td>
-		<td>Request query parameters.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_headers RESTCLIENT_headers}</td>
-		<td>Request headers.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retries RESTCLIENT_retries}</td>
-		<td>Number of retries to attempt.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryInterval RESTCLIENT_retryInterval}</td>
-		<td>The time in milliseconds between retry attempts.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_retryOn RESTCLIENT_retryOn}</td>
-		<td>Retry-on determination object.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.rest.client.RetryOn}&gt;</c><li>{@link org.apache.juneau.rest.client.RetryOn}</ul></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_rootUri RESTCLIENT_rootUri}</td>
-		<td>Root URI.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><c>String</c></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_serializer RESTCLIENT_serializer}</td>
-		<td>Serializer.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><ul><li><c>Class&lt;{@link org.apache.juneau.serializer.Serializer}&gt;</c><li>{@link org.apache.juneau.serializer.Serializer}</ul></td>
 	</tr>
 	<tr>
@@ -30631,7 +30631,7 @@
 	<tr>
 		<td>{@link org.apache.juneau.dto.swagger.ui.SwaggerUI}</td>
 		<td>{@link org.apache.juneau.dto.swagger.ui.SwaggerUI#SWAGGERUI_resolveRefsMaxDepth SWAGGERUI_resolveRefsMaxDepth}</td>
-		<td>Resolve <c>$ref</c> references in schema up to the specified depth.</td>
+		<td></td>
 		<td style='max-width:250px;overflow:hidden'><jk>int</jk></td>
 	</tr>
 	<tr>

@@ -57,7 +57,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Aside section contents.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Aside section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the aside section on the HTML page.
@@ -91,7 +91,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Float aside section contents.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Float aside section contents.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
@@ -144,7 +144,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Footer section contents.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Footer section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
@@ -172,7 +172,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Additional head section content.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Additional head section content.
 	 *
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
@@ -197,7 +197,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Header section contents.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Header section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the header section on the HTML page.
@@ -223,7 +223,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Nav section contents.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Nav section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the nav section on the HTML page.
@@ -252,7 +252,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Page navigation links.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Page navigation links.
 	 *
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
@@ -299,7 +299,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_navlinks} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -312,7 +312,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  No-results message.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  No-results message.
 	 *
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
@@ -338,7 +338,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Prevent word wrap on page.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Prevent word wrap on page.
 	 *
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
@@ -355,7 +355,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Prevent word wrap on page.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Prevent word wrap on page.
 	 *
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
@@ -369,7 +369,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Javascript code.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Javascript code.
 	 *
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
@@ -394,7 +394,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_script} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -407,7 +407,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  CSS style code.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  CSS style code.
 	 *
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
@@ -433,7 +433,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_style} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -446,7 +446,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Stylesheet import URLs.
 	 *
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
@@ -465,7 +465,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  Add to the {@link HtmlDocSerializer#HTMLDOC_stylesheet} property.
 	 *
 	 * @param value
 	 * 	The value to add to this property.
@@ -478,7 +478,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTML document template.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  HTML document template.
 	 *
 	 * <p>
 	 * Specifies the template to use for serializing the page.
@@ -505,7 +505,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTML Widgets.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  HTML Widgets.
 	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
@@ -525,7 +525,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTML Widgets.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  HTML Widgets.
 	 *
 	 * <p>
 	 * Same as {@link #widgets(Class...)} but replaces any previous values.
@@ -544,7 +544,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTML Widgets.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  HTML Widgets.
 	 *
 	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
@@ -562,7 +562,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  HTML Widgets.
+	 * <i><l>HtmlDocSerializer</l> configuration property:</i>  HTML Widgets.
 	 *
 	 * <p>
 	 * Same as {@link #widgets(HtmlWidget...)} except allows you to overwrite the previous value.
@@ -822,32 +822,14 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

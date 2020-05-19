@@ -51,7 +51,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * <i><l>Serializer</l> configuration property:</i>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #addBeanTypes()}
@@ -65,7 +65,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * <i><l>Serializer</l> configuration property:</i>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -114,7 +114,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * <i><l>Serializer</l> configuration property:</i>  Add type attribute to root nodes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #addRootType()}
@@ -128,7 +128,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * <i><l>Serializer</l> configuration property:</i>  Add type attribute to root nodes.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
@@ -178,7 +178,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Don't trim null bean property values.
+	 * <i><l>Serializer</l> configuration property:</i>  Don't trim null bean property values.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
@@ -192,7 +192,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Don't trim null bean property values.
+	 * <i><l>Serializer</l> configuration property:</i>  Don't trim null bean property values.
 	 *
 	 * <p>
 	 * When enabled, null bean values will be serialized to the output.
@@ -230,7 +230,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Serializer listener.
+	 * <i><l>Serializer</l> configuration property:</i>  Serializer listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
@@ -285,7 +285,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * <i><l>Serializer</l> configuration property:</i>  Sort arrays and collections alphabetically.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #sortCollections()}
@@ -299,7 +299,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * <i><l>Serializer</l> configuration property:</i>  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
@@ -334,7 +334,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort maps alphabetically.
+	 * <i><l>Serializer</l> configuration property:</i>  Sort maps alphabetically.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #sortMaps()}
@@ -348,7 +348,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort maps alphabetically.
+	 * <i><l>Serializer</l> configuration property:</i>  Sort maps alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
@@ -383,7 +383,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim empty lists and arrays.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #trimEmptyCollections()}
@@ -397,7 +397,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim empty lists and arrays.
 	 *
 	 * <p>
 	 * When enabled, empty lists and arrays will not be serialized.
@@ -440,7 +440,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim empty maps.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim empty maps.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #trimEmptyMaps()}
@@ -454,7 +454,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim empty maps.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim empty maps.
 	 *
 	 * <p>
 	 * When enabled, empty map values will not be serialized to the output.
@@ -495,7 +495,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim null bean property values.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
@@ -509,7 +509,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim null bean property values.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
@@ -523,7 +523,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim strings.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
@@ -537,7 +537,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * <i><l>Serializer</l> configuration property:</i>  Trim strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
@@ -569,7 +569,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI context bean.
+	 * <i><l>Serializer</l> configuration property:</i>  URI context bean.
 	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
@@ -614,7 +614,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * <i><l>Serializer</l> configuration property:</i>  URI relativity.
 	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -652,7 +652,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  URI resolution.
+	 * <i><l>Serializer</l> configuration property:</i>  URI resolution.
 	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
@@ -934,32 +934,14 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

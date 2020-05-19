@@ -436,7 +436,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * @see #RDF_collectionFormat
 	 * @return
@@ -447,7 +447,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @see #RDF_juneauBpNs
 	 * @return
@@ -458,7 +458,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @see #RDF_juneauNs
 	 * @return
@@ -469,7 +469,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * RDF language.
 	 *
 	 * @see #RDF_language
 	 * @return
@@ -480,7 +480,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * @see #RDF_looseCollections
 	 * @return
@@ -496,7 +496,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  All Jena-related configuration properties.
+	 * All Jena-related configuration properties.
 	 *
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
@@ -510,7 +510,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #RDF_addBeanTypes
 	 * @return
@@ -523,7 +523,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
+	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * @see #RDF_addLiteralTypes
 	 * @return
@@ -534,7 +534,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Add RDF root identifier property to root node.
+	 * Add RDF root identifier property to root node.
 	 *
 	 * @see RdfSerializer#RDF_addRootProperty
 	 * @return
@@ -546,7 +546,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Auto-detect namespace usage.
 	 *
 	 * @see #RDF_autoDetectNamespaces
 	 * @return
@@ -557,7 +557,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * @see #RDF_namespaces
 	 * @return
@@ -568,7 +568,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	}
 
 	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 * Reuse XML namespaces when RDF namespaces not specified.
 	 *
 	 * @see #RDF_useXmlNamespaces
 	 * @return

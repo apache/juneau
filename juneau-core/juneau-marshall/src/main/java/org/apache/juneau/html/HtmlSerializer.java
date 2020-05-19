@@ -792,7 +792,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #HTML_addBeanTypes
 	 * @return
@@ -805,7 +805,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Configuration property:  Add key/value headers on bean/map tables.
+	 * Add key/value headers on bean/map tables.
 	 *
 	 * @see #HTML_addKeyValueTableHeaders
 	 * @return
@@ -816,7 +816,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Look for link labels in URIs.
 	 *
 	 * @see #HTML_detectLabelParameters
 	 * @return
@@ -827,7 +827,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 * Look for URLs in {@link String Strings}.
 	 *
 	 * @see #HTML_detectLinksInStrings
 	 * @return
@@ -838,7 +838,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Configuration property:  Link label parameter name.
+	 * Link label parameter name.
 	 *
 	 * @see #HTML_labelParameter
 	 * @return
@@ -849,7 +849,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Configuration property:  Anchor text source.
+	 * Anchor text source.
 	 *
 	 * @see #HTML_uriAnchorText
 	 * @return

@@ -57,7 +57,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <i><l>JsonSerializer</l> configuration property:</i>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #escapeSolidus()}
@@ -71,7 +71,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <i><l>JsonSerializer</l> configuration property:</i>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
@@ -88,7 +88,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #simple()}
@@ -102,7 +102,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
@@ -119,7 +119,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Simple JSON mode and single quote.
+	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode and single quote.
 	 *
 	 * <p>
 	 * Shortcut for calling <c>simple().sq()</c>.
@@ -379,32 +379,14 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

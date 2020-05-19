@@ -266,7 +266,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * @see #RDF_collectionFormat
 	 * @return
@@ -277,7 +277,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @see #RDF_juneauBpNs
 	 * @return
@@ -288,7 +288,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @see #RDF_juneauNs
 	 * @return
@@ -299,7 +299,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * RDF language.
 	 *
 	 * @see #RDF_language
 	 * @return
@@ -310,7 +310,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * @see #RDF_looseCollections
 	 * @return
@@ -326,7 +326,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  All Jena-related configuration properties.
+	 * All Jena-related configuration properties.
 	 *
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
@@ -340,7 +340,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * Trim whitespace from text elements.
 	 *
 	 * @see #RDF_trimWhitespace
 	 * @return

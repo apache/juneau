@@ -60,7 +60,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -78,7 +78,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -96,7 +96,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
+	 * <i><l>XmlParser</l> configuration property:</i>  Preserve root element during generalized parsing.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #preserveRootElement()}
@@ -110,7 +110,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
+	 * <i><l>XmlParser</l> configuration property:</i>  Preserve root element during generalized parsing.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
@@ -127,7 +127,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML reporter.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -145,7 +145,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML reporter.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -163,7 +163,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML resolver.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -181,7 +181,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML resolver.
+	 * <i><l>XmlParser</l> configuration property:</i>  XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -199,7 +199,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * <i><l>XmlParser</l> configuration property:</i>  Enable validation.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #validating()}
@@ -213,7 +213,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * <i><l>XmlParser</l> configuration property:</i>  Enable validation.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>validating(<jk>true</jk>)</code>.
@@ -472,32 +472,14 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public XmlParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public XmlParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

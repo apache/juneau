@@ -178,7 +178,7 @@ public abstract class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * File charset.
 	 *
 	 * @see #RPARSER_fileCharset
 	 * @return
@@ -189,7 +189,7 @@ public abstract class ReaderParser extends Parser {
 	}
 
 	/**
-	 * Configuration property:  Input stream charset.
+	 * Input stream charset.
 	 *
 	 * @see #RPARSER_streamCharset
 	 * @return

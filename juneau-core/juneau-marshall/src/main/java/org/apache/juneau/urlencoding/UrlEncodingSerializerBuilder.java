@@ -57,7 +57,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 * <i><l>UrlEncodingSerializer</l> configuration property:</i>  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #expandedParams()}
@@ -71,7 +71,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 * <i><l>UrlEncodingSerializer</l> configuration property:</i>  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
@@ -330,32 +330,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

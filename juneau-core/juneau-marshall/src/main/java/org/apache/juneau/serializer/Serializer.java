@@ -1059,7 +1059,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #SERIALIZER_addBeanTypes
 	 * @return
@@ -1071,7 +1071,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * Add type attribute to root nodes.
 	 *
 	 * @see #SERIALIZER_addRootType
 	 * @return
@@ -1082,7 +1082,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Serializer listener.
+	 * Serializer listener.
 	 *
 	 * @see #SERIALIZER_listener
 	 * @return
@@ -1093,7 +1093,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * Sort arrays and collections alphabetically.
 	 *
 	 * @see #SERIALIZER_sortCollections
 	 * @return
@@ -1104,7 +1104,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Sort maps alphabetically.
+	 * Sort maps alphabetically.
 	 *
 	 * @see #SERIALIZER_sortMaps
 	 * @return
@@ -1115,7 +1115,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * Trim empty lists and arrays.
 	 *
 	 * @see #SERIALIZER_trimEmptyCollections
 	 * @return
@@ -1126,7 +1126,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Trim empty maps.
+	 * Trim empty maps.
 	 *
 	 * @see #SERIALIZER_trimEmptyMaps
 	 * @return
@@ -1137,7 +1137,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Don't trim null bean property values.
+	 * Don't trim null bean property values.
 	 *
 	 * @see #SERIALIZER_keepNullProperties
 	 * @return
@@ -1148,7 +1148,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * Trim strings.
 	 *
 	 * @see #SERIALIZER_trimStrings
 	 * @return
@@ -1159,7 +1159,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  URI context bean.
+	 * URI context bean.
 	 *
 	 * @see #SERIALIZER_uriContext
 	 * @return
@@ -1170,7 +1170,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * URI relativity.
 	 *
 	 * @see #SERIALIZER_uriRelativity
 	 * @return
@@ -1181,7 +1181,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  URI resolution.
+	 * URI resolution.
 	 *
 	 * @see #SERIALIZER_uriResolution
 	 * @return

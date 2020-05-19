@@ -330,7 +330,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * XML event allocator.
 	 *
 	 * @see #XML_eventAllocator
 	 * @return
@@ -341,7 +341,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	}
 
 	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
+	 * Preserve root element during generalized parsing.
 	 *
 	 * @see #XML_preserveRootElement
 	 * @return
@@ -353,7 +353,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	}
 
 	/**
-	 * Configuration property:  XML reporter.
+	 * XML reporter.
 	 *
 	 * @see #XML_reporter
 	 * @return
@@ -364,7 +364,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	}
 
 	/**
-	 * Configuration property:  XML resolver.
+	 * XML resolver.
 	 *
 	 * @see #XML_resolver
 	 * @return
@@ -375,7 +375,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, XmlCommo
 	}
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * Enable validation.
 	 *
 	 * @see #XML_validating
 	 * @return

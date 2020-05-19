@@ -55,7 +55,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Auto-close streams.
+	 * <i><l>Parser</l> configuration property:</i>  Auto-close streams.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #autoCloseStreams()}
@@ -69,7 +69,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Auto-close streams.
+	 * <i><l>Parser</l> configuration property:</i>  Auto-close streams.
 	 *
 	 * <p>
 	 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
@@ -101,7 +101,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Debug output lines.
+	 * <i><l>Parser</l> configuration property:</i>  Debug output lines.
 	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
@@ -139,7 +139,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Parser listener.
+	 * <i><l>Parser</l> configuration property:</i>  Parser listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
@@ -193,7 +193,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Strict mode.
+	 * <i><l>Parser</l> configuration property:</i>  Strict mode.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #strict()}
@@ -207,7 +207,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Strict mode.
+	 * <i><l>Parser</l> configuration property:</i>  Strict mode.
 	 *
 	 * <p>
 	 * When enabled, strict mode for the parser is enabled.
@@ -269,7 +269,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * <i><l>Parser</l> configuration property:</i>  Trim parsed strings.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
@@ -283,7 +283,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * <i><l>Parser</l> configuration property:</i>  Trim parsed strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -317,7 +317,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Unbuffered.
+	 * <i><l>Parser</l> configuration property:</i>  Unbuffered.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #unbuffered()}
@@ -331,7 +331,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Unbuffered.
+	 * <i><l>Parser</l> configuration property:</i>  Unbuffered.
 	 *
 	 * <p>
 	 * When enabled, don't use internal buffering during parsing.
@@ -628,32 +628,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

@@ -460,7 +460,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #JSON_addBeanTypes
 	 * @return
@@ -473,7 +473,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	}
 
 	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * @see #JSON_escapeSolidus
 	 * @return
@@ -484,7 +484,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	}
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * Simple JSON mode.
 	 *
 	 * @see #JSON_simpleMode
 	 * @return

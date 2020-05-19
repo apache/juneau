@@ -119,7 +119,7 @@ public abstract class InputStreamParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary input format.
+	 * Binary input format.
 	 *
 	 * @see #ISPARSER_binaryFormat
 	 * @return

@@ -334,7 +334,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 * Decode <js>"%xx"</js> sequences enabled
 	 *
 	 * @see #UON_decoding
 	 * @return
@@ -346,7 +346,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end enabled.
 	 *
 	 * @see #UON_validateEnd
 	 * @return

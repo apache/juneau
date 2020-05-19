@@ -856,7 +856,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Aside section contents.
+	 * Aside section contents.
 	 *
 	 * @see #HTMLDOC_aside
 	 * @return
@@ -867,7 +867,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Float side section contents.
+	 * Float side section contents.
 	 *
 	 * @see #HTMLDOC_asideFloat
 	 * @return
@@ -878,7 +878,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Footer section contents.
+	 * Footer section contents.
 	 *
 	 * @see #HTMLDOC_footer
 	 * @return
@@ -889,7 +889,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Additional head section content.
+	 * Additional head section content.
 	 *
 	 * @see #HTMLDOC_head
 	 * @return
@@ -900,7 +900,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Header section contents.
+	 * Header section contents.
 	 *
 	 * @see #HTMLDOC_header
 	 * @return
@@ -911,7 +911,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Nav section contents.
+	 * Nav section contents.
 	 *
 	 * @see #HTMLDOC_nav
 	 * @return
@@ -922,7 +922,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Page navigation links.
+	 * Page navigation links.
 	 *
 	 * @see #HTMLDOC_navlinks
 	 * @return
@@ -933,7 +933,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  No-results message.
+	 * No-results message.
 	 *
 	 * @see #HTMLDOC_noResultsMessage
 	 * @return
@@ -944,7 +944,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Prevent word wrap on page.
+	 * Prevent word wrap on page.
 	 *
 	 * @see #HTMLDOC_nowrap
 	 * @return
@@ -955,7 +955,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Javascript code.
+	 * Javascript code.
 	 *
 	 * @see #HTMLDOC_script
 	 * @return
@@ -966,7 +966,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  CSS style code.
+	 * CSS style code.
 	 *
 	 * @see #HTMLDOC_style
 	 * @return
@@ -977,7 +977,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * Stylesheet import URLs.
 	 *
 	 * @see #HTMLDOC_stylesheet
 	 * @return
@@ -988,7 +988,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  HTML document template.
+	 * HTML document template.
 	 *
 	 * @see #HTMLDOC_template
 	 * @return
@@ -999,7 +999,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  HTML widgets.
+	 * HTML widgets.
 	 *
 	 * @see #HTMLDOC_widgets
 	 * @return

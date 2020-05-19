@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  *
  * <p>
  * These objects are created when you pass in non-<c>BeanFilterBuilder</c> classes to
- * {@link BeanContextBuilder#beanFilters(Class...)}, and are equivalent to adding a
+ * {@link BeanContextBuilder#beanFilters(Object...)}, and are equivalent to adding a
  * <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <c>Foo</c> class.
  *
  * @param <T> The interface class.

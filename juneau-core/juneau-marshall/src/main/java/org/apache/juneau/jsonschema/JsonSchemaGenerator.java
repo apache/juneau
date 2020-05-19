@@ -401,7 +401,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add descriptions to types.
+	 * Add descriptions to types.
 	 *
 	 * @see #JSONSCHEMA_addDescriptionsTo
 	 * @return
@@ -412,7 +412,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Add examples.
+	 * Add examples.
 	 *
 	 * @see #JSONSCHEMA_addExamplesTo
 	 * @return
@@ -423,7 +423,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Allow nested descriptions.
+	 * Allow nested descriptions.
 	 *
 	 * @see #JSONSCHEMA_allowNestedDescriptions
 	 * @return
@@ -434,7 +434,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Allow nested examples.
+	 * Allow nested examples.
 	 *
 	 * @see #JSONSCHEMA_allowNestedExamples
 	 * @return
@@ -445,7 +445,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Bean schema definition mapper.
+	 * Bean schema definition mapper.
 	 *
 	 * @see #JSONSCHEMA_beanDefMapper
 	 * @return
@@ -456,7 +456,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Default schemas.
+	 * Default schemas.
 	 *
 	 * @see #JSONSCHEMA_defaultSchemas
 	 * @return
@@ -467,7 +467,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Ignore types from schema definitions.
+	 * Ignore types from schema definitions.
 	 *
 	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
 	 * @return
@@ -478,7 +478,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Configuration property:  Use bean definitions.
+	 * Use bean definitions.
 	 *
 	 * @see #JSONSCHEMA_useBeanDefs
 	 * @return

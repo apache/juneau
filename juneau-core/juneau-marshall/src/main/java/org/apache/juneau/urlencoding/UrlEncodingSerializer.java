@@ -376,7 +376,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see #URLENC_expandedParams
 	 * @return

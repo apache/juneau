@@ -644,7 +644,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #XML_addBeanTypes
 	 * @return
@@ -657,7 +657,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  Add namespace URLs to the root element.
+	 * Add namespace URLs to the root element.
 	 *
 	 * @see #XML_addNamespaceUrisToRoot
 	 * @return
@@ -668,7 +668,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Auto-detect namespace usage.
 	 *
 	 * @see #XML_autoDetectNamespaces
 	 * @return
@@ -679,7 +679,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  Default namespace.
+	 * Default namespace.
 	 *
 	 * @see #XML_defaultNamespace
 	 * @return
@@ -690,7 +690,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  Enable support for XML namespaces.
+	 * Enable support for XML namespaces.
 	 *
 	 * @see #XML_enableNamespaces
 	 * @return
@@ -701,7 +701,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * @see #XML_namespaces
 	 * @return
@@ -712,7 +712,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Configuration property:  XMLSchema namespace.
+	 * XMLSchema namespace.
 	 *
 	 * @see #XML_xsNamespace
 	 * @return

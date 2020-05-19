@@ -26,6 +26,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
@@ -93,7 +94,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Annotations.
+	 * <i><l>BeanContext</l> configuration property:</i>  Dynamically applied POJO annotations.
 	 *
 	 * <p>
 	 * Defines annotations to apply to specific classes and methods.
@@ -108,7 +109,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
-	 * <p class='bpcode w800'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Class with explicit annotation.</jc>
 	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> A {...}
@@ -127,43 +128,140 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <p>
-	 * Concrete implementations of annotations are also provided that can be passed directly into serializer and parser
-	 * builder classes:
-	 * <p class='bpcode w800'>
+	 * In general, the underlying framework uses this method when it finds dynamically applied annotations on
+	 * config annotations.  However, concrete implementations of annotations are also provided that can be passed
+	 * directly into builder classes like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a concrete @Bean annotation.</jc>
 	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"B"</js>).bpi(<js>"street,city,state"</js>);
+	 *
+	 * 	<jc>// Apply it to a serializer.</jc>
 	 * 	WriterSerializer ws = JsonSerializer.<jsm>create</jsm>().annotations(a).build();
-	 * 	String json = ws.serialize(a);
+	 *
+	 * 	<jc>// Serialize a bean with the dynamically applied annotation.</jc>
+	 * 	String json = ws.serialize(<jk>new</jk> B());
 	 * </p>
 	 *
 	 * <p>
 	 * The following is the list of concrete annotations provided that can be constructed and passed into the builder
 	 * class:
 	 * <ul class='javatree'>
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
-	 * 	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
+	 * <p>
+	 * The syntax for the <l>on()</l> pattern match parameter depends on whether it applies to a class, method, field, or constructor.
+	 * The valid pattern matches are:
+	 * <ul class='spaced-list'>
+	 *  <li>Classes:
+	 * 		<ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified inner class:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
+	 * 					<li><js>"Inner1$Inner2"</js>
+	 * 					<li><js>"Inner2"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Methods:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass.myMethod()"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myMethod"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
+	 * 					<li><js>"Inner2.myMethod"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Fields:
+	 * 		<ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass.myField"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner1$Inner2.myField"</js>
+	 * 					<li><js>"Inner2.myField"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>Constructors:
+	 * 		<ul>
+	 * 			<li>Fully qualified with args:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"com.foo.MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple with args:
+	 * 				<ul>
+	 * 					<li><js>"MyClass(String,int)"</js>
+	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
+	 * 					<li><js>"MyClass()"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner class:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner1$Inner2()"</js>
+	 * 					<li><js>"Inner2()"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
 	 * @param values
@@ -176,14 +274,30 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Minimum bean class visibility.
+	 * <i><l>BeanContext</l> configuration property:</i>  Minimum bean class visibility.
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
+	 * For example, if the visibility is <jsf>PUBLIC</jsf> and the bean class is <jk>protected</jk>, then the class
+	 * will not be interpreted as a bean class and be serialized as a string.
+	 * Use this setting to reduce the visibility requirement.
 	 *
-	 * <p>
-	 * For example, if the visibility is <c>PUBLIC</c> and the bean class is <jk>protected</jk>, then the class
-	 * will not be interpreted as a bean class and will be treated as a string.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a protected class and one field.</jc>
+	 * 	<jk>protected class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that's capable of serializing the class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanClassVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo","bar"}</jc>
+	 * 	String json = w.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanClassVisibility}
@@ -200,10 +314,37 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Minimum bean constructor visibility.
+	 * <i><l>BeanContext</l> configuration property:</i>  Minimum bean constructor visibility.
 	 *
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
+	 *
+	 * <p>
+	 * This setting affects the logic for finding no-arg constructors for bean.  Normally, only <jk>public</jk> no-arg
+	 * constructors are used.  Use this setting if you want to reduce the visibility requirement.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a protected constructor and one field.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf>;
+	 *
+	 * 		<jk>protected</jk> MyBean() {}
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser capable of calling the protected constructor.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanConstructorVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Use it.</jc>
+	 * 	MyBean c = r.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Beanc @Beanc} annotation can also be used to expose a constructor with non-public visibility.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanConstructorVisibility}
@@ -220,7 +361,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
@@ -237,10 +378,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Class...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -251,10 +392,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Class...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -265,7 +406,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
@@ -279,10 +420,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Class...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -293,7 +434,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
@@ -307,10 +448,46 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Minimum bean field visibility.
+	 * <i><l>BeanContext</l> configuration property:</i>  Minimum bean field visibility.
 	 *
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
+	 *
+	 * <p>
+	 * This affects which fields on a bean class are considered bean properties.  Normally only <jk>public</jk> fields are considered.
+	 * Use this setting if you want to reduce the visibility requirement.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a protected field.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>protected</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that recognizes the protected field.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFieldVisibility(<jsf>PROTECTED</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * Bean fields can be ignored as properties entirely by setting the value to {@link Visibility#NONE}
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Disable using fields as properties entirely.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFieldVisibility(<jsf>NONE</jsf>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a field with non-public visibility.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFieldVisibility}
@@ -327,31 +504,90 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean filters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the Bean annotation functionality, but you don't have the ability to alter
+	 * <br>It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
+	 * <p>
+	 * Values can consist of any of the following types:
+	 * <ul class='spaced-list'>
+	 * 	<li>Any subclass or instance of {@link BeanFilterBuilder}.
+	 * 		<br>These must have a public no-arg constructor.
+	 * 	<li>Any instance of {@link BeanFilter}.
+	 * 	<li>Any bean interfaces.
+	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
+	 * 		All other bean properties will be ignored.
+	 * 	<li>Any array or collection of the objects above.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with multiple properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;  <jc>// Ignore this field.</jc>
+	 * 	}
+	 *
+	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
+	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
+	 *
+	 * 		<jc>// Must provide a no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyBeanFilter() {
+	 * 			bpi(<js>"foo,bar"</js>);  <jc>// The properties we want exposed (bean property include).</jc>
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Associate our bean filter with a serializer.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same but pass in constructed filter.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBeanFilter.<jk>class</jk>).bpi(<js>"foo,bar"</js>).build())
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * An alternate approach for specifying bean filters is by using concrete dynamically applied annotations:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a concrete @Bean annotation.</jc>
+	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"MyBean"</js>).bpi(<js>"foo,bar"</js>);
+	 *
+	 * 	<jc>// Apply it to a serializer.</jc>
+	 * 	WriterSerializer ws = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.annotations(a)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
 	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * 	<li class='jf'>{@link #BEAN_annotations}
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
 	 * </ul>
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<p>
-	 * 	Values can consist of any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
-	 * 			<br>These must have a public no-arg constructor when a class.
-	 * 		<li>Any instance of {@link BeanFilter}.
-	 * 		<li>Any bean interfaces.
-	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 			All other bean properties will be ignored.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
@@ -360,7 +596,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean filters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
 	 *
 	 * <p>
 	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
@@ -391,7 +627,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean filters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
 	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean filters in this bean context.
@@ -422,7 +658,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  BeanMap.put() returns old property value.
+	 * <i><l>BeanContext</l> configuration property:</i>  BeanMap.put() returns old property value.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #beanMapPutReturnsOldValue()}
@@ -436,10 +672,32 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  BeanMap.put() returns old property value.
+	 * <i><l>BeanContext</l> configuration property:</i>  BeanMap.put() returns old property value.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>beanMapPutReturnsOldValue(<jk>true</jk>)</code>.
+	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * values.  Otherwise, it returns <jk>null</jk>.
+	 *
+	 * <p>
+	 * Disabled by default because it introduces a slight performance penalty during serialization.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanMapPutReturnsOldValue()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
+	 * 	bm.put(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	Object oldValue = bm.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanMapPutReturnsOldValue}
@@ -453,7 +711,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Minimum bean method visibility.
+	 * <i><l>BeanContext</l> configuration property:</i>  Minimum bean method visibility.
 	 *
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
@@ -473,7 +731,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require no-arg constructors.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require no-arg constructors.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #beansRequireDefaultConstructor()}
@@ -487,7 +745,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require no-arg constructors.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require no-arg constructors.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireDefaultConstructor(<jk>true</jk>)</code>.
@@ -504,7 +762,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require Serializable interface.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require Serializable interface.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #beansRequireSerializable()}
@@ -518,7 +776,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require Serializable interface.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require Serializable interface.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireSerializable(<jk>true</jk>)</code>.
@@ -535,7 +793,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require setters for getters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require setters for getters.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #beansRequireSettersForGetters()}
@@ -549,7 +807,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require setters for getters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require setters for getters.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>beansRequireSettersForGetters(<jk>true</jk>)</code>.
@@ -566,7 +824,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require at least one property.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require at least one property.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #beansDontRequireSomeProperties()}
@@ -580,7 +838,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Beans require at least one property.
+	 * <i><l>BeanContext</l> configuration property:</i>  Beans require at least one property.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
@@ -598,7 +856,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean type property name.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean type property name.
 	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
@@ -624,9 +882,50 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
+	 * <p>
+	 * For example, <c>bpi(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)</c> means only serialize the <c>foo</c> and
+	 * <c>bar</c> properties on the specified bean.  Likewise, parsing will ignore any bean properties not specified
+	 * and either throw an exception or silently ignore them depending on whether {@link #ignoreUnknownBeanProperties()}
+	 * has been called.
+	 *
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on
+	 * a class as bean properties.  However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.  Note that on IBM JREs, the property order is the same as the order in the source code,
+	 * whereas on Oracle JREs, the order is entirely random.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpi(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpi(properties));
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanConfig#bpi()}
-	 * 	<li class='jm'>{@link Bean#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -642,20 +941,64 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Bean property includes.
 	 *
 	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
+	 * Specifies the set and order of names of properties associated with bean classes.
+	 *
+	 * <p>
+	 * For example, <c>bpi(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"foo,bar"</js>))</c> means only serialize the <c>foo</c> and
+	 * <c>bar</c> properties on the specified bean.  Likewise, parsing will ignore any bean properties not specified
+	 * and either throw an exception or silently ignore them depending on whether {@link #ignoreUnknownBeanProperties()}
+	 * has been called.
+	 *
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on
+	 * a class as bean properties.  However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.  Note that on IBM JREs, the property order is the same as the order in the source code,
+	 * whereas on Oracle JREs, the order is entirely random.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpi(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"foo,bar"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code for each entry:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpi(value.toString()));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanConfig#bpi()}
-	 * 	<li class='jm'>{@link Bean#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
 	 * </ul>
 	 *
-	 * @param values The new value for this property.
+	 * @param values
+	 * 	The values to add to this builder.
+	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
+	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpi(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(asString(e.getValue())));
 		return this;
 	}
 
@@ -665,9 +1008,50 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
+	 * <p>
+	 * For example, <c>bpi(<js>"MyBean"</js>, <js>"foo,bar"</js>)</c> means only serialize the <c>foo</c> and
+	 * <c>bar</c> properties on the specified bean.  Likewise, parsing will ignore any bean properties not specified
+	 * and either throw an exception or silently ignore them depending on whether {@link #ignoreUnknownBeanProperties()}
+	 * has been called.
+	 *
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on
+	 * a class as bean properties.  However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.  Note that on IBM JREs, the property order is the same as the order in the source code,
+	 * whereas on Oracle JREs, the order is entirely random.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpi(<js>"MyBean"</js>, <js>"foo,bar"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpi(properties));
+	 * </p>
+	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanConfig#bpi()}
-	 * 	<li class='jm'>{@link Bean#bpi()}
+	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
 	 * </ul>
 	 *
 	 * @param beanClassName
@@ -686,6 +1070,39 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 *
+	 * <p>
+	 * Same as {@link #bpi(Class, String)} except you specify a list of bean property names that you want to exclude from
+	 * serialization.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpx(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpx(properties));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpx()}
@@ -707,29 +1124,95 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean classes.
 	 *
+	 * <p>
+	 * Same as {@link #bpi(Map)} except you specify a list of bean property names that you want to exclude from
+	 * serialization.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpx(OMap.of(<js>"MyBean"</js>, <js>"bar,baz"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code for each entry:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpx(value.toString()));
+	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpx()}
 	 * 	<li class='jm'>{@link Bean#bpx()}
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The new value for this property.
+	 * 	The values to add to this builder.
+	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
+	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpx(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(asString(e.getValue())));
 		return this;
 	}
 
 	/**
 	 * Bean property excludes.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanConfig#bpx()}
-	 * 	<li class='jm'>{@link Bean#bpx()}
-	 * </ul>
+	 * <p>
+	 * Specifies to exclude the specified list of properties for the specified bean class.
+	 *
+	 * <p>
+	 * Same as {@link #bpx(String, String)} except you specify a list of bean property names that you want to exclude from
+	 * serialization.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String
+	 * 			<jf>foo</jf> = <js>"foo"</js>,
+	 * 			<jf>bar</jf> = <js>"bar"</js>,
+	 * 			<jf>baz</jf> = <js>"baz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that excludes the "bar" and "baz" properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpx(<js>"MyBean"</js>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpx(properties));
+	 * </p>
 	 *
 	 * @param beanClassName
 	 * 	The bean class name.
@@ -746,7 +1229,44 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Read-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the read-only properties for the specified bean class.
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with read-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// All 3 properties will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with read-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
+	 * 		.ignoreUnknownBeanProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser ignores bar and baz properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpro(properties));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpro()}
@@ -766,7 +1286,44 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Read-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the read-only properties for the specified bean classes.
+	 * Specifies one or more properties on beans that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with read-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// All 3 properties will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with read-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
+	 * 		.ignoreUnknownBeanProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser ignores bar and baz properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code for each entry:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpro(value.toString()));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpro()}
@@ -774,13 +1331,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The new value for this property.
+	 * 	The values to add to this builder.
+	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
+	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpro(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(asString(e.getValue())));
 		return this;
 	}
 
@@ -788,7 +1347,44 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Read-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the read-only properties for the specified bean class.
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with read-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(<js>"MyBean"</js>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// All 3 properties will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with read-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpro(<js>"MyBean"</js>, <js>"bar,baz"</js>)
+	 * 		.ignoreUnknownBeanProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser ignores bar and baz properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpro(properties));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpro()}
@@ -810,7 +1406,43 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Write-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the write-only properties for the specified bean class.
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with write-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Only foo will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with write-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser parses all 3 properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpwo(properties));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
@@ -830,7 +1462,43 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Write-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the write-only properties for the specified bean classes.
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with write-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Only foo will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with write-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser parses all 3 properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code for each entry:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpwo(value.toString()));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
@@ -838,13 +1506,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The new value for this property.
+	 * 	The values to add to this builder.
+	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
+	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder bpwo(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(asString(e.getValue())));
 		return this;
 	}
 
@@ -852,7 +1522,43 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Write-only bean properties.
 	 *
 	 * <p>
-	 * Specifies the write-only properties for the specified bean class.
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 * Note that this is different from the <l>bpi</l>/<l>bpx</l> settings which include or exclude properties
+	 * for both serializers and parsers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo, bar, baz;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer with write-only property settings.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(<js>"MyBean"</js>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Only foo will be serialized.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 *
+	 * 	<jc>// Create a parser with write-only property settings.</jc>
+	 * 	// to read-only.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.bpwo(<js>"MyBean"</js>, <js>"bar,baz"</js>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parser parses all 3 properties.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar',baz:'baz'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method is functionally equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpwo(properties));
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link BeanConfig#bpwo()}
@@ -871,7 +1577,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Debug mode.
+	 * <i><l>BeanContext</l> configuration property:</i>  Debug mode.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #debug()}
@@ -885,10 +1591,44 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Debug mode.
+	 * <i><l>BeanContext</l> configuration property:</i>  Debug mode.
 	 *
 	 * <p>
-	 * Shortcut for calling <code>debug(<jk>true</jk>)</code>.
+	 * Enables the following additional information during serialization:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean getters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * 	<li>
+	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean setters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with debug enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.debug()
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
@@ -902,13 +1642,82 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <p>
-	 * Adds to the list of classes that make up the bean dictionary in this bean context.
+	 * The list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <p>
+	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+	 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
+	 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
+	 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON (depending on <l>addBeanTypes</l>/<l>addRootType</l> properties)
+	 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
+	 *
+	 * <p>
+	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+	 *
+	 * <p>
+	 * Values can consist of any of the following types:
+	 * <ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	<li>Any array or collection of the objects above.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+	 * 	<jk>public class</jk> Foo {...}
+	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+	 * 	<jk>public class</jk> Bar {...}
+	 *
+	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Parse bean.</jc>
+	 * 	MyBean b = p.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
+	 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
+	 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
+	 * 	ReaderParser p = HtmlParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse an HTML body into HTML beans.</jc>
+	 * 	Body body = p.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 *
 	 * @param values
@@ -921,45 +1730,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but takes in an array of classes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder dictionary(Class<?>...values) {
-		return  prependTo(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder dictionaryReplace(Class<?>...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
@@ -978,26 +1749,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder dictionaryRemove(Class<?>...values) {
-		return removeFrom(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <p>
 	 * Removes from the list of classes that make up the bean dictionary in this bean context.
@@ -1016,10 +1768,33 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO example.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO example.
 	 *
 	 * <p>
 	 * Specifies an example of the specified class.
+	 *
+	 * <p>
+	 * Examples are used in cases such as POJO examples in Swagger documents.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * POJO examples can also be defined on classes via the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>A static field annotated with {@link Example @Example}.
+	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
@@ -1035,10 +1810,33 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO example.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO example.
 	 *
 	 * <p>
-	 * Specifies an example of the specified class.
+	 * Specifies an example in JSON of the specified class.
+	 *
+	 * <p>
+	 * Examples are used in cases such as POJO examples in Swagger documents.
+	 *
+	 * <p>
+	 * Setting applies to specified class and all subclasses.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.example(MyBean.<jk>class</jk>, <js>"{foo:'bar'}"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * POJO examples can also be defined on classes via the following:
+	 * <ul class='spaced-list'>
+	 * 	<li>A static field annotated with {@link Example @Example}.
+	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
@@ -1059,7 +1857,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO examples.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO examples.
 	 *
 	 * <p>
 	 * Specifies an example of the specified class.
@@ -1086,7 +1884,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property excludes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpx(Class, String)}
@@ -1099,7 +1897,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property excludes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpx(Map)}
@@ -1112,7 +1910,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property excludes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property excludes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpx(String, String)}
@@ -1125,7 +1923,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Find fluent setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Find fluent setters.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #fluentSetters()}
@@ -1139,7 +1937,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Find fluent setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Find fluent setters.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
@@ -1156,7 +1954,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on getters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore invocation errors on getters.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnGetters()}
@@ -1170,7 +1968,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on getters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore invocation errors on getters.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreInvocationExceptionsOnGetters(<jk>true</jk>)</code>.
@@ -1187,7 +1985,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore invocation errors on setters.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnSetters()}
@@ -1201,7 +1999,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore invocation errors on setters.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreInvocationExceptionsOnSetters(<jk>true</jk>)</code>.
@@ -1218,10 +2016,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore properties without setters.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #ignorePropertiesWithoutSetters()}
+	 * 	<b>Deprecated</b> - Use {@link #dontIgnorePropertiesWithoutSetters()}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -1232,7 +2030,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore properties without setters.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
@@ -1250,7 +2048,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore transient fields.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore transient fields.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreTransientFields()}
@@ -1264,7 +2062,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore transient fields.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore transient fields.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
@@ -1278,7 +2076,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore unknown properties.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore unknown properties.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #ignoreUnknownBeanProperties()}
@@ -1292,7 +2090,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore unknown properties.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore unknown properties.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>ignoreUnknownBeanProperties(<jk>true</jk>)</code>.
@@ -1309,7 +2107,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore unknown properties with null values.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore unknown properties with null values.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreUnknownNullBeanProperties()}
@@ -1323,7 +2121,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Ignore unknown properties with null values.
+	 * <i><l>BeanContext</l> configuration property:</i>  Ignore unknown properties with null values.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
@@ -1341,7 +2139,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Implementation classes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Implementation classes.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
@@ -1357,7 +2155,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Implementation classes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Implementation classes.
 	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
@@ -1377,7 +2175,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property includes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpi(Class, String)}
@@ -1390,7 +2188,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property includes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpi(Map)}
@@ -1403,7 +2201,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property includes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #bpi(String, String)}
@@ -1416,7 +2214,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Locale.
+	 * <i><l>BeanContext</l> configuration property:</i>  Locale.
 	 *
 	 * <p>
 	 * Specifies a default locale for serializer and parser sessions.
@@ -1434,7 +2232,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Media type.
+	 * <i><l>BeanContext</l> configuration property:</i>  Media type.
 	 *
 	 * <p>
 	 * Specifies a default media type value for serializer and parser sessions.
@@ -1452,7 +2250,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
@@ -1471,7 +2269,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
@@ -1496,7 +2294,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <p>
 	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
@@ -1516,7 +2314,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <p>
 	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
@@ -1541,7 +2339,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
@@ -1557,7 +2355,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
@@ -1578,7 +2376,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1594,7 +2392,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1615,7 +2413,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1631,7 +2429,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1652,7 +2450,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1667,7 +2465,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
@@ -1688,7 +2486,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1703,7 +2501,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1725,7 +2523,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1747,7 +2545,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1769,7 +2567,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1790,7 +2588,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
+	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
@@ -1812,7 +2610,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean property namer
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean property namer
 	 *
 	 * <p>
 	 * The class to use for calculating bean property names.
@@ -1832,7 +2630,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort bean properties.
+	 * <i><l>BeanContext</l> configuration property:</i>  Sort bean properties.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #sortProperties()}
@@ -1846,7 +2644,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Sort bean properties.
+	 * <i><l>BeanContext</l> configuration property:</i>  Sort bean properties.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
@@ -1863,7 +2661,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  TimeZone.
+	 * <i><l>BeanContext</l> configuration property:</i>  TimeZone.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
@@ -1878,7 +2676,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use enum names.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use enum names.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useEnumNames()}
@@ -1892,7 +2690,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use enum names.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use enum names.
 	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name instead of using {@link Object#toString()}.
@@ -1909,7 +2707,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use interface proxies.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use interface proxies.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dontUseInterfaceProxies()}
@@ -1923,7 +2721,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use interface proxies.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use interface proxies.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
@@ -1941,7 +2739,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use Java Introspector.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use Java Introspector.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useJavaBeanIntrospector()}
@@ -1955,7 +2753,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use Java Introspector.
+	 * <i><l>BeanContext</l> configuration property:</i>  Use Java Introspector.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>useJavaBeanIntrospector(<jk>true</jk>)</code>.

@@ -280,7 +280,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end.
 	 *
 	 * @see #JSON_validateEnd
 	 * @return

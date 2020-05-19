@@ -59,7 +59,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * <i><l>RdfParser</l> configuration property:</i>  XML namespace for Juneau properties.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -71,7 +71,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * <i><l>RdfParser</l> configuration property:</i>  Default XML namespace for bean properties.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -83,7 +83,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>iri_rules</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <p>
 	 * Set the engine for checking and resolving.
@@ -114,7 +114,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
@@ -141,7 +141,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
@@ -156,7 +156,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
@@ -171,7 +171,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>longId</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>longId</c>.
 	 *
 	 * <p>
 	 * Whether to use long ID's for anon resources.
@@ -187,7 +187,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>allowBadURIs</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
@@ -202,7 +202,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>relativeURIs</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <p>
 	 * What sort of relative URIs should be used.
@@ -239,7 +239,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>showXmlDeclaration</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <p>
 	 * Possible values:
@@ -264,7 +264,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>showDoctypeDeclaration</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>showDoctypeDeclaration</c>.
 	 *
 	 * <p>
 	 * If true, an XML doctype declaration is included in the output.
@@ -282,7 +282,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>tab</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>tab</c>.
 	 *
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
@@ -297,7 +297,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>attributeQuoteChar</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <p>
 	 * The XML attribute quote character.
@@ -312,7 +312,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>blockRules</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <p>
 	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
@@ -329,7 +329,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>minGap</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <p>
 	 * Minimum gap between items on a line.
@@ -344,7 +344,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>objectLists</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>objectLists</c>.
 	 *
 	 * <p>
 	 * Print object lists as comma separated lists.
@@ -359,7 +359,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
@@ -374,7 +374,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>propertyColumn</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -389,7 +389,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>indentProperty</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <p>
 	 * Width to indent properties.
@@ -404,7 +404,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>widePropertyLen</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -420,7 +420,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>abbrevBaseURI</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>abbrevBaseURI</c>.
 	 *
 	 * <p>
 	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
@@ -435,7 +435,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>usePropertySymbols</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>usePropertySymbols</c>.
 	 *
 	 * <p>
 	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
@@ -450,7 +450,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useTripleQuotedStrings</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>useTripleQuotedStrings</c>.
 	 *
 	 * <p>
 	 * Allow the use of <c>"""</c> to delimit long strings.
@@ -465,7 +465,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useDoubles</c>.
+	 * <i><l>RdfParser</l> configuration property:</i>  N3/Turtle property: <c>useDoubles</c>.
 	 *
 	 * <p>
 	 * Allow the use doubles as <c>123.456</c>.
@@ -480,7 +480,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 * Possible values:
@@ -513,7 +513,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF format for representing collections and arrays.
 	 *
 	 * <p>
 	 * Possible values:
@@ -543,7 +543,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * <i><l>RdfParser</l> configuration property:</i>  Default XML namespace for bean properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauBpNs}
@@ -560,7 +560,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * <i><l>RdfParser</l> configuration property:</i>  XML namespace for Juneau properties.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RdfParser#RDF_juneauNs}
@@ -577,7 +577,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF language.
 	 *
 	 * <p>
 	 * Can be any of the following:
@@ -622,7 +622,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * <i><l>RdfParser</l> configuration property:</i>  Collections should be serialized and parsed as loose collections.
 	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
@@ -643,7 +643,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * <i><l>RdfParser</l> configuration property:</i>  Collections should be serialized and parsed as loose collections.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>looseCollection(<jk>true</jk>)</code>.
@@ -660,7 +660,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_N3</jsf>)</code>.
@@ -677,7 +677,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * <i><l>RdfParser</l> configuration property:</i>  RDF language.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>.
@@ -694,7 +694,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * <i><l>RdfParser</l> configuration property:</i>  Trim whitespace from text elements.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
@@ -714,7 +714,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * <i><l>RdfParser</l> configuration property:</i>  Trim whitespace from text elements.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>trimWhitespace(<jk>true</jk>)</code>.
@@ -1015,32 +1015,14 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

@@ -50,7 +50,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary output format.
+	 * <i><l>OutputStreamSerializer</l> configuration property:</i>  Binary output format.
 	 *
 	 * <p>
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
@@ -87,7 +87,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Binary output format.
+	 * <i><l>OutputStreamSerializer</l> configuration property:</i>  Binary output format.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}
@@ -343,32 +343,14 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

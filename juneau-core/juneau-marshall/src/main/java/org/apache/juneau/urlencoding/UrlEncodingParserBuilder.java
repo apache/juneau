@@ -57,7 +57,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
+	 * <i><l>UrlEncodingParser</l> configuration property:</i>  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #expandedParams()}
@@ -71,7 +71,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	/**
-	 * Configuration property: Serialize bean property collections/arrays as separate key/value pairs.
+	 * <i><l>UrlEncodingParser</l> configuration property:</i>  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
@@ -330,32 +330,14 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

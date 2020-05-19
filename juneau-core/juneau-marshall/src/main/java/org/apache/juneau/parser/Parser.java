@@ -917,7 +917,7 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Auto-close streams.
+	 * Auto-close streams.
 	 *
 	 * @see #PARSER_autoCloseStreams
 	 * @return
@@ -929,7 +929,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Debug output lines.
+	 * Debug output lines.
 	 *
 	 * @see #PARSER_debugOutputLines
 	 * @return
@@ -940,7 +940,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Parser listener.
+	 * Parser listener.
 	 *
 	 * @see #PARSER_listener
 	 * @return
@@ -951,7 +951,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Strict mode.
+	 * Strict mode.
 	 *
 	 * @see #PARSER_strict
 	 * @return
@@ -962,7 +962,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * Trim parsed strings.
 	 *
 	 * @see #PARSER_trimStrings
 	 * @return
@@ -974,7 +974,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Unbuffered.
+	 * Unbuffered.
 	 *
 	 * @see #PARSER_unbuffered
 	 * @return

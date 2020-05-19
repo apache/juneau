@@ -147,7 +147,7 @@ public final class SoapXmlSerializer extends XmlSerializer implements SoapXmlMet
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  The SOAPAction HTTP header value to set on responses.
+	 * The SOAPAction HTTP header value to set on responses.
 	 *
 	 * @see #SOAPXML_SOAPAction
 	 * @return

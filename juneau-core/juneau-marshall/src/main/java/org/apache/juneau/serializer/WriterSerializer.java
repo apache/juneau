@@ -423,7 +423,7 @@ public abstract class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * File charset.
 	 *
 	 * @see #WSERIALIZER_fileCharset
 	 * @return
@@ -434,7 +434,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Configuration property:  Maximum indentation.
+	 * Maximum indentation.
 	 *
 	 * @see #WSERIALIZER_maxIndent
 	 * @return
@@ -445,7 +445,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * Quote character.
 	 *
 	 * @see #WSERIALIZER_quoteChar
 	 * @return
@@ -456,7 +456,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Configuration property:  Output stream charset.
+	 * Output stream charset.
 	 *
 	 * @see #WSERIALIZER_streamCharset
 	 * @return
@@ -467,7 +467,7 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * Trim strings.
 	 *
 	 * @see #WSERIALIZER_useWhitespace
 	 * @return

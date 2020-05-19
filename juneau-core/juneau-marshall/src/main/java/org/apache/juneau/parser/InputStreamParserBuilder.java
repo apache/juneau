@@ -50,7 +50,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary input format.
+	 * <i><l>InputStreamParser</l> configuration property:</i>  Binary input format.
 	 *
 	 * <p>
 	 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
@@ -84,7 +84,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Binary input format.
+	 * <i><l>InputStreamParser</l> configuration property:</i>  Binary input format.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}
@@ -340,32 +340,14 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

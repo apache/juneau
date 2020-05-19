@@ -164,7 +164,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary output format.
+	 * Binary output format.
 	 *
 	 * @see #OSSERIALIZER_binaryFormat
 	 * @return

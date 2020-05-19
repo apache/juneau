@@ -57,7 +57,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
+	 * <i><l>UonSerializer</l> configuration property:</i>  Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -104,7 +104,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
+	 * <i><l>UonSerializer</l> configuration property:</i>  Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -148,7 +148,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * <i><l>UonSerializer</l> configuration property:</i>  Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
@@ -176,7 +176,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	OMap m = OMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-	 *  );
+	 * 	);
 	 *
 	 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
 	 * 	String uon1 = s1.serialize(m)
@@ -200,7 +200,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * <i><l>UonSerializer</l> configuration property:</i>  Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies plain-text for the format to use for URL GET parameter keys and values.
@@ -216,7 +216,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	OMap m = OMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-	 *  );
+	 * 	);
 	 *
 	 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
 	 * 	String uon = s.serialize(m)
@@ -476,32 +476,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

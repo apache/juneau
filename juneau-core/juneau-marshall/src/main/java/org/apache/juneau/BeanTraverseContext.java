@@ -298,7 +298,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
+	 * Automatically detect POJO recursions.
 	 *
 	 * @see #BEANTRAVERSE_detectRecursions
 	 * @return
@@ -309,7 +309,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Ignore recursion errors.
+	 * Ignore recursion errors.
 	 *
 	 * @see #BEANTRAVERSE_ignoreRecursions
 	 * @return
@@ -321,7 +321,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Initial depth.
 	 *
 	 * @see #BEANTRAVERSE_initialDepth
 	 * @return
@@ -332,7 +332,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	}
 
 	/**
-	 * Configuration property:  Max traversal depth.
+	 * Max traversal depth.
 	 *
 	 * @see #BEANTRAVERSE_maxDepth
 	 * @return

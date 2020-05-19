@@ -94,7 +94,7 @@ MockRest
 </p>
 <p>
 	The concept of the design is simple.  The {@link oajr.mock2.MockRest} class is used to create instances of {@link oajr.mock2.MockServletRequest}
-	and {@link oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	and {@link oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
 	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
 	actually having to run in a servlet container.
 </p>

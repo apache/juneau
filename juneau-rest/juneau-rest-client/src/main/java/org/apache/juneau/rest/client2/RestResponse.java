@@ -418,7 +418,7 @@ public final class RestResponse implements HttpResponse {
 	 * Header values are ignored.
 	 *
 	 * @param name The header name to check for.
-	 * @returns <jk>true</jk> if at least one header with this name is present.
+	 * @return <jk>true</jk> if at least one header with this name is present.
 	 */
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
@@ -462,7 +462,7 @@ public final class RestResponse implements HttpResponse {
 	 * Returns the last header with a specified name of this message.
 	 *
 	 * Header values are ignored.
-	 * <br>?If there is more than one matching header in the message the last element of {@linkn #getHeaders(String)} is returned.
+	 * <br>?If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
 	 *
 	 * @param name The name of the header to return.
 	 * @return The header, or <jk>null</jk> if there is no matching header in the message.

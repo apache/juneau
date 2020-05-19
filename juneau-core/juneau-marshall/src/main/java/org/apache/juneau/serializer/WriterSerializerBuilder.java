@@ -51,7 +51,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property: File charset.
+	 * <i><l>WriterSerializer</l> configuration property:</i> File charset.
 	 *
 	 * <p>
 	 * The character set to use for writing <c>Files</c> to the file system.
@@ -86,7 +86,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Maximum indentation.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -120,7 +120,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies the character to use for quoting attributes and values.
@@ -161,7 +161,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies to use single quotes for quoting attributes and values.
@@ -199,7 +199,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property: Output stream charset.
+	 * <i><l>WriterSerializer</l> configuration property:</i> Output stream charset.
 	 *
 	 * <p>
 	 * The character set to use when writing to <c>OutputStreams</c>.
@@ -234,7 +234,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useWhitespace()}
@@ -248,7 +248,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -281,7 +281,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -557,32 +557,14 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public WriterSerializerBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public WriterSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 

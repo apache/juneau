@@ -204,7 +204,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
+	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see #URLENC_expandedParams
 	 * @return

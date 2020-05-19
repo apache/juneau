@@ -288,7 +288,7 @@ public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, Re
 	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
-	 * object has been created and after the {@link #POST_INIT} methods have been called.
+	 * object has been created and after the {@link HookEvent#POST_INIT} methods have been called.
 	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information

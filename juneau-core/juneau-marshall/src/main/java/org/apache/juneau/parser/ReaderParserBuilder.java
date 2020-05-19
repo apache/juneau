@@ -51,7 +51,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * <i><l>ReaderParser</l> configuration property:</i>  File charset.
 	 *
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
@@ -86,7 +86,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Input stream charset.
+	 * <i><l>ReaderParser</l> configuration property:</i>  Input stream charset.
 	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
@@ -363,32 +363,14 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder dictionary(java.lang.Class<?>...values) {
-		super.dictionary(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder dictionary(Object...values) {
 		super.dictionary(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder dictionaryRemove(java.lang.Class<?>...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder dictionaryReplace(java.lang.Class<?>...values) {
-		super.dictionaryReplace(values);
 		return this;
 	}
 
