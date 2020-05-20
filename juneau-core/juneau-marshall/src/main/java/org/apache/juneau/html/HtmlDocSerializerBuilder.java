@@ -924,32 +924,14 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-		super.notBeanClassesReplace(values);
 		return this;
 	}
 
@@ -966,19 +948,7 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
@@ -990,38 +960,14 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlDocSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-		super.pojoSwapsReplace(values);
 		return this;
 	}
 

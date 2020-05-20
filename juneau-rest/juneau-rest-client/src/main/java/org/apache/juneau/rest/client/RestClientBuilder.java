@@ -2688,32 +2688,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -2730,26 +2712,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -2760,32 +2724,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
 		return this;
 	}
 

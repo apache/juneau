@@ -445,32 +445,14 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-		super.notBeanClassesReplace(values);
 		return this;
 	}
 
@@ -487,19 +469,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
@@ -511,38 +481,14 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-		super.pojoSwapsReplace(values);
 		return this;
 	}
 

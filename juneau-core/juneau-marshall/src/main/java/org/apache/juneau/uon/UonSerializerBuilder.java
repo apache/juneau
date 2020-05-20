@@ -578,32 +578,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanClasses(java.lang.Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-		super.notBeanClassesReplace(values);
 		return this;
 	}
 
@@ -620,19 +602,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
@@ -644,38 +614,14 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder pojoSwaps(java.lang.Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-		super.pojoSwapsReplace(values);
 		return this;
 	}
 

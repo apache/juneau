@@ -60,14 +60,14 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			serializers = SerializerGroup.create()
 				.append(jp.serializers())
 				.beanFilters((Object[])jp.beanFilters())
-				.pojoSwaps(jp.pojoSwaps())
+				.pojoSwaps((Object[])jp.pojoSwaps())
 				.set(properties)
 				.build();
 
 			parsers = ParserGroup.create()
 				.append(jp.parsers())
 				.beanFilters((Object[])jp.beanFilters())
-				.pojoSwaps(jp.pojoSwaps())
+				.pojoSwaps((Object[])jp.pojoSwaps())
 				.set(properties)
 				.build();
 

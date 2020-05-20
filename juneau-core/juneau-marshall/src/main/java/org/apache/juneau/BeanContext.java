@@ -1666,8 +1666,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * When enabled, fluent setters are detected on beans.
+	 * When enabled, fluent setters are detected on beans during parsing.
 	 *
 	 * <p>
 	 * Fluent setters must have the following attributes:
@@ -1680,18 +1681,31 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that finds fluent setters.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	<jc>// A bean with a fluent setter.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> MyBean foo(String value) {...}
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that finds fluent setters.</jc>
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.fluentSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_fluentSetters</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Parse into bean using fluent setter.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>);
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
+	 * 	<li>The {@link Bean#fluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+	 * </ul>
 	 */
 	public static final String BEAN_fluentSetters = PREFIX + ".fluentSetters.b";
 
@@ -1718,12 +1732,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a property that throws an exception.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String getFoo() {
+	 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1735,6 +1757,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Exception is ignored.</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnGetters = PREFIX + ".ignoreInvocationExceptionsOnGetters.b";
@@ -1762,12 +1787,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
-	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a property that throws an exception.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public void</jk> setFoo(String foo) {
+	 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1779,6 +1812,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Exception is ignored.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + ".ignoreInvocationExceptionsOnSetters.b";
@@ -1806,16 +1842,24 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public void</jk> getFoo() {
+	 * 			<jk>return</jk> <js>"foo"</js>;
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.ignorePropertiesWithoutSetters(<jk>false</jk>)
+	 * 		.dontIgnorePropertiesWithoutSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -1823,7 +1867,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, <jk>false</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Throws a ParseException.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
+	 * </ul>
 	 */
 	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + ".ignorePropertiesWithoutSetters.b";
 
@@ -1850,16 +1901,22 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> or annotated with {@link java.beans.Transient}
 	 * will be ignored as bean properties.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a transient field.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public transient</jk> String foo = <js>"foo"</js>;
+	 * 	}
+	 *
 	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreTransientFields(<jk>false</jk>)
+	 * 		.dontIgnoreTransientFields()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -1867,7 +1924,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreTransientFields</jsf>, <jk>false</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
+	 * </ul>
 	 */
 	public static final String BEAN_ignoreTransientFields = PREFIX + ".ignoreTransientFields.b";
 
@@ -1894,12 +1958,18 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo;
+	 * 	}
+	 *
 	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1911,6 +1981,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + ".ignoreUnknownBeanProperties.b";
@@ -1938,16 +2011,22 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo;
+	 * 	}
+	 *
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreUnknownNullBeanProperties(<jk>false</jk>)
+	 * 		.dontIgnoreUnknownNullBeanProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -1955,6 +2034,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, <jk>false</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + ".ignoreUnknownNullBeanProperties.b";
@@ -1981,6 +2063,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
@@ -1988,17 +2071,30 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeanInterfaces.</jc>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public interface</jk> MyBean {
+	 * 		...
+	 * 	}
+	 *
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
+	 * 		...
+	 * 	}
+
+	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.implClass(MyBeanInterface.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
+	 * 		.implClass(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBeanInterface.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
+	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Instantiates a MyBeanImpl,</jc>
+	 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_implClasses = PREFIX + ".implClasses.smc";
@@ -2036,27 +2132,45 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Specifies the default locale for serializer and parser sessions.
+	 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSessionArgs#locale(Locale)}.
+	 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
+	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
+	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getLocale().equals(Locale.<jsf>UK</jsf>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return<jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.locale(Locale.<jsf>UK</jsf>)
+	 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_locale</jsf>, Locale.<jsf>UK</jsf>)
+	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyBeanSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
-	 * 		...
+	 *
+	 * 		<jc>// Produces "null" if in the UK.</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>
 	 */
@@ -2086,11 +2200,26 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Specifies the default media type value for serializer and parser sessions.
+	 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSessionArgs#mediaType(MediaType)}.
+	 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
+	 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
+	 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
+	 * serializer or parser.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getMediaType().equals(<js>"application/json"</js>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return<jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -2106,7 +2235,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
-	 * 		...
+	 *
+	 * 		<jc>// Produces "null" since it's JSON.</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>
 	 */
@@ -2129,16 +2260,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Class...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesReplace(Class...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesRemove(Class...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
@@ -2206,11 +2335,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(String...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesReplace(String...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesRemove(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesRemove(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2278,11 +2404,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Class...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsReplace(Class...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsRemove(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsRemove(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2507,11 +2630,25 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * Specifies the default timezone for serializer and parser sessions.
+	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSessionArgs#timeZone(TimeZone)}.
+	 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
+	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
+	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return<jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -2527,6 +2664,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
+	 *
+	 * 		<jc>// Produces "null" since the time zone is GMT.</jc>
 	 * 		String json = s.serialize(<jk>new</jk> MyBean());
 	 * 	}
 	 * </p>

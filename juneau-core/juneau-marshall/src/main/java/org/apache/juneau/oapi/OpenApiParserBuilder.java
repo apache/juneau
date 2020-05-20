@@ -513,32 +513,14 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanClasses(java.lang.Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-		super.notBeanClassesReplace(values);
 		return this;
 	}
 
@@ -555,19 +537,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
@@ -579,38 +549,14 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder pojoSwaps(java.lang.Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-		super.pojoSwapsReplace(values);
 		return this;
 	}
 

@@ -65,6 +65,7 @@ public class MediaType implements Comparable<MediaType>  {
 	private final List<String> subTypesList;             // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final Map<String,Set<String>> parameters;    // The media type parameters (e.g. "text/html;level=1").  Does not include q!
 	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
+	private String asString;
 
 	/**
 	 * Returns the media type for the specified string.
@@ -333,13 +334,18 @@ public class MediaType implements Comparable<MediaType>  {
 
 	@Override /* Object */
 	public final String toString() {
-		if (parameters.isEmpty())
-			return mediaType;
-		StringBuilder sb = new StringBuilder(mediaType);
-		for (Map.Entry<String,Set<String>> e : parameters.entrySet())
-			for (String value : e.getValue())
-				sb.append(';').append(e.getKey()).append('=').append(value);
-		return sb.toString();
+		if (asString == null) {
+			if (parameters.isEmpty())
+				asString = mediaType;
+			else {
+				StringBuilder sb = new StringBuilder(mediaType);
+				for (Map.Entry<String,Set<String>> e : parameters.entrySet())
+					for (String value : e.getValue())
+						sb.append(';').append(e.getKey()).append('=').append(value);
+				asString = sb.toString();
+			}
+		}
+		return asString;
 	}
 
 	@Override /* Object */
@@ -349,7 +355,11 @@ public class MediaType implements Comparable<MediaType>  {
 
 	@Override /* Object */
 	public final boolean equals(Object o) {
-		return this == o;
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		return toString().equals(o.toString());
 	}
 
 	@Override

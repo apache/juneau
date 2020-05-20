@@ -39,7 +39,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 	}
 
 	@Override /* RoundTripTest */
-	public Class<?>[] getPojoSwaps() {
+	public Object[] getPojoSwaps() {
 		return new Class<?>[]{
 			ByteArraySwap.Base64.class,
 		};

@@ -627,32 +627,14 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanClasses(Class<?>...values) {
-		super.notBeanClasses(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanClassesReplace(Class<?>...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder notBeanClassesReplace(Object...values) {
 		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanClassesRemove(Class<?>...values) {
-		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -669,26 +651,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanPackages(String...values) {
-		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanPackagesReplace(String...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder notBeanPackagesReplace(Object...values) {
 		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder notBeanPackagesRemove(String...values) {
-		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -699,32 +663,14 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder pojoSwaps(Class<?>...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder pojoSwapsReplace(Class<?>...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder pojoSwapsReplace(Object...values) {
 		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder pojoSwapsRemove(Class<?>...values) {
-		super.pojoSwapsRemove(values);
 		return this;
 	}
 

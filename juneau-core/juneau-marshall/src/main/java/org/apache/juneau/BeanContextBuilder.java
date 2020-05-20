@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
@@ -2233,25 +2232,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanClasses(Class<?>...values) {
-		return addTo(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
-	 *
-	 * <p>
-	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
@@ -2264,26 +2244,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanClasses(Object...values) {
 		return addTo(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
-	 *
-	 * <p>
-	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
-	 * bean-like.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanClassesReplace(Class<?>...values) {
-		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -2320,22 +2280,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values
 	 * 	The values to remove from this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanClassesRemove(Class<?>...values) {
-		return removeFrom(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
 	 * 		<li>Classes.
@@ -2346,22 +2290,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanClassesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanPackages(String...values) {
-		return addTo(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -2394,22 +2322,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param values
 	 * 	<br>Values can consist of any of the following types:
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanPackagesReplace(String...values) {
-		return set(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	<br>Values can consist of any of the following types:
 	 * 	<br>Possible values are:
 	 * 	<ul>
 	 * 		<li>Strings.
@@ -2420,21 +2332,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanPackagesReplace(Object...values) {
 		return set(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
-	 * @param values The values to remove from this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanPackagesRemove(String...values) {
-		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -2456,21 +2353,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanPackagesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder pojoSwaps(Class<?>...values) {
-		return appendTo(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -2513,51 +2395,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder pojoSwapsReplace(Class<?>...values) {
-		return set(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
 	public BeanContextBuilder pojoSwapsReplace(Object...values) {
 		return set(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder pojoSwapsRemove(Class<?>...values) {
-		return removeFrom(BEAN_pojoSwaps, values);
 	}
 
 	/**

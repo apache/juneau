@@ -210,7 +210,7 @@ public abstract class RoundTripTest {
 		return new Object[0];
 	}
 
-	public Class<?>[] getPojoSwaps() {
+	public Object[] getPojoSwaps() {
 		return new Class<?>[0];
 	}
 
@@ -260,7 +260,7 @@ public abstract class RoundTripTest {
 			p = p.builder().beanFilters(c).build();
 	}
 
-	protected void pojoSwaps(Class<?>...c) {
+	protected void pojoSwaps(Object...c) {
 		s = s.builder().pojoSwaps(c).build();
 		if (p != null)
 			p = p.builder().pojoSwaps(c).build();
