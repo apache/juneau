@@ -13,8 +13,8 @@
  ***************************************************************************************************************************/
  -->
 
-{8.1.0-updated} 
-Per-media-type PojoSwaps
+{8.1.0-updated,8.1.4-updated} 
+Per-media-type Swaps
 
 <p>
 	Swaps can also be defined per-media-type.		
@@ -74,7 +74,7 @@ Per-media-type PojoSwaps
 			SerializerGroup g = SerializerGroup.<jsm>create</jsm>()
 				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
 				.sq()
-				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+				.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
 				.build();
 
 			MyPojo myPojo = <jk>new</jk> MyPojo();

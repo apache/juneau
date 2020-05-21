@@ -55,13 +55,9 @@ public @interface JuneauProvider {
 	/**
 	 * Provider-level POJO swaps.
 	 *
-	 * <p>
-	 * These POJO swaps are applied to all serializers and parsers being used by the provider.
-	 *
-	 * <p>
-	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
-	 * Any other classes are wrapped in a {@link SurrogateSwap}.
+	 * @deprecated Use {@link #swaps()}
 	 */
+	@Deprecated
 	Class<?>[] pojoSwaps() default {};
 
 	/**
@@ -74,6 +70,18 @@ public @interface JuneauProvider {
 	 * These properties can be augmented/overridden through the {@link RestMethod#properties() @RestMethod(properties)} annotation on the REST method.
 	 */
 	Property[] properties() default {};
+
+	/**
+	 * Provider-level POJO swaps.
+	 *
+	 * <p>
+	 * These POJO swaps are applied to all serializers and parsers being used by the provider.
+	 *
+	 * <p>
+	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
+	 * Any other classes are wrapped in a {@link SurrogateSwap}.
+	 */
+	Class<?>[] swaps() default {};
 
 	/**
 	 * Shortcut for setting {@link #properties()} of boolean types.

@@ -75,7 +75,7 @@ public class PojoSwapTest {
 		SerializerGroup g = SerializerGroup.create()
 			.append(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
 			.sq()
-			.pojoSwaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class)
+			.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class)
 			.build();
 
 		MyPojo myPojo = new MyPojo();

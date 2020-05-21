@@ -46,7 +46,7 @@ import org.apache.juneau.rest.annotation.*;
 )
 @BeanConfig(
 	// POJO swaps to apply to all serializers/parsers on this method.
-	pojoSwaps={
+	swaps={
 		// Use the SwaggerUI swap when rendering Swagger beans.
 		// This is a per-media-type swap that only applies to text/html requests.
 		SwaggerUI.class

@@ -116,7 +116,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = object();
-		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (builder != null)

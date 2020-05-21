@@ -112,7 +112,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
 		ClassMeta<?> sType;			// The serialized type
-		PojoSwap pojoSwap = eType.getPojoSwap(this);
+		PojoSwap pojoSwap = eType.getSwap(this);
 
 		aType = push(attrName, eType, null);
 

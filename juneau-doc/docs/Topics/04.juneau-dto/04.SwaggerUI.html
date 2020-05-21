@@ -58,13 +58,15 @@ Swagger UI
 		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
 		allowedMethodParams=<js>"OPTIONS"</js>,
 	
-		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
-		pojoSwaps={
-			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
-			SwaggerUI.<jk>class</jk>
-		},
 	
 		...
+	)
+	<ja>@BeanConfig</ja>(
+		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		swaps={
+			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+			SwaggerUI.<jk>class</jk>
+		}
 	)
 	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
 	

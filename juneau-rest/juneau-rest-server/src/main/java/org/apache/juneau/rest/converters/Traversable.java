@@ -61,7 +61,7 @@ public final class Traversable implements RestConverter {
 		if (pathRemainder != null) {
 			try {
 				BeanSession bs = req.getBeanSession();
-				PojoSwap swap = bs.getClassMetaForObject(o).getPojoSwap(bs);
+				PojoSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
 				if (swap != null)
 					o = swap.swap(bs, o);
 				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());

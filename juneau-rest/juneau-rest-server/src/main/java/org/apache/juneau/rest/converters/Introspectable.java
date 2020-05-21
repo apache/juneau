@@ -66,7 +66,7 @@ public final class Introspectable implements RestConverter {
 			return o;
 		try {
 			BeanSession bs = req.getBeanSession();
-			PojoSwap swap = bs.getClassMetaForObject(o).getPojoSwap(bs);
+			PojoSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
 			if (swap != null)
 				o = swap.swap(bs, o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);

@@ -113,7 +113,7 @@ public class OpenApiParserSession extends UonParserSession {
 			in = schema.getDefault();
 		} else {
 
-			PojoSwap<T,Object> swap = (PojoSwap<T,Object>)type.getPojoSwap(this);
+			PojoSwap<T,Object> swap = (PojoSwap<T,Object>)type.getSwap(this);
 			BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
 			ClassMeta<?> sType = null;
 			if (builder != null)

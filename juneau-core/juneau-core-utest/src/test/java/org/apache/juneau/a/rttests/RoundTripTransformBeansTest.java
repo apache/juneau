@@ -52,7 +52,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		Object[] f = {
 			ByteArraySwap.Base64.class
 		};
-		pojoSwaps(f);
+		swaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -154,7 +154,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		Object[] f = {
 			ByteArraySwap.Base64.class
 		};
-		pojoSwaps(f);
+		swaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -199,7 +199,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testSwaps - Bean.pojoSwaps annotation
+	// swaps - Bean.swaps annotation
 	//====================================================================================================
 	@Test
 	public void testSwaps() throws Exception {
@@ -341,10 +341,10 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSurrogates() throws Exception {
-		pojoSwaps(D2.class);
+		swaps(D2.class);
 
-		JsonSerializer s = JsonSerializer.create().ssq().pojoSwaps(D2.class).build();
-		JsonParser p = JsonParser.create().pojoSwaps(D2.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().swaps(D2.class).build();
+		JsonParser p = JsonParser.create().swaps(D2.class).build();
 		Object r;
 		D1 x = D1.create();
 

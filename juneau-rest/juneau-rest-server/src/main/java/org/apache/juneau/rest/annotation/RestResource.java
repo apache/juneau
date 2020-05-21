@@ -799,7 +799,7 @@ public @interface RestResource {
 	 * Shortcut to add POJO swaps to the bean contexts of all serializers and parsers on all methods in the class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
 	 * </ul>
 	 */
 	Class<?>[] pojoSwaps() default {};

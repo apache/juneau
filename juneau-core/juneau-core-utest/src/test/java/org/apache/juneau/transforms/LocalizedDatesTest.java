@@ -638,7 +638,7 @@ public class LocalizedDatesTest {
 		this.sessionLocale = sessionLocale;
 		this.sessionTimeZone = sessionTimeZone;
 		BeanContextBuilder bcb = BeanContext.create();
-		bcb.pojoSwaps(swap);
+		bcb.swaps(swap);
 		if (contextLocale != null)
 			bcb.set(BEAN_locale, contextLocale);
 		if (contextTimeZone != null)

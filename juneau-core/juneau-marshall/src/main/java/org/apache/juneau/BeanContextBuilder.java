@@ -2358,20 +2358,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swaps(Object...)}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwaps(Object...values) {
 		return appendTo(BEAN_pojoSwaps, values);
@@ -2380,20 +2372,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swapsReplace(Object...)}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwapsReplace(Object...values) {
 		return set(BEAN_pojoSwaps, values);
@@ -2402,20 +2386,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swapsRemove(Object...)}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwapsRemove(Object...values) {
 		return removeFrom(BEAN_pojoSwaps, values);
@@ -2470,6 +2446,72 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder sortProperties() {
 		return set(BEAN_sortProperties, true);
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Java object swaps.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 		<li>Any array or collection of the objects above.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder swaps(Object...values) {
+		return appendTo(BEAN_swaps, values);
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Java object swaps.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 		<li>Any array or collection of the objects above.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder swapsReplace(Object...values) {
+		return set(BEAN_swaps, values);
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Java object swaps.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 		<li>Any array or collection of the objects above.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder swapsRemove(Object...values) {
+		return removeFrom(BEAN_swaps, values);
 	}
 
 	/**

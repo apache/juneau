@@ -43,12 +43,9 @@ import org.apache.juneau.serializer.*;
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
  * 	<li class='ja'>{@link Swaps @Swaps}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Object...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Class...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Class...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#swaps(Object...)}
  * </ul>
  *
  * <p>

@@ -87,7 +87,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getPojoSwap(this);
+		PojoSwap<T,Object> swap = (PojoSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (builder != null)

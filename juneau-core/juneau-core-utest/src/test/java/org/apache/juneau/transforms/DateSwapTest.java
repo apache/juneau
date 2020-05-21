@@ -40,11 +40,11 @@ public class DateSwapTest {
 		A testBeanA = new A().init();
 
 		final String jsonData = JsonSerializer.create()
-			.pojoSwaps(DateSwap.ISO8601DT.class)
+			.swaps(DateSwap.ISO8601DT.class)
 			.build()
 			.serialize(testBeanA);
 		final OMap data = JsonParser.create()
-			.pojoSwaps(DateSwap.ISO8601DT.class)
+			.swaps(DateSwap.ISO8601DT.class)
 			.build()
 			.parse(jsonData, OMap.class);
 

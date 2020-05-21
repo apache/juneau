@@ -59,7 +59,7 @@ import org.apache.juneau.http.*;
  *
  * 	<jc>// Change settings on parsers simultaneously</jc>
  * 	b.set(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
- * 		.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
+ * 		.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
  *
  * 	ParserGroup g = b.build();
  *

@@ -137,7 +137,7 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
-		psb.set(BEAN_pojoSwaps, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
+		psb.set(BEAN_swaps, merge(ObjectUtils.toType(psb.peek(BEAN_swaps), Object[].class), a.pojoSwaps()));
 
 		psb.prependTo(REST_paramResolvers, a.paramResolvers());
 

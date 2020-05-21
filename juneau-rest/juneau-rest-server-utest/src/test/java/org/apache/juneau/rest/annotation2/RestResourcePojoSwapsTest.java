@@ -88,11 +88,11 @@ public class RestResourcePojoSwapsTest {
 	}
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
-	@BeanConfig(pojoSwaps={SwapA1.class})
+	@BeanConfig(swaps={SwapA1.class})
 	public static class A01_Parent {}
 
 	@Rest
-	@BeanConfig(pojoSwaps={SwapA2.class})
+	@BeanConfig(swaps={SwapA2.class})
 	public static class A01 extends A01_Parent {
 
 		@RestMethod(name=GET, path="/classTransformOverridesParentClassTransform")
@@ -107,15 +107,18 @@ public class RestResourcePojoSwapsTest {
 		public A a01c(@Path("a") A a) {
 			return a; // Should return "A2-1".
 		}
-		@RestMethod(name=GET, path="/methodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+		@RestMethod(name=GET, path="/methodTransformOverridesClassTransform")
+		@BeanConfig(swaps={SwapA3.class})
 		public A a02a() {
 			return new A(); // Should return "A3-1".
 		}
-		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
+		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform")
+		@BeanConfig(swaps={SwapA3.class})
 		public A a02b(@Body A a) {
 			return a; // Should return "A3-1".
 		}
-		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
+		@RestMethod(name=PUT, path="/methodTransformOverridesClassTransform/{a}")
+		@BeanConfig(swaps={SwapA3.class})
 		public A a02c(@Path("a") A a) {
 			return a; // Should return "A3-1".
 		}

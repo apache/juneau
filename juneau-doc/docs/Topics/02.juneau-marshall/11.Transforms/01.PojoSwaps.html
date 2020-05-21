@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{8.1.0-updated} 
-PojoSwaps
+{8.1.0-updated,8.1.4-updated} 
+Swaps
 
 <p>
-	{@link oaj.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
+	{@link oaj.transform.PojoSwap Swaps} are a critical component of Juneau.
 	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
 </p>
 <p>
@@ -57,11 +57,11 @@ PojoSwaps
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a new JSON serializer with our swap.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
 	String json = s.serialize(<jk>new</jk> MyBean());
 	
 	<jc>// Create a JSON parser with our swap.</jc>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(MyBeanSwap.<jk>class</jk>).build();
 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 </p>
 <p>
@@ -98,8 +98,8 @@ PojoSwaps
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 	
 	<jk>byte</jk>[] bytes = {1,2,3};
 	String json = s.serialize(bytes);		<jc>// Produces "'AQID'"</jc>

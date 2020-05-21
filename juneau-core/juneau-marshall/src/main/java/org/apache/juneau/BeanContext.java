@@ -1228,68 +1228,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Bean property includes.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.bpi.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.bpi</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPI</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpi()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#properties()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpi()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(Class, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(String, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpi(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means only serialize the <c>foo</c> and
-	 * <c>bar</c> properties on the specified bean.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.bpi(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpi</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpi</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
-	 * @deprecated Use {@link Bean#bpi()} and {@link BeanConfig#bpi()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link Bean#bpi()} and {@link BeanConfig#bpi()}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String BEAN_bpi = PREFIX + ".bpi.sms";
@@ -1297,70 +1238,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Bean property excludes.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.bpx.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.bpx</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPX</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 		</ul>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpx()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpx()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(Class, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(String, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpx(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means don't serialize the <c>foo</c> and
-	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.bpx(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpx</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpx</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
-	 * @deprecated Use {@link Bean#bpx()} and {@link BeanConfig#bpx()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link Bean#bpx()} and {@link BeanConfig#bpx()}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
@@ -1368,68 +1248,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Read-only bean properties.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpro BEAN_bpro}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.bpro.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.bpro</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPRO</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpro()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#ro()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpro()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(Class, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(String, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpro(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
-	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means the <c>foo</c> and
-	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.bpro(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpro</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpro</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
-	 * @deprecated Use {@link Bean#bpro()} and {@link BeanConfig#bpro()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link Bean#bpro()} and {@link BeanConfig#bpro()}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String BEAN_bpro = PREFIX + ".bpro.sms";
@@ -1437,68 +1258,9 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Write-only bean properties.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_bpwo BEAN_bpwo}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.bpwo.sms"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,String&gt;</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.bpwo</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BPWO</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#bpwo()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Beanp#wo()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#bpwo()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(Class, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(String, String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#bpwo(String...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
-	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 *
-	 * <p>
-	 * The keys are either fully-qualified or simple class names, and the values are comma-delimited lists of property
-	 * names.
-	 * The key <js>"*"</js> means all bean classes.
-	 *
-	 * <p>
-	 * For example, <code>{Bean1:<js>'foo,bar'</js>}</code> means the <c>foo</c> and
-	 * <c>bar</c> properties on any beans whose simple class name is <c>Bean1</c>.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.bpwo(MyBean.<jk>class</jk>, <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpwo</jsf>, MyBean.<jk>class</jk>.getName(), <js>"foo,bar"</js>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Alternate using JSON object.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_bpwo</jsf>, <js>"{'org.apache.MyBean':'foo,bar'}"</js>)
-	 * 		.build();
-	 * </p>
-	 * @deprecated Use {@link Bean#bpwo()} and {@link BeanConfig#bpwo()}
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link Bean#bpwo()} and {@link BeanConfig#bpwo()}
+	 * </div>
 	 */
 	@Deprecated
 	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
@@ -2270,7 +2032,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
-	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
+	 * Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <p>
 	 * Values can consist of any of the following types:
@@ -2281,6 +2043,15 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+	 *
+	 * 		<jk>public</jk> String toString() {
+	 * 			<jk>return</jk> <js>"baz"</js>;
+	 * 		}
+	 * 	}
+	 *
 	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -2292,7 +2063,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_notBeanClasses</jsf>, MyBean.<jk>class</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Produces "baz" instead of {"foo":"bar"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
+	 * </ul>
 	 */
 	public static final String BEAN_notBeanClasses = PREFIX + ".notBeanClasses.sc";
 
@@ -2341,10 +2119,9 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When specified, the current list of ignore packages are appended to.
 	 *
 	 * <p>
+	 * Used as a convenient way of defining the {@link #BEAN_notBeanClasses} property for entire packages.
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <p>
@@ -2388,10 +2165,170 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  POJO swaps.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps}
+	 * </div>
+	 */
+	@Deprecated
+	public static final String BEAN_pojoSwaps = PREFIX + ".pojoSwaps.lo";
+
+	/**
+	 * Configuration property:  Add to POJO swap classes.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps_add}
+	 * </div>
+	 */
+	@Deprecated
+	public static final String BEAN_pojoSwaps_add = PREFIX + ".pojoSwaps.lo/add";
+
+	/**
+	 * Configuration property:  Remove from POJO swap classes.
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps_remove}
+	 * </div>
+	 */
+	@Deprecated
+	public static final String BEAN_pojoSwaps_remove = PREFIX + ".pojoSwaps.lo/remove";
+
+	/**
+	 * Configuration property:  Bean property namer.
+	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.PropertyNamerDefault}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyNamer()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#propertyNamer()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyNamer(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * The class to use for calculating bean property names.
+	 *
+	 * <p>
+	 * Predefined classes:
+	 * <ul>
+	 * 	<li>{@link PropertyNamerDefault} - Default.
+	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
+	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
+	 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.propertyNamer(PropertyNamerDLC.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_propertyNamer</jsf>, PropertyNamerDLC.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 */
+	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
+
+	/**
+	 * Configuration property:  Sort bean properties.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.sortProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_SORTPROPERTIES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#sort()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#sortProperties()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
+	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
+	 * >On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
+	 *
+	 * <p>
+	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
+	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
+	 * in the Java file.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
+	 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
+	 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
+	 * </ul>
+	 */
+	public static final String BEAN_sortProperties = PREFIX + ".sortProperties.b";
+
+	/**
+	 * Configuration property:  Java object swaps.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.swaps.lo"</js>
 	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
@@ -2399,27 +2336,28 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swap}
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swaps}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#pojoSwaps()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#swaps()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwaps(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#pojoSwapsRemove(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
-	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
+	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
 	 * and "swap in" the non-serializable class during parsing.
 	 *
 	 * <p>
-	 * An example of a POJO swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
+	 * An example of a swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
 	 *
 	 * <p>
-	 * Multiple POJO swaps can be associated with a single class.
-	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
+	 * Multiple swaps can be associated with a single class.
+	 * When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <p>
@@ -2457,27 +2395,33 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.pojoSwaps(MyDateSwap.<jk>class</jk>)
+	 * 		.swaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyDateSwap.<jk>class</jk>)
+	 * 		.addTo(<jsf>BEAN_swaps</jsf>, MyDateSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces "{date:'2012-03-03T04:05:06-0500'}"</jc>
+	 * 	<jc>// Produces:  {"date":"2012-03-03T04:05:06-0500"}</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a serializer that uses our date swap.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.pojoSwaps(MyDateSwap.<jk>class</jk>)
+	 * 		.swaps(MyDateSwap.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use our parser to parse a bean.</jc>
 	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
+	 *
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
+	 * 	<li>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
@@ -2488,123 +2432,17 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
 	 * </ul>
 	 */
-	public static final String BEAN_pojoSwaps = PREFIX + ".pojoSwaps.lo";
+	public static final String BEAN_swaps = PREFIX + ".swaps.lo";
 
 	/**
-	 * Configuration property:  Add to POJO swap classes.
+	 * Configuration property:  Add to swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_add = PREFIX + ".pojoSwaps.lo/add";
+	public static final String BEAN_swaps_add = PREFIX + ".swaps.lo/add";
 
 	/**
-	 * Configuration property:  Remove from POJO swap classes.
+	 * Configuration property:  Remove from swap classes.
 	 */
-	public static final String BEAN_pojoSwaps_remove = PREFIX + ".pojoSwaps.lo/remove";
-
-	/**
-	 * Configuration property:  Bean property namer.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
-	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.PropertyNamerDefault}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyNamer()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#propertyNamer()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyNamer(Class)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The class to use for calculating bean property names.
-	 *
-	 * <p>
-	 * Predefined classes:
-	 * <ul>
-	 * 	<li>{@link PropertyNamerDefault} - Default.
-	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
-	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
-	 * 	<jc>// (e.g. "foo-bar-url" instead of "fooBarURL")</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.propertyNamer(PropertyNamerDLC.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_propertyNamer</jsf>, PropertyNamerDLC.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String BEAN_propertyNamer = PREFIX + ".propertyNamer.c";
-
-	/**
-	 * Configuration property:  Sort bean properties.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.sortProperties</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_SORTPROPERTIES</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#sort()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#sortProperties()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * <br>On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * <br>On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-	 *
-	 * <p>
-	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-	 * in the Java file.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.sortProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String BEAN_sortProperties = PREFIX + ".sortProperties.b";
+	public static final String BEAN_swaps_remove = PREFIX + ".swaps.lo/remove";
 
 	/**
 	 * Configuration property:  Time zone.
@@ -2695,6 +2533,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 	 *
@@ -2756,24 +2595,32 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * <br>Otherwise, throws a {@link BeanRuntimeException}.
+	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Create a parser that doesn't try to make interface proxies.</jc>
+	 * 	<jc>// An interface with a single getter.</jc>
+	 * 	<jk>public interface</jk> MyBean {
+	 * 		String getFoo();
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that uses interface proxies.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.useInterfaceProxies(<jk>false</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useInterfaceProxies</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_useInterfaceProxies</jsf>, <jk>true</jk>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Creates a proxy implementation of a MyBean interface.</jc>
+	 * 	MyBean b = p.parse("{foo:'bar'}", MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_useInterfaceProxies = PREFIX + ".useInterfaceProxies.b";
@@ -2801,6 +2648,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
+	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.
@@ -2810,13 +2658,13 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.useJavaBeanIntrospector(<jk>false</jk>)
+	 * 		.useJavaBeanIntrospector()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 * </p>
 	 */
@@ -2895,7 +2743,7 @@ public class BeanContext extends Context implements MetaProvider {
 	private final List<Class<?>> beanDictionaryClasses;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final BeanFilter[] beanFilters;
-	private final PojoSwap<?,?>[] pojoSwaps;
+	private final PojoSwap<?,?>[] swaps;
 	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
 	private final Map<String,ClassInfo> implClasses;
@@ -3012,7 +2860,20 @@ public class BeanContext extends Context implements MetaProvider {
 				lpf.add((PojoSwap)o);
 			}
 		}
-		pojoSwaps = lpf.toArray(new PojoSwap[lpf.size()]);
+		for (Object o : getListProperty(BEAN_swaps, Object.class)) {
+			if (o instanceof Class) {
+				ClassInfo ci = ClassInfo.of((Class<?>)o);
+				if (ci.isChildOf(PojoSwap.class))
+					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
+				else if (ci.isChildOf(Surrogate.class))
+					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
+				else
+					throw new BasicRuntimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
+			} else if (o instanceof PojoSwap) {
+				lpf.add((PojoSwap)o);
+			}
+		}
+		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
 
 		examples = getMapProperty(BEAN_examples, Object.class);
 
@@ -3611,7 +3472,7 @@ public class BeanContext extends Context implements MetaProvider {
 		// Note:  On first
 		if (c != null) {
 			List<PojoSwap> l = new ArrayList<>();
-			for (PojoSwap f : pojoSwaps)
+			for (PojoSwap f : swaps)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
@@ -3646,10 +3507,10 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
 	private final PojoSwap[] findChildPojoSwaps(Class<?> c) {
-		if (c == null || pojoSwaps.length == 0)
+		if (c == null || swaps.length == 0)
 			return null;
 		List<PojoSwap> l = null;
-		for (PojoSwap f : pojoSwaps) {
+		for (PojoSwap f : swaps) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = new ArrayList<>();
@@ -4644,14 +4505,14 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * POJO swaps.
+	 * Java object swaps.
 	 *
-	 * @see #BEAN_pojoSwaps
+	 * @see #BEAN_swaps
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
-	protected final PojoSwap<?,?>[] getPojoSwaps() {
-		return pojoSwaps;
+	protected final PojoSwap<?,?>[] getSwaps() {
+		return swaps;
 	}
 
 	/**
@@ -4770,7 +4631,7 @@ public class BeanContext extends Context implements MetaProvider {
 				.a("notBeanClasses", notBeanClasses)
 				.a("notBeanPackageNames", notBeanPackageNames)
 				.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-				.a("pojoSwaps", pojoSwaps)
+				.a("pojoSwaps", swaps)
 				.a("sortProperties", sortProperties)
 				.a("timeZone", timeZone)
 				.a("useEnumNames", useEnumNames)

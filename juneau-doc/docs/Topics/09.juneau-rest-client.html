@@ -195,7 +195,7 @@ juneau-rest-client
 	}
 				
 	<jc>// GET request, getting a filtered object</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().pojoSwaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().swaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
 		Calendar birthDate = client
 			.get(<js>"http://localhost:10000/addressBook/0/birthDate"</js>)
 			.run()

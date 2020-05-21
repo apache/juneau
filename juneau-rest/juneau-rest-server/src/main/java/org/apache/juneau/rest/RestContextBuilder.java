@@ -72,7 +72,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Option #1 - Pass in through constructor.</jc>
  * 	<jk>public</jk> MyResource(RestContextBuilder builder) {
  * 			builder
- * 				.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+ * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
  * 	}
  *
@@ -80,7 +80,7 @@ import org.apache.juneau.utils.*;
  * 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
  * 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
  * 			builder
- * 				.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+ * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
  * 	}
  * </p>
@@ -2966,24 +2966,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwaps(Object...values) {
-		super.pojoSwaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsRemove(Object...values) {
-		super.pojoSwapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder pojoSwapsReplace(Object...values) {
-		super.pojoSwapsReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
@@ -2992,6 +2974,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder swaps(Object...values) {
+		super.swaps(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder swapsRemove(Object...values) {
+		super.swapsRemove(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder swapsReplace(Object...values) {
+		super.swapsReplace(values);
 		return this;
 	}
 

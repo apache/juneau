@@ -192,7 +192,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			type = object();
 		else if (type.isDelegate())
 			type = ((Delegate)o).getClassMeta();
-		PojoSwap swap = type.getPojoSwap(this);
+		PojoSwap swap = type.getSwap(this);
 		if (swap != null) {
 			o = swap(swap, o);
 			type = swap.getSwapClassMeta(this);
@@ -273,7 +273,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				typeName = aType.getDictionaryName();
 
 			// Swap if necessary
-			PojoSwap swap = aType.getPojoSwap(this);
+			PojoSwap swap = aType.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
@@ -580,8 +580,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			for (Object o : c) {
 				ClassMeta<?> cm = getClassMetaForObject(o);
 
-				if (cm != null && cm.getPojoSwap(this) != null) {
-					PojoSwap swap = cm.getPojoSwap(this);
+				if (cm != null && cm.getSwap(this) != null) {
+					PojoSwap swap = cm.getSwap(this);
 					o = swap(swap, o);
 					cm = swap.getSwapClassMeta(this);
 				}
@@ -735,7 +735,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		ClassMeta<?> cm1 = getClassMetaForObject(o1);
 
-		PojoSwap swap = cm1.getPojoSwap(this);
+		PojoSwap swap = cm1.getSwap(this);
 		o1 = swap(swap, o1);
 		if (swap != null)
 			cm1 = swap.getSwapClassMeta(this);

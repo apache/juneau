@@ -25,9 +25,9 @@ Transforms
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.annotation.BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
-	<li class='ja'>{@link oaj.annotation.BeanConfig#pojoSwaps() BeanConfig(pojoSwaps)} - On class or methods. 
+	<li class='ja'>{@link oaj.annotation.BeanConfig#swaps() BeanConfig(swaps)} - On class or methods. 
 	<li class='jm'>{@link oajr.RestContextBuilder#beanFilters(Object...)} 
-	<li class='jm'>{@link oajr.RestContextBuilder#pojoSwaps(Object...)} 
+	<li class='jm'>{@link oajr.RestContextBuilder#swaps(Object...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Servlet with transforms applied</jc>
@@ -35,7 +35,7 @@ Transforms
 		...
 	)
 	<ja>@BeanConfig</ja>(
-		pojoSwaps={
+		swaps={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
 			TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 
@@ -61,7 +61,7 @@ Transforms
 		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
 			
 			builder
-				.pojoSwaps(
+				.swaps(
 					TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 					ByteArraySwap.Base64.<jk>class</jk>
 				) 

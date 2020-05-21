@@ -357,8 +357,8 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <l>BeanContext</l> class
-	 * called <l>pojoSwaps</l> that has a data type of <l>List&lt;Class&gt;</l>.
+	 * For example, <js>"BeanContext.swaps.lc"</js> refers to a property on the <l>BeanContext</l> class
+	 * called <l>swaps</l> that has a data type of <l>List&lt;Class&gt;</l>.
 	 *
 	 * <p>
 	 * Property values get 'normalized' when they get set.
@@ -635,20 +635,20 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, the {@link BeanContext#BEAN_pojoSwaps} property which has the value <js>"BeanContext.pojoSwaps.lo"</js>.
+	 * For example, the {@link BeanContext#BEAN_swaps} property which has the value <js>"BeanContext.swaps.lo"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that converts Temporal objects to Basic ISO date strings.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.pojoSwaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use generic appendTo() method.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.appendTo(<jsf>BEAN_pojoSwaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.appendTo(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -689,20 +689,20 @@ public abstract class ContextBuilder {
 	 * </ul>
 	 *
 	 * <p>
-	 * For example, the {@link BeanContext#BEAN_pojoSwaps} property which has the value <js>"BeanContext.pojoSwaps.lo"</js>.
+	 * For example, the {@link BeanContext#BEAN_swaps} property which has the value <js>"BeanContext.swaps.lo"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that converts Temporal objects to Basic ISO date strings.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.pojoSwaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use generic prependTo() method.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.prependTo(<jsf>BEAN_pojoSwaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.prependTo(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -856,13 +856,13 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Create a serializer that specifies the concrete implementation class for an interface.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.pojoSwaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.swaps(TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Clone the previous serializer but remove the swap.</jc>
 	 * 	s = s
 	 * 		.<jsm>builder</jsm>()
-	 * 		.removeFrom(<jsf>BEAN_pojoSwaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
+	 * 		.removeFrom(<jsf>BEAN_swaps</jsf>, TemoralCalendarSwap.BasicIsoDate.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *

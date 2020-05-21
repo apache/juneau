@@ -99,7 +99,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			type = object();
 
 		// Swap if necessary
-		PojoSwap swap = type.getPojoSwap(this);
+		PojoSwap swap = type.getSwap(this);
 		if (swap != null && ! type.isDateOrCalendarOrTemporal()) {
 			value = swap(swap, value);
 			type = swap.getSwapClassMeta(this);

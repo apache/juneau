@@ -32,7 +32,7 @@ public class PojoSearcherTest {
 
 	private static BeanSession bs = BeanContext.DEFAULT.createSession();
 	private static PojoSearcher ps = PojoSearcher.DEFAULT;
-	private static WriterSerializer ws = JsonSerializer.create().ssq().pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
+	private static WriterSerializer ws = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility

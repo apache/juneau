@@ -147,9 +147,9 @@ public class BeanConfigAnnotationTest {
 		notBeanPackages={"$X{foo1}","$X{foo2}"},
 		notBeanPackages_replace={"$X{foo1}","$X{foo2}","$X{foo3}"},
 		notBeanPackages_remove={"$X{foo2}"},
-		pojoSwaps={AB1.class,AB2.class},
-		pojoSwaps_replace={AB1.class,AB2.class,AB3.class},
-		pojoSwaps_remove=AB2.class,
+		swaps={AB1.class,AB2.class},
+		swaps_replace={AB1.class,AB2.class,AB3.class},
+		swaps_remove=AB2.class,
 		propertyNamer=PropertyNamerULC.class,
 		sortProperties="$X{true}",
 		timeZone="$X{z}",
@@ -194,7 +194,7 @@ public class BeanConfigAnnotationTest {
 		check("application/json", bc.getMediaType());
 		check("A1,A3", bc.getNotBeanClasses());
 		check("foo1,foo3", bc.getNotBeanPackagesNames());
-		check("AB1<String,Integer>,AB3<String,Integer>", bc.getPojoSwaps());
+		check("AB1<String,Integer>,AB3<String,Integer>", bc.getSwaps());
 		check("PropertyNamerULC", bc.getPropertyNamer());
 		check("true", bc.isSortProperties());
 		check("GMT", bc.getTimeZone());
@@ -247,7 +247,7 @@ public class BeanConfigAnnotationTest {
 		check("100", bc.getMaxDepth());
 		check(null, bc.getMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
-		check("", bc.getPojoSwaps());
+		check("", bc.getSwaps());
 		check("PropertyNamerDefault", bc.getPropertyNamer());
 		check("false", bc.isSortProperties());
 		check(null, bc.getTimeZone());
@@ -299,7 +299,7 @@ public class BeanConfigAnnotationTest {
 		check("100", bc.getMaxDepth());
 		check(null, bc.getMediaType());
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
-		check("", bc.getPojoSwaps());
+		check("", bc.getSwaps());
 		check("PropertyNamerDefault", bc.getPropertyNamer());
 		check("false", bc.isSortProperties());
 		check(null, bc.getTimeZone());

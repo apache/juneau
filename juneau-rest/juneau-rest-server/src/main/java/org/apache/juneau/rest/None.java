@@ -29,7 +29,7 @@ package org.apache.juneau.rest;
  * 		beanFilters=None.<jk>class</jk>,
  *
  * 		<jc>// No POJO swaps are defined method or inherited from the class.</jc>
- * 		pojoSwaps=None.<jk>class</jk>
+ * 		swaps=None.<jk>class</jk>
  * 	)
  * </p>
  */

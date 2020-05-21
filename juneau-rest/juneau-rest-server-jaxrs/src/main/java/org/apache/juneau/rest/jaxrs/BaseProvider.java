@@ -47,6 +47,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 	/**
 	 * Constructor.
 	 */
+	@SuppressWarnings("deprecation")
 	protected BaseProvider() {
 		try {
 			properties = new OMap();
@@ -60,14 +61,16 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			serializers = SerializerGroup.create()
 				.append(jp.serializers())
 				.beanFilters((Object[])jp.beanFilters())
-				.pojoSwaps((Object[])jp.pojoSwaps())
+				.swaps((Object[])jp.pojoSwaps())
+				.swaps((Object[])jp.swaps())
 				.set(properties)
 				.build();
 
 			parsers = ParserGroup.create()
 				.append(jp.parsers())
 				.beanFilters((Object[])jp.beanFilters())
-				.pojoSwaps((Object[])jp.pojoSwaps())
+				.swaps((Object[])jp.pojoSwaps())
+				.swaps((Object[])jp.swaps())
 				.set(properties)
 				.build();
 

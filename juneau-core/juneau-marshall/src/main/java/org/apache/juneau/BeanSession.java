@@ -304,7 +304,7 @@ public class BeanSession extends Session {
 				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
 					return (T)value;
 
-			PojoSwap swap = to.getPojoSwap(this);
+			PojoSwap swap = to.getSwap(this);
 			if (swap != null) {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
@@ -317,7 +317,7 @@ public class BeanSession extends Session {
 			}
 
 			ClassMeta<?> from = getClassMetaForObject(value);
-			swap = from.getPojoSwap(this);
+			swap = from.getSwap(this);
 			if (swap != null) {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
@@ -1500,16 +1500,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  POJO swaps.
-	 *
-	 * @see BeanContext#BEAN_pojoSwaps
-	 * @return
-	 * 	The list POJO swaps defined.
-	 */
-	protected final PojoSwap<?,?>[] getPojoSwaps() {
-		return ctx.getPojoSwaps();
-	}
-	/**
 	 * Configuration property:  Bean property namer.
 	 *
 	 * @see BeanContext#BEAN_propertyNamer
@@ -1529,6 +1519,17 @@ public class BeanSession extends Session {
 	 */
 	protected final boolean isSortProperties() {
 		return ctx.isSortProperties();
+	}
+
+	/**
+	 * Configuration property:  Java object swaps.
+	 *
+	 * @see BeanContext#BEAN_swaps
+	 * @return
+	 * 	The list POJO swaps defined.
+	 */
+	protected final PojoSwap<?,?>[] getSwaps() {
+		return ctx.getSwaps();
 	}
 
 	/**

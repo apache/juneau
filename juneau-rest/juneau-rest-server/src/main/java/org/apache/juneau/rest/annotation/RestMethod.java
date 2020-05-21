@@ -613,7 +613,7 @@ public @interface RestMethod {
 	 * Sets the POJO swaps for the serializers and parsers defined on this method.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#pojoSwaps()}
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps()}
 	 * </div>
 	 *
 	 * <p>
@@ -627,7 +627,7 @@ public @interface RestMethod {
 	 * Use {@link None} to suppress inheriting POJO swaps defined on the class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
 	 * </ul>
 	 */
 	@Deprecated

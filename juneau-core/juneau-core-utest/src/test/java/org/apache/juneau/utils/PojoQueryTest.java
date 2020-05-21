@@ -72,7 +72,7 @@ public class PojoQueryTest {
 	@Test
 	public void testFilterCollectionDateSearchOneLevel() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		B[] in;
 		PojoQuery q;
 		SearchArgs sa;
@@ -349,7 +349,7 @@ public class PojoQueryTest {
 	@Test
 	public void testSorting() throws Exception {
 		BeanSession session = BeanContext.DEFAULT.createSession();
-		WriterSerializer s = JsonSerializer.create().ssq().pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
+		WriterSerializer s = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 		SearchArgs sa;
 		List results;
 

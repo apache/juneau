@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-One-way PojoSwaps
+One-way Swaps
 
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
@@ -23,7 +23,7 @@ One-way PojoSwaps
 	For these, we can use one-way object swaps.
 </p>
 <p>
-	A one-way POJO swap is simply an object transform that only implements the {@code swap()} method.  
+	A one-way swap is simply an object transform that only implements the {@code swap()} method.  
 	The {@code unswap()} method is simply left unimplemented.
 </p>
 <p>
@@ -49,7 +49,7 @@ One-way PojoSwaps
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(IteratorSwap.<jk>class</jk>).build();
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
 	Iterator i = OList.<jsm>of</jsm>(1,2,3).iterator();
@@ -58,6 +58,6 @@ One-way PojoSwaps
 	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>
 	
 	<jc>// Try to parse it.</jc>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(IteratorSwap.<jk>class</jk>).build();
 	i = p.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 </p>

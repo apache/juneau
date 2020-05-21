@@ -46,17 +46,17 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#pojoSwaps(Class...)}
+ * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#swaps(Class...)}
  * method.
  * <p class='bcode w800'>
  * 	JsonSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()
- * 		.pojoSwaps(MySurrogate.<jk>class</jk>)
+ * 		.swaps(MySurrogate.<jk>class</jk>)
  * 		.build();
  *
  * 	JsonParser p = JsonParser
  * 		.<jsm>create</jsm>()
- * 		.pojoSwaps(MySurrogate.<jk>class</jk>)
+ * 		.swaps(MySurrogate.<jk>class</jk>)
  * 		.build();
  * </p>
  *

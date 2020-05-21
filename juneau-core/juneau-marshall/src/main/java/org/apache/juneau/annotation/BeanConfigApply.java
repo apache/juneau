@@ -135,6 +135,12 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_propertyNamer, a.propertyNamer());
 		if (! a.sortProperties().isEmpty())
 			psb.set(BEAN_sortProperties, bool(a.sortProperties()));
+		if (a.swaps().length != 0)
+			psb.prependTo(BEAN_swaps, a.swaps());
+		if (a.swaps_replace().length != 0)
+			psb.set(BEAN_swaps, a.swaps_replace());
+		if (a.swaps_remove().length != 0)
+			psb.removeFrom(BEAN_swaps, a.swaps_remove());
 		if (! a.timeZone().isEmpty())
 			psb.set(BEAN_timeZone, timeZone(a.timeZone()));
 		if (! a.useEnumNames().isEmpty())

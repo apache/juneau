@@ -49,12 +49,12 @@ public class TestUtils {
 
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.ssq()
-		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.build();
 
 	private static JsonSerializer js3 = JsonSerializer.create()
 		.ssq()
-		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.swaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties()
 		.build();
 

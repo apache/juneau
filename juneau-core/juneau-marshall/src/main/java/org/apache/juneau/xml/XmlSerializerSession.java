@@ -291,7 +291,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			sType = aType;
 
 			// Swap if necessary
-			PojoSwap swap = aType.getPojoSwap(this);
+			PojoSwap swap = aType.getSwap(this);
 			if (swap != null) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);

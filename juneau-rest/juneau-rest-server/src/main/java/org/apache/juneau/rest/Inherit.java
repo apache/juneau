@@ -35,7 +35,7 @@ package org.apache.juneau.rest;
  * 		<jc>// Override the POJO swaps for this method, but also inherit the POJO swaps from the class.
  * 		// Overridden POJO swaps only apply to NEW serializers and parsers defined on the method
  * 		// (not those inherited from the class).</jc>
- * 		pojoSwaps={MySwap.<jk>class</jk>, Inherit.<jk>class</jk>}
+ * 		swaps={MySwap.<jk>class</jk>, Inherit.<jk>class</jk>}
  * 	)
  * </p>
  */

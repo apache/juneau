@@ -35,7 +35,7 @@ import org.apache.juneau.collections.*;
  * 	}
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
- * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+ * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
  * 	String json = s.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *

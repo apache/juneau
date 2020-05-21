@@ -34,7 +34,7 @@ import org.apache.juneau.*;
  * 	}
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
- * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+ * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
  * 	String json = s.serialize(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *

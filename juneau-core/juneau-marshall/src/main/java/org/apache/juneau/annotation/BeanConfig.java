@@ -1377,46 +1377,36 @@ public @interface BeanConfig {
 	/**
 	 * Configuration property:  POJO swaps.
 	 *
-	 * <p>
-	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
-	 * and "swap in" the non-serializable class during parsing.
-	 *
-	 * <p>
-	 * An example of a POJO swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
-	 *
-	 * <p>
-	 * Multiple POJO swaps can be associated with a single class.
-	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.AutoPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
-	 * </ul>
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swaps(Class[])}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps() default {};
 
 	/**
 	 * Configuration property:  Add to POJO swap classes.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swaps_replace(Class[])}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps_replace() default {};
 
 	/**
 	 * Configuration property:  Remove from POJO swap classes.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #swaps_remove(Class[])}
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps_remove() default {};
 
 	/**
@@ -1469,6 +1459,51 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	String sortProperties() default "";
+
+	/**
+	 * Configuration property:  Java object swaps.
+	 *
+	 * <p>
+	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
+	 * and "swap in" the non-serializable class during parsing.
+	 *
+	 * <p>
+	 * An example of a swap would be a <c>Calendar</c> object that gets swapped out for an ISO8601 string.
+	 *
+	 * <p>
+	 * Multiple swaps can be associated with a single class.
+	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
+	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.AutoPojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
+	 * </ul>
+	 */
+	Class<?>[] swaps() default {};
+
+	/**
+	 * Configuration property:  Add to Java object swap classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * </ul>
+	 */
+	Class<?>[] swaps_replace() default {};
+
+	/**
+	 * Configuration property:  Remove from Java object swap classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
+	 * </ul>
+	 */
+	Class<?>[] swaps_remove() default {};
 
 	/**
 	 * Configuration property:  Time zone.

@@ -781,7 +781,7 @@ public abstract class ParserSession extends BeanSession {
 
 		if (type == null)
 			type = (ClassMeta<T>)object();
-		PojoSwap swap = type.getPojoSwap(this);
+		PojoSwap swap = type.getSwap(this);
 		ClassMeta<?> sType = swap == null ? type : swap.getSwapClassMeta(this);
 
 		Object o = s;

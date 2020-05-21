@@ -73,7 +73,7 @@ import org.apache.juneau.transforms.*;
 		// Interpret these as their parent classes, not subclasses
 		HttpServletRequest.class, HttpSession.class, ServletContext.class,
 	},
-	pojoSwaps={
+	swaps={
 		// Add a special filter for Enumerations
 		EnumerationSwap.class
 	}

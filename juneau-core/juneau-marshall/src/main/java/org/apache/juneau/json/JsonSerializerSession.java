@@ -117,7 +117,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		String typeName = getBeanTypeName(eType, aType, pMeta);
 
 		// Swap if necessary
-		PojoSwap swap = aType.getPojoSwap(this);
+		PojoSwap swap = aType.getSwap(this);
 		if (swap != null) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);

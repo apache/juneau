@@ -759,12 +759,12 @@ public class BeanConfigTest {
 		p2.notBeanPackagesRemove("bar");
 		assertSameCache(p1, p2);
 
-		p1.pojoSwaps(DummyPojoSwapA.class);
+		p1.swaps(DummyPojoSwapA.class);
 		assertDifferentCache(p1, p2);
-		p2.pojoSwaps(DummyPojoSwapA.class);
+		p2.swaps(DummyPojoSwapA.class);
 		assertSameCache(p1, p2);
-		p1.pojoSwaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
-		p2.pojoSwaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
+		p1.swaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
+		p2.swaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
 
 		p1 = JsonParser.create();

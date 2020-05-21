@@ -1346,7 +1346,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void swaps_int() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder()
-			.pojoSwaps(IntSwap.class)
+			.swaps(IntSwap.class)
 			.build().createSession();
 		assertObjectEquals("{type:'integer',format:'int32'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'array',items:{type:'integer',format:'int32'}}", s.getSchema(BeanList.class));
@@ -1466,7 +1466,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void jsonschema_onpojoswap() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder()
-			.pojoSwaps(SwapWithAnnotation.class)
+			.swaps(SwapWithAnnotation.class)
 			.build().createSession();
 		assertObjectEquals("{description:'baz',format:'bar',type:'foo','x-example':'123'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}", s.getSchema(BeanList.class));
@@ -1479,7 +1479,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void jsonschema_onpojoswap_usingConfig() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(SwapWithAnnotation2.class)
-			.pojoSwaps(SwapWithAnnotation2.class)
+			.swaps(SwapWithAnnotation2.class)
 			.build().createSession();
 		assertObjectEquals("{description:'baz',format:'bar',type:'foo','x-example':'123'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}", s.getSchema(BeanList.class));

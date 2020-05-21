@@ -52,7 +52,7 @@ public abstract class ComboRoundTripTest {
 		if (s2 == null) {
 			s2 = applySettings(s);
 			if (! comboInput.swaps.isEmpty())
-				s2 = s2.builder().pojoSwaps(comboInput.swaps.toArray()).build();
+				s2 = s2.builder().swaps(comboInput.swaps.toArray()).build();
 			serializerMap.put(s, s2);
 		}
 		return s2;
@@ -63,7 +63,7 @@ public abstract class ComboRoundTripTest {
 		if (p2 == null) {
 			p2 = applySettings(p);
 			if (! comboInput.swaps.isEmpty())
-				p2 = p2.builder().pojoSwaps(comboInput.swaps.toArray()).build();
+				p2 = p2.builder().swaps(comboInput.swaps.toArray()).build();
 			parserMap.put(p, p2);
 		}
 		return p2;

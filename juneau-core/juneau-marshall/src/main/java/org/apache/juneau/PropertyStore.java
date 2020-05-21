@@ -40,8 +40,8 @@ import org.apache.juneau.reflect.*;
  * the same serializer:
  *
  * <p class='bcode w800'>
- * 	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySwap.<jk>class</jk>).simple().build();
- * 	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MySwap.<jk>class</jk>).build();
+ * 	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().swaps(MySwap.<jk>class</jk>).simple().build();
+ * 	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().simple().swaps(MySwap.<jk>class</jk>).build();
  * 	<jk>assert</jk>(s1 == s2);
  * </p>
  *
@@ -61,7 +61,7 @@ import org.apache.juneau.reflect.*;
  * <p class='bcode w800'>
  * 	PropertyStore ps = PropertyStore
  * 		.<jsm>create</jsm>()
- * 		.set(<js>"BeanContext.pojoSwaps.lc"</js>, MySwap.<jk>class</jk>)
+ * 		.set(<js>"BeanContext.swaps.lc"</js>, MySwap.<jk>class</jk>)
  * 		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
  * 		.build();
  * </p>
@@ -111,8 +111,8 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <p>
- * For example, <js>"BeanContext.pojoSwaps.lc"</js> refers to a property on the <c>BeanContext</c> class
- * called <c>pojoSwaps</c> that has a data type of <c>List&lt;Class&gt;</c>.
+ * For example, <js>"BeanContext.swaps.lc"</js> refers to a property on the <c>BeanContext</c> class
+ * called <c>swaps</c> that has a data type of <c>List&lt;Class&gt;</c>.
  *
  * <h5 class='topic'>Property value normalization</h5>
  *
@@ -140,19 +140,19 @@ import org.apache.juneau.reflect.*;
  * <br>This ensures that the resulting order of the list is in most-to-least importance.
  *
  * <p>
- * For example, multiple calls to <c>pojoSwaps()</c> causes new entries to be added to the beginning of the list
+ * For example, multiple calls to <c>swaps()</c> causes new entries to be added to the beginning of the list
  * so that previous values can be 'overridden':
  * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
- * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>).pojoSwaps(MySwap2.<jk>class</jk>).build();
+ * 	JsonSerializer.create().swaps(MySwap1.<jk>class</jk>).swaps(MySwap2.<jk>class</jk>).build();
  * </p>
  *
  * <p>
- * Note that the order is different when passing multiple values into the <c>pojoSwaps()</c> method, in which
+ * Note that the order is different when passing multiple values into the <c>swaps()</c> method, in which
  * case the order should be first-match-wins:
  * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
- * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>).build();
+ * 	JsonSerializer.create().swaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>).build();
  * </p>
  *
  * <p>
@@ -161,9 +161,9 @@ import org.apache.juneau.reflect.*;
  * 	<jc>// Swap order:  [MySwap4.class, MySwap3.class, MySwap1.class, MySwap2.class]</jc>
  * 	JsonSerializer
  * 		.create()
- * 		.pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>)
- * 		.pojoSwaps(MySwap3.<jk>class</jk>)
- * 		.pojoSwaps(MySwap4.<jk>class</jk>)
+ * 		.swaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>)
+ * 		.swaps(MySwap3.<jk>class</jk>)
+ * 		.swaps(MySwap4.<jk>class</jk>)
  * 		.build();
  * </p>
  *
