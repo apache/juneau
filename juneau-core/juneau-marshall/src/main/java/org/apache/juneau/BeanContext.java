@@ -807,7 +807,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
+	 * When enabled, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.  Otherwise, it returns <jk>null</jk>.
 	 *
 	 * <p>
@@ -921,7 +921,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
+	 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -991,7 +991,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
+	 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1056,7 +1056,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, ignore read-only properties (properties with getters but not setters).
+	 * When enabled, ignore read-only properties (properties with getters but not setters).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1119,7 +1119,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
+	 * When enabled, then a Java class must contain at least 1 property to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <p>
@@ -1176,6 +1176,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanTypePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
@@ -1490,7 +1492,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
+	 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1545,7 +1547,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
+	 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1600,7 +1602,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
+	 * When enabled, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1659,7 +1661,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> or annotated with {@link java.beans.Transient}
+	 * When enabled, methods and fields marked as <jk>transient</jk> or annotated with {@link java.beans.Transient}
 	 * will be ignored as bean properties.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1716,7 +1718,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
+	 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -1769,7 +1771,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
+	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2275,7 +2277,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
+	 * When enabled, all bean properties will be serialized and access in alphabetical order.
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
 	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
@@ -2408,7 +2410,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Use our parser to parse a bean.</jc>
 	 * 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 	 * </p>
-	 *
 	 *
 	 * <ul class='notes'>
 	 * 	<li>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
@@ -2590,7 +2591,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an
+	 * When enabled, then interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
@@ -3101,7 +3102,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @param <T> The class type being wrapped.
 	 * @param type The class to resolve.
 	 * @param waitForInit
-	 * 	If <jk>true</jk>, wait for the ClassMeta constructor to finish before returning.
+	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.
 	 * @return
 	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
