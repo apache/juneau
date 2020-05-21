@@ -13,8 +13,10 @@
 package org.apache.juneau.jso.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Jso} annotation.
@@ -34,7 +36,37 @@ public class JsoAnnotation implements Jso {
 	 * 	<br>See {@link Jso#on()}
 	 */
 	public JsoAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Jso#on()}
+	 */
+	public JsoAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Jso#on()}
+	 */
+	public JsoAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Jso#on()}
+	 */
+	public JsoAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -55,6 +87,39 @@ public class JsoAnnotation implements Jso {
 	 */
 	public JsoAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public JsoAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public JsoAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public JsoAnnotation on(Field value) {
+		this.on = value.getName();
 		return this;
 	}
 }

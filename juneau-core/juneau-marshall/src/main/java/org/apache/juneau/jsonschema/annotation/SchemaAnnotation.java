@@ -119,7 +119,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation _default(String[] value) {
+	public SchemaAnnotation _default(String...value) {
 		this._default = value;
 		return this;
 	}
@@ -135,7 +135,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation df(String[] value) {
+	public SchemaAnnotation df(String...value) {
 		this.df = value;
 		return this;
 	}
@@ -151,7 +151,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation _enum(String[] value) {
+	public SchemaAnnotation _enum(String...value) {
 		this._enum = value;
 		return this;
 	}
@@ -167,7 +167,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation e(String[] value) {
+	public SchemaAnnotation e(String...value) {
 		this.e = value;
 		return this;
 	}
@@ -199,7 +199,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation additionalProperties(String[] value) {
+	public SchemaAnnotation additionalProperties(String...value) {
 		this.additionalProperties = value;
 		return this;
 	}
@@ -215,7 +215,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation allOf(String[] value) {
+	public SchemaAnnotation allOf(String...value) {
 		this.allOf = value;
 		return this;
 	}
@@ -263,7 +263,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation description(String[] value) {
+	public SchemaAnnotation description(String...value) {
 		this.description = value;
 		return this;
 	}
@@ -279,7 +279,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation d(String[] value) {
+	public SchemaAnnotation d(String...value) {
 		this.d = value;
 		return this;
 	}
@@ -311,7 +311,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation example(String[] value) {
+	public SchemaAnnotation example(String...value) {
 		this.example = value;
 		return this;
 	}
@@ -327,7 +327,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation ex(String[] value) {
+	public SchemaAnnotation ex(String...value) {
 		this.ex = value;
 		return this;
 	}
@@ -343,7 +343,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation examples(String[] value) {
+	public SchemaAnnotation examples(String...value) {
 		this.examples = value;
 		return this;
 	}
@@ -359,7 +359,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation exs(String[] value) {
+	public SchemaAnnotation exs(String...value) {
 		this.exs = value;
 		return this;
 	}
@@ -855,7 +855,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation properties(String[] value) {
+	public SchemaAnnotation properties(String...value) {
 		this.properties = value;
 		return this;
 	}
@@ -1015,7 +1015,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation value(String[] value) {
+	public SchemaAnnotation value(String...value) {
 		this.value = value;
 		return this;
 	}
@@ -1031,7 +1031,7 @@ public class SchemaAnnotation implements Schema {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaAnnotation xml(String[] value) {
+	public SchemaAnnotation xml(String...value) {
 		this.xml = value;
 		return this;
 	}

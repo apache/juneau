@@ -57,7 +57,16 @@ public class BeanAnnotation implements Bean {
 	 * @param on The initial value for the <c>on</c> property.
 	 */
 	public BeanAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 */
+	public BeanAnnotation(Class<?> on) {
+		on(on);
 	}
 
 	@Override
@@ -76,7 +85,7 @@ public class BeanAnnotation implements Bean {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanAnnotation beanDictionary(Class<?>[] value) {
+	public BeanAnnotation beanDictionary(Class<?>...value) {
 		this.beanDictionary = value;
 		return this;
 	}
@@ -156,7 +165,7 @@ public class BeanAnnotation implements Bean {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanAnnotation dictionary(Class<?>[] value) {
+	public BeanAnnotation dictionary(Class<?>...value) {
 		this.dictionary = value;
 		return this;
 	}
@@ -222,6 +231,17 @@ public class BeanAnnotation implements Bean {
 	 */
 	public BeanAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanAnnotation on(Class<?> value) {
+		this.on = value.getName();
 		return this;
 	}
 

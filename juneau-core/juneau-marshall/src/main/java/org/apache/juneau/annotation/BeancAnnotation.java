@@ -13,8 +13,10 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Beanc} annotation.
@@ -34,7 +36,17 @@ public class BeancAnnotation implements Beanc {
 	 * 	<br>See {@link Beanc#on()}
 	 */
 	public BeancAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Beanc#on()}
+	 */
+	public BeancAnnotation(Constructor<?> on) {
+		on(on);
 	}
 
 	@Override
@@ -55,6 +67,17 @@ public class BeancAnnotation implements Beanc {
 	 */
 	public BeancAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeancAnnotation on(Constructor<?> value) {
+		this.on = ConstructorInfo.of(value).getFullName();
 		return this;
 	}
 

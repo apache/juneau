@@ -13,8 +13,10 @@
 package org.apache.juneau.urlencoding.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link UrlEncoding} annotation.
@@ -37,7 +39,37 @@ public class UrlEncodingAnnotation implements UrlEncoding {
 	 * 	<br>See {@link UrlEncoding#on()}
 	 */
 	public UrlEncodingAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link UrlEncoding#on()}
+	 */
+	public UrlEncodingAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link UrlEncoding#on()}
+	 */
+	public UrlEncodingAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link UrlEncoding#on()}
+	 */
+	public UrlEncodingAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -74,6 +106,39 @@ public class UrlEncodingAnnotation implements UrlEncoding {
 	 */
 	public UrlEncodingAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public UrlEncodingAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public UrlEncodingAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public UrlEncodingAnnotation on(Field value) {
+		this.on = value.getName();
 		return this;
 	}
 }

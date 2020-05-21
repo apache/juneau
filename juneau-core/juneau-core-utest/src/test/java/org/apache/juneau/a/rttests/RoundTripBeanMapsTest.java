@@ -362,9 +362,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CFilterDictionaryMap extends BeanDictionaryMap {
 		public CFilterDictionaryMap() {
-			addClass("C1", C1.class);
-			addClass("C2", C2.class);
-			addClass("C3", C3.class);
+			append("C1", C1.class);
+			append("C2", C2.class);
+			append("C3", C3.class);
 		}
 	}
 
@@ -419,8 +419,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanFilters(CAFilter.class).build();
-		Parser p = getParser().builder().beanFilters(CAFilter.class).build();
+		Serializer s = getSerializer().builder().annotations(new BeanAnnotation(CA.class).dictionary(CAFilterDictionaryMap.class)).build();
+		Parser p = getParser().builder().annotations(new BeanAnnotation(CA.class).dictionary(CAFilterDictionaryMap.class)).build();
 
 		CA1 c1 = CA1.create();
 		Object r = s.serialize(c1);
@@ -448,16 +448,10 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f2;
 	}
 
-	public static class CAFilter extends BeanFilterBuilder<CA> {
-		public CAFilter() {
-			dictionary(CAFilterDictionaryMap.class);
-		}
-	}
-
 	public static class CAFilterDictionaryMap extends BeanDictionaryMap {
 		public CAFilterDictionaryMap() {
-			addClass("CA1", CA1.class);
-			addClass("CA2", CA2.class);
+			append("CA1", CA1.class);
+			append("CA2", CA2.class);
 		}
 	}
 

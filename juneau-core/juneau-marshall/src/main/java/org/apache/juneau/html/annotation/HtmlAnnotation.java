@@ -13,9 +13,11 @@
 package org.apache.juneau.html.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Html} annotation.
@@ -46,7 +48,37 @@ public class HtmlAnnotation implements Html {
 	 * 	<br>See {@link Html#on()}
 	 */
 	public HtmlAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Html#on()}
+	 */
+	public HtmlAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Html#on()}
+	 */
+	public HtmlAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Html#on()}
+	 */
+	public HtmlAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -147,6 +179,39 @@ public class HtmlAnnotation implements Html {
 	 */
 	public HtmlAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlAnnotation on(Field value) {
+		this.on = value.getName();
 		return this;
 	}
 

@@ -529,7 +529,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation _default(String[] value) {
+	public SubItemsAnnotation _default(String...value) {
 		this._default = value;
 		return this;
 	}
@@ -545,7 +545,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation df(String[] value) {
+	public SubItemsAnnotation df(String...value) {
 		this.df = value;
 		return this;
 	}
@@ -561,7 +561,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation _enum(String[] value) {
+	public SubItemsAnnotation _enum(String...value) {
 		this._enum = value;
 		return this;
 	}
@@ -577,7 +577,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation e(String[] value) {
+	public SubItemsAnnotation e(String...value) {
 		this.e = value;
 		return this;
 	}
@@ -609,7 +609,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation value(String[] value) {
+	public SubItemsAnnotation value(String...value) {
 		this.value = value;
 		return this;
 	}
@@ -625,7 +625,7 @@ public class SubItemsAnnotation implements SubItems {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public SubItemsAnnotation items(String[] value) {
+	public SubItemsAnnotation items(String...value) {
 		this.items = value;
 		return this;
 	}

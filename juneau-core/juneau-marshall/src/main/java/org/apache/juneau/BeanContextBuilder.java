@@ -576,10 +576,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * 	<li class='jf'>{@link #BEAN_annotations}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1716,7 +1714,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 *
 	 * @param values

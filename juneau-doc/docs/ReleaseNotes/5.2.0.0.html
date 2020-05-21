@@ -183,12 +183,12 @@
 	<li>{@link oaj.serializer.SerializerGroup} and {@link oaj.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 	<li>{@link oaj.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
 	<li>New <dc>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</dc> serializer.
-	<li>Changes to {@link oaj.utils.Args}:
+	<li>Changes to <dc>Args</dc>:
 		<ul>
-			<li><c>getMainArg(int)</c> changed to {@link oaj.utils.Args#getArg(int)}.  
+			<li><c>getMainArg(int)</c> changed to <dc>Args.getArg(int)</dc>.  
 				Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
 				This is more inline with the behavior of the rest of the library.
-			<li>New {@link oaj.utils.Args#hasArg(int)} method.
+			<li>New <dc>Args.hasArg(int)</dc> method.
 		</ul> 
 	<li>Removed <c>org.apache.juneau.utils.CharsetUtils</c> class.
 	<li>Removed <c>org.apache.juneau.utils.ConcurrentIdentityList</c> class.

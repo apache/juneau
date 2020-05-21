@@ -55,10 +55,14 @@
 		<ul class='javatree'>
 			<li class='jc'>{@link oaj.BeanContextBuilder}
 			<ul>
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(String) bpi(String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(String) bpx(String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(String) bpro(String)}
-				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(String) bpwo(String}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(Class,String) bpi(Class,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpi(String,String) bpi(String,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(Class,String) bpx(Class,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpx(String,String) bpx(String,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(Class,String) bpro(Class,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpro(String,String) bpro(String,String)}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(Class,String) bpwo(Class,String}
+				<li class='jm'>{@link oaj.BeanContextBuilder#bpwo(String,String) bpwo(String,String}
 			</ul>
 		</ul>
 	<li>
@@ -76,29 +80,29 @@
 	<jk>public</jk> MyClass getMyClass() {...}
 		</p>
 	<li>
-		The following concrete annotation implementation classes are now provided that can be used with the {@link oaj.BeanContextBuilder#annotations(Annotation)} method:
+		The following concrete annotation implementation classes are now provided that can be used with the {@link oaj.BeanContextBuilder#annotations(Annotation...)} method:
 		<ul class='javatree'>
-			<li class'jc'>{@link oaj.annotation.BeanAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanAnnotation}
-			<li class'jc'>{@link oaj.annotation.BeancAnnotation} <jk>implements</jk> {@link oaj.annotation.BeancAnnotation}
-			<li class'jc'>{@link oaj.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanIgnoreAnnotation}
-			<li class'jc'>{@link oaj.annotation.BeanpAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanpAnnotation}
-			<li class'jc'>{@link oaj.annotation.ExampleAnnotation} <jk>implements</jk> {@link oaj.annotation.ExampleAnnotation}
-			<li class'jc'>{@link oaj.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.NamePropertyAnnotation}
-			<li class'jc'>{@link oaj.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.ParentPropertyAnnotation}
-			<li class'jc'>{@link oaj.annotation.SwapAnnotation} <jk>implements</jk> {@link oaj.annotation.SwapAnnotation}
-			<li class'jc'>{@link oaj.annotation.UriAnnotation} <jk>implements</jk> {@link oaj.annotation.UriAnnotation}
-			<li class'jc'>{@link oaj.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link oaj.annotation.CsvAnnotation}
-			<li class'jc'>{@link oaj.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link oaj.annotation.HtmlAnnotation}
-			<li class'jc'>{@link oaj.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link oaj.annotation.JsoAnnotation}
-			<li class'jc'>{@link oaj.json.annotation.JsonAnnotation} <jk>implements</jk> {@link oaj.annotation.JsonAnnotation}
-			<li class'jc'>{@link oaj.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link oaj.annotation.SchemaAnnotation}
-			<li class'jc'>{@link oaj.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link oaj.annotation.MsgPackAnnotation}
-			<li class'jc'>{@link oaj.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link oaj.annotation.OpenApiAnnotation}
-			<li class'jc'>{@link oaj.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link oaj.annotation.PlainTextAnnotation}
-			<li class'jc'>{@link oaj.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link oaj.annotation.SoapXmlAnnotation}
-			<li class'jc'>{@link oaj.uon.annotation.UonAnnotation} <jk>implements</jk> {@link oaj.annotation.UonAnnotation}
-			<li class'jc'>{@link oaj.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link oaj.annotation.UrlEncodingAnnotation}
-			<li class'jc'>{@link oaj.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link oaj.annotation.XmlAnnotation}
+			<li class'jc'>{@link oaj.annotation.BeanAnnotation} <jk>implements</jk> {@link oaj.annotation.Bean}
+			<li class'jc'>{@link oaj.annotation.BeancAnnotation} <jk>implements</jk> {@link oaj.annotation.Beanc}
+			<li class'jc'>{@link oaj.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link oaj.annotation.BeanIgnore}
+			<li class'jc'>{@link oaj.annotation.BeanpAnnotation} <jk>implements</jk> {@link oaj.annotation.Beanp}
+			<li class'jc'>{@link oaj.annotation.ExampleAnnotation} <jk>implements</jk> {@link oaj.annotation.Example}
+			<li class'jc'>{@link oaj.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.NameProperty}
+			<li class'jc'>{@link oaj.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link oaj.annotation.ParentProperty}
+			<li class'jc'>{@link oaj.annotation.SwapAnnotation} <jk>implements</jk> {@link oaj.annotation.Swap}
+			<li class'jc'>{@link oaj.annotation.UriAnnotation} <jk>implements</jk> {@link oaj.annotation.URI}
+			<li class'jc'>{@link oaj.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link oaj.csv.annotation.Csv}
+			<li class'jc'>{@link oaj.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link oaj.html.annotation.Html}
+			<li class'jc'>{@link oaj.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link oaj.jso.annotation.Jso}
+			<li class'jc'>{@link oaj.json.annotation.JsonAnnotation} <jk>implements</jk> {@link oaj.json.annotation.Json}
+			<li class'jc'>{@link oaj.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link oaj.jsonschema.annotation.Schema}
+			<li class'jc'>{@link oaj.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link oaj.msgpack.annotation.MsgPack}
+			<li class'jc'>{@link oaj.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link oaj.oapi.annotation.OpenApi}
+			<li class'jc'>{@link oaj.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link oaj.plaintext.annotation.PlainText}
+			<li class'jc'>{@link oaj.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link oaj.soap.annotation.SoapXml}
+			<li class'jc'>{@link oaj.uon.annotation.UonAnnotation} <jk>implements</jk> {@link oaj.uon.annotation.Uon}
+			<li class'jc'>{@link oaj.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link oaj.urlencoding.annotation.UrlEncoding}
+			<li class'jc'>{@link oaj.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link oaj.xml.annotation.Xml}
 		</ul>
 		<br>Example:
 		<p class='bpcode w800'>
@@ -127,7 +131,7 @@
 		The general rule for the {@link oaj.BeanMap} class is that <c>get()</c>,<c>put()</c>, and <c>containsKey()</c>
 		will work against hidden properties, but <c>keySet()</c> and <c>entrySet()</c> will skip them.
 	<li>
-		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
+		Several bug fixes in the {@link oaj.html.HtmlSerializer} and {@link oaj.html.HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
 		New swaps auto-added to all serializers/parsers:
@@ -138,7 +142,7 @@
 	<li>
 		{@link oaj.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
 	<li>
-		New {@link oaj.html.annotation.HtmlDoc#asideFloat} setting so that you can position the contents of the aside section on the page.
+		New {@link oaj.html.annotation.HtmlDocConfig#asideFloat()} setting so that you can position the contents of the aside section on the page.
 	<li>
 		Various minor fixes surrounding HTML serialization.
 		<ul>
@@ -183,10 +187,10 @@
 			<li class='jm'>{@link oaj.http.annotation.FormData#multi()}
 		</ul>
 	<li>
-		{@link oaj.BeanContext#BEAN_ignoreRecursions} setting no longer requires {@link oaj.BeanContext#BEAN_detectRecursions} 
+		{@link oaj.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions} setting no longer requires {@link oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} 
 		to be enabled.
 	<li>
-		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link oaj.BeanTraverseContext#BEANTRAVERSE_initialIndent}
+		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link oaj.BeanTraverseContext#BEANTRAVERSE_initialDepth}
 		used.
 	<li>
 		Fixed bug in JSON/UON/URL-Encoding serializers where properties past the max depth were being serialized as null instead
@@ -235,7 +239,7 @@
 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBean.<jk>class</jk>).bpi(<js>"foo,bar,baz"</js>).build())
 		.build();
 		</p>
-	<li><c>BeanContext.REST_pojoSwaps</c> replaced with {@link oajr.BeanContext#REST_swaps} (and builder methods as well).
+	<li><c>BeanContext.REST_pojoSwaps</c> replaced with {@link oaj.BeanContext#BEAN_swaps} (and builder methods as well).
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -250,9 +254,9 @@
 			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
 	<li>
-		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, {@link RestResourceResolver},
+		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, {@link oajr.RestResourceResolver},
 		and {@link oaj.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, 
-		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, {@link BasicRestResourceResolver}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
+		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, {@link oajr.BasicRestResourceResolver}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
 		
 		This makes it easier to tweak these methods without having to implement your own classes.
 		<br>The methods added for {@link oajr.RestCallHandler} are:
@@ -314,7 +318,7 @@
 				<li class='jm'>{@link oajr.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 			</ul>
 		</ul>
-		<br>The methods added for {@link oaj.utils.ClassspathResourceFinder} are:
+		<br>The methods added for {@link oaj.utils.ClasspathResourceFinder} are:
 		<ul>
 			<li class='jac'>{@link oajr.RestServlet}
 			<ul>
@@ -363,7 +367,7 @@
 			</ul>
 		</ul>
 	<li>
-		New {@link Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
+		New {@link oajr.annotation.Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
 		
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
@@ -434,7 +438,7 @@
 		the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 		using <ja>@SpringBootTest</ja>.
 	<li>
-		New {@link oajr.helper.ResourceDescription(String,String,String)} constructor and {@link oajr.helper.ResourceDescriptions#append(String,String,String)} method.
+		New {@link oajr.helper.ResourceDescription#ResourceDescription(String,String,String)} constructor and {@link oajr.helper.ResourceDescriptions#append(String,String,String)} method.
 	<li>
 		New {@link oajr.helper.Hyperlink} class.
 </ul>

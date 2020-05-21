@@ -13,8 +13,10 @@
 package org.apache.juneau.xml.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Xml} annotation.
@@ -40,7 +42,37 @@ public class XmlAnnotation implements Xml {
 	 * 	<br>See {@link Xml#on()}
 	 */
 	public XmlAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Xml#on()}
+	 */
+	public XmlAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Xml#on()}
+	 */
+	public XmlAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Xml#on()}
+	 */
+	public XmlAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -109,6 +141,40 @@ public class XmlAnnotation implements Xml {
 	 */
 	public XmlAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlAnnotation on(Field value) {
+		this.on = value.getName();
 		return this;
 	}
 

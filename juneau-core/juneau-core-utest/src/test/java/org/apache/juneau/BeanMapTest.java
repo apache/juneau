@@ -41,18 +41,18 @@ public class BeanMapTest {
 
 	public static class MyBeanDictionaryMap extends BeanDictionaryMap {
 		public MyBeanDictionaryMap() {
-			addClass("StringArray", String[].class);
-			addClass("String2dArray", String[][].class);
-			addClass("IntArray", int[].class);
-			addClass("Int2dArray", int[][].class);
-			addClass("S", S.class);
-			addClass("R1", R1.class);
-			addClass("R2", R2.class);
-			addClass("LinkedList", LinkedList.class);
-			addClass("TreeMap", TreeMap.class);
-			addCollectionClass("LinkedListOfInts", LinkedList.class, Integer.class);
-			addCollectionClass("LinkedListOfR1", LinkedList.class, R1.class);
-			addCollectionClass("LinkedListOfCalendar", LinkedList.class, Calendar.class);
+			append("StringArray", String[].class);
+			append("String2dArray", String[][].class);
+			append("IntArray", int[].class);
+			append("Int2dArray", int[][].class);
+			append("S", S.class);
+			append("R1", R1.class);
+			append("R2", R2.class);
+			append("LinkedList", LinkedList.class);
+			append("TreeMap", TreeMap.class);
+			append("LinkedListOfInts", LinkedList.class, Integer.class);
+			append("LinkedListOfR1", LinkedList.class, R1.class);
+			append("LinkedListOfCalendar", LinkedList.class, Calendar.class);
 		}
 	}
 

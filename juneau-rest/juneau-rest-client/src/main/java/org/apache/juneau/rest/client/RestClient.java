@@ -90,7 +90,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}
 	 * 	<li><b>Name:</b>  <js>"RestClient.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>  {@link RestCallHandler}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.rest.client.RestCallHandler}
 	 * 	<li><b>Default:</b>  <c><jk>null</jk></c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>

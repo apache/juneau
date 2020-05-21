@@ -13,8 +13,10 @@
 package org.apache.juneau.soap.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link SoapXml} annotation.
@@ -34,7 +36,37 @@ public class SoapXmlAnnotation implements SoapXml {
 	 * 	<br>See {@link SoapXml#on()}
 	 */
 	public SoapXmlAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link SoapXml#on()}
+	 */
+	public SoapXmlAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link SoapXml#on()}
+	 */
+	public SoapXmlAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link SoapXml#on()}
+	 */
+	public SoapXmlAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -55,6 +87,39 @@ public class SoapXmlAnnotation implements SoapXml {
 	 */
 	public SoapXmlAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SoapXmlAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SoapXmlAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SoapXmlAnnotation on(Field value) {
+		this.on = value.getName();
 		return this;
 	}
 }

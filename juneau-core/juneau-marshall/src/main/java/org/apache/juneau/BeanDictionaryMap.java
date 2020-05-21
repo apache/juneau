@@ -32,17 +32,17 @@ import org.apache.juneau.annotation.*;
  *
  * 		<jc>// Must provide a no-arg constructor!</jc>
  * 		<jk>public</jk> MyBeanDictionaryMap() {
- * 			addClass(<js>"MyBean"</js>, MyBean.<jk>class</jk>);
- * 			addClass(<js>"MyBeanArray"</js>, MyBean[].<jk>class</jk>);
- * 			addClass(<js>"StringArray"</js>, String[].<jk>class</jk>);
- * 			addClass(<js>"String2dArray"</js>, String[][].<jk>class</jk>);
- * 			addClass(<js>"IntArray"</js>, <jk>int</jk>[].<jk>class</jk>);
- * 			addClass(<js>"Int2dArray"</js>, <jk>int</jk>[][].<jk>class</jk>);
- * 			addClass(<js>"LinkedList"</js>, LinkedList.<jk>class</jk>);
- * 			addClass(<js>"TreeMap"</js>, TreeMap.<jk>class</jk>);
- * 			addCollectionClass(<js>"LinkedListOfInts"</js>, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
- * 			addCollectionClass(<js>"LinkedListOfR1"</js>, LinkedList.<jk>class</jk>, R1.<jk>class</jk>);
- * 			addCollectionClass(<js>"LinkedListOfCalendar"</js>, LinkedList.<jk>class</jk>, Calendar.<jk>class</jk>);
+ * 			append(<js>"MyBean"</js>, MyBean.<jk>class</jk>);
+ * 			append(<js>"MyBeanArray"</js>, MyBean[].<jk>class</jk>);
+ * 			append(<js>"StringArray"</js>, String[].<jk>class</jk>);
+ * 			append(<js>"String2dArray"</js>, String[][].<jk>class</jk>);
+ * 			append(<js>"IntArray"</js>, <jk>int</jk>[].<jk>class</jk>);
+ * 			append(<js>"Int2dArray"</js>, <jk>int</jk>[][].<jk>class</jk>);
+ * 			append(<js>"LinkedList"</js>, LinkedList.<jk>class</jk>);
+ * 			append(<js>"TreeMap"</js>, TreeMap.<jk>class</jk>);
+ * 			append(<js>"LinkedListOfInts"</js>, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
+ * 			append(<js>"LinkedListOfR1"</js>, LinkedList.<jk>class</jk>, R1.<jk>class</jk>);
+ * 			append(<js>"LinkedListOfCalendar"</js>, LinkedList.<jk>class</jk>, Calendar.<jk>class</jk>);
  * 		}
  * 	}
  *
@@ -72,7 +72,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 * @param c The class represented by the dictionary name.
 	 * @return This object (for method chaining).
 	 */
-	protected BeanDictionaryMap addClass(String typeName, Class<?> c) {
+	protected BeanDictionaryMap append(String typeName, Class<?> c) {
 		put(typeName, c);
 		return this;
 	}
@@ -86,7 +86,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 * @param valueClass The value class.
 	 * @return This object (for method chaining).
 	 */
-	protected BeanDictionaryMap addMapClass(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
+	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
 		assertValidParameter(keyClass);
 		assertValidParameter(valueClass);
 		put(typeName, new Object[]{mapClass, keyClass, valueClass});
@@ -101,7 +101,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 * @param entryClass The entry class.
 	 * @return This object (for method chaining).
 	 */
-	protected BeanDictionaryMap addCollectionClass(String typeName, Class<? extends Collection> collectionClass, Object entryClass) {
+	protected BeanDictionaryMap append(String typeName, Class<? extends Collection> collectionClass, Object entryClass) {
 		assertValidParameter(entryClass);
 		put(typeName, new Object[]{collectionClass, entryClass});
 		return this;

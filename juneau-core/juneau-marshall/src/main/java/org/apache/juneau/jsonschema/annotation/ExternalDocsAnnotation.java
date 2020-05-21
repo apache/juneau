@@ -47,7 +47,7 @@ public class ExternalDocsAnnotation implements ExternalDocs {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocsAnnotation description(String[] value) {
+	public ExternalDocsAnnotation description(String...value) {
 		this.description = value;
 		return this;
 	}
@@ -79,7 +79,7 @@ public class ExternalDocsAnnotation implements ExternalDocs {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ExternalDocsAnnotation value(String[] value) {
+	public ExternalDocsAnnotation value(String...value) {
 		this.value = value;
 		return this;
 	}

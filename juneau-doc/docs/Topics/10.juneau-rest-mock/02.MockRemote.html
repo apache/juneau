@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{8.1.0-new, 8.1.2-updated} 
+{8.1.0-new, 8.1.2-updated,8.1.4-updated} 
 MockRemote
 
 <p>
@@ -46,7 +46,7 @@ MockRemote
 
 	<ja>@Test</ja>
 	<jk>public void</jk> testProxy() {
-		MyRemoteInterface mri = MockRemote.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
+		MyRemoteInterface mri = MockRemote.buildJson(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
 		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
 	}
 </p>
@@ -66,14 +66,47 @@ MockRemote
 </p>
 <hr>
 <p>
-	By default, the {@link oajr.mock2.MockRemote} class uses JSON marshalling.
-	This can be overridden via any of the following methods: 
+	By default, the {@link oajr.mock2.MockRemote#buildJson(Class,Object)} method uses JSON marshalling.
+	Other types of marshalling can be used with the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link oajr.mock2.MockRemote#build(Class,Object,Marshall)}
-	<li class='jm'>{@link oajr.mock2.MockRemote#build(Class,Object,Serializer,Parser)}
-	<li class='jm'>{@link oajr.mock2.MockRemote#create(Class,Object,Marshall)}
-	<li class='jm'>{@link oajr.mock2.MockRemote#create(Class,Object,Serializer,Parser)}
+	<li class='jc'>{@link oajr.mock2.MockRemote}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockRemote#buildSimpleJson(Class,Object) buildSimpleJson(Class,Object)} - Simplified JSON
+		<li class='jm'>{@link oajr.mock2.MockRemote#create(Class,Object) create(Class,Object)} - Select language through further setters.
+		<li class='jm'>{@link oajr.mock2.MockRemote#html() html()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#htmlParser() htmlParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#htmlSerializer() htmlSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#json() json()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#jsonParser() jsonParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#jsonSerializer() jsonSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#marshall(Marshall) marshall(Marshall)} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#msgPack() msgPack()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#msgPackParser() msgPackParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#msgPackSerializer() msgPackSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#openApi() openApi()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#openApiParser() openApiParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#openApiSerializer() openApiSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#parser(Class) parser(Class)} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#parser(Parser) parser(Parser)} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#plainText() plainText()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#plainTextParser() plainTextParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#plainTextSerializer() plainTextSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#serializer(Class) serializer(Class)} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#serializer(Serializer) serializer(Serializer)} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#simpleJson() simpleJson()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#simpleJsonParser() simpleJsonParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#simpleJsonSerializer() simpleJsonSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#uon() uon()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#uonParser() uonParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#uonSerializer() uonSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#urlEnc() urlEnc()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#urlEncParser() urlEncParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#urlEncSerializer() urlEncSerializer()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#xml() xml()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#xmlParser() #xmlParser()} 
+		<li class='jm'>{@link oajr.mock2.MockRemote#xmlSerializer() #xmlSerializer()} 
+	</ul>
 </ul>
 <hr>
 <p>

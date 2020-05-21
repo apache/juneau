@@ -354,7 +354,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
 	 * 	<li><b>System property:</b>  <c>BeanContext.beanClassVisibility</c>
 	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCLASSVISIBILITY</c>
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -398,8 +398,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a bean class to ignore it as a bean.
+	 * 	<li>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 	 * </ul>
 	 */
 	public static final String BEAN_beanClassVisibility = PREFIX + ".beanClassVisibility.s";
@@ -414,7 +414,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
 	 * 	<li><b>System property:</b>  <c>BeanContext.beanConstructorVisibility</c>
 	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANCONSTRUCTORVISIBILITY</c>
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -461,8 +461,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>The {@link Beanc @Beanc} annotation can also be used to expose a constructor with non-public visibility.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a bean constructor to ignore it.
+	 * 	<li>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 	 * </ul>
 	 */
 	public static final String BEAN_beanConstructorVisibility = PREFIX + ".beanConstructorVisibility.s";
@@ -598,7 +598,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
 	 * 	<li><b>System property:</b>  <c>BeanContext.beanFieldVisibility</c>
 	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANFIELDVISIBILITY</c>
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -654,8 +654,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a field with non-public visibility.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a bean field to ignore it as a bean property.
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 	 * </ul>
 	 */
 	public static final String BEAN_beanFieldVisibility = PREFIX + ".beanFieldVisibility.s";
@@ -686,7 +686,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
+	 * It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
 	 * <p>
@@ -844,7 +844,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.Visibility}
 	 * 	<li><b>System property:</b>  <c>BeanContext.beanMethodVisibility</c>
 	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANMETHODVISIBILITY</c>
-	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.Visibility#PUBLIC}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -863,16 +863,16 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <p>
 	 * This affects which methods are detected as getters and setters on a bean class. Normally only <jk>public</jk> getters and setters are considered.
-	 * <br>Use this setting if you want to reduce the visibility requirement.
+	 * Use this setting if you want to reduce the visibility requirement.
 	 *
 	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A bean with a protected getter.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
 	 * 		<jk>protected</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
 	 * 	}
 	 *
-	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -890,8 +890,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a method with non-public visibility.
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a bean getter/setter to ignore it as a bean property.
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 	 * </ul>
 	 */
 	public static final String BEAN_beanMethodVisibility = PREFIX + ".beanMethodVisibility.s";
@@ -924,16 +924,13 @@ public class BeanContext extends Context implements MetaProvider {
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// A bean without a no-arg constructor.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// A property method.</jc>
-	 * 		<jk>public</jk> String <jf>foo</jk> = <js>"bar"</js>;
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 *
 	 * 		<jc>// A no-arg constructor</jc>
 	 * 		<jk>public</jk> MyBean(String foo) {
@@ -995,10 +992,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1006,7 +1000,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// A property method.</jc>
-	 * 		<jk>public</jk> String <jf>foo</jk> = <js>"bar"</js>;
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 *
 	 * 		<ja>@Override</ja>
 	 * 		<jk>public</jk> String toString() {
@@ -1126,17 +1120,17 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <p>
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A bean with no properties.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 	}
 	 *
-	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1148,10 +1142,10 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(<jsf>BEAN_beansRequireSomeProperties</jsf>, <jk>false</jk>)
 	 * 		.build();
-	 * </p>
 	 *
 	 * 	<jc>// Produces:  {}</jc>
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
@@ -1909,7 +1903,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
 	 * 			<jk>if</jk> (session.getLocale().equals(Locale.<jsf>UK</jsf>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return<jk> o.toString();
+	 * 			<jk>return</jk> o.toString();
 	 * 		}
 	 * 	}
 	 *
@@ -1978,7 +1972,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
 	 * 			<jk>if</jk> (session.getMediaType().equals(<js>"application/json"</js>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return<jk> o.toString();
+	 * 			<jk>return</jk> o.toString();
 	 * 		}
 	 * 	}
 	 *
@@ -1994,7 +1988,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.set(<jsf>BEAN_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
 	 * 		.build();
 	 *
-	 * <jc>// Define on session-args instead.</jc>
+	 * 	<jc>// Define on session-args instead.</jc>
 	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
 	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
 	 *
@@ -2284,7 +2278,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * >On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
+	 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
 	 *
 	 * <p>
 	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
@@ -2340,8 +2334,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#swaps(Object...)}
 	 * 		</ul>
 	 * </ul>
@@ -2483,7 +2475,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
 	 * 			<jk>if</jk> (session.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
 	 * 				<jk>return null</jk>;
-	 * 			<jk>return<jk> o.toString();
+	 * 			<jk>return</jk> o.toString();
 	 * 		}
 	 * 	}
 	 *
@@ -2568,6 +2560,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		<jk>public</jk> String toString() {
 	 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>i</jf>);
 	 * 		}
+	 * 	}
 	 * </p>
 	 */
 	public static final String BEAN_useEnumNames = PREFIX + ".useEnumNames.b";
@@ -2620,7 +2613,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 		.build();
 	 *
 	 * 	<jc>// Creates a proxy implementation of a MyBean interface.</jc>
-	 * 	MyBean b = p.parse("{foo:'bar'}", MyBean.<jk>class</jk>);
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 	 * </p>
 	 */
 	public static final String BEAN_useInterfaceProxies = PREFIX + ".useInterfaceProxies.b";

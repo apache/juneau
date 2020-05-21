@@ -15,34 +15,44 @@ package org.apache.juneau.html.annotation;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
- * A concrete implementation of the {@link Beanc} annotation.
+ * A concrete implementation of the {@link HtmlLink} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class HtmlLinkAnnotation implements Beanc {
+public class HtmlLinkAnnotation implements HtmlLink {
 
 	private String
 		on = "",
-		properties = "";
+		nameProperty = "",
+		uriProperty = "";
 
 	/**
 	 * Constructor.
 	 *
 	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Beanc#on()}
+	 * 	<br>See {@link HtmlLink#on()}
 	 */
 	public HtmlLinkAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link HtmlLink#on()}
+	 */
+	public HtmlLinkAnnotation(Class<?> on) {
+		on(on);
 	}
 
 	@Override
 	public Class<? extends Annotation> annotationType() {
-		return Beanc.class;
+		return HtmlLink.class;
 	}
 
 	@Override
@@ -61,19 +71,46 @@ public class HtmlLinkAnnotation implements Beanc {
 		return this;
 	}
 
-	@Override
-	public String properties() {
-		return properties;
-	}
-
 	/**
-	 * Sets the <c>properties</c> property on this annotation.
+	 * Sets the <c>on</c> property on this annotation.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public HtmlLinkAnnotation properties(String value) {
-		this.properties = value;
+	public HtmlLinkAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	@Override
+	public String nameProperty() {
+		return nameProperty;
+	}
+
+	/**
+	 * Sets the <c>nameProperty</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlLinkAnnotation nameProperty(String value) {
+		this.nameProperty = value;
+		return this;
+	}
+
+	@Override
+	public String uriProperty() {
+		return uriProperty;
+	}
+
+	/**
+	 * Sets the <c>uriProperty</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlLinkAnnotation uriProperty(String value) {
+		this.uriProperty = value;
 		return this;
 	}
 }

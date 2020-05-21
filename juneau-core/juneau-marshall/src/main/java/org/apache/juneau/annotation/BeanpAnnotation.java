@@ -13,8 +13,10 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Beanp} annotation.
@@ -46,7 +48,27 @@ public class BeanpAnnotation implements Beanp {
 	 * 	<br>See {@link Beanp#on()}
 	 */
 	public BeanpAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Beanp#on()}
+	 */
+	public BeanpAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Beanp#on()}
+	 */
+	public BeanpAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -118,6 +140,28 @@ public class BeanpAnnotation implements Beanp {
 		return this;
 	}
 
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanpAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanpAnnotation on(Field value) {
+		this.on = value.getName();
+		return this;
+	}
+
 	@Override
 	public Class<?>[] params() {
 		return params;
@@ -129,7 +173,7 @@ public class BeanpAnnotation implements Beanp {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanpAnnotation params(Class<?>[] value) {
+	public BeanpAnnotation params(Class<?>...value) {
 		this.params = value;
 		return this;
 	}
@@ -161,7 +205,7 @@ public class BeanpAnnotation implements Beanp {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanpAnnotation dictionary(Class<?>[] value) {
+	public BeanpAnnotation dictionary(Class<?>...value) {
 		this.dictionary = value;
 		return this;
 	}

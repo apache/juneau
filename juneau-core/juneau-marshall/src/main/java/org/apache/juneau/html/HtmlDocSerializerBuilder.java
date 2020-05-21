@@ -97,10 +97,10 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.asideFloat.s"</js>
-	 * 	<li><b>Data type:</b>  {@link AsideFloat}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.html.AsideFloat}
 	 * 	<li><b>System property:</b>  <c>HtmlDocSerializer.asideFloat</c>
 	 * 	<li><b>Environment variable:</b>  <c>HTMLDOCSERIALIZER_ASIDEFLOAT</c>
-	 * 	<li><b>Default:</b>  {@link AsideFloat#DEFAULT}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.html.AsideFloat#DEFAULT}
 	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>

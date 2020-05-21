@@ -529,7 +529,7 @@ public class ItemsAnnotation implements Items {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ItemsAnnotation _default(String[] value) {
+	public ItemsAnnotation _default(String...value) {
 		this._default = value;
 		return this;
 	}
@@ -545,7 +545,7 @@ public class ItemsAnnotation implements Items {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ItemsAnnotation df(String[] value) {
+	public ItemsAnnotation df(String...value) {
 		this.df = value;
 		return this;
 	}
@@ -561,7 +561,7 @@ public class ItemsAnnotation implements Items {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ItemsAnnotation _enum(String[] value) {
+	public ItemsAnnotation _enum(String...value) {
 		this._enum = value;
 		return this;
 	}
@@ -577,7 +577,7 @@ public class ItemsAnnotation implements Items {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ItemsAnnotation e(String[] value) {
+	public ItemsAnnotation e(String...value) {
 		this.e = value;
 		return this;
 	}
@@ -625,7 +625,7 @@ public class ItemsAnnotation implements Items {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public ItemsAnnotation value(String[] value) {
+	public ItemsAnnotation value(String...value) {
 		this.value = value;
 		return this;
 	}

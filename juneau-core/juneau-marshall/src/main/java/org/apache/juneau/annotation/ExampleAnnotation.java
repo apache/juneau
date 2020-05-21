@@ -13,8 +13,10 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Example} annotation.
@@ -34,7 +36,37 @@ public class ExampleAnnotation implements Example {
 	 * 	<br>See {@link Example#on()}
 	 */
 	public ExampleAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Example#on()}
+	 */
+	public ExampleAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Example#on()}
+	 */
+	public ExampleAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link Example#on()}
+	 */
+	public ExampleAnnotation(Field on) {
+		on(on);
 	}
 
 	@Override
@@ -55,6 +87,39 @@ public class ExampleAnnotation implements Example {
 	 */
 	public ExampleAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ExampleAnnotation on(Field value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ExampleAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public ExampleAnnotation on(Class<?> value) {
+		this.on = value.getName();
 		return this;
 	}
 

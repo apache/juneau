@@ -1378,10 +1378,9 @@ public @interface BeanConfig {
 	 * Configuration property:  POJO swaps.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swaps(Class[])}
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps()}
 	 * </div>
 	 */
-	@SuppressWarnings("javadoc")
 	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps() default {};
 
@@ -1390,10 +1389,9 @@ public @interface BeanConfig {
 	 *
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swaps_replace(Class[])}
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps_replace()}
 	 * </div>
 	 */
-	@SuppressWarnings("javadoc")
 	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps_replace() default {};
 
@@ -1402,10 +1400,9 @@ public @interface BeanConfig {
 	 *
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swaps_remove(Class[])}
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps_remove()}
 	 * </div>
 	 */
-	@SuppressWarnings("javadoc")
 	@Deprecated
 	Class<? extends PojoSwap<?,?>>[] pojoSwaps_remove() default {};
 

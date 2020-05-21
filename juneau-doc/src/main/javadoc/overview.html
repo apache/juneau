@@ -178,11 +178,11 @@
 		<li><p><a class='doclink' href='#juneau-marshall.ContextsBuildersSessionsPropertyStores'>Contexts, Builders, Sessions, and PropertyStores</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PojoSwaps'>PojoSwaps</a><span class='update'>8.1.0-updated</span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PojoSwaps'>Swaps</a><span class='update'>8.1.0-updated,<b>8.1.4-updated</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Transforms.AutoPojoSwaps'>Auto-detected POJO swaps</a><span class='update'>8.1.0-new</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps'>Per-media-type PojoSwaps</a><span class='update'>8.1.0-updated</span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way PojoSwaps</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps'>Per-media-type Swaps</a><span class='update'>8.1.0-updated,<b>8.1.4-updated</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.Transforms.OneWayPojoSwaps'>One-way Swaps</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Transforms.SwapAnnotation'>@Swap Annotation</a><span class='update'>8.0.0-updated</span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Transforms.TemplatedSwaps'>Templated Swaps</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.Transforms.SurrogateClasses'>Surrogate Classes</a></p>
@@ -489,7 +489,7 @@
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a><span class='update'>8.1.0-new</span></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-rest-mock.MockRest'>MockRest</a><span class='update'>8.1.0-new</span></p>
-		<li><p><a class='doclink' href='#juneau-rest-mock.MockRemote'>MockRemote</a><span class='update'>8.1.0-new, 8.1.2-updated</span></p>
+		<li><p><a class='doclink' href='#juneau-rest-mock.MockRemote'>MockRemote</a><span class='update'>8.1.0-new, 8.1.2-updated,<b>8.1.4-updated</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a><span class='update'>8.0.0-new, 8.1.2-deprecated</span></p>
 	<ol>
@@ -1528,27 +1528,27 @@
 	The following concrete annotation implementation are provided:
 </p>
 <ul class='javatree'>
-	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeancAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanpAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ExampleAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NamePropertyAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SwapAnnotation}
-	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UriAnnotation}
-	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.CsvAnnotation}
-	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.HtmlAnnotation}
-	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsoAnnotation}
-	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsonAnnotation}
-	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SchemaAnnotation}
-	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.MsgPackAnnotation}
-	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.OpenApiAnnotation}
-	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.PlainTextAnnotation}
-	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SoapXmlAnnotation}
-	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UonAnnotation}
-	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UrlEncodingAnnotation}
-	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.XmlAnnotation}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Bean}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Beanc}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnore}
+	<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Beanp}
+	<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Example}
+	<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NameProperty}
+	<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentProperty}
+	<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Swap}
+	<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.URI}
+	<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.csv.annotation.Csv}
+	<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.html.annotation.Html}
+	<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.jso.annotation.Jso}
+	<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.json.annotation.Json}
+	<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.jsonschema.annotation.Schema}
+	<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.msgpack.annotation.MsgPack}
+	<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.oapi.annotation.OpenApi}
+	<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.plaintext.annotation.PlainText}
+	<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.soap.annotation.SoapXml}
+	<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.uon.annotation.Uon}
+	<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.urlencoding.annotation.UrlEncoding}
+	<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.xml.annotation.Xml}
 </ul>
 
 <p>
@@ -1698,7 +1698,7 @@
 	SerializerGroup sg = SerializerGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		.ws   <jc>// or .useWhitespace(true)</jc>
-		.pojoSwaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+		.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 		.build();
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
@@ -1708,7 +1708,7 @@
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
 	ParserGroup pg = ParserGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
- 		.pojoSwaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+ 		.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>)
  		.build();
 
 	Person p = pg.getParser(<js>"text/json"</js>).parse(myReader, Person.<jk>class</jk>);
@@ -1828,8 +1828,8 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Two serializers created with identical configurations will always be the same copy.</jc> 
-	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySwap.<jk>class</jk>).simple().build();
-	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).pojoSwaps(MySwap.<jk>class</jk>).build();
+	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().swaps(MySwap.<jk>class</jk>).simple().build();
+	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).swaps(MySwap.<jk>class</jk>).build();
 	<jk>assert</jk>(s1 == s2);
 </p>
 <p>
@@ -1846,7 +1846,7 @@
 <p class='bpcode w800'>
 	PropertyStore ps = PropertyStore
 		.<jsm>create</jsm>()
-		.set(<js>"BeanContext.pojoSwaps.lc"</js>, MySwap.<jk>class</jk>)
+		.set(<js>"BeanContext.swaps.lo"</js>, MySwap.<jk>class</jk>)
 		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
 		.build();
 </p>
@@ -1888,7 +1888,7 @@
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
-		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}
+		<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}
 	</ul>
 </ul>
 <p>
@@ -1923,10 +1923,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoSwaps' id='juneau-marshall.Transforms.PojoSwaps'>2.11.1 - PojoSwaps</a><span class='update'>8.1.0-updated</span></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PojoSwaps' id='juneau-marshall.Transforms.PojoSwaps'>2.11.1 - Swaps</a><span class='update'>8.1.0-updated,<b>8.1.4-updated</b></span></h4>
 <div class='topic'><!-- START: 2.11.1 - juneau-marshall.Transforms.PojoSwaps -->
 <p>
-	{@link org.apache.juneau.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
+	{@link org.apache.juneau.transform.PojoSwap Swaps} are a critical component of Juneau.
 	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
 </p>
 <p>
@@ -1966,11 +1966,11 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a new JSON serializer with our swap.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
 	String json = s.serialize(<jk>new</jk> MyBean());
 	
 	<jc>// Create a JSON parser with our swap.</jc>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MyBeanSwap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(MyBeanSwap.<jk>class</jk>).build();
 	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
 </p>
 <p>
@@ -2007,8 +2007,8 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 	
 	<jk>byte</jk>[] bytes = {1,2,3};
 	String json = s.serialize(bytes);		<jc>// Produces "'AQID'"</jc>
@@ -2289,7 +2289,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.11.4 - Per-media-type PojoSwaps</a><span class='update'>8.1.0-updated</span></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.PerMediaTypePojoSwaps' id='juneau-marshall.Transforms.PerMediaTypePojoSwaps'>2.11.4 - Per-media-type Swaps</a><span class='update'>8.1.0-updated,<b>8.1.4-updated</b></span></h4>
 <div class='topic'><!-- START: 2.11.4 - juneau-marshall.Transforms.PerMediaTypePojoSwaps -->
 <p>
 	Swaps can also be defined per-media-type.		
@@ -2349,7 +2349,7 @@
 			SerializerGroup g = SerializerGroup.<jsm>create</jsm>()
 				.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
 				.sq()
-				.pojoSwaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
+				.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>)
 				.build();
 
 			MyPojo myPojo = <jk>new</jk> MyPojo();
@@ -2389,7 +2389,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.11.5 - One-way PojoSwaps</a></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.Transforms.OneWayPojoSwaps' id='juneau-marshall.Transforms.OneWayPojoSwaps'>2.11.5 - One-way Swaps</a></h4>
 <div class='topic'><!-- START: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
@@ -2399,7 +2399,7 @@
 	For these, we can use one-way object swaps.
 </p>
 <p>
-	A one-way POJO swap is simply an object transform that only implements the {@code swap()} method.  
+	A one-way swap is simply an object transform that only implements the {@code swap()} method.  
 	The {@code unswap()} method is simply left unimplemented.
 </p>
 <p>
@@ -2425,7 +2425,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(IteratorSwap.<jk>class</jk>).build();
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
 	Iterator i = OList.<jsm>of</jsm>(1,2,3).iterator();
@@ -2434,7 +2434,7 @@
 	String json = s.serialize(i);		<jc>// Produces "[1,2,3]"</jc>
 	
 	<jc>// Try to parse it.</jc>
-	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().swaps(IteratorSwap.<jk>class</jk>).build();
 	i = p.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 </p>
 </div><!-- END: 2.11.5 - juneau-marshall.Transforms.OneWayPojoSwaps -->
@@ -2446,7 +2446,7 @@
 <p>
 	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
 	annotation.
-	This is often cleaner than using the builder <c>pojoSwaps()</c> method since you can keep
+	This is often cleaner than using the builder <c>swaps()</c> method since you can keep
 	your swap class near your POJO class. 
 </p>
 <p class='bpcode w800'>
@@ -11543,13 +11543,15 @@
 		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
 		allowedMethodParams=<js>"OPTIONS"</js>,
 	
-		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
-		pojoSwaps={
-			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
-			SwaggerUI.<jk>class</jk>
-		},
 	
 		...
+	)
+	<ja>@BeanConfig</ja>(
+		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		swaps={
+			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+			SwaggerUI.<jk>class</jk>
+		}
 	)
 	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
 	
@@ -13721,7 +13723,7 @@
 			<jc>// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</jc>
 			ignoreUnknownBeanProperties=<js>"true"</js>,
 			<jc>// POJO swaps to apply to all serializers/parsers on this method.</jc>
-			pojoSwaps={
+			swaps={
 				<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
 				<jc>// This is a per-media-type swap that only applies to text/html requests.</jc>
 				SwaggerUI.<jk>class</jk>
@@ -13904,7 +13906,7 @@
 			<jc>// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</jc>
 			ignoreUnknownBeanProperties=<js>"true"</js>,
 			<jc>// POJO swaps to apply to all serializers/parsers on this method.</jc>
-			pojoSwaps={
+			swaps={
 				<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
 				<jc>// This is a per-media-type swap that only applies to text/html requests.</jc>
 				SwaggerUI.<jk>class</jk>
@@ -14439,7 +14441,7 @@
 	<jc>// Option #1 - Pass in through constructor.</jc>
 	<jk>public</jk> MyResource(RestContextBuilder builder) {
 			builder
-				.pojoSwaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
+				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
 	}
 
@@ -14447,7 +14449,7 @@
 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 			builder
-				.pojoSwaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
+				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
 	}
 </p>
@@ -18341,9 +18343,9 @@
 </p>
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFilters() BeanConfig(beanFilters)} - On class or methods. 
-	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#pojoSwaps() BeanConfig(pojoSwaps)} - On class or methods. 
+	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#swaps() BeanConfig(swaps)} - On class or methods. 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Object...)} 
-	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#pojoSwaps(Object...)} 
+	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#swaps(Object...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Servlet with transforms applied</jc>
@@ -18351,7 +18353,7 @@
 		...
 	)
 	<ja>@BeanConfig</ja>(
-		pojoSwaps={
+		swaps={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
 			TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 
@@ -18377,7 +18379,7 @@
 		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
 			
 			builder
-				.pojoSwaps(
+				.swaps(
 					TemporalCalendarSwap.IsoInstant.<jk>class</jk>,
 					ByteArraySwap.Base64.<jk>class</jk>
 				) 
@@ -19503,7 +19505,7 @@
 			<jc>// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</jc>
 			ignoreUnknownBeanProperties=<js>"true"</js>,
 			<jc>// POJO swaps to apply to all serializers/parsers on this method.</jc>
-			pojoSwaps={
+			swaps={
 				<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
 				<jc>// This is a per-media-type swap that only applies to text/html requests.</jc>
 				SwaggerUI.<jk>class</jk>
@@ -22716,7 +22718,7 @@
 	}
 				
 	<jc>// GET request, getting a filtered object</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().pojoSwaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().swaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
 		Calendar birthDate = client
 			.get(<js>"http://localhost:10000/addressBook/0/birthDate"</js>)
 			.run()
@@ -24720,7 +24722,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRemote' id='juneau-rest-mock.MockRemote'>10.2 - MockRemote</a><span class='update'>8.1.0-new, 8.1.2-updated</span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRemote' id='juneau-rest-mock.MockRemote'>10.2 - MockRemote</a><span class='update'>8.1.0-new, 8.1.2-updated,<b>8.1.4-updated</b></span></h3>
 <div class='topic'><!-- START: 10.2 - juneau-rest-mock.MockRemote -->
 <p>
 	The {@link org.apache.juneau.rest.mock2.MockRemote} class is used for serverless unit testing of {@link org.apache.juneau.http.remote.Remote @Remote}-annotated
@@ -24752,7 +24754,7 @@
 
 	<ja>@Test</ja>
 	<jk>public void</jk> testProxy() {
-		MyRemoteInterface mri = MockRemote.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
+		MyRemoteInterface mri = MockRemote.buildJson(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
 		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
 	}
 </p>
@@ -24772,14 +24774,47 @@
 </p>
 <hr>
 <p>
-	By default, the {@link org.apache.juneau.rest.mock2.MockRemote} class uses JSON marshalling.
-	This can be overridden via any of the following methods: 
+	By default, the {@link org.apache.juneau.rest.mock2.MockRemote#buildJson(Class,Object)} method uses JSON marshalling.
+	Other types of marshalling can be used with the following methods:
 </p>
 <ul class='javatree'>
-	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#build(Class,Object,Marshall)}
-	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#build(Class,Object,Serializer,Parser)}
-	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#create(Class,Object,Marshall)}
-	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#create(Class,Object,Serializer,Parser)}
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRemote}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#buildSimpleJson(Class,Object) buildSimpleJson(Class,Object)} - Simplified JSON
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#create(Class,Object) create(Class,Object)} - Select language through further setters.
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#html() html()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#htmlParser() htmlParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#htmlSerializer() htmlSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#json() json()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#jsonParser() jsonParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#jsonSerializer() jsonSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#marshall(Marshall) marshall(Marshall)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#msgPack() msgPack()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#msgPackParser() msgPackParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#msgPackSerializer() msgPackSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#openApi() openApi()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#openApiParser() openApiParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#openApiSerializer() openApiSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#parser(Class) parser(Class)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#parser(Parser) parser(Parser)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#plainText() plainText()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#plainTextParser() plainTextParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#plainTextSerializer() plainTextSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#serializer(Class) serializer(Class)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#serializer(Serializer) serializer(Serializer)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#simpleJson() simpleJson()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#simpleJsonParser() simpleJsonParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#simpleJsonSerializer() simpleJsonSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#uon() uon()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#uonParser() uonParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#uonSerializer() uonSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#urlEnc() urlEnc()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#urlEncParser() urlEncParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#urlEncSerializer() urlEncSerializer()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#xml() xml()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#xmlParser() #xmlParser()} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemote#xmlSerializer() #xmlSerializer()} 
+	</ul>
 </ul>
 <hr>
 <p>
@@ -29280,30 +29315,6 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_bpi BEAN_bpi}</td>
-		<td>Bean property includes.</td>
-		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_bpro BEAN_bpro}</td>
-		<td>Read-only bean properties.</td>
-		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_bpwo BEAN_bpwo}</td>
-		<td>Write-only bean properties.</td>
-		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_bpx BEAN_bpx}</td>
-		<td>Bean property excludes.</td>
-		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,String&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}</td>
 		<td>Debug mode.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
@@ -29388,12 +29399,6 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_pojoSwaps BEAN_pojoSwaps}</td>
-		<td>POJO swaps.</td>
-		<td style='max-width:250px;overflow:hidden'><c>List&lt;Object&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}</td>
 		<td>Bean property namer.</td>
 		<td style='max-width:250px;overflow:hidden'><code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code></td>
@@ -29403,6 +29408,12 @@
 		<td>{@link org.apache.juneau.BeanContext#BEAN_sortProperties BEAN_sortProperties}</td>
 		<td>Sort bean properties.</td>
 		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}</td>
+		<td>Java object swaps.</td>
+		<td style='max-width:250px;overflow:hidden'><c>List&lt;Object&gt;</c></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -29558,7 +29569,7 @@
 		<td></td>
 		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}</td>
 		<td>Float aside section contents.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link AsideFloat}</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.html.AsideFloat}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -29636,7 +29647,7 @@
 		<td>{@link org.apache.juneau.html.HtmlDocSerializerBuilder}</td>
 		<td>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_asideFloat HTMLDOC_asideFloat}</td>
 		<td></td>
-		<td style='max-width:250px;overflow:hidden'>{@link AsideFloat}</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.html.AsideFloat}</td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.html.HtmlSerializer}</td>
@@ -30044,7 +30055,7 @@
 		<td>{@link org.apache.juneau.rest.client.RestClient}</td>
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}</td>
 		<td>REST call handler.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link RestCallHandler}</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.client.RestCallHandler}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -33575,12 +33586,12 @@
 	<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} ignores serializers and parsers if they throw <c>NoClassDefFoundErrors</c>.
 	<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
 	<li>New <dc>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</dc> serializer.
-	<li>Changes to {@link org.apache.juneau.utils.Args}:
+	<li>Changes to <dc>Args</dc>:
 		<ul>
-			<li><c>getMainArg(int)</c> changed to {@link org.apache.juneau.utils.Args#getArg(int)}.  
+			<li><c>getMainArg(int)</c> changed to <dc>Args.getArg(int)</dc>.  
 				Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
 				This is more inline with the behavior of the rest of the library.
-			<li>New {@link org.apache.juneau.utils.Args#hasArg(int)} method.
+			<li>New <dc>Args.hasArg(int)</dc> method.
 		</ul> 
 	<li>Removed <c>org.apache.juneau.utils.CharsetUtils</c> class.
 	<li>Removed <c>org.apache.juneau.utils.ConcurrentIdentityList</c> class.
@@ -34384,9 +34395,9 @@
 	<li>Parse-args supported added to {@link org.apache.juneau.msgpack.MsgPackParser} to allow it to be used in remoteable proxies. 
 	<li>Added some convenience classes for constructing collections using a fluent interface:
 		<ul>
-			<li>{@link org.apache.juneau.utils.AList}
-			<li>{@link org.apache.juneau.utils.ASet}
-			<li>{@link org.apache.juneau.utils.AMap}
+			<li><dc>AList</dc>
+			<li><dc>ASet</dc>
+			<li><dc>AMap</dc>
 		</ul>
 	<li>New {@link org.apache.juneau.annotation.Bean#typePropertyName @Bean(typePropertyName)} annotation allows you to 
 		specify the name of the <js>"_type"</js> property at the class level.
@@ -37569,7 +37580,7 @@
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(String) log(String)}
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(String,Throwable) log(String,Throwable)}
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(Level,String,Object[]) log(Level,String,Object[])}
-				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
+				<li class='jm'><dc>logObjects(Level,String,Object[])</dc>
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 			</ul>
 		</ul>
@@ -37639,7 +37650,7 @@
 	<li>
 		{@link org.apache.juneau.http.remote.Remote @Remote} replaces {@link org.apache.juneau.http.remote.RemoteResource @RemoteResource}.
 	<li>
-		Shortened names for {@link org.apache.juneau.annotation.Bean#dictionary @Bean(dictionary)} and {@link org.apache.juneau.BeanContextBuilder#dictionary(Class...)}.
+		Shortened names for {@link org.apache.juneau.annotation.Bean#dictionary @Bean(dictionary)} and {@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -37785,10 +37796,14 @@
 		<ul class='javatree'>
 			<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(String) bpi(String)}
-				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(String) bpx(String)}
-				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(String) bpro(String)}
-				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(String) bpwo(String}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(Class,String) bpi(Class,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpi(String,String) bpi(String,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(Class,String) bpx(Class,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpx(String,String) bpx(String,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(Class,String) bpro(Class,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpro(String,String) bpro(String,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(Class,String) bpwo(Class,String}
+				<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#bpwo(String,String) bpwo(String,String}
 			</ul>
 		</ul>
 	<li>
@@ -37806,29 +37821,29 @@
 	<jk>public</jk> MyClass getMyClass() {...}
 		</p>
 	<li>
-		The following concrete annotation implementation classes are now provided that can be used with the {@link org.apache.juneau.BeanContextBuilder#annotations(Annotation)} method:
+		The following concrete annotation implementation classes are now provided that can be used with the {@link org.apache.juneau.BeanContextBuilder#annotations(Annotation...)} method:
 		<ul class='javatree'>
-			<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeancAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanpAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ExampleAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NamePropertyAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SwapAnnotation}
-			<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UriAnnotation}
-			<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.CsvAnnotation}
-			<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.HtmlAnnotation}
-			<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsoAnnotation}
-			<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.JsonAnnotation}
-			<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SchemaAnnotation}
-			<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.MsgPackAnnotation}
-			<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.OpenApiAnnotation}
-			<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.PlainTextAnnotation}
-			<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.SoapXmlAnnotation}
-			<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UonAnnotation}
-			<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.UrlEncodingAnnotation}
-			<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.XmlAnnotation}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Bean}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeancAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Beanc}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.BeanIgnore}
+			<li class'jc'>{@link org.apache.juneau.annotation.BeanpAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Beanp}
+			<li class'jc'>{@link org.apache.juneau.annotation.ExampleAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Example}
+			<li class'jc'>{@link org.apache.juneau.annotation.NamePropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.NameProperty}
+			<li class'jc'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.ParentProperty}
+			<li class'jc'>{@link org.apache.juneau.annotation.SwapAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.Swap}
+			<li class'jc'>{@link org.apache.juneau.annotation.UriAnnotation} <jk>implements</jk> {@link org.apache.juneau.annotation.URI}
+			<li class'jc'>{@link org.apache.juneau.csv.annotation.CsvAnnotation} <jk>implements</jk> {@link org.apache.juneau.csv.annotation.Csv}
+			<li class'jc'>{@link org.apache.juneau.html.annotation.HtmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.html.annotation.Html}
+			<li class'jc'>{@link org.apache.juneau.jso.annotation.JsoAnnotation} <jk>implements</jk> {@link org.apache.juneau.jso.annotation.Jso}
+			<li class'jc'>{@link org.apache.juneau.json.annotation.JsonAnnotation} <jk>implements</jk> {@link org.apache.juneau.json.annotation.Json}
+			<li class'jc'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation} <jk>implements</jk> {@link org.apache.juneau.jsonschema.annotation.Schema}
+			<li class'jc'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation} <jk>implements</jk> {@link org.apache.juneau.msgpack.annotation.MsgPack}
+			<li class'jc'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation} <jk>implements</jk> {@link org.apache.juneau.oapi.annotation.OpenApi}
+			<li class'jc'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation} <jk>implements</jk> {@link org.apache.juneau.plaintext.annotation.PlainText}
+			<li class'jc'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.soap.annotation.SoapXml}
+			<li class'jc'>{@link org.apache.juneau.uon.annotation.UonAnnotation} <jk>implements</jk> {@link org.apache.juneau.uon.annotation.Uon}
+			<li class'jc'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation} <jk>implements</jk> {@link org.apache.juneau.urlencoding.annotation.UrlEncoding}
+			<li class'jc'>{@link org.apache.juneau.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link org.apache.juneau.xml.annotation.Xml}
 		</ul>
 		<br>Example:
 		<p class='bpcode w800'>
@@ -37857,7 +37872,7 @@
 		The general rule for the {@link org.apache.juneau.BeanMap} class is that <c>get()</c>,<c>put()</c>, and <c>containsKey()</c>
 		will work against hidden properties, but <c>keySet()</c> and <c>entrySet()</c> will skip them.
 	<li>
-		Several bug fixes in the {@link HtmlSerializer} and {@link HtmlParser} classes around the handling of 
+		Several bug fixes in the {@link org.apache.juneau.html.HtmlSerializer} and {@link org.apache.juneau.html.HtmlParser} classes around the handling of 
 		collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.
 	<li>
 		New swaps auto-added to all serializers/parsers:
@@ -37868,7 +37883,7 @@
 	<li>
 		{@link org.apache.juneau.html.annotation.Html#noTableHeaders} now can be applied to collections of beans.
 	<li>
-		New {@link org.apache.juneau.html.annotation.HtmlDoc#asideFloat} setting so that you can position the contents of the aside section on the page.
+		New {@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat()} setting so that you can position the contents of the aside section on the page.
 	<li>
 		Various minor fixes surrounding HTML serialization.
 		<ul>
@@ -37913,10 +37928,10 @@
 			<li class='jm'>{@link org.apache.juneau.http.annotation.FormData#multi()}
 		</ul>
 	<li>
-		{@link org.apache.juneau.BeanContext#BEAN_ignoreRecursions} setting no longer requires {@link org.apache.juneau.BeanContext#BEAN_detectRecursions} 
+		{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions} setting no longer requires {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions} 
 		to be enabled.
 	<li>
-		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialIndent}
+		Fixed bug in JSON/UON/URL-Encoding serializers where indentation was not correct of first line when {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth}
 		used.
 	<li>
 		Fixed bug in JSON/UON/URL-Encoding serializers where properties past the max depth were being serialized as null instead
@@ -37965,6 +37980,7 @@
 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBean.<jk>class</jk>).bpi(<js>"foo,bar,baz"</js>).build())
 		.build();
 		</p>
+	<li><c>BeanContext.REST_pojoSwaps</c> replaced with {@link org.apache.juneau.BeanContext#BEAN_swaps} (and builder methods as well).
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -37979,9 +37995,9 @@
 			<li class='jic'>{@link org.apache.juneau.utils.ClasspathResourceFinder} - Normally defined through {@link org.apache.juneau.rest.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
 		</ul>
 	<li>
-		{@link org.apache.juneau.rest.RestServlet} and {@link org.apache.juneau.rest.BasicRest} now implement the {@link org.apache.juneau.rest.RestCallHandler}, {@link org.apache.juneau.rest.RestInfoProvider}, {@link org.apache.juneau.rest.RestCallLogger}, {@link RestResourceResolver},
+		{@link org.apache.juneau.rest.RestServlet} and {@link org.apache.juneau.rest.BasicRest} now implement the {@link org.apache.juneau.rest.RestCallHandler}, {@link org.apache.juneau.rest.RestInfoProvider}, {@link org.apache.juneau.rest.RestCallLogger}, {@link org.apache.juneau.rest.RestResourceResolver},
 		and {@link org.apache.juneau.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link org.apache.juneau.rest.BasicRestCallHandler}, 
-		{@link org.apache.juneau.rest.BasicRestInfoProvider}, {@link org.apache.juneau.rest.BasicRestCallLogger}, {@link BasicRestResourceResolver}, and {@link org.apache.juneau.utils.ClasspathResourceFinderBasic}.  
+		{@link org.apache.juneau.rest.BasicRestInfoProvider}, {@link org.apache.juneau.rest.BasicRestCallLogger}, {@link org.apache.juneau.rest.BasicRestResourceResolver}, and {@link org.apache.juneau.utils.ClasspathResourceFinderBasic}.  
 		
 		This makes it easier to tweak these methods without having to implement your own classes.
 		<br>The methods added for {@link org.apache.juneau.rest.RestCallHandler} are:
@@ -38043,7 +38059,7 @@
 				<li class='jm'>{@link org.apache.juneau.rest.BasicRest#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 			</ul>
 		</ul>
-		<br>The methods added for {@link org.apache.juneau.utils.ClassspathResourceFinder} are:
+		<br>The methods added for {@link org.apache.juneau.utils.ClasspathResourceFinder} are:
 		<ul>
 			<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
 			<ul>
@@ -38092,7 +38108,7 @@
 			</ul>
 		</ul>
 	<li>
-		New {@link Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
+		New {@link org.apache.juneau.rest.annotation.Rest#debugOn() @Rest(debugOn)} annotation for turning on debug mode using class/method identifiers:
 		
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
@@ -38163,7 +38179,7 @@
 		the <c><ja>@ConfigurationContext</ja>(initializers=JuneauRestInitializer.<jk>class</jk>)</c> when unit testing
 		using <ja>@SpringBootTest</ja>.
 	<li>
-		New {@link org.apache.juneau.rest.helper.ResourceDescription(String,String,String)} constructor and {@link org.apache.juneau.rest.helper.ResourceDescriptions#append(String,String,String)} method.
+		New {@link org.apache.juneau.rest.helper.ResourceDescription#ResourceDescription(String,String,String)} constructor and {@link org.apache.juneau.rest.helper.ResourceDescriptions#append(String,String,String)} method.
 	<li>
 		New {@link org.apache.juneau.rest.helper.Hyperlink} class.
 </ul>

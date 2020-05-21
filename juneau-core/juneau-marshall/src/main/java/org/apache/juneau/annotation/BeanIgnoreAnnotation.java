@@ -13,8 +13,10 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link BeanIgnore} annotation.
@@ -34,7 +36,47 @@ public class BeanIgnoreAnnotation implements BeanIgnore {
 	 * 	<br>See {@link BeanIgnore#on()}
 	 */
 	public BeanIgnoreAnnotation(String on) {
-		this.on = on;
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link BeanIgnore#on()}
+	 */
+	public BeanIgnoreAnnotation(Class<?> on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link BeanIgnore#on()}
+	 */
+	public BeanIgnoreAnnotation(Method on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link BeanIgnore#on()}
+	 */
+	public BeanIgnoreAnnotation(Field on) {
+		on(on);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param on The initial value for the <c>on</c> property.
+	 * 	<br>See {@link BeanIgnore#on()}
+	 */
+	public BeanIgnoreAnnotation(Constructor<?> on) {
+		on(on);
 	}
 
 	@Override
@@ -55,6 +97,50 @@ public class BeanIgnoreAnnotation implements BeanIgnore {
 	 */
 	public BeanIgnoreAnnotation on(String value) {
 		this.on = value;
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanIgnoreAnnotation on(Class<?> value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanIgnoreAnnotation on(Method value) {
+		this.on = MethodInfo.of(value).getFullName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanIgnoreAnnotation on(Field value) {
+		this.on = value.getName();
+		return this;
+	}
+
+	/**
+	 * Sets the <c>on</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanIgnoreAnnotation on(Constructor<?> value) {
+		this.on = ConstructorInfo.of(value).getFullName();
 		return this;
 	}
 }
