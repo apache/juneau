@@ -283,18 +283,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder dontIgnorePropertiesWithoutSetters() {
 		super.dontIgnorePropertiesWithoutSetters();
 		return this;
@@ -403,32 +391,8 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
@@ -471,18 +435,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder swapsRemove(Object...values) {
-		super.swapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder swapsReplace(Object...values) {
-		super.swapsReplace(values);
 		return this;
 	}
 

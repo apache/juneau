@@ -328,18 +328,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder dontIgnorePropertiesWithoutSetters() {
 		super.dontIgnorePropertiesWithoutSetters();
 		return this;
@@ -448,32 +436,8 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
@@ -516,18 +480,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder swapsRemove(Object...values) {
-		super.swapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder swapsReplace(Object...values) {
-		super.swapsReplace(values);
 		return this;
 	}
 

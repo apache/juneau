@@ -2586,18 +2586,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public <T> RestClientBuilder example(Class<T> c, T o) {
 		super.example(c, o);
 		return this;
@@ -2688,32 +2676,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestClientBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
 		return this;
 	}
 

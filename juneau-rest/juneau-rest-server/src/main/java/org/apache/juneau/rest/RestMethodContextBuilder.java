@@ -299,18 +299,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder dictionaryRemove(Object...values) {
-		super.dictionaryRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder dictionaryReplace(Object...values) {
-		super.dictionaryReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder dontIgnorePropertiesWithoutSetters() {
 		super.dontIgnorePropertiesWithoutSetters();
 		return this;
@@ -419,32 +407,8 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder notBeanClassesRemove(Object...values) {
-		super.notBeanClassesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder notBeanClassesReplace(Object...values) {
-		super.notBeanClassesReplace(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder notBeanPackagesRemove(Object...values) {
-		super.notBeanPackagesRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder notBeanPackagesReplace(Object...values) {
-		super.notBeanPackagesReplace(values);
 		return this;
 	}
 
@@ -487,18 +451,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder swapsRemove(Object...values) {
-		super.swapsRemove(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder swapsReplace(Object...values) {
-		super.swapsReplace(values);
 		return this;
 	}
 

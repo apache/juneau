@@ -486,8 +486,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionaryRemove(Object...)}
 	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#dictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
@@ -1927,8 +1925,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClasses(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanClassesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2017,8 +2013,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackages(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#notBeanPackagesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *

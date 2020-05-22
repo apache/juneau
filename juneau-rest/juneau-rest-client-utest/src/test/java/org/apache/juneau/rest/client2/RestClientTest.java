@@ -2926,7 +2926,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o028_beanContext_bpiMap() throws Exception {
+	public void o028_beanContext_bpi() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
@@ -2938,280 +2938,626 @@ public class RestClientTest {
 			.getBody().cache().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpi(O25.class, "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpi("O25", "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpi(O25.class.getName(), "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
 	}
-//	public RestClientBuilder bpi(Map<String,String> values) {
 
-//	@Test
-//	public void o029_beanContext_bpiClassString() throws Exception { fail(); }
-////	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
-//
-//	@Test
-//	public void o030_beanContext_bpiStringString() throws Exception { fail(); }
-////	public RestClientBuilder bpi(String beanClassName, String properties) {
-//
-//	@Test
-//	public void o031_beanContext_bproMap() throws Exception { fail(); }
-////	public RestClientBuilder bpro(Map<String,String> values) {
-//
-//	@Test
-//	public void o032_beanContext_bproClassString() throws Exception { fail(); }
-////	public RestClientBuilder bpro(Class<?> beanClass, String properties) {
-//
-//	@Test
-//	public void o033_beanContext_bproStringString() throws Exception { fail(); }
-////	public RestClientBuilder bpro(String beanClassName, String properties) {
-//
-//	@Test
-//	public void o034_beanContext_bpwoMap() throws Exception { fail(); }
-////	public RestClientBuilder bpwo(Map<String,String> values) {
-//
-//	@Test
-//	public void o035_beanContext_bpwoClassString() throws Exception { fail(); }
-////	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
-//
-//	@Test
-//	public void o036_beanContext_bpwoStringString() throws Exception { fail(); }
-////	public RestClientBuilder bpwo(String beanClassName, String properties) {
-//
-//	@Test
-//	public void o037_beanContext_bpxMap() throws Exception { fail(); }
-////	public RestClientBuilder bpx(Map<String,String> values) {
-//
-//	@Test
-//	public void o038_beanContext_bpxClassString() throws Exception { fail(); }
-////	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
-//
-//	@Test
-//	public void o039_beanContext_bpxStringString() throws Exception { fail(); }
-////	public RestClientBuilder bpx(String beanClassName, String properties) {
-//
-//	@Test
-//	public void o040_beanContext_debug() throws Exception { fail(); }
-////	public RestClientBuilder debug() {
-//
-//	@Test
-//	public void o041_beanContext_debugBoolean() throws Exception { fail(); }
-////	public RestClientBuilder debug(boolean value) {
-//
-//	@Test
-//	public void o042_beanContext_dictionaryClasses() throws Exception { fail(); }
-////	public RestClientBuilder dictionary(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o043_beanContext_dictionaryObjects() throws Exception { fail(); }
-////	public RestClientBuilder dictionary(Object...values) {
-//
-//	@Test
-//	public void o044_beanContext_dictionaryRemoveClasses() throws Exception { fail(); }
-////	public RestClientBuilder dictionaryRemove(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o045_beanContext_dictionaryRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder dictionaryRemove(Object...values) {
-//
-//	@Test
-//	public void o046_beanContext_dictionaryReplaceClasses() throws Exception { fail(); }
-////	public RestClientBuilder dictionaryReplace(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o047_beanContext_dictionaryReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder dictionaryReplace(Object...values) {
-//
-//	@Test
-//	public void o048_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception { fail(); }
-////	public RestClientBuilder dontIgnorePropertiesWithoutSetters() {
-//
-//	@Test
-//	public void o049_beanContext_dontIgnoreTransientFields() throws Exception { fail(); }
-////	public RestClientBuilder dontIgnoreTransientFields() {
-//
-//	@Test
-//	public void o050_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception { fail(); }
-////	public RestClientBuilder dontIgnoreUnknownNullBeanProperties() {
-//
-//	@Test
-//	public void o051_beanContext_dontUseInterfaceProxies() throws Exception { fail(); }
-////	public RestClientBuilder dontUseInterfaceProxies() {
-//
-//	@Test
-//	public void o052_beanContext_example() throws Exception { fail(); }
-////	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
-//
-//	@Test
-//	public void o053_beanContext_exampleJson() throws Exception { fail(); }
-////	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
-//
-//	@Test
-//	public void o054_beanContext_examples() throws Exception { fail(); }
-////	public RestClientBuilder examples(String json) {
-//
-//	@Test
-//	public void o058_beanContext_fluentSetters() throws Exception { fail(); }
-////	public RestClientBuilder fluentSetters() {
-//
-//	@Test
-//	public void o059_beanContext_fluentSettersBoolean() throws Exception { fail(); }
-////	public RestClientBuilder fluentSetters(boolean value) {
-//
-//	@Test
-//	public void o060_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception { fail(); }
-////	public RestClientBuilder ignoreInvocationExceptionsOnGetters() {
-//
-//	@Test
-//	public void o061_beanContext_ignoreInvocationExceptionsOnGettersBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-//
-//	@Test
-//	public void o062_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception { fail(); }
-////	public RestClientBuilder ignoreInvocationExceptionsOnSetters() {
-//
-//	@Test
-//	public void o063_beanContext_ignoreInvocationExceptionsOnSettersBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-//
-//	@Test
-//	public void o064_beanContext_ignorePropertiesWithoutSettersBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignorePropertiesWithoutSetters(boolean value) {
-//
-//	@Test
-//	public void o065_beanContext_ignoreTransientFields() throws Exception { fail(); }
-////	public RestClientBuilder ignoreTransientFields(boolean value) {
-//
-//	@Test
-//	public void o066_beanContext_ignoreUnknownBeanProperties() throws Exception { fail(); }
-////	public RestClientBuilder ignoreUnknownBeanProperties() {
-//
-//	@Test
-//	public void o067_beanContext_ignoreUnknownBeanPropertiesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignoreUnknownBeanProperties(boolean value) {
-//
-//	@Test
-//	public void o068_beanContext_ignoreUnknownNullBeanPropertiesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder ignoreUnknownNullBeanProperties(boolean value) {
-//
-//	@Test
-//	public void o069_beanContext_implClass() throws Exception { fail(); }
-////	public RestClientBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-//
-//	@Test
-//	public void o070_beanContext_implClasses() throws Exception { fail(); }
-////	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
-//
-//	@Test
-//	public void o074_beanContext_locale() throws Exception { fail(); }
-////	public RestClientBuilder locale(Locale value) {
-//
-//	@Test
-//	public void o075_beanContext_mediaType() throws Exception { fail(); }
-////	public RestClientBuilder mediaType(MediaType value) {
-//
-//	@Test
-//	public void o076_beanContext_notBeanClassesClasses() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClasses(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o077_beanContext_notBeanClassesObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClasses(Object...values) {
-//
-//	@Test
-//	public void o078_beanContext_notBeanClassesRemoveClasses() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClassesRemove(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o079_beanContext_notBeanClassesRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClassesRemove(Object...values) {
-//
-//	@Test
-//	public void o080_beanContext_notBeanClassesReplaceClasses() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClassesReplace(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o081_beanContext_notBeanClassesReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanClassesReplace(Object...values) {
-//
-//	@Test
-//	public void o082_beanContext_notBeanPackagesObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackages(Object...values) {
-//
-//	@Test
-//	public void o083_beanContext_notBeanPackagesStrings() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackages(String...values) {
-//
-//	@Test
-//	public void o084_beanContext_notBeanPackagesRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackagesRemove(Object...values) {
-//
-//	@Test
-//	public void o085_beanContext_notBeanPackagesRemoveStrings() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackagesRemove(String...values) {
-//
-//	@Test
-//	public void o086_beanContext_notBeanPackagesReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackagesReplace(Object...values) {
-//
-//	@Test
-//	public void o087_beanContext_notBeanPackagesReplaceStrings() throws Exception { fail(); }
-////	public RestClientBuilder notBeanPackagesReplace(String...values) {
-//
-//	@Test
-//	public void o088_beanContext_pojoSwapsClasses() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwaps(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o089_beanContext_pojoSwapsObjects() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwaps(Object...values) {
-//
-//	@Test
-//	public void o090_beanContext_pojoSwapsRemoveClasses() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwapsRemove(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o091_beanContext_pojoSwapsRemoveObjects() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwapsRemove(Object...values) {
-//
-//	@Test
-//	public void o092_beanContext_pojoSwapsReplaceClasses() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwapsReplace(java.lang.Class<?>...values) {
-//
-//	@Test
-//	public void o093_beanContextpojoSwapsReplaceObjects() throws Exception { fail(); }
-////	public RestClientBuilder pojoSwapsReplace(Object...values) {
-//
-//	@Test
-//	public void o094_beanContext_propertyNamer() throws Exception { fail(); }
-////	public RestClientBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-//
-//	@Test
-//	public void o095_beanContext_sortProperties() throws Exception { fail(); }
-////	public RestClientBuilder sortProperties() {
-//
-//	@Test
-//	public void o096_beanContext_sortPropertiesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder sortProperties(boolean value) {
-//
-//	@Test
-//	public void o097_beanContext_timeZone() throws Exception { fail(); }
-////	public RestClientBuilder timeZone(TimeZone value) {
-//
-//	@Test
-//	public void o098_beanContext_useEnumNames() throws Exception { fail(); }
-////	public RestClientBuilder useEnumNames() {
-//
-//	@Test
-//	public void o099_beanContext_useEnumNamesBoolean() throws Exception { fail(); }
-////	public RestClientBuilder useEnumNames(boolean value) {
-//
-//	@Test
-//	public void o100_beanContext_useInterfaceProxies() throws Exception { fail(); }
-////	public RestClientBuilder useInterfaceProxies(boolean value) {
-//
-//	@Test
-//	public void o101_beanContext_useJavaBeanIntrospector() throws Exception { fail(); }
-////	public RestClientBuilder useJavaBeanIntrospector() {
-//
-//	@Test
-//	public void o102_beanContext_useJavaBeanIntrospectorBoolean() throws Exception { fail(); }
-////	public RestClientBuilder useJavaBeanIntrospector(boolean value) {
+	@Test
+	public void o029_beanContext_bpro() throws Exception {
+		RestResponse rr = null;
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpro(OMap.of("O25", "f2"))
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpro(O25.class, "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpro("O25", "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getHeader("X").assertValue("f1=1,f2=2")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+	}
+
+	@Test
+	public void o030_beanContext_bpwo() throws Exception {
+		RestResponse rr = null;
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpwo(OMap.of("O25", "f2"))
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpwo(O25.class, "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+
+		rr = MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpwo("O25", "f2")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f1:1}")
+			.getHeader("X").assertValue("f1=1")
+		;
+		assertEquals("1/0", rr.getBody().as(O25.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+	}
+
+	@Test
+	public void o031_beanContext_bpx() throws Exception {
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpx(OMap.of("O25", "f1"))
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpx(O25.class, "f1")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpx("O25", "f1")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+		MockRestClient
+			.create(O2R.class)
+			.simpleJson()
+			.bpx(O25.class.getName(), "f1")
+			.build()
+			.post("/test", new O25().init())
+			.header("X", new O25().init())
+			.run()
+			.getBody().cache().assertValue("{f2:2}")
+			.getHeader("X").assertValue("f2=2")
+		;
+	}
+
+	public static class O32 {
+		public Object f;
+	}
+
+	@Test
+	public void o032_beanContext_debug() throws Exception {
+		O32 x = new O32();
+		x.f = x;
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.debug()
+				.build()
+				.post("/echo", x)
+				.run()
+				.getBody().assertContains("HTTP GET /echo","Foo: bar");
+			;
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(SerializeException.class).getMessage().startsWith("Recursion occurred"));
+		}
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName="foo")
+	public static class O33a {
+		public String foo;
+
+		public O33a init() {
+			foo = "1";
+			return this;
+		}
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName="bar")
+	public static class O33b {
+		public String foo;
+
+		public O33b init() {
+			foo = "2";
+			return this;
+		}
+	}
+
+	public static class O33c {
+		public Object foo;
+
+		public O33c init() {
+			foo = new O33a().init();
+			return this;
+		}
+	}
+
+	@Test
+	public void o033_beanContext_dictionary() throws Exception {
+		Object o = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.dictionary(O33a.class,O33b.class)
+			.addRootType()
+			.addBeanTypes()
+			.build()
+			.post("/echoBody", new O33a().init())
+			.run()
+			.getBody().cache().assertContains("{_type:'foo',foo:'1'}")
+			.getBody().as(Object.class);
+		;
+		assertTrue(o instanceof O33a);
+
+		OMap m = OMap.of("x", new O33a().init(), "y", new O33b().init());
+		m = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.dictionary(O33a.class,O33b.class)
+			.addRootType()
+			.addBeanTypes()
+			.build()
+			.post("/echoBody", m)
+			.run()
+			.getBody().cache().assertValue("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
+			.getBody().as(OMap.class);
+		;
+		assertTrue(m.get("x") instanceof O33a);
+		assertTrue(m.get("y") instanceof O33b);
+
+		O33c o33c = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.dictionaryOn(O33c.class,O33a.class,O33b.class)
+			.addRootType()
+			.addBeanTypes()
+			.build()
+			.post("/echoBody", new O33c().init())
+			.run()
+			.getBody().cache().assertValue("{foo:{_type:'foo',foo:'1'}}")
+			.getBody().as(O33c.class);
+		;
+		assertTrue(o33c.foo instanceof O33a);
+	}
+
+
+
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient dontIgnorePropertiesWithoutSetters() {
+//		super.dontIgnorePropertiesWithoutSetters();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient dontIgnoreTransientFields() {
+//		super.dontIgnoreTransientFields();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient dontIgnoreUnknownNullBeanProperties() {
+//		super.dontIgnoreUnknownNullBeanProperties();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient dontUseInterfaceProxies() {
+//		super.dontUseInterfaceProxies();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public <T> MockRestClient example(Class<T> pojoClass, T o) {
+//		super.example(pojoClass, o);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public <T> MockRestClient exampleJson(Class<T> pojoClass, String json) {
+//		super.exampleJson(pojoClass, json);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient fluentSetters() {
+//		super.fluentSetters();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient fluentSetters(Class<?> on) {
+//		super.fluentSetters(on);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient ignoreInvocationExceptionsOnGetters() {
+//		super.ignoreInvocationExceptionsOnGetters();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient ignoreInvocationExceptionsOnSetters() {
+//		super.ignoreInvocationExceptionsOnSetters();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient ignoreUnknownBeanProperties() {
+//		super.ignoreUnknownBeanProperties();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient implClass(Class<?> interfaceClass, Class<?> implClass) {
+//		super.implClass(interfaceClass, implClass);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient implClasses(Map<String,Class<?>> values) {
+//		super.implClasses(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient interfaceClass(Class<?> on, Class<?> value) {
+//		super.interfaceClass(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient interfaces(java.lang.Class<?>...value) {
+//		super.interfaces(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient locale(Locale value) {
+//		super.locale(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient mediaType(MediaType value) {
+//		super.mediaType(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanClasses(Object...values) {
+//		super.notBeanClasses(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanClassesRemove(Object...values) {
+//		super.notBeanClassesRemove(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanClassesReplace(Object...values) {
+//		super.notBeanClassesReplace(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanPackages(Object...values) {
+//		super.notBeanPackages(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanPackagesRemove(Object...values) {
+//		super.notBeanPackagesRemove(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient notBeanPackagesReplace(Object...values) {
+//		super.notBeanPackagesReplace(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+//		super.propertyFilter(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+//		super.propertyNamer(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+//		super.propertyNamer(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient sortProperties() {
+//		super.sortProperties();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient sortProperties(java.lang.Class<?>...on) {
+//		super.sortProperties(on);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient stopClass(Class<?> on, Class<?> value) {
+//		super.stopClass(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient swaps(Object...values) {
+//		super.swaps(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient swapsRemove(Object...values) {
+//		super.swapsRemove(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient swapsReplace(Object...values) {
+//		super.swapsReplace(values);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient timeZone(TimeZone value) {
+//		super.timeZone(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient typeName(Class<?> on, String value) {
+//		super.typeName(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient typePropertyName(String value) {
+//		super.typePropertyName(value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient typePropertyName(Class<?> on, String value) {
+//		super.typePropertyName(on, value);
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient useEnumNames() {
+//		super.useEnumNames();
+//		return this;
+//	}
+//
+//	@Test
+//	public void o0_beanContext_() throws Exception {
+//	}
+//	@Override /* GENERATED - BeanContextBuilder */
+//	public MockRestClient useJavaBeanIntrospector() {
+//		super.useJavaBeanIntrospector();
+//		return this;
+//	}
 
 
 //	//-----------------------------------------------------------------------------------------------------------------

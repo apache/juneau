@@ -754,9 +754,9 @@ public class BeanConfigTest {
 		p2.notBeanPackages("baz");
 		assertSameCache(p1, p2);
 
-		p1.notBeanPackagesRemove("bar");
+		p1.set(BeanContext.BEAN_notBeanPackages_remove, "bar");
 		assertDifferentCache(p1, p2);
-		p2.notBeanPackagesRemove("bar");
+		p2.set(BeanContext.BEAN_notBeanPackages_remove, "bar");
 		assertSameCache(p1, p2);
 
 		p1.swaps(DummyPojoSwapA.class);

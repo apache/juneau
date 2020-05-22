@@ -418,7 +418,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictonary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -432,7 +432,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryReplace(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -446,7 +446,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -460,7 +460,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionaryRemove(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -1750,6 +1750,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.addBeanTypes()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -1757,6 +1758,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
+	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -1853,44 +1855,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder dictionaryOn(Class<?> on, Class<?>...values) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).dictionary(values));
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
-	 *
-	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder dictionaryReplace(Object...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
-	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder dictionaryRemove(Object...values) {
-		return removeFrom(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -2883,52 +2847,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
-	 *
-	 * <p>
-	 * Not-bean classes are converted to <c>Strings</c> during serialization even if they appear to be
-	 * bean-like.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new value for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanClassesReplace(Object...values) {
-		return set(BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanClassesRemove(Object...values) {
-		return removeFrom(BEAN_notBeanClasses, values);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <p>
@@ -2977,48 +2895,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanPackages(Object...values) {
 		return addTo(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<br>Possible values are:
-	 * 	<ul>
-	 * 		<li>Strings.
-	 * 		<li>Arrays and collections of strings.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanPackagesReplace(Object...values) {
-		return set(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<br>Possible values are:
-	 * 	<ul>
-	 * 		<li>Strings.
-	 * 		<li>Arrays and collections of strings.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder notBeanPackagesRemove(Object...values) {
-		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -3458,50 +3334,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder swaps(Object...values) {
 		return appendTo(BEAN_swaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Java object swaps.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder swapsReplace(Object...values) {
-		return set(BEAN_swaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Java object swaps.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Any subclass of {@link PojoSwap}.
-	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder swapsRemove(Object...values) {
-		return removeFrom(BEAN_swaps, values);
 	}
 
 	/**

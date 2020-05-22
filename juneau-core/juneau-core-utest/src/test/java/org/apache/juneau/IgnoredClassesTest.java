@@ -44,15 +44,15 @@ public class IgnoredClassesTest {
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.notBeanPackagesRemove("org.apache.juneau");
+		s.set(BeanContext.BEAN_notBeanPackages_remove, "org.apache.juneau");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.notBeanPackagesRemove("org.apache.juneau.*");
+		s.set(BeanContext.BEAN_notBeanPackages_remove, "org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.notBeanPackagesRemove("org.apache.juneau.*");
+		s.set(BeanContext.BEAN_notBeanPackages_remove, "org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));
