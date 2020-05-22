@@ -109,6 +109,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_ignoreUnknownNullBeanProperties, bool(a.ignoreUnknownNullBeanProperties()));
 		for (CC e : a.implClasses())
 			psb.putTo(BEAN_implClasses, e.k().getName(), e.v());
+		for (Class<?> c : a.interfaces())
+			psb.prependTo(BEAN_annotations, new BeanAnnotation(c).interfaceClass(c));
 		if (! a.locale().isEmpty())
 			psb.set(BEAN_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())

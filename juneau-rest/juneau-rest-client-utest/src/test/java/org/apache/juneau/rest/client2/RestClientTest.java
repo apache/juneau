@@ -48,7 +48,6 @@ import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -2694,17 +2693,11 @@ public class RestClientTest {
 		}
 	}
 
-	public static class O10Filter extends org.apache.juneau.transform.BeanFilterBuilder<O10> {
-		public O10Filter() {
-			bpi("f1");
-		}
-	}
-
 	@Test
 	public void o010_beanContext_beanFilters() throws Exception {
 		RestResponse rr = MockRestClient
 			.create(O2R.class)
-			.beanFilters(O10Filter.class)
+			.bpi(O10.class, "f1")
 			.simpleJson()
 			.build()
 			.post("/test", new O10().init())
@@ -2718,7 +2711,7 @@ public class RestClientTest {
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.beanFilters(new O10Filter())
+			.bpi(O10.class, "f1")
 			.simpleJson()
 			.build()
 			.post("/test", new O10().init())
@@ -2732,7 +2725,7 @@ public class RestClientTest {
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.beanFilters(BeanFilter.create(O10.class).bpi("f1").build())
+			.bpi(O10.class, "f1")
 			.simpleJson()
 			.build()
 			.post("/test", new O10().init())
@@ -2746,7 +2739,7 @@ public class RestClientTest {
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.beanFilters(BeanFilter.create(O10.class).bpi("f1"))
+			.bpi(O10.class, "f1")
 			.simpleJson()
 			.build()
 			.post("/test", new O10().init())
@@ -2761,7 +2754,7 @@ public class RestClientTest {
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.beanFilters(O10I.class)
+			.interfaces(O10I.class)
 			.simpleJson()
 			.build()
 			.post("/test", new O10().init())

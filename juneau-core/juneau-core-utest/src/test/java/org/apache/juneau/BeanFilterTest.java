@@ -152,7 +152,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassFilter() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().beanFilters(C1.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().interfaces(C1.class).build();
 
 		C1 c1 = new C2();
 		String r = s.serialize(c1);
@@ -177,7 +177,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassFilter2() throws Exception {
-		JsonSerializer s = JsonSerializer.create().ssq().beanFilters(D1.class).build();
+		JsonSerializer s = JsonSerializer.create().ssq().interfaces(D1.class).build();
 
 		D1 d1 = new D2();
 		String r = s.serialize(d1);

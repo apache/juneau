@@ -233,10 +233,6 @@ public @interface Bean {
 	 * <p>
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * or can be set individually on the child classes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
 	 */
 	Class<?> interfaceClass() default Object.class;
 

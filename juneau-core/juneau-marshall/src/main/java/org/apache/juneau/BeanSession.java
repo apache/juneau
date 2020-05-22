@@ -1239,7 +1239,6 @@ public class BeanSession extends Session {
 	 * Configuration property:  Bean filters.
 	 *
 	 *
-	 * @see BeanContext#BEAN_beanFilters
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */

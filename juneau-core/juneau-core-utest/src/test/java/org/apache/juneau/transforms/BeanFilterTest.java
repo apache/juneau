@@ -29,13 +29,13 @@ public class BeanFilterTest {
 		BeanSession session;
 		BeanMap<A3> bm;
 
-		session = BeanContext.create().beanFilters(A1.class).build().createSession();
+		session = BeanContext.create().interfaces(A1.class).build().createSession();
 		bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		session = BeanContext.create().beanFilters(A2.class).build().createSession();
+		session = BeanContext.create().interfaces(A2.class).build().createSession();
 		bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));
@@ -72,13 +72,13 @@ public class BeanFilterTest {
 		BeanSession session;
 		BeanMap<Test2> bm;
 
-		session = BeanContext.create().beanFilters(B1.class).build().createSession();
+		session = BeanContext.create().interfaces(B1.class).build().createSession();
 		bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		session = BeanContext.create().beanFilters(B2.class).build().createSession();
+		session = BeanContext.create().interfaces(B2.class).build().createSession();
 		bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));

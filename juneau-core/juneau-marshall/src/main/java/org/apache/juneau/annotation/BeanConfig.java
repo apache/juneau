@@ -249,7 +249,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #dictionary()}.
+	 * 	<b>Deprecated</b> - Use {@link #dictionary()}.
 	 * </div>
 	 */
 	@Deprecated
@@ -263,7 +263,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #dictionary_replace()}.
+	 * 	<b>Deprecated</b> - Use {@link #dictionary_replace()}.
 	 * </div>
 	 */
 	@Deprecated
@@ -277,7 +277,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #dictionary_remove()}.
+	 * 	<b>Deprecated</b> - Use {@link #dictionary_remove()}.
 	 * </div>
 	 */
 	@Deprecated
@@ -339,25 +339,32 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
 	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
+	 * </div>
 	 */
+	@Deprecated
 	Class<?>[] beanFilters() default {};
 
 	/**
 	 * Configuration property:  Add to bean filters.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
+	 * </div>
 	 */
+	@Deprecated
 	Class<?>[] beanFilters_replace() default {};
 
 	/**
 	 * Configuration property:  Remove from bean filters.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters_remove}
-	 * </ul>
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
+	 * </div>
 	 */
+	@Deprecated
 	Class<?>[] beanFilters_remove() default {};
 
 	/**
@@ -628,7 +635,12 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
 	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpi()}.
+	 * </div>
 	 */
+	@Deprecated
 	CS[] bpiMap() default {};
 
 	/**
@@ -722,7 +734,12 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
 	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpx()}.
+	 * </div>
 	 */
+	@Deprecated
 	CS[] bpxMap() default {};
 
 	/**
@@ -801,7 +818,12 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
 	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpi()}.
+	 * </div>
 	 */
+	@Deprecated
 	CS[] bproMap() default {};
 
 	/**
@@ -880,7 +902,12 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
 	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
 	 * </ul>
+	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpwo()}.
+	 * </div>
 	 */
+	@Deprecated
 	CS[] bpwoMap() default {};
 
 	/**
@@ -1250,6 +1277,42 @@ public @interface BeanConfig {
 	 * </div>
 	 */
 	@Deprecated CS[] includeProperties() default {};
+
+	/**
+	 * Identifies a set of interfaces.
+	 *
+	 * <p>
+	 * When specified, only the list of properties defined on the interface class will be used during serialization
+	 * of implementation classes.  Additional properties on subclasses will be ignored.
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parent class or interface</jc>
+	 * 	<jk>public abstract class</jk> A {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Sub class</jc>
+	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>bar</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Apply it to a config</jc>
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		interfaces={
+	 * 			A.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
+	 * individually on the child classes.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+	 * </ul>
+	 */
+	Class<?>[] interfaces() default {};
 
 	/**
 	 * Configuration property:  Locale.

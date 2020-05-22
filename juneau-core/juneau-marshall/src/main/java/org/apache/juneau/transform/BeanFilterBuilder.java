@@ -203,7 +203,6 @@ public class BeanFilterBuilder<T> {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Bean#interfaceClass()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 *
 	 * @param value The new value for this setting.

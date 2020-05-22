@@ -766,16 +766,6 @@ public class BeanConfigTest {
 		p1.swaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
 		p2.swaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
-
-		p1 = JsonParser.create();
-		p2 = JsonParser.create();
-		p1.beanFilters(DummyBeanFilterA.class);
-		assertDifferentCache(p1, p2);
-		p2.beanFilters(DummyBeanFilterA.class);
-		assertSameCache(p1, p2);
-		p1.beanFilters(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
-		p2.beanFilters(DummyBeanFilterC.class,DummyBeanFilterB.class);
-		assertDifferentCache(p1, p2);
 	}
 
 	public static class DummyPojoSwapA extends MapSwap<A> {}

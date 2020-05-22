@@ -663,123 +663,31 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Configuration property:  Bean filters.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanFilters BEAN_beanFilters}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;Object&gt;</c>
-	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFilters()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersReplace(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFiltersRemove(Object...)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * This is an older programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
-	 * the bean classes.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>Any subclass or instance of {@link BeanFilterBuilder}.
-	 * 		<br>These must have a public no-arg constructor.
-	 * 	<li>Any instance of {@link BeanFilter}.
-	 * 	<li>Any bean interfaces.
-	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 		All other bean properties will be ignored.
-	 * 	<li>Any array or collection of the objects above.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with multiple properties.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String
-	 * 			<jf>foo</jf> = <js>"foo"</js>,
-	 * 			<jf>bar</jf> = <js>"bar"</js>,
-	 * 			<jf>baz</jf> = <js>"baz"</js>;  <jc>// Ignore this field.</jc>
-	 * 	}
-	 *
-	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
-	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 *
-	 * 		<jc>// Must provide a no-arg constructor!</jc>
-	 * 		<jk>public</jk> MyBeanFilter() {
-	 * 			bpi(<js>"foo,bar"</js>);  <jc>// The properties we want exposed (bean property include).</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Associate our bean filter with a serializer.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_beanFilters</jsf>, MyBeanFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same but pass in constructed filter.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBeanFilter.<jk>class</jk>).bpi(<js>"foo,bar"</js>).build())
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * An alternate approach for specifying bean filters is by using concrete dynamically applied annotations:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a concrete @Bean annotation.</jc>
-	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"MyBean"</js>).bpi(<js>"foo,bar"</js>);
-	 *
-	 * 	<jc>// Apply it to a serializer.</jc>
-	 * 	WriterSerializer ws = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.annotations(a)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on bean classes for equivalent functionality.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
-	 * 	<li class='jf'>{@link #BEAN_annotations}
-	 * </ul>
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@Deprecated
 	public static final String BEAN_beanFilters = PREFIX + ".beanFilters.lo";
 
 	/**
 	 * Configuration property:  Add to bean filters.
+	 * 
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@Deprecated
 	public static final String BEAN_beanFilters_add = PREFIX + ".beanFilters.lo/add";
 
 	/**
 	 * Configuration property:  Remove from bean filters.
+	 * 
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@Deprecated
 	public static final String BEAN_beanFilters_remove = PREFIX + ".beanFilters.lo/remove";
 
 	/**

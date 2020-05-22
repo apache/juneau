@@ -28,7 +28,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 import org.junit.*;
 
 /**
@@ -298,8 +297,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanFilters(CFilter.class).build();
-		Parser p = getParser().builder().beanFilters(CFilter.class).build();
+		Serializer s = getSerializer().builder().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
+		Parser p = getParser().builder().dictionaryOn(C.class, CFilterDictionaryMap.class).build();
 
 		C1 c1 = C1.create();
 		Object r = s.serialize(c1);
@@ -351,12 +350,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			c.f0 = "f0";
 			c.f3 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2001-01-01T12:34:56.789Z");
 			return c;
-		}
-	}
-
-	public static class CFilter extends BeanFilterBuilder<C> {
-		public CFilter() {
-			dictionary(CFilterDictionaryMap.class);
 		}
 	}
 
@@ -490,14 +483,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().beanFilters(D2Filter.class).build();
+		JsonSerializer js = JsonSerializer.create().ssq().bpi(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanFilters(D2Filter.class).build();
-		Parser p = getParser().builder().beanFilters(D2Filter.class).build();
+		Serializer s = getSerializer().builder().bpi(D2.class, "f3,f2").build();
+		Parser p = getParser().builder().bpi(D2.class, "f3,f2").build();
 
 		D2 d = new D2().init();
 		Object r = s.serialize(d);
@@ -513,11 +506,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			f2 = "f2";
 			f3 = "f3";
 			return this;
-		}
-	}
-	public static class D2Filter extends BeanFilterBuilder<D2> {
-		public D2Filter() {
-			bpi("f3,f2");
 		}
 	}
 
@@ -559,8 +547,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().beanFilters(E2Filter.class).build();
-		Parser p = getParser().builder().beanFilters(E2Filter.class).build();
+		Serializer s = getSerializer().builder().bpx(E2.class, "f2").build();
+		Parser p = getParser().builder().bpx(E2.class, "f2").build();
 
 		E2 e = new E2().init();
 		Object r = s.serialize(e);
@@ -575,11 +563,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			f2 = "f2";
 			f3 = "f3";
 			return this;
-		}
-	}
-	public static class E2Filter extends BeanFilterBuilder<E2> {
-		public E2Filter() {
-			bpx("f2");
 		}
 	}
 
@@ -630,8 +613,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return;
 
 		// --- BeanFilter defined on parent class ---
-		s.beanFilters(FB1Filter.class);
-		p.beanFilters(FB1Filter.class);
+		s.interfaces(FB1.class);
+		p.interfaces(FB1.class);
 
 		t = new FB2().init();
 		r = s.build().serialize(t);
@@ -639,8 +622,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObjectEquals("{f1:'f1'}", t);
 
 		// --- BeanFilter defined on child class class ---
-		s.beanFilters(FB2Filter.class);
-		p.beanFilters(FB2Filter.class);
+		s.interfaces(FB1.class);
+		p.interfaces(FB1.class);
 
 		t = new FB2().init();
 		r = s.build().serialize(t);
@@ -648,8 +631,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObjectEquals("{f1:'f1'}", t);
 
 		// --- BeanFilter defined as plain class ---
-		s.beanFilters(FB1.class);
-		p.beanFilters(FB1.class);
+		s.interfaces(FB1.class);
+		p.interfaces(FB1.class);
 
 		t = new FB2().init();
 		r = s.build().serialize(t);
@@ -669,8 +652,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class FB1Filter extends InterfaceBeanFilterBuilder<FB1> {}
-	public static class FB2Filter extends InterfaceBeanFilterBuilder<FB1> {}
 
 	//====================================================================================================
 	// testMemberClass

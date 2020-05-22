@@ -536,129 +536,27 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
 	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
-	 * the bean classes.
-	 *
-	 * <p>
-	 * Values can consist of any of the following types:
-	 * <ul class='spaced-list'>
-	 * 	<li>Any subclass or instance of {@link BeanFilterBuilder}.
-	 * 		<br>These must have a public no-arg constructor.
-	 * 	<li>Any instance of {@link BeanFilter}.
-	 * 	<li>Any bean interfaces.
-	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 		All other bean properties will be ignored.
-	 * 	<li>Any array or collection of the objects above.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with multiple properties.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String
-	 * 			<jf>foo</jf> = <js>"foo"</js>,
-	 * 			<jf>bar</jf> = <js>"bar"</js>,
-	 * 			<jf>baz</jf> = <js>"baz"</js>;  <jc>// Ignore this field.</jc>
-	 * 	}
-	 *
-	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
-	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 *
-	 * 		<jc>// Must provide a no-arg constructor!</jc>
-	 * 		<jk>public</jk> MyBeanFilter() {
-	 * 			bpi(<js>"foo,bar"</js>);  <jc>// The properties we want exposed (bean property include).</jc>
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Associate our bean filter with a serializer.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(MyBeanFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_beanFilters</jsf>, MyBeanFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same but pass in constructed filter.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBeanFilter.<jk>class</jk>).bpi(<js>"foo,bar"</js>).build())
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * An alternate approach for specifying bean filters is by using concrete dynamically applied annotations:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a concrete @Bean annotation.</jc>
-	 * 	BeanAnnotation a = <jk>new</jk> BeanAnnotation(<js>"MyBean"</js>).bpi(<js>"foo,bar"</js>);
-	 *
-	 * 	<jc>// Apply it to a serializer.</jc>
-	 * 	WriterSerializer ws = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.annotations(a)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo","bar":"bar"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on bean classes for equivalent functionality.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_annotations}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanContextBuilder beanFilters(Object...values) {
 		return prependTo(BEAN_beanFilters, values);
 	}
 
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
-	 *
-	 * <p>
-	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The new values for this property.
-	 * 	<p>
-	 * 	Values can consist of any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
-	 * 			<br>These must have a public no-arg constructor when a class.
-	 * 		<li>Any instance of {@link BeanFilter}.
-	 * 		<li>Any bean interfaces.
-	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 			All other bean properties will be ignored.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * 
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanContextBuilder beanFiltersReplace(Object...values) {
 		return set(BEAN_beanFilters, values);
 	}
@@ -666,30 +564,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
 	 *
-	 * <p>
-	 * Removes from the list of classes that make up the bean filters in this bean context.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to remove from this property.
-	 * 	<p>
-	 * 	Values can consist of any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>Any subclass or instance of {@link BeanFilterBuilder}.
-	 * 			<br>These must have a public no-arg constructor when a class.
-	 * 		<li>Any instance of {@link BeanFilter}.
-	 * 		<li>Any bean interfaces.
-	 * 			<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 			<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 			All other bean properties will be ignored.
-	 * 		<li>Any array or collection of the objects above.
-	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@ConfigurationProperty
+	@Deprecated
 	public BeanContextBuilder beanFiltersRemove(Object...values) {
 		return removeFrom(BEAN_beanFilters, values);
 	}
@@ -2781,8 +2662,56 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
+	@ConfigurationProperty
 	public BeanContextBuilder interfaceClass(Class<?> on, Class<?> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).interfaceClass(value));
+	}
+
+	/**
+	 * Identifies a set of interfaces.
+	 *
+	 * <p>
+	 * When specified, only the list of properties defined on the interface class will be used during serialization
+	 * of implementation classes.  Additional properties on subclasses will be ignored.
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parent class or interface</jc>
+	 * 	<jk>public abstract class</jk> A {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Sub class</jc>
+	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>bar</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.interfaces(A.class)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces "{"foo":"f0"}"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> A1());
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
+	 * individually on the child classes.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder interfaces(Class<?>...value) {
+		for (Class<?> v : value)
+			prependTo(BEAN_annotations, new BeanAnnotation(v).interfaceClass(v));
+		return this;
 	}
 
 	/**
