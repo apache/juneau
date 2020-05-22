@@ -502,7 +502,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder sortProperties(Class<?> on) {
+	public InputStreamParserBuilder sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}

@@ -584,7 +584,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder sortProperties(Class<?> on) {
+	public OpenApiSerializerBuilder sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}

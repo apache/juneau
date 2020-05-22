@@ -634,7 +634,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder sortProperties(Class<?> on) {
+	public XmlParserBuilder sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}

@@ -458,7 +458,7 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder sortProperties(Class<?> on) {
+	public HtmlStrippedDocSerializerBuilder sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}

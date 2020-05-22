@@ -672,7 +672,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 	/**
 	 * Configuration property:  Add to bean filters.
-	 * 
+	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
 	 * </div>
@@ -682,7 +682,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 	/**
 	 * Configuration property:  Remove from bean filters.
-	 * 
+	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
 	 * </div>
@@ -982,7 +982,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beansRequireSettersForGetter()
+	 * 		.beansRequireSettersForGetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -1737,12 +1737,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jc>// A bean interface.</jc>
 	 * 	<jk>public interface</jk> MyBean {
 	 * 		...
 	 * 	}
 	 *
-	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jc>// A bean implementation.</jc>
 	 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 	 * 		...
 	 * 	}
@@ -2499,7 +2499,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * When enabled, then interfaces will be instantiated as proxy classes through the use of an
+	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
@@ -2654,7 +2654,7 @@ public class BeanContext extends Context implements MetaProvider {
 	private final MediaType mediaType;
 	private final Map<String,Set<String>> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
-	private final String beanTypePropertyName;
+	private final String typePropertyName;
 	private final int beanHashCode;
 	private final ReflectionMap<Annotation> annotations;
 
@@ -2713,7 +2713,7 @@ public class BeanContext extends Context implements MetaProvider {
 		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
 		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
 		fluentSetters = getBooleanProperty(BEAN_fluentSetters, false);
-		beanTypePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
+		typePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
 		debug = getBooleanProperty(BEAN_debug, false);
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
@@ -4102,7 +4102,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
 	protected final String getBeanTypePropertyName() {
-		return beanTypePropertyName;
+		return typePropertyName;
 	}
 
 	/**

@@ -536,7 +536,7 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient sortProperties(Class<?> on) {
+	public MockRestClient sortProperties(java.lang.Class<?>...on) {
 		super.sortProperties(on);
 		return this;
 	}

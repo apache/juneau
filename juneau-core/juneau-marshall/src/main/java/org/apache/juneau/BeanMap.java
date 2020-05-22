@@ -76,7 +76,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	protected BeanMeta<T> meta;
 
 	private final BeanSession session;
-	private final String beanTypePropertyName;
+	private final String typePropertyName;
 
 	/**
 	 * Convenience method for wrapping a bean inside a {@link BeanMap}.
@@ -102,7 +102,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.meta = meta;
 		if (meta.constructorArgs.length > 0)
 			propertyCache = new TreeMap<>();
-		this.beanTypePropertyName = session.getBeanTypePropertyName(meta.classMeta);
+		this.typePropertyName = session.getBeanTypePropertyName(meta.classMeta);
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
 				return null;
 
-			if (property.equals(beanTypePropertyName))
+			if (property.equals(typePropertyName))
 				return null;
 
 			p = getPropertyMeta("*");

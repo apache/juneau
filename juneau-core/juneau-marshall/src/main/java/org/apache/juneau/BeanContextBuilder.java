@@ -549,7 +549,7 @@ public class BeanContextBuilder extends ContextBuilder {
 
 	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean filters.
-	 * 
+	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
 	 * </div>
@@ -857,7 +857,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beansRequireSettersForGetter()
+	 * 		.beansRequireSettersForGetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -992,12 +992,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpi(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpi(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
-	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}).
 	 * </ul>
 	 *
 	 * @param beanClass The bean class.
@@ -1053,12 +1053,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpi(value.toString()));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).bpi(value.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
-	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}).
 	 * </ul>
 	 *
 	 * @param values
@@ -1118,12 +1118,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpi(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).bpi(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link Bean#bpi()} - On an annotation on the bean class itself.
-	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}.
+	 * 	<li class='jm'>{@link BeanConfig#bpi()} - On a bean config annotation (see {@link #annotations(Annotation...)}).
 	 * </ul>
 	 *
 	 * @param beanClassName
@@ -1173,7 +1173,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpx(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpx(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1226,7 +1226,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpx(value.toString()));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).bpx(value.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1283,7 +1283,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpx(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).bpx(properties));
 	 * </p>
 	 *
 	 * @param beanClassName
@@ -1323,7 +1323,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpro(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
@@ -1337,7 +1336,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpro(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName()).bpro(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1380,7 +1379,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpro(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
@@ -1394,7 +1392,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpro(value.toString()));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).bpro(value.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1441,7 +1439,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with read-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpro(<js>"MyBean"</js>, <js>"bar,baz"</js>)
@@ -1455,7 +1452,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpro(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpro(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1500,7 +1497,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpwo(MyBean.<jk>class</jk>, <js>"bar,baz"</js>)
@@ -1513,7 +1509,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpwo(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClass.getName).bpwo(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1556,7 +1552,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpwo(OMap.<jsm>of</jsm>(<js>"MyBean"</js>, <js>"bar,baz"</js>))
@@ -1569,7 +1564,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code for each entry:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(key).bpwo(value.toString()));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(key).bpwo(value.toString()));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -1616,7 +1611,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	String json = s.serialize(<jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Create a parser with write-only property settings.</jc>
-	 * 	// to read-only.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.bpwo(<js>"MyBean"</js>, <js>"bar,baz"</js>)
@@ -1629,7 +1623,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * This method is functionally equivalent to the following code:
 	 * <p class='bcode w800'>
-	 * 		builder.anntations(<jk>new</jk> BeanAnnotation(beanClassName).bpwo(properties));
+	 * 	builder.annotations(<jk>new</jk> BeanAnnotation(beanClassName).bpwo(properties));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2495,12 +2489,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jc>// A bean interface.</jc>
 	 * 	<jk>public interface</jk> MyBean {
 	 * 		...
 	 * 	}
 	 *
-	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jc>// A bean implementation.</jc>
 	 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 	 * 		...
 	 * 	}
@@ -2557,13 +2551,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.implClass(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
+	 * 		.implClasses(OMap.<jsm>of</jsm>(MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
+	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, OMap.<jsm>of</jsm>(MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Instantiates a MyBeanImpl,</jc>
@@ -2642,10 +2636,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.interfaceClass(A1.class, A.class)
+	 * 		.interfaceClass(A1.<jk>class</jk>, A.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces "{"foo":"f0"}"</jc>
+	 * 	<jc>// Produces "{"foo":"foo"}"</jc>
 	 * 	String json = s.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
@@ -2688,10 +2682,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.interfaces(A.class)
+	 * 		.interfaces(A.<jk>class</jk>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces "{"foo":"f0"}"</jc>
+	 * 	<jc>// Produces "{"foo":"foo"}"</jc>
 	 * 	String json = s.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
@@ -2938,7 +2932,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean package exclusions.
 	 *
 	 * <p>
-	 * Used as a convenient way of defining the {@link #BEAN_notBeanClasses} property for entire packages.
+	 * Used as a convenient way of defining the {@link #notBeanClasses(Object...)} property for entire packages.
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 *
 	 * <p>
@@ -3315,12 +3309,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
 	 * </ul>
 	 *
-	 * @param on The bean class to sort properties on.
+	 * @param on The bean classes to sort properties on.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder sortProperties(Class<?> on) {
-		return prependTo(BEAN_annotations, new BeanAnnotation(on).sort(true));
+	public BeanContextBuilder sortProperties(Class<?>...on) {
+		for (Class<?> c : on)
+			prependTo(BEAN_annotations, new BeanAnnotation(c).sort(true));
+		return this;
 	}
 
 	/**
@@ -3344,7 +3340,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		<jk>public int</jk> getP2();
 	 * 	}
 	 *
-	 * 	<ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
 	 * 	<jk>public class</jk> C3 <jk>extends</jk> C2 {
 	 * 		<jk>public int</jk> getP3();
 	 * 	}
@@ -3627,14 +3622,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beanTypePropertyName(<js>"t"</js>)
+	 * 		.typePropertyName(<js>"t"</js>)
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"t"</js>)
+	 * 		.set(<jsf>BEAN_typePropertyName</jsf>, <js>"t"</js>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
 	 * 		.build();
@@ -3684,7 +3679,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beanTypePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
+	 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
@@ -3791,7 +3786,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Use interface proxies.
 	 *
 	 * <p>
-	 * When enabled, then interfaces will be instantiated as proxy classes through the use of an
+	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
