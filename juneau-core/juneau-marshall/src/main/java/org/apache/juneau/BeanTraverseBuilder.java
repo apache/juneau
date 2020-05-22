@@ -377,12 +377,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -491,6 +485,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -541,6 +541,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -623,14 +629,38 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -655,6 +685,24 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

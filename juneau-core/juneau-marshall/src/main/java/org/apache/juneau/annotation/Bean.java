@@ -427,7 +427,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 */
 	String typePropertyName() default "";

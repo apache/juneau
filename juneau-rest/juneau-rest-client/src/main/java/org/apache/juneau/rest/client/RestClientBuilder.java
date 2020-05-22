@@ -2493,12 +2493,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestClientBuilder bpi(Class<?> beanClass, String value) {
 		super.bpi(beanClass, value);
 		return this;

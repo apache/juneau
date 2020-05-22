@@ -409,12 +409,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -523,6 +517,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -573,6 +573,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -655,14 +661,38 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -687,6 +717,24 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

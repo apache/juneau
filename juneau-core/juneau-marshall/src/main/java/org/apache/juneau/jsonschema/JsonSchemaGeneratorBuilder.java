@@ -438,12 +438,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -552,6 +546,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -602,6 +602,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -684,14 +690,38 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -716,6 +746,24 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

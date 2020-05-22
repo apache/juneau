@@ -685,7 +685,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 *
 	 * <p>
-	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
+	 * This is an older programmatic equivalent to the {@link Bean @Bean} annotation.
 	 * It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
@@ -1159,21 +1159,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName BEAN_beanTypePropertyName}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_typePropertyName BEAN_typePropertyName}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.typePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>BeanContext.beanTypePropertyName</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANTYPEPROPERTYNAME</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.typePropertyName</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_TYPEPROPERTYNAME</c>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanTypePropertyName()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanTypePropertyName(String)}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1194,14 +1194,14 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beanTypePropertyName(<js>"t"</js>)
+	 * 		.typePropertyName(<js>"t"</js>)
 	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"t"</js>)
+	 * 		.set(<jsf>BEAN_typePropertyName</jsf>, <js>"t"</js>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
 	 * 		.build();
@@ -1219,7 +1219,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
-	public static final String BEAN_beanTypePropertyName = PREFIX + ".beanTypePropertyName.s";
+	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
 
 	/**
 	 * Configuration property:  Bean property includes.
@@ -2805,7 +2805,7 @@ public class BeanContext extends Context implements MetaProvider {
 		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
 		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
 		fluentSetters = getBooleanProperty(BEAN_fluentSetters, false);
-		beanTypePropertyName = getStringProperty(BEAN_beanTypePropertyName, "_type");
+		beanTypePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
 		debug = getBooleanProperty(BEAN_debug, false);
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
@@ -4189,7 +4189,7 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Bean type property name.
 	 *
-	 * @see #BEAN_beanTypePropertyName
+	 * @see #BEAN_typePropertyName
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */

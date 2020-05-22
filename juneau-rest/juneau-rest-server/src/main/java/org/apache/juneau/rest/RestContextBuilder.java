@@ -2720,12 +2720,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -2834,6 +2828,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -2884,6 +2884,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -2966,14 +2972,38 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -2998,6 +3028,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

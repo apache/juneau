@@ -520,12 +520,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -634,6 +628,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -684,6 +684,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -766,14 +772,38 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -798,6 +828,24 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

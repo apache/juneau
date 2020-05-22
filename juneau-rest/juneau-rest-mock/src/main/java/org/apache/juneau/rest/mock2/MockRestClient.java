@@ -266,12 +266,6 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClient beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -380,6 +374,12 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -430,6 +430,12 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -512,14 +518,38 @@ public class MockRestClient extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -544,6 +574,24 @@ public class MockRestClient extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClient timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClient typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

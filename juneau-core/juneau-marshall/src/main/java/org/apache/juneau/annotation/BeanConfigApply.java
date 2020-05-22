@@ -85,8 +85,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
 		if (! a.beansRequireSomeProperties().isEmpty())
 			psb.set(BEAN_beansRequireSomeProperties, bool(a.beansRequireSomeProperties()));
-		if (! a.beanTypePropertyName().isEmpty())
-			psb.set(BEAN_beanTypePropertyName, string(a.beanTypePropertyName()));
+		if (! a.typePropertyName().isEmpty())
+			psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
 		if (! a.debug().isEmpty())
 			psb.set(BEAN_debug, bool(a.debug()));
 		for (CS e : a.example())

@@ -222,12 +222,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -336,6 +330,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -386,6 +386,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -468,14 +474,38 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -500,6 +530,24 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingParserBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

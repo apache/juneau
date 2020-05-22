@@ -530,10 +530,10 @@ public @interface BeanConfig {
 	 * </ul>
 
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
 	 * </ul>
 	 */
-	String beanTypePropertyName() default "";
+	String typePropertyName() default "";
 
 	/**
 	 * Configuration property:  Bean property includes.

@@ -235,12 +235,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder beansDontRequireSomeProperties() {
 		super.beansDontRequireSomeProperties();
 		return this;
@@ -349,6 +343,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		super.dictionaryOn(on, values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder dictionaryRemove(Object...values) {
 		super.dictionaryRemove(values);
 		return this;
@@ -399,6 +399,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder fluentSetters() {
 		super.fluentSetters();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder fluentSetters(Class<?> on) {
+		super.fluentSetters(on);
 		return this;
 	}
 
@@ -481,14 +487,38 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
+		super.propertyFilter(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
 		super.propertyNamer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+		super.propertyNamer(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder sortProperties() {
 		super.sortProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder sortProperties(Class<?> on) {
+		super.sortProperties(on);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder stopClass(Class<?> on, Class<?> value) {
+		super.stopClass(on, value);
 		return this;
 	}
 
@@ -513,6 +543,24 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder typeName(Class<?> on, String value) {
+		super.typeName(on, value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder typePropertyName(String value) {
+		super.typePropertyName(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OutputStreamSerializerBuilder typePropertyName(Class<?> on, String value) {
+		super.typePropertyName(on, value);
 		return this;
 	}
 

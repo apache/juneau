@@ -121,7 +121,7 @@ public class BeanConfigAnnotationTest {
 		beansRequireSerializable="$X{true}",
 		beansRequireSettersForGetters="$X{true}",
 		beansRequireSomeProperties="$X{true}",
-		beanTypePropertyName="$X{foo}",
+		typePropertyName="$X{foo}",
 		bpiMap=@CS(k=A1.class,v="$X{foo}"),
 		bpxMap=@CS(k=A1.class,v="$X{bar}"),
 		bproMap=@CS(k=A1.class,v="$X{baz}"),

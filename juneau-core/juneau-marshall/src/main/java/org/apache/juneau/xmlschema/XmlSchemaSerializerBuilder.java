@@ -441,12 +441,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlSchemaSerializerBuilder beanTypePropertyName(String value) {
-		super.beanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlSchemaSerializerBuilder bpi(Class<?> beanClass, String value) {
 		super.bpi(beanClass, value);
 		return this;

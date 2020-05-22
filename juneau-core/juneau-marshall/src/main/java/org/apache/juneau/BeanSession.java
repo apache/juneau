@@ -1065,7 +1065,7 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContext#BEAN_beanTypePropertyName}.
+	 * Returns the type property name as defined by {@link BeanContext#BEAN_typePropertyName}.
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
@@ -1321,7 +1321,7 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Bean type property name.
 	 *
-	 * @see BeanContext#BEAN_beanTypePropertyName
+	 * @see BeanContext#BEAN_typePropertyName
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */

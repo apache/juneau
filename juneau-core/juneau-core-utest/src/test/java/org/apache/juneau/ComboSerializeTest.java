@@ -129,7 +129,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// JSON - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.create().ssq().beanTypePropertyName("t").build();
+	WriterSerializer sJsonT = JsonSerializer.create().ssq().typePropertyName("t").build();
 
 	@Test
 	public void a21_serializeJsonT() throws Exception {
@@ -159,7 +159,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// XML - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sXmlT = XmlSerializer.create().sq().beanTypePropertyName("t").build();
+	WriterSerializer sXmlT = XmlSerializer.create().sq().typePropertyName("t").build();
 
 	@Test
 	public void b21_serializeXmlT() throws Exception {
@@ -199,7 +199,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTML - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sHtmlT = HtmlSerializer.create().sq().beanTypePropertyName("t").build();
+	WriterSerializer sHtmlT = HtmlSerializer.create().sq().typePropertyName("t").build();
 
 	@Test
 	public void c21_serializeHtmlT() throws Exception {
@@ -229,7 +229,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UON - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUonT = UonSerializer.create().beanTypePropertyName("t").build();
+	WriterSerializer sUonT = UonSerializer.create().typePropertyName("t").build();
 
 	@Test
 	public void d21_serializeUonT() throws Exception {
@@ -259,7 +259,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// UrlEncoding - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().beanTypePropertyName("t").build();
+	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.create().typePropertyName("t").build();
 
 	@Test
 	public void e21_serializeUrlEncodingT() throws Exception {
@@ -289,7 +289,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// MsgPack - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().beanTypePropertyName("t").build();
+	OutputStreamSerializer sMsgPackT = MsgPackSerializer.create().typePropertyName("t").build();
 
 	@Test
 	public void f21_serializeMsgPackT() throws Exception {
@@ -309,7 +309,7 @@ public abstract class ComboSerializeTest {
 	//-----------------------------------------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfXmlAbbrevSerializer.create().beanTypePropertyName("t").build();
+	WriterSerializer sRdfXmlT = RdfXmlAbbrevSerializer.create().typePropertyName("t").build();
 
 	@Test
 	public void g21_serializeRdfXmlT() throws Exception {

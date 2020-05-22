@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1067,59 +1068,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Bean type property name.
-	 *
-	 * <p>
-	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
-	 * parser knows the data type to reconstruct.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-	 * 	<jk>public class</jk> Foo {...}
-	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-	 * 	<jk>public class</jk> Bar {...}
-	 *
-	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanTypePropertyName(<js>"t"</js>)
-	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"t"</js>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
-	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Parse bean.</jc>
-	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <js>"_type"</js>.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder beanTypePropertyName(String value) {
-		return set(BEAN_beanTypePropertyName, value);
-	}
-
-	/**
 	 * Bean property includes.
 	 *
 	 * <p>
@@ -1988,6 +1936,54 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <p>
+	 * This is identical to {@link #dictionary(Object...)}, but specifies a dictionary within the context of
+	 * a single class as opposed to globally.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+	 * 	<jk>public class</jk> Foo {...}
+	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+	 * 	<jk>public class</jk> Bar {...}
+	 *
+	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dictionaryOn(MyBean.class, Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse bean.</jc>
+	 * 	MyBean b = p.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param on The class that the dictionary values apply to.
+	 * @param values
+	 * 	The new values for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder dictionaryOn(Class<?> on, Class<?>...values) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).dictionary(values));
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
+	 *
+	 * <p>
 	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
 	 *
 	 * <ul class='seealso'>
@@ -2222,6 +2218,46 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder fluentSetters() {
 		return set(BEAN_fluentSetters, true);
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Find fluent setters.
+	 *
+	 * <p>
+	 * Identical to {@link #fluentSetters()} but enables it on a specific class only.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a fluent setter.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> MyBean foo(String value) {...}
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that finds fluent setters.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.fluentSetters(MyBean.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse into bean using fluent setter.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>This method is functionally equivalent to using the {@link Bean#fluentSetters()} annotation.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#fluentSetters()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * </ul>
+	 *
+	 * @param on The class that this applies to.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder fluentSetters(Class<?> on) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).fluentSetters(true));
 	}
 
 	/**
@@ -2705,6 +2741,51 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Identifies a class to be used as the interface class for the specified class and all subclasses.
+	 *
+	 * <p>
+	 * When specified, only the list of properties defined on the interface class will be used during serialization.
+	 * Additional properties on subclasses will be ignored.
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Parent class or interface</jc>
+	 * 	<jk>public abstract class</jk> A {
+	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Sub class</jc>
+	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>bar</jf> = <js>"bar"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer and define our interface class mapping.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.interfaceClass(A1.class, A.class)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces "{"foo":"f0"}"</jc>
+	 * 	String json = s.serialize(<jk>new</jk> A1());
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
+	 * individually on the child classes.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+	 * </ul>
+	 *
+	 * @param on The class that the interface class applies to.
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder interfaceClass(Class<?> on, Class<?> value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).interfaceClass(value));
+	}
+
+	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Locale.
 	 *
 	 * <p>
@@ -3060,6 +3141,62 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Property filter.
+	 *
+	 * <p>
+	 * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Address filter that strips out sensitive information.</jc>
+	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+	 *
+	 * 		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+	 * 				<jk>return</jk> <js>"redacted"</js>;
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 *
+	 * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
+	 * 			AddressBook a = (Address)bean;
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Our bean class.</jc>
+	 * 	<jk>public class</jk> Address {
+	 * 		<jk>public</jk> String getTaxInfo() {...}
+	 * 		<jk>public void</jk> setTaxInfo(String s) {...}
+	 * 	}
+	 *
+	 * 	<jc>// Register filter on serializer or parser.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.propertyFilter(Address.<jk>class</jk>, AddressPropertyFilter.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"taxInfo":"redacted"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> Address());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link PropertyFilter}
+	 * 	<li class='ja'>{@link Bean#propertyFilter() Bean(propertyFilter)}
+	 * </ul>
+	 *
+	 * @param on The bean that the filter applies to.
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder propertyFilter(Class<?> on, Class<? extends PropertyFilter> value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).propertyFilter(value));
+	}
+
+	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean property namer
 	 *
 	 * <p>
@@ -3109,6 +3246,46 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder propertyNamer(Class<? extends PropertyNamer> value) {
 		return set(BEAN_propertyNamer, value);
+	}
+
+	/**
+	 * Bean property namer
+	 *
+	 * <p>
+	 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
+	 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
+	 * </ul>
+	 *
+	 * @param on The class that the namer applies to.
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default is {@link PropertyNamerDefault}.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).propertyNamer(value));
 	}
 
 	/**
@@ -3177,6 +3354,90 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder sortProperties() {
 		return set(BEAN_sortProperties, true);
+	}
+
+	/**
+	 * Sort bean properties.
+	 *
+	 * <p>
+	 * Same as {@link #sortProperties()} but allows you to specify individual bean classes instead of globally.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with 3 properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
+	 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
+	 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that sorts properties on MyBean.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.sortProperties(MyBean.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_sortProperties}
+	 * </ul>
+	 *
+	 * @param on The bean class to sort properties on.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder sortProperties(Class<?> on) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).sort(true));
+	}
+
+	/**
+	 * Identifies a stop class for the annotated class.
+	 *
+	 * <p>
+	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
+	 * Any properties in the stop class or in its base classes will be ignored during analysis.
+	 *
+	 * <p>
+	 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
+	 * but not <c>p1</c> or <c>p2</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> C1 {
+	 * 		<jk>public int</jk> getP1();
+	 * 	}
+	 *
+	 * 	<jk>public class</jk> C2 <jk>extends</jk> C1 {
+	 * 		<jk>public int</jk> getP2();
+	 * 	}
+	 *
+	 * 	<ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
+	 * 	<jk>public class</jk> C3 <jk>extends</jk> C2 {
+	 * 		<jk>public int</jk> getP3();
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer specifies a stop class for C3.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.stopClass(C3.<jk>class</jk>, C2.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"p3":"..."}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> C3());
+	 * </p>
+	 *
+	 * @param on The class on which the stop class is being applied.
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder stopClass(Class<?> on, Class<?> value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).stopClass(value));
 	}
 
 	/**
@@ -3371,6 +3632,151 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder timeZone(TimeZone value) {
 		return set(BEAN_timeZone, value);
+	}
+
+	/**
+	 * An identifying name for this class.
+	 *
+	 * <p>
+	 * The name is used to identify the class type during parsing when it cannot be inferred through reflection.
+	 * For example, if a bean property is of type <c>Object</c>, then the serializer will add the name to the
+	 * output so that the class can be determined during parsing.
+	 *
+	 * <p>
+	 * It is also used to specify element names in XML.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
+	 * 	<jk>public class</jk> MyBean {...}
+	 *
+	 * 	<jc>// Create a serializer and specify the type name..</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.typeName(MyBean.<jk>class</jk>, <js>"mybean"</js>)
+	 * 		.build();
+	 *
+	 * 		<jc>// Produces:  {"_type":"mybean",...}</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param on
+	 * 	The class the type name is being defined on.
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder typeName(Class<?> on, String value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).typeName(value));
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean type property name.
+	 *
+	 * <p>
+	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
+	 * parser knows the data type to reconstruct.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+	 * 	<jk>public class</jk> Foo {...}
+	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+	 * 	<jk>public class</jk> Bar {...}
+	 *
+	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanTypePropertyName(<js>"t"</js>)
+	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beanTypePropertyName</jsf>, <js>"t"</js>)
+	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
+	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Parse bean.</jc>
+	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"_type"</js>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder typePropertyName(String value) {
+		return set(BEAN_typePropertyName, value);
+	}
+
+	/**
+	 * <i><l>BeanContext</l> configuration property:</i>  Bean type property name.
+	 *
+	 * <p>
+	 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+	 * 	<jk>public class</jk> Foo {...}
+	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+	 * 	<jk>public class</jk> Bar {...}
+	 *
+	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanTypePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
+	 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Parse bean.</jc>
+	 * 	MyBean b = p.parse(<js>"{mySimpleField:{t:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_typePropertyName}
+	 * </ul>
+	 *
+	 * @param on The class the type property name applies to.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"_type"</js>.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder typePropertyName(Class<?> on, String value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).typePropertyName(value));
 	}
 
 	/**
