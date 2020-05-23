@@ -142,8 +142,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
-			else if (m.containsKey("_value")) {
+			else if (m.containsKey("_value"))
 				o = convertToType(m.get("_value"), sType);
+			else if (sType.getProxyInvocationHandler() != null) {
+				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			} else {
 				if (sType.getNotABeanReason() != null)
 					throw new ParseException(this, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());

@@ -288,6 +288,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
+			else if (sType.getProxyInvocationHandler() != null)
+				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 					sType.getInnerClass().getName(), sType.getNotABeanReason());

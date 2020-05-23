@@ -385,6 +385,12 @@ public class XmlParserSession extends ReaderParserSession {
 			o = toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
+		} else if (sType.getProxyInvocationHandler() != null) {
+			OMap m = new OMap(this);
+			parseIntoMap(r, m, string(), object(), pMeta);
+			if (wrapperAttr != null)
+				m = new OMap(this).a(wrapperAttr, m);
+			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 		} else {
 			throw new ParseException(this,
 				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",

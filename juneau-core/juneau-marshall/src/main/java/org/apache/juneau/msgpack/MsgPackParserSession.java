@@ -194,6 +194,8 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
+				else if (sType.getProxyInvocationHandler() != null)
+					o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 				else
 					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
 						sType.getInnerClass().getName(), sType.getNotABeanReason());

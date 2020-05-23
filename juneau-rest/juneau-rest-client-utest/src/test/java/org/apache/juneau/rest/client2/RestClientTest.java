@@ -3344,30 +3344,47 @@ public class RestClientTest {
 				.run()
 				.cacheBody()
 				.getBody().assertContains("{foo:'1',bar:null}")
-				.getBody().as(O34.class);
+				.getBody().as(O36.class);
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(ParseException.class).getMessage().contains("Unknown property 'bar'"));
 		}
 	}
 
-	//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient dontIgnoreUnknownNullBeanProperties() {
-//		super.dontIgnoreUnknownNullBeanProperties();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient dontUseInterfaceProxies() {
-//		super.dontUseInterfaceProxies();
-//		return this;
-//	}
-//
+	public static interface O37 {
+		public String getFoo();
+		public void setFoo(String foo);
+	}
+
+	@Test
+	public void o037_beanContext_dontUseInterfaceProxies() throws Exception {
+		O37 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/echoBody", new StringReader("{foo:'1'}"))
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1'}")
+			.getBody().as(O37.class);
+		;
+		assertEquals("1", x.getFoo());
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.dontUseInterfaceProxies()
+				.build()
+				.post("/echoBody", new StringReader("{foo:'1'}"))
+				.run()
+				.cacheBody()
+				.getBody().assertContains("{foo:'1'}")
+				.getBody().as(O37.class);
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(ParseException.class).getMessage().contains("could not be instantiated"));
+		}
+	}
+
 //	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}

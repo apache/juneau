@@ -224,6 +224,9 @@ public final class HtmlParserSession extends XmlParserSession {
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.getInnerClass());
 					o = parseIntoBean(r, m).getBean();
+				} else if (sType.getProxyInvocationHandler() != null) {
+					BeanMap m = newBeanMap(outer, sType.getInnerClass());
+					o = parseIntoBean(r, m).getBean();
 				} else {
 					isValid = false;
 				}
