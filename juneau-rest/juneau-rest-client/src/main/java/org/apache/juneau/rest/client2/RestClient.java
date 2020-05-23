@@ -717,7 +717,7 @@ import org.apache.http.client.CookieStore;
  * </p>
  *
  * <p class='w900'>
- * The response body can only be consumed once.  However, the {@link RestResponseBody#cache()} method is provided
+ * The response body can only be consumed once.  However, the {@link RestResponse#cacheBody()} and {@link RestResponseBody#cache()} methods are provided
  * to cache the response body in memory so that you can perform several operations against it.
  *
  * <h5 class='figure'>Examples:</h5>

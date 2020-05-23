@@ -234,6 +234,21 @@ public final class RestResponse implements HttpResponse {
 		return responseBody;
 	}
 
+	/**
+	 * Caches the response body so that it can be read as a stream multiple times.
+	 *
+	 * This is equivalent to calling the following:
+	 * <p class='bcode w800'>
+	 * 	getBody().cache();
+	 * </p>
+	 *
+	 * @return The body of the response.
+	 */
+	public RestResponse cacheBody() {
+		responseBody.cache();
+		return this;
+	}
+
 	@SuppressWarnings("unchecked")
 	<T> T as(ResponseBeanMeta rbm) throws RestCallException {
 		try {

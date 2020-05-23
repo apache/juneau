@@ -539,7 +539,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
 								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
-									onUnknownProperty(currAttr, m);
+									onUnknownProperty(currAttr, m, null);
 									unmark();
 								} else {
 									unmark();
@@ -559,9 +559,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
 								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
-									onUnknownProperty(currAttr, m);
+									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));
 									unmark();
-									parseAnything(object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
 								} else {
 									unmark();
 									setCurrentProperty(pMeta);

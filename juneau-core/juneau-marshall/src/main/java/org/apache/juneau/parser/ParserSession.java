@@ -316,18 +316,20 @@ public abstract class ParserSession extends BeanSession {
 	 *
 	 * @param propertyName The unknown bean property name.
 	 * @param beanMap The bean that doesn't have the expected property.
+	 * @param value The parsed value.
 	 * @throws ParseException
 	 * 	Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
-	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap) throws ParseException {
+	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, Object value) throws ParseException {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			throw new ParseException(this,
-				"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
-				beanMap.getClassMeta());
+			if (value != null || ! isIgnoreUnknownNullBeanProperties())
+				throw new ParseException(this,
+					"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
+					beanMap.getClassMeta());
 		if (listener != null)
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean());
 	}

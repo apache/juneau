@@ -240,7 +240,7 @@ public class RestResponseBody implements HttpEntity {
 			}
 
 			if (isConsumed && ! entity.isRepeatable())
-				throw new IllegalStateException("Method cannot be called.  Response has already been consumed.");
+				throw new IllegalStateException("Method cannot be called.  Response has already been consumed.  Consider using the RestResponse.cacheBody() method.");
 
 			HttpEntity e = response.asHttpResponse().getEntity();
 			InputStream is = e == null ? new ByteArrayInputStream(new byte[0]) : e.getContent();
@@ -523,7 +523,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 			<li class='jc'>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
 	 * 		</ul>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -568,7 +568,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -632,7 +632,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 			<li class='jc'>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
 	 * 		</ul>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -670,7 +670,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -724,7 +724,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -849,7 +849,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -878,7 +878,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -909,7 +909,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -935,7 +935,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -968,7 +968,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -996,7 +996,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1035,7 +1035,7 @@ public class RestResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1071,7 +1071,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1101,7 +1101,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1127,7 +1127,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1158,7 +1158,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1301,7 +1301,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1338,7 +1338,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1375,7 +1375,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1412,7 +1412,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1449,7 +1449,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1487,7 +1487,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1534,7 +1534,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1577,7 +1577,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1622,7 +1622,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1657,7 +1657,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1689,7 +1689,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>
@@ -1727,7 +1727,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li>

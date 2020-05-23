@@ -289,7 +289,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
 								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
-									onUnknownProperty(currAttr, m);
+									onUnknownProperty(currAttr, m, null);
 									unmark();
 								} else {
 									unmark();
@@ -315,9 +315,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
 								BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
-									onUnknownProperty(currAttr, m);
+									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), true, null));
 									unmark();
-									parseAnything(object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
 								} else {
 									unmark();
 									setCurrentProperty(pMeta);

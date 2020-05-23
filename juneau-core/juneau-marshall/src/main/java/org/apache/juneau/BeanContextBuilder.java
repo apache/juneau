@@ -2292,8 +2292,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Ignore transient fields.
 	 *
 	 * <p>
-	 * When enabled, methods and fields marked as <jk>transient</jk> or annotated with {@link java.beans.Transient}
-	 * will be ignored as bean properties.
+	 * When enabled, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

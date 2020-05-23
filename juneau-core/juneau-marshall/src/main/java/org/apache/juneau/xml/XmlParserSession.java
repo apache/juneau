@@ -495,7 +495,7 @@ public class XmlParserSession extends ReaderParserSession {
 					if (xmlMeta.getAttrsProperty() != null) {
 						xmlMeta.getAttrsProperty().add(m, key, key, val);
 					} else if (ns == null) {
-						onUnknownProperty(key, m);
+						onUnknownProperty(key, m, val);
 					}
 				} else {
 					try {
@@ -581,8 +581,8 @@ public class XmlParserSession extends ReaderParserSession {
 						currAttr = getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
-						onUnknownProperty(currAttr, m);
-						skipCurrentTag(r);
+						Object value = parseAnything(object(), currAttr, r, m.getBean(false), false, null);
+						onUnknownProperty(currAttr, m, value);
 					} else {
 						setCurrentProperty(pMeta);
 						XmlFormat xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
@@ -635,17 +635,6 @@ public class XmlParserSession extends ReaderParserSession {
 
 		returnStringBuilder(sb);
 		return m;
-	}
-
-	private static void skipCurrentTag(XmlReader r) throws XMLStreamException {
-		int depth = 1;
-		do {
-			int event = r.next();
-			if (event == START_ELEMENT)
-				depth++;
-			else if (event == END_ELEMENT)
-				depth--;
-		} while (depth > 0);
 	}
 
 	private boolean isSpecialAttr(String key) {

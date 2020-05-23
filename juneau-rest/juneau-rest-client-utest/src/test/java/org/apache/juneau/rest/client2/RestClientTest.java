@@ -30,6 +30,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.Visibility;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
@@ -1834,8 +1835,8 @@ public class RestClientTest {
 		Bean b = rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1851,15 +1852,15 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache().assertValue("{f:1}");
+			.getBody().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
 			.accept("text/xml")
 			.contentType("text/xml")
 			.run()
-			.getBody().cache()
-			.assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1868,7 +1869,8 @@ public class RestClientTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache().assertValue("{\"f\":1}")
+			.cacheBody()
+			.getBody().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -1884,7 +1886,8 @@ public class RestClientTest {
 		Bean b = rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache().assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1901,7 +1904,8 @@ public class RestClientTest {
 		Bean b = rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache().assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1919,14 +1923,15 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache().assertValue("{f:1}");
+			.getBody().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
 			.accept("text/xml")
 			.contentType("text/xml")
 			.run()
-			.getBody().cache().assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1935,7 +1940,8 @@ public class RestClientTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache().assertValue("{\"f\":1}")
+			.cacheBody()
+			.getBody().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -1951,14 +1957,15 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.getBody().cache().assertValue("{f:1}");
+			.getBody().assertValue("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
 			.accept("text/xml")
 			.contentType("text/xml")
 			.run()
-			.getBody().cache().assertValue("<object><f>1</f></object>")
+			.cacheBody()
+			.getBody().assertValue("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1967,7 +1974,8 @@ public class RestClientTest {
 			.accept("text/json")
 			.contentType("text/json")
 			.run()
-			.getBody().cache().assertValue("{\"f\":1}")
+			.cacheBody()
+			.getBody().assertValue("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -2117,7 +2125,7 @@ public class RestClientTest {
 				.post("/echoBody", l1)
 				.run();
 		} catch (RestCallException e) {
-			assertTrue(e.getCause().getCause().getMessage().startsWith("Recursion occurred"));
+			assertTrue(e.getCause(SerializeException.class).getMessage().startsWith("Recursion occurred"));
 		}
 	}
 
@@ -2620,7 +2628,8 @@ public class RestClientTest {
 			.post("/test", new O2(1))
 			.header("X", new O2(1))
 			.run()
-			.getBody().cache().assertValue("1")
+			.cacheBody()
+			.getBody().assertValue("1")
 			.getHeader("X").assertValue("1")
 		;
 		assertEquals(1, rr.getBody().as(O2.class).f);
@@ -2654,7 +2663,8 @@ public class RestClientTest {
 			.post("/test", new O9().init())
 			.header("X", new O9().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		assertEquals(2, rr.getBody().as(O9.class).f2);
@@ -2703,7 +2713,8 @@ public class RestClientTest {
 			.post("/test", new O10().init())
 			.header("X", new O10().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
@@ -2717,7 +2728,8 @@ public class RestClientTest {
 			.post("/test", new O10().init())
 			.header("X", new O10().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
@@ -2731,7 +2743,8 @@ public class RestClientTest {
 			.post("/test", new O10().init())
 			.header("X", new O10().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
@@ -2745,12 +2758,12 @@ public class RestClientTest {
 			.post("/test", new O10().init())
 			.header("X", new O10().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
 		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
-
 
 		rr = MockRestClient
 			.create(O2R.class)
@@ -2760,7 +2773,8 @@ public class RestClientTest {
 			.post("/test", new O10().init())
 			.header("X", new O10().init())
 			.run()
-			.getBody().cache().assertValue("{f3:3}")
+			.cacheBody()
+			.getBody().assertValue("{f3:3}")
 			.getHeader("X").assertValue("f3=3")
 		;
 		assertEquals(3, rr.getBody().as(O10.class).f3);
@@ -2805,7 +2819,8 @@ public class RestClientTest {
 			.post("/test", new O18().init())
 			.header("X", new O18().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		assertEquals(2, rr.getBody().as(O18.class).f2);
@@ -2834,7 +2849,7 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.getBody().cache().assertValue("{f1:'1'}")
+			.getBody().assertValue("{f1:'1'}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		MockRestClient
@@ -2845,7 +2860,7 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.getBody().cache().assertValue("'1'")
+			.getBody().assertValue("'1'")
 			.getHeader("X").assertValue("1")
 		;
 	}
@@ -2859,7 +2874,7 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.getBody().cache().assertValue("{f1:'1'}")
+			.getBody().assertValue("{f1:'1'}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		MockRestClient
@@ -2870,7 +2885,7 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.getBody().cache().assertValue("'1'")
+			.getBody().assertValue("'1'")
 			.getHeader("X").assertValue("1")
 		;
 	}
@@ -2909,7 +2924,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		MockRestClient
@@ -2920,7 +2935,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 	}
@@ -2935,7 +2950,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -2946,7 +2961,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -2957,7 +2972,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -2968,7 +2983,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 	}
@@ -2985,7 +3000,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -2999,7 +3015,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -3013,7 +3030,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1,f2:2}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1,f2:2}")
 			.getHeader("X").assertValue("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -3032,7 +3050,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -3046,7 +3065,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -3060,7 +3080,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f1:1}")
+			.cacheBody()
+			.getBody().assertValue("{f1:1}")
 			.getHeader("X").assertValue("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
@@ -3077,7 +3098,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -3088,7 +3109,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -3099,7 +3120,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 		MockRestClient
@@ -3110,7 +3131,7 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.getBody().cache().assertValue("{f2:2}")
+			.getBody().assertValue("{f2:2}")
 			.getHeader("X").assertValue("f2=2")
 		;
 	}
@@ -3178,7 +3199,8 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", new O33a().init())
 			.run()
-			.getBody().cache().assertContains("{_type:'foo',foo:'1'}")
+			.cacheBody()
+			.getBody().assertContains("{_type:'foo',foo:'1'}")
 			.getBody().as(Object.class);
 		;
 		assertTrue(o instanceof O33a);
@@ -3193,7 +3215,8 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", m)
 			.run()
-			.getBody().cache().assertValue("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
+			.cacheBody()
+			.getBody().assertValue("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
 			.getBody().as(OMap.class);
 		;
 		assertTrue(m.get("x") instanceof O33a);
@@ -3208,34 +3231,126 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", new O33c().init())
 			.run()
-			.getBody().cache().assertValue("{foo:{_type:'foo',foo:'1'}}")
+			.cacheBody()
+			.getBody().assertValue("{foo:{_type:'foo',foo:'1'}}")
 			.getBody().as(O33c.class);
 		;
 		assertTrue(o33c.foo instanceof O33a);
 	}
 
+	public static class O34 {
+		private String foo;
+		public String getFoo() {
+			return foo;
+		}
+		public O34 init() {
+			foo = "foo";
+			return this;
+		}
+	}
 
+	@Test
+	public void o034_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception {
+		O34 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/echoBody", new O34().init())
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'foo'}")
+			.getBody().as(O34.class);
+		;
+		assertNull(x.foo);
 
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient dontIgnorePropertiesWithoutSetters() {
-//		super.dontIgnorePropertiesWithoutSetters();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient dontIgnoreTransientFields() {
-//		super.dontIgnoreTransientFields();
-//		return this;
-//	}
-//
-//	@Test
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.dontIgnorePropertiesWithoutSetters()
+				.build()
+				.post("/echoBody", new O34().init())
+				.run()
+				.cacheBody()
+				.getBody().assertContains("{foo:'foo'}")
+				.getBody().as(O34.class);
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(BeanRuntimeException.class).getMessage().contains("Setter or public field not defined"));
+		}
+	}
+
+	public static class O35 {
+		public String foo;
+		public transient String bar;
+
+		public O35 init() {
+			foo = "1";
+			bar = "2";
+			return this;
+		}
+	}
+
+	@Test
+	public void o035_beanContext_dontIgnoreTransientFields() throws Exception {
+		O35 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/echoBody", new O35().init())
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1'}")
+			.getBody().as(O35.class);
+		;
+		assertNull(x.bar);
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.dontIgnoreTransientFields()
+			.build()
+			.post("/echoBody", new O35().init())
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{bar:'2',foo:'1'}")
+			.getBody().as(O35.class);
+		assertEquals("2", x.bar);
+	}
+
+	public static class O36 {
+		public String foo;
+	}
+
+	@Test
+	public void o036_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/echoBody", new StringReader("{foo:'1',bar:null}"))
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1',bar:null}")
+			.getBody().as(O36.class);
+		;
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.dontIgnoreUnknownNullBeanProperties()
+				.build()
+				.post("/echoBody", new StringReader("{foo:'1',bar:null}"))
+				.run()
+				.cacheBody()
+				.getBody().assertContains("{foo:'1',bar:null}")
+				.getBody().as(O34.class);
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(ParseException.class).getMessage().contains("Unknown property 'bar'"));
+		}
+	}
+
+	//	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}
 //	@Override /* GENERATED - BeanContextBuilder */

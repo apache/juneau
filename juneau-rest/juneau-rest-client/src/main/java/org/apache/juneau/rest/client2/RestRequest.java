@@ -2329,7 +2329,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 			}
 
 			if (client.logRequests == DetailLevel.FULL)
-				response.getBody().cache();
+				response.cacheBody();
 
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);

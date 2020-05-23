@@ -513,9 +513,8 @@ public final class JsonParserSession extends ReaderParserSession {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							setCurrentProperty(pMeta);
 							if (pMeta == null) {
-								onUnknownProperty(currAttr, m);
+								onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
 								unmark();
-								parseAnything(object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
 							} else {
 								unmark();
 								ClassMeta<?> cm = pMeta.getClassMeta();

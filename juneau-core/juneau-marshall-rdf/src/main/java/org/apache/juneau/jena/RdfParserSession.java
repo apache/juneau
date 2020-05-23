@@ -202,7 +202,9 @@ public class RdfParserSession extends ReaderParserSession {
 					}
 				}
 			} else if (! (p.equals(pRoot) || p.equals(pType))) {
-				onUnknownProperty(key, m);
+				RDFNode o = st.getObject();
+				Object value = parseAnything(object(), o, m.getBean(false), null);
+				onUnknownProperty(key, m, value);
 			}
 			setCurrentProperty(null);
 		}
