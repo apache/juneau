@@ -254,13 +254,17 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
+	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.
 	 */
-	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) {
+	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) throws SerializeException {
 		if (listener != null)
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
 			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		if (! isIgnoreInvocationExceptionsOnGetters())
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
+				p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 	}
 
 	/**

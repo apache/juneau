@@ -3385,51 +3385,97 @@ public class RestClientTest {
 		}
 	}
 
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public <T> MockRestClient example(Class<T> pojoClass, T o) {
-//		super.example(pojoClass, o);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public <T> MockRestClient exampleJson(Class<T> pojoClass, String json) {
-//		super.exampleJson(pojoClass, json);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient fluentSetters() {
-//		super.fluentSetters();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient fluentSetters(Class<?> on) {
-//		super.fluentSetters(on);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient ignoreInvocationExceptionsOnGetters() {
-//		super.ignoreInvocationExceptionsOnGetters();
-//		return this;
-//	}
-//
+	public static class O38 {
+		private String foo;
+		public String getFoo() {
+			return foo;
+		}
+		public O38 foo(String foo) {
+			this.foo = foo;
+			return this;
+		}
+	}
+
+	@Test
+	public void o038_beanContext_fluentSetters() throws Exception {
+		O38 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.fluentSetters()
+			.build()
+			.post("/echoBody", new StringReader("{foo:'1'}"))
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1'}")
+			.getBody().as(O38.class);
+		;
+		assertEquals("1", x.getFoo());
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.fluentSetters(O38.class)
+			.build()
+			.post("/echoBody", new StringReader("{foo:'1'}"))
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1'}")
+			.getBody().as(O38.class);
+		;
+		assertEquals("1", x.getFoo());
+	}
+
+	public static class O39 {
+		@SuppressWarnings("unused")
+		private String foo,bar;
+		public String getFoo() {
+			return foo;
+		}
+		public void setFoo(String foo) {
+			this.foo = foo;
+		}
+		public String getBar() {
+			throw new RuntimeException("xxx");
+		}
+		public void setBar(String bar) {
+			this.bar = bar;
+		}
+		public O39 init() {
+			this.foo = "1";
+			this.bar = "2";
+			return this;
+		}
+	}
+
+	@Test
+	public void o039_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post("/echoBody", new O39().init())
+				.run()
+			;
+			fail("Exception expected.");
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(SerializeException.class).getMessage().contains("Could not call getValue() on property 'bar'"));
+		}
+
+		O39 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.ignoreInvocationExceptionsOnGetters()
+			.build()
+			.post("/echoBody", new O39().init())
+			.run()
+			.cacheBody()
+			.getBody().assertContains("{foo:'1'}")
+			.getBody().as(O39.class);
+		;
+		assertEquals("1", x.getFoo());
+	}
+
 //	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}

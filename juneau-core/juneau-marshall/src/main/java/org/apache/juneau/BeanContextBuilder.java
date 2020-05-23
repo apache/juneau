@@ -3626,6 +3626,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// An interface with a single getter.</jc>
 	 * 	<jk>public interface</jk> MyBean {
 	 * 		String getFoo();
+	 * 		<jk>void</jk> setFoo(String foo);
 	 * 	}
 	 *
 	 * 	<jc>// Create a parser that uses interface proxies.</jc>
