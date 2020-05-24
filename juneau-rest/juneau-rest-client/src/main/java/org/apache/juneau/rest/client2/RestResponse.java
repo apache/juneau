@@ -18,7 +18,6 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -150,34 +149,22 @@ public final class RestResponse implements HttpResponse {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the status code on the response is one of the specified values.
+	 * Provides the ability to perform fluent-style assertions on the response status code.
 	 *
-	 * @param validCodes The list of valid codes.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertStatusCode(int...validCodes) throws RestCallException, AssertionError {
-		int sc = getStatusCode();
-		for (int c : validCodes)
-			if (c == sc)
-				return this;
-		throw new BasicAssertionError("Response did not have the expected status code.\n\tExpected=[{0}]\n\tActual=[{1}]", validCodes, sc);
-	}
-
-	/**
-	 * Asserts that the status code on the response passes the specified predicate test.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	MyBean bean = client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertStatusCode().equals(200)
+	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * </p>
 	 *
-	 * @param test The test.
-	 * @return This object (for method chaining).
+	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertStatusCode(Predicate<Integer> test) throws RestCallException, AssertionError {
-		int sc = getStatusCode();
-		if (test.test(sc))
-			return this;
-		throw new BasicAssertionError("Response did not have the expected status code.\n\tActual=[{0}]", sc);
+	public RestResponseStatusCodeAssertion assertStatusCode() throws RestCallException {
+		return new RestResponseStatusCodeAssertion(getStatusCode(), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -219,6 +206,69 @@ public final class RestResponse implements HttpResponse {
 		return new RestResponseHeader(request, this, getLastHeader(name)).parser(partParser);
 	}
 
+	/**
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the content type header is provided.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 *
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(x -&gt; x.equals(<js>"application/json"</js>));
+	 *
+	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the header and converts it to a bean.</jc>
+	 * 	MediaType mediaType = client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public RestResponseHeaderAssertion assertHeader(String name) throws RestCallException {
+		return getHeader(name).assertThat();
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Body
 	//------------------------------------------------------------------------------------------------------------------
@@ -232,6 +282,77 @@ public final class RestResponse implements HttpResponse {
 	 */
 	public RestResponseBody getBody() {
 		return responseBody;
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body equals the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equals(<js>"OK"</js>);
+	 *
+	 * 	<jc>// Validates the response body contains the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().contains(<js>"OK"</js>);
+	 *
+	 * 	<jc>// Validates the response body passes a predicate test.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().passes(x -&gt; x.contains(<js>"OK"</js>));
+	 *
+	 * 	<jc>// Validates the response body matches a regular expression.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().matches(<js>".*OK.*"</js>);
+	 *
+	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 *
+	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
+	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().matches(p);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body matches a regular expression.</jc>
+	 * 	MyBean bean = client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().matches(<js>".*OK.*"</js>);
+	 * 		.assertBody().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public RestResponseBodyAssertion assertBody() throws RestCallException {
+		return responseBody.cache().assertThat();
 	}
 
 	/**

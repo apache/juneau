@@ -40,7 +40,7 @@ public class RestClientTest extends RestTestcase {
 			.run()
 			.getStatusCode(rc)
 			.cacheBody()
-			.getBody().assertContains("SUCCESS")
+			.assertBody().contains("SUCCESS")
 			.getBody().asString(r);
 		assertEquals("xxxSUCCESSxxx", r.get());
 		assertEquals(200, rc.get().intValue());
@@ -48,11 +48,10 @@ public class RestClientTest extends RestTestcase {
 		try {
 			c.post(URL, new StringEntity("xxxFAILURExxx"))
 				.run()
-				.getBody()
-				.assertContains("SUCCESS");
+				.assertBody().contains("SUCCESS");
 			fail();
 		} catch (AssertionError e) {
-			assertTrue(e.getLocalizedMessage().contains("Response did not have the expected substring for body."));
+			// OK
 		}
 	}
 
@@ -69,7 +68,7 @@ public class RestClientTest extends RestTestcase {
 			.run()
 			.getStatusCode(rc)
 			.cacheBody()
-			.getBody().assertValue(x -> ! x.contains("FAILURE"))
+			.assertBody().passes(x -> ! x.contains("FAILURE"))
 			.getBody().asString(r);
 		assertEquals("xxxSUCCESSxxx", r.get());
 		assertEquals(200, rc.get().intValue());
@@ -77,11 +76,10 @@ public class RestClientTest extends RestTestcase {
 		try {
 			c.post(URL, new StringEntity("xxxFAILURExxx"))
 				.run()
-				.getBody()
-				.assertValue(x -> ! x.contains("FAILURE"));
+				.assertBody().passes(x -> ! x.contains("FAILURE"));
 			fail();
 		} catch (AssertionError e) {
-			assertTrue(e.getLocalizedMessage().contains("Response did not have the expected value for body."));
+			// OK
 		}
 	}
 

@@ -518,8 +518,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode(Mutable) getStatusCode(Mutable&lt;Integer&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase(Mutable) getReasonPhrase(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponse#assertStatusCode(int...) assertStatusCode(int...)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponse#assertStatusCode(Predicate) assertStatusCode(Predicate&lt;Integer&gt;)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponse#assertStatusCode() assertStatusCode()} <jk>returns</jk> {@link RestResponseStatusCodeAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -618,13 +617,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertExists() assertExists()} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValue(String) assertValue(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertValue(Predicate) assertValue(Predicate&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertContains(String...) assertContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(String) assertMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(String,int) assertMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertMatches(Pattern) assertMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertThat() assertThat()} <jk>returns</jk> {@link RestResponseHeaderAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -684,12 +677,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValue(String) assertValue(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertContains(String...) assertContains(String...)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertValue(Predicate) assertValue(Predicate&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(String) assertMatches(String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(String,int) assertMatches(String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertMatches(Pattern) assertMatches(Pattern)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertThat() assertThat()} <jk>returns</jk> {@link RestResponseBodyAssertion}</c>
  * 	</ul>
  * </ul>
  *

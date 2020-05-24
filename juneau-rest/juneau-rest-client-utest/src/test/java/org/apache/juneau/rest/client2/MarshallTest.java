@@ -85,55 +85,55 @@ public class MarshallTest {
 			.header("X-Accept", "application/json+simple")
 			.header("X-Content-Type", "application/json+simple")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1b.post("/a01", bean)
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1c.post("/a01", bean)
 			.header("X-Accept", "text/xml")
 			.header("X-Content-Type", "text/xml")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1d.post("/a01", bean)
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1e.post("/a01", bean)
 			.header("X-Accept", "text/plain")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1f.post("/a01", bean)
 			.header("X-Accept", "octal/msgpack")
 			.header("X-Content-Type", "octal/msgpack")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1g.post("/a01", bean)
 			.header("X-Accept", "text/uon")
 			.header("X-Content-Type", "text/uon")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1h.post("/a01", bean)
 			.header("X-Accept", "application/x-www-form-urlencoded")
 			.header("X-Content-Type", "application/x-www-form-urlencoded")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		a1i.post("/a01", bean)
 			.header("X-Accept", "text/openapi")
 			.header("X-Content-Type", "text/openapi")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -145,7 +145,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -160,8 +160,8 @@ public class MarshallTest {
 			.header("X-Content-Type", "application/json")
 			.body("{f:1}")
 			.run()
-			.assertStatusCode(200)
-			.getBody().assertValue("{\"f\":1}");
+			.assertStatusCode().equals(200)
+			.assertBody().equals("{\"f\":1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "text/xml")
@@ -197,7 +197,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/xml")
 			.header("X-Content-Type", "text/xml")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "text/html")
@@ -205,7 +205,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "text/plain")
@@ -213,7 +213,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/plain")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "octal/msgpack")
@@ -221,7 +221,7 @@ public class MarshallTest {
 			.header("X-Accept", "octal/msgpack")
 			.header("X-Content-Type", "octal/msgpack")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "text/uon")
@@ -229,7 +229,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/uon")
 			.header("X-Content-Type", "text/uon")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "application/x-www-form-urlencoded")
@@ -237,7 +237,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/x-www-form-urlencoded")
 			.header("X-Content-Type", "application/x-www-form-urlencoded")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		b1.post("/a01", bean)
 			.header("Accept", "text/openapi")
@@ -245,7 +245,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/openapi")
 			.header("X-Content-Type", "text/openapi")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -256,7 +256,7 @@ public class MarshallTest {
 			.header("X-Accept", "nil")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -277,7 +277,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "text/xml")
@@ -285,7 +285,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/xml")
 			.header("X-Content-Type", "text/xml")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "text/html")
@@ -293,7 +293,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "text/plain")
@@ -301,7 +301,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/plain")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "octal/msgpack")
@@ -309,7 +309,7 @@ public class MarshallTest {
 			.header("X-Accept", "octal/msgpack")
 			.header("X-Content-Type", "octal/msgpack")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "text/uon")
@@ -317,7 +317,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/uon")
 			.header("X-Content-Type", "text/uon")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "application/x-www-form-urlencoded")
@@ -325,7 +325,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/x-www-form-urlencoded")
 			.header("X-Content-Type", "application/x-www-form-urlencoded")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		c1.post("/a01", bean)
 			.header("Accept", "text/openapi")
@@ -333,7 +333,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/openapi")
 			.header("X-Content-Type", "text/openapi")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -343,7 +343,7 @@ public class MarshallTest {
 			.header("X-Accept", "nil")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -366,7 +366,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "text/xml")
@@ -374,7 +374,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/xml")
 			.header("X-Content-Type", "text/xml")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "text/html")
@@ -382,7 +382,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "text/plain")
@@ -390,7 +390,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/plain")
 			.header("X-Content-Type", "text/plain")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "octal/msgpack")
@@ -398,7 +398,7 @@ public class MarshallTest {
 			.header("X-Accept", "octal/msgpack")
 			.header("X-Content-Type", "octal/msgpack")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "text/uon")
@@ -406,7 +406,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/uon")
 			.header("X-Content-Type", "text/uon")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "application/x-www-form-urlencoded")
@@ -414,7 +414,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/x-www-form-urlencoded")
 			.header("X-Content-Type", "application/x-www-form-urlencoded")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 		d1.post("/a01", bean)
 			.header("Accept", "text/openapi")
@@ -422,7 +422,7 @@ public class MarshallTest {
 			.header("X-Accept", "text/openapi")
 			.header("X-Content-Type", "text/openapi")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 
@@ -432,7 +432,7 @@ public class MarshallTest {
 			.header("X-Accept", "application/json")
 			.header("X-Content-Type", "application/json")
 			.run()
-			.assertStatusCode(200)
+			.assertStatusCode().equals(200)
 			.getBody().as(Bean.class).check();
 	}
 }

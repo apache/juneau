@@ -15,13 +15,11 @@ package org.apache.juneau.rest.client2;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.utils.*;
@@ -504,171 +502,65 @@ public class RestResponseHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the header exists.
+	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertExists();
-	 * </p>
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
 	 *
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertExists() throws RestCallException, AssertionError {
-		if (! exists())
-			throw new BasicAssertionError("Response did not have the expected header {0}.", getName());
-		return response;
-	}
-
-	/**
-	 * Asserts that the header equals the specified value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue(<js>"application/json"</js>);
-	 * </p>
+	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
 	 *
-	 * @param value The value to test for.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(String value) throws RestCallException, AssertionError {
-		if (! StringUtils.isEquals(value, asString()))
-			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", getName(), value, asString());
-		return response;
-	}
-
-	/**
-	 * Asserts that the header passes the specified predicate test.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue(x -&gt; x.equals(<js>"application/json"</js>));
-	 * </p>
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(x -&gt; x.equals(<js>"application/json"</js>));
 	 *
-	 * @param test The predicate to test for.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(Predicate<String> test) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! test.test(text))
-			throw new BasicAssertionError("Response did not have the expected value for header {0}.\n\tActual=[{1}]", getName(), text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header contains all the specified substrings.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueContains(<js>"json"</js>);
-	 * </p>
+	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
 	 *
-	 * @param values The substrings to test for.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertContains(String...values) throws RestCallException, AssertionError {
-		String text = asString();
-		for (String substring : values)
-			if (! StringUtils.contains(text, substring))
-				throw new BasicAssertionError("Response did not have the expected substring in header {0}.\n\tExpected=[{1}]\n\tHeader=[{2}]", getName(), substring, text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(<js>".*json.*"</js>);
-	 * </p>
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
 	 *
-	 * @param regex The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex) throws RestCallException, AssertionError {
-		return assertMatches(regex, 0);
-	}
-
-	/**
-	 * Asserts that the header matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
-	 *
-	 * @param regex The pattern to test for.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex, int flags) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! Pattern.compile(regex, flags).matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), regex, text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the header matches the specified pattern.
 	 *
 	 * <p>
-	 * The pattern can contain <js>"*"</js> to represent zero or more arbitrary characters.
-	 *
-	 * <h5 class='section'>Example:</h5>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*application\\/json.*"</js>);
-	 * 	client
+	 * 	<jc>// Validates the header and converts it to a bean.</jc>
+	 * 	MediaType mediaType = client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValueMatches(p);
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
+	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
 	 * </p>
 	 *
-	 * @param pattern The pattern to test for.
-	 * @return The response object (for method chaining).
+	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(Pattern pattern) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! pattern.matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern in header {0}.\n\tpattern=[{1}]\n\tHeader=[{2}]", getName(), pattern.pattern(), text);
-		return response;
+	public RestResponseHeaderAssertion assertThat() throws RestCallException {
+		return new RestResponseHeaderAssertion(asString(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -14,12 +14,10 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.logging.Level.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
@@ -177,11 +175,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li class='jm'>{@link #asPojoRest(Mutable) asPojoRest(Mutable)}
 	 * 	<li class='jm'>{@link #asPojoRest(Class) asPojoRest(Class)}
 	 * 	<li class='jm'>{@link #asPojoRest(Mutable,Class) asPojoRest(Mutable,Class)}
-	 * 	<li class='jm'>{@link #assertValue(Predicate) assertValue(Predicate)}
-	 * 	<li class='jm'>{@link #assertValue(String) assertValue(String)}
-	 * 	<li class='jm'>{@link #assertContains(String...) assertContains(String...)}
-	 * 	<li class='jm'>{@link #assertMatches(Pattern) assertMatches(Pattern)}
-	 * 	<li class='jm'>{@link #assertMatches(String) assertMatches(String)}
+	 * 	<li class='jm'>{@link #assertThat() assertThat()}
 	 * 	<li class='jm'>{@link #asString() asString()}
 	 * 	<li class='jm'>{@link #asString(Mutable) asString(Mutable)}
 	 * 	<li class='jm'>{@link #asStringFuture() asStringFuture()}
@@ -1519,208 +1513,58 @@ public class RestResponseBody implements HttpEntity {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the body equals the specified value.
+	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body is the text "OK".</jc>
+	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue(<js>"OK"</js>);
-	 * </p>
+	 * 		.assertBody().equals(<js>"OK"</js>);
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(String value) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! StringUtils.isEquals(value, text)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Response did not have the expected value for body.");
-				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				client.log(WARNING, sb.toString());
-			}
-			throw new BasicAssertionError("Response did not have the expected value for body.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
-		}
-		return response;
-	}
-
-	/**
-	 * Asserts that the body contains all of the specified substrings.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValueContains(<js>"OK"</js>);
-	 * </p>
+	 * 		.assertBody().contains(<js>"OK"</js>);
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param values The values to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public RestResponse assertContains(String...values) throws RestCallException, AssertionError {
-		String text = asString();
-		for (String substring : values)
-			if (! StringUtils.contains(text, substring)) {
-				if (substring.startsWith("x")) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Response did not have the expected substring for body.");
-					sb.append("\nExpected: [").append(substring.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					client.log(WARNING, sb.toString());
-				}
-				throw new BasicAssertionError("Response did not have the expected substring for body.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
-
-			}
-		return response;
-	}
-
-	/**
-	 * Asserts that the body passes the specified predicate test.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body contains the text "OK".</jc>
+	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue(x -&gt; x.contains(<js>"OK"</js>));
-	 * </p>
+	 * 		.assertBody().passes(x -&gt; x.contains(<js>"OK"</js>));
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param test The predicate to use to test the body context.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertValue(Predicate<String> test) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! test.test(text))
-			throw new BasicAssertionError("Response did not have the expected value for body.\n\tActual=[{0}]", text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the body matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body contains the text "OK" anywhere.</jc>
+	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValueMaches(<js>".*OK.*"</js>);
-	 * </p>
+	 * 		.assertBody().matches(<js>".*OK.*"</js>);
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param regex The pattern to test for.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex) throws RestCallException, AssertionError {
-		return assertMatches(regex, 0);
-	}
-
-	/**
-	 * Asserts that the body matches the specified regular expression.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body contains the text "OK" anywhere.</jc>
+	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValueMaches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
-	 * </p>
+	 * 		.assertBody().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param regex The pattern to test for.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The response object (for method chaining).
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public RestResponse assertMatches(String regex, int flags) throws RestCallException, AssertionError {
-		String text = asString();
-		Pattern p = Pattern.compile(regex, flags);
-		if (! p.matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", regex, text);
-		return response;
-	}
-
-	/**
-	 * Asserts that the body matches the specified regular expression pattern.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body contains the text "OK" anywhere.</jc>
+	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValueMaches(p);
+	 * 		.assertBody().matches(p);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body matches a regular expression.</jc>
+	 * 	MyBean bean = client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().matches(<js>".*OK.*"</js>);
+	 * 		.assertBody().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getBody().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1734,16 +1578,11 @@ public class RestResponseBody implements HttpEntity {
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
-	 * @param pattern The pattern to test for.
-	 * @return The response object (for method chaining).
+	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponse assertMatches(Pattern pattern) throws RestCallException, AssertionError {
-		String text = asString();
-		if (! pattern.matcher(text).matches())
-			throw new BasicAssertionError("Response did not match expected pattern.\n\tpattern=[{0}]\n\tBody=[{1}]", pattern.pattern(), text);
-		return response;
+	public RestResponseBodyAssertion assertThat() throws RestCallException {
+		return new RestResponseBodyAssertion(asString(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
