@@ -688,7 +688,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder implClasses(Map<String,Class<?>> values) {
+	public ParserBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}

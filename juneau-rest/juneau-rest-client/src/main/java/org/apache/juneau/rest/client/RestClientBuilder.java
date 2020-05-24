@@ -2652,7 +2652,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestClientBuilder implClasses(Map<String,Class<?>> values) {
+	public RestClientBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}

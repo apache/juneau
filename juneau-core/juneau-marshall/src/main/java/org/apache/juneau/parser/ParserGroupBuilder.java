@@ -673,7 +673,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder implClasses(Map<String,Class<?>> values) {
+	public ParserGroupBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}

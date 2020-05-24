@@ -355,7 +355,7 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder implClasses(Map<String,Class<?>> values) {
+	public MsgPackSerializerBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}

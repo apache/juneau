@@ -2514,7 +2514,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.implClasses(OMap.<jsm>of</jsm>(MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>))
+	 * 		.implClasses(OMap.<jsm>of</jsm>(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>))
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
@@ -2531,12 +2531,15 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
 	 *
-	 * @param values The new value for this property.
+	 * @param values
+	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
-	public BeanContextBuilder implClasses(Map<String,Class<?>> values) {
-		return set(BEAN_implClasses, values);
+	public BeanContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
+		for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
+			putTo(BEAN_implClasses, e.getKey().getName(), e.getValue());
+		return this;
 	}
 
 	/**

@@ -3476,42 +3476,134 @@ public class RestClientTest {
 		assertEquals("1", x.getFoo());
 	}
 
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient ignoreInvocationExceptionsOnSetters() {
-//		super.ignoreInvocationExceptionsOnSetters();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient ignoreUnknownBeanProperties() {
-//		super.ignoreUnknownBeanProperties();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient implClass(Class<?> interfaceClass, Class<?> implClass) {
-//		super.implClass(interfaceClass, implClass);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient implClasses(Map<String,Class<?>> values) {
-//		super.implClasses(values);
-//		return this;
-//	}
-//
+	public static class O40 {
+		@SuppressWarnings("unused")
+		private String foo,bar;
+		public String getFoo() {
+			return foo;
+		}
+		public void setFoo(String foo) {
+			this.foo = foo;
+		}
+		public String getBar() {
+			return bar;
+		}
+		public void setBar(String bar) {
+			throw new RuntimeException("xxx");
+		}
+		public O40 init() {
+			this.foo = "1";
+			this.bar = "2";
+			return this;
+		}
+	}
+
+	@Test
+	public void o040_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post("/echoBody", new O40().init())
+				.run()
+				.getBody().as(O40.class)
+			;
+			fail("Exception expected.");
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(BeanRuntimeException.class).getMessage().contains("Error occurred trying to set property 'bar'"));
+		}
+
+		O40 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.ignoreInvocationExceptionsOnSetters()
+			.build()
+			.post("/echoBody", new O40().init())
+			.run()
+			.cacheBody()
+			.getBody().as(O40.class);
+		;
+		assertEquals("1", x.getFoo());
+	}
+
+	public static class O41 {
+		public String foo;
+	}
+
+	@Test
+	public void o041_beanContext_ignoreUnknownBeanProperties() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post("/echoBody", new StringReader("{foo:'1',bar:'2'}"))
+				.run()
+				.getBody().as(O41.class)
+			;
+			fail("Exception expected.");
+		} catch (RestCallException e) {
+			assertTrue(e.getCause(ParseException.class).getMessage().contains("Unknown property 'bar' encountered"));
+		}
+
+		O41 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.ignoreUnknownBeanProperties()
+			.build()
+			.post("/echoBody", new StringReader("{foo:'1',bar:'2'}"))
+			.run()
+			.cacheBody()
+			.getBody().as(O41.class);
+		;
+		assertEquals("1", x.foo);
+	}
+
+	public static interface O42I {
+		void setFoo(int foo);
+		int getFoo();
+	}
+
+	public static class O42 implements O42I {
+		private int foo;
+		@Override
+		public void setFoo(int foo) {
+			this.foo = foo;
+		}
+		@Override
+		public int getFoo() {
+			return foo;
+		}
+	}
+
+	@Test
+	public void o042_beanContext_implClass() throws Exception {
+		O42I x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.implClass(O42I.class, O42.class)
+			.build()
+			.post("/echoBody", new StringReader("{foo:1}"))
+			.run()
+			.getBody().as(O42I.class)
+		;
+		assertEquals(1, x.getFoo());
+		assertTrue(x instanceof O42);
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.implClasses(AMap.of(O42I.class, O42.class))
+			.build()
+			.post("/echoBody", new StringReader("{foo:1}"))
+			.run()
+			.getBody().as(O42I.class)
+		;
+		assertEquals(1, x.getFoo());
+		assertTrue(x instanceof O42);
+	}
+
 //	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}
