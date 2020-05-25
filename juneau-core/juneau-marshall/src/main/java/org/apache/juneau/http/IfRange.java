@@ -62,7 +62,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("If-Range")
-public class IfRange extends BasicHeader {
+public class IfRange extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

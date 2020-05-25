@@ -18,7 +18,7 @@ import org.apache.juneau.http.annotation.*;
  * Represents a parsed <l>Origin</l> HTTP request header.
  */
 @Header("Origin")
-public class Origin extends BasicHeader {
+public class Origin extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * Represents a parsed <l>X-Client-Version</l> HTTP request header.
  */
 @Header("X-Client-Version")
-public class ClientVersion extends BasicHeader {
+public class ClientVersion extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

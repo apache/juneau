@@ -52,7 +52,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return This header as a {@link URI}.
 	 */
 	public URI asURI() {
-		return URI.create(toString());
+		return value == null ? null : URI.create(toString());
 	}
 
 	/**

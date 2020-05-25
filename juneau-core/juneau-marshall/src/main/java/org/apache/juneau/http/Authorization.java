@@ -70,7 +70,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Authorization")
-public class Authorization extends BasicHeader {
+public class Authorization extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

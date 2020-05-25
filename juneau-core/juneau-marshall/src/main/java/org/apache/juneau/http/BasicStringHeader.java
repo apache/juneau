@@ -12,53 +12,55 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.assertions.*;
+
 /**
- * Category of headers that consist of a single enum value.
+ * Category of headers that consist of a single string value.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Accept-Ranges: bytes
+ * 	Host: www.myhost.com:8080
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
- *
- * @param <E> The enum type.
- */
-public class BasicEnumHeader<E extends Enum<E>> extends BasicHeader {
+*/
+public class BasicStringHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 
-	private final E enumValue;
-
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
-	 * @param name The HTTP header name.
-	 * @param value The raw header value.
-	 * @param enumClass The enum class.
-	 * @param def The default enum value if the value could not be parsed.
+	 * @param name Header name.
+	 * @param value Header value.
 	 */
-	protected BasicEnumHeader(String name, String value, Class<E> enumClass, E def) {
+	public BasicStringHeader(String name, String value) {
 		super(name, value);
-		E _enumValue = def;
-		try {
-			if (value != null)
-				_enumValue = Enum.valueOf(enumClass, value.toUpperCase());
-		} catch (Exception e) {
-			_enumValue = def;
-		}
-		this.enumValue = _enumValue;
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions.
+	//------------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equalsIgnoreCase(String)}.
+	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
-	 * @return <jk>true</jk> if the specified value is the same.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the content type header is provided.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getStringHeader(<js>"Content-Type"</js>).assertThat().exists();
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public E asEnum() {
-		return enumValue;
+	public FluentStringAssertion<BasicStringHeader> assertThat() {
+		return new FluentStringAssertion<>(asString(), this);
 	}
 }

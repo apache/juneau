@@ -48,7 +48,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Content-Disposition")
-public class ContentDisposition extends BasicHeader {
+public class ContentDisposition extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

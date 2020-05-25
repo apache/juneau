@@ -61,7 +61,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("Accept-Ranges")
-public class AcceptRanges extends BasicHeader {
+public class AcceptRanges extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

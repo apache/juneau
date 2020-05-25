@@ -24,6 +24,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -136,83 +137,97 @@ public class RestResponseHeader implements Header {
 	}
 
 	/**
+	 * Returns the value of this header as a {@link BasicHeader}.
+	 *
+	 * @param c The subclass of {@link BasicHeader} to instantiate.
+	 * @param <T> The subclass of {@link BasicHeader} to instantiate.
+	 * @return The value of this header as a string, never <jk>null</jk>.
+	 */
+	public <T extends BasicHeader> T asHeader(Class<T> c) {
+		try {
+			ClassInfo ci = ClassInfo.of(c);
+			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
+			if (cc != null)
+				return cc.invoke(asString());
+			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
+			if (cc != null)
+				return cc.invoke(getName(), asString());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		throw new BasicRuntimeException("Could not determine a method to construct type {0}", c.getClass().getName());
+	}
+
+	/**
 	 * Returns the value of this header as a CSV array header.
 	 *
-	 * @return The value of this header as a CSV array header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a CSV array header, never <jk>null</jk>.
 	 */
 	public BasicCsvArrayHeader asCsvArrayHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicCsvArrayHeader(getName(), v);
+		return new BasicCsvArrayHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as a date header.
 	 *
-	 * @return The value of this header as a date header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a date header, never <jk>null</jk>.
 	 */
 	public BasicDateHeader asDateHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicDateHeader(getName(), v);
+		return new BasicDateHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as an entity validator array header.
 	 *
-	 * @return The value of this header as an entity validator array header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as an entity validator array header, never <jk>null</jk>.
 	 */
 	public BasicEntityValidatorArrayHeader asEntityValidatorArrayHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicEntityValidatorArrayHeader(getName(), v);
+		return new BasicEntityValidatorArrayHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as an integer header.
 	 *
-	 * @return The value of this header as an integer header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as an integer header, never <jk>null</jk>.
 	 */
 	public BasicIntegerHeader asIntegerHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicIntegerHeader(getName(), v);
+		return new BasicIntegerHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as a long header.
 	 *
-	 * @return The value of this header as a long header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a long header, never <jk>null</jk>.
 	 */
 	public BasicLongHeader asLongHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicLongHeader(getName(), v);
+		return new BasicLongHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as a range array header.
 	 *
-	 * @return The value of this header as a range array header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a range array header, never <jk>null</jk>.
 	 */
 	public BasicRangeArrayHeader asRangeArrayHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicRangeArrayHeader(getName(), v);
+		return new BasicRangeArrayHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as a string header.
 	 *
-	 * @return The value of this header as a string header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a string header, never <jk>null</jk>.
 	 */
-	public BasicHeader asHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicHeader(getName(), v);
+	public BasicStringHeader asStringHeader() {
+		return new BasicStringHeader(getName(), getValue());
 	}
 
 	/**
 	 * Returns the value of this header as a URI header.
 	 *
-	 * @return The value of this header as a URI header, or <jk>null</jk> if header was not present.
+	 * @return The value of this header as a URI header, never <jk>null</jk>.
 	 */
 	public BasicUriHeader asUriHeader() {
-		String v = getValue();
-		return v == null ? null : new BasicUriHeader(getName(), v);
+		return new BasicUriHeader(getName(), getValue());
 	}
 
 	/**

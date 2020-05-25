@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -47,6 +48,8 @@ public class BasicLongHeader extends BasicHeader {
 	}
 
 	private static Long toLong(Object value) {
+		if (value == null)
+			return null;
 		if (value instanceof Long)
 			return (Long)value;
 		String s = value.toString();
@@ -66,5 +69,28 @@ public class BasicLongHeader extends BasicHeader {
 	 */
 	public long asLong() {
 		return value;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body is not too large.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getLongHeader(<js>"Length"</js>).assertThat().isLessThan(100000);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentLongAssertion<BasicLongHeader> assertThat() {
+		return new FluentLongAssertion<>(value, this);
 	}
 }

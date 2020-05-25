@@ -50,7 +50,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("User-Agent")
-public class UserAgent extends BasicHeader {
+public class UserAgent extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

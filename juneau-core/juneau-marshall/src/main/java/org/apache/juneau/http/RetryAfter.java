@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Retry-After")
-public class RetryAfter extends BasicHeader {
+public class RetryAfter extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
 

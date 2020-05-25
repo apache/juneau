@@ -50,7 +50,7 @@ public class Cache<K,V> {
 	 * @return The value, or <jk>null</jk> if the value is not in the cache, or the cache is disabled.
 	 */
 	public V get(K key) {
-		if (nocache)
+		if (nocache || key == null)
 			return null;
 		return cache.get(key);
 	}
@@ -65,7 +65,7 @@ public class Cache<K,V> {
 	 * 	Always returns the same value if the cache is disabled.
 	 */
 	public V put(K key, V value) {
-		if (nocache)
+		if (nocache || key == null)
 			return value;
 
 		// Prevent OOM in case of DDOS

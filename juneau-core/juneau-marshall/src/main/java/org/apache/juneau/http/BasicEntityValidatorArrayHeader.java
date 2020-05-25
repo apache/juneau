@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
@@ -43,7 +43,7 @@ public class BasicEntityValidatorArrayHeader extends BasicHeader {
 	 */
 	public BasicEntityValidatorArrayHeader(String name, String value) {
 		super(name, value);
-		String[] s = StringUtils.split(value);
+		String[] s = value == null ? new String[0] : split(value);
 		this.value = new EntityValidator[s.length];
 		for (int i = 0; i < s.length; i++) {
 			this.value[i] = new EntityValidator(s[i]);

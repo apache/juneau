@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -47,6 +48,8 @@ public class BasicIntegerHeader extends BasicHeader {
 	}
 
 	private static Integer toInt(Object value) {
+		if (value == null)
+			return null;
 		if (value instanceof Integer)
 			return (Integer)value;
 		String s = value.toString();
@@ -71,5 +74,28 @@ public class BasicIntegerHeader extends BasicHeader {
 	 */
 	public int asInt() {
 		return value;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response content is older than 1.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getIntegerHeader(<js>"Age"</js>).assertThat().isGreaterThan(1);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentIntegerAssertion<BasicIntegerHeader> assertThat() {
+		return new FluentIntegerAssertion<>(value, this);
 	}
 }

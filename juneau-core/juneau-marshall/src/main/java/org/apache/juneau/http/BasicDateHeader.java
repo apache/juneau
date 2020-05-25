@@ -18,6 +18,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.
@@ -47,7 +48,7 @@ public class BasicDateHeader extends BasicHeader {
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.zdt = ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value));
+		this.zdt = value == null ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value));
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value The header value.
 	 */
 	public BasicDateHeader(String name, ZonedDateTime value) {
-		super(name, RFC_1123_DATE_TIME.format(value));
+		super(name, value == null ? null : RFC_1123_DATE_TIME.format(value));
 		this.zdt = value;
 	}
 
@@ -77,7 +78,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return This header value as a {@link java.util.Calendar}, or <jk>null</jk> if the header could not be parsed.
 	 */
 	public Calendar asCalendar() {
-		return GregorianCalendar.from(zdt);
+		return zdt == null ? null : GregorianCalendar.from(zdt);
 	}
 
 	/**
@@ -100,6 +101,33 @@ public class BasicDateHeader extends BasicHeader {
 	}
 
 	private static ZonedDateTime asZdt(Calendar o) {
-		return o instanceof GregorianCalendar ? ((GregorianCalendar)o).toZonedDateTime() : o.toInstant().atZone(ZoneId.systemDefault());
+		if (o == null)
+			return null;
+		if (o instanceof GregorianCalendar)
+			return ((GregorianCalendar)o).toZonedDateTime();
+		return o.toInstant().atZone(ZoneId.systemDefault());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions.
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body content is not expired.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getDateHeader(<js>"Expires"</js>).assertThat().isLessThan(<jk>new</jk> Date());
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentDateAssertion<BasicDateHeader> assertThat() {
+		return new FluentDateAssertion<>(asDate(), this);
 	}
 }

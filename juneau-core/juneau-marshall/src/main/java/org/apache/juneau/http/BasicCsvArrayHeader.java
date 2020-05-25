@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 
 /**
@@ -43,7 +44,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param value The raw header value.
 	 */
 	protected BasicCsvArrayHeader(String name, String[] value) {
-		super(name, StringUtils.joine(value, ','));
+		super(name, joine(value, ','));
 		this.value = value;
 	}
 
@@ -58,10 +59,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		this.value = split(value);
 	}
 
-	private static String[] split(String value) {
-		return StringUtils.split(value);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this header contains the specified value.
 	 *
@@ -69,7 +66,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
 	public boolean contains(String val) {
-		if (val != null)
+		if (val != null && value != null)
 			for (String v : value)
 				if (val.equals(v))
 					return true;
@@ -83,7 +80,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
 	public boolean containsIC(String val) {
-		if (val != null)
+		if (val != null && value != null)
 			for (String v : value)
 				if (val.equalsIgnoreCase(v))
 					return true;
