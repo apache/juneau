@@ -2548,7 +2548,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o001_beanContext_beanClassVisibility() throws Exception {
+	public void o01_beanContext_beanClassVisibility() throws Exception {
 		RestClient rc1 = MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -2619,7 +2619,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o002_beanContext_beanConstructorVisibility() throws Exception {
+	public void o02_beanContext_beanConstructorVisibility() throws Exception {
 		RestResponse rr = MockRestClient
 			.create(O2R.class)
 			.beanConstructorVisibility(Visibility.PROTECTED)
@@ -2636,12 +2636,11 @@ public class RestClientTest {
 		assertEquals(1, rr.getHeader("X").as(O2.class).f);
 	}
 
-
-	public static class O9 {
+	public static class O3 {
 		public int f1;
 		protected int f2;
 
-		O9 init() {
+		O3 init() {
 			f1 = 1;
 			f2 = 2;
 			return this;
@@ -2654,29 +2653,29 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o009_beanContext_beanFieldVisibility() throws Exception {
+	public void o03_beanContext_beanFieldVisibility() throws Exception {
 		RestResponse rr = MockRestClient
 			.create(O2R.class)
 			.beanFieldVisibility(Visibility.PROTECTED)
 			.simpleJson()
 			.build()
-			.post("/test", new O9().init())
-			.header("X", new O9().init())
+			.post("/test", new O3().init())
+			.header("X", new O3().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
 		;
-		assertEquals(2, rr.getBody().as(O9.class).f2);
-		assertEquals(2, rr.getHeader("X").as(O9.class).f2);
+		assertEquals(2, rr.getBody().as(O3.class).f2);
+		assertEquals(2, rr.getHeader("X").as(O3.class).f2);
 	}
 
-	public static interface O10I {
+	public static interface O4I {
 		int getF3();
 		void setF3(int f3);
 	}
 
-	public static class O10 implements O10I {
+	public static class O4 implements O4I {
 		public int f1, f2;
 		private int f3;
 
@@ -2690,7 +2689,7 @@ public class RestClientTest {
 			this.f3 = f3;
 		}
 
-		O10 init() {
+		O4 init() {
 			f1 = 1;
 			f2 = 2;
 			f3 = 3;
@@ -2704,84 +2703,84 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o010_beanContext_beanFilters() throws Exception {
+	public void o04_beanContext_beanFilters() throws Exception {
 		RestResponse rr = MockRestClient
 			.create(O2R.class)
-			.bpi(O10.class, "f1")
+			.bpi(O4.class, "f1")
 			.simpleJson()
 			.build()
-			.post("/test", new O10().init())
-			.header("X", new O10().init())
+			.post("/test", new O4().init())
+			.header("X", new O4().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals(0, rr.getBody().as(O10.class).f2);
-		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+		assertEquals(0, rr.getBody().as(O4.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O4.class).f2);
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.bpi(O10.class, "f1")
+			.bpi(O4.class, "f1")
 			.simpleJson()
 			.build()
-			.post("/test", new O10().init())
-			.header("X", new O10().init())
+			.post("/test", new O4().init())
+			.header("X", new O4().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals(0, rr.getBody().as(O10.class).f2);
-		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+		assertEquals(0, rr.getBody().as(O4.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O4.class).f2);
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.bpi(O10.class, "f1")
+			.bpi(O4.class, "f1")
 			.simpleJson()
 			.build()
-			.post("/test", new O10().init())
-			.header("X", new O10().init())
+			.post("/test", new O4().init())
+			.header("X", new O4().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals(0, rr.getBody().as(O10.class).f2);
-		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+		assertEquals(0, rr.getBody().as(O4.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O4.class).f2);
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.bpi(O10.class, "f1")
+			.bpi(O4.class, "f1")
 			.simpleJson()
 			.build()
-			.post("/test", new O10().init())
-			.header("X", new O10().init())
+			.post("/test", new O4().init())
+			.header("X", new O4().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals(0, rr.getBody().as(O10.class).f2);
-		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
+		assertEquals(0, rr.getBody().as(O4.class).f2);
+		assertEquals(0, rr.getHeader("X").as(O4.class).f2);
 
 		rr = MockRestClient
 			.create(O2R.class)
-			.interfaces(O10I.class)
+			.interfaces(O4I.class)
 			.simpleJson()
 			.build()
-			.post("/test", new O10().init())
-			.header("X", new O10().init())
+			.post("/test", new O4().init())
+			.header("X", new O4().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f3:3}")
 			.assertHeader("X").is("f3=3")
 		;
-		assertEquals(3, rr.getBody().as(O10.class).f3);
-		assertEquals(3, rr.getHeader("X").as(O10.class).f3);
+		assertEquals(3, rr.getBody().as(O4.class).f3);
+		assertEquals(3, rr.getHeader("X").as(O4.class).f3);
 	}
 
-	public static class O18  {
+	public static class O5  {
 		private int f1, f2;
 
 		public int getF1() {
@@ -2797,7 +2796,7 @@ public class RestClientTest {
 			this.f2 = f2;
 		}
 
-		O18 init() {
+		O5 init() {
 			f1 = 1;
 			f2 = 2;
 			return this;
@@ -2810,27 +2809,27 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o018_beanContext_beanMethodVisibility() throws Exception {
+	public void o05_beanContext_beanMethodVisibility() throws Exception {
 		RestResponse rr = MockRestClient
 			.create(O2R.class)
 			.beanMethodVisibility(Visibility.PROTECTED)
 			.simpleJson()
 			.build()
-			.post("/test", new O18().init())
-			.header("X", new O18().init())
+			.post("/test", new O5().init())
+			.header("X", new O5().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
 		;
-		assertEquals(2, rr.getBody().as(O18.class).f2);
-		assertEquals(2, rr.getHeader("X").as(O18.class).f2);
+		assertEquals(2, rr.getBody().as(O5.class).f2);
+		assertEquals(2, rr.getHeader("X").as(O5.class).f2);
 	}
 
-	public static class O21  {
+	public static class O6  {
 		public String f1;
 
-		public O21(String i) {
+		public O6(String i) {
 			f1 = i;
 		}
 
@@ -2841,13 +2840,13 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o021_beanContext_beansRequireDefaultConstructor() throws Exception {
+	public void o06_beanContext_beansRequireDefaultConstructor() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
 			.build()
-			.post("/test", new O21("1"))
-			.header("X", new O21("1"))
+			.post("/test", new O6("1"))
+			.header("X", new O6("1"))
 			.run()
 			.assertBody().is("{f1:'1'}")
 			.assertHeader("X").is("f1=1")
@@ -2857,8 +2856,8 @@ public class RestClientTest {
 			.simpleJson()
 			.beansRequireDefaultConstructor()
 			.build()
-			.post("/test", new O21("1"))
-			.header("X", new O21("1"))
+			.post("/test", new O6("1"))
+			.header("X", new O6("1"))
 			.run()
 			.assertBody().is("'1'")
 			.assertHeader("X").is("1")
@@ -2866,13 +2865,13 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o022_beanContext_beansRequireSerializable() throws Exception {
+	public void o07_beanContext_beansRequireSerializable() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
 			.build()
-			.post("/test", new O21("1"))
-			.header("X", new O21("1"))
+			.post("/test", new O6("1"))
+			.header("X", new O6("1"))
 			.run()
 			.assertBody().is("{f1:'1'}")
 			.assertHeader("X").is("f1=1")
@@ -2882,15 +2881,15 @@ public class RestClientTest {
 			.simpleJson()
 			.beansRequireSerializable()
 			.build()
-			.post("/test", new O21("1"))
-			.header("X", new O21("1"))
+			.post("/test", new O6("1"))
+			.header("X", new O6("1"))
 			.run()
 			.assertBody().is("'1'")
 			.assertHeader("X").is("1")
 		;
 	}
 
-	public static class O25  {
+	public static class O8  {
 		private int f1, f2;
 
 		public int getF1() {
@@ -2903,7 +2902,7 @@ public class RestClientTest {
 			return f2;
 		}
 
-		O25 init() {
+		O8 init() {
 			f1 = 1;
 			f2 = 2;
 			return this;
@@ -2916,13 +2915,13 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o025_beanContext_beansRequireSettersForGetters() throws Exception {
+	public void o08_beanContext_beansRequireSettersForGetters() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
@@ -2932,8 +2931,8 @@ public class RestClientTest {
 			.simpleJson()
 			.beansRequireSettersForGetters()
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
@@ -2941,14 +2940,14 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o028_beanContext_bpi() throws Exception {
+	public void o09_beanContext_bpi() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpi(OMap.of("O25", "f2"))
+			.bpi(OMap.of("O8", "f2"))
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -2956,10 +2955,10 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpi(O25.class, "f2")
+			.bpi(O8.class, "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -2967,10 +2966,10 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpi("O25", "f2")
+			.bpi("O8", "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -2978,10 +2977,10 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpi(O25.class.getName(), "f2")
+			.bpi(O8.class.getName(), "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -2989,7 +2988,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o029_beanContext_bpro() throws Exception {
+	public void o10_beanContext_bpro() throws Exception {
 		RestResponse rr = null;
 
 		rr = MockRestClient
@@ -2997,106 +2996,106 @@ public class RestClientTest {
 			.simpleJson()
 			.bpro(OMap.of("O25", "f2"))
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 
 		rr = MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpro(O25.class, "f2")
+			.bpro(O8.class, "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 
 		rr = MockRestClient
 			.create(O2R.class)
 			.simpleJson()
 			.bpro("O25", "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1,f2:2}")
 			.assertHeader("X").is("f1=1,f2=2")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 	}
 
 	@Test
-	public void o030_beanContext_bpwo() throws Exception {
+	public void o11_beanContext_bpwo() throws Exception {
 		RestResponse rr = null;
 
 		rr = MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpwo(OMap.of("O25", "f2"))
+			.bpwo(OMap.of("O8", "f2"))
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 
 		rr = MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpwo(O25.class, "f2")
+			.bpwo(O8.class, "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 
 		rr = MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpwo("O25", "f2")
+			.bpwo("O8", "f2")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{f1:1}")
 			.assertHeader("X").is("f1=1")
 		;
-		assertEquals("1/0", rr.getBody().as(O25.class).toString());
-		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
+		assertEquals("1/0", rr.getBody().as(O8.class).toString());
+		assertEquals("1/0", rr.getHeader("X").as(O8.class).toString());
 	}
 
 	@Test
-	public void o031_beanContext_bpx() throws Exception {
+	public void o12_beanContext_bpx() throws Exception {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpx(OMap.of("O25", "f1"))
+			.bpx(OMap.of("O8", "f1"))
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -3104,10 +3103,10 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpx(O25.class, "f1")
+			.bpx(O8.class, "f1")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -3115,10 +3114,10 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpx("O25", "f1")
+			.bpx("O8", "f1")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
@@ -3126,23 +3125,23 @@ public class RestClientTest {
 		MockRestClient
 			.create(O2R.class)
 			.simpleJson()
-			.bpx(O25.class.getName(), "f1")
+			.bpx(O8.class.getName(), "f1")
 			.build()
-			.post("/test", new O25().init())
-			.header("X", new O25().init())
+			.post("/test", new O8().init())
+			.header("X", new O8().init())
 			.run()
 			.assertBody().is("{f2:2}")
 			.assertHeader("X").is("f2=2")
 		;
 	}
 
-	public static class O32 {
+	public static class O13 {
 		public Object f;
 	}
 
 	@Test
-	public void o032_beanContext_debug() throws Exception {
-		O32 x = new O32();
+	public void o13_beanContext_debug() throws Exception {
+		O13 x = new O13();
 		x.f = x;
 		try {
 			MockRestClient
@@ -3160,56 +3159,56 @@ public class RestClientTest {
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="foo")
-	public static class O33a {
+	public static class O14a {
 		public String foo;
 
-		public O33a init() {
+		public O14a init() {
 			foo = "1";
 			return this;
 		}
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="bar")
-	public static class O33b {
+	public static class O14b {
 		public String foo;
 
-		public O33b init() {
+		public O14b init() {
 			foo = "2";
 			return this;
 		}
 	}
 
-	public static class O33c {
+	public static class O14c {
 		public Object foo;
 
-		public O33c init() {
-			foo = new O33a().init();
+		public O14c init() {
+			foo = new O14a().init();
 			return this;
 		}
 	}
 
 	@Test
-	public void o033_beanContext_dictionary() throws Exception {
+	public void o14_beanContext_dictionary() throws Exception {
 		Object o = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.dictionary(O33a.class,O33b.class)
+			.dictionary(O14a.class,O14b.class)
 			.addRootType()
 			.addBeanTypes()
 			.build()
-			.post("/echoBody", new O33a().init())
+			.post("/echoBody", new O14a().init())
 			.run()
 			.cacheBody()
 			.assertBody().contains("{_type:'foo',foo:'1'}")
 			.getBody().as(Object.class);
 		;
-		assertTrue(o instanceof O33a);
+		assertTrue(o instanceof O14a);
 
-		OMap m = OMap.of("x", new O33a().init(), "y", new O33b().init());
+		OMap m = OMap.of("x", new O14a().init(), "y", new O14b().init());
 		m = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.dictionary(O33a.class,O33b.class)
+			.dictionary(O14a.class,O14b.class)
 			.addRootType()
 			.addBeanTypes()
 			.build()
@@ -3219,47 +3218,47 @@ public class RestClientTest {
 			.assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
 			.getBody().as(OMap.class);
 		;
-		assertTrue(m.get("x") instanceof O33a);
-		assertTrue(m.get("y") instanceof O33b);
+		assertTrue(m.get("x") instanceof O14a);
+		assertTrue(m.get("y") instanceof O14b);
 
-		O33c o33c = MockRestClient
+		O14c o33c = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.dictionaryOn(O33c.class,O33a.class,O33b.class)
+			.dictionaryOn(O14c.class,O14a.class,O14b.class)
 			.addRootType()
 			.addBeanTypes()
 			.build()
-			.post("/echoBody", new O33c().init())
+			.post("/echoBody", new O14c().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:{_type:'foo',foo:'1'}}")
-			.getBody().as(O33c.class);
+			.getBody().as(O14c.class);
 		;
-		assertTrue(o33c.foo instanceof O33a);
+		assertTrue(o33c.foo instanceof O14a);
 	}
 
-	public static class O34 {
+	public static class O15 {
 		private String foo;
 		public String getFoo() {
 			return foo;
 		}
-		public O34 init() {
+		public O15 init() {
 			foo = "foo";
 			return this;
 		}
 	}
 
 	@Test
-	public void o034_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception {
-		O34 x = MockRestClient
+	public void o15_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception {
+		O15 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.build()
-			.post("/echoBody", new O34().init())
+			.post("/echoBody", new O15().init())
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'foo'}")
-			.getBody().as(O34.class);
+			.getBody().as(O15.class);
 		;
 		assertNull(x.foo);
 
@@ -3269,21 +3268,21 @@ public class RestClientTest {
 				.simpleJson()
 				.dontIgnorePropertiesWithoutSetters()
 				.build()
-				.post("/echoBody", new O34().init())
+				.post("/echoBody", new O15().init())
 				.run()
 				.cacheBody()
 				.assertBody().contains("{foo:'foo'}")
-				.getBody().as(O34.class);
+				.getBody().as(O15.class);
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(BeanRuntimeException.class).getMessage().contains("Setter or public field not defined"));
 		}
 	}
 
-	public static class O35 {
+	public static class O16 {
 		public String foo;
 		public transient String bar;
 
-		public O35 init() {
+		public O16 init() {
 			foo = "1";
 			bar = "2";
 			return this;
@@ -3291,16 +3290,16 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o035_beanContext_dontIgnoreTransientFields() throws Exception {
-		O35 x = MockRestClient
+	public void o16_beanContext_dontIgnoreTransientFields() throws Exception {
+		O16 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.build()
-			.post("/echoBody", new O35().init())
+			.post("/echoBody", new O16().init())
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1'}")
-			.getBody().as(O35.class);
+			.getBody().as(O16.class);
 		;
 		assertNull(x.bar);
 
@@ -3309,20 +3308,20 @@ public class RestClientTest {
 			.simpleJson()
 			.dontIgnoreTransientFields()
 			.build()
-			.post("/echoBody", new O35().init())
+			.post("/echoBody", new O16().init())
 			.run()
 			.cacheBody()
 			.assertBody().contains("{bar:'2',foo:'1'}")
-			.getBody().as(O35.class);
+			.getBody().as(O16.class);
 		assertEquals("2", x.bar);
 	}
 
-	public static class O36 {
+	public static class O17 {
 		public String foo;
 	}
 
 	@Test
-	public void o036_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception {
+	public void o17_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -3331,7 +3330,7 @@ public class RestClientTest {
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1',bar:null}")
-			.getBody().as(O36.class);
+			.getBody().as(O17.class);
 		;
 
 		try {
@@ -3344,20 +3343,20 @@ public class RestClientTest {
 				.run()
 				.cacheBody()
 				.assertBody().contains("{foo:'1',bar:null}")
-				.getBody().as(O36.class);
+				.getBody().as(O17.class);
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(ParseException.class).getMessage().contains("Unknown property 'bar'"));
 		}
 	}
 
-	public static interface O37 {
+	public static interface O18 {
 		public String getFoo();
 		public void setFoo(String foo);
 	}
 
 	@Test
-	public void o037_beanContext_dontUseInterfaceProxies() throws Exception {
-		O37 x = MockRestClient
+	public void o18_beanContext_dontUseInterfaceProxies() throws Exception {
+		O18 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.build()
@@ -3365,7 +3364,7 @@ public class RestClientTest {
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1'}")
-			.getBody().as(O37.class);
+			.getBody().as(O18.class);
 		;
 		assertEquals("1", x.getFoo());
 
@@ -3379,26 +3378,26 @@ public class RestClientTest {
 				.run()
 				.cacheBody()
 				.assertBody().contains("{foo:'1'}")
-				.getBody().as(O37.class);
+				.getBody().as(O18.class);
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(ParseException.class).getMessage().contains("could not be instantiated"));
 		}
 	}
 
-	public static class O38 {
+	public static class O19 {
 		private String foo;
 		public String getFoo() {
 			return foo;
 		}
-		public O38 foo(String foo) {
+		public O19 foo(String foo) {
 			this.foo = foo;
 			return this;
 		}
 	}
 
 	@Test
-	public void o038_beanContext_fluentSetters() throws Exception {
-		O38 x = MockRestClient
+	public void o19_beanContext_fluentSetters() throws Exception {
+		O19 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.fluentSetters()
@@ -3407,25 +3406,25 @@ public class RestClientTest {
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1'}")
-			.getBody().as(O38.class);
+			.getBody().as(O19.class);
 		;
 		assertEquals("1", x.getFoo());
 
 		x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.fluentSetters(O38.class)
+			.fluentSetters(O19.class)
 			.build()
 			.post("/echoBody", new StringReader("{foo:'1'}"))
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1'}")
-			.getBody().as(O38.class);
+			.getBody().as(O19.class);
 		;
 		assertEquals("1", x.getFoo());
 	}
 
-	public static class O39 {
+	public static class O20 {
 		@SuppressWarnings("unused")
 		private String foo,bar;
 		public String getFoo() {
@@ -3440,7 +3439,7 @@ public class RestClientTest {
 		public void setBar(String bar) {
 			this.bar = bar;
 		}
-		public O39 init() {
+		public O20 init() {
 			this.foo = "1";
 			this.bar = "2";
 			return this;
@@ -3448,13 +3447,13 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o039_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception {
+	public void o20_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception {
 		try {
 			MockRestClient
 				.create(A.class)
 				.simpleJson()
 				.build()
-				.post("/echoBody", new O39().init())
+				.post("/echoBody", new O20().init())
 				.run()
 			;
 			fail("Exception expected.");
@@ -3462,21 +3461,21 @@ public class RestClientTest {
 			assertTrue(e.getCause(SerializeException.class).getMessage().contains("Could not call getValue() on property 'bar'"));
 		}
 
-		O39 x = MockRestClient
+		O20 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ignoreInvocationExceptionsOnGetters()
 			.build()
-			.post("/echoBody", new O39().init())
+			.post("/echoBody", new O20().init())
 			.run()
 			.cacheBody()
 			.assertBody().contains("{foo:'1'}")
-			.getBody().as(O39.class);
+			.getBody().as(O20.class);
 		;
 		assertEquals("1", x.getFoo());
 	}
 
-	public static class O40 {
+	public static class O21 {
 		@SuppressWarnings("unused")
 		private String foo,bar;
 		public String getFoo() {
@@ -3491,7 +3490,7 @@ public class RestClientTest {
 		public void setBar(String bar) {
 			throw new RuntimeException("xxx");
 		}
-		public O40 init() {
+		public O21 init() {
 			this.foo = "1";
 			this.bar = "2";
 			return this;
@@ -3499,40 +3498,40 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o040_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception {
+	public void o21_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception {
 		try {
 			MockRestClient
 				.create(A.class)
 				.simpleJson()
 				.build()
-				.post("/echoBody", new O40().init())
+				.post("/echoBody", new O21().init())
 				.run()
-				.getBody().as(O40.class)
+				.getBody().as(O21.class)
 			;
 			fail("Exception expected.");
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(BeanRuntimeException.class).getMessage().contains("Error occurred trying to set property 'bar'"));
 		}
 
-		O40 x = MockRestClient
+		O21 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ignoreInvocationExceptionsOnSetters()
 			.build()
-			.post("/echoBody", new O40().init())
+			.post("/echoBody", new O21().init())
 			.run()
 			.cacheBody()
-			.getBody().as(O40.class);
+			.getBody().as(O21.class);
 		;
 		assertEquals("1", x.getFoo());
 	}
 
-	public static class O41 {
+	public static class O22 {
 		public String foo;
 	}
 
 	@Test
-	public void o041_beanContext_ignoreUnknownBeanProperties() throws Exception {
+	public void o22_beanContext_ignoreUnknownBeanProperties() throws Exception {
 		try {
 			MockRestClient
 				.create(A.class)
@@ -3540,14 +3539,14 @@ public class RestClientTest {
 				.build()
 				.post("/echoBody", new StringReader("{foo:'1',bar:'2'}"))
 				.run()
-				.getBody().as(O41.class)
+				.getBody().as(O22.class)
 			;
 			fail("Exception expected.");
 		} catch (RestCallException e) {
 			assertTrue(e.getCause(ParseException.class).getMessage().contains("Unknown property 'bar' encountered"));
 		}
 
-		O41 x = MockRestClient
+		O22 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.ignoreUnknownBeanProperties()
@@ -3555,17 +3554,17 @@ public class RestClientTest {
 			.post("/echoBody", new StringReader("{foo:'1',bar:'2'}"))
 			.run()
 			.cacheBody()
-			.getBody().as(O41.class);
+			.getBody().as(O22.class);
 		;
 		assertEquals("1", x.foo);
 	}
 
-	public static interface O42I {
+	public static interface O23i {
 		void setFoo(int foo);
 		int getFoo();
 	}
 
-	public static class O42 implements O42I {
+	public static class O23 implements O23i {
 		private int foo;
 		@Override
 		public int getFoo() {
@@ -3578,38 +3577,38 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o042_beanContext_implClass() throws Exception {
-		O42I x = MockRestClient
+	public void o23_beanContext_implClass() throws Exception {
+		O23i x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.implClass(O42I.class, O42.class)
+			.implClass(O23i.class, O23.class)
 			.build()
 			.post("/echoBody", new StringReader("{foo:1}"))
 			.run()
-			.getBody().as(O42I.class)
+			.getBody().as(O23i.class)
 		;
 		assertEquals(1, x.getFoo());
-		assertTrue(x instanceof O42);
+		assertTrue(x instanceof O23);
 
 		x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.implClasses(AMap.of(O42I.class, O42.class))
+			.implClasses(AMap.of(O23i.class, O23.class))
 			.build()
 			.post("/echoBody", new StringReader("{foo:1}"))
 			.run()
-			.getBody().as(O42I.class)
+			.getBody().as(O23i.class)
 		;
 		assertEquals(1, x.getFoo());
-		assertTrue(x instanceof O42);
+		assertTrue(x instanceof O23);
 	}
 
-	public static interface O43I {
+	public static interface O24i {
 		void setFoo(int foo);
 		int getFoo();
 	}
 
-	public static class O43 implements O43I {
+	public static class O24 implements O24i {
 		private int foo,bar;
 		@Override
 		public int getFoo() { return foo; }
@@ -3618,7 +3617,7 @@ public class RestClientTest {
 		public int getBar() { return bar; }
 		public void setBar(int bar) { this.bar = bar; }
 
-		public O43 init() {
+		public O24 init() {
 			foo = 1;
 			bar = 2;
 			return this;
@@ -3626,104 +3625,104 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o043_beanContext_interfaceClass() throws Exception {
-		O43I x = MockRestClient
+	public void o24_beanContext_interfaceClass() throws Exception {
+		O24i x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.interfaceClass(O43.class, O43I.class)
+			.interfaceClass(O24.class, O24i.class)
 			.build()
-			.post("/echoBody", new O43().init())
+			.post("/echoBody", new O24().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:1}")
-			.getBody().as(O43.class)
+			.getBody().as(O24.class)
 		;
 		assertEquals(1, x.getFoo());
 
 		x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.interfaces(O43I.class)
+			.interfaces(O24i.class)
 			.build()
-			.post("/echoBody", new O43().init())
+			.post("/echoBody", new O24().init())
 			.run()
 			.assertBody().is("{foo:1}")
-			.getBody().as(O43.class)
+			.getBody().as(O24.class)
 		;
 		assertEquals(1, x.getFoo());
 	}
 
-	public static class O44 {
+	public static class O25 {
 		public int foo;
-		public O44 init() {
+		public O25 init() {
 			foo = 1;
 			return this;
 		}
 	}
 
-	public static class O44Swap extends StringSwap<O44> {
+	public static class O25s extends StringSwap<O25> {
 		@Override
-		public String swap(BeanSession session, O44 o) throws Exception {
+		public String swap(BeanSession session, O25 o) throws Exception {
 			assertEquals(Locale.UK, session.getLocale());
 			return super.swap(session, o);
 		}
 
 		@Override
-		public O44 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+		public O25 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 			assertEquals(Locale.UK, session.getLocale());
 			return super.unswap(session, f, hint);
 		}
 	}
 
 	@Test
-	public void o044_beanContext_locale() throws Exception {
-		O44 x = MockRestClient
+	public void o25_beanContext_locale() throws Exception {
+		O25 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.locale(Locale.UK)
 			.build()
-			.post("/echoBody", new O44().init())
+			.post("/echoBody", new O25().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:1}")
-			.getBody().as(O44.class)
+			.getBody().as(O25.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O45Swap extends StringSwap<O44> {
+	public static class O26s extends StringSwap<O25> {
 		@Override
-		public String swap(BeanSession session, O44 o) throws Exception {
+		public String swap(BeanSession session, O25 o) throws Exception {
 			assertEquals(MediaType.JSON, session.getMediaType());
 			return super.swap(session, o);
 		}
 
 		@Override
-		public O44 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+		public O25 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 			assertEquals(MediaType.JSON, session.getMediaType());
 			return super.unswap(session, f, hint);
 		}
 	}
 
 	@Test
-	public void o045_beanContext_mediaType() throws Exception {
-		O44 x = MockRestClient
+	public void o26_beanContext_mediaType() throws Exception {
+		O25 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.mediaType(MediaType.JSON)
 			.build()
-			.post("/echoBody", new O44().init())
+			.post("/echoBody", new O25().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:1}")
-			.getBody().as(O44.class)
+			.getBody().as(O25.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O46 {
+	public static class O27 {
 		public int foo;
-		public O46 init() {
+		public O27 init() {
 			foo = 1;
 			return this;
 		}
@@ -3731,129 +3730,129 @@ public class RestClientTest {
 		public String toString() {
 			return String.valueOf(foo);
 		}
-		public static O46 fromString(String foo) throws ParseException {
-			O46 x = new O46();
+		public static O27 fromString(String foo) throws ParseException {
+			O27 x = new O27();
 			x.foo = JsonParser.DEFAULT.parse(foo, int.class);
 			return x;
 		}
 	}
 
 	@Test
-	public void o046_beanContext_notBeanClasses() throws Exception {
-		O46 x = MockRestClient
+	public void o27_beanContext_notBeanClasses() throws Exception {
+		O27 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.notBeanClasses(O46.class)
+			.notBeanClasses(O27.class)
 			.build()
-			.post("/echoBody", new O46().init())
+			.post("/echoBody", new O27().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("'1'")
-			.getBody().as(O46.class)
+			.getBody().as(O27.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
 	@Test
-	public void o047_beanContext_notBeanPackages() throws Exception {
-		O46 x = MockRestClient
+	public void o28_beanContext_notBeanPackages() throws Exception {
+		O27 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.notBeanPackages(O46.class.getPackage())
+			.notBeanPackages(O27.class.getPackage())
 			.build()
-			.post("/echoBody", new O46().init())
+			.post("/echoBody", new O27().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("'1'")
-			.getBody().as(O46.class)
+			.getBody().as(O27.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O48 {
+	public static class O29 {
 		private String foo;
 		public String getFoo() { return foo; }
 		public void setFoo(String foo) { this.foo = foo; }
-		public O48 init() {
+		public O29 init() {
 			foo = "foo";
 			return this;
 		}
 	}
 
-	public static class O48Interceptor extends BeanInterceptor<O48> {
+	public static class O29Interceptor extends BeanInterceptor<O29> {
 		static boolean getterCalled, setterCalled;
 		@Override
-		public Object readProperty(O48 bean, String name, Object value) {
+		public Object readProperty(O29 bean, String name, Object value) {
 			getterCalled = true;
 			return "x" + value;
 		}
 		@Override
-		public Object writeProperty(O48 bean, String name, Object value) {
+		public Object writeProperty(O29 bean, String name, Object value) {
 			setterCalled = true;
 			return value.toString().substring(1);
 		}
 	}
 
 	@Test
-	public void o048_beanContext_beanInterceptor() throws Exception {
-		O48 x = MockRestClient
+	public void o29_beanContext_beanInterceptor() throws Exception {
+		O29 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.beanInterceptor(O48.class, O48Interceptor.class)
+			.beanInterceptor(O29.class, O29Interceptor.class)
 			.build()
-			.post("/echoBody", new O48().init())
+			.post("/echoBody", new O29().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:'xfoo'}")
-			.getBody().as(O48.class)
+			.getBody().as(O29.class)
 		;
 		assertEquals("foo", x.foo);
-		assertTrue(O48Interceptor.getterCalled);
-		assertTrue(O48Interceptor.setterCalled);
+		assertTrue(O29Interceptor.getterCalled);
+		assertTrue(O29Interceptor.setterCalled);
 	}
 
-	public static class O49 {
+	public static class O30 {
 		private String fooBar;
 		public String getFooBar() { return fooBar; }
 		public void setFooBar(String fooBar) { this.fooBar = fooBar; }
-		public O49 init() {
+		public O30 init() {
 			fooBar = "fooBar";
 			return this;
 		}
 	}
 
 	@Test
-	public void o049_beanContext_propertyNamer() throws Exception {
-		O49 x = MockRestClient
+	public void o30_beanContext_propertyNamer() throws Exception {
+		O30 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.propertyNamer(PropertyNamerDLC.class)
 			.build()
-			.post("/echoBody", new O49().init())
+			.post("/echoBody", new O30().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{'foo-bar':'fooBar'}")
-			.getBody().as(O49.class)
+			.getBody().as(O30.class)
 		;
 		assertEquals("fooBar", x.fooBar);
 
 		x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.propertyNamer(O49.class, PropertyNamerDLC.class)
+			.propertyNamer(O30.class, PropertyNamerDLC.class)
 			.build()
-			.post("/echoBody", new O49().init())
+			.post("/echoBody", new O30().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{'foo-bar':'fooBar'}")
-			.getBody().as(O49.class)
+			.getBody().as(O30.class)
 		;
 		assertEquals("fooBar", x.fooBar);
 	}
 
-	public static class O50 {
+	public static class O31 {
 		public int foo, bar, baz;
-		public O50 init() {
+		public O31 init() {
 			foo = 1;
 			bar = 2;
 			baz = 3;
@@ -3862,41 +3861,41 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o050_beanContext_sortProperties() throws Exception {
-		O50 x = MockRestClient
+	public void o31_beanContext_sortProperties() throws Exception {
+		O31 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.sortProperties()
 			.build()
-			.post("/echoBody", new O50().init())
+			.post("/echoBody", new O31().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{bar:2,baz:3,foo:1}")
-			.getBody().as(O50.class)
+			.getBody().as(O31.class)
 		;
 		assertEquals(1, x.foo);
 
 		x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.sortProperties(O50.class)
+			.sortProperties(O31.class)
 			.build()
-			.post("/echoBody", new O50().init())
+			.post("/echoBody", new O31().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{bar:2,baz:3,foo:1}")
-			.getBody().as(O50.class)
+			.getBody().as(O31.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O51a {
+	public static class O32a {
 		public int foo;
 	}
 
-	public static class O51b extends O51a {
+	public static class O32b extends O32a {
 		public int bar;
-		public O51b init() {
+		public O32b init() {
 			foo = 1;
 			bar = 2;
 			return this;
@@ -3904,169 +3903,194 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void o051_beanContext_stopClass() throws Exception {
-		O51b x = MockRestClient
+	public void o32_beanContext_stopClass() throws Exception {
+		O32b x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.stopClass(O51b.class, O51a.class)
+			.stopClass(O32b.class, O32a.class)
 			.build()
-			.post("/echoBody", new O51b().init())
+			.post("/echoBody", new O32b().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{bar:2}")
-			.getBody().as(O51b.class)
+			.getBody().as(O32b.class)
 		;
 		assertEquals(0, x.foo);
 		assertEquals(2, x.bar);
 	}
 
-	public static class O52 {
+	public static class O33 {
 		public int foo;
-		public O52 init() {
+		public O33 init() {
 			this.foo = 1;
 			return this;
 		}
 	}
 
-	public static class O52Swap extends PojoSwap<O52,Integer> {
+	public static class O33s extends PojoSwap<O33,Integer> {
 		@Override
-		public Integer swap(BeanSession session, O52 o) { return o.foo; }
+		public Integer swap(BeanSession session, O33 o) { return o.foo; }
 		@Override
-		public O52 unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new O52().init(); }
+		public O33 unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new O33().init(); }
 	}
 
 	@Test
-	public void o052_beanContext_swaps() throws Exception {
-		O52 x = MockRestClient
+	public void o33_beanContext_swaps() throws Exception {
+		O33 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.swaps(O52Swap.class)
+			.swaps(O33s.class)
 			.build()
-			.post("/echoBody", new O52().init())
+			.post("/echoBody", new O33().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("1")
-			.getBody().as(O52.class)
+			.getBody().as(O33.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O53 {
+	public static class O34 {
 		public int foo;
-		public O53 init() {
+		public O34 init() {
 			foo = 1;
 			return this;
 		}
 	}
 
-	public static class O53Swap extends StringSwap<O53> {
+	public static class O34s extends StringSwap<O34> {
 		@Override
-		public String swap(BeanSession session, O53 o) throws Exception {
+		public String swap(BeanSession session, O34 o) throws Exception {
 			assertEquals(TimeZone.getTimeZone("Z"), session.getTimeZone());
 			return super.swap(session, o);
 		}
 
 		@Override
-		public O53 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+		public O34 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 			assertEquals(TimeZone.getTimeZone("Z"), session.getTimeZone());
 			return super.unswap(session, f, hint);
 		}
 	}
 
 	@Test
-	public void o053_beanContext_timeZone() throws Exception {
-		O53 x = MockRestClient
+	public void o34_beanContext_timeZone() throws Exception {
+		O34 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.timeZone(TimeZone.getTimeZone("Z"))
 			.build()
-			.post("/echoBody", new O53().init())
+			.post("/echoBody", new O34().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{foo:1}")
-			.getBody().as(O53.class)
+			.getBody().as(O34.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-	public static class O54 {
+	public static class O35 {
 		public int foo;
-		public O54 init() {
+		public O35 init() {
 			this.foo = 1;
 			return this;
 		}
 	}
 
 	@Test
-	public void o054_beanContext_typeName() throws Exception {
-		O54 x = MockRestClient
+	public void o35_beanContext_typeName() throws Exception {
+		O35 x = MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.typeName(O54.class, "foo")
+			.typeName(O35.class, "foo")
 			.addRootType()
 			.build()
-			.post("/echoBody", new O54().init())
+			.post("/echoBody", new O35().init())
 			.run()
 			.cacheBody()
 			.assertBody().is("{_type:'foo',foo:1}")
-			.getBody().as(O54.class)
+			.getBody().as(O35.class)
 		;
 		assertEquals(1, x.foo);
 	}
 
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient typeName(Class<?> on, String value) {
-//		super.typeName(on, value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient typePropertyName(String value) {
-//		super.typePropertyName(value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient typePropertyName(Class<?> on, String value) {
-//		super.typePropertyName(on, value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient useEnumNames() {
-//		super.useEnumNames();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient useJavaBeanIntrospector() {
-//		super.useJavaBeanIntrospector();
-//		return this;
-//	}
+	@Test
+	public void o36_beanContext_typePropertyName() throws Exception {
+		O35 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.typeName(O35.class, "foo")
+			.typePropertyName("X")
+			.addRootType()
+			.build()
+			.post("/echoBody", new O35().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{X:'foo',foo:1}")
+			.getBody().as(O35.class)
+		;
+		assertEquals(1, x.foo);
+	}
 
+	public static enum O37e {
+		ONE(1),TWO(2);
 
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// Context properties
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	@Test
-//	public void p01_context_addMap() throws Exception { fail(); }
-////	public RestClientBuilder add(Map<String,Object> properties) {
+		private int value;
+
+		O37e(int value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(value);
+		}
+	}
+
+	public static class O37 {
+		public O37e foo;
+		public O37 init() {
+			this.foo = O37e.ONE;
+			return this;
+		}
+	}
+
+	@Test
+	public void o37_beanContext_useEnumNames() throws Exception {
+		O37 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.useEnumNames()
+			.build()
+			.post("/echoBody", new O37().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:'ONE'}")
+			.getBody().as(O37.class)
+		;
+		assertEquals(O37e.ONE, x.foo);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Context properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class P1 {
+		public String foo;
+	}
+
+	@Test
+	public void p01_context_addMap() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.add(OMap.of(Serializer.SERIALIZER_keepNullProperties, true))
+			.build()
+			.post("/echoBody", new P1())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:null}")
+			.getBody().as(P1.class);
+	}
 //
 //	@Test
 //	public void p02_context_addToStringObject() throws Exception { fail(); }
@@ -4115,5 +4139,5 @@ public class RestClientTest {
 //	@Test
 //	public void p13_context_annotations() throws Exception { fail(); }
 ////	public RestClientBuilder annotations(Annotation...values) {
-//
+
 }
