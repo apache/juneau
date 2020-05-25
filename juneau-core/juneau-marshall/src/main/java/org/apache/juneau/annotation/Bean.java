@@ -305,16 +305,16 @@ public @interface Bean {
 	@Deprecated String properties() default "";
 
 	/**
-	 * Property filter.
+	 * Bean property interceptor.
 	 *
 	 * <p>
-	 * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
+	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyFilter}
+	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 */
-	Class<? extends PropertyFilter> propertyFilter() default PropertyFilter.class;
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
 
 	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.

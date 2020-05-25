@@ -70,7 +70,7 @@ public class BeanFilterBuilder<T> {
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
 	List<Class<?>> dictionary;
-	Object propertyFilter;
+	Object interceptor;
 
 	/**
 	 * Constructor.
@@ -702,10 +702,10 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * Configuration property:  Property filter.
+	 * Configuration property:  Bean interceptor.
 	 *
 	 * <p>
-	 * The property filter to use for intercepting and altering getter and setter calls.
+	 * The interceptor to use for intercepting and altering getter and setter calls.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -713,7 +713,7 @@ public class BeanFilterBuilder<T> {
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
 	 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
-	 * 			propertyFilter(AddressPropertyFilter.<jk>class</jk>);
+	 * 			interceptor(AddressInterceptor.<jk>class</jk>);
 	 * 		}
 	 * 	}
 	 *
@@ -725,17 +725,17 @@ public class BeanFilterBuilder<T> {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#propertyFilter()}
-	 * 	<li class='jc'>{@link PropertyFilter}
+	 * 	<li class='ja'>{@link Bean#interceptor()}
+	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link PropertyFilter}.
+	 * 	<br>The default value is {@link BeanInterceptor}.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder<T> propertyFilter(Class<? extends PropertyFilter> value) {
-		this.propertyFilter = value;
+	public BeanFilterBuilder<T> interceptor(Class<?> value) {
+		this.interceptor = value;
 		return this;
 	}
 

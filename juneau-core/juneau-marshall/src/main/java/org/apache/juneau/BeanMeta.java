@@ -972,6 +972,36 @@ public class BeanMeta<T> {
 		}
 	}
 
+	/**
+	 * Property read interceptor.
+	 * 
+	 * <p>
+	 * Called immediately after calling the getter to allow the value to be overridden.
+	 *
+	 * @param bean The bean from which the property was read.
+	 * @param name The property name.
+	 * @param value The value just extracted from calling the bean getter.
+	 * @return The value to serialize.  Default is just to return the existing value.
+	 */
+	public Object onReadProperty(Object bean, String name, Object value) {
+		return beanFilter == null ? value : beanFilter.readProperty(bean, name, value);
+	}
+
+	/**
+	 * Property write interceptor.
+	 * 
+	 * <p>
+	 * Called immediately before calling theh setter to allow value to be overwridden.
+	 *
+	 * @param bean The bean from which the property was read.
+	 * @param name The property name.
+	 * @param value The value just parsed.
+	 * @return The value to serialize.  Default is just to return the existing value.
+	 */
+	public Object onWriteProperty(Object bean, String name, Object value) {
+		return beanFilter == null ? value : beanFilter.writeProperty(bean, name, value);
+	}
+
 	@SuppressWarnings("deprecation")
 	static final String bpName(BeanProperty px, List<Beanp> p, List<Name> n) {
 		if (px == null && p.isEmpty() && n.isEmpty())

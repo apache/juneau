@@ -576,6 +576,61 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Bean interceptor.
+	 *
+	 * <p>
+	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Interceptor that strips out sensitive information.</jc>
+	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
+	 *
+	 * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+	 * 				<jk>return</jk> <js>"redacted"</js>;
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 *
+	 * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
+	 * 			<jk>return</jk> value;
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Our bean class.</jc>
+	 * 	<jk>public class</jk> Address {
+	 * 		<jk>public</jk> String getTaxInfo() {...}
+	 * 		<jk>public void</jk> setTaxInfo(String s) {...}
+	 * 	}
+	 *
+	 * 	<jc>// Register filter on serializer or parser.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beanInterceptor(Address.<jk>class</jk>, AddressInterceptor.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"taxInfo":"redacted"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> Address());
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link BeanInterceptor}
+	 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
+	 * </ul>
+	 *
+	 * @param on The bean that the filter applies to.
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public BeanContextBuilder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+		return prependTo(BEAN_annotations, new BeanAnnotation(on).interceptor(value));
+	}
+
+	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  BeanMap.put() returns old property value.
 	 *
 	 * <div class='warn'>
@@ -2889,14 +2944,28 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
+	 * 		<li>{@link Package} objects.
 	 * 		<li>Strings.
-	 * 		<li>Arrays and collections of strings.
+	 * 		<li>Arrays and collections of anything in this list.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@ConfigurationProperty
 	public BeanContextBuilder notBeanPackages(Object...values) {
-		return addTo(BEAN_notBeanPackages, values);
+		for (Object o : values) {
+			if (o instanceof Package)
+				addTo(BEAN_notBeanPackages, ((Package) o).getName());
+			else if (o instanceof String)
+				addTo(BEAN_notBeanPackages, o.toString());
+			else if (o instanceof Collection) {
+				for (Object o2 : (Collection<?>)o)
+					notBeanPackages(o2);
+			} else if (o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					notBeanPackages(Array.get(o, i));
+			}
+		}
+		return this;
 	}
 
 	/**
@@ -2939,62 +3008,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@ConfigurationProperty
 	public BeanContextBuilder pojoSwapsRemove(Object...values) {
 		return removeFrom(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * Property filter.
-	 *
-	 * <p>
-	 * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Address filter that strips out sensitive information.</jc>
-	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
-	 *
-	 * 		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
-	 * 				<jk>return</jk> <js>"redacted"</js>;
-	 * 			<jk>return</jk> value;
-	 * 		}
-	 *
-	 * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
-	 * 			AddressBook a = (Address)bean;
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
-	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
-	 * 			<jk>return</jk> value;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Our bean class.</jc>
-	 * 	<jk>public class</jk> Address {
-	 * 		<jk>public</jk> String getTaxInfo() {...}
-	 * 		<jk>public void</jk> setTaxInfo(String s) {...}
-	 * 	}
-	 *
-	 * 	<jc>// Register filter on serializer or parser.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.propertyFilter(Address.<jk>class</jk>, AddressPropertyFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"taxInfo":"redacted"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> Address());
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link PropertyFilter}
-	 * 	<li class='ja'>{@link Bean#propertyFilter() Bean(propertyFilter)}
-	 * </ul>
-	 *
-	 * @param on The bean that the filter applies to.
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder propertyFilter(Class<?> on, Class<? extends PropertyFilter> value) {
-		return prependTo(BEAN_annotations, new BeanAnnotation(on).propertyFilter(value));
 	}
 
 	/**

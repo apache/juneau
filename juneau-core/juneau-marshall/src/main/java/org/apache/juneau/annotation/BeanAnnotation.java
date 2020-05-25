@@ -34,8 +34,8 @@ public class BeanAnnotation implements Bean {
 	private Class<?>
 		interfaceClass = Object.class,
 		stopClass = Object.class;
-	private Class<? extends PropertyFilter>
-		propertyFilter = PropertyFilter.class;
+	private Class<? extends BeanInterceptor<?>>
+		interceptor = BeanInterceptor.Default.class;
 	private Class<? extends PropertyNamer>
 		propertyNamer = PropertyNamerDefault.class;
 	private String
@@ -262,8 +262,8 @@ public class BeanAnnotation implements Bean {
 	}
 
 	@Override
-	public Class<? extends PropertyFilter> propertyFilter() {
-		return propertyFilter;
+	public Class<? extends BeanInterceptor<?>> interceptor() {
+		return interceptor;
 	}
 
 	/**
@@ -272,8 +272,8 @@ public class BeanAnnotation implements Bean {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanAnnotation propertyFilter(Class<? extends PropertyFilter> value) {
-		this.propertyFilter = value;
+	public BeanAnnotation interceptor(Class<? extends BeanInterceptor<?>> value) {
+		this.interceptor = value;
 		return this;
 	}
 

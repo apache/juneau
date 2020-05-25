@@ -42,7 +42,8 @@ public final class BeanFilter {
 	private final boolean sortProperties, fluentSetters;
 	private final String typeName;
 	private final Class<?>[] beanDictionary;
-	private final PropertyFilter propertyFilter;
+	@SuppressWarnings("rawtypes")
+	private final BeanInterceptor interceptor;
 
 	/**
 	 * Constructor.
@@ -63,10 +64,10 @@ public final class BeanFilter {
 			builder.dictionary == null
 			? null
 			: builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
-		this.propertyFilter =
-			builder.propertyFilter == null
-			? PropertyFilter.DEFAULT
-			: castOrCreate(PropertyFilter.class, builder.propertyFilter);
+		this.interceptor =
+			builder.interceptor == null
+			? BeanInterceptor.DEFAULT
+			: castOrCreate(BeanInterceptor.class, builder.interceptor);
 	}
 
 	/**
@@ -195,26 +196,28 @@ public final class BeanFilter {
 	}
 
 	/**
-	 * Calls the {@link PropertyFilter#readProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link BeanInterceptor#readProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just extracted from calling the bean getter.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
+	@SuppressWarnings("unchecked")
 	public Object readProperty(Object bean, String name, Object value) {
-		return propertyFilter.readProperty(bean, name, value);
+		return interceptor.readProperty(bean, name, value);
 	}
 
 	/**
-	 * Calls the {@link PropertyFilter#writeProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link BeanInterceptor#writeProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
 	 * @param value The value just parsed.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
+	@SuppressWarnings("unchecked")
 	public Object writeProperty(Object bean, String name, Object value) {
-		return propertyFilter.writeProperty(bean, name, value);
+		return interceptor.writeProperty(bean, name, value);
 	}
 }

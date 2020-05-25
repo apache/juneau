@@ -85,8 +85,8 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 			if (b.dictionary().length > 0)
 				dictionary(b.dictionary());
 
-			if (b.propertyFilter() != PropertyFilter.class)
-				propertyFilter(b.propertyFilter());
+			if (b.interceptor() != BeanInterceptor.Default.class)
+				interceptor(b.interceptor());
 		}
 	}
 }

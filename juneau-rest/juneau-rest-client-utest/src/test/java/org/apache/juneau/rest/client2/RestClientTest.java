@@ -30,7 +30,6 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.Visibility;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
@@ -49,6 +48,7 @@ import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -3653,79 +3653,166 @@ public class RestClientTest {
 		assertEquals(1, x.getFoo());
 	}
 
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient locale(Locale value) {
-//		super.locale(value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient mediaType(MediaType value) {
-//		super.mediaType(value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanClasses(Object...values) {
-//		super.notBeanClasses(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanClassesRemove(Object...values) {
-//		super.notBeanClassesRemove(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanClassesReplace(Object...values) {
-//		super.notBeanClassesReplace(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanPackages(Object...values) {
-//		super.notBeanPackages(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanPackagesRemove(Object...values) {
-//		super.notBeanPackagesRemove(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient notBeanPackagesReplace(Object...values) {
-//		super.notBeanPackagesReplace(values);
-//		return this;
-//	}
-//
-//	@Test
+	public static class O44 {
+		public int foo;
+		public O44 init() {
+			foo = 1;
+			return this;
+		}
+	}
+
+	public static class O44Swap extends StringSwap<O44> {
+		@Override
+		public String swap(BeanSession session, O44 o) throws Exception {
+			assertEquals(Locale.UK, session.getLocale());
+			return super.swap(session, o);
+		}
+
+		@Override
+		public O44 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+			assertEquals(Locale.UK, session.getLocale());
+			return super.unswap(session, f, hint);
+		}
+	}
+
+	@Test
+	public void o044_beanContext_locale() throws Exception {
+		O44 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.locale(Locale.UK)
+			.build()
+			.post("/echoBody", new O44().init())
+			.run()
+			.cacheBody()
+			.assertBody().equals("{foo:1}")
+			.getBody().as(O44.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O45Swap extends StringSwap<O44> {
+		@Override
+		public String swap(BeanSession session, O44 o) throws Exception {
+			assertEquals(MediaType.JSON, session.getMediaType());
+			return super.swap(session, o);
+		}
+
+		@Override
+		public O44 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+			assertEquals(MediaType.JSON, session.getMediaType());
+			return super.unswap(session, f, hint);
+		}
+	}
+
+	@Test
+	public void o045_beanContext_mediaType() throws Exception {
+		O44 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.mediaType(MediaType.JSON)
+			.build()
+			.post("/echoBody", new O44().init())
+			.run()
+			.cacheBody()
+			.assertBody().equals("{foo:1}")
+			.getBody().as(O44.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O46 {
+		public int foo;
+		public O46 init() {
+			foo = 1;
+			return this;
+		}
+		@Override
+		public String toString() {
+			return String.valueOf(foo);
+		}
+		public static O46 fromString(String foo) throws ParseException {
+			O46 x = new O46();
+			x.foo = JsonParser.DEFAULT.parse(foo, int.class);
+			return x;
+		}
+	}
+
+	@Test
+	public void o046_beanContext_notBeanClasses() throws Exception {
+		O46 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.notBeanClasses(O46.class)
+			.build()
+			.post("/echoBody", new O46().init())
+			.run()
+			.cacheBody()
+			.assertBody().equals("'1'")
+			.getBody().as(O46.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	@Test
+	public void o047_beanContext_notBeanPackages() throws Exception {
+		O46 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.notBeanPackages(O46.class.getPackage())
+			.build()
+			.post("/echoBody", new O46().init())
+			.run()
+			.cacheBody()
+			.assertBody().equals("'1'")
+			.getBody().as(O46.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O48 {
+		private int foo;
+		public int getFoo() { return foo; }
+		public void setFoo(int foo) { this.foo = foo; }
+		public O48 init() {
+			foo = 1;
+			return this;
+		}
+	}
+
+	public static class O48Interceptor extends BeanInterceptor<O48> {
+		static boolean getterCalled, setterCalled;
+		@Override
+		public Object readProperty(O48 bean, String name, Object value) {
+			getterCalled = true;
+			return value;
+		}
+		@Override
+		public Object writeProperty(O48 bean, String name, Object value) {
+			setterCalled = true;
+			return value;
+		}
+	}
+
+	@Test
+	public void o048_beanContext_beanInterceptor() throws Exception {
+		O48 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.beanInterceptor(O48.class, O48Interceptor.class)
+			.build()
+			.post("/echoBody", new O48().init())
+			.run()
+			.cacheBody()
+			.assertBody().equals("{foo:1}")
+			.getBody().as(O48.class)
+		;
+		assertEquals(1, x.foo);
+		assertTrue(O48Interceptor.getterCalled);
+		assertTrue(O48Interceptor.setterCalled);
+	}
+
+	//	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}
 //	@Override /* GENERATED - BeanContextBuilder */

@@ -247,17 +247,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		BeanPropertyMeta p = getPropertyMeta(property);
 		if (p == null) {
 			if (meta.ctx.isIgnoreUnknownBeanProperties())
-				return null;
+				return meta.onWriteProperty(bean, property, null);
 
 			if (property.equals(typePropertyName))
-				return null;
+				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");
 			if (p == null)
 				throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
 		}
-		if (meta.beanFilter != null)
-			value = meta.beanFilter.writeProperty(this.bean, property, value);
 		return p.set(this, property, value);
 	}
 
@@ -328,10 +326,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object get(Object property) {
 		String pName = stringify(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
-		if (p == null)
-			return null;
-		if (meta.beanFilter != null)
-			return meta.beanFilter.readProperty(this.bean, pName, p.get(this, pName));
+		if (p == null) 
+			return meta.onReadProperty(this.bean, pName, null);
 		return p.get(this, pName);
 	}
 

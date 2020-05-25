@@ -575,6 +575,10 @@ public final class BeanPropertyMeta {
 	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
 	 */
 	public Object get(BeanMap<?> m, String pName) {
+		return m.meta.onReadProperty(m.bean, pName, getInner(m, pName));
+	}
+
+	private Object getInner(BeanMap<?> m, String pName) {
 		try {
 
 			if (writeOnly)
@@ -678,6 +682,10 @@ public final class BeanPropertyMeta {
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
+		return setInner(m, pName, m.meta.onWriteProperty(m.bean, pName, value));
+	}
+
+	private Object setInner(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		try {
 
 			if (readOnly)

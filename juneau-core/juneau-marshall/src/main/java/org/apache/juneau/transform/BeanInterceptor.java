@@ -13,73 +13,59 @@
 package org.apache.juneau.transform;
 
 /**
- * Bean property filter.
+ * Bean interceptor.
  *
  * <p>
- * Registers a bean property filter with a bean class.
- *
- * <p>
- * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
+ * Bean interceptors intercept calls to bean getters and setters to allow them to override values in transit.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Property filter that strips out sensitive information on Address beans.</jc>
- * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+ * 	<jc>// Interceptor that strips out sensitive information on Address beans.</jc>
+ * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
+ * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
  * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
  * 				<jk>return</jk> <js>"redacted"</js>;
  * 			<jk>return</jk> value;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
- * 			AddressBook a = (Address)bean;
+ * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
  * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
- * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
+ * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
  * 			<jk>return</jk> value;
  * 		}
  * 	}
  * </p>
  *
  * <p>
- * Property filters are registered in the following ways:
+ * Bean interceptors are registered in the following way:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#propertyFilter() @Bean(propertyFilter)}
- * 	<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyFilter(Class)}
+ * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor() @Bean(interceptor)}
+ * 	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanInterceptor(Class,Class)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Register filter on bean class.</jc>
- * 	<ja>@Bean</ja>(propertyFilter=AddressPropertyFilter.<jk>class</jk>)
+ * 	<jc>// Register interceptor on bean class.</jc>
+ * 	<ja>@Bean</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getTaxInfo() {...}
  * 		<jk>public void</jk> setTaxInfo(String s) {...}
  * 	}
- *
- * 	<jc>// Or define a bean filter.</jc>
- * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;Address&gt; {
- * 		<jk>public</jk> MyFilter() {
- * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
- * 			propertyFilter(AddressPropertyFilter.<jk>class</jk>);
- * 		}
- * 	}
- *
- * 	<jc>// Register filter on serializer or parser.</jc>
- * 	WriterSerializer s = JsonSerializer
- * 		.<jsm>create</jsm>()
- * 		.beanFilters(MyFilter.<jk>class</jk>)
- * 		.build();
  * </p>
+ * @param <T> The bean type.
  */
-public class PropertyFilter {
+public class BeanInterceptor<T> {
+
+	/** Default interceptor */
+	public static class Default extends BeanInterceptor<Object> {}
 
 	/**
 	 * Default reusable property filter instance.
 	 */
-	public static final PropertyFilter DEFAULT = new PropertyFilter();
+	public static final BeanInterceptor<Object> DEFAULT = new Default();
 
 	/**
 	 * Property read interceptor.
@@ -90,9 +76,9 @@ public class PropertyFilter {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
-	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
-	 * 		<jk>public</jk> Object readProperty(Object bean, String name, Object value) {
+	 * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
 	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
 	 * 				<jk>return</jk> <js>"redacted"</js>;
 	 * 			<jk>return</jk> value;
@@ -105,7 +91,7 @@ public class PropertyFilter {
 	 * @param value The value just extracted from calling the bean getter.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	public Object readProperty(Object bean, String name, Object value) {
+	public Object readProperty(T bean, String name, Object value) {
 		return value;
 	}
 
@@ -119,12 +105,11 @@ public class PropertyFilter {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
-	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
+	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
-	 * 		<jk>public</jk> Object writeProperty(Object bean, String name, Object value) {
-	 * 			AddressBook a = (Address)bean;
+	 * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
 	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
-	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(a.getStreet(), a.getCity(), a.getState());
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
 	 * 			<jk>return</jk> value;
 	 * 		}
 	 * 	}
@@ -135,7 +120,7 @@ public class PropertyFilter {
 	 * @param value The value just parsed.
 	 * @return The value to serialize.  Default is just to return the existing value.
 	 */
-	public Object writeProperty(Object bean, String name, Object value) {
+	public Object writeProperty(T bean, String name, Object value) {
 		return value;
 	}
 }
