@@ -38,6 +38,6 @@ public class ResponseStatusAnnotationTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").execute().assertStatus(100);
+		a.get("/a01").run().assertStatus().equals(100);
 	}
 }

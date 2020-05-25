@@ -54,26 +54,26 @@ public class RestResourceTest {
 
 	@Test
 	public void a01_allowBodyParam_true() throws Exception {
-		a1.put("/", "{a:'b'}").execute().assertBody("{a:'b'}");
-		a1.put("/?body=(c=d)", "{a:'b'}").execute().assertBody("{c:'d'}");
+		a1.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a1.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{c:'d'}");
 	}
 
 	@Test
 	public void a02_allowBodyParam_false() throws Exception {
-		a2.put("/", "{a:'b'}").execute().assertBody("{a:'b'}");
-		a2.put("/?body=(c=d)", "{a:'b'}").execute().assertBody("{a:'b'}");
+		a2.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a2.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{a:'b'}");
 	}
 
 	@Test
 	public void a03_allowBodyParam_overridden_false() throws Exception {
-		a3.put("/", "{a:'b'}").execute().assertBody("{a:'b'}");
-		a3.put("/?body=(c=d)", "{a:'b'}").execute().assertBody("{a:'b'}");
+		a3.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a3.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{a:'b'}");
 	}
 
 	@Test
 	public void a04_allowBodyParam_overridden_true() throws Exception {
-		a4.put("/", "{a:'b'}").execute().assertBody("{a:'b'}");
-		a4.put("/?body=(c=d)", "{a:'b'}").execute().assertBody("{c:'d'}");
+		a4.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a4.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{c:'d'}");
 	}
 
 	//====================================================================================================
@@ -122,58 +122,58 @@ public class RestResourceTest {
 
 	@Test
 	public void b01_allowedHeaderParams_default() throws Exception {
-		b1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		b1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 	}
 
 	@Test
 	public void b02_allowedHeaderParams_defaultExplicit() throws Exception {
-		b2.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b2.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		b2.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b2.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b2.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b2.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 	}
 
 	@Test
 	public void b03_allowedHeaderParams_caseSensitivity() throws Exception {
-		b3.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b3.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		b3.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b3.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b3.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		b3.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 	}
 
 	@Test
 	public void b04_allowedHeaderParams_customHeaderOnly() throws Exception {
-		b4.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b4.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
-		b4.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
+		b4.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b4.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
+		b4.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
 	}
 
 	@Test
 	public void b05_allowedHeaderParams_allHeaders() throws Exception {
-		b5.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b5.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
-		b5.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
+		b5.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b5.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
+		b5.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
 	}
 
 	@Test
 	public void b06_allowedHeaderParams_none() throws Exception {
-		b6.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b6.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b6.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b6.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b6.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b6.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 	}
 
 	@Test
 	public void b07_allowedHeaderParams_none_caseSensitivity() throws Exception {
-		b7.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b7.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b7.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b7.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b7.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b7.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 	}
 
 	@Test
 	public void b08_allowedHeaderParams_none_overridingParent() throws Exception {
-		b8.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b8.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		b8.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").execute().assertBody("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b8.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b8.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		b8.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 	}
 
 	//====================================================================================================
@@ -230,86 +230,86 @@ public class RestResourceTest {
 
 	@Test
 	public void c01_allowedMethodHeaders_default() throws Exception {
-		c1.get("/").execute().assertBody("GET");
-		c1.put("/", "").execute().assertBody("PUT");
-		c1.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c1.put("/", "").header("X-Method", "GET").execute().assertBody("PUT");
-		c1.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c1.get("/").run().assertBody().is("GET");
+		c1.put("/", "").run().assertBody().is("PUT");
+		c1.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c1.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
+		c1.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c02_allowedMethodHeaders_GET_only() throws Exception {
-		c2.get("/").execute().assertBody("GET");
-		c2.put("/", "").execute().assertBody("PUT");
-		c2.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c2.put("/", "").header("X-Method", "GET").execute().assertBody("GET");
-		c2.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c2.get("/").run().assertBody().is("GET");
+		c2.put("/", "").run().assertBody().is("PUT");
+		c2.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c2.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
+		c2.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c03_allowedMethodHeaders_GET_caseSensitivity() throws Exception {
-		c3.get("/").execute().assertBody("GET");
-		c3.put("/", "").execute().assertBody("PUT");
-		c3.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c3.put("/", "").header("X-Method", "GET").execute().assertBody("GET");
-		c3.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c3.get("/").run().assertBody().is("GET");
+		c3.put("/", "").run().assertBody().is("PUT");
+		c3.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c3.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
+		c3.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c04_allowedMethodHeaders_FOO_only() throws Exception {
-		c4.get("/").execute().assertBody("GET");
-		c4.put("/", "").execute().assertBody("PUT");
-		c4.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c4.put("/", "").header("X-Method", "GET").execute().assertBody("PUT");
-		c4.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("FOO");
+		c4.get("/").run().assertBody().is("GET");
+		c4.put("/", "").run().assertBody().is("PUT");
+		c4.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c4.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
+		c4.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void c05_allowedMethodHeaders_allMethods() throws Exception {
-		c5.get("/").execute().assertBody("GET");
-		c5.put("/", "").execute().assertBody("PUT");
-		c5.get("/").header("X-Method", "PUT").execute().assertBody("PUT");
-		c5.put("/", "").header("X-Method", "GET").execute().assertBody("GET");
-		c5.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("FOO");
+		c5.get("/").run().assertBody().is("GET");
+		c5.put("/", "").run().assertBody().is("PUT");
+		c5.get("/").header("X-Method", "PUT").run().assertBody().is("PUT");
+		c5.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
+		c5.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void c06_allowedMethodHeaders_none() throws Exception {
-		c6.get("/").execute().assertBody("GET");
-		c6.put("/", "").execute().assertBody("PUT");
-		c6.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c6.put("/", "").header("X-Method", "GET").execute().assertBody("PUT");
-		c6.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c6.get("/").run().assertBody().is("GET");
+		c6.put("/", "").run().assertBody().is("PUT");
+		c6.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c6.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
+		c6.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c07_allowedMethodHeaders_none_caseSensitivity() throws Exception {
-		c7.get("/").execute().assertBody("GET");
-		c7.put("/", "").execute().assertBody("PUT");
-		c7.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c7.put("/", "").header("X-Method", "GET").execute().assertBody("PUT");
-		c7.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c7.get("/").run().assertBody().is("GET");
+		c7.put("/", "").run().assertBody().is("PUT");
+		c7.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c7.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
+		c7.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c08_allowedMethodHeaders_none_overridingParent() throws Exception {
-		c8.get("/").execute().assertBody("GET");
-		c8.put("/", "").execute().assertBody("PUT");
-		c8.get("/").header("X-Method", "PUT").execute().assertBody("GET");
-		c8.put("/", "").header("X-Method", "GET").execute().assertBody("PUT");
-		c8.request("GET","/",null,"").header("X-Method","FOO").execute().assertBody("GET");
+		c8.get("/").run().assertBody().is("GET");
+		c8.put("/", "").run().assertBody().is("PUT");
+		c8.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
+		c8.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
+		c8.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void c09_allowedMethodHeaders_caseInsensitiveHeaderName() throws Exception {
-		c5.get("/").header("x-method", "PUT").execute().assertBody("PUT");
-		c5.get("/").header("x-method", "FOO").execute().assertBody("FOO");
+		c5.get("/").header("x-method", "PUT").run().assertBody().is("PUT");
+		c5.get("/").header("x-method", "FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void c10_allowedMethodHeaders_caseInsensitiveHeaderValue() throws Exception {
-		c5.get("/").header("X-Method", "put").execute().assertBody("PUT");
-		c5.get("/").header("X-Method", "foo").execute().assertBody("FOO");
+		c5.get("/").header("X-Method", "put").run().assertBody().is("PUT");
+		c5.get("/").header("X-Method", "foo").run().assertBody().is("FOO");
 	}
 
 	//====================================================================================================
@@ -374,111 +374,111 @@ public class RestResourceTest {
 
 	@Test
 	public void d01_allowedMethodHeaders_default() throws Exception {
-		d1.get("/").execute().assertBody("GET");
-		d1.put("/", "").execute().assertBody("PUT");
-		d1.head("/").execute().assertBody("HEAD");
-		d1.options("/").execute().assertBody("OPTIONS");
-		d1.get("/?method=PUT").execute().assertBody("GET");
-		d1.put("/?method=GET", "").execute().assertBody("PUT");
-		d1.get("/?method=HEAD").execute().assertBody("HEAD");
-		d1.get("/?method=OPTIONS").execute().assertBody("OPTIONS");
-		d1.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d1.get("/").run().assertBody().is("GET");
+		d1.put("/", "").run().assertBody().is("PUT");
+		d1.head("/").run().assertBody().is("HEAD");
+		d1.options("/").run().assertBody().is("OPTIONS");
+		d1.get("/?method=PUT").run().assertBody().is("GET");
+		d1.put("/?method=GET", "").run().assertBody().is("PUT");
+		d1.get("/?method=HEAD").run().assertBody().is("HEAD");
+		d1.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
+		d1.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d02_allowedMethodParams_GET_only() throws Exception {
-		d2.get("/").execute().assertBody("GET");
-		d2.put("/", "").execute().assertBody("PUT");
-		d2.head("/").execute().assertBody("HEAD");
-		d2.options("/").execute().assertBody("OPTIONS");
-		d2.get("/?method=PUT").execute().assertBody("GET");
-		d2.put("/?method=GET", "").execute().assertBody("GET");
-		d2.get("/?method=HEAD").execute().assertBody("GET");
-		d2.get("/?method=OPTIONS").execute().assertBody("GET");
-		d2.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d2.get("/").run().assertBody().is("GET");
+		d2.put("/", "").run().assertBody().is("PUT");
+		d2.head("/").run().assertBody().is("HEAD");
+		d2.options("/").run().assertBody().is("OPTIONS");
+		d2.get("/?method=PUT").run().assertBody().is("GET");
+		d2.put("/?method=GET", "").run().assertBody().is("GET");
+		d2.get("/?method=HEAD").run().assertBody().is("GET");
+		d2.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d2.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d03_allowedMethodParams_GET_caseSensitivity() throws Exception {
-		d3.get("/").execute().assertBody("GET");
-		d3.put("/", "").execute().assertBody("PUT");
-		d3.head("/").execute().assertBody("HEAD");
-		d3.options("/").execute().assertBody("OPTIONS");
-		d3.get("/?method=PUT").execute().assertBody("GET");
-		d3.put("/?method=GET", "").execute().assertBody("GET");
-		d3.get("/?method=HEAD").execute().assertBody("GET");
-		d3.get("/?method=OPTIONS").execute().assertBody("GET");
-		d3.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d3.get("/").run().assertBody().is("GET");
+		d3.put("/", "").run().assertBody().is("PUT");
+		d3.head("/").run().assertBody().is("HEAD");
+		d3.options("/").run().assertBody().is("OPTIONS");
+		d3.get("/?method=PUT").run().assertBody().is("GET");
+		d3.put("/?method=GET", "").run().assertBody().is("GET");
+		d3.get("/?method=HEAD").run().assertBody().is("GET");
+		d3.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d3.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d04_allowedMethodParams_FOO_only() throws Exception {
-		d4.get("/").execute().assertBody("GET");
-		d4.put("/", "").execute().assertBody("PUT");
-		d4.head("/").execute().assertBody("HEAD");
-		d4.options("/").execute().assertBody("OPTIONS");
-		d4.get("/?method=PUT").execute().assertBody("GET");
-		d4.put("/?method=GET", "").execute().assertBody("PUT");
-		d4.get("/?method=HEAD").execute().assertBody("GET");
-		d4.get("/?method=OPTIONS").execute().assertBody("GET");
-		d4.request("GET","/?method=FOO",null,"").execute().assertBody("FOO");
+		d4.get("/").run().assertBody().is("GET");
+		d4.put("/", "").run().assertBody().is("PUT");
+		d4.head("/").run().assertBody().is("HEAD");
+		d4.options("/").run().assertBody().is("OPTIONS");
+		d4.get("/?method=PUT").run().assertBody().is("GET");
+		d4.put("/?method=GET", "").run().assertBody().is("PUT");
+		d4.get("/?method=HEAD").run().assertBody().is("GET");
+		d4.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d4.request("GET","/?method=FOO",null,"").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void d05_allowedMethodParams_allMethods() throws Exception {
-		d5.get("/").execute().assertBody("GET");
-		d5.put("/", "").execute().assertBody("PUT");
-		d5.head("/").execute().assertBody("HEAD");
-		d5.options("/").execute().assertBody("OPTIONS");
-		d5.get("/?method=PUT").execute().assertBody("PUT");
-		d5.put("/?method=GET", "").execute().assertBody("GET");
-		d5.get("/?method=HEAD").execute().assertBody("HEAD");
-		d5.get("/?method=OPTIONS").execute().assertBody("OPTIONS");
-		d5.request("GET","/?method=FOO",null,"").execute().assertBody("FOO");
+		d5.get("/").run().assertBody().is("GET");
+		d5.put("/", "").run().assertBody().is("PUT");
+		d5.head("/").run().assertBody().is("HEAD");
+		d5.options("/").run().assertBody().is("OPTIONS");
+		d5.get("/?method=PUT").run().assertBody().is("PUT");
+		d5.put("/?method=GET", "").run().assertBody().is("GET");
+		d5.get("/?method=HEAD").run().assertBody().is("HEAD");
+		d5.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
+		d5.request("GET","/?method=FOO",null,"").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void d06_allowedMethodParams_none() throws Exception {
-		d6.get("/").execute().assertBody("GET");
-		d6.put("/", "").execute().assertBody("PUT");
-		d6.head("/").execute().assertBody("HEAD");
-		d6.options("/").execute().assertBody("OPTIONS");
-		d6.get("/?method=PUT").execute().assertBody("GET");
-		d6.put("/?method=GET", "").execute().assertBody("PUT");
-		d6.get("/?method=HEAD").execute().assertBody("GET");
-		d6.get("/?method=OPTIONS").execute().assertBody("GET");
-		d6.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d6.get("/").run().assertBody().is("GET");
+		d6.put("/", "").run().assertBody().is("PUT");
+		d6.head("/").run().assertBody().is("HEAD");
+		d6.options("/").run().assertBody().is("OPTIONS");
+		d6.get("/?method=PUT").run().assertBody().is("GET");
+		d6.put("/?method=GET", "").run().assertBody().is("PUT");
+		d6.get("/?method=HEAD").run().assertBody().is("GET");
+		d6.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d6.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d07_allowedMethodParams_none_caseSensitivity() throws Exception {
-		d7.get("/").execute().assertBody("GET");
-		d7.put("/", "").execute().assertBody("PUT");
-		d7.head("/").execute().assertBody("HEAD");
-		d7.options("/").execute().assertBody("OPTIONS");
-		d7.get("/?method=PUT").execute().assertBody("GET");
-		d7.put("/?method=GET", "").execute().assertBody("PUT");
-		d7.get("/?method=HEAD").execute().assertBody("GET");
-		d7.get("/?method=OPTIONS").execute().assertBody("GET");
-		d7.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d7.get("/").run().assertBody().is("GET");
+		d7.put("/", "").run().assertBody().is("PUT");
+		d7.head("/").run().assertBody().is("HEAD");
+		d7.options("/").run().assertBody().is("OPTIONS");
+		d7.get("/?method=PUT").run().assertBody().is("GET");
+		d7.put("/?method=GET", "").run().assertBody().is("PUT");
+		d7.get("/?method=HEAD").run().assertBody().is("GET");
+		d7.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d7.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d08_allowedMethodParams_none_overridingParent() throws Exception {
-		d8.get("/").execute().assertBody("GET");
-		d8.put("/", "").execute().assertBody("PUT");
-		d8.head("/").execute().assertBody("HEAD");
-		d8.options("/").execute().assertBody("OPTIONS");
-		d8.get("/?method=PUT").execute().assertBody("GET");
-		d8.put("/?method=GET", "").execute().assertBody("PUT");
-		d8.get("/?method=HEAD").execute().assertBody("GET");
-		d8.get("/?method=OPTIONS").execute().assertBody("GET");
-		d8.request("GET","/?method=FOO",null,"").execute().assertBody("GET");
+		d8.get("/").run().assertBody().is("GET");
+		d8.put("/", "").run().assertBody().is("PUT");
+		d8.head("/").run().assertBody().is("HEAD");
+		d8.options("/").run().assertBody().is("OPTIONS");
+		d8.get("/?method=PUT").run().assertBody().is("GET");
+		d8.put("/?method=GET", "").run().assertBody().is("PUT");
+		d8.get("/?method=HEAD").run().assertBody().is("GET");
+		d8.get("/?method=OPTIONS").run().assertBody().is("GET");
+		d8.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d09_allowedMethodHeaders_caseInsensitiveParamValue() throws Exception {
-		d5.get("/?method=Put").execute().assertBody("PUT");
-		d5.get("/?method=Foo").execute().assertBody("FOO");
+		d5.get("/?method=Put").run().assertBody().is("PUT");
+		d5.get("/?method=Foo").run().assertBody().is("FOO");
 	}
 }

@@ -43,15 +43,15 @@ public class PathRemainderAnnotationTest {
 
 	@Test
 	public void a01_withoutRemainder() throws Exception {
-		a.get("/").execute().assertBody("");
+		a.get("/").run().assertBody().is("");
 	}
 	@Test
 	public void a02_withRemainder() throws Exception {
-		a.get("/foo").execute().assertBody("foo");
+		a.get("/foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a03_withRemainder2() throws Exception {
-		a.get("/foo/bar").execute().assertBody("foo/bar");
+		a.get("/foo/bar").run().assertBody().is("foo/bar");
 	}
 
 	//=================================================================================================================
@@ -84,21 +84,21 @@ public class PathRemainderAnnotationTest {
 
 	@Test
 	public void b01_optionalParam_integer() throws Exception {
-		b.get("/a/123").execute().assertStatus(200).assertBody("123");
+		b.get("/a/123").run().assertStatus().equals(200).assertBody().is("123");
 	}
 
 	@Test
 	public void b02_optionalParam_bean() throws Exception {
-		b.get("/b/a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
+		b.get("/b/a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
 	}
 
 	@Test
 	public void b03_optionalParam_listOfBeans() throws Exception {
-		b.get("/c/@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		b.get("/c/@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
 	public void b04_optionalParam_listOfOptionals() throws Exception {
-		b.get("/d/@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
+		b.get("/d/@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
 	}
 }

@@ -2341,7 +2341,7 @@ public class BasicRestInfoProviderTest {
 
 	@Test
 	public void p01_bodyWithReadOnlyProperty() throws Exception {
-		Swagger s = JsonParser.DEFAULT.parse(p.options("/").accept("application/json").execute().getBodyAsString(), Swagger.class);
+		Swagger s = JsonParser.DEFAULT.parse(p.options("/").accept("application/json").run().getBodyAsString(), Swagger.class);
 		Operation o = s.getOperation("/", "get");
 		ParameterInfo pi = o.getParameter("body", null);
 		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));

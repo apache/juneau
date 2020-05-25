@@ -66,15 +66,15 @@ public class RestMethodMatchersTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/one?t1=1").execute().assertBody("OK-1a");
-		a.get("/one?t2=2").execute().assertBody("OK-1b");
-		a.get("/one").execute().assertBody("OK-1c");
+		a.get("/one?t1=1").run().assertBody().is("OK-1a");
+		a.get("/one?t2=2").run().assertBody().is("OK-1b");
+		a.get("/one").run().assertBody().is("OK-1c");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/two?t1=1").execute().assertBody("OK-2b");
-		a.get("/two?t2=2").execute().assertBody("OK-2b");
-		a.get("/two?t1=1&t2=2").execute().assertBody("OK-2b");
-		a.get("/two?tx=x").execute().assertBody("OK-2a");
+		a.get("/two?t1=1").run().assertBody().is("OK-2b");
+		a.get("/two?t2=2").run().assertBody().is("OK-2b");
+		a.get("/two?t1=1&t2=2").run().assertBody().is("OK-2b");
+		a.get("/two?tx=x").run().assertBody().is("OK-2a");
 	}
 }

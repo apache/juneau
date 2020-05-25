@@ -64,14 +64,14 @@ public class AnnotationInheritanceTest {
 
 	@Test
 	public void a01_inherited_Body() throws Exception {
-		a.put("/a01", "'foo'").json().execute().assertBody("'foo'");
+		a.put("/a01", "'foo'").json().run().assertBody().is("'foo'");
 	}
 	@Test
 	public void a02_inherited_Query() throws Exception {
-		a.get("/a02").query("foo", "bar").json().execute().assertBody("'bar'");
+		a.get("/a02").query("foo", "bar").json().run().assertBody().is("'bar'");
 	}
 	@Test
 	public void a03_inherited_Header() throws Exception {
-		a.get("/a03").header("foo", "bar").json().execute().assertBody("'bar'");
+		a.get("/a03").header("foo", "bar").json().run().assertBody().is("'bar'");
 	}
 }

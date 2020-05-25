@@ -53,23 +53,23 @@ public class HtmlDocStyleTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").accept("text/html").execute().assertBodyContains("<style>@import \"/a01s\"; a01a a01b</style>");
+		a.get("/a01").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a01a a01b</style>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").accept("text/html").execute().assertBodyContains("<style>@import \"/a02s\"; a02a a02b</style>");
+		a.get("/a02").accept("text/html").run().assertBody().contains("<style>@import \"/a02s\"; a02a a02b</style>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").accept("text/html").execute().assertBodyContains("<style>@import \"/a01s\"; a01a a01b a03a a03b</style>");
+		a.get("/a03").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a01a a01b a03a a03b</style>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").accept("text/html").execute().assertBodyContains("<style>@import \"/a01s\"; a04a a01a a01b a04b</style>");
+		a.get("/a04").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a04a a01a a01b a04b</style>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").accept("text/html").execute().assertBodyContains("<style>@import \"/a01s\"; a05a a05b a01a a01b</style>");
+		a.get("/a05").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a05a a05b a01a a01b</style>");
 	}
 
 	//=================================================================================================================
@@ -103,22 +103,22 @@ public class HtmlDocStyleTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").accept("text/html").execute().assertBodyContains("<style>@import \"/b01s\"; b01a b01b</style>");
+		b.get("/b01").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b01a b01b</style>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").accept("text/html").execute().assertBodyContains("<style>@import \"/b02s\"; b02a b02b</style>");
+		b.get("/b02").accept("text/html").run().assertBody().contains("<style>@import \"/b02s\"; b02a b02b</style>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").accept("text/html").execute().assertBodyContains("<style>@import \"/b01s\"; b01a b01b b03a b03b</style>");
+		b.get("/b03").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b01a b01b b03a b03b</style>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").accept("text/html").execute().assertBodyContains("<style>@import \"/b01s\"; b04a b01a b01b b04b</style>");
+		b.get("/b04").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b04a b01a b01b b04b</style>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").accept("text/html").execute().assertBodyContains("<style>@import \"/b01s\"; b05a b05b b01a b01b</style>");
+		b.get("/b05").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b05a b05b b01a b01b</style>");
 	}
 }

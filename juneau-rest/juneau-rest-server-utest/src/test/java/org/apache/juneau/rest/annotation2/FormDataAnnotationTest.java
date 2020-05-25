@@ -49,18 +49,18 @@ public class FormDataAnnotationTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.post("", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.post("", "p1&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("", "p1=&p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,,0]");
-		a.post("", "").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("", "p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("", "p1=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[,,],p2=[0,null,0]");
-		a.post("", "p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("", "p2=").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[0,,0]");
-		a.post("", "p1=foo&p2").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.post("", "p1&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[null,null,null],p2=[1,1,1]");
+		a.post("", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.post("", "p1&p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("", "p1=&p2=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[,,],p2=[0,,0]");
+		a.post("", "").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("", "p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("", "p1=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[,,],p2=[0,null,0]");
+		a.post("", "p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("", "p2=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,,0]");
+		a.post("", "p1=foo&p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.post("", "p1&p2=1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[1,1,1]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.post("", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 
 	//=================================================================================================================
@@ -84,13 +84,13 @@ public class FormDataAnnotationTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.post("/post1", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
-		b.post("/post1", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=['p1','p1','p1']");
+		b.post("/post1", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1]");
+		b.post("/post1", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=['p1','p1','p1']");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.post("/post2", "p1=p1").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,p1,p1]");
-		b.post("/post2", "p1='p1'").contentType("application/x-www-form-urlencoded").execute().assertBody("p1=[p1,'p1','p1']");
+		b.post("/post2", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1]");
+		b.post("/post2", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,'p1','p1']");
 	}
 
 	//=================================================================================================================
@@ -132,26 +132,26 @@ public class FormDataAnnotationTest {
 
 	@Test
 	public void c01_defaultFormData() throws Exception {
-		c.post("/defaultFormData", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/defaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/defaultFormData", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/defaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void c02_annotatedFormData() throws Exception {
-		c.post("/annotatedFormData", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:null,f2:null,f3:null}");
-		c.post("/annotatedFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/annotatedFormData", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:null,f2:null,f3:null}");
+		c.post("/annotatedFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void c03_annotatedFormDataDefault() throws Exception {
-		c.post("/annotatedFormDataDefault", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/annotatedFormDataDefault", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/annotatedFormDataDefault", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/annotatedFormDataDefault", null).contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void c04_annotatedAndDefaultFormData() throws Exception {
-		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
-		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
+		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/annotatedAndDefaultFormData", null).contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//=================================================================================================================
@@ -184,26 +184,26 @@ public class FormDataAnnotationTest {
 
 	@Test
 	public void d01_optionalParam_integer() throws Exception {
-		d.post("/a", "f1=123").execute().assertStatus(200).assertBody("123");
-		d.post("/a", "null").execute().assertStatus(200).assertBody("null");
+		d.post("/a", "f1=123").run().assertStatus().equals(200).assertBody().is("123");
+		d.post("/a", "null").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void d02_optionalParam_bean() throws Exception {
-		d.post("/b", "f1=a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
-		d.post("/b", "null").execute().assertStatus(200).assertBody("null");
+		d.post("/b", "f1=a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
+		d.post("/b", "null").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void d03_optionalParam_listOfBeans() throws Exception {
-		d.post("/c", "f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
-		d.post("/c", "null").execute().assertStatus(200).assertBody("null");
+		d.post("/c", "f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		d.post("/c", "null").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void d04_optionalParam_listOfOptionals() throws Exception {
-		d.post("/d", "f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
-		d.post("/d", "null").execute().assertStatus(200).assertBody("null");
+		d.post("/d", "f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		d.post("/d", "null").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 

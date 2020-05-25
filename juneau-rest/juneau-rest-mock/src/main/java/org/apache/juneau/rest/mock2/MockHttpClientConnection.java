@@ -94,7 +94,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	@Override /* HttpClientConnection */
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
-			res = req.execute();
+			res = req.run();
 			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 			for (Map.Entry<String,String[]> e : res.getHeaders().entrySet())
 				for (String hv : e.getValue())

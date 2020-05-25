@@ -48,7 +48,7 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void a01_default() throws Exception {
-		a.get("/").execute().assertBody("{}");
+		a.get("/").run().assertBody().is("{}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -113,39 +113,39 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void b01_logging() throws Exception {
-		b1.get("/b01").execute().assertBody("{level:'WARNING'}");
+		b1.get("/b01").run().assertBody().is("{level:'WARNING'}");
 	}
 	@Test
 	public void b02_logging() throws Exception {
-		b1.get("/b02").execute().assertBody("{level:'SEVERE'}");
+		b1.get("/b02").run().assertBody().is("{level:'SEVERE'}");
 	}
 	@Test
 	public void b03_logging() throws Exception {
-		b2.get("/b03").execute().assertBody("{}");
+		b2.get("/b03").run().assertBody().is("{}");
 	}
 	@Test
 	public void b04_logging() throws Exception {
-		b2.get("/b04").execute().assertBody("{level:'SEVERE'}");
+		b2.get("/b04").run().assertBody().is("{level:'SEVERE'}");
 	}
 	@Test
 	public void b05_logging() throws Exception {
-		b3.get("/b01").execute().assertBody("{level:'WARNING'}");
+		b3.get("/b01").run().assertBody().is("{level:'WARNING'}");
 	}
 	@Test
 	public void b06_logging() throws Exception {
-		b3.get("/b02").execute().assertBody("{level:'SEVERE'}");
+		b3.get("/b02").run().assertBody().is("{level:'SEVERE'}");
 	}
 	@Test
 	public void b07_logging() throws Exception {
-		b3.get("/b07").execute().assertBody("{level:'OFF'}");
+		b3.get("/b07").run().assertBody().is("{level:'OFF'}");
 	}
 	@Test
 	public void b08_logging() throws Exception {
-		b3.get("/b08").execute().assertBody("{level:'WARNING'}");
+		b3.get("/b08").run().assertBody().is("{level:'WARNING'}");
 	}
 	@Test
 	public void b09_logging() throws Exception {
-		b3.get("/b09").execute().assertBody("{level:'SEVERE'}");
+		b3.get("/b09").run().assertBody().is("{level:'SEVERE'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -222,47 +222,47 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void c01_useStackTraceHashing() throws Exception {
-		c1.get("/c01").execute().assertBody("{useStackTraceHashing:true}");
+		c1.get("/c01").run().assertBody().is("{useStackTraceHashing:true}");
 	}
 	@Test
 	public void c02_useStackTraceHashing() throws Exception {
-		c1.get("/c02").execute().assertBody("{}");
+		c1.get("/c02").run().assertBody().is("{}");
 	}
 	@Test
 	public void c03_useStackTraceHashing() throws Exception {
-		c2.get("/c03").execute().assertBody("{}");
+		c2.get("/c03").run().assertBody().is("{}");
 	}
 	@Test
 	public void c04_useStackTraceHashing() throws Exception {
-		c2.get("/c04").execute().assertBody("{useStackTraceHashing:true}");
+		c2.get("/c04").run().assertBody().is("{useStackTraceHashing:true}");
 	}
 	@Test
 	public void c05_useStackTraceHashing() throws Exception {
-		c2.get("/c05").execute().assertBody("{}");
+		c2.get("/c05").run().assertBody().is("{}");
 	}
 	@Test
 	public void c06_useStackTraceHashing() throws Exception {
-		c3.get("/c01").execute().assertBody("{useStackTraceHashing:true}");
+		c3.get("/c01").run().assertBody().is("{useStackTraceHashing:true}");
 	}
 	@Test
 	public void c07_useStackTraceHashing() throws Exception {
-		c3.get("/c02").execute().assertBody("{}");
+		c3.get("/c02").run().assertBody().is("{}");
 	}
 	@Test
 	public void c08_useStackTraceHashing() throws Exception {
-		c3.get("/c08").execute().assertBody("{useStackTraceHashing:true}");
+		c3.get("/c08").run().assertBody().is("{useStackTraceHashing:true}");
 	}
 	@Test
 	public void c09_useStackTraceHashing() throws Exception {
-		c3.get("/c09").execute().assertBody("{useStackTraceHashing:true}");
+		c3.get("/c09").run().assertBody().is("{useStackTraceHashing:true}");
 	}
 	@Test
 	public void c10_useStackTraceHashing() throws Exception {
-		c3.get("/c10").execute().assertBody("{}");
+		c3.get("/c10").run().assertBody().is("{}");
 	}
 	@Test
 	public void c11_useStackTraceHashing() throws Exception {
-		c4.get("/c11").execute().assertBody("{}");
+		c4.get("/c11").run().assertBody().is("{}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -327,39 +327,39 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void d01_stackTraceHashingTimeout() throws Exception {
-		d1.get("/d01").execute().assertBody("{stackTraceHashingTimeout:1}");
+		d1.get("/d01").run().assertBody().is("{stackTraceHashingTimeout:1}");
 	}
 	@Test
 	public void d02_stackTraceHashingTimeout() throws Exception {
-		d1.get("/d02").execute().assertBody("{stackTraceHashingTimeout:2}");
+		d1.get("/d02").run().assertBody().is("{stackTraceHashingTimeout:2}");
 	}
 	@Test
 	public void d03_stackTraceHashingTimeout() throws Exception {
-		d2.get("/d03").execute().assertBody("{}");
+		d2.get("/d03").run().assertBody().is("{}");
 	}
 	@Test
 	public void d04_stackTraceHashingTimeout() throws Exception {
-		d2.get("/d04").execute().assertBody("{stackTraceHashingTimeout:4}");
+		d2.get("/d04").run().assertBody().is("{stackTraceHashingTimeout:4}");
 	}
 	@Test
 	public void d05_stackTraceHashingTimeout() throws Exception {
-		d3.get("/d01").execute().assertBody("{stackTraceHashingTimeout:1}");
+		d3.get("/d01").run().assertBody().is("{stackTraceHashingTimeout:1}");
 	}
 	@Test
 	public void d06_stackTraceHashingTimeout() throws Exception {
-		d3.get("/d02").execute().assertBody("{stackTraceHashingTimeout:2}");
+		d3.get("/d02").run().assertBody().is("{stackTraceHashingTimeout:2}");
 	}
 	@Test
 	public void d07_stackTraceHashingTimeout() throws Exception {
-		d3.get("/d07").execute().assertBody("{stackTraceHashingTimeout:5}");
+		d3.get("/d07").run().assertBody().is("{stackTraceHashingTimeout:5}");
 	}
 	@Test
 	public void d08_stackTraceHashingTimeout() throws Exception {
-		d3.get("/d08").execute().assertBody("{stackTraceHashingTimeout:1}");
+		d3.get("/d08").run().assertBody().is("{stackTraceHashingTimeout:1}");
 	}
 	@Test
 	public void d09_stackTraceHashingTimeout() throws Exception {
-		d3.get("/d09").execute().assertBody("{stackTraceHashingTimeout:6}");
+		d3.get("/d09").run().assertBody().is("{stackTraceHashingTimeout:6}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -436,47 +436,47 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void e01_noTrace() throws Exception {
-		e1.get("/e01").execute().assertBody("{disabled:'TRUE'}");
+		e1.get("/e01").run().assertBody().is("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e02_noTrace() throws Exception {
-		e1.get("/e02").execute().assertBody("{disabled:'PER_REQUEST'}");
+		e1.get("/e02").run().assertBody().is("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e03_noTrace() throws Exception {
-		e2.get("/e03").execute().assertBody("{}");
+		e2.get("/e03").run().assertBody().is("{}");
 	}
 	@Test
 	public void e04_noTrace() throws Exception {
-		e2.get("/e04").execute().assertBody("{disabled:'TRUE'}");
+		e2.get("/e04").run().assertBody().is("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e05_noTrace() throws Exception {
-		e2.get("/e05").execute().assertBody("{}");
+		e2.get("/e05").run().assertBody().is("{}");
 	}
 	@Test
 	public void e06_noTrace() throws Exception {
-		e3.get("/e01").execute().assertBody("{disabled:'TRUE'}");
+		e3.get("/e01").run().assertBody().is("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e07_noTrace() throws Exception {
-		e3.get("/e02").execute().assertBody("{disabled:'PER_REQUEST'}");
+		e3.get("/e02").run().assertBody().is("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e08_noTrace() throws Exception {
-		e3.get("/e08").execute().assertBody("{}");
+		e3.get("/e08").run().assertBody().is("{}");
 	}
 	@Test
 	public void e09_noTrace() throws Exception {
-		e3.get("/e09").execute().assertBody("{disabled:'TRUE'}");
+		e3.get("/e09").run().assertBody().is("{disabled:'TRUE'}");
 	}
 	@Test
 	public void e10_noTrace() throws Exception {
-		e3.get("/e10").execute().assertBody("{disabled:'PER_REQUEST'}");
+		e3.get("/e10").run().assertBody().is("{disabled:'PER_REQUEST'}");
 	}
 	@Test
 	public void e11_noTrace() throws Exception {
-		e4.get("/e11").execute().assertBody("{}");
+		e4.get("/e11").run().assertBody().is("{}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -541,39 +541,39 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void f01_rules() throws Exception {
-		f1.get("/f01").execute().assertBody("{codes:'1'}");
+		f1.get("/f01").run().assertBody().is("{codes:'1'}");
 	}
 	@Test
 	public void f02_rules() throws Exception {
-		f1.get("/f02").execute().assertBody("{codes:'2'},{codes:'1'}");
+		f1.get("/f02").run().assertBody().is("{codes:'2'},{codes:'1'}");
 	}
 	@Test
 	public void f03_rules() throws Exception {
-		f2.get("/f03").execute().assertBody("");
+		f2.get("/f03").run().assertBody().is("");
 	}
 	@Test
 	public void f04_rules() throws Exception {
-		f2.get("/f04").execute().assertBody("{codes:'4'}");
+		f2.get("/f04").run().assertBody().is("{codes:'4'}");
 	}
 	@Test
 	public void f05_rules() throws Exception {
-		f3.get("/f01").execute().assertBody("{codes:'1'}");
+		f3.get("/f01").run().assertBody().is("{codes:'1'}");
 	}
 	@Test
 	public void f06_rules() throws Exception {
-		f3.get("/f02").execute().assertBody("{codes:'2'},{codes:'1'}");
+		f3.get("/f02").run().assertBody().is("{codes:'2'},{codes:'1'}");
 	}
 	@Test
 	public void f07_rules() throws Exception {
-		f3.get("/f07").execute().assertBody("{codes:'5'},{codes:'3'},{codes:'1'}");
+		f3.get("/f07").run().assertBody().is("{codes:'5'},{codes:'3'},{codes:'1'}");
 	}
 	@Test
 	public void f08_rules() throws Exception {
-		f3.get("/f08").execute().assertBody("{codes:'1'}");
+		f3.get("/f08").run().assertBody().is("{codes:'1'}");
 	}
 	@Test
 	public void f09_rules() throws Exception {
-		f3.get("/f09").execute().assertBody("{codes:'6'},{codes:'1'}");
+		f3.get("/f09").run().assertBody().is("{codes:'6'},{codes:'1'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -634,15 +634,15 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void g01_rules() throws Exception {
-		g1.get("/g01").execute().assertBody("{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
+		g1.get("/g01").run().assertBody().is("{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
 	}
 	@Test
 	public void g02_rules() throws Exception {
-		g1.get("/g02").execute().assertBody("{exceptions:'2',debugOnly:true,level:'WARNING',req:'MEDIUM'},{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
+		g1.get("/g02").run().assertBody().is("{exceptions:'2',debugOnly:true,level:'WARNING',req:'MEDIUM'},{exceptions:'1',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
 	}
 	@Test
 	public void g03_rules() throws Exception {
-		g2.get("/g03").execute().assertBody("{exceptions:'3',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
+		g2.get("/g03").run().assertBody().is("{exceptions:'3',debugOnly:true,level:'WARNING',req:'MEDIUM'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -673,7 +673,7 @@ public class RestResourceLoggingTest {
 
 	@Test
 	public void test() throws Exception {
-		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").execute().assertStatus(500);
-		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").execute().assertStatus(500);
+		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").run().assertStatus().equals(500);
+		MY_REST.post("/foo?foo=bar", "Foo").header("Foo", "bar").run().assertStatus().equals(500);
 	}
 }

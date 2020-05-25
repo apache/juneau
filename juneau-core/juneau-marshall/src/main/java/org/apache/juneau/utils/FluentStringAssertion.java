@@ -72,12 +72,81 @@ public class FluentStringAssertion<R> {
 	/**
 	 * Asserts that the text equals the specified value.
 	 *
+	 * <p>
+	 * Equivalent to {@link #equals(String)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(String value) throws AssertionError {
+		return equals(value);
+	}
+
+	/**
+	 * Asserts that the text equals the specified value ignoring case.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equalsIc(String value) throws AssertionError {
+		if (! StringUtils.isEqualsIc(value, text)) {
+			if (value != null && value.startsWith("x")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Text did not equal expected.");
+				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				System.err.println(sb.toString());
+			}
+			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
+		}
+		return returns;
+	}
+
+	/**
+	 * Asserts that the text equals the specified value.
+	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
 		if (StringUtils.isEquals(value, text)) {
+			if (value != null && value.startsWith("x")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Text equaled unexpected.");
+				sb.append("\nText: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				System.err.println(sb.toString());
+			}
+			throw new BasicAssertionError("Text equaled unexpected.\n\tText=[{1}]", value, text);
+		}
+		return returns;
+	}
+
+	/**
+	 * Asserts that the text equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #doesNotEqual(String)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNot(String value) throws AssertionError {
+		return doesNotEqual(value);
+	}
+
+	/**
+	 * Asserts that the text does not equal the specified value ignoring case.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotEqualIc(String value) throws AssertionError {
+		if (StringUtils.isEqualsIc(value, text)) {
 			if (value != null && value.startsWith("x")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text equaled unexpected.");
@@ -137,14 +206,37 @@ public class FluentStringAssertion<R> {
 	 * Asserts that the text is not null.
 	 *
 	 * <p>
-	 * Equivalent to {@link #isNotEmpty()}.
+	 * Equivalent to {@link #isNotNull()}.
 	 *
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R exists() throws AssertionError {
-		if (text == null)
-			throw new BasicAssertionError("Text was null.");
+		return isNotNull();
+	}
+
+	/**
+	 * Asserts that the text is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotExist() throws AssertionError {
+		return isNull();
+	}
+
+	/**
+	 * Asserts that the text is not null.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNull() throws AssertionError {
+		if (text != null)
+			throw new BasicAssertionError("Text was not null.");
 		return returns;
 	}
 
@@ -161,6 +253,18 @@ public class FluentStringAssertion<R> {
 	}
 
 	/**
+	 * Asserts that the text is not empty.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() throws AssertionError {
+		if (! text.isEmpty())
+			throw new BasicAssertionError("Text was not empty.");
+		return returns;
+	}
+
+	/**
 	 * Asserts that the text is not null or empty.
 	 *
 	 * @return The response object (for method chaining).
@@ -170,7 +274,7 @@ public class FluentStringAssertion<R> {
 		if (text == null)
 			throw new BasicAssertionError("Text was null.");
 		if (text.isEmpty())
-			throw new BasicAssertionError("Text was emtpy.");
+			throw new BasicAssertionError("Text was empty.");
 		return returns;
 	}
 

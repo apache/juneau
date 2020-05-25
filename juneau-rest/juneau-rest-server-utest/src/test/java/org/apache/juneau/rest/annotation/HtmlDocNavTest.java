@@ -53,23 +53,23 @@ public class HtmlDocNavTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").accept("text/html").execute().assertBodyContains("<nav>a01a a01b</nav>");
+		a.get("/a01").accept("text/html").run().assertBody().contains("<nav>a01a a01b</nav>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").accept("text/html").execute().assertBodyContains("<nav>a02a a02b</nav>");
+		a.get("/a02").accept("text/html").run().assertBody().contains("<nav>a02a a02b</nav>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").accept("text/html").execute().assertBodyContains("<nav>a01a a01b a03a a03b</nav>");
+		a.get("/a03").accept("text/html").run().assertBody().contains("<nav>a01a a01b a03a a03b</nav>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").accept("text/html").execute().assertBodyContains("<nav>a04a a01a a01b a04b</nav>");
+		a.get("/a04").accept("text/html").run().assertBody().contains("<nav>a04a a01a a01b a04b</nav>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").accept("text/html").execute().assertBodyContains("<nav>a05a a05b a01a a01b</nav>");
+		a.get("/a05").accept("text/html").run().assertBody().contains("<nav>a05a a05b a01a a01b</nav>");
 	}
 
 	//=================================================================================================================
@@ -103,22 +103,22 @@ public class HtmlDocNavTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").accept("text/html").execute().assertBodyContains("<nav>a01a a01b b01a b01b</nav>");
+		b.get("/b01").accept("text/html").run().assertBody().contains("<nav>a01a a01b b01a b01b</nav>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").accept("text/html").execute().assertBodyContains("<nav>b02a b02b</nav>");
+		b.get("/b02").accept("text/html").run().assertBody().contains("<nav>b02a b02b</nav>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").accept("text/html").execute().assertBodyContains("<nav>a01a a01b b01a b01b b03a b03b</nav>");
+		b.get("/b03").accept("text/html").run().assertBody().contains("<nav>a01a a01b b01a b01b b03a b03b</nav>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").accept("text/html").execute().assertBodyContains("<nav>b04a a01a a01b b01a b01b b04b</nav>");
+		b.get("/b04").accept("text/html").run().assertBody().contains("<nav>b04a a01a a01b b01a b01b b04b</nav>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").accept("text/html").execute().assertBodyContains("<nav>b05a b05b a01a a01b b01a b01b</nav>");
+		b.get("/b05").accept("text/html").run().assertBody().contains("<nav>b05a b05b a01a a01b b01a b01b</nav>");
 	}
 }

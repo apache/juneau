@@ -12,12 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.io.*;
-import java.text.*;
 import java.util.*;
-import java.util.regex.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -349,124 +345,6 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	}
 
 	/**
-	 * Throws an {@link AssertionError} if the response status does not match the expected status.
-	 *
-	 * @param status The expected status.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if status does not match.
-	 */
-	public MockServletResponse assertStatus(int status) throws AssertionError {
-		if (getStatus() != status)
-			throw new MockAssertionError("Response did not have the expected status.\n\tExpected=[{0}]\n\tActual=[{1}]", status, getStatus());
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response body does not contain the expected text.
-	 *
-	 * @param text The expected text of the body.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the body does not contain the expected text.
-	 */
-	public MockServletResponse assertBody(String text) throws AssertionError {
-		if (! StringUtils.isEquals(text, getBodyAsString()))
-			throw new MockAssertionError("Response did not have the expected text.\n\tExpected=[{0}]\n\tActual=[{1}]", text, getBodyAsString());
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response body does not contain all of the expected substrings.
-	 *
-	 * @param substrings The expected substrings.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the body does not contain one or more of the expected substrings.
-	 */
-	public MockServletResponse assertBodyContains(String...substrings) throws AssertionError {
-		String text = getBodyAsString();
-		for (String substring : substrings)
-			if (! contains(text, substring))
-				throw new MockAssertionError("Response did not have the expected substring.\n\tExpected=[{0}]\n\tBody=[{1}]", substring, text);
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response body does not match the specified pattern.
-	 *
-	 * <p>
-	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
-	 *
-	 * @param pattern The pattern to match against.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the body does not match the specified pattern.
-	 */
-	public MockServletResponse assertBodyMatches(String pattern) throws AssertionError {
-		String text = getBodyAsString();
-		if (! getMatchPattern(pattern).matcher(text).matches())
-			throw new MockAssertionError("Response did not match expected pattern.\n\tPattern=[{0}]\n\tBody=[{1}]", pattern, text);
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response body does not match the specified regular expression.
-	 *
-	 * <p>
-	 * A pattern is a simple string containing <js>"*"</js> to represent zero or more arbitrary characters.
-	 *
-	 * @param regExp The regular expression to match against.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the body does not match the specified regular expression.
-	 */
-	public MockServletResponse assertBodyMatchesRE(String regExp) throws AssertionError {
-		String text = getBodyAsString();
-		if (! Pattern.compile(regExp).matcher(text).matches())
-			throw new MockAssertionError("Response did not match expected regular expression.\n\tRegExp=[{0}]\n\tBody=[{1}]", regExp, text);
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response does not contain the expected character encoding.
-	 *
-	 * @param value The expected character encoding.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the response does not contain the expected character encoding.
-	 */
-	public MockServletResponse assertCharset(String value) {
-		if (! StringUtils.isEquals(value, getCharacterEncoding()))
-			throw new MockAssertionError("Response did not have the expected character encoding.\n\tExpected=[{0}]\n\tActual=[{1}]", value, getBodyAsString());
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response does not contain the expected header value.
-	 *
-	 * @param name The header name.
-	 * @param value The expected header value.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the response does not contain the expected header value.
-	 */
-	public MockServletResponse assertHeader(String name, String value) {
-		if (! StringUtils.isEquals(value, getHeader(name)))
-			throw new MockAssertionError("Response did not have the expected value for header {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", name, value, getHeader(name));
-		return this;
-	}
-
-	/**
-	 * Throws an {@link AssertionError} if the response header does not contain all of the expected substrings.
-	 *
-	 * @param name The header name.
-	 * @param substrings The expected substrings.
-	 * @return This object (for method chaining).
-	 * @throws AssertionError Thrown if the header does not contain one or more of the expected substrings.
-	 */
-	public MockServletResponse assertHeaderContains(String name, String...substrings) {
-		String text = getHeader(name);
-		for (String substring : substrings)
-			if (! contains(text, substring))
-				throw new MockAssertionError("Response did not have the expected substring in header {0}.\n\tExpected=[{1}]\n\tHeader=[{2}]", name, substring, text);
-		return this;
-	}
-
-	/**
 	 * Returns the body of the request.
 	 *
 	 * @return The body of the request.
@@ -481,12 +359,81 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		return headerMap;
 	}
 
-	private static class MockAssertionError extends AssertionError {
-		private static final long serialVersionUID = 1L;
+	//------------------------------------------------------------------------------------------------------------------
+	// Assertions
+	//------------------------------------------------------------------------------------------------------------------
 
-		MockAssertionError(String msg, Object...args) {
-			super(MessageFormat.format(msg, args));
-			System.err.println(getMessage());  // NOT DEBUG
-		}
+	/**
+	 * Used for fluent assertion calls against the response status code.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response status code is 200 or 404.</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertStatus().isOneOf(200,404);
+	 * </p>
+	 *
+	 * @return A new fluent-style assertion object.
+	 */
+	public MockServletResponseStatusCodeAssertion assertStatus() {
+		return new MockServletResponseStatusCodeAssertion(getStatus(), this);
+	}
+
+	/**
+	 * Used for fluent assertion calls against the response body.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body has the text "OK".</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equals(<js>"OK"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent-style assertion object.
+	 */
+	public MockServletResponseBodyAssertion assertBody() {
+		return new MockServletResponseBodyAssertion(getBodyAsString(), this);
+	}
+
+	/**
+	 * Used for fluent assertion calls against response headers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response has the header Foo and contains "bar".</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Foo"</js>).exists()
+	 * 		.assertHeader(<js>"Foo"</js>).contains(<js>"bar"</js>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent-style assertion object.
+	 */
+	public MockServletResponseHeaderAssertion assertHeader(String name) {
+		return new MockServletResponseHeaderAssertion(getHeader(name), this);
+	}
+
+	/**
+	 * Used for fluent assertion calls against the response charset.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response has the header Foo and contains "bar".</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertCharset().equals("utf-8");
+	 * </p>
+	 *
+	 * @return A new fluent-style assertion object.
+	 */
+	public MockServletResponseHeaderAssertion assertCharset() {
+		return new MockServletResponseHeaderAssertion(getCharacterEncoding(), this);
 	}
 }

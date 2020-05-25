@@ -70,36 +70,36 @@ public class ReaderResourceTest {
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertEquals("foo", a.get("/a01").execute().getBodyAsString());
+		assertEquals("foo", a.get("/a01").run().getBodyAsString());
 	}
 
 	@Test
 	public void a02_headers() throws Exception {
-		assertEquals("Bar", a.get("/a02").execute().getHeader("Foo"));
+		assertEquals("Bar", a.get("/a02").run().getHeader("Foo"));
 	}
 
 	@Test
 	public void a03_contentType() throws Exception {
-		assertEquals("application/json", a.get("/a03").execute().getHeader("Content-Type"));
+		assertEquals("application/json", a.get("/a03").run().getHeader("Content-Type"));
 	}
 
 	@Test
 	public void a04_withVars() throws Exception {
-		assertEquals("bar", a.get("/a04?foo=bar").execute().getBodyAsString());
+		assertEquals("bar", a.get("/a04?foo=bar").run().getBodyAsString());
 	}
 
 	@Test
 	public void a05_inputStream() throws Exception {
-		assertEquals("foo", a.get("/a05").execute().getBodyAsString());
+		assertEquals("foo", a.get("/a05").run().getBodyAsString());
 	}
 
 	@Test
 	public void a06_reader() throws Exception {
-		assertEquals("foo", a.get("/a06").execute().getBodyAsString());
+		assertEquals("foo", a.get("/a06").run().getBodyAsString());
 	}
 
 	@Test
 	public void a07_charSequence() throws Exception {
-		assertEquals("foo", a.get("/a07").execute().getBodyAsString());
+		assertEquals("foo", a.get("/a07").run().getBodyAsString());
 	}
 }

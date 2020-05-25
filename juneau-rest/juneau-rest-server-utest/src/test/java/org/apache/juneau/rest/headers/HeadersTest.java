@@ -174,234 +174,234 @@ public class HeadersTest {
 
 	@Test
 	public void a01a_accept() throws Exception {
-		a.get("/accept").accept("text/foo").execute().assertBody("text/foo");
-		a.get("/accept").accept("text/foo+bar").execute().assertBody("text/foo+bar");
-		a.get("/accept").accept("text/*").execute().assertBody("text/*");
-		a.get("/accept").accept("*/foo").execute().assertBody("*/foo");
+		a.get("/accept").accept("text/foo").run().assertBody().is("text/foo");
+		a.get("/accept").accept("text/foo+bar").run().assertBody().is("text/foo+bar");
+		a.get("/accept").accept("text/*").run().assertBody().is("text/*");
+		a.get("/accept").accept("*/foo").run().assertBody().is("*/foo");
 	}
 	@Test
 	public void a01b_accept_qValues() throws Exception {
-		a.get("/accept").accept("text/foo;q=1.0").execute().assertBody("text/foo;q=1.0");
-		a.get("/accept").accept("text/foo;q=0.9").execute().assertBody("text/foo;q=0.9");
-		a.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").execute().assertBody("text/foo;x=X;q=0.9;y=Y");
+		a.get("/accept").accept("text/foo;q=1.0").run().assertBody().is("text/foo;q=1.0");
+		a.get("/accept").accept("text/foo;q=0.9").run().assertBody().is("text/foo;q=0.9");
+		a.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").run().assertBody().is("text/foo;x=X;q=0.9;y=Y");
 	}
 	@Test
 	public void a01b_accept_query() throws Exception {
-		a.get("/accept?Accept=text/foo").execute().assertBody("text/foo");
+		a.get("/accept?Accept=text/foo").run().assertBody().is("text/foo");
 	}
 	@Test
 	public void a02a_acceptCharset() throws Exception {
-		a.get("/acceptCharset").acceptCharset("UTF-8").execute().assertBody("UTF-8");
+		a.get("/acceptCharset").acceptCharset("UTF-8").run().assertBody().is("UTF-8");
 	}
 	@Test
 	public void a02b_acceptCharset_query() throws Exception {
-		a.get("/acceptCharset?Accept-Charset=UTF-8").execute().assertBody("UTF-8");
+		a.get("/acceptCharset?Accept-Charset=UTF-8").run().assertBody().is("UTF-8");
 	}
 	@Test
 	public void a03a_acceptEncoding() throws Exception {
-		a.get("/acceptEncoding").acceptEncoding("foo").execute().assertBody("foo");
-		a.get("/acceptEncoding").acceptEncoding("*").execute().assertBody("*");
+		a.get("/acceptEncoding").acceptEncoding("foo").run().assertBody().is("foo");
+		a.get("/acceptEncoding").acceptEncoding("*").run().assertBody().is("*");
 	}
 	@Test
 	public void a03b_acceptEncoding_query() throws Exception {
-		a.get("/acceptEncoding?Accept-Encoding=*").execute().assertBody("*");
+		a.get("/acceptEncoding?Accept-Encoding=*").run().assertBody().is("*");
 	}
 	@Test
 	public void a04a_acceptLanguage() throws Exception {
-		a.get("/acceptLanguage").acceptLanguage("foo").execute().assertBody("foo");
+		a.get("/acceptLanguage").acceptLanguage("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a04b_acceptLanguage_query() throws Exception {
-		a.get("/acceptLanguage?Accept-Language=foo").acceptLanguage("foo").execute().assertBody("foo");
+		a.get("/acceptLanguage?Accept-Language=foo").acceptLanguage("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a05a_authorization() throws Exception {
-		a.get("/authorization").authorization("foo").execute().assertBody("foo");
+		a.get("/authorization").authorization("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a05b_authorization_query() throws Exception {
-		a.get("/authorization?Authorization=foo").execute().assertBody("foo");
+		a.get("/authorization?Authorization=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a06a_cacheControl() throws Exception {
-		a.get("/cacheControl").cacheControl("foo").execute().assertBody("foo");
+		a.get("/cacheControl").cacheControl("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a06b_cacheControl_query() throws Exception {
-		a.get("/cacheControl?Cache-Control=foo").execute().assertBody("foo");
+		a.get("/cacheControl?Cache-Control=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a07a_connection() throws Exception {
-		a.get("/connection").connection("foo").execute().assertBody("foo");
+		a.get("/connection").connection("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a07b_connection_query() throws Exception {
-		a.get("/connection?Connection=foo").execute().assertBody("foo");
+		a.get("/connection?Connection=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a08a_contentLength() throws Exception {
-		a.get("/contentLength").contentLength(0).execute().assertBody("0");
+		a.get("/contentLength").contentLength(0).run().assertBody().is("0");
 	}
 	@Test
 	public void a08b_contentLength_query() throws Exception {
-		a.get("/contentLength?Content-Length=0").execute().assertBody("0");
+		a.get("/contentLength?Content-Length=0").run().assertBody().is("0");
 	}
 	@Test
 	public void a09a_contentType() throws Exception {
-		a.get("/contentType").contentType("text/foo").execute().assertBody("text/foo");
+		a.get("/contentType").contentType("text/foo").run().assertBody().is("text/foo");
 	}
 	@Test
 	public void a09b_contentType_query() throws Exception {
-		a.get("/contentType?Content-Type=text/foo").execute().assertBody("text/foo");
+		a.get("/contentType?Content-Type=text/foo").run().assertBody().is("text/foo");
 	}
 	@Test
 	public void a10a_date() throws Exception {
-		a.get("/date").date("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/date").date("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a10b_date_query() throws Exception {
-		a.get("/date?Date=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/date?Date=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a11a_expect() throws Exception {
-		a.get("/expect").expect("100-continue").execute().assertBody("100-continue");
+		a.get("/expect").expect("100-continue").run().assertBody().is("100-continue");
 	}
 	@Test
 	public void a11b_expect_query() throws Exception {
-		a.get("/expect?Expect=100-continue").execute().assertBody("100-continue");
+		a.get("/expect?Expect=100-continue").run().assertBody().is("100-continue");
 	}
 	@Test
 	public void a12a_from() throws Exception {
-		a.get("/from").from("foo").execute().assertBody("foo");
+		a.get("/from").from("foo").run().assertBody().is("foo");
 	}
 	public void a12b_from_query() throws Exception {
-		a.get("/from?From=foo").execute().assertBody("foo");
+		a.get("/from?From=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a13a_host() throws Exception {
-		a.get("/host").host("localhost").execute().assertBody("localhost");
+		a.get("/host").host("localhost").run().assertBody().is("localhost");
 	}
 	@Test
 	public void a13b_host_query() throws Exception {
-		a.get("/host?Host=localhost").execute().assertBody("localhost");
+		a.get("/host?Host=localhost").run().assertBody().is("localhost");
 	}
 	@Test
 	public void a14a_ifMatch() throws Exception {
-		a.get("/ifMatch").ifMatch("foo").execute().assertBody("foo");
-		a.get("/ifMatch").ifMatch("\"foo\"").execute().assertBody("\"foo\"");
-		a.get("/ifMatch").ifMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
-		a.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\",\"bar\"");
+		a.get("/ifMatch").ifMatch("foo").run().assertBody().is("foo");
+		a.get("/ifMatch").ifMatch("\"foo\"").run().assertBody().is("\"foo\"");
+		a.get("/ifMatch").ifMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
+		a.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 	}
 	@Test
 	public void a14b_ifMatch_query() throws Exception {
-		a.get("/ifMatch?If-Match=foo").execute().assertBody("foo");
+		a.get("/ifMatch?If-Match=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a15a_ifModifiedSince() throws Exception {
-		a.get("/ifModifiedSince").ifModifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/ifModifiedSince").ifModifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a15b_ifModifiedSince_query() throws Exception {
-		a.get("/ifModifiedSince?If-Modified-Since=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/ifModifiedSince?If-Modified-Since=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a16a_ifNoneMatch() throws Exception {
-		a.get("/ifNoneMatch").ifNoneMatch("foo").execute().assertBody("foo");
-		a.get("/ifNoneMatch").ifNoneMatch("\"foo\"").execute().assertBody("\"foo\"");
-		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").execute().assertBody("W/\"foo\"");
-		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").execute().assertBody("W/\"foo\",\"bar\"");
+		a.get("/ifNoneMatch").ifNoneMatch("foo").run().assertBody().is("foo");
+		a.get("/ifNoneMatch").ifNoneMatch("\"foo\"").run().assertBody().is("\"foo\"");
+		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
+		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 	}
 	@Test
 	public void a16b_ifNoneMatch_query() throws Exception {
-		a.get("/ifNoneMatch?If-None-Match=foo").execute().assertBody("foo");
+		a.get("/ifNoneMatch?If-None-Match=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a17a_ifRange() throws Exception {
-		a.get("/ifRange").ifRange("foo").execute().assertBody("foo");
+		a.get("/ifRange").ifRange("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a17b_ifRange_query() throws Exception {
-		a.get("/ifRange?If-Range=foo").execute().assertBody("foo");
+		a.get("/ifRange?If-Range=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a18a_ifUnmodifiedSince() throws Exception {
-		a.get("/ifUnmodifiedSince").ifUnmodifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/ifUnmodifiedSince").ifUnmodifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a18b_ifUnmodifiedSince_query() throws Exception {
-		a.get("/ifUnmodifiedSince?If-Unmodified-Since=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
+		a.get("/ifUnmodifiedSince?If-Unmodified-Since=Wed, 21 Oct 2015 07:28:00 GMT").run().assertBody().is("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a19a_maxForwards() throws Exception {
-		a.get("/maxForwards").maxForwards(123).execute().assertBody("123");
+		a.get("/maxForwards").maxForwards(123).run().assertBody().is("123");
 	}
 	@Test
 	public void a19b_maxForwards_query() throws Exception {
-		a.get("/maxForwards?Max-Forwards=123").execute().assertBody("123");
+		a.get("/maxForwards?Max-Forwards=123").run().assertBody().is("123");
 	}
 	@Test
 	public void a20a_pragma() throws Exception {
-		a.get("/pragma").pragma("foo").execute().assertBody("foo");
+		a.get("/pragma").pragma("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a20b_pragma_query() throws Exception {
-		a.get("/pragma?Pragma=foo").execute().assertBody("foo");
+		a.get("/pragma?Pragma=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a21a_proxyAuthorization() throws Exception {
-		a.get("/proxyAuthorization").proxyAuthorization("foo").execute().assertBody("foo");
+		a.get("/proxyAuthorization").proxyAuthorization("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a21b_proxyAuthorization_query() throws Exception {
-		a.get("/proxyAuthorization?Proxy-Authorization=foo").execute().assertBody("foo");
+		a.get("/proxyAuthorization?Proxy-Authorization=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a22a_range() throws Exception {
-		a.get("/range").range("foo").execute().assertBody("foo");
+		a.get("/range").range("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a22b_range_query() throws Exception {
-		a.get("/range?Range=foo").execute().assertBody("foo");
+		a.get("/range?Range=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a23a_referer() throws Exception {
-		a.get("/referer").referer("foo").execute().assertBody("foo");
+		a.get("/referer").referer("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a23b_referer_query() throws Exception {
-		a.get("/referer?Referer=foo").execute().assertBody("foo");
+		a.get("/referer?Referer=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a24a_te() throws Exception {
-		a.get("/te").te("foo").execute().assertBody("foo");
+		a.get("/te").te("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a24b_te_query() throws Exception {
-		a.get("/te?TE=foo").execute().assertBody("foo");
+		a.get("/te?TE=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a25a_upgrade() throws Exception {
-		a.get("/upgrade").upgrade("foo").execute().assertBody("foo");
+		a.get("/upgrade").upgrade("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a25b_upgrade_query() throws Exception {
-		a.get("/upgrade?Upgrade=foo").execute().assertBody("foo");
+		a.get("/upgrade?Upgrade=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a26a_userAgent() throws Exception {
-		a.get("/userAgent").userAgent("foo").execute().assertBody("foo");
+		a.get("/userAgent").userAgent("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a26b_userAgent_query() throws Exception {
-		a.get("/userAgent?User-Agent=foo").execute().assertBody("foo");
+		a.get("/userAgent?User-Agent=foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a27a_warning() throws Exception {
-		a.get("/warning").warning("foo").execute().assertBody("foo");
+		a.get("/warning").warning("foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a27b_warning_query() throws Exception {
-		a.get("/warning?Warning=foo").execute().assertBody("foo");
+		a.get("/warning?Warning=foo").run().assertBody().is("foo");
 	}
 
 	//====================================================================================================
@@ -443,11 +443,11 @@ public class HeadersTest {
 
 	@Test
 	public void b01a_customHeader() throws Exception {
-		b.get("/customHeader").header("Custom", "foo").execute().assertBody("foo");
+		b.get("/customHeader").header("Custom", "foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void b01b_customHeader_query() throws Exception {
-		b.get("/customHeader?Custom=foo").execute().assertBody("foo");
+		b.get("/customHeader?Custom=foo").run().assertBody().is("foo");
 	}
 
 	//====================================================================================================
@@ -468,15 +468,15 @@ public class HeadersTest {
 
 	@Test
 	public void c01_reqHeaders_default() throws Exception {
-		c.get("/c").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		c.get("/c").run().assertBody().is("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void c02_reqHeaders_override() throws Exception {
-		c.get("/c").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/c").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void c03_reqHeaders_override_caseInsensitive() throws Exception {
-		c.get("/c").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/c").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -497,15 +497,15 @@ public class HeadersTest {
 
 	@Test
 	public void d01_reqHeadersCaseInsensitive_default() throws Exception {
-		d.get("/d").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		d.get("/d").run().assertBody().is("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void d02_reqHeadersCaseInsensitive_override() throws Exception {
-		d.get("/d").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/d").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void d03_reqHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		d.get("/d").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/d").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -526,15 +526,15 @@ public class HeadersTest {
 
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
-		e.get("/e").execute().assertBody("{h1:null,h2:null,h3:null}");
+		e.get("/e").run().assertBody().is("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void e02_annotatedHeaders_override() throws Exception {
-		e.get("/e").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/e").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void e03_annotatedHeaders_override_caseInsensitive() throws Exception {
-		e.get("/e").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/e").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -555,15 +555,15 @@ public class HeadersTest {
 
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
-		f.get("/f").execute().assertBody("{h1:null,h2:null,h3:null}");
+		f.get("/f").run().assertBody().is("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void f02_annotatedHeadersCaseInsensitive_override() throws Exception {
-		f.get("/f").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/f").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void f03_annotatedHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		f.get("/f").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/f").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -584,15 +584,15 @@ public class HeadersTest {
 
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
-		g.get("/g").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		g.get("/g").run().assertBody().is("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void g02_annotatedHeadersDefault_override() throws Exception {
-		g.get("/g").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/g").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void g03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
-		g.get("/g").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/g").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	@Rest
@@ -609,15 +609,15 @@ public class HeadersTest {
 
 	@Test
 	public void gb01_annotatedHeadersDefault_default() throws Exception {
-		gb.get("/g").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		gb.get("/g").run().assertBody().is("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void gb02_annotatedHeadersDefault_override() throws Exception {
-		gb.get("/g").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		gb.get("/g").header("H1",4).header("H2",5).header("H3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void gb03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
-		gb.get("/g").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		gb.get("/g").header("h1",4).header("h2",5).header("h3",6).run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -638,15 +638,15 @@ public class HeadersTest {
 
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {
-		h.get("/h").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		h.get("/h").run().assertBody().is("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void h02_annotatedAndDefaultHeaders_override() throws Exception {
-		h.get("/h").header("H1",7).header("H2",8).header("H3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/h").header("H1",7).header("H2",8).header("H3",9).run().assertBody().is("{h1:'7',h2:'8',h3:'9'}");
 	}
 	@Test
 	public void h03_annotatedAndDefaultHeaders_override_caseInsensitive() throws Exception {
-		h.get("/h").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/h").header("h1",7).header("h2",8).header("h3",9).run().assertBody().is("{h1:'7',h2:'8',h3:'9'}");
 	}
 
 	//====================================================================================================

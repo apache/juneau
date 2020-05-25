@@ -78,47 +78,47 @@ public class HtmlDocNavlinksTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
+		a.get("/a01").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").accept("text/html").execute().assertBodyContains("<nav><ol><li>a02a</li><li>a02b</li></ol></nav>");
+		a.get("/a02").accept("text/html").run().assertBody().contains("<nav><ol><li>a02a</li><li>a02b</li></ol></nav>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li><li>a03a</li><li>a03b</li></ol></nav>");
+		a.get("/a03").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>a03a</li><li>a03b</li></ol></nav>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").accept("text/html").execute().assertBodyContains("<nav><ol><li>a04a</li><li>a01a</li><li>a01b</li><li>a04b</li></ol></nav>");
+		a.get("/a04").accept("text/html").run().assertBody().contains("<nav><ol><li>a04a</li><li>a01a</li><li>a01b</li><li>a04b</li></ol></nav>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").accept("text/html").execute().assertBodyContains("<nav><ol><li>a05a</li><li>a05b</li><li>a01a</li><li>a01b</li></ol></nav>");
+		a.get("/a05").accept("text/html").run().assertBody().contains("<nav><ol><li>a05a</li><li>a05b</li><li>a01a</li><li>a01b</li></ol></nav>");
 	}
 	@Test
 	public void a06() throws Exception {
-		a.get("/a06").accept("text/html").execute().assertBodyContains("<nav><ol><li>a06a</li><li>a01a</li><li>a01b</li><li>a06b</li></ol></nav>");
+		a.get("/a06").accept("text/html").run().assertBody().contains("<nav><ol><li>a06a</li><li>a01a</li><li>a01b</li><li>a06b</li></ol></nav>");
 	}
 	@Test
 	public void a07() throws Exception {
-		a.get("/a07").accept("text/html").execute().assertBodyContains("<nav><ol><li>a07a</li><li>a07b</li><li>a01a</li><li>a01b</li></ol></nav>");
+		a.get("/a07").accept("text/html").run().assertBody().contains("<nav><ol><li>a07a</li><li>a07b</li><li>a01a</li><li>a01b</li></ol></nav>");
 	}
 	@Test
 	public void a08() throws Exception {
-		a.get("/a08").accept("text/html").execute().assertBodyContains("<nav><ol><li>a08b</li><li>a08a</li></ol></nav>");
+		a.get("/a08").accept("text/html").run().assertBody().contains("<nav><ol><li>a08b</li><li>a08a</li></ol></nav>");
 	}
 	@Test
 	public void a09() throws Exception {
-		a.get("/a09").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/a09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/a09b\">bar</a></li></ol></nav>");
+		a.get("/a09").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/a09b\">bar</a></li></ol></nav>");
 	}
 	@Test
 	public void a10() throws Exception {
-		a.get("/a10").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/a10a\">foo</a></li><li><a href=\"/a10b\">bar</a></li><li>a01a</li><li>a01b</li></ol></nav>");
+		a.get("/a10").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a10a\">foo</a></li><li><a href=\"/a10b\">bar</a></li><li>a01a</li><li>a01b</li></ol></nav>");
 	}
 	@Test
 	public void a11() throws Exception {
-		a.get("/a11").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/a11b\">bar</a></li><li><a href=\"/a11a\">foo</a></li></ol></nav>");
+		a.get("/a11").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a11b\">bar</a></li><li><a href=\"/a11a\">foo</a></li></ol></nav>");
 	}
 
 	//=================================================================================================================
@@ -177,46 +177,46 @@ public class HtmlDocNavlinksTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b01").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").accept("text/html").execute().assertBodyContains("<nav><ol><li>b02a</li><li>b02b</li></ol></nav>");
+		b.get("/b02").accept("text/html").run().assertBody().contains("<nav><ol><li>b02a</li><li>b02b</li></ol></nav>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").accept("text/html").execute().assertBodyContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b03a</li><li>b03b</li></ol></nav>");
+		b.get("/b03").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b03a</li><li>b03b</li></ol></nav>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").accept("text/html").execute().assertBodyContains("<nav><ol><li>b04a</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b04b</li></ol></nav>");
+		b.get("/b04").accept("text/html").run().assertBody().contains("<nav><ol><li>b04a</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b04b</li></ol></nav>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").accept("text/html").execute().assertBodyContains("<nav><ol><li>b05a</li><li>b05b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b05").accept("text/html").run().assertBody().contains("<nav><ol><li>b05a</li><li>b05b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b06() throws Exception {
-		b.get("/b06").accept("text/html").execute().assertBodyContains("<nav><ol><li>b06a</li><li>a01a</li><li>a01b</li><li>b06b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b06").accept("text/html").run().assertBody().contains("<nav><ol><li>b06a</li><li>a01a</li><li>a01b</li><li>b06b</li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b07() throws Exception {
-		b.get("/b07").accept("text/html").execute().assertBodyContains("<nav><ol><li>b07a</li><li>b07b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b07").accept("text/html").run().assertBody().contains("<nav><ol><li>b07a</li><li>b07b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b08() throws Exception {
-		b.get("/b08").accept("text/html").execute().assertBodyContains("<nav><ol><li>b08b</li><li>b08a</li></ol></nav>");
+		b.get("/b08").accept("text/html").run().assertBody().contains("<nav><ol><li>b08b</li><li>b08a</li></ol></nav>");
 	}
 	@Test
 	public void b09() throws Exception {
-		b.get("/b09").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/b09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/b09b\">bar</a></li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b09").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/b09b\">bar</a></li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b10() throws Exception {
-		b.get("/b10").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/b10a\">foo</a></li><li><a href=\"/b10b\">bar</a></li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		b.get("/b10").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b10a\">foo</a></li><li><a href=\"/b10b\">bar</a></li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
 	}
 	@Test
 	public void b11() throws Exception {
-		b.get("/b11").accept("text/html").execute().assertBodyContains("<nav><ol><li><a href=\"/b11b\">bar</a></li><li><a href=\"/b11a\">foo</a></li></ol></nav>");
+		b.get("/b11").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b11b\">bar</a></li><li><a href=\"/b11a\">foo</a></li></ol></nav>");
 	}
 }

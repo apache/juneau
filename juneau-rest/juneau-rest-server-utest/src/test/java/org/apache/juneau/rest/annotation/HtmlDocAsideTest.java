@@ -53,23 +53,23 @@ public class HtmlDocAsideTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").accept("text/html").execute().assertBodyContains("<aside>a01a a01b</aside>");
+		a.get("/a01").accept("text/html").run().assertBody().contains("<aside>a01a a01b</aside>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").accept("text/html").execute().assertBodyContains("<aside>a02a a02b</aside>");
+		a.get("/a02").accept("text/html").run().assertBody().contains("<aside>a02a a02b</aside>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").accept("text/html").execute().assertBodyContains("<aside>a01a a01b a03a a03b</aside>");
+		a.get("/a03").accept("text/html").run().assertBody().contains("<aside>a01a a01b a03a a03b</aside>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").accept("text/html").execute().assertBodyContains("<aside>a04a a01a a01b a04b</aside>");
+		a.get("/a04").accept("text/html").run().assertBody().contains("<aside>a04a a01a a01b a04b</aside>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").accept("text/html").execute().assertBodyContains("<aside>a05a a05b a01a a01b</aside>");
+		a.get("/a05").accept("text/html").run().assertBody().contains("<aside>a05a a05b a01a a01b</aside>");
 	}
 
 	//=================================================================================================================
@@ -103,22 +103,22 @@ public class HtmlDocAsideTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").accept("text/html").execute().assertBodyContains("<aside>a01a a01b b01a b01b</aside>");
+		b.get("/b01").accept("text/html").run().assertBody().contains("<aside>a01a a01b b01a b01b</aside>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").accept("text/html").execute().assertBodyContains("<aside>b02a b02b</aside>");
+		b.get("/b02").accept("text/html").run().assertBody().contains("<aside>b02a b02b</aside>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").accept("text/html").execute().assertBodyContains("<aside>a01a a01b b01a b01b b03a b03b</aside>");
+		b.get("/b03").accept("text/html").run().assertBody().contains("<aside>a01a a01b b01a b01b b03a b03b</aside>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").accept("text/html").execute().assertBodyContains("<aside>b04a a01a a01b b01a b01b b04b</aside>");
+		b.get("/b04").accept("text/html").run().assertBody().contains("<aside>b04a a01a a01b b01a b01b b04b</aside>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").accept("text/html").execute().assertBodyContains("<aside>b05a b05b a01a a01b b01a b01b</aside>");
+		b.get("/b05").accept("text/html").run().assertBody().contains("<aside>b05a b05b a01a a01b b01a b01b</aside>");
 	}
 }

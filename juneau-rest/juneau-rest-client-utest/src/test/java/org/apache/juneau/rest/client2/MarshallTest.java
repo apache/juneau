@@ -158,7 +158,7 @@ public class MarshallTest {
 			.body("{f:1}")
 			.run()
 			.assertStatusCode().equals(200)
-			.assertBody().equals("{\"f\":1}");
+			.assertBody().is("{\"f\":1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

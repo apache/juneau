@@ -156,15 +156,15 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void a01_serializers_default() throws Exception {
-		a.get("/default").execute().assertBody("['text/s3','text/s4','text/s1','text/s2']");
+		a.get("/default").run().assertBody().is("['text/s3','text/s4','text/s1','text/s2']");
 	}
 	@Test
 	public void a02_serializers_onMethod() throws Exception {
-		a.get("/onMethod").execute().assertBody("['text/s5']");
+		a.get("/onMethod").run().assertBody().is("['text/s5']");
 	}
 	@Test
 	public void a03_serializers_onMethodInherit() throws Exception {
-		a.get("/onMethodInherit").execute().assertBody("['text/s5','text/s3','text/s4','text/s1','text/s2']");
+		a.get("/onMethodInherit").run().assertBody().is("['text/s5','text/s3','text/s4','text/s1','text/s2']");
 	}
 
 	//=================================================================================================================
@@ -199,15 +199,15 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void b01_parsers_default() throws Exception {
-		b.get("/default").execute().assertBody("['text/p3','text/p4','text/p1','text/p2']");
+		b.get("/default").run().assertBody().is("['text/p3','text/p4','text/p1','text/p2']");
 	}
 	@Test
 	public void b02_parsers_onMethod() throws Exception {
-		b.get("/onMethod").execute().assertBody("['text/p5']");
+		b.get("/onMethod").run().assertBody().is("['text/p5']");
 	}
 	@Test
 	public void b03_parsers_onMethodInherit() throws Exception {
-		b.get("/onMethodInherit").execute().assertBody("['text/p5','text/p3','text/p4','text/p1','text/p2']");
+		b.get("/onMethodInherit").run().assertBody().is("['text/p5','text/p3','text/p4','text/p1','text/p2']");
 	}
 
 	//=================================================================================================================
@@ -250,19 +250,19 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void d01_transforms_default() throws Exception {
-		d.get("/d01").json().execute().assertBody("['F1','F2','Foo3']");
+		d.get("/d01").json().run().assertBody().is("['F1','F2','Foo3']");
 	}
 	@Test
 	public void d02_transforms_inheritTransforms() throws Exception {
-		d.get("/d02").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/d02").json().run().assertBody().is("['F1','F2','F3']");
 	}
 	@Test
 	public void d03_transforms_overrideSerializer() throws Exception {
-		d.get("/d03").json().execute().assertBody("['Foo1','Foo2','F3']");
+		d.get("/d03").json().run().assertBody().is("['Foo1','Foo2','F3']");
 	}
 	@Test
 	public void d04_transforms_overrideSerializerInheritTransforms() throws Exception {
-		d.get("/d04").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/d04").json().run().assertBody().is("['F1','F2','F3']");
 	}
 
 	//=================================================================================================================
@@ -309,14 +309,14 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void e01_properties_default() throws Exception {
-		e.get("/e01").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		e.get("/e01").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
 	}
 	@Test
 	public void e02a_properties_override_false() throws Exception {
-		e.get("/e02").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		e.get("/e02").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
 	}
 	@Test
 	public void e02b_properties_override_true() throws Exception {
-		e.get("/e02?override").execute().assertBody("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		e.get("/e02?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 	}
 }

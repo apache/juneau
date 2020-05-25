@@ -45,32 +45,32 @@ public class HasQueryAnnotationTest {
 
 	@Test
 	public void a01_get() throws Exception {
-		a.get("?p1=p1&p2=2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.get("?p1&p2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.get("?p1=&p2=").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.get("/").execute().assertBody("p1=[false,false],p2=[false,false]");
-		a.get("?p1").execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.get("?p1=").execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.get("?p2").execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.get("?p2=").execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.get("?p1=foo&p2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.get("?p1&p2=1").execute().assertBody("p1=[true,true],p2=[true,true]");
+		a.get("?p1=p1&p2=2").run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.get("?p1&p2").run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.get("?p1=&p2=").run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.get("/").run().assertBody().is("p1=[false,false],p2=[false,false]");
+		a.get("?p1").run().assertBody().is("p1=[true,true],p2=[false,false]");
+		a.get("?p1=").run().assertBody().is("p1=[true,true],p2=[false,false]");
+		a.get("?p2").run().assertBody().is("p1=[false,false],p2=[true,true]");
+		a.get("?p2=").run().assertBody().is("p1=[false,false],p2=[true,true]");
+		a.get("?p1=foo&p2").run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.get("?p1&p2=1").run().assertBody().is("p1=[true,true],p2=[true,true]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.get("?p1="+x+"&p2=1").execute().assertBody("p1=[true,true],p2=[true,true]");
+		a.get("?p1="+x+"&p2=1").run().assertBody().is("p1=[true,true],p2=[true,true]");
 	}
 	@Test
 	public void a02_post() throws Exception {
-		a.post("?p1=p1&p2=2", null).execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("?p1&p2", null).execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("?p1=&p2=", null).execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("/", null).execute().assertBody("p1=[false,false],p2=[false,false]");
-		a.post("?p1", null).execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.post("?p1=", null).execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.post("?p2", null).execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.post("?p2=", null).execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.post("?p1=foo&p2", null).execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("?p1&p2=1", null).execute().assertBody("p1=[true,true],p2=[true,true]");
+		a.post("?p1=p1&p2=2", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.post("?p1&p2", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.post("?p1=&p2=", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.post("/", null).run().assertBody().is("p1=[false,false],p2=[false,false]");
+		a.post("?p1", null).run().assertBody().is("p1=[true,true],p2=[false,false]");
+		a.post("?p1=", null).run().assertBody().is("p1=[true,true],p2=[false,false]");
+		a.post("?p2", null).run().assertBody().is("p1=[false,false],p2=[true,true]");
+		a.post("?p2=", null).run().assertBody().is("p1=[false,false],p2=[true,true]");
+		a.post("?p1=foo&p2", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
+		a.post("?p1&p2=1", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("?p1="+x+"&p2=1", null).execute().assertBody("p1=[true,true],p2=[true,true]");
+		a.post("?p1="+x+"&p2=1", null).run().assertBody().is("p1=[true,true],p2=[true,true]");
 	}
 }

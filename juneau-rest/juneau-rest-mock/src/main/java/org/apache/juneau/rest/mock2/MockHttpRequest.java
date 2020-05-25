@@ -60,6 +60,6 @@ public interface MockHttpRequest {
 	 * @return The response for the request.
 	 * @throws Exception
 	 */
-	MockHttpResponse execute() throws Exception;
+	MockHttpResponse run() throws Exception;
 
 }

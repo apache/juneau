@@ -99,14 +99,14 @@ public class RestHookTest {
 
 	@Test
 	public void a01_preCall_propertiesOverriddenByAnnotation() throws Exception {
-		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/propertiesOverriddenByAnnotation", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 
 	@Test
 	public void a02_preCall_propertiesOverriddenProgrammatically() throws Exception {
-		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
-		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").header("Override-Content-Type", "text/a2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/propertiesOverriddenProgrammatically", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
 	}
 
 	//=================================================================================================================
@@ -185,27 +185,27 @@ public class RestHookTest {
 
 	@Test
 	public void b01a_postCall_propertiesOverridenByAnnotation() throws Exception {
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b01b_postCall_propertiesOverridenByAnnotation_defaultAccept() throws Exception {
-		b.put("/propertiesOverridenByAnnotation", null).execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverridenByAnnotation", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverridenByAnnotation", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Accept", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverridenByAnnotation", null).header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b02a_postCall_propertiesOverriddenProgramatically() throws Exception {
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Accept", "text/s2").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 	@Test
 	public void b02b_postCall_propertiesOverriddenProgramatically_defaultAccept() throws Exception {
-		b.put("/propertiesOverriddenProgramatically", null).execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").execute().assertBody("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Accept", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/propertiesOverriddenProgramatically", null).header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 
 	//====================================================================================================
@@ -279,9 +279,9 @@ public class RestHookTest {
 
 	@Test
 	public void c01_init() throws Exception {
-		c.get("/super/events").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		c.get("/sub/events").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		c.get("/sub/child/events").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		c.get("/super/events").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
+		c.get("/sub/events").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		c.get("/sub/child/events").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 
 	//====================================================================================================
@@ -367,13 +367,13 @@ public class RestHookTest {
 
 	@Test
 	public void d01_postInit() throws Exception {
-		d.get("/super/events").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		d.get("/sub/events").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		d.get("/sub/child/events").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		d.get("/super/events").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
+		d.get("/sub/events").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		d.get("/sub/child/events").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void d02_postInit_order() throws Exception {
-		d.get("/sub/lastCalled").execute().assertBody("CHILD");
+		d.get("/sub/lastCalled").run().assertBody().is("CHILD");
 	}
 
 	//====================================================================================================
@@ -465,13 +465,13 @@ public class RestHookTest {
 
 	@Test
 	public void e01_postInitChildFirst() throws Exception {
-		e.get("/super/postInitChildFirstEvents").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		e.get("/sub/postInitChildFirstEvents").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		e.get("/sub/child/postInitChildFirstEvents").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		e.get("/super/postInitChildFirstEvents").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
+		e.get("/sub/postInitChildFirstEvents").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		e.get("/sub/child/postInitChildFirstEvents").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void e02_postInitChildFirst_order() throws Exception {
-		e.get("/sub/lastCalled").execute().assertBody("PARENT");
+		e.get("/sub/lastCalled").run().assertBody().is("PARENT");
 	}
 
 	//====================================================================================================
@@ -522,7 +522,7 @@ public class RestHookTest {
 
 	@Test
 	public void f01_startCall() throws Exception {
-		f.get("/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
+		f.get("/").run().assertBody().is("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//====================================================================================================
@@ -573,7 +573,7 @@ public class RestHookTest {
 
 	@Test
 	public void g01_preCall() throws Exception {
-		g.get("/").execute().assertBody("{'1':'true','2':'true','3':'true','4':'true'}");
+		g.get("/").run().assertBody().is("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//====================================================================================================
@@ -620,10 +620,10 @@ public class RestHookTest {
 
 	@Test
 	public void h01_postCall() throws Exception {
-		h.get("/").execute()
-			.assertHeader("post1-called", "true")
-			.assertHeader("post2-called", "true")
-			.assertHeader("post3-called", "true")
-			.assertHeader("post4-called", "true");
+		h.get("/").run()
+			.assertHeader("post1-called").is("true")
+			.assertHeader("post2-called").is("true")
+			.assertHeader("post3-called").is("true")
+			.assertHeader("post4-called").is("true");
 	}
 }

@@ -216,8 +216,8 @@ public class RestClientTest {
 			.get("/echo")
 			.run()
 			.assertBody().contains("A1: 1", "A2: 2")
-			.assertHeader("B1").equals("1")
-			.assertHeader("B2").equals("2")
+			.assertHeader("B1").is("1")
+			.assertHeader("B2").is("2")
 		;
 	}
 
@@ -241,7 +241,7 @@ public class RestClientTest {
 			.get("/echo")
 			.run()
 			.assertBody().contains("A1: 1")
-			.assertHeader("B1").equals("1");
+			.assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -383,7 +383,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo","baz")
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -397,7 +397,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo", bean)
 			.run()
-			.assertBody().equals("['f=1','f=1']");
+			.assertBody().is("['f=1','f=1']");
 	}
 
 	@Test
@@ -411,7 +411,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo", null)
 			.run()
-			.assertBody().equals("null");
+			.assertBody().is("null");
 	}
 
 	@Test
@@ -425,7 +425,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header(new org.apache.http.message.BasicHeader("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -439,7 +439,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header(new BasicNameValuePair("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -453,7 +453,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header(new BasicObjectHeader("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -467,7 +467,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(new org.apache.http.message.BasicHeader("Foo", "baz"),new org.apache.http.message.BasicHeader("Baz", "quux"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -481,7 +481,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(OMap.of("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -495,7 +495,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(AMap.of("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -509,7 +509,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(NameValuePairs.of("Foo","baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -523,7 +523,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(new BasicNameValuePair("Foo","baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -537,7 +537,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headerPairs("Foo", "baz")
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -551,7 +551,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headers(new BasicObjectHeader("Foo", "baz"))
 			.run()
-			.assertBody().equals("['bar','baz']");
+			.assertBody().is("['bar','baz']");
 	}
 
 	@Test
@@ -565,7 +565,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.accept("text/plain")
 			.run()
-			.assertBody().equals("['text/foo','text/plain']");
+			.assertBody().is("['text/foo','text/plain']");
 	}
 
 	@Test
@@ -578,7 +578,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['UTF-8']");
+			.assertBody().is("['UTF-8']");
 	}
 
 	@Test
@@ -591,7 +591,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['identity']");
+			.assertBody().is("['identity']");
 	}
 
 	@Test
@@ -604,7 +604,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['en']");
+			.assertBody().is("['en']");
 	}
 
 	@Test
@@ -617,7 +617,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -630,7 +630,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['none']");
+			.assertBody().is("['none']");
 	}
 
 	@Test
@@ -643,7 +643,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['1']");
+			.assertBody().is("['1']");
 	}
 
 	@Test
@@ -656,7 +656,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -669,7 +669,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['123']");
+			.assertBody().is("['123']");
 	}
 
 	@Test
@@ -682,7 +682,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -695,7 +695,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['123']");
+			.assertBody().is("['123']");
 	}
 
 	@Test
@@ -708,7 +708,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -721,7 +721,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -734,7 +734,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -747,7 +747,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -760,7 +760,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -773,7 +773,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -786,7 +786,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -799,7 +799,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -812,7 +812,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -825,7 +825,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['10']");
+			.assertBody().is("['10']");
 	}
 
 	@Test
@@ -838,7 +838,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['true']");
+			.assertBody().is("['true']");
 	}
 
 	@Test
@@ -851,7 +851,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -864,7 +864,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -877,7 +877,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -890,7 +890,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -903,7 +903,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -916,7 +916,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -929,7 +929,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -942,7 +942,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -955,7 +955,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -968,7 +968,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -986,7 +986,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header(new Accept("text/plain"))
 			.run()
-			.assertBody().equals("['text/foo','text/plain']");
+			.assertBody().is("['text/foo','text/plain']");
 	}
 
 	@Test
@@ -999,7 +999,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['UTF-8']");
+			.assertBody().is("['UTF-8']");
 	}
 
 	@Test
@@ -1012,7 +1012,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['identity']");
+			.assertBody().is("['identity']");
 	}
 
 	@Test
@@ -1025,7 +1025,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['en']");
+			.assertBody().is("['en']");
 	}
 
 	@Test
@@ -1038,7 +1038,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1052,7 +1052,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['none']");
+			.assertBody().is("['none']");
 	}
 
 	@Test
@@ -1065,7 +1065,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['1']");
+			.assertBody().is("['1']");
 	}
 
 	@Test
@@ -1078,7 +1078,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1091,7 +1091,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['123']");
+			.assertBody().is("['123']");
 	}
 
 	@Test
@@ -1104,7 +1104,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1117,7 +1117,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1130,7 +1130,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1143,7 +1143,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1156,7 +1156,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1169,7 +1169,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1182,7 +1182,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1195,7 +1195,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['\"foo\"']");
+			.assertBody().is("['\"foo\"']");
 	}
 
 	@Test
@@ -1208,7 +1208,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1221,7 +1221,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1234,7 +1234,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['\"foo\"']");
+			.assertBody().is("['\"foo\"']");
 	}
 
 	@Test
@@ -1247,7 +1247,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1260,7 +1260,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1273,7 +1273,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['Sun, 31 Dec 2000 12:34:56 GMT']");
+			.assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 	}
 
 	@Test
@@ -1286,7 +1286,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['10']");
+			.assertBody().is("['10']");
 	}
 
 	@Test
@@ -1299,7 +1299,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['true']");
+			.assertBody().is("['true']");
 	}
 
 	@Test
@@ -1312,7 +1312,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1325,7 +1325,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1338,7 +1338,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1351,7 +1351,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1364,7 +1364,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1377,7 +1377,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1390,7 +1390,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1403,7 +1403,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1416,7 +1416,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	@Test
@@ -1429,7 +1429,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['foo']");
+			.assertBody().is("['foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1448,7 +1448,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.headerPairs("Foo","q1x","Foo","q2x")
 			.run()
-			.assertBody().equals("['bar','baz','qux','q1x','q2x']");
+			.assertBody().is("['bar','baz','qux','q1x','q2x']");
 	}
 
 	@Test
@@ -1462,7 +1462,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo","qux")
 			.run()
-			.assertBody().equals("['bar','baz','qux']");
+			.assertBody().is("['bar','baz','qux']");
 	}
 
 	@Test
@@ -1475,7 +1475,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['text/plain']");
+			.assertBody().is("['text/plain']");
 	}
 
 	@Test
@@ -1489,7 +1489,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Accept","text/plain")
 			.run()
-			.assertBody().equals("['text/foo','text/plain']");
+			.assertBody().is("['text/foo','text/plain']");
 	}
 
 	@Test
@@ -1504,7 +1504,7 @@ public class RestClientTest {
 		req.setHeader("Accept","text/plain");
 		req
 			.run()
-			.assertBody().equals("['text/plain']");
+			.assertBody().is("['text/plain']");
 	}
 
 	@Test
@@ -1517,7 +1517,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkHeader")
 			.run()
-			.assertBody().equals("['text/plain']");
+			.assertBody().is("['text/plain']");
 	}
 
 	@Test
@@ -1531,7 +1531,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Content-Type", "text/plain")
 			.run()
-			.assertBody().equals("['text/foo','text/plain']");
+			.assertBody().is("['text/foo','text/plain']");
 	}
 
 	@Test
@@ -1545,7 +1545,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer().createPartSession(null),null)
 			.run()
-			.assertBody().equals("['x{f:1}','x{f:1}']");
+			.assertBody().is("['x{f:1}','x{f:1}']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1562,7 +1562,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkQuery")
 			.run()
-			.assertBody().equals("Foo=bar&Foo=baz");
+			.assertBody().is("Foo=bar&Foo=baz");
 	}
 
 	@Test
@@ -1578,7 +1578,7 @@ public class RestClientTest {
 			.build()
 			.get("/checkQuery")
 			.run()
-			.assertBody().equals("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+			.assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1594,7 +1594,7 @@ public class RestClientTest {
 			.build()
 			.post("/checkFormData")
 			.run()
-			.assertBody().equals("Foo=bar&Foo=baz");
+			.assertBody().is("Foo=bar&Foo=baz");
 	}
 
 	@Test
@@ -1610,7 +1610,7 @@ public class RestClientTest {
 			.build()
 			.post("/checkFormData")
 			.run()
-			.assertBody().equals("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+			.assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1648,7 +1648,7 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.header("Foo","f2")
 			.run()
-			.assertBody().equals("['f1','f2','baz']");
+			.assertBody().is("['f1','f2','baz']");
 	}
 
 	@Test
@@ -1757,8 +1757,8 @@ public class RestClientTest {
 			.header("Check","foo")
 			.header("Foo","f3")
 			.run()
-			.assertBody().equals("['f1','f2','f3']")
-			.assertHeader("Bar").equals("b1");
+			.assertBody().is("['f1','f2','f3']")
+			.assertHeader("Bar").is("b1");
 		assertEquals(111, XRestCallInterceptor.x);
 	}
 
@@ -1774,8 +1774,8 @@ public class RestClientTest {
 			.header("Check","foo")
 			.header("Foo","f3")
 			.run()
-			.assertBody().equals("['f1','f2','f3']")
-			.assertHeader("Bar").equals("b1");
+			.assertBody().is("['f1','f2','f3']")
+			.assertHeader("Bar").is("b1");
 		assertEquals(111, XRestCallInterceptor.x);
 	}
 
@@ -1836,7 +1836,7 @@ public class RestClientTest {
 			.post("/echoBody", bean)
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1852,7 +1852,7 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.assertBody().equals("{f:1}");
+			.assertBody().is("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
@@ -1860,7 +1860,7 @@ public class RestClientTest {
 			.contentType("text/xml")
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1870,7 +1870,7 @@ public class RestClientTest {
 			.contentType("text/json")
 			.run()
 			.cacheBody()
-			.assertBody().equals("{\"f\":1}")
+			.assertBody().is("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -1887,7 +1887,7 @@ public class RestClientTest {
 			.post("/echoBody", bean)
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1905,7 +1905,7 @@ public class RestClientTest {
 			.post("/echoBody", bean)
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 
 		assertEqualObjects(b, bean);
@@ -1923,7 +1923,7 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.assertBody().equals("{f:1}");
+			.assertBody().is("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
@@ -1931,7 +1931,7 @@ public class RestClientTest {
 			.contentType("text/xml")
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1941,7 +1941,7 @@ public class RestClientTest {
 			.contentType("text/json")
 			.run()
 			.cacheBody()
-			.assertBody().equals("{\"f\":1}")
+			.assertBody().is("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -1957,7 +1957,7 @@ public class RestClientTest {
 		rc
 			.post("/echoBody", bean)
 			.run()
-			.assertBody().equals("{f:1}");
+			.assertBody().is("{f:1}");
 
 		Bean b = rc
 			.post("/echoBody", bean)
@@ -1965,7 +1965,7 @@ public class RestClientTest {
 			.contentType("text/xml")
 			.run()
 			.cacheBody()
-			.assertBody().equals("<object><f>1</f></object>")
+			.assertBody().is("<object><f>1</f></object>")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 
@@ -1975,7 +1975,7 @@ public class RestClientTest {
 			.contentType("text/json")
 			.run()
 			.cacheBody()
-			.assertBody().equals("{\"f\":1}")
+			.assertBody().is("{\"f\":1}")
 			.getBody().as(Bean.class);
 		assertEqualObjects(b, bean);
 	}
@@ -2035,7 +2035,7 @@ public class RestClientTest {
 			.get("/")
 			.header("Foo",bean)
 			.run()
-			.assertHeader("Foo").equals("x{f:1}")
+			.assertHeader("Foo").is("x{f:1}")
 			.getHeader("Foo").as(Bean.class);
 		assertEquals("{f:1}", b.toString());
 	}
@@ -2054,7 +2054,7 @@ public class RestClientTest {
 			.get("/")
 			.header("Foo",bean)
 			.run()
-			.assertHeader("Foo").equals("x{f:1}")
+			.assertHeader("Foo").is("x{f:1}")
 			.getHeader("Foo").as(Bean.class);
 		assertEquals("{f:1}", b.toString());
 	}
@@ -2093,7 +2093,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", l1)
 			.run()
-			.assertBody().equals("{f1:{_type:'L',f2:1}}");
+			.assertBody().is("{f1:{_type:'L',f2:1}}");
 	}
 
 	@Test
@@ -2108,7 +2108,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", l2)
 			.run()
-			.assertBody().equals("{_type:'L',f2:1}");
+			.assertBody().is("{_type:'L',f2:1}");
 	}
 
 	@Test
@@ -2141,7 +2141,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", l1)
 			.run()
-			.assertBody().equals("{}");
+			.assertBody().is("{}");
 	}
 
 	@Test
@@ -2154,7 +2154,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", bean)
 			.run()
-			.assertBody().equals("\t\t{\n\t\t\tf: 1\n\t\t}");
+			.assertBody().is("\t\t{\n\t\t\tf: 1\n\t\t}");
 	}
 
 	public static class L10 extends SerializerListener {
@@ -2186,7 +2186,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", new L11().init())
 			.run()
-			.assertBody().equals("{}");
+			.assertBody().is("{}");
 	}
 
 	@Test
@@ -2200,7 +2200,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("['a','b','c']");
+			.assertBody().is("['a','b','c']");
 	}
 
 	@Test
@@ -2214,7 +2214,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{a:1,b:2,c:3}");
+			.assertBody().is("{a:1,b:2,c:3}");
 	}
 
 	public static class L16 {
@@ -2233,7 +2233,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{}");
+			.assertBody().is("{}");
 	}
 
 	public static class L18 {
@@ -2252,7 +2252,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{}");
+			.assertBody().is("{}");
 	}
 
 	public static class L20 {
@@ -2270,7 +2270,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f:null}");
+			.assertBody().is("{f:null}");
 	}
 
 	public static class L21 {
@@ -2288,7 +2288,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f:'foo'}");
+			.assertBody().is("{f:'foo'}");
 	}
 
 	public static class L23 {
@@ -2309,7 +2309,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f:'http://localhost:80/context/resource/foo'}");
+			.assertBody().is("{f:'http://localhost:80/context/resource/foo'}");
 
 		MockRestClient
 			.create(A.class)
@@ -2320,7 +2320,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f:'foo'}");
+			.assertBody().is("{f:'foo'}");
 	}
 
 	public static class L26 {
@@ -2350,7 +2350,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
+			.assertBody().is("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
 	}
 
 	public static class L27 {
@@ -2368,7 +2368,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{'f1':'foo'}");
+			.assertBody().is("{'f1':'foo'}");
 
 		MockRestClient
 			.create(A.class)
@@ -2377,7 +2377,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{|f1|:|foo|}");
+			.assertBody().is("{|f1|:|foo|}");
 
 		MockRestClient
 			.create(A.class)
@@ -2386,7 +2386,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f1:|foo|}");
+			.assertBody().is("{f1:|foo|}");
 	}
 
 	@Test
@@ -2400,7 +2400,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{'f1':'foo'}");
+			.assertBody().is("{'f1':'foo'}");
 
 		MockRestClient
 			.create(A.class)
@@ -2409,7 +2409,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{f1:'foo'}");
+			.assertBody().is("{f1:'foo'}");
 	}
 
 	@Test
@@ -2423,7 +2423,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", x)
 			.run()
-			.assertBody().equals("{\n\tf1: 'foo'\n}");
+			.assertBody().is("{\n\tf1: 'foo'\n}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2506,7 +2506,7 @@ public class RestClientTest {
 			.get("/checkQuery")
 			.query("Foo", "bar baz")
 			.run()
-			.assertBody().equals("Foo=%27bar+baz%27");
+			.assertBody().is("Foo=%27bar+baz%27");
 	}
 
 	@Test
@@ -2519,19 +2519,19 @@ public class RestClientTest {
 		rc.get("/checkQuery")
 			.query("Foo", new String[]{"bar","baz"})
 			.run()
-			.assertBody().equals("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz");
 
 		rc.post("/checkFormData")
 			.formData("Foo", new String[]{"bar","baz"})
 			.run()
-			.assertBody().equals("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz");
 
 		rc.get("/checkHeader")
 			.header("Check", "Foo")
 			.header("Foo", new String[]{"bar","baz"})
 			.accept("text/json+simple")
 			.run()
-			.assertBody().equals("['bar|baz']");
+			.assertBody().is("['bar|baz']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2562,39 +2562,39 @@ public class RestClientTest {
 
 		rc1.post("/echoBody", new O1())
 			.run()
-			.assertBody().equals("'O1'");
+			.assertBody().is("'O1'");
 		rc2.post("/echoBody", new O1())
 			.run()
-			.assertBody().equals("{f:1}");
+			.assertBody().is("{f:1}");
 
 		rc1.get("/checkQuery")
 			.query("foo", new O1())
 			.run()
-			.assertBody().equals("foo=O1");
+			.assertBody().is("foo=O1");
 		rc2.get("/checkQuery")
 			.query("foo", new O1())
 			.run()
-			.assertBody().equals("foo=f%3D1");
+			.assertBody().is("foo=f%3D1");
 
 		rc1.formPost("/checkFormData")
 			.formData("foo", new O1())
 			.run()
-			.assertBody().equals("foo=O1");
+			.assertBody().is("foo=O1");
 		rc2.formPost("/checkFormData")
 			.formData("foo", new O1())
 			.run()
-			.assertBody().equals("foo=f%3D1");
+			.assertBody().is("foo=f%3D1");
 
 		rc1.get("/checkHeader")
 			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
-			.assertBody().equals("['O1']");
+			.assertBody().is("['O1']");
 		rc2.get("/checkHeader")
 			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
-			.assertBody().equals("['f=1']");
+			.assertBody().is("['f=1']");
 	}
 
 	public static class O2 {
@@ -2629,8 +2629,8 @@ public class RestClientTest {
 			.header("X", new O2(1))
 			.run()
 			.cacheBody()
-			.assertBody().equals("1")
-			.assertHeader("X").equals("1")
+			.assertBody().is("1")
+			.assertHeader("X").is("1")
 		;
 		assertEquals(1, rr.getBody().as(O2.class).f);
 		assertEquals(1, rr.getHeader("X").as(O2.class).f);
@@ -2664,8 +2664,8 @@ public class RestClientTest {
 			.header("X", new O9().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		assertEquals(2, rr.getBody().as(O9.class).f2);
 		assertEquals(2, rr.getHeader("X").as(O9.class).f2);
@@ -2714,8 +2714,8 @@ public class RestClientTest {
 			.header("X", new O10().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
 		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
@@ -2729,8 +2729,8 @@ public class RestClientTest {
 			.header("X", new O10().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
 		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
@@ -2744,8 +2744,8 @@ public class RestClientTest {
 			.header("X", new O10().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
 		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
@@ -2759,8 +2759,8 @@ public class RestClientTest {
 			.header("X", new O10().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals(0, rr.getBody().as(O10.class).f2);
 		assertEquals(0, rr.getHeader("X").as(O10.class).f2);
@@ -2774,8 +2774,8 @@ public class RestClientTest {
 			.header("X", new O10().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f3:3}")
-			.assertHeader("X").equals("f3=3")
+			.assertBody().is("{f3:3}")
+			.assertHeader("X").is("f3=3")
 		;
 		assertEquals(3, rr.getBody().as(O10.class).f3);
 		assertEquals(3, rr.getHeader("X").as(O10.class).f3);
@@ -2820,8 +2820,8 @@ public class RestClientTest {
 			.header("X", new O18().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		assertEquals(2, rr.getBody().as(O18.class).f2);
 		assertEquals(2, rr.getHeader("X").as(O18.class).f2);
@@ -2849,8 +2849,8 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.assertBody().equals("{f1:'1'}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:'1'}")
+			.assertHeader("X").is("f1=1")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2860,8 +2860,8 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.assertBody().equals("'1'")
-			.assertHeader("X").equals("1")
+			.assertBody().is("'1'")
+			.assertHeader("X").is("1")
 		;
 	}
 
@@ -2874,8 +2874,8 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.assertBody().equals("{f1:'1'}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:'1'}")
+			.assertHeader("X").is("f1=1")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2885,8 +2885,8 @@ public class RestClientTest {
 			.post("/test", new O21("1"))
 			.header("X", new O21("1"))
 			.run()
-			.assertBody().equals("'1'")
-			.assertHeader("X").equals("1")
+			.assertBody().is("'1'")
+			.assertHeader("X").is("1")
 		;
 	}
 
@@ -2924,8 +2924,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2935,8 +2935,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 	}
 
@@ -2950,8 +2950,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2961,8 +2961,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2972,8 +2972,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -2983,8 +2983,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 	}
 
@@ -3001,8 +3001,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3016,8 +3016,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3031,8 +3031,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1,f2:2}")
-			.assertHeader("X").equals("f1=1,f2=2")
+			.assertBody().is("{f1:1,f2:2}")
+			.assertHeader("X").is("f1=1,f2=2")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3051,8 +3051,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3066,8 +3066,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3081,8 +3081,8 @@ public class RestClientTest {
 			.header("X", new O25().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{f1:1}")
-			.assertHeader("X").equals("f1=1")
+			.assertBody().is("{f1:1}")
+			.assertHeader("X").is("f1=1")
 		;
 		assertEquals("1/0", rr.getBody().as(O25.class).toString());
 		assertEquals("1/0", rr.getHeader("X").as(O25.class).toString());
@@ -3098,8 +3098,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -3109,8 +3109,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -3120,8 +3120,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 		MockRestClient
 			.create(O2R.class)
@@ -3131,8 +3131,8 @@ public class RestClientTest {
 			.post("/test", new O25().init())
 			.header("X", new O25().init())
 			.run()
-			.assertBody().equals("{f2:2}")
-			.assertHeader("X").equals("f2=2")
+			.assertBody().is("{f2:2}")
+			.assertHeader("X").is("f2=2")
 		;
 	}
 
@@ -3216,7 +3216,7 @@ public class RestClientTest {
 			.post("/echoBody", m)
 			.run()
 			.cacheBody()
-			.assertBody().equals("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
+			.assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}")
 			.getBody().as(OMap.class);
 		;
 		assertTrue(m.get("x") instanceof O33a);
@@ -3232,7 +3232,7 @@ public class RestClientTest {
 			.post("/echoBody", new O33c().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{foo:{_type:'foo',foo:'1'}}")
+			.assertBody().is("{foo:{_type:'foo',foo:'1'}}")
 			.getBody().as(O33c.class);
 		;
 		assertTrue(o33c.foo instanceof O33a);
@@ -3635,7 +3635,7 @@ public class RestClientTest {
 			.post("/echoBody", new O43().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{foo:1}")
+			.assertBody().is("{foo:1}")
 			.getBody().as(O43.class)
 		;
 		assertEquals(1, x.getFoo());
@@ -3647,7 +3647,7 @@ public class RestClientTest {
 			.build()
 			.post("/echoBody", new O43().init())
 			.run()
-			.assertBody().equals("{foo:1}")
+			.assertBody().is("{foo:1}")
 			.getBody().as(O43.class)
 		;
 		assertEquals(1, x.getFoo());
@@ -3685,7 +3685,7 @@ public class RestClientTest {
 			.post("/echoBody", new O44().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{foo:1}")
+			.assertBody().is("{foo:1}")
 			.getBody().as(O44.class)
 		;
 		assertEquals(1, x.foo);
@@ -3715,7 +3715,7 @@ public class RestClientTest {
 			.post("/echoBody", new O44().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{foo:1}")
+			.assertBody().is("{foo:1}")
 			.getBody().as(O44.class)
 		;
 		assertEquals(1, x.foo);
@@ -3748,7 +3748,7 @@ public class RestClientTest {
 			.post("/echoBody", new O46().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("'1'")
+			.assertBody().is("'1'")
 			.getBody().as(O46.class)
 		;
 		assertEquals(1, x.foo);
@@ -3764,7 +3764,7 @@ public class RestClientTest {
 			.post("/echoBody", new O46().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("'1'")
+			.assertBody().is("'1'")
 			.getBody().as(O46.class)
 		;
 		assertEquals(1, x.foo);
@@ -3804,7 +3804,7 @@ public class RestClientTest {
 			.post("/echoBody", new O48().init())
 			.run()
 			.cacheBody()
-			.assertBody().equals("{foo:1}")
+			.assertBody().is("{foo:1}")
 			.getBody().as(O48.class)
 		;
 		assertEquals(1, x.foo);

@@ -1161,6 +1161,21 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are equal.
+	 */
+	public static boolean isEqualsIc(String s1, String s2) {
+		if (s1 == null)
+			return s2 == null;
+		if (s2 == null)
+			return false;
+		return s1.equalsIgnoreCase(s2);
+	}
+
+	/**
 	 * Tests two strings for non-equality, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.

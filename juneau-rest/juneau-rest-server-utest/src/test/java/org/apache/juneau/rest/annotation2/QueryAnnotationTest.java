@@ -54,33 +54,33 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void a01_get() throws Exception {
-		a.get("?p1=p1&p2=2").execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.get("?p1&p2").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.get("?p1=&p2=").execute().assertBody("p1=[,,],p2=[0,,0]");
-		a.get("/").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.get("?p1").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.get("?p1=").execute().assertBody("p1=[,,],p2=[0,null,0]");
-		a.get("?p2").execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.get("?p2=").execute().assertBody("p1=[null,null,null],p2=[0,,0]");
-		a.get("?p1=foo&p2").execute().assertBody("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.get("?p1&p2=1").execute().assertBody("p1=[null,null,null],p2=[1,1,1]");
+		a.get("?p1=p1&p2=2").run().assertBody().is("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.get("?p1&p2").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.get("?p1=&p2=").run().assertBody().is("p1=[,,],p2=[0,,0]");
+		a.get("/").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.get("?p1").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.get("?p1=").run().assertBody().is("p1=[,,],p2=[0,null,0]");
+		a.get("?p2").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.get("?p2=").run().assertBody().is("p1=[null,null,null],p2=[0,,0]");
+		a.get("?p1=foo&p2").run().assertBody().is("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.get("?p1&p2=1").run().assertBody().is("p1=[null,null,null],p2=[1,1,1]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.get("?p1="+x+"&p2=1").execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.get("?p1="+x+"&p2=1").run().assertBody().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 	@Test
 	public void a02_post() throws Exception {
-		a.post("?p1=p1&p2=2", null).execute().assertBody("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.post("?p1&p2", null).execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("?p1=&p2=", null).execute().assertBody("p1=[,,],p2=[0,,0]");
-		a.post("/", null).execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("?p1", null).execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("?p1=", null).execute().assertBody("p1=[,,],p2=[0,null,0]");
-		a.post("?p2", null).execute().assertBody("p1=[null,null,null],p2=[0,null,0]");
-		a.post("?p2=", null).execute().assertBody("p1=[null,null,null],p2=[0,,0]");
-		a.post("?p1=foo&p2", null).execute().assertBody("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.post("?p1&p2=1", null).execute().assertBody("p1=[null,null,null],p2=[1,1,1]");
+		a.post("?p1=p1&p2=2", null).run().assertBody().is("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.post("?p1&p2", null).run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("?p1=&p2=", null).run().assertBody().is("p1=[,,],p2=[0,,0]");
+		a.post("/", null).run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("?p1", null).run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("?p1=", null).run().assertBody().is("p1=[,,],p2=[0,null,0]");
+		a.post("?p2", null).run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("?p2=", null).run().assertBody().is("p1=[null,null,null],p2=[0,,0]");
+		a.post("?p1=foo&p2", null).run().assertBody().is("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.post("?p1&p2=1", null).run().assertBody().is("p1=[null,null,null],p2=[1,1,1]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("?p1="+x+"&p2=1", null).execute().assertBody("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.post("?p1="+x+"&p2=1", null).run().assertBody().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 
 	//=================================================================================================================
@@ -114,23 +114,23 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void b01_get1() throws Exception {
-		b.get("/get1?p1=p1").execute().assertBody("p1=[p1,p1,p1]");
-		b.get("/get1?p1='p1'").execute().assertBody("p1=['p1','p1','p1']");
+		b.get("/get1?p1=p1").run().assertBody().is("p1=[p1,p1,p1]");
+		b.get("/get1?p1='p1'").run().assertBody().is("p1=['p1','p1','p1']");
 	}
 	@Test
 	public void b02_get2() throws Exception {
-		b.get("/get2?p1=p1").execute().assertBody("p1=[p1,p1,p1]");
-		b.get("/get2?p1='p1'").execute().assertBody("p1=[p1,'p1','p1']");
+		b.get("/get2?p1=p1").run().assertBody().is("p1=[p1,p1,p1]");
+		b.get("/get2?p1='p1'").run().assertBody().is("p1=[p1,'p1','p1']");
 	}
 	@Test
 	public void b03_post1() throws Exception {
-		b.post("/post1?p1=p1", null).execute().assertBody("p1=[p1,p1,p1]");
-		b.post("/post1?p1='p1'", null).execute().assertBody("p1=['p1','p1','p1']");
+		b.post("/post1?p1=p1", null).run().assertBody().is("p1=[p1,p1,p1]");
+		b.post("/post1?p1='p1'", null).run().assertBody().is("p1=['p1','p1','p1']");
 	}
 	@Test
 	public void b04_post2() throws Exception {
-		b.post("/post2?p1=p1", null).execute().assertBody("p1=[p1,p1,p1]");
-		b.post("/post2?p1='p1'", null).execute().assertBody("p1=[p1,'p1','p1']");
+		b.post("/post2?p1=p1", null).run().assertBody().is("p1=[p1,p1,p1]");
+		b.post("/post2?p1='p1'", null).run().assertBody().is("p1=[p1,'p1','p1']");
 	}
 
 	//=================================================================================================================
@@ -174,33 +174,33 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void c01_StringArray() throws Exception {
-		c.get("/c01?x=a").execute().assertBody("['a']");
-		c.get("/c01?x=a&x=b").execute().assertBody("['a','b']");
+		c.get("/c01?x=a").run().assertBody().is("['a']");
+		c.get("/c01?x=a&x=b").run().assertBody().is("['a','b']");
 	}
 	@Test
 	public void c02_intArray() throws Exception {
-		c.get("/c02?x=1").execute().assertBody("[1]");
-		c.get("/c02?x=1&x=2").execute().assertBody("[1,2]");
+		c.get("/c02?x=1").run().assertBody().is("[1]");
+		c.get("/c02?x=1&x=2").run().assertBody().is("[1,2]");
 	}
 	@Test
 	public void c03_ListOfStrings() throws Exception {
-		c.get("/c03?x=a").execute().assertBody("['a']");
-		c.get("/c03?x=a&x=b").execute().assertBody("['a','b']");
+		c.get("/c03?x=a").run().assertBody().is("['a']");
+		c.get("/c03?x=a&x=b").run().assertBody().is("['a','b']");
 	}
 	@Test
 	public void c04_ListOfIntegers() throws Exception {
-		c.get("/c04?x=1").execute().assertBody("[1]");
-		c.get("/c04?x=1&x=2").execute().assertBody("[1,2]");
+		c.get("/c04?x=1").run().assertBody().is("[1]");
+		c.get("/c04?x=1&x=2").run().assertBody().is("[1,2]");
 	}
 	@Test
 	public void c05_BeanArray() throws Exception {
-		c.get("/c05?x=a=1,b=2,c=false").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/c05?x=a=1,b=2,c=false&x=a=3,b=4,c=true").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c05?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1',b:2,c:false}]");
+		c.get("/c05?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 	@Test
 	public void c06_ListOfBeans() throws Exception {
-		c.get("/c06?x=a=1,b=2,c=false").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/c06?x=a=1,b=2,c=false&x=a=3,b=4,c=true").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c06?x=a=1,b=2,c=false").run().assertBody().is("[{a:'1',b:2,c:false}]");
+		c.get("/c06?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertBody().is("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 
 	//=================================================================================================================
@@ -242,26 +242,26 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void d01_defaultQuery() throws Exception {
-		d.get("/d01").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/d01").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d01").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/d01").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d02_annotatedQuery() throws Exception {
-		d.get("/d02").execute().assertBody("{f1:null,f2:null,f3:null}");
-		d.get("/d02").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d02").run().assertBody().is("{f1:null,f2:null,f3:null}");
+		d.get("/d02").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d03_annotatedQueryDefault() throws Exception {
-		d.get("/d03").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/d03").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d03").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/d03").query("f1",4).query("f2",5).query("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d04_annotatedAndDefaultQuery() throws Exception {
-		d.get("/d04").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/d04").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
+		d.get("/d04").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d04").query("f1",7).query("f2",8).query("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//=================================================================================================================
@@ -294,26 +294,26 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void e01_optionalParam_integer() throws Exception {
-		e.get("/a?f1=123").execute().assertStatus(200).assertBody("123");
-		e.get("/a").execute().assertStatus(200).assertBody("null");
+		e.get("/a?f1=123").run().assertStatus().equals(200).assertBody().is("123");
+		e.get("/a").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void e02_optionalParam_bean() throws Exception {
-		e.get("/b?f1=a=1,b=foo").execute().assertStatus(200).assertBody("{a:1,b:'foo'}");
-		e.get("/b").execute().assertStatus(200).assertBody("null");
+		e.get("/b?f1=a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
+		e.get("/b").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void e03_optionalParam_listOfBeans() throws Exception {
-		e.get("/c?f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
-		e.get("/c").execute().assertStatus(200).assertBody("null");
+		e.get("/c?f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		e.get("/c").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 	@Test
 	public void e04_optionalParam_listOfOptionals() throws Exception {
-		e.get("/d?f1=@((a=1,b=foo))").execute().assertStatus(200).assertBody("[{a:1,b:'foo'}]");
-		e.get("/d").execute().assertStatus(200).assertBody("null");
+		e.get("/d?f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		e.get("/d").run().assertStatus().equals(200).assertBody().is("null");
 	}
 
 

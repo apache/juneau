@@ -44,8 +44,8 @@ public class ThreadLocalObjectsTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01?foo=bar").execute()
-			.assertBodyContains("bar")
+		a.get("/a01?foo=bar").run()
+			.assertBody().contains("bar")
 		;
 	}
 
@@ -70,8 +70,8 @@ public class ThreadLocalObjectsTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/a/a01?foo=bar").execute()
-			.assertBodyContains("bar")
+		b.get("/a/a01?foo=bar").run()
+			.assertBody().contains("bar")
 		;
 	}
 }

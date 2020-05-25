@@ -10,55 +10,22 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.mock2;
 
-import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
+import org.apache.juneau.utils.*;
 
-import java.util.*;
+/**
+ * Allows for fluent-style assertions on the HTTP response status code.
+ */
+public class MockServletResponseStatusCodeAssertion extends FluentIntAssertion<MockServletResponse> {
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class HyperlinkTest {
-
-	@Rest
-	public static class A extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-
-		@RestMethod
-		public Hyperlink a01() {
-			return new Hyperlink("foo", "bar");
-		}
-
-		@RestMethod
-		public Hyperlink[] a02() {
-			return new Hyperlink[]{a01(),a01()};
-		}
-
-		@RestMethod
-		public Collection<Hyperlink> a03() {
-			return Arrays.asList(a02());
-		}
-	}
-
-	static MockRest a = MockRest.build(A.class);
-
-	@Test
-	public void a01_basic() throws Exception {
-		assertEquals("<a href=\"/foo\">bar</a>", a.get("/a01").accept("text/html+stripped").run().getBodyAsString());
-	}
-
-	@Test
-	public void a02_array() throws Exception {
-		assertEquals("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>", a.get("/a02").accept("text/html+stripped").run().getBodyAsString());
-	}
-
-	@Test
-	public void a03_collection() throws Exception {
-		assertEquals("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>", a.get("/a03").accept("text/html+stripped").run().getBodyAsString());
+	/**
+	 * Constructor.
+	 *
+	 * @param value Status code.
+	 * @param returns Fluent-style return object.
+	 */
+	public MockServletResponseStatusCodeAssertion(int value, MockServletResponse returns) {
+		super(value, returns);
 	}
 }

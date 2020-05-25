@@ -123,15 +123,15 @@ public class RestResourcePojoSwapsTest {
 
 	@Test
 	public void a01_classTransformOverridesParentClassTransform() throws Exception {
-		a.get("/classTransformOverridesParentClassTransform").json().execute().assertBody("'A2-0'");
-		a.put("/classTransformOverridesParentClassTransform", "'A2-1'").json().execute().assertBody("'A2-1'");
-		a.put("/classTransformOverridesParentClassTransform/A2-2", null).json().execute().assertBody("'A2-2'");
+		a.get("/classTransformOverridesParentClassTransform").json().run().assertBody().is("'A2-0'");
+		a.put("/classTransformOverridesParentClassTransform", "'A2-1'").json().run().assertBody().is("'A2-1'");
+		a.put("/classTransformOverridesParentClassTransform/A2-2", null).json().run().assertBody().is("'A2-2'");
 	}
 
 	@Test
 	public void a02_methodTransformOverridesClassTransform() throws Exception {
-		a.get("/methodTransformOverridesClassTransform").json().execute().assertBody("'A3-0'");
-		a.put("/methodTransformOverridesClassTransform", "'A3-1'").json().execute().assertBody("'A3-1'");
-		a.put("/methodTransformOverridesClassTransform/A3-2", null).json().execute().assertBody("'A3-2'");
+		a.get("/methodTransformOverridesClassTransform").json().run().assertBody().is("'A3-0'");
+		a.put("/methodTransformOverridesClassTransform", "'A3-1'").json().run().assertBody().is("'A3-1'");
+		a.put("/methodTransformOverridesClassTransform/A3-2", null).json().run().assertBody().is("'A3-2'");
 	}
 }

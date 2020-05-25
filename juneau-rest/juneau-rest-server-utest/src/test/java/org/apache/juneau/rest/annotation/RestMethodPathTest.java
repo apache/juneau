@@ -72,13 +72,13 @@ public class RestMethodPathTest {
 		// [/{id}/*] = [test5f]
 		// [/{id}/foo] = [test5g]
 		// [/{id}/foo/*] = [test5h]
-		a.get("/").execute().assertBody("a");
-		a.get("/foo").execute().assertBody("c");
-		a.get("/foo/x").execute().assertBody("d");
-		a.get("/x").execute().assertBody("e");
-		a.get("/x/x").execute().assertBody("f");
-		a.get("/x/foo").execute().assertBody("g");
-		a.get("/x/foo/x").execute().assertBody("h");
+		a.get("/").run().assertBody().is("a");
+		a.get("/foo").run().assertBody().is("c");
+		a.get("/foo/x").run().assertBody().is("d");
+		a.get("/x").run().assertBody().is("e");
+		a.get("/x/x").run().assertBody().is("f");
+		a.get("/x/foo").run().assertBody().is("g");
+		a.get("/x/foo/x").run().assertBody().is("h");
 	}
 
 	//=================================================================================================================
@@ -104,6 +104,6 @@ public class RestMethodPathTest {
 
 	@Test
 	public void b01_pathOverriddenByChild() throws Exception {
-		b2.get("/foo").execute().assertBody("b");
+		b2.get("/foo").run().assertBody().is("b");
 	}
 }

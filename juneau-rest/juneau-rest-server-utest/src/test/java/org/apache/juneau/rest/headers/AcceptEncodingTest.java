@@ -53,57 +53,57 @@ public class AcceptEncodingTest {
 
 	@Test
 	public void a01_noCompression() throws Exception {
-		a.get("/").execute().assertBody("foo");
-		a.get("/").acceptEncoding("").execute().assertBody("foo");
-		a.get("/").acceptEncoding("*").execute().assertBody("foo");
-		a.get("/").acceptEncoding("identity").execute().assertBody("foo");
+		a.get("/").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("*").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("identity").run().assertBody().is("foo");
 	}
 
 	@Test
 	public void a02_noCompression_qValues() throws Exception {
 		// The following should all match identity.
-		a.get("/").acceptEncoding("mycoding").execute().assertBody("foo");
-		a.get("/").acceptEncoding("identity;q=0.8,mycoding;q=0.6").execute().assertBody("foo");
-		a.get("/").acceptEncoding("mycoding;q=0.8,identity;q=0.6").execute().assertBody("foo");
-		a.get("/").acceptEncoding("mycoding;q=0.8,*;q=0.6").execute().assertBody("foo");
-		a.get("/").acceptEncoding("*;q=0.8,myencoding;q=0.6").execute().assertBody("foo");
+		a.get("/").acceptEncoding("mycoding").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("identity;q=0.8,mycoding;q=0.6").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().assertBody().is("foo");
+		a.get("/").acceptEncoding("*;q=0.8,myencoding;q=0.6").run().assertBody().is("foo");
 	}
 
 	@Test
 	public void a03_noCompression_nomatch() throws Exception {
-		a.get("?noTrace=true").acceptEncoding("mycoding,identity;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("mycoding,identity;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,identity;q=0'",
 				"Supported codings: ['identity']"
 			);
-		a.get("?noTrace=true").acceptEncoding("mycoding,*;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("mycoding,*;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,*;q=0'",
 				"Supported codings: ['identity']"
 			);
-		a.get("?noTrace=true").acceptEncoding("identity;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("identity;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['identity']"
 			);
-		a.get("?noTrace=true").acceptEncoding("identity;q=0.0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("identity;q=0.0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['identity']"
 			);
-		a.get("?noTrace=true").acceptEncoding("*;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("*;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['identity']"
 			);
-		a.get("?noTrace=true").acceptEncoding("*;q=0.0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		a.get("?noTrace=true").acceptEncoding("*;q=0.0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['identity']"
 			);
@@ -124,49 +124,49 @@ public class AcceptEncodingTest {
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {
-		b.get("/b01").execute().assertBody("foo");
-		b.get("/b01").acceptEncoding("").execute().assertBody("foo");
-		b.get("/b01").acceptEncoding("identity").execute().assertBody("foo");
+		b.get("/b01").run().assertBody().is("foo");
+		b.get("/b01").acceptEncoding("").run().assertBody().is("foo");
+		b.get("/b01").acceptEncoding("identity").run().assertBody().is("foo");
 	}
 	@Test
 	public void b02_withCompression_identity_qValues() throws Exception {
-		b.get("/b01").acceptEncoding("identity;q=0.8,mycoding;q=0.6").execute().assertBody("foo");
+		b.get("/b01").acceptEncoding("identity;q=0.8,mycoding;q=0.6").run().assertBody().is("foo");
 	}
 	@Test
 	public void b03_withCompression_gzip() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").run().getBody()));
 	}
 	@Test
 	public void b04_withCompression_gzip_qValues() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().getBody()));
 	}
 	@Test
 	public void b05_withCompression_nomatch() throws Exception {
-		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0.0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0.0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("/b01?noTrace=true").acceptEncoding("*;q=0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		b.get("/b01?noTrace=true").acceptEncoding("*;q=0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("/b01?noTrace=true").acceptEncoding("*;q=0.0").execute()
-			.assertStatus(406)
-			.assertBodyContains(
+		b.get("/b01?noTrace=true").acceptEncoding("*;q=0.0").run()
+			.assertStatus().equals(406)
+			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
 			);
@@ -217,43 +217,43 @@ public class AcceptEncodingTest {
 
 	@Test
 	public void c01_direct1() throws Exception {
-		c.get("/c01").acceptEncoding("mycoding").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertHeader("Content-Type", "text/direct")
-			.assertBody("foo");
-		c.get("/c01").acceptEncoding("*").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertHeader("Content-Type", "text/direct")
-			.assertBody("foo");
+		c.get("/c01").acceptEncoding("mycoding").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Type").is("text/direct")
+			.assertBody().is("foo");
+		c.get("/c01").acceptEncoding("*").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertHeader("Content-Type").is("text/direct")
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c02_direct2() throws Exception {
-		c.get("/c02").acceptEncoding("mycoding").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertBody("foo");
-		c.get("/c02").acceptEncoding("*").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertBody("foo");
+		c.get("/c02").acceptEncoding("mycoding").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertBody().is("foo");
+		c.get("/c02").acceptEncoding("*").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c03_direct3() throws Exception {
 		byte[] body;
-		body = c.get("/c03").acceptEncoding("mycoding").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
+		body = c.get("/c03").acceptEncoding("mycoding").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.getBody();
 		assertEquals("foo", decompress(body));
-		body = c.get("/c03").acceptEncoding("*").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
+		body = c.get("/c03").acceptEncoding("*").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.getBody();
 		assertEquals("foo", decompress(body));
 	}
 	@Test
 	public void c04_direct4() throws Exception {
-		c.get("/c04").acceptEncoding("mycoding").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertBody("foo");
-		c.get("/c04").acceptEncoding("*").execute()
-			.assertHeader("Content-Encoding", null) // Should not be set
-			.assertBody("foo");
+		c.get("/c04").acceptEncoding("mycoding").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertBody().is("foo");
+		c.get("/c04").acceptEncoding("*").run()
+			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertBody().is("foo");
 	}
 }

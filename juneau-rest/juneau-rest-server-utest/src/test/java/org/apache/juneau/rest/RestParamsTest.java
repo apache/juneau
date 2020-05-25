@@ -126,85 +126,85 @@ public class RestParamsTest {
 
 	@Test
 	public void a01_ResourceBundle() throws Exception {
-		a.get("/a01").acceptLanguage("en-US").execute().assertBody("bar");
-		a.get("/a01").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/a01").acceptLanguage("en-US").run().assertBody().is("bar");
+		a.get("/a01").acceptLanguage("ja-JP").run().assertBody().is("baz");
 	}
 	@Test
 	public void a02_MessageBundle() throws Exception {
-		a.get("/a02").acceptLanguage("en-US").execute().assertBody("bar");
-		a.get("/a02").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/a02").acceptLanguage("en-US").run().assertBody().is("bar");
+		a.get("/a02").acceptLanguage("ja-JP").run().assertBody().is("baz");
 	}
 	@Test
 	public void a03_InputStream() throws Exception {
-		a.post("/a03", "foo").execute().assertBody("foo");
+		a.post("/a03", "foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a04_ServletInputStream() throws Exception {
-		a.post("/a04", "foo").execute().assertBody("foo");
+		a.post("/a04", "foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a05_Reader() throws Exception {
-		a.post("/a05", "foo").execute().assertBody("foo");
+		a.post("/a05", "foo").run().assertBody().is("foo");
 	}
 	@Test
 	public void a06_OutputStream() throws Exception {
-		a.get("/a06").execute().assertBody("OK");
+		a.get("/a06").run().assertBody().is("OK");
 	}
 	@Test
 	public void a07_ServletOutputStream() throws Exception {
-		a.get("/a07").execute().assertBody("OK");
+		a.get("/a07").run().assertBody().is("OK");
 	}
 	@Test
 	public void a08_Writer() throws Exception {
-		a.get("/a08").execute().assertBody("OK");
+		a.get("/a08").run().assertBody().is("OK");
 	}
 	@Test
 	public void a09_RequestHeaders() throws Exception {
-		a.get("/a09").execute().assertBody("true");
+		a.get("/a09").run().assertBody().is("true");
 	}
 	@Test
 	public void a10_RequestQuery() throws Exception {
-		a.get("/a10").execute().assertBody("true");
+		a.get("/a10").run().assertBody().is("true");
 	}
 	@Test
 	public void a11_RequestFormData() throws Exception {
-		a.get("/a11").execute().assertBody("true");
+		a.get("/a11").run().assertBody().is("true");
 	}
 	@Test
 	public void a12_HttpMethod() throws Exception {
-		a.get("/a12").execute().assertBody("GET");
+		a.get("/a12").run().assertBody().is("GET");
 	}
 	@Test
 	public void a13_RestLogger() throws Exception {
-		a.get("/a13").execute().assertBody("true");
+		a.get("/a13").run().assertBody().is("true");
 	}
 	@Test
 	public void a14_RestContext() throws Exception {
-		a.get("/a14").execute().assertBody("true");
+		a.get("/a14").run().assertBody().is("true");
 	}
 	@Test
 	public void a15_Parser() throws Exception {
-		a.get("/a15").contentType("application/json").execute().assertBody("org.apache.juneau.json.JsonParser");
+		a.get("/a15").contentType("application/json").run().assertBody().is("org.apache.juneau.json.JsonParser");
 	}
 	@Test
 	public void a16_Locale() throws Exception {
-		a.get("/a16").acceptLanguage("en-US").execute().assertBody("en_US");
-		a.get("/a16").acceptLanguage("ja-JP").execute().assertBody("ja_JP");
+		a.get("/a16").acceptLanguage("en-US").run().assertBody().is("en_US");
+		a.get("/a16").acceptLanguage("ja-JP").run().assertBody().is("ja_JP");
 	}
 	@Test
 	public void a17_Swagger() throws Exception {
-		a.get("/a17").execute().assertBody("true");
+		a.get("/a17").run().assertBody().is("true");
 	}
 	@Test
 	public void a18_RequestPathMatch() throws Exception {
-		a.get("/a18").execute().assertBody("true");
+		a.get("/a18").run().assertBody().is("true");
 	}
 	@Test
 	public void a19_RequestBody() throws Exception {
-		a.get("/a19").execute().assertBody("true");
+		a.get("/a19").run().assertBody().is("true");
 	}
 	@Test
 	public void a20_Config() throws Exception {
-		a.get("/a20").execute().assertBody("true");
+		a.get("/a20").run().assertBody().is("true");
 	}
 }

@@ -61,52 +61,52 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		a.get("/a01").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		a.get("/a01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		a.get("/a01").uon().execute().assertBody("(a=1,_b=foo)");
-		a.get("/a01").urlEnc().execute().assertBody("a=1&_b=foo");
+		a.get("/a01").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		a.get("/a01").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		a.get("/a01").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a01").uon().run().assertBody().is("(a=1,_b=foo)");
+		a.get("/a01").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").json().execute().assertBody("{\"a\":1}");
-		a.get("/a02").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		a.get("/a02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		a.get("/a02").uon().execute().assertBody("(a=1)");
-		a.get("/a02").urlEnc().execute().assertBody("a=1");
+		a.get("/a02").json().run().assertBody().is("{\"a\":1}");
+		a.get("/a02").xml().run().assertBody().contains("<object><a>1</a></object>");
+		a.get("/a02").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a.get("/a02").uon().run().assertBody().is("(a=1)");
+		a.get("/a02").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").json().execute().assertBody("{\"_b\":\"foo\"}");
-		a.get("/a03").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		a.get("/a03").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		a.get("/a03").uon().execute().assertBody("(_b=foo)");
-		a.get("/a03").urlEnc().execute().assertBody("_b=foo");
+		a.get("/a03").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		a.get("/a03").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		a.get("/a03").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a03").uon().run().assertBody().is("(_b=foo)");
+		a.get("/a03").urlEnc().run().assertBody().is("_b=foo");
 	}
 
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		a.get("/a04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		a.get("/a04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		a.get("/a04").uon().execute().assertBody("(a=1,_b=foo)");
-		a.get("/a04").urlEnc().execute().assertBody("a=1&_b=foo");
+		a.get("/a04").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		a.get("/a04").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		a.get("/a04").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a04").uon().run().assertBody().is("(a=1,_b=foo)");
+		a.get("/a04").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").json().execute().assertBody("{\"a\":1}");
-		a.get("/a05").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		a.get("/a05").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		a.get("/a05").uon().execute().assertBody("(a=1)");
-		a.get("/a05").urlEnc().execute().assertBody("a=1");
+		a.get("/a05").json().run().assertBody().is("{\"a\":1}");
+		a.get("/a05").xml().run().assertBody().contains("<object><a>1</a></object>");
+		a.get("/a05").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a.get("/a05").uon().run().assertBody().is("(a=1)");
+		a.get("/a05").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void a06() throws Exception {
-		a.get("/a06").json().execute().assertBody("{\"_b\":\"foo\"}");
-		a.get("/a06").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		a.get("/a06").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		a.get("/a06").uon().execute().assertBody("(_b=foo)");
-		a.get("/a06").urlEnc().execute().assertBody("_b=foo");
+		a.get("/a06").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		a.get("/a06").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		a.get("/a06").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a.get("/a06").uon().run().assertBody().is("(_b=foo)");
+		a.get("/a06").urlEnc().run().assertBody().is("_b=foo");
 	}
 
 	//=================================================================================================================
@@ -148,51 +148,51 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").json().execute().assertBody("{}");
-		b.get("/b01").xml().execute().assertBodyContains("<object/>");
-		b.get("/b01").html().execute().assertBodyContains("<table></table>");
-		b.get("/b01").uon().execute().assertBody("()");
-		b.get("/b01").urlEnc().execute().assertBody("");
+		b.get("/b01").json().run().assertBody().is("{}");
+		b.get("/b01").xml().run().assertBody().contains("<object/>");
+		b.get("/b01").html().run().assertBody().contains("<table></table>");
+		b.get("/b01").uon().run().assertBody().is("()");
+		b.get("/b01").urlEnc().run().assertBody().is("");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").json().execute().assertBody("{\"_b\":\"foo\"}");
-		b.get("/b02").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		b.get("/b02").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		b.get("/b02").uon().execute().assertBody("(_b=foo)");
-		b.get("/b02").urlEnc().execute().assertBody("_b=foo");
+		b.get("/b02").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		b.get("/b02").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		b.get("/b02").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		b.get("/b02").uon().run().assertBody().is("(_b=foo)");
+		b.get("/b02").urlEnc().run().assertBody().is("_b=foo");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").json().execute().assertBody("{\"a\":1}");
-		b.get("/b03").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		b.get("/b03").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		b.get("/b03").uon().execute().assertBody("(a=1)");
-		b.get("/b03").urlEnc().execute().assertBody("a=1");
+		b.get("/b03").json().run().assertBody().is("{\"a\":1}");
+		b.get("/b03").xml().run().assertBody().contains("<object><a>1</a></object>");
+		b.get("/b03").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		b.get("/b03").uon().run().assertBody().is("(a=1)");
+		b.get("/b03").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").json().execute().assertBody("{}");
-		b.get("/b04").xml().execute().assertBodyContains("<object/>");
-		b.get("/b04").html().execute().assertBodyContains("<table></table>");
-		b.get("/b04").uon().execute().assertBody("()");
-		b.get("/b04").urlEnc().execute().assertBody("");
+		b.get("/b04").json().run().assertBody().is("{}");
+		b.get("/b04").xml().run().assertBody().contains("<object/>");
+		b.get("/b04").html().run().assertBody().contains("<table></table>");
+		b.get("/b04").uon().run().assertBody().is("()");
+		b.get("/b04").urlEnc().run().assertBody().is("");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").json().execute().assertBody("{\"_b\":\"foo\"}");
-		b.get("/b05").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		b.get("/b05").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		b.get("/b05").uon().execute().assertBody("(_b=foo)");
-		b.get("/b05").urlEnc().execute().assertBody("_b=foo");
+		b.get("/b05").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		b.get("/b05").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		b.get("/b05").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		b.get("/b05").uon().run().assertBody().is("(_b=foo)");
+		b.get("/b05").urlEnc().run().assertBody().is("_b=foo");
 	}
 	@Test
 	public void b06() throws Exception {
-		b.get("/b06").json().execute().assertBody("{\"a\":1}");
-		b.get("/b06").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		b.get("/b06").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		b.get("/b06").uon().execute().assertBody("(a=1)");
-		b.get("/b06").urlEnc().execute().assertBody("a=1");
+		b.get("/b06").json().run().assertBody().is("{\"a\":1}");
+		b.get("/b06").xml().run().assertBody().contains("<object><a>1</a></object>");
+		b.get("/b06").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		b.get("/b06").uon().run().assertBody().is("(a=1)");
+		b.get("/b06").urlEnc().run().assertBody().is("a=1");
 	}
 
 	//=================================================================================================================
@@ -234,51 +234,51 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void c01() throws Exception {
-		c.get("/c01").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		c.get("/c01").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		c.get("/c01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		c.get("/c01").uon().execute().assertBody("(a=1,_b=foo)");
-		c.get("/c01").urlEnc().execute().assertBody("a=1&_b=foo");
+		c.get("/c01").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		c.get("/c01").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		c.get("/c01").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c01").uon().run().assertBody().is("(a=1,_b=foo)");
+		c.get("/c01").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void c02() throws Exception {
-		c.get("/c02").json().execute().assertBody("{\"a\":1}");
-		c.get("/c02").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		c.get("/c02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		c.get("/c02").uon().execute().assertBody("(a=1)");
-		c.get("/c02").urlEnc().execute().assertBody("a=1");
+		c.get("/c02").json().run().assertBody().is("{\"a\":1}");
+		c.get("/c02").xml().run().assertBody().contains("<object><a>1</a></object>");
+		c.get("/c02").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		c.get("/c02").uon().run().assertBody().is("(a=1)");
+		c.get("/c02").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void c03() throws Exception {
-		c.get("/c03").json().execute().assertBody("{\"_b\":\"foo\"}");
-		c.get("/c03").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		c.get("/c03").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		c.get("/c03").uon().execute().assertBody("(_b=foo)");
-		c.get("/c03").urlEnc().execute().assertBody("_b=foo");
+		c.get("/c03").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		c.get("/c03").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		c.get("/c03").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c03").uon().run().assertBody().is("(_b=foo)");
+		c.get("/c03").urlEnc().run().assertBody().is("_b=foo");
 	}
 	@Test
 	public void c04() throws Exception {
-		c.get("/c04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		c.get("/c04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		c.get("/c04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		c.get("/c04").uon().execute().assertBody("(a=1,_b=foo)");
-		c.get("/c04").urlEnc().execute().assertBody("a=1&_b=foo");
+		c.get("/c04").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		c.get("/c04").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		c.get("/c04").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c04").uon().run().assertBody().is("(a=1,_b=foo)");
+		c.get("/c04").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void c05() throws Exception {
-		c.get("/c05").json().execute().assertBody("{\"a\":1}");
-		c.get("/c05").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		c.get("/c05").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		c.get("/c05").uon().execute().assertBody("(a=1)");
-		c.get("/c05").urlEnc().execute().assertBody("a=1");
+		c.get("/c05").json().run().assertBody().is("{\"a\":1}");
+		c.get("/c05").xml().run().assertBody().contains("<object><a>1</a></object>");
+		c.get("/c05").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		c.get("/c05").uon().run().assertBody().is("(a=1)");
+		c.get("/c05").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void c06() throws Exception {
-		c.get("/c06").json().execute().assertBody("{\"_b\":\"foo\"}");
-		c.get("/c06").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		c.get("/c06").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		c.get("/c06").uon().execute().assertBody("(_b=foo)");
-		c.get("/c06").urlEnc().execute().assertBody("_b=foo");
+		c.get("/c06").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		c.get("/c06").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		c.get("/c06").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c06").uon().run().assertBody().is("(_b=foo)");
+		c.get("/c06").urlEnc().run().assertBody().is("_b=foo");
 	}
 
 	//=================================================================================================================
@@ -320,51 +320,51 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void d01() throws Exception {
-		d.get("/d01").json().execute().assertBody("{}");
-		d.get("/d01").xml().execute().assertBodyContains("<object/>");
-		d.get("/d01").html().execute().assertBodyContains("<table></table>");
-		d.get("/d01").uon().execute().assertBody("()");
-		d.get("/d01").urlEnc().execute().assertBody("");
+		d.get("/d01").json().run().assertBody().is("{}");
+		d.get("/d01").xml().run().assertBody().contains("<object/>");
+		d.get("/d01").html().run().assertBody().contains("<table></table>");
+		d.get("/d01").uon().run().assertBody().is("()");
+		d.get("/d01").urlEnc().run().assertBody().is("");
 	}
 	@Test
 	public void d02() throws Exception {
-		d.get("/d02").json().execute().assertBody("{\"_b\":\"foo\"}");
-		d.get("/d02").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		d.get("/d02").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		d.get("/d02").uon().execute().assertBody("(_b=foo)");
-		d.get("/d02").urlEnc().execute().assertBody("_b=foo");
+		d.get("/d02").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		d.get("/d02").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		d.get("/d02").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		d.get("/d02").uon().run().assertBody().is("(_b=foo)");
+		d.get("/d02").urlEnc().run().assertBody().is("_b=foo");
 	}
 	@Test
 	public void d03() throws Exception {
-		d.get("/d03").json().execute().assertBody("{\"a\":1}");
-		d.get("/d03").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		d.get("/d03").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		d.get("/d03").uon().execute().assertBody("(a=1)");
-		d.get("/d03").urlEnc().execute().assertBody("a=1");
+		d.get("/d03").json().run().assertBody().is("{\"a\":1}");
+		d.get("/d03").xml().run().assertBody().contains("<object><a>1</a></object>");
+		d.get("/d03").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		d.get("/d03").uon().run().assertBody().is("(a=1)");
+		d.get("/d03").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void d04() throws Exception {
-		d.get("/d04").json().execute().assertBody("{}");
-		d.get("/d04").xml().execute().assertBodyContains("<object/>");
-		d.get("/d04").html().execute().assertBodyContains("<table></table>");
-		d.get("/d04").uon().execute().assertBody("()");
-		d.get("/d04").urlEnc().execute().assertBody("");
+		d.get("/d04").json().run().assertBody().is("{}");
+		d.get("/d04").xml().run().assertBody().contains("<object/>");
+		d.get("/d04").html().run().assertBody().contains("<table></table>");
+		d.get("/d04").uon().run().assertBody().is("()");
+		d.get("/d04").urlEnc().run().assertBody().is("");
 	}
 	@Test
 	public void d05() throws Exception {
-		d.get("/d05").json().execute().assertBody("{\"_b\":\"foo\"}");
-		d.get("/d05").xml().execute().assertBodyContains("<object><_b>foo</_b></object>");
-		d.get("/d05").html().execute().assertBodyContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
-		d.get("/d05").uon().execute().assertBody("(_b=foo)");
-		d.get("/d05").urlEnc().execute().assertBody("_b=foo");
+		d.get("/d05").json().run().assertBody().is("{\"_b\":\"foo\"}");
+		d.get("/d05").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
+		d.get("/d05").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		d.get("/d05").uon().run().assertBody().is("(_b=foo)");
+		d.get("/d05").urlEnc().run().assertBody().is("_b=foo");
 	}
 	@Test
 	public void d06() throws Exception {
-		d.get("/d06").json().execute().assertBody("{\"a\":1}");
-		d.get("/d06").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		d.get("/d06").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		d.get("/d06").uon().execute().assertBody("(a=1)");
-		d.get("/d06").urlEnc().execute().assertBody("a=1");
+		d.get("/d06").json().run().assertBody().is("{\"a\":1}");
+		d.get("/d06").xml().run().assertBody().contains("<object><a>1</a></object>");
+		d.get("/d06").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		d.get("/d06").uon().run().assertBody().is("(a=1)");
+		d.get("/d06").urlEnc().run().assertBody().is("a=1");
 	}
 
 	//=================================================================================================================
@@ -388,19 +388,19 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void e01() throws Exception {
-		e.get("/e01").json().execute().assertBody("{\"a\":1}");
-		e.get("/e01").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		e.get("/e01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		e.get("/e01").uon().execute().assertBody("(a=1)");
-		e.get("/e01").urlEnc().execute().assertBody("a=1");
+		e.get("/e01").json().run().assertBody().is("{\"a\":1}");
+		e.get("/e01").xml().run().assertBody().contains("<object><a>1</a></object>");
+		e.get("/e01").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		e.get("/e01").uon().run().assertBody().is("(a=1)");
+		e.get("/e01").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void e02() throws Exception {
-		e.get("/e02").json().execute().assertBody("{\"a\":1}");
-		e.get("/e02").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		e.get("/e02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		e.get("/e02").uon().execute().assertBody("(a=1)");
-		e.get("/e02").urlEnc().execute().assertBody("a=1");
+		e.get("/e02").json().run().assertBody().is("{\"a\":1}");
+		e.get("/e02").xml().run().assertBody().contains("<object><a>1</a></object>");
+		e.get("/e02").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		e.get("/e02").uon().run().assertBody().is("(a=1)");
+		e.get("/e02").urlEnc().run().assertBody().is("a=1");
 	}
 
 	//=================================================================================================================
@@ -424,19 +424,19 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void f01() throws Exception {
-		f.get("/f01").json().execute().assertBody("{\"a\":1}");
-		f.get("/f01").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		f.get("/f01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		f.get("/f01").uon().execute().assertBody("(a=1)");
-		f.get("/f01").urlEnc().execute().assertBody("a=1");
+		f.get("/f01").json().run().assertBody().is("{\"a\":1}");
+		f.get("/f01").xml().run().assertBody().contains("<object><a>1</a></object>");
+		f.get("/f01").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		f.get("/f01").uon().run().assertBody().is("(a=1)");
+		f.get("/f01").urlEnc().run().assertBody().is("a=1");
 	}
 	@Test
 	public void f02() throws Exception {
-		f.get("/f02").json().execute().assertBody("{\"a\":1}");
-		f.get("/f02").xml().execute().assertBodyContains("<object><a>1</a></object>");
-		f.get("/f02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr></table>");
-		f.get("/f02").uon().execute().assertBody("(a=1)");
-		f.get("/f02").urlEnc().execute().assertBody("a=1");
+		f.get("/f02").json().run().assertBody().is("{\"a\":1}");
+		f.get("/f02").xml().run().assertBody().contains("<object><a>1</a></object>");
+		f.get("/f02").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		f.get("/f02").uon().run().assertBody().is("(a=1)");
+		f.get("/f02").urlEnc().run().assertBody().is("a=1");
 	}
 
 	//=================================================================================================================
@@ -473,35 +473,35 @@ public class RestMethodBpiTest {
 
 	@Test
 	public void g01() throws Exception {
-		g.get("/g01").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		g.get("/g01").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		g.get("/g01").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		g.get("/g01").uon().execute().assertBody("(a=1,_b=foo)");
-		g.get("/g01").urlEnc().execute().assertBody("a=1&_b=foo");
+		g.get("/g01").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g01").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g01").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g01").uon().run().assertBody().is("(a=1,_b=foo)");
+		g.get("/g01").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void g02() throws Exception {
-		g.get("/g02").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		g.get("/g02").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		g.get("/g02").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		g.get("/g02").uon().execute().assertBody("(a=1,_b=foo)");
-		g.get("/g02").urlEnc().execute().assertBody("a=1&_b=foo");
+		g.get("/g02").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g02").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g02").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g02").uon().run().assertBody().is("(a=1,_b=foo)");
+		g.get("/g02").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void g03() throws Exception {
-		g.get("/g03").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		g.get("/g03").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		g.get("/g03").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		g.get("/g03").uon().execute().assertBody("(a=1,_b=foo)");
-		g.get("/g03").urlEnc().execute().assertBody("a=1&_b=foo");
+		g.get("/g03").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g03").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g03").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g03").uon().run().assertBody().is("(a=1,_b=foo)");
+		g.get("/g03").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 	@Test
 	public void g04() throws Exception {
-		g.get("/g04").json().execute().assertBody("{\"a\":1,\"_b\":\"foo\"}");
-		g.get("/g04").xml().execute().assertBodyContains("<object><a>1</a><_b>foo</_b></object>");
-		g.get("/g04").html().execute().assertBodyContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		g.get("/g04").uon().execute().assertBody("(a=1,_b=foo)");
-		g.get("/g04").urlEnc().execute().assertBody("a=1&_b=foo");
+		g.get("/g04").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
+		g.get("/g04").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
+		g.get("/g04").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		g.get("/g04").uon().run().assertBody().is("(a=1,_b=foo)");
+		g.get("/g04").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}
 
 	//=================================================================================================================

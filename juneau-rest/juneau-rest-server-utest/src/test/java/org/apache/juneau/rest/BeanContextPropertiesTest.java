@@ -48,7 +48,7 @@ public class BeanContextPropertiesTest  {
 
 	@Test
 	public void a01_testClassTransforms() throws Exception {
-		a.get("/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").header("X-D3", "2001-07-06T15:30:45Z").execute()
-			.assertBody("d1=2001-07-04T15:30:45Z,d2=2001-07-05T15:30:45Z,d3=2001-07-06T15:30:45Z");
+		a.get("/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").header("X-D3", "2001-07-06T15:30:45Z").run()
+			.assertBody().is("d1=2001-07-04T15:30:45Z,d2=2001-07-05T15:30:45Z,d3=2001-07-06T15:30:45Z");
 	}
 }
