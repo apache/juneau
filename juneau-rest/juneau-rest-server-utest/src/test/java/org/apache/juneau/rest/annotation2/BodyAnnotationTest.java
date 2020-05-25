@@ -131,139 +131,203 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void a01a_onParameter_String() throws Exception {
-		a.put("/String", "'foo'").json().run().assertBody().is("'foo'");
+		a.put("/String", "'foo'").json()
+			.run()
+			.assertBody().is("'foo'");
 	}
 	@Test
 	public void a01b_onParameter_String_noContentType() throws Exception {
 		// If no Content-Type specified, should be treated as plain-text.
-		a.put("/String", "'foo'").run().assertBody().is("'\\'foo\\''");
+		a.put("/String", "'foo'")
+			.run()
+			.assertBody().is("'\\'foo\\''");
 	}
 	@Test
 	public void a01c_onParameter_String_noContentType_other() throws Exception {
 		// If Content-Type not matched, should be treated as plain-text.
-		a.put("/String", "'foo'").contentType("").run().assertBody().is("'\\'foo\\''");
-		a.put("/String", "'foo'").contentType("text/plain").run().assertBody().is("'\\'foo\\''");
+		a.put("/String", "'foo'").contentType("")
+			.run()
+			.assertBody().is("'\\'foo\\''");
+		a.put("/String", "'foo'").contentType("text/plain")
+			.run()
+			.assertBody().is("'\\'foo\\''");
 	}
 	@Test
 	public void a02a_onParameter_Integer() throws Exception {
-		a.put("/Integer", "123").json().run().assertBody().is("123");
+		a.put("/Integer", "123").json()
+			.run()
+			.assertBody().is("123");
 	}
 	@Test
 	public void a02b_onParameter_Integer_noContentType() throws Exception {
 		// Integer takes in a String arg, so it can be parsed without Content-Type.
-		a.put("/Integer", "123").run().assertBody().is("123");
+		a.put("/Integer", "123")
+			.run()
+			.assertBody().is("123");
 	}
 	@Test
 	public void a03a_onParameter_int() throws Exception {
-		a.put("/int", "123").json().run().assertBody().is("123");
+		a.put("/int", "123").json()
+			.run()
+			.assertBody().is("123");
 	}
 	@Test
 	public void a03b_onParameter_int_noContentType() throws Exception {
-		a.put("/int", "123").run().assertBody().is("123"); // Uses part parser.
+		a.put("/int", "123")
+			.run()
+			.assertBody().is("123"); // Uses part parser.
 	}
 	@Test
 	public void a04a_onParameter_Boolean() throws Exception {
-		a.put("/Boolean", "true").json().run().assertBody().is("true");
+		a.put("/Boolean", "true").json()
+			.run()
+			.assertBody().is("true");
 	}
 	@Test
 	public void a04b_onParameter_Boolean_noContentType() throws Exception {
 		// Boolean takes in a String arg, so it can be parsed without Content-Type.
-		a.put("/Boolean", "true").run().assertBody().is("true");
+		a.put("/Boolean", "true")
+			.run()
+			.assertBody().is("true");
 	}
 	@Test
 	public void a05a_onParameter_boolean() throws Exception {
-		a.put("/boolean", "true").json().run().assertBody().is("true");
+		a.put("/boolean", "true").json()
+			.run()
+			.assertBody().is("true");
 	}
 	@Test
 	public void a05b_onParameter_boolean_noContentType() throws Exception {
-		a.put("/boolean", "true").run().assertBody().is("true"); // Uses part parser.
+		a.put("/boolean", "true")
+			.run()
+			.assertBody().is("true"); // Uses part parser.
 	}
 	@Test
 	public void a06a_onParameter_float() throws Exception {
-		a.put("/float", "1.23").json().run().assertBody().is("1.23");
+		a.put("/float", "1.23").json()
+			.run()
+			.assertBody().is("1.23");
 	}
 	@Test
 	public void a06b_onParameter_float_noContentType() throws Exception {
-		a.put("/float", "1.23").run().assertBody().is("1.23");  // Uses part parser.
+		a.put("/float", "1.23")
+			.run()
+			.assertBody().is("1.23");  // Uses part parser.
 	}
 	@Test
 	public void a07a_onParameter_Float() throws Exception {
-		a.put("/Float", "1.23").json().run().assertBody().is("1.23");
+		a.put("/Float", "1.23").json()
+			.run()
+			.assertBody().is("1.23");
 	}
 	@Test
 	public void a07b_onParameter_Float_noContentType() throws Exception {
 		// Float takes in a String arg, so it can be parsed without Content-Type.
-		a.put("/Float", "1.23").run().assertBody().is("1.23");
+		a.put("/Float", "1.23")
+			.run()
+			.assertBody().is("1.23");
 	}
 	@Test
 	public void a08a_onParameter_Map() throws Exception {
-		a.put("/Map", "{foo:123}").json().run().assertBody().is("{foo:123}");
+		a.put("/Map", "{foo:123}").json()
+			.run()
+			.assertBody().is("{foo:123}");
 	}
 	@Test
 	public void a08b_onParameter_Map_noContentType() throws Exception {
-		a.put("/Map", "(foo=123)").run().assertStatus().equals(415);
+		a.put("/Map", "(foo=123)")
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
-		a.put("/enum", "'ONE'").json().run().assertBody().is("'ONE'");
+		a.put("/enum", "'ONE'").json()
+			.run()
+			.assertBody().is("'ONE'");
 	}
 	@Test
 	public void a09b_onParameter_enum_noContentType() throws Exception {
-		a.put("/enum", "ONE").run().assertBody().is("'ONE'");
+		a.put("/enum", "ONE")
+			.run()
+			.assertBody().is("'ONE'");
 	}
 	@Test
 	public void a11a_onParameter_Bean() throws Exception {
-		a.put("/Bean", "{f1:'a'}").json().run().assertBody().is("{f1:'a'}");
+		a.put("/Bean", "{f1:'a'}").json()
+			.run()
+			.assertBody().is("{f1:'a'}");
 	}
 	@Test
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
-		a.put("/Bean", "(f1=a)").run().assertStatus().equals(415);
+		a.put("/Bean", "(f1=a)")
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
 		// Content-Type should always be ignored.
-		a.put("/InputStream", "'a'").json().run().assertBody().is("'\\'a\\''");
+		a.put("/InputStream", "'a'").json()
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a12b_onParameter_InputStream_noContentType() throws Exception {
-		a.put("/InputStream", "'a'").run().assertBody().is("'\\'a\\''");
+		a.put("/InputStream", "'a'")
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a13a_onParameter_Reader() throws Exception {
 		// Content-Type should always be ignored.
-		a.put("/Reader", "'a'").json().run().assertBody().is("'\\'a\\''");
+		a.put("/Reader", "'a'").json()
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a13b_onParameter_Reader_noContentType() throws Exception {
-		a.put("/Reader", "'a'").run().assertBody().is("'\\'a\\''");
+		a.put("/Reader", "'a'")
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a14a_onParameter_InputStreamTransform() throws Exception {
 		// Input stream transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.put("/InputStreamTransform?noTrace=true", "'a'").json().run().assertBody().contains("Bad Request");
+		a.put("/InputStreamTransform?noTrace=true", "'a'").json()
+			.run()
+			.assertBody().contains("Bad Request");
 	}
 	@Test
 	public void a14b_onParameter_InputStreamTransform_noContentType() throws Exception {
-		a.put("/InputStreamTransform", "'a'").run().assertBody().is("'\\'a\\''");
+		a.put("/InputStreamTransform", "'a'")
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a15a_onParameter_ReaderTransform() throws Exception {
 		// Reader transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.put("/ReaderTransform?noTrace=true", "'a'").json().run().assertBody().contains("Bad Request");
+		a.put("/ReaderTransform?noTrace=true", "'a'").json()
+			.run()
+			.assertBody().contains("Bad Request");
 	}
 	@Test
 	public void a15b_onParameter_ReaderTransform_noContentType() throws Exception {
-		a.put("/ReaderTransform", "'a'").run().assertBody().is("'\\'a\\''");
+		a.put("/ReaderTransform", "'a'")
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 	@Test
 	public void a16a_onParameter_StringTransform() throws Exception {
 		// When Content-Type specified and matched, treated as a parsed POJO.
-		a.put("/StringTransform", "'a'").json().run().assertBody().is("'a'");
+		a.put("/StringTransform", "'a'").json()
+			.run()
+			.assertBody().is("'a'");
 	}
 	@Test
 	public void a16b_onParameter_StringTransform_noContentType() throws Exception {
 		// When Content-Type not matched, treated as plain text.
-		a.put("/StringTransform", "'a'").run().assertBody().is("'\\'a\\''");
+		a.put("/StringTransform", "'a'")
+			.run()
+			.assertBody().is("'\\'a\\''");
 	}
 
 	//=================================================================================================================
@@ -322,46 +386,66 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void b01a_onPojo_StringTransform() throws Exception {
-		b.put("/StringTransform", "'foo'").json().run().assertBody().is("'foo'");
+		b.put("/StringTransform", "'foo'").json()
+			.run()
+			.assertBody().is("'foo'");
 	}
 	@Test
 	public void b01b_onPojo_StringTransform_noContentType() throws Exception {
 		// When Content-Type not matched, treated as plain text.
-		b.put("/StringTransform", "'foo'").run().assertBody().is("'\\'foo\\''");
+		b.put("/StringTransform", "'foo'")
+			.run()
+			.assertBody().is("'\\'foo\\''");
 	}
 	@Test
 	public void b02a_onPojo_Bean() throws Exception {
-		b.put("/Bean", "{f1:'a'}").json().run().assertBody().is("{f1:'a'}");
+		b.put("/Bean", "{f1:'a'}").json()
+			.run()
+			.assertBody().is("{f1:'a'}");
 	}
 	@Test
 	public void b02b_onPojo_Bean_noContentType() throws Exception {
-		b.put("/Bean", "(f1=a)").run().assertStatus().equals(415);
+		b.put("/Bean", "(f1=a)")
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void b03a_onPojo_BeanList() throws Exception {
-		b.put("/BeanList", "[{f1:'a'}]").json().run().assertBody().is("[{f1:'a'}]");
+		b.put("/BeanList", "[{f1:'a'}]").json()
+			.run()
+			.assertBody().is("[{f1:'a'}]");
 	}
 	@Test
 	public void b03b_onPojo_BeanList_noContentType() throws Exception {
-		b.put("/BeanList", "(f1=a)").run().assertStatus().equals(415);
+		b.put("/BeanList", "(f1=a)")
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void b04a_onPojo_InputStreamTransform() throws Exception {
-		b.put("/InputStreamTransform", "a").run().assertBody().is("'a'");
+		b.put("/InputStreamTransform", "a")
+			.run()
+			.assertBody().is("'a'");
 	}
 	@Test
 	public void b04b_onPojo_InputStreamTransform_withContentType() throws Exception {
 		// When Content-Type matched, treated as parsed POJO.
-		b.put("/InputStreamTransform?noTrace=true", "a").json().run().assertBody().contains("Bad Request");
+		b.put("/InputStreamTransform?noTrace=true", "a").json()
+			.run()
+			.assertBody().contains("Bad Request");
 	}
 	@Test
 	public void b05a_onPojo_ReaderTransform() throws Exception {
-		b.put("/ReaderTransform", "a").run().assertBody().is("'a'");
+		b.put("/ReaderTransform", "a")
+			.run()
+			.assertBody().is("'a'");
 	}
 	@Test
 	public void b05b_onPojo_ReaderTransform_withContentType() throws Exception {
 		// When Content-Type matched, treated as parsed POJO.
-		b.put("/ReaderTransform?noTrace=true", "a").json().run().assertBody().contains("Bad Request");
+		b.put("/ReaderTransform?noTrace=true", "a").json()
+			.run()
+			.assertBody().contains("Bad Request");
 	}
 
 	//=================================================================================================================
@@ -369,93 +453,201 @@ public class BodyAnnotationTest {
 	//=================================================================================================================
 
 	public void c01_bodyParam_String() throws Exception {
-		a.put("/String?body=foo", null).run().assertBody().is("'foo'");
-		a.put("/String?body=null", null).run().assertBody().is("null");
-		a.put("/String?body=", null).run().assertBody().is("''");
+		a.put("/String?body=foo", null)
+			.run()
+			.assertBody().is("'foo'");
+		a.put("/String?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/String?body=", null)
+			.run()
+			.assertBody().is("''");
 	}
 	@Test
 	public void c02_bodyParam_Integer() throws Exception {
-		a.put("/Integer?body=123", null).run().assertBody().is("123");
-		a.put("/Integer?body=-123", null).run().assertBody().is("-123");
-		a.put("/Integer?body=null", null).run().assertBody().is("null");
-		a.put("/Integer?body=", null).run().assertBody().is("null");
-		a.put("/Integer?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/Integer?body=123", null)
+			.run()
+			.assertBody().is("123");
+		a.put("/Integer?body=-123", null)
+			.run()
+			.assertBody().is("-123");
+		a.put("/Integer?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Integer?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Integer?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c03_bodyParam_int() throws Exception {
-		a.put("/int?body=123", null).run().assertBody().is("123");
-		a.put("/int?body=-123", null).run().assertBody().is("-123");
-		a.put("/int?body=null", null).run().assertBody().is("0");
-		a.put("/int?body=", null).run().assertBody().is("0");
-		a.put("/int?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/int?body=123", null)
+			.run()
+			.assertBody().is("123");
+		a.put("/int?body=-123", null)
+			.run()
+			.assertBody().is("-123");
+		a.put("/int?body=null", null)
+			.run()
+			.assertBody().is("0");
+		a.put("/int?body=", null)
+			.run()
+			.assertBody().is("0");
+		a.put("/int?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c04_bodyParam_Boolean() throws Exception {
-		a.put("/Boolean?body=true", null).run().assertBody().is("true");
-		a.put("/Boolean?body=false", null).run().assertBody().is("false");
-		a.put("/Boolean?body=null", null).run().assertBody().is("null");
-		a.put("/Boolean?body=", null).run().assertBody().is("null");
-		a.put("/Boolean?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/Boolean?body=true", null)
+			.run()
+			.assertBody().is("true");
+		a.put("/Boolean?body=false", null)
+			.run()
+			.assertBody().is("false");
+		a.put("/Boolean?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Boolean?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Boolean?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c05_bodyParam_boolean() throws Exception {
-		a.put("/boolean?body=true", null).run().assertBody().is("true");
-		a.put("/boolean?body=false", null).run().assertBody().is("false");
-		a.put("/boolean?body=null", null).run().assertBody().is("false");
-		a.put("/boolean?body=", null).run().assertBody().is("false");
-		a.put("/boolean?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/boolean?body=true", null)
+			.run()
+			.assertBody().is("true");
+		a.put("/boolean?body=false", null)
+			.run()
+			.assertBody().is("false");
+		a.put("/boolean?body=null", null)
+			.run()
+			.assertBody().is("false");
+		a.put("/boolean?body=", null)
+			.run()
+			.assertBody().is("false");
+		a.put("/boolean?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c06_bodyParam_Float() throws Exception {
-		a.put("/Float?body=1.23", null).run().assertBody().is("1.23");
-		a.put("/Float?body=-1.23", null).run().assertBody().is("-1.23");
-		a.put("/Float?body=null", null).run().assertBody().is("null");
-		a.put("/Float?body=", null).run().assertBody().is("null");
-		a.put("/Float?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/Float?body=1.23", null)
+			.run()
+			.assertBody().is("1.23");
+		a.put("/Float?body=-1.23", null)
+			.run()
+			.assertBody().is("-1.23");
+		a.put("/Float?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Float?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Float?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c07_bodyParam_float() throws Exception {
-		a.put("/float?body=1.23", null).run().assertBody().is("1.23");
-		a.put("/float?body=-1.23", null).run().assertBody().is("-1.23");
-		a.put("/float?body=null", null).run().assertBody().is("0.0");
-		a.put("/float?body=", null).run().assertBody().is("0.0");
-		a.put("/float?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/float?body=1.23", null)
+			.run()
+			.assertBody().is("1.23");
+		a.put("/float?body=-1.23", null)
+			.run()
+			.assertBody().is("-1.23");
+		a.put("/float?body=null", null)
+			.run()
+			.assertBody().is("0.0");
+		a.put("/float?body=", null)
+			.run()
+			.assertBody().is("0.0");
+		a.put("/float?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c08_bodyParam_Map() throws Exception {
-		a.put("/Map?body=(foo=123)", null).run().assertBody().is("{foo:123}");
-		a.put("/Map?body=()", null).run().assertBody().is("{}");
-		a.put("/Map?body=null", null).run().assertBody().is("null");
-		a.put("/Map?body=", null).run().assertBody().is("null");
-		a.put("/Map?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/Map?body=(foo=123)", null)
+			.run()
+			.assertBody().is("{foo:123}");
+		a.put("/Map?body=()", null)
+			.run()
+			.assertBody().is("{}");
+		a.put("/Map?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Map?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Map?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c09_bodyParam_enum() throws Exception {
-		a.put("/enum?body=ONE", null).run().assertBody().is("'ONE'");
-		a.put("/enum?body=TWO", null).run().assertBody().is("'TWO'");
-		a.put("/enum?body=null", null).run().assertBody().is("null");
-		a.put("/enum?body=", null).run().assertBody().is("null");
-		a.put("/enum?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/enum?body=ONE", null)
+			.run()
+			.assertBody().is("'ONE'");
+		a.put("/enum?body=TWO", null)
+			.run()
+			.assertBody().is("'TWO'");
+		a.put("/enum?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/enum?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/enum?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c11_bodyParam_Bean() throws Exception {
-		a.put("/Bean?body=(f1=a)", null).run().assertBody().is("{f1:'a'}");
-		a.put("/Bean?body=()", null).run().assertBody().is("{}");
-		a.put("/Bean?body=null", null).run().assertBody().is("null");
-		a.put("/Bean?body=", null).run().assertBody().is("null");
-		a.put("/Bean?body=bad&noTrace=true", null).run().assertStatus().equals(400);
+		a.put("/Bean?body=(f1=a)", null)
+			.run()
+			.assertBody().is("{f1:'a'}");
+		a.put("/Bean?body=()", null)
+			.run()
+			.assertBody().is("{}");
+		a.put("/Bean?body=null", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Bean?body=", null)
+			.run()
+			.assertBody().is("null");
+		a.put("/Bean?body=bad&noTrace=true", null)
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c12_bodyParam_InputStream() throws Exception {
-		a.put("/InputStream?body=a", null).run().assertBody().is("'a'");
-		a.put("/InputStream?body=null", null).run().assertBody().is("'null'");
-		a.put("/InputStream?body=", null).run().assertBody().is("''");
+		a.put("/InputStream?body=a", null)
+			.run()
+			.assertBody().is("'a'");
+		a.put("/InputStream?body=null", null)
+			.run()
+			.assertBody().is("'null'");
+		a.put("/InputStream?body=", null)
+			.run()
+			.assertBody().is("''");
 	}
 	@Test
 	public void c13_bodyParam_Reader() throws Exception {
-		a.put("/Reader?body=a", null).run().assertBody().is("'a'");
-		a.put("/Reader?body=null", null).run().assertBody().is("'null'");
-		a.put("/Reader?body=", null).run().assertBody().is("''");
+		a.put("/Reader?body=a", null)
+			.run()
+			.assertBody().is("'a'");
+		a.put("/Reader?body=null", null)
+			.run()
+			.assertBody().is("'null'");
+		a.put("/Reader?body=", null)
+			.run()
+			.assertBody().is("''");
 	}
 
 	// It's not currently possible to pass in a &body parameter for InputStream/Reader transforms.
@@ -541,75 +733,111 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
-		d.put("/String", "a").run().assertBody().is("a");
+		d.put("/String", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d01b_noMediaTypes_String_withContentType() throws Exception {
-		d.put("/String", "a").json().run().assertBody().is("a");
+		d.put("/String", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d02a_noMediaTypes_InputStream() throws Exception {
-		d.put("/InputStream", "a").run().assertBody().is("a");
+		d.put("/InputStream", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d02b_noMediaTypes_InputStream_withContentType() throws Exception {
-		d.put("/InputStream", "a").json().run().assertBody().is("a");
+		d.put("/InputStream", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d03a_noMediaTypes_Reader() throws Exception {
-		d.put("/Reader", "a").run().assertBody().is("a");
+		d.put("/Reader", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d03b_noMediaTypes_Reader_withContentType() throws Exception {
-		d.put("/Reader", "a").json().run().assertBody().is("a");
+		d.put("/Reader", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d04a_noMediaTypes_StringTransform() throws Exception {
-		d.put("/StringTransform", "a").run().assertBody().is("a");
+		d.put("/StringTransform", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d04b_noMediaTypes_StringTransform_withContentType() throws Exception {
-		d.put("/StringTransform?noTrace=true", "a").json().run().assertStatus().equals(415);
+		d.put("/StringTransform?noTrace=true", "a").json()
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void d05a_noMediaTypes_InputStreamTransform() throws Exception {
-		d.put("/InputStreamTransform", "a").run().assertBody().is("a");
+		d.put("/InputStreamTransform", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d05b_noMediaTypes_InputStreamTransform_withContentType() throws Exception {
-		d.put("/InputStreamTransform", "a").json().run().assertBody().is("a");
+		d.put("/InputStreamTransform", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d06a_noMediaTypes_ReaderTransform() throws Exception {
-		d.put("/ReaderTransform", "a").run().assertBody().is("a");
+		d.put("/ReaderTransform", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d06b_noMediaTypes_ReaderTransform_withContentType() throws Exception {
-		d.put("/ReaderTransform", "a").json().run().assertBody().is("a");
+		d.put("/ReaderTransform", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d07a_noMediaTypes_StringTransformBodyOnPojo() throws Exception {
-		d.put("/StringTransformBodyOnPojo", "a").run().assertBody().is("a");
+		d.put("/StringTransformBodyOnPojo", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d07b_noMediaTypes_StringTransformBodyOnPojo_withContentType() throws Exception {
-		d.put("/StringTransformBodyOnPojo?noTrace=true", "a").json().run().assertStatus().equals(415);
+		d.put("/StringTransformBodyOnPojo?noTrace=true", "a").json()
+			.run()
+			.assertStatus().is(415);
 	}
 	@Test
 	public void d08a_noMediaTypes_InputStreamTransformBodyOnPojo() throws Exception {
-		d.put("/InputStreamTransformBodyOnPojo", "a").run().assertBody().is("a");
+		d.put("/InputStreamTransformBodyOnPojo", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d08b_noMediaTypes_InputStreamTransformBodyOnPojo_withContentType() throws Exception {
-		d.put("/InputStreamTransformBodyOnPojo", "a").json().run().assertBody().is("a");
+		d.put("/InputStreamTransformBodyOnPojo", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d09a_noMediaTypes_ReaderTransformBodyOnPojo() throws Exception {
-		d.put("/ReaderTransformBodyOnPojo", "a").run().assertBody().is("a");
+		d.put("/ReaderTransformBodyOnPojo", "a")
+			.run()
+			.assertBody().is("a");
 	}
 	@Test
 	public void d09b_noMediaTypes_ReaderTransformBodyOnPojo_withContentType() throws Exception {
-		d.put("/ReaderTransformBodyOnPojo", "a").json().run().assertBody().is("a");
+		d.put("/ReaderTransformBodyOnPojo", "a").json()
+			.run()
+			.assertBody().is("a");
 	}
 
 	//=================================================================================================================
@@ -632,22 +860,30 @@ public class BodyAnnotationTest {
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json().run().assertBody().is(expected);
+		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json()
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e02_complexPojos_B_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").run().assertBody().is(expected);
+		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a")
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e03_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json().run().assertBody().is(expected);
+		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json()
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e04_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a").run().assertBody().is(expected);
+		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a")
+			.run()
+			.assertBody().is(expected);
 	}
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
@@ -668,22 +904,30 @@ public class BodyAnnotationTest {
 	@Test
 	public void e05_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json().run().assertBody().is(expected);
+		e2.put("/B", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json()
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e06_complexPojos_B_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a").run().assertBody().is(expected);
+		e2.put("/B?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a")
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e07_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json().run().assertBody().is(expected);
+		e2.put("/C", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE)).json()
+			.run()
+			.assertBody().is(expected);
 	}
 	@Test
 	public void e08_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a").run().assertBody().is(expected);
+		e2.put("/C?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a")
+			.run()
+			.assertBody().is(expected);
 	}
 
 	//=================================================================================================================
@@ -708,10 +952,18 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void f01_formPostAsContent() throws Exception {
-		f.post("/", "{p1:'p1',p2:2}").json().run().assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
-		f.post("/", "{}").json().run().assertBody().is("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
-		f.post("?p1=p3&p2=4", "{p1:'p1',p2:2}").json().run().assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
-		f.post("?p1=p3&p2=4", "{}").json().run().assertBody().is("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+		f.post("/", "{p1:'p1',p2:2}").json()
+			.run()
+			.assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.post("/", "{}").json()
+			.run()
+			.assertBody().is("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+		f.post("?p1=p3&p2=4", "{p1:'p1',p2:2}").json()
+			.run()
+			.assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+		f.post("?p1=p3&p2=4", "{}").json()
+			.run()
+			.assertBody().is("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
 
 	//=================================================================================================================
@@ -752,7 +1004,9 @@ public class BodyAnnotationTest {
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
-		g.post("/", in).urlEnc().run().assertBody().is(in);
+		g.post("/", in).urlEnc()
+			.run()
+			.assertBody().is(in);
 	}
 
 	//=================================================================================================================
@@ -798,7 +1052,9 @@ public class BodyAnnotationTest {
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
-		h.post("/", in).urlEnc().run().assertBody().is(in);
+		h.post("/", in).urlEnc()
+			.run()
+			.assertBody().is(in);
 	}
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
@@ -840,7 +1096,9 @@ public class BodyAnnotationTest {
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
 			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
-		h2.post("/", in).urlEnc().run().assertBody().is(in);
+		h2.post("/", in).urlEnc()
+			.run()
+			.assertBody().is(in);
 	}
 
 	//=================================================================================================================
@@ -858,8 +1116,13 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void i01() throws Exception {
-		i.post("/", "").json().run().assertStatus().equals(400).assertBody().contains("Required value not provided.");
-		i.post("/", "{}").json().run().assertStatus().equals(200);
+		i.post("/", "").json()
+			.run()
+			.assertStatus().is(400)
+			.assertBody().contains("Required value not provided.");
+		i.post("/", "{}").json()
+			.run()
+			.assertStatus().is(200);
 	}
 
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
@@ -875,8 +1138,13 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void i02() throws Exception {
-		i2.post("/", "").json().run().assertStatus().equals(400).assertBody().contains("Required value not provided.");
-		i2.post("/", "{}").json().run().assertStatus().equals(200);
+		i2.post("/", "").json()
+			.run()
+			.assertStatus().is(400)
+			.assertBody().contains("Required value not provided.");
+		i2.post("/", "{}").json()
+			.run()
+			.assertStatus().is(200);
 	}
 
 	//=================================================================================================================
@@ -909,28 +1177,52 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void j01_optionalParam_integer() throws Exception {
-		j.post("/a", "123").run().assertStatus().equals(200).assertBody().is("123");
-		j.post("/a", "null").run().assertStatus().equals(200).assertBody().is("null");
+		j.post("/a", "123")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("123");
+		j.post("/a", "null")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void j02_optionalParam_bean() throws Exception {
-		j.post("/b", new ABean().init()).run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
-		j.post("/b", "null").run().assertStatus().equals(200).assertBody().is("null");
+		j.post("/b", new ABean().init())
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("{a:1,b:'foo'}");
+		j.post("/b", "null")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void j03_optionalParam_listOfBeans() throws Exception {
 		String body = SimpleJson.DEFAULT.toString(AList.of(new ABean().init()));
-		j.post("/c", body).run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		j.post("/c", "null").run().assertStatus().equals(200).assertBody().is("null");
+		j.post("/c", body)
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		j.post("/c", "null")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void j04_optionalParam_listOfOptionals() throws Exception {
 		String body = SimpleJson.DEFAULT.toString(AList.of(Optional.of(new ABean().init())));
-		j.post("/d", body).run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		j.post("/d", "null").run().assertStatus().equals(200).assertBody().is("null");
+		j.post("/d", body)
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		j.post("/d", "null")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	//=================================================================================================================

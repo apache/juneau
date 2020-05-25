@@ -24,6 +24,7 @@ import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.utils.*;
@@ -156,15 +157,15 @@ public final class RestResponse implements HttpResponse {
 	 * 	MyBean bean = client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertStatusCode().equals(200)
+	 * 		.assertStatusCode().is(200)
 	 * 		.getBody().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponseStatusCodeAssertion assertStatusCode() throws RestCallException {
-		return new RestResponseStatusCodeAssertion(getStatusCode(), this);
+	public FluentIntegerAssertion<RestResponse> assertStatusCode() throws RestCallException {
+		return new FluentIntegerAssertion<>(getStatusCode(), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -207,8 +208,7 @@ public final class RestResponse implements HttpResponse {
 	}
 
 	/**
-	/**
-	 * Provides the ability to perform fluent-style assertions on this response header.
+	 * Provides the ability to perform fluent-style assertions on a response header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -222,7 +222,7 @@ public final class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
 	 * 	client
@@ -265,8 +265,68 @@ public final class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponseHeaderAssertion assertHeader(String name) throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertHeader(String name) throws RestCallException {
 		return getHeader(name).assertThat();
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on an integer response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertIntHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentIntegerAssertion<RestResponse> assertIntHeader(String name) throws RestCallException {
+		return getHeader(name).assertThatInteger();
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a long response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response body is not too large.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentLongAssertion<RestResponse> assertLongHeader(String name) throws RestCallException {
+		return getHeader(name).assertThatLong();
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentDateAssertion<RestResponse> assertDateHeader(String name) throws RestCallException {
+		return getHeader(name).assertThatDate();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -351,7 +411,7 @@ public final class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponseBodyAssertion assertBody() throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertBody() throws RestCallException {
 		return responseBody.cache().assertThat();
 	}
 

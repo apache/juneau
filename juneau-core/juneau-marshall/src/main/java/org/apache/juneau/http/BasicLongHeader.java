@@ -41,7 +41,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicLongHeader(String name, Object value) {
+	public BasicLongHeader(String name, Object value) {
 		super(name, StringUtils.asString(value));
 		this.value = toLong(value);
 	}

@@ -71,11 +71,16 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void a01_codeOnClass() throws Exception {
-		a.get("/a01").run().assertStatus().equals(201).assertBody().is("foo");
+		a.get("/a01")
+			.run()
+			.assertStatus().is(201)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void a02_codeOnThrown() throws Exception {
-		a.get("/a02").run().assertStatus().equals(501);
+		a.get("/a02")
+			.run()
+			.assertStatus().is(501);
 	}
 
 	//=================================================================================================================
@@ -124,19 +129,31 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void b01_useOnMethod() throws Exception {
-		b.get("/b01").run().assertStatus().equals(200).assertBody().is("foo");
+		b.get("/b01")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void b03_useOnClass() throws Exception {
-		b.get("/b03").run().assertStatus().equals(200).assertBody().is("foo");
+		b.get("/b03")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void b05_useOnThrown() throws Exception {
-		b.get("/b05").run().assertStatus().equals(500).assertBody().is("foo");
+		b.get("/b05")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void b07_useOnParameter() throws Exception {
-		b.get("/b07").run().assertStatus().equals(200).assertBody().is("foo");
+		b.get("/b07")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 
 
@@ -215,35 +232,59 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void d01_useOnMethod() throws Exception {
-		d.get("/d01").run().assertStatus().equals(200).assertBody().is("foo|bar");
+		d.get("/d01")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d02_useOnClass() throws Exception {
-		d.get("/d02").run().assertStatus().equals(200).assertBody().is("foo|bar");
+		d.get("/d02")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d03_useOnThrown() throws Exception {
-		d.get("/d03").run().assertStatus().equals(500).assertBody().is("foo|bar");
+		d.get("/d03")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d04_useOnParameter() throws Exception {
-		d.get("/d04").run().assertStatus().equals(200).assertBody().is("foo|bar");
+		d.get("/d04")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d05_useOnMethodBytes() throws Exception {
-		d.get("/d05").run().assertStatus().equals(200).assertBody().is("Zm9v");
+		d.get("/d05")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d06_useOnClassBytes() throws Exception {
-		d.get("/d06").run().assertStatus().equals(200).assertBody().is("Zm9v");
+		d.get("/d06")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d07_useOnThrownBytes() throws Exception {
-		d.get("/d07").run().assertStatus().equals(500).assertBody().is("Zm9v");
+		d.get("/d07")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d08_useOnParameterBytes() throws Exception {
-		d.get("/d08").run().assertStatus().equals(200).assertBody().is("Zm9v");
+		d.get("/d08")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("Zm9v");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -286,19 +327,31 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void e01_basic_onParameter() throws Exception {
-		e.get("/e01").run().assertStatus().equals(200).assertBody().is("foo");
+		e.get("/e01")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void e02_basic_onType() throws Exception {
-		e.get("/e02").run().assertStatus().equals(200).assertBody().is("foo");
+		e.get("/e02")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void e03_basic_onMethod() throws Exception {
-		e.get("/e03").run().assertStatus().equals(200).assertBody().is("foo");
+		e.get("/e03")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void e04_basic_onReturnedType() throws Exception {
-		e.get("/e04").run().assertStatus().equals(200).assertBody().is("foo");
+		e.get("/e04")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -339,7 +392,10 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void f01a_basic_onParameter() throws Exception {
-		f.get("/f01").run().assertStatus().equals(200).assertBody().is("1|2");
+		f.get("/f01")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1|2");
 	}
 	@Test
 	public void f01b_basic_onParameter_swagger() throws Exception {
@@ -348,7 +404,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void f02a_basic_onType() throws Exception {
-		f.get("/f02").run().assertStatus().equals(200).assertBody().is("1|2");
+		f.get("/f02")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1|2");
 	}
 	@Test
 	public void f02b_basic_onParameter_swagger() throws Exception {
@@ -357,7 +416,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void f03a_basic_onMethod() throws Exception {
-		f.get("/f03").run().assertStatus().equals(200).assertBody().is("1|2");
+		f.get("/f03")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1|2");
 	}
 	@Test
 	public void f03b_basic_onParameter_swagger() throws Exception {
@@ -366,7 +428,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void f04a_basic_onReturnedType() throws Exception {
-		f.get("/f04").run().assertStatus().equals(200).assertBody().is("1|2");
+		f.get("/f04")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1|2");
 	}
 	@Test
 	public void f04b_basic_onParameter_swagger() throws Exception {
@@ -412,7 +477,10 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void g01a_basic_onParameter() throws Exception {
-		g.get("/g01").json().run().assertStatus().equals(200).assertBody().is("[1,2]");
+		g.get("/g01").json()
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[1,2]");
 	}
 	@Test
 	public void g01b_basic_onParameter_swagger() throws Exception {
@@ -421,7 +489,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void g02a_basic_onType() throws Exception {
-		g.get("/g02").json().run().assertStatus().equals(200).assertBody().is("[1,2]");
+		g.get("/g02").json()
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[1,2]");
 	}
 	@Test
 	public void g02b_basic_onParameter_swagger() throws Exception {
@@ -430,7 +501,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void g03a_basic_onMethod() throws Exception {
-		g.get("/g03").json().run().assertStatus().equals(200).assertBody().is("[1,2]");
+		g.get("/g03").json()
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[1,2]");
 	}
 	@Test
 	public void g03b_basic_onParameter_swagger() throws Exception {
@@ -439,7 +513,10 @@ public class ResponseAnnotationTest {
 	}
 	@Test
 	public void g04a_basic_onReturnedType() throws Exception {
-		g.get("/g04").json().run().assertStatus().equals(200).assertBody().is("[1,2]");
+		g.get("/g04").json()
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[1,2]");
 	}
 	@Test
 	public void g04b_basic_onParameter_swagger() throws Exception {
@@ -468,7 +545,11 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void j01a_basic() throws Exception {
-		j.post("/j01", "foo").accept("text/plain").run().assertStatus().equals(200).assertBody().is("foo").assertHeader("Content-Type").is("text/plain");
+		j.post("/j01", "foo").accept("text/plain")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo")
+			.assertHeader("Content-Type").is("text/plain");
 	}
 
 

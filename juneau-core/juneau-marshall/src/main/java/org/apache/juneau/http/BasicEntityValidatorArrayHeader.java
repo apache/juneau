@@ -41,7 +41,7 @@ public class BasicEntityValidatorArrayHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicEntityValidatorArrayHeader(String name, String value) {
+	public BasicEntityValidatorArrayHeader(String name, String value) {
 		super(name, value);
 		String[] s = StringUtils.split(value);
 		this.value = new EntityValidator[s.length];

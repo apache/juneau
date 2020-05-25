@@ -49,5 +49,5 @@ public interface MockHttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
-	byte[] getBody();
+	MockServletResponseBody getBody();
 }

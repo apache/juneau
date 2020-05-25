@@ -121,9 +121,14 @@ public class RestResourceSerializersTest {
 
 	@Test
 	public void a01_serializerOnClass() throws Exception {
-		a.get("/a01").accept("text/a").run().assertBody().is("text/a - test1");
-		a.get("/a01?noTrace=true").accept("text/b").run()
-			.assertStatus().equals(406)
+		a.get("/a01")
+			.accept("text/a")
+			.run()
+			.assertBody().is("text/a - test1");
+		a.get("/a01?noTrace=true")
+			.accept("text/b")
+			.run()
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
 				"Supported media-types: ['text/a'"
@@ -131,8 +136,10 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a02_serializerOnMethod() throws Exception {
-		a.get("/a02?noTrace=true").accept("text/a").run()
-			.assertStatus().equals(406)
+		a.get("/a02?noTrace=true")
+			.accept("text/a")
+			.run()
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -140,18 +147,32 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a03_serializerOverriddenOnMethod() throws Exception {
-		a.get("/a03").accept("text/a").run().assertBody().is("text/c - test3");
-		a.get("/a03").accept("text/b").run().assertBody().is("text/b - test3");
+		a.get("/a03")
+			.accept("text/a")
+			.run()
+			.assertBody().is("text/c - test3");
+		a.get("/a03")
+			.accept("text/b")
+			.run()
+			.assertBody().is("text/b - test3");
 	}
 	@Test
 	public void a04_serializerWithDifferentMediaTypes() throws Exception {
-		a.get("/a04").accept("text/a").run().assertBody().is("text/d - test4");
-		a.get("/a04").accept("text/d").run().assertBody().is("text/d - test4");
+		a.get("/a04")
+			.accept("text/a")
+			.run()
+			.assertBody().is("text/d - test4");
+		a.get("/a04")
+			.accept("text/d")
+			.run()
+			.assertBody().is("text/d - test4");
 	}
 	@Test
 	public void a05_validErrorResponse() throws Exception {
-		a.get("/a05?noTrace=true").accept("text/bad").run()
-			.assertStatus().equals(406)
+		a.get("/a05?noTrace=true")
+			.accept("text/bad")
+			.run()
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
 				"Supported media-types: ['text/a"

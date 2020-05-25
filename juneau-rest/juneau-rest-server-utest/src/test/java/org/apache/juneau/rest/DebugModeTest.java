@@ -119,39 +119,39 @@ public class DebugModeTest {
 	@Test
 	public void a01_debugDefault() throws Exception {
 
-		assertEquals("false", a1.get("/a01").run().getBodyAsString());
+		a1.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1d.get("/a01").run().getBodyAsString());
-		assertLogged(false);
-
-		assertEquals("false", a1.get("/a02").run().getBodyAsString());
-		assertLogged(false);
-		assertEquals("false", a1d.get("/a02").run().getBodyAsString());
+		a1d.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a1.get("/a03").run().getBodyAsString());
+		a1.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+		a1d.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+
+		a1.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
-		assertEquals("true", a1d.get("/a03").run().getBodyAsString());
+		a1d.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
 
-		assertEquals("false", a1.get("/a04").run().getBodyAsString());
+		a1.get("/a04").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a1d.get("/a04").run().getBodyAsString());
+		a1d.get("/a04").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a04");
 
-		assertEquals("false", a1.get("/a05").run().getBodyAsString());
+		a1.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1d.get("/a05").run().getBodyAsString());
+		a1d.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a1.get("/a06").run().getBodyAsString());
+		a1.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a1d.get("/a06").run().getBodyAsString());
+		a1d.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a1.get("/a07").run().getBodyAsString());
+		a1.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1d.get("/a07").run().getBodyAsString());
+		a1d.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -194,39 +194,39 @@ public class DebugModeTest {
 	@Test
 	public void a01a_debugDefault() throws Exception {
 
-		assertEquals("false", a1a.get("/a01").run().getBodyAsString());
+		a1a.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1ad.get("/a01").run().getBodyAsString());
-		assertLogged(false);
-
-		assertEquals("false", a1a.get("/a02").run().getBodyAsString());
-		assertLogged(false);
-		assertEquals("false", a1ad.get("/a02").run().getBodyAsString());
+		a1ad.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a1a.get("/a03").run().getBodyAsString());
+		a1a.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+		a1ad.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+
+		a1a.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
-		assertEquals("true", a1ad.get("/a03").run().getBodyAsString());
+		a1ad.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
 
-		assertEquals("false", a1a.get("/a04").run().getBodyAsString());
+		a1a.get("/a04").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a1ad.get("/a04").run().getBodyAsString());
+		a1ad.get("/a04").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a04");
 
-		assertEquals("false", a1a.get("/a05").run().getBodyAsString());
+		a1a.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1ad.get("/a05").run().getBodyAsString());
+		a1ad.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a1a.get("/a06").run().getBodyAsString());
+		a1a.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a1ad.get("/a06").run().getBodyAsString());
+		a1ad.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a1a.get("/a07").run().getBodyAsString());
+		a1a.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a1ad.get("/a07").run().getBodyAsString());
+		a1ad.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -273,39 +273,39 @@ public class DebugModeTest {
 	@Test
 	public void a02_debugTrue() throws Exception {
 
-		assertEquals("true", a2.get("/a01").run().getBodyAsString());
+		a2.get("/a01").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a2d.get("/a01").run().getBodyAsString());
+		a2d.get("/a01").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a2.get("/a02").run().getBodyAsString());
+		a2.get("/a02").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a2d.get("/a02").run().getBodyAsString());
+		a2d.get("/a02").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a2.get("/a03").run().getBodyAsString());
+		a2.get("/a03").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a2d.get("/a03").run().getBodyAsString());
+		a2d.get("/a03").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a2.get("/a04").run().getBodyAsString());
+		a2.get("/a04").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a2d.get("/a04").run().getBodyAsString());
+		a2d.get("/a04").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("true", a2.get("/a05").run().getBodyAsString());
+		a2.get("/a05").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a2d.get("/a05").run().getBodyAsString());
-		assertLogged(true);
-
-		assertEquals("true", a2.get("/a06").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", a2d.get("/a06").run().getBodyAsString());
+		a2d.get("/a05").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a2.get("/a07").run().getBodyAsString());
+		a2.get("/a06").run().assertBody().is("true");
+		assertLogged(true);
+		a2d.get("/a06").run().assertBody().is("true");
+		assertLogged(true);
+
+		a2.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a2d.get("/a07").run().getBodyAsString());
+		a2d.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -352,39 +352,39 @@ public class DebugModeTest {
 	@Test
 	public void a03_restDebugFalse() throws Exception {
 
-		assertEquals("false", a3.get("/a01").run().getBodyAsString());
+		a3.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a3d.get("/a01").run().getBodyAsString());
-		assertLogged(false);
-
-		assertEquals("false", a3.get("/a02").run().getBodyAsString());
-		assertLogged(false);
-		assertEquals("false", a3d.get("/a02").run().getBodyAsString());
+		a3d.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a3.get("/a03").run().getBodyAsString());
+		a3.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+		a3d.get("/a02").run().assertBody().is("false");
+		assertLogged(false);
+
+		a3.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
-		assertEquals("true", a3d.get("/a03").run().getBodyAsString());
+		a3d.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
 
-		assertEquals("false", a3.get("/a04").run().getBodyAsString());
+		a3.get("/a04").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a3d.get("/a04").run().getBodyAsString());
+		a3d.get("/a04").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a04");
 
-		assertEquals("false", a3.get("/a05").run().getBodyAsString());
+		a3.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a3d.get("/a05").run().getBodyAsString());
+		a3d.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a3.get("/a06").run().getBodyAsString());
+		a3.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a3d.get("/a06").run().getBodyAsString());
+		a3d.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a3.get("/a07").run().getBodyAsString());
+		a3.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a3d.get("/a07").run().getBodyAsString());
+		a3d.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -431,39 +431,39 @@ public class DebugModeTest {
 	@Test
 	public void a04_debugPerRequest() throws Exception {
 
-		assertEquals("false", a4.get("/a01").run().getBodyAsString());
+		a4.get("/a01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a4d.get("/a01").run().getBodyAsString());
+		a4d.get("/a01").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a4.get("/a02").run().getBodyAsString());
+		a4.get("/a02").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a4d.get("/a02").run().getBodyAsString());
+		a4d.get("/a02").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", a4.get("/a03").run().getBodyAsString());
+		a4.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
-		assertEquals("true", a4d.get("/a03").run().getBodyAsString());
+		a4d.get("/a03").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a03");
 
-		assertEquals("false", a4.get("/a04").run().getBodyAsString());
+		a4.get("/a04").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a4d.get("/a04").run().getBodyAsString());
+		a4d.get("/a04").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /a04");
 
-		assertEquals("false", a4.get("/a05").run().getBodyAsString());
+		a4.get("/a05").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", a4d.get("/a05").run().getBodyAsString());
+		a4d.get("/a05").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("true", a4.get("/a06").run().getBodyAsString());
+		a4.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", a4d.get("/a06").run().getBodyAsString());
+		a4d.get("/a06").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", a4.get("/a07").run().getBodyAsString());
+		a4.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", a4d.get("/a07").run().getBodyAsString());
+		a4d.get("/a07").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -491,9 +491,9 @@ public class DebugModeTest {
 	@Test
 	public void b01_debugDefault() throws Exception {
 
-		assertEquals("false", b1.get("/b01").run().getBodyAsString());
+		b1.get("/b01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", b1.get("/b02").run().getBodyAsString());
+		b1.get("/b02").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /b02");
 	}
 
@@ -517,9 +517,9 @@ public class DebugModeTest {
 	@Test
 	public void b02_debugDefault() throws Exception {
 
-		assertEquals("false", b2.get("/b01").run().getBodyAsString());
+		b2.get("/b01").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", b2.get("/b02").run().getBodyAsString());
+		b2.get("/b02").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /b02");
 	}
 
@@ -706,155 +706,155 @@ public class DebugModeTest {
 	@Test
 	public void c01_debugDefault() throws Exception {
 
-		assertEquals("false", c1.get("/c01a").run().getBodyAsString());
+		c1.get("/c01a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c01a").run().getBodyAsString());
+		c1d.get("/c01a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c01b").run().getBodyAsString());
+		c1.get("/c01b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c01b").run().getBodyAsString());
+		c1d.get("/c01b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1.get("/c01c").run().getBodyAsString());
+		c1.get("/c01c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1d.get("/c01c").run().getBodyAsString());
+		c1d.get("/c01c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("false", c1.get("/c01d").run().getBodyAsString());
+		c1.get("/c01d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c01d").run().getBodyAsString());
+		c1d.get("/c01d").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", c1.get("/c02a").run().getBodyAsString());
+		c1.get("/c02a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02a").run().getBodyAsString());
+		c1d.get("/c02a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c02b").run().getBodyAsString());
+		c1.get("/c02b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02b").run().getBodyAsString());
+		c1d.get("/c02b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c02c").run().getBodyAsString());
+		c1.get("/c02c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02c").run().getBodyAsString());
+		c1d.get("/c02c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c02d").run().getBodyAsString());
+		c1.get("/c02d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02d").run().getBodyAsString());
+		c1d.get("/c02d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c02e").run().getBodyAsString());
+		c1.get("/c02e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02e").run().getBodyAsString());
+		c1d.get("/c02e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c02f").run().getBodyAsString());
+		c1.get("/c02f").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c02f").run().getBodyAsString());
+		c1d.get("/c02f").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", c1.get("/c03a").run().getBodyAsString());
+		c1.get("/c03a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03a");
-		assertEquals("true", c1d.get("/c03a").run().getBodyAsString());
+		c1d.get("/c03a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03a");
-		assertEquals("true", c1.get("/c03b").run().getBodyAsString());
+		c1.get("/c03b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03b");
-		assertEquals("true", c1d.get("/c03b").run().getBodyAsString());
+		c1d.get("/c03b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03b");
-		assertEquals("true", c1.get("/c03c").run().getBodyAsString());
+		c1.get("/c03c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03c");
-		assertEquals("true", c1d.get("/c03c").run().getBodyAsString());
+		c1d.get("/c03c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03c");
-		assertEquals("true", c1.get("/c03d").run().getBodyAsString());
+		c1.get("/c03d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03d");
-		assertEquals("true", c1d.get("/c03d").run().getBodyAsString());
+		c1d.get("/c03d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03d");
-		assertEquals("true", c1.get("/c03e").run().getBodyAsString());
+		c1.get("/c03e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03e");
-		assertEquals("true", c1d.get("/c03e").run().getBodyAsString());
+		c1d.get("/c03e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03e");
-		assertEquals("true", c1.get("/c03f").run().getBodyAsString());
+		c1.get("/c03f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03f");
-		assertEquals("true", c1d.get("/c03f").run().getBodyAsString());
+		c1d.get("/c03f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03f");
 
-		assertEquals("false", c1.get("/c04a").run().getBodyAsString());
+		c1.get("/c04a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04a").run().getBodyAsString());
+		c1d.get("/c04a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04a");
-		assertEquals("false", c1.get("/c04b").run().getBodyAsString());
+		c1.get("/c04b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04b").run().getBodyAsString());
+		c1d.get("/c04b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04b");
-		assertEquals("false", c1.get("/c04c").run().getBodyAsString());
+		c1.get("/c04c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04c").run().getBodyAsString());
+		c1d.get("/c04c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04c");
-		assertEquals("false", c1.get("/c04d").run().getBodyAsString());
+		c1.get("/c04d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04d").run().getBodyAsString());
+		c1d.get("/c04d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04d");
-		assertEquals("false", c1.get("/c04e").run().getBodyAsString());
+		c1.get("/c04e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04e").run().getBodyAsString());
+		c1d.get("/c04e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04e");
-		assertEquals("false", c1.get("/c04f").run().getBodyAsString());
+		c1.get("/c04f").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c1d.get("/c04f").run().getBodyAsString());
+		c1d.get("/c04f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04f");
 
-		assertEquals("false", c1.get("/c05a").run().getBodyAsString());
+		c1.get("/c05a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05a").run().getBodyAsString());
+		c1d.get("/c05a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c05b").run().getBodyAsString());
+		c1.get("/c05b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05b").run().getBodyAsString());
+		c1d.get("/c05b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c05c").run().getBodyAsString());
+		c1.get("/c05c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05c").run().getBodyAsString());
+		c1d.get("/c05c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c05d").run().getBodyAsString());
+		c1.get("/c05d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05d").run().getBodyAsString());
+		c1d.get("/c05d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c05e").run().getBodyAsString());
+		c1.get("/c05e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05e").run().getBodyAsString());
+		c1d.get("/c05e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c05f").run().getBodyAsString());
+		c1.get("/c05f").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c05f").run().getBodyAsString());
+		c1d.get("/c05f").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", c1.get("/c06a").run().getBodyAsString());
+		c1.get("/c06a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1d.get("/c06a").run().getBodyAsString());
+		c1d.get("/c06a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1.get("/c06b").run().getBodyAsString());
+		c1.get("/c06b").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1d.get("/c06b").run().getBodyAsString());
+		c1d.get("/c06b").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1.get("/c06c").run().getBodyAsString());
+		c1.get("/c06c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1d.get("/c06c").run().getBodyAsString());
+		c1d.get("/c06c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1.get("/c06d").run().getBodyAsString());
+		c1.get("/c06d").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c1d.get("/c06d").run().getBodyAsString());
+		c1d.get("/c06d").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", c1.get("/c07a").run().getBodyAsString());
+		c1.get("/c07a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c07a").run().getBodyAsString());
+		c1d.get("/c07a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c07b").run().getBodyAsString());
+		c1.get("/c07b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c07b").run().getBodyAsString());
+		c1d.get("/c07b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c07c").run().getBodyAsString());
+		c1.get("/c07c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c07c").run().getBodyAsString());
+		c1d.get("/c07c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1.get("/c07d").run().getBodyAsString());
+		c1.get("/c07d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c1d.get("/c07d").run().getBodyAsString());
+		c1d.get("/c07d").run().assertBody().is("false");
 		assertLogged(false);
 	}
 
@@ -1040,155 +1040,155 @@ public class DebugModeTest {
 	@Test
 	public void c02_debugTrue() throws Exception {
 
-		assertEquals("true", c2.get("/c01a").run().getBodyAsString());
+		c2.get("/c01a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c01a").run().getBodyAsString());
+		c2d.get("/c01a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("false", c2.get("/c01b").run().getBodyAsString());
+		c2.get("/c01b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c01b").run().getBodyAsString());
+		c2d.get("/c01b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2.get("/c01c").run().getBodyAsString());
+		c2.get("/c01c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c01c").run().getBodyAsString());
+		c2d.get("/c01c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("false", c2.get("/c01d").run().getBodyAsString());
+		c2.get("/c01d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c01d").run().getBodyAsString());
+		c2d.get("/c01d").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", c2.get("/c02a").run().getBodyAsString());
+		c2.get("/c02a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02a").run().getBodyAsString());
+		c2d.get("/c02a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c02b").run().getBodyAsString());
+		c2.get("/c02b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02b").run().getBodyAsString());
+		c2d.get("/c02b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c02c").run().getBodyAsString());
+		c2.get("/c02c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02c").run().getBodyAsString());
+		c2d.get("/c02c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c02d").run().getBodyAsString());
+		c2.get("/c02d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02d").run().getBodyAsString());
+		c2d.get("/c02d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c02e").run().getBodyAsString());
+		c2.get("/c02e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02e").run().getBodyAsString());
+		c2d.get("/c02e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c02f").run().getBodyAsString());
+		c2.get("/c02f").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c02f").run().getBodyAsString());
+		c2d.get("/c02f").run().assertBody().is("false");
 		assertLogged(false);
 
-		assertEquals("true", c2.get("/c03a").run().getBodyAsString());
+		c2.get("/c03a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03a");
-		assertEquals("true", c2d.get("/c03a").run().getBodyAsString());
+		c2d.get("/c03a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03a");
-		assertEquals("true", c2.get("/c03b").run().getBodyAsString());
+		c2.get("/c03b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03b");
-		assertEquals("true", c2d.get("/c03b").run().getBodyAsString());
+		c2d.get("/c03b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03b");
-		assertEquals("true", c2.get("/c03c").run().getBodyAsString());
+		c2.get("/c03c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03c");
-		assertEquals("true", c2d.get("/c03c").run().getBodyAsString());
+		c2d.get("/c03c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03c");
-		assertEquals("true", c2.get("/c03d").run().getBodyAsString());
+		c2.get("/c03d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03d");
-		assertEquals("true", c2d.get("/c03d").run().getBodyAsString());
+		c2d.get("/c03d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03d");
-		assertEquals("true", c2.get("/c03e").run().getBodyAsString());
+		c2.get("/c03e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03e");
-		assertEquals("true", c2d.get("/c03e").run().getBodyAsString());
+		c2d.get("/c03e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03e");
-		assertEquals("true", c2.get("/c03f").run().getBodyAsString());
+		c2.get("/c03f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03f");
-		assertEquals("true", c2d.get("/c03f").run().getBodyAsString());
+		c2d.get("/c03f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c03f");
 
-		assertEquals("false", c2.get("/c04a").run().getBodyAsString());
+		c2.get("/c04a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04a").run().getBodyAsString());
+		c2d.get("/c04a").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04a");
-		assertEquals("false", c2.get("/c04b").run().getBodyAsString());
+		c2.get("/c04b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04b").run().getBodyAsString());
+		c2d.get("/c04b").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04b");
-		assertEquals("false", c2.get("/c04c").run().getBodyAsString());
+		c2.get("/c04c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04c").run().getBodyAsString());
+		c2d.get("/c04c").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04c");
-		assertEquals("false", c2.get("/c04d").run().getBodyAsString());
+		c2.get("/c04d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04d").run().getBodyAsString());
+		c2d.get("/c04d").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04d");
-		assertEquals("false", c2.get("/c04e").run().getBodyAsString());
+		c2.get("/c04e").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04e").run().getBodyAsString());
+		c2d.get("/c04e").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04e");
-		assertEquals("false", c2.get("/c04f").run().getBodyAsString());
+		c2.get("/c04f").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("true", c2d.get("/c04f").run().getBodyAsString());
+		c2d.get("/c04f").run().assertBody().is("true");
 		assertLoggedContains("[200] HTTP GET /c04f");
 
-		assertEquals("true", c2.get("/c05a").run().getBodyAsString());
+		c2.get("/c05a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05a").run().getBodyAsString());
+		c2d.get("/c05a").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2.get("/c05b").run().getBodyAsString());
+		c2.get("/c05b").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05b").run().getBodyAsString());
+		c2d.get("/c05b").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2.get("/c05c").run().getBodyAsString());
+		c2.get("/c05c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05c").run().getBodyAsString());
+		c2d.get("/c05c").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2.get("/c05d").run().getBodyAsString());
+		c2.get("/c05d").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05d").run().getBodyAsString());
+		c2d.get("/c05d").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2.get("/c05e").run().getBodyAsString());
+		c2.get("/c05e").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05e").run().getBodyAsString());
+		c2d.get("/c05e").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2.get("/c05f").run().getBodyAsString());
+		c2.get("/c05f").run().assertBody().is("true");
 		assertLogged(true);
-		assertEquals("true", c2d.get("/c05f").run().getBodyAsString());
-		assertLogged(true);
-
-		assertEquals("true", c2.get("/c06a").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2d.get("/c06a").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2.get("/c06b").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2d.get("/c06b").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2.get("/c06c").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2d.get("/c06c").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2.get("/c06d").run().getBodyAsString());
-		assertLogged(true);
-		assertEquals("true", c2d.get("/c06d").run().getBodyAsString());
+		c2d.get("/c05f").run().assertBody().is("true");
 		assertLogged(true);
 
-		assertEquals("false", c2.get("/c07a").run().getBodyAsString());
+		c2.get("/c06a").run().assertBody().is("true");
+		assertLogged(true);
+		c2d.get("/c06a").run().assertBody().is("true");
+		assertLogged(true);
+		c2.get("/c06b").run().assertBody().is("true");
+		assertLogged(true);
+		c2d.get("/c06b").run().assertBody().is("true");
+		assertLogged(true);
+		c2.get("/c06c").run().assertBody().is("true");
+		assertLogged(true);
+		c2d.get("/c06c").run().assertBody().is("true");
+		assertLogged(true);
+		c2.get("/c06d").run().assertBody().is("true");
+		assertLogged(true);
+		c2d.get("/c06d").run().assertBody().is("true");
+		assertLogged(true);
+
+		c2.get("/c07a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c07a").run().getBodyAsString());
+		c2d.get("/c07a").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c07b").run().getBodyAsString());
+		c2.get("/c07b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c07b").run().getBodyAsString());
+		c2d.get("/c07b").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c07c").run().getBodyAsString());
+		c2.get("/c07c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c07c").run().getBodyAsString());
+		c2d.get("/c07c").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2.get("/c07d").run().getBodyAsString());
+		c2.get("/c07d").run().assertBody().is("false");
 		assertLogged(false);
-		assertEquals("false", c2d.get("/c07d").run().getBodyAsString());
+		c2d.get("/c07d").run().assertBody().is("false");
 		assertLogged(false);
 	}
 

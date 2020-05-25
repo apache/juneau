@@ -35,13 +35,21 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void a01a() throws Exception {
-		a1.get("/xdocs/test.txt").run().assertBody().contains("OK-1");
-		a1.get("/xdocs/xsubdocs/test.txt").run().assertBody().contains("OK-2");
+		a1.get("/xdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-1");
+		a1.get("/xdocs/xsubdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-2");
 	}
 	@Test
 	public void a01b_preventPathTraversals() throws Exception {
-		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true").run().assertStatus().equals(404);
-		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").run().assertStatus().equals(404);
+		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
+			.run()
+			.assertStatus().is(404);
+		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Rest(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
@@ -55,13 +63,21 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void a02a() throws Exception {
-		a1.get("/xdocs/test.txt").run().assertBody().contains("OK-1");
-		a1.get("/xdocs/xsubdocs/test.txt").run().assertBody().contains("OK-2");
+		a1.get("/xdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-1");
+		a1.get("/xdocs/xsubdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-2");
 	}
 	@Test
 	public void a02b_preventPathTraversals() throws Exception {
-		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true").run().assertStatus().equals(404);
-		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true").run().assertStatus().equals(404);
+		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
+			.run()
+			.assertStatus().is(404);
+		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -79,7 +95,11 @@ public class RestResourceStaticFilesTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/xdocs/test.txt").run().assertHeader("Foo").is("Bar").assertHeader("Baz").is("Qux").assertBody().contains("OK-1");
+		b.get("/xdocs/test.txt")
+			.run()
+			.assertHeader("Foo").is("Bar")
+			.assertHeader("Baz").is("Qux")
+			.assertBody().contains("OK-1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -108,18 +128,34 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void c01() throws Exception {
 		// Should resolve to relative xdocs folder.
-		c1.get("/xdocs/test.txt").run().assertBody().contains("OK-1");
-		c1.get("/xdocs/xsubdocs/test.txt").run().assertBody().contains("OK-2");
+		c1.get("/xdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-1");
+		c1.get("/xdocs/xsubdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-2");
 
 		// Should be overridden to absolute xdocs folder.
-		c2.get("/xdocs/test.txt").run().assertBody().contains("OK-3");
-		c2.get("/xdocs/xsubdocs/test.txt").run().assertBody().contains("OK-4");
+		c2.get("/xdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-3");
+		c2.get("/xdocs/xsubdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-4");
 
 		// Should pick up from file system.
-		c1.get("/xdocs/test2.txt").run().assertBody().contains("OK-5");
-		c2.get("/xdocs/test2.txt").run().assertBody().contains("OK-5");
-		c1.get("/xdocs/xsubdocs/test2.txt").run().assertBody().contains("OK-6");
-		c2.get("/xdocs/xsubdocs/test2.txt").run().assertBody().contains("OK-6");
+		c1.get("/xdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-5");
+		c2.get("/xdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-5");
+		c1.get("/xdocs/xsubdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-6");
+		c2.get("/xdocs/xsubdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-6");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -139,12 +175,20 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void d01() throws Exception {
 		// Should be overridden to absolute xdocs folder.
-		d.get("/xdocs/test.txt").run().assertBody().contains("OK-3");
-		d.get("/xdocs/xsubdocs/test.txt").run().assertBody().contains("OK-4");
+		d.get("/xdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-3");
+		d.get("/xdocs/xsubdocs/test.txt")
+			.run()
+			.assertBody().contains("OK-4");
 
 		// Should pick up from file system.
-		d.get("/xdocs/test2.txt").run().assertBody().contains("OK-5");
-		d.get("/xdocs/xsubdocs/test2.txt").run().assertBody().contains("OK-6");
+		d.get("/xdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-5");
+		d.get("/xdocs/xsubdocs/test2.txt")
+			.run()
+			.assertBody().contains("OK-6");
 	}
 
 }

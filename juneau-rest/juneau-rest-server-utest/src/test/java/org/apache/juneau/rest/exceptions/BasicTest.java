@@ -73,135 +73,234 @@ public class BasicTest {
 
 	@Test
 	public void a01_badRequest() throws Exception {
-		a.get("/badRequest").run().assertStatus().equals(400).assertBody().is("Bad Request");
+		a.get("/badRequest")
+			.run()
+			.assertStatus().is(400)
+			.assertBody().is("Bad Request");
 	}
 	@Test
 	public void a02_conflict() throws Exception {
-		a.get("/conflict").run().assertStatus().equals(409).assertBody().is("Conflict");
+		a.get("/conflict")
+			.run()
+			.assertStatus().is(409)
+			.assertBody().is("Conflict");
 	}
 	@Test
 	public void a03_expectationFailed() throws Exception {
-		a.get("/expectationFailed").run().assertStatus().equals(417).assertBody().is("Expectation Failed");
+		a.get("/expectationFailed")
+			.run()
+			.assertStatus().is(417)
+			.assertBody().is("Expectation Failed");
 	}
 	@Test
 	public void a04_failedDependency() throws Exception {
-		a.get("/failedDependency").run().assertStatus().equals(424).assertBody().is("Failed Dependency");
+		a.get("/failedDependency")
+			.run()
+			.assertStatus().is(424)
+			.assertBody().is("Failed Dependency");
 	}
 	@Test
 	public void a05_forbidden() throws Exception {
-		a.get("/forbidden").run().assertStatus().equals(403).assertBody().is("Forbidden");
+		a.get("/forbidden")
+			.run()
+			.assertStatus().is(403)
+			.assertBody().is("Forbidden");
 	}
 	@Test
 	public void a06_gone() throws Exception {
-		a.get("/gone").run().assertStatus().equals(410).assertBody().is("Gone");
+		a.get("/gone")
+			.run()
+			.assertStatus().is(410)
+			.assertBody().is("Gone");
 	}
 	@Test
 	public void a07_httpVersionNotSupported() throws Exception {
-		a.get("/httpVersionNotSupported").run().assertStatus().equals(505).assertBody().is("HTTP Version Not Supported");
+		a.get("/httpVersionNotSupported")
+			.run()
+			.assertStatus().is(505)
+			.assertBody().is("HTTP Version Not Supported");
 	}
 	@Test
 	public void a08_insufficientStorage() throws Exception {
-		a.get("/insufficientStorage").run().assertStatus().equals(507).assertBody().is("Insufficient Storage");
+		a.get("/insufficientStorage")
+			.run()
+			.assertStatus().is(507)
+			.assertBody().is("Insufficient Storage");
 	}
 	@Test
 	public void a09_internalServerError() throws Exception {
-		a.get("/internalServerError").run().assertStatus().equals(500).assertBody().is("Internal Server Error");
+		a.get("/internalServerError")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("Internal Server Error");
 	}
 	@Test
 	public void a10_lengthRequired() throws Exception {
-		a.get("/lengthRequired").run().assertStatus().equals(411).assertBody().is("Length Required");
+		a.get("/lengthRequired")
+			.run()
+			.assertStatus().is(411)
+			.assertBody().is("Length Required");
 	}
 	@Test
 	public void a11_locked() throws Exception {
-		a.get("/locked").run().assertStatus().equals(423).assertBody().is("Locked");
+		a.get("/locked")
+			.run()
+			.assertStatus().is(423)
+			.assertBody().is("Locked");
 	}
 	@Test
 	public void a12_loopDetected() throws Exception {
-		a.get("/loopDetected").run().assertStatus().equals(508).assertBody().is("Loop Detected");
+		a.get("/loopDetected")
+			.run()
+			.assertStatus().is(508)
+			.assertBody().is("Loop Detected");
 	}
 	@Test
 	public void a13_methodNotAllowed() throws Exception {
-		a.get("/methodNotAllowed").run().assertStatus().equals(405).assertBody().is("Method Not Allowed");
+		a.get("/methodNotAllowed")
+			.run()
+			.assertStatus().is(405)
+			.assertBody().is("Method Not Allowed");
 	}
 	@Test
 	public void a14_misdirectedRequest() throws Exception {
-		a.get("/misdirectedRequest").run().assertStatus().equals(421).assertBody().is("Misdirected Request");
+		a.get("/misdirectedRequest")
+			.run()
+			.assertStatus().is(421)
+			.assertBody().is("Misdirected Request");
 	}
 	@Test
 	public void a15_networkAuthenticationRequired() throws Exception {
-		a.get("/networkAuthenticationRequired").run().assertStatus().equals(511).assertBody().is("Network Authentication Required");
+		a.get("/networkAuthenticationRequired")
+			.run()
+			.assertStatus().is(511)
+			.assertBody().is("Network Authentication Required");
 	}
 	@Test
 	public void a16_notAcceptable() throws Exception {
-		a.get("/notAcceptable").run().assertStatus().equals(406).assertBody().is("Not Acceptable");
+		a.get("/notAcceptable")
+			.run()
+			.assertStatus().is(406)
+			.assertBody().is("Not Acceptable");
 	}
 	@Test
 	public void a17_notExtended() throws Exception {
-		a.get("/notExtended").run().assertStatus().equals(510).assertBody().is("Not Extended");
+		a.get("/notExtended")
+			.run()
+			.assertStatus().is(510)
+			.assertBody().is("Not Extended");
 	}
 	@Test
 	public void a18_notFound() throws Exception {
-		a.get("/notFound").run().assertStatus().equals(404).assertBody().is("Not Found");
+		a.get("/notFound")
+			.run()
+			.assertStatus().is(404)
+			.assertBody().is("Not Found");
 	}
 	@Test
 	public void a19_notImplemented() throws Exception {
-		a.get("/notImplemented").run().assertStatus().equals(501).assertBody().is("Not Implemented");
+		a.get("/notImplemented")
+			.run()
+			.assertStatus().is(501)
+			.assertBody().is("Not Implemented");
 	}
 	@Test
 	public void a20_payloadTooLarge() throws Exception {
-		a.get("/payloadTooLarge").run().assertStatus().equals(413).assertBody().is("Payload Too Large");
+		a.get("/payloadTooLarge")
+			.run()
+			.assertStatus().is(413)
+			.assertBody().is("Payload Too Large");
 	}
 	@Test
 	public void a21_preconditionFailed() throws Exception {
-		a.get("/preconditionFailed").run().assertStatus().equals(412).assertBody().is("Precondition Failed");
+		a.get("/preconditionFailed")
+			.run()
+			.assertStatus().is(412)
+			.assertBody().is("Precondition Failed");
 	}
 	@Test
 	public void a22_preconditionRequired() throws Exception {
-		a.get("/preconditionRequired").run().assertStatus().equals(428).assertBody().is("Precondition Required");
+		a.get("/preconditionRequired")
+			.run()
+			.assertStatus().is(428)
+			.assertBody().is("Precondition Required");
 	}
 	@Test
 	public void a23_rangeNotSatisfiable() throws Exception {
-		a.get("/rangeNotSatisfiable").run().assertStatus().equals(416).assertBody().is("Range Not Satisfiable");
+		a.get("/rangeNotSatisfiable")
+			.run()
+			.assertStatus().is(416)
+			.assertBody().is("Range Not Satisfiable");
 	}
 	@Test
 	public void a24_requestHeaderFieldsTooLarge() throws Exception {
-		a.get("/requestHeaderFieldsTooLarge").run().assertStatus().equals(431).assertBody().is("Request Header Fields Too Large");
+		a.get("/requestHeaderFieldsTooLarge")
+			.run()
+			.assertStatus().is(431)
+			.assertBody().is("Request Header Fields Too Large");
 	}
 	@Test
 	public void a25_serviceUnavailable() throws Exception {
-		a.get("/serviceUnavailable").run().assertStatus().equals(503).assertBody().is("Service Unavailable");
+		a.get("/serviceUnavailable")
+			.run()
+			.assertStatus().is(503)
+			.assertBody().is("Service Unavailable");
 	}
 	@Test
 	public void a26_tooManyRequests() throws Exception {
-		a.get("/tooManyRequests").run().assertStatus().equals(429).assertBody().is("Too Many Requests");
+		a.get("/tooManyRequests")
+			.run()
+			.assertStatus().is(429)
+			.assertBody().is("Too Many Requests");
 	}
 	@Test
 	public void a27_unauthorized() throws Exception {
-		a.get("/unauthorized").run().assertStatus().equals(401).assertBody().is("Unauthorized");
+		a.get("/unauthorized")
+			.run()
+			.assertStatus().is(401)
+			.assertBody().is("Unauthorized");
 	}
 	@Test
 	public void a28_unavailableForLegalReasons() throws Exception {
-		a.get("/unavailableForLegalReasons").run().assertStatus().equals(451).assertBody().is("Unavailable For Legal Reasons");
+		a.get("/unavailableForLegalReasons")
+			.run()
+			.assertStatus().is(451)
+			.assertBody().is("Unavailable For Legal Reasons");
 	}
 	@Test
 	public void a29_unprocessableEntity() throws Exception {
-		a.get("/unprocessableEntity").run().assertStatus().equals(422).assertBody().is("Unprocessable Entity");
+		a.get("/unprocessableEntity")
+			.run()
+			.assertStatus().is(422)
+			.assertBody().is("Unprocessable Entity");
 	}
 	@Test
 	public void a30_unsupportedMediaType() throws Exception {
-		a.get("/unsupportedMediaType").run().assertStatus().equals(415).assertBody().is("Unsupported Media Type");
+		a.get("/unsupportedMediaType")
+			.run()
+			.assertStatus().is(415)
+			.assertBody().is("Unsupported Media Type");
 	}
 	@Test
 	public void a31_upgradeRequired() throws Exception {
-		a.get("/upgradeRequired").run().assertStatus().equals(426).assertBody().is("Upgrade Required");
+		a.get("/upgradeRequired")
+			.run()
+			.assertStatus().is(426)
+			.assertBody().is("Upgrade Required");
 	}
 	@Test
 	public void a32_uriTooLong() throws Exception {
-		a.get("/uriTooLong").run().assertStatus().equals(414).assertBody().is("URI Too Long");
+		a.get("/uriTooLong")
+			.run()
+			.assertStatus().is(414)
+			.assertBody().is("URI Too Long");
 	}
 	@Test
 	public void a33_variantAlsoNegotiates() throws Exception {
-		a.get("/variantAlsoNegotiates").run().assertStatus().equals(506).assertBody().is("Variant Also Negotiates");
+		a.get("/variantAlsoNegotiates")
+			.run()
+			.assertStatus().is(506)
+			.assertBody().is("Variant Also Negotiates");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -249,135 +348,234 @@ public class BasicTest {
 
 	@Test
 	public void b01_badRequest() throws Exception {
-		b.get("/badRequest").run().assertStatus().equals(400).assertBody().is("foo bar");
+		b.get("/badRequest")
+			.run()
+			.assertStatus().is(400)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b02_conflict() throws Exception {
-		b.get("/conflict").run().assertStatus().equals(409).assertBody().is("foo bar");
+		b.get("/conflict")
+			.run()
+			.assertStatus().is(409)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b03_expectationFailed() throws Exception {
-		b.get("/expectationFailed").run().assertStatus().equals(417).assertBody().is("foo bar");
+		b.get("/expectationFailed")
+			.run()
+			.assertStatus().is(417)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b04_failedDependency() throws Exception {
-		b.get("/failedDependency").run().assertStatus().equals(424).assertBody().is("foo bar");
+		b.get("/failedDependency")
+			.run()
+			.assertStatus().is(424)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b05_forbidden() throws Exception {
-		b.get("/forbidden").run().assertStatus().equals(403).assertBody().is("foo bar");
+		b.get("/forbidden")
+			.run()
+			.assertStatus().is(403)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b06_gone() throws Exception {
-		b.get("/gone").run().assertStatus().equals(410).assertBody().is("foo bar");
+		b.get("/gone")
+			.run()
+			.assertStatus().is(410)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b07_httpVersionNotSupported() throws Exception {
-		b.get("/httpVersionNotSupported").run().assertStatus().equals(505).assertBody().is("foo bar");
+		b.get("/httpVersionNotSupported")
+			.run()
+			.assertStatus().is(505)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b08_insufficientStorage() throws Exception {
-		b.get("/insufficientStorage").run().assertStatus().equals(507).assertBody().is("foo bar");
+		b.get("/insufficientStorage")
+			.run()
+			.assertStatus().is(507)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b09_internalServerError() throws Exception {
-		b.get("/internalServerError").run().assertStatus().equals(500).assertBody().is("foo bar");
+		b.get("/internalServerError")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b10_lengthRequired() throws Exception {
-		b.get("/lengthRequired").run().assertStatus().equals(411).assertBody().is("foo bar");
+		b.get("/lengthRequired")
+			.run()
+			.assertStatus().is(411)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b11_locked() throws Exception {
-		b.get("/locked").run().assertStatus().equals(423).assertBody().is("foo bar");
+		b.get("/locked")
+			.run()
+			.assertStatus().is(423)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b12_loopDetected() throws Exception {
-		b.get("/loopDetected").run().assertStatus().equals(508).assertBody().is("foo bar");
+		b.get("/loopDetected")
+			.run()
+			.assertStatus().is(508)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b13_methodNotAllowed() throws Exception {
-		b.get("/methodNotAllowed").run().assertStatus().equals(405).assertBody().is("foo bar");
+		b.get("/methodNotAllowed")
+			.run()
+			.assertStatus().is(405)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b14_misdirectedRequest() throws Exception {
-		b.get("/misdirectedRequest").run().assertStatus().equals(421).assertBody().is("foo bar");
+		b.get("/misdirectedRequest")
+			.run()
+			.assertStatus().is(421)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b15_networkAuthenticationRequired() throws Exception {
-		b.get("/networkAuthenticationRequired").run().assertStatus().equals(511).assertBody().is("foo bar");
+		b.get("/networkAuthenticationRequired")
+			.run()
+			.assertStatus().is(511)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b16_notAcceptable() throws Exception {
-		b.get("/notAcceptable").run().assertStatus().equals(406).assertBody().is("foo bar");
+		b.get("/notAcceptable")
+			.run()
+			.assertStatus().is(406)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b17_notExtended() throws Exception {
-		b.get("/notExtended").run().assertStatus().equals(510).assertBody().is("foo bar");
+		b.get("/notExtended")
+			.run()
+			.assertStatus().is(510)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b18_notFound() throws Exception {
-		b.get("/notFound").run().assertStatus().equals(404).assertBody().is("foo bar");
+		b.get("/notFound")
+			.run()
+			.assertStatus().is(404)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b19_notImplemented() throws Exception {
-		b.get("/notImplemented").run().assertStatus().equals(501).assertBody().is("foo bar");
+		b.get("/notImplemented")
+			.run()
+			.assertStatus().is(501)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b20_payloadTooLarge() throws Exception {
-		b.get("/payloadTooLarge").run().assertStatus().equals(413).assertBody().is("foo bar");
+		b.get("/payloadTooLarge")
+			.run()
+			.assertStatus().is(413)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b21_preconditionFailed() throws Exception {
-		b.get("/preconditionFailed").run().assertStatus().equals(412).assertBody().is("foo bar");
+		b.get("/preconditionFailed")
+			.run()
+			.assertStatus().is(412)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b22_preconditionRequired() throws Exception {
-		b.get("/preconditionRequired").run().assertStatus().equals(428).assertBody().is("foo bar");
+		b.get("/preconditionRequired")
+			.run()
+			.assertStatus().is(428)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b23_rangeNotSatisfiable() throws Exception {
-		b.get("/rangeNotSatisfiable").run().assertStatus().equals(416).assertBody().is("foo bar");
+		b.get("/rangeNotSatisfiable")
+			.run()
+			.assertStatus().is(416)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b24_requestHeaderFieldsTooLarge() throws Exception {
-		b.get("/requestHeaderFieldsTooLarge").run().assertStatus().equals(431).assertBody().is("foo bar");
+		b.get("/requestHeaderFieldsTooLarge")
+			.run()
+			.assertStatus().is(431)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b25_serviceUnavailable() throws Exception {
-		b.get("/serviceUnavailable").run().assertStatus().equals(503).assertBody().is("foo bar");
+		b.get("/serviceUnavailable")
+			.run()
+			.assertStatus().is(503)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b26_tooManyRequests() throws Exception {
-		b.get("/tooManyRequests").run().assertStatus().equals(429).assertBody().is("foo bar");
+		b.get("/tooManyRequests")
+			.run()
+			.assertStatus().is(429)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b27_unauthorized() throws Exception {
-		b.get("/unauthorized").run().assertStatus().equals(401).assertBody().is("foo bar");
+		b.get("/unauthorized")
+			.run()
+			.assertStatus().is(401)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b28_unavailableForLegalReasons() throws Exception {
-		b.get("/unavailableForLegalReasons").run().assertStatus().equals(451).assertBody().is("foo bar");
+		b.get("/unavailableForLegalReasons")
+			.run()
+			.assertStatus().is(451)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b29_unprocessableEntity() throws Exception {
-		b.get("/unprocessableEntity").run().assertStatus().equals(422).assertBody().is("foo bar");
+		b.get("/unprocessableEntity")
+			.run()
+			.assertStatus().is(422)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b30_unsupportedMediaType() throws Exception {
-		b.get("/unsupportedMediaType").run().assertStatus().equals(415).assertBody().is("foo bar");
+		b.get("/unsupportedMediaType")
+			.run()
+			.assertStatus().is(415)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b31_upgradeRequired() throws Exception {
-		b.get("/upgradeRequired").run().assertStatus().equals(426).assertBody().is("foo bar");
+		b.get("/upgradeRequired")
+			.run()
+			.assertStatus().is(426)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b32_uriTooLong() throws Exception {
-		b.get("/uriTooLong").run().assertStatus().equals(414).assertBody().is("foo bar");
+		b.get("/uriTooLong")
+			.run()
+			.assertStatus().is(414)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void b33_variantAlsoNegotiates() throws Exception {
-		b.get("/variantAlsoNegotiates").run().assertStatus().equals(506).assertBody().is("foo bar");
+		b.get("/variantAlsoNegotiates")
+			.run()
+			.assertStatus().is(506)
+			.assertBody().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -427,135 +625,234 @@ public class BasicTest {
 
 	@Test
 	public void c01_badRequest() throws Exception {
-		c.get("/badRequest").run().assertStatus().equals(400).assertBody().is("foo");
+		c.get("/badRequest")
+			.run()
+			.assertStatus().is(400)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c02_conflict() throws Exception {
-		c.get("/conflict").run().assertStatus().equals(409).assertBody().is("foo");
+		c.get("/conflict")
+			.run()
+			.assertStatus().is(409)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c03_expectationFailed() throws Exception {
-		c.get("/expectationFailed").run().assertStatus().equals(417).assertBody().is("foo");
+		c.get("/expectationFailed")
+			.run()
+			.assertStatus().is(417)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c04_failedDependency() throws Exception {
-		c.get("/failedDependency").run().assertStatus().equals(424).assertBody().is("foo");
+		c.get("/failedDependency")
+			.run()
+			.assertStatus().is(424)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c05_forbidden() throws Exception {
-		c.get("/forbidden").run().assertStatus().equals(403).assertBody().is("foo");
+		c.get("/forbidden")
+			.run()
+			.assertStatus().is(403)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c06_gone() throws Exception {
-		c.get("/gone").run().assertStatus().equals(410).assertBody().is("foo");
+		c.get("/gone")
+			.run()
+			.assertStatus().is(410)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c07_httpVersionNotSupported() throws Exception {
-		c.get("/httpVersionNotSupported").run().assertStatus().equals(505).assertBody().is("foo");
+		c.get("/httpVersionNotSupported")
+			.run()
+			.assertStatus().is(505)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c08_insufficientStorage() throws Exception {
-		c.get("/insufficientStorage").run().assertStatus().equals(507).assertBody().is("foo");
+		c.get("/insufficientStorage")
+			.run()
+			.assertStatus().is(507)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c09_internalServerError() throws Exception {
-		c.get("/internalServerError").run().assertStatus().equals(500).assertBody().is("foo");
+		c.get("/internalServerError")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c10_lengthRequired() throws Exception {
-		c.get("/lengthRequired").run().assertStatus().equals(411).assertBody().is("foo");
+		c.get("/lengthRequired")
+			.run()
+			.assertStatus().is(411)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c11_locked() throws Exception {
-		c.get("/locked").run().assertStatus().equals(423).assertBody().is("foo");
+		c.get("/locked")
+			.run()
+			.assertStatus().is(423)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c12_loopDetected() throws Exception {
-		c.get("/loopDetected").run().assertStatus().equals(508).assertBody().is("foo");
+		c.get("/loopDetected")
+			.run()
+			.assertStatus().is(508)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c13_methodNotAllowed() throws Exception {
-		c.get("/methodNotAllowed").run().assertStatus().equals(405).assertBody().is("foo");
+		c.get("/methodNotAllowed")
+			.run()
+			.assertStatus().is(405)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c14_misdirectedRequest() throws Exception {
-		c.get("/misdirectedRequest").run().assertStatus().equals(421).assertBody().is("foo");
+		c.get("/misdirectedRequest")
+			.run()
+			.assertStatus().is(421)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c15_networkAuthenticationRequired() throws Exception {
-		c.get("/networkAuthenticationRequired").run().assertStatus().equals(511).assertBody().is("foo");
+		c.get("/networkAuthenticationRequired")
+			.run()
+			.assertStatus().is(511)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c16_notAcceptable() throws Exception {
-		c.get("/notAcceptable").run().assertStatus().equals(406).assertBody().is("foo");
+		c.get("/notAcceptable")
+			.run()
+			.assertStatus().is(406)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c17_notExtended() throws Exception {
-		c.get("/notExtended").run().assertStatus().equals(510).assertBody().is("foo");
+		c.get("/notExtended")
+			.run()
+			.assertStatus().is(510)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c18_notFound() throws Exception {
-		c.get("/notFound").run().assertStatus().equals(404).assertBody().is("foo");
+		c.get("/notFound")
+			.run()
+			.assertStatus().is(404)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c19_notImplemented() throws Exception {
-		c.get("/notImplemented").run().assertStatus().equals(501).assertBody().is("foo");
+		c.get("/notImplemented")
+			.run()
+			.assertStatus().is(501)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c20_payloadTooLarge() throws Exception {
-		c.get("/payloadTooLarge").run().assertStatus().equals(413).assertBody().is("foo");
+		c.get("/payloadTooLarge")
+			.run()
+			.assertStatus().is(413)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c21_preconditionFailed() throws Exception {
-		c.get("/preconditionFailed").run().assertStatus().equals(412).assertBody().is("foo");
+		c.get("/preconditionFailed").
+			run()
+			.assertStatus().is(412)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c22_preconditionRequired() throws Exception {
-		c.get("/preconditionRequired").run().assertStatus().equals(428).assertBody().is("foo");
+		c.get("/preconditionRequired")
+			.run()
+			.assertStatus().is(428)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c23_rangeNotSatisfiable() throws Exception {
-		c.get("/rangeNotSatisfiable").run().assertStatus().equals(416).assertBody().is("foo");
+		c.get("/rangeNotSatisfiable")
+			.run()
+			.assertStatus().is(416)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c24_requestHeaderFieldsTooLarge() throws Exception {
-		c.get("/requestHeaderFieldsTooLarge").run().assertStatus().equals(431).assertBody().is("foo");
+		c.get("/requestHeaderFieldsTooLarge")
+			.run()
+			.assertStatus().is(431)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c25_serviceUnavailable() throws Exception {
-		c.get("/serviceUnavailable").run().assertStatus().equals(503).assertBody().is("foo");
+		c.get("/serviceUnavailable")
+			.run()
+			.assertStatus().is(503)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c26_tooManyRequests() throws Exception {
-		c.get("/tooManyRequests").run().assertStatus().equals(429).assertBody().is("foo");
+		c.get("/tooManyRequests")
+			.run()
+			.assertStatus().is(429)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c27_unauthorized() throws Exception {
-		c.get("/unauthorized").run().assertStatus().equals(401).assertBody().is("foo");
+		c.get("/unauthorized")
+			.run()
+			.assertStatus().is(401)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c28_unavailableForLegalReasons() throws Exception {
-		c.get("/unavailableForLegalReasons").run().assertStatus().equals(451).assertBody().is("foo");
+		c.get("/unavailableForLegalReasons")
+			.run()
+			.assertStatus().is(451)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c29_unprocessableEntity() throws Exception {
-		c.get("/unprocessableEntity").run().assertStatus().equals(422).assertBody().is("foo");
+		c.get("/unprocessableEntity")
+			.run()
+			.assertStatus().is(422)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c30_unsupportedMediaType() throws Exception {
-		c.get("/unsupportedMediaType").run().assertStatus().equals(415).assertBody().is("foo");
+		c.get("/unsupportedMediaType")
+			.run()
+			.assertStatus().is(415)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c31_upgradeRequired() throws Exception {
-		c.get("/upgradeRequired").run().assertStatus().equals(426).assertBody().is("foo");
+		c.get("/upgradeRequired")
+			.run()
+			.assertStatus().is(426)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c32_uriTooLong() throws Exception {
-		c.get("/uriTooLong").run().assertStatus().equals(414).assertBody().is("foo");
+		c.get("/uriTooLong")
+			.run()
+			.assertStatus().is(414)
+			.assertBody().is("foo");
 	}
 	@Test
 	public void c33_variantAlsoNegotiates() throws Exception {
-		c.get("/variantAlsoNegotiates").run().assertStatus().equals(506).assertBody().is("foo");
+		c.get("/variantAlsoNegotiates")
+			.run()
+			.assertStatus().is(506)
+			.assertBody().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -603,135 +900,234 @@ public class BasicTest {
 
 	@Test
 	public void d01_badRequest() throws Exception {
-		d.get("/badRequest").run().assertStatus().equals(400).assertBody().is("foo bar");
+		d.get("/badRequest")
+			.run()
+			.assertStatus().is(400)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d02_conflict() throws Exception {
-		d.get("/conflict").run().assertStatus().equals(409).assertBody().is("foo bar");
+		d.get("/conflict")
+			.run()
+			.assertStatus().is(409)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d03_expectationFailed() throws Exception {
-		d.get("/expectationFailed").run().assertStatus().equals(417).assertBody().is("foo bar");
+		d.get("/expectationFailed")
+			.run()
+			.assertStatus().is(417)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d04_failedDependency() throws Exception {
-		d.get("/failedDependency").run().assertStatus().equals(424).assertBody().is("foo bar");
+		d.get("/failedDependency")
+			.run()
+			.assertStatus().is(424)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d05_forbidden() throws Exception {
-		d.get("/forbidden").run().assertStatus().equals(403).assertBody().is("foo bar");
+		d.get("/forbidden")
+			.run()
+			.assertStatus().is(403)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d06_gone() throws Exception {
-		d.get("/gone").run().assertStatus().equals(410).assertBody().is("foo bar");
+		d.get("/gone")
+			.run()
+			.assertStatus().is(410)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d07_httpVersionNotSupported() throws Exception {
-		d.get("/httpVersionNotSupported").run().assertStatus().equals(505).assertBody().is("foo bar");
+		d.get("/httpVersionNotSupported")
+			.run()
+			.assertStatus().is(505)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d08_insufficientStorage() throws Exception {
-		d.get("/insufficientStorage").run().assertStatus().equals(507).assertBody().is("foo bar");
+		d.get("/insufficientStorage")
+			.run()
+			.assertStatus().is(507)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d09_internalServerError() throws Exception {
-		d.get("/internalServerError").run().assertStatus().equals(500).assertBody().is("foo bar");
+		d.get("/internalServerError")
+			.run()
+			.assertStatus().is(500)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d10_lengthRequired() throws Exception {
-		d.get("/lengthRequired").run().assertStatus().equals(411).assertBody().is("foo bar");
+		d.get("/lengthRequired")
+			.run()
+			.assertStatus().is(411)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d11_locked() throws Exception {
-		d.get("/locked").run().assertStatus().equals(423).assertBody().is("foo bar");
+		d.get("/locked")
+			.run()
+			.assertStatus().is(423)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d12_loopDetected() throws Exception {
-		d.get("/loopDetected").run().assertStatus().equals(508).assertBody().is("foo bar");
+		d.get("/loopDetected")
+			.run()
+			.assertStatus().is(508)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d13_methodNotAllowed() throws Exception {
-		d.get("/methodNotAllowed").run().assertStatus().equals(405).assertBody().is("foo bar");
+		d.get("/methodNotAllowed")
+			.run()
+			.assertStatus().is(405)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d14_misdirectedRequest() throws Exception {
-		d.get("/misdirectedRequest").run().assertStatus().equals(421).assertBody().is("foo bar");
+		d.get("/misdirectedRequest")
+			.run()
+			.assertStatus().is(421)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d15_networkAuthenticationRequired() throws Exception {
-		d.get("/networkAuthenticationRequired").run().assertStatus().equals(511).assertBody().is("foo bar");
+		d.get("/networkAuthenticationRequired")
+			.run()
+			.assertStatus().is(511)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d16_notAcceptable() throws Exception {
-		d.get("/notAcceptable").run().assertStatus().equals(406).assertBody().is("foo bar");
+		d.get("/notAcceptable")
+			.run()
+			.assertStatus().is(406)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d17_notExtended() throws Exception {
-		d.get("/notExtended").run().assertStatus().equals(510).assertBody().is("foo bar");
+		d.get("/notExtended")
+			.run()
+			.assertStatus().is(510)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d18_notFound() throws Exception {
-		d.get("/notFound").run().assertStatus().equals(404).assertBody().is("foo bar");
+		d.get("/notFound")
+			.run()
+			.assertStatus().is(404)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d19_notImplemented() throws Exception {
-		d.get("/notImplemented").run().assertStatus().equals(501).assertBody().is("foo bar");
+		d.get("/notImplemented")
+			.run()
+			.assertStatus().is(501)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d20_payloadTooLarge() throws Exception {
-		d.get("/payloadTooLarge").run().assertStatus().equals(413).assertBody().is("foo bar");
+		d.get("/payloadTooLarge")
+			.run()
+			.assertStatus().is(413)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d21_preconditionFailed() throws Exception {
-		d.get("/preconditionFailed").run().assertStatus().equals(412).assertBody().is("foo bar");
+		d.get("/preconditionFailed")
+			.run()
+			.assertStatus().is(412)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d22_preconditionRequired() throws Exception {
-		d.get("/preconditionRequired").run().assertStatus().equals(428).assertBody().is("foo bar");
+		d.get("/preconditionRequired")
+			.run()
+			.assertStatus().is(428)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d23_rangeNotSatisfiable() throws Exception {
-		d.get("/rangeNotSatisfiable").run().assertStatus().equals(416).assertBody().is("foo bar");
+		d.get("/rangeNotSatisfiable")
+			.run()
+			.assertStatus().is(416)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d24_requestHeaderFieldsTooLarge() throws Exception {
-		d.get("/requestHeaderFieldsTooLarge").run().assertStatus().equals(431).assertBody().is("foo bar");
+		d.get("/requestHeaderFieldsTooLarge")
+			.run()
+			.assertStatus().is(431)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d25_serviceUnavailable() throws Exception {
-		d.get("/serviceUnavailable").run().assertStatus().equals(503).assertBody().is("foo bar");
+		d.get("/serviceUnavailable")
+			.run()
+			.assertStatus().is(503)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d26_tooManyRequests() throws Exception {
-		d.get("/tooManyRequests").run().assertStatus().equals(429).assertBody().is("foo bar");
+		d.get("/tooManyRequests")
+			.run()
+			.assertStatus().is(429)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d27_unauthorized() throws Exception {
-		d.get("/unauthorized").run().assertStatus().equals(401).assertBody().is("foo bar");
+		d.get("/unauthorized")
+			.run()
+			.assertStatus().is(401)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d28_unavailableForLegalReasons() throws Exception {
-		d.get("/unavailableForLegalReasons").run().assertStatus().equals(451).assertBody().is("foo bar");
+		d.get("/unavailableForLegalReasons")
+			.run()
+			.assertStatus().is(451)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d29_unprocessableEntity() throws Exception {
-		d.get("/unprocessableEntity").run().assertStatus().equals(422).assertBody().is("foo bar");
+		d.get("/unprocessableEntity")
+			.run()
+			.assertStatus().is(422)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d30_unsupportedMediaType() throws Exception {
-		d.get("/unsupportedMediaType").run().assertStatus().equals(415).assertBody().is("foo bar");
+		d.get("/unsupportedMediaType")
+			.run()
+			.assertStatus().is(415)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d31_upgradeRequired() throws Exception {
-		d.get("/upgradeRequired").run().assertStatus().equals(426).assertBody().is("foo bar");
+		d.get("/upgradeRequired")
+			.run()
+			.assertStatus().is(426)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d32_uriTooLong() throws Exception {
-		d.get("/uriTooLong").run().assertStatus().equals(414).assertBody().is("foo bar");
+		d.get("/uriTooLong")
+			.run()
+			.assertStatus().is(414)
+			.assertBody().is("foo bar");
 	}
 	@Test
 	public void d33_variantAlsoNegotiates() throws Exception {
-		d.get("/variantAlsoNegotiates").run().assertStatus().equals(506).assertBody().is("foo bar");
+		d.get("/variantAlsoNegotiates")
+			.run()
+			.assertStatus().is(506)
+			.assertBody().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -747,7 +1143,11 @@ public class BasicTest {
 
 	@Test
 	public void e01_badRequest() throws Exception {
-		e.get("/badRequest").json().run().assertStatus().equals(400).assertBody().is("'foo bar'");
+		e.get("/badRequest")
+			.json()
+			.run()
+			.assertStatus().is(400)
+			.assertBody().is("'foo bar'");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -973,7 +1373,9 @@ public class BasicTest {
 
 	@Test
 	public void g01_thrownObjectDoesntMatchReturnType() throws Exception {
-		g.get("/thrownObjectDoesntMatchReturnType").run().assertStatus().equals(404);
+		g.get("/thrownObjectDoesntMatchReturnType")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -992,6 +1394,8 @@ public class BasicTest {
 
 	@Test
 	public void h01_parseExceptionCausesBadRequest() throws Exception {
-		h.get("/foo").run().assertStatus().equals(400);
+		h.get("/foo")
+			.run()
+			.assertStatus().is(400);
 	}
 }

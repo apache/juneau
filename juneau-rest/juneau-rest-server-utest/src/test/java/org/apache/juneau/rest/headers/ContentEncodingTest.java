@@ -58,7 +58,7 @@ public class ContentEncodingTest {
 	@Test
 	public void a02_noCompression_invalid() throws Exception {
 		a.put("?noTrace=true", compress("foo")).contentEncoding("mycoding").run()
-			.assertStatus().equals(415)
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
 				"Supported codings: ['identity']"
@@ -80,13 +80,24 @@ public class ContentEncodingTest {
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {
-		b.put("/", "foo").run().assertBody().is("foo");
-		b.put("/", "foo").contentEncoding("").run().assertBody().is("foo");
-		b.put("/", "foo").contentEncoding("identity").run().assertBody().is("foo");
+		b.put("/", "foo")
+			.run()
+			.assertBody().is("foo");
+		b.put("/", "foo")
+			.contentEncoding("")
+			.run()
+			.assertBody().is("foo");
+		b.put("/", "foo")
+			.contentEncoding("identity")
+			.run()
+			.assertBody().is("foo");
 	}
 	@Test
 	@Ignore
 	public void b02_withCompression_gzip() throws Exception {
-		b.put("/", compress("foo")).contentEncoding("mycoding").run().assertBody().is("foo");
+		b.put("/", compress("foo"))
+			.contentEncoding("mycoding")
+			.run()
+			.assertBody().is("foo");
 	}
 }

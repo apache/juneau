@@ -1680,7 +1680,7 @@ public class RestClientTest {
 			.get("/echo")
 			.runFuture()
 			.get()
-			.assertStatusCode().equals(200)
+			.assertStatusCode().is(200)
 			.assertBody().contains("HTTP GET /echo");
 	}
 

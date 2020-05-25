@@ -81,6 +81,16 @@ public class BasicDateHeader extends BasicHeader {
 	}
 
 	/**
+	 * Returns this header value as a {@link java.util.Date}.
+	 *
+	 * @return This header value as a {@link java.util.Date}, or <jk>null</jk> if the header could not be parsed.
+	 */
+	public java.util.Date asDate() {
+		Calendar c = asCalendar();
+		return c == null ? null : c.getTime();
+	}
+
+	/**
 	 * Returns this header value as a {@link java.util.Calendar}.
 	 *
 	 * @return This header value as a {@link java.util.Calendar}, or <jk>null</jk> if the header could not be parsed.

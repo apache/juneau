@@ -50,6 +50,7 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.*;
@@ -518,7 +519,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode(Mutable) getStatusCode(Mutable&lt;Integer&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase(Mutable) getReasonPhrase(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponse#assertStatusCode() assertStatusCode()} <jk>returns</jk> {@link RestResponseStatusCodeAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponse#assertStatusCode() assertStatusCode()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -617,7 +618,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertThat() assertThat()} <jk>returns</jk> {@link RestResponseHeaderAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertThat() assertThat()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -677,7 +678,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertThat() assertThat()} <jk>returns</jk> {@link RestResponseBodyAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertThat() assertThat()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *

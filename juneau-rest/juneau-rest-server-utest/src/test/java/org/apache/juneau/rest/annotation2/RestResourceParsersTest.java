@@ -128,9 +128,14 @@ public class RestResourceParsersTest {
 
 	@Test
 	public void a01_parserOnClass() throws Exception {
-		a.put("/parserOnClass", "test1").contentType("text/a").run().assertBody().is("text/a - test1");
-		a.put("/parserOnClass?noTrace=true", "test1").contentType("text/b").run()
-			.assertStatus().equals(415)
+		a.put("/parserOnClass", "test1")
+			.contentType("text/a")
+			.run()
+			.assertBody().is("text/a - test1");
+		a.put("/parserOnClass?noTrace=true", "test1")
+			.contentType("text/b")
+			.run()
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
 				"Supported media-types: ['text/a"
@@ -138,9 +143,14 @@ public class RestResourceParsersTest {
 	}
 	@Test
 	public void a02_parserOnMethod() throws Exception {
-		a.put("/parserOnMethod", "test2").contentType("text/b").run().assertBody().is("text/b - test2");
-		a.put("/parserOnMethod?noTrace=true", "test2").contentType("text/a").run()
-			.assertStatus().equals(415)
+		a.put("/parserOnMethod", "test2")
+			.contentType("text/b")
+			.run()
+			.assertBody().is("text/b - test2");
+		a.put("/parserOnMethod?noTrace=true", "test2")
+			.contentType("text/a")
+			.run()
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -148,18 +158,32 @@ public class RestResourceParsersTest {
 	}
 	@Test
 	public void a03_parserOverriddenOnMethod() throws Exception {
-		a.put("/parserOverriddenOnMethod", "test3").contentType("text/a").run().assertBody().is("text/a - test3");
-		a.put("/parserOverriddenOnMethod", "test3").contentType("text/b").run().assertBody().is("text/b - test3");
+		a.put("/parserOverriddenOnMethod", "test3")
+			.contentType("text/a")
+			.run()
+			.assertBody().is("text/a - test3");
+		a.put("/parserOverriddenOnMethod", "test3")
+			.contentType("text/b")
+			.run()
+			.assertBody().is("text/b - test3");
 	}
 	@Test
 	public void a04_parserWithDifferentMediaTypes() throws Exception {
-		a.put("/parserWithDifferentMediaTypes", "test4").contentType("text/a").run().assertBody().is("text/a - test4");
-		a.put("/parserWithDifferentMediaTypes", "test4").contentType("text/d").run().assertBody().is("text/d - test4");
+		a.put("/parserWithDifferentMediaTypes", "test4")
+			.contentType("text/a")
+			.run()
+			.assertBody().is("text/a - test4");
+		a.put("/parserWithDifferentMediaTypes", "test4")
+			.contentType("text/d")
+			.run()
+			.assertBody().is("text/d - test4");
 	}
 	@Test
 	public void a05_validErrorResponse() throws Exception {
-		a.put("/validErrorResponse?noTrace=true", "test1").contentType("text/bad").run()
-			.assertStatus().equals(415)
+		a.put("/validErrorResponse?noTrace=true", "test1")
+			.contentType("text/bad")
+			.run()
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
 				"Supported media-types: ['text/a"

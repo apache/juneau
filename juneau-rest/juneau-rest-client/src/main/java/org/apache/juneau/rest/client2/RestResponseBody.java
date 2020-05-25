@@ -23,6 +23,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
@@ -1581,8 +1582,8 @@ public class RestResponseBody implements HttpEntity {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public RestResponseBodyAssertion assertThat() throws RestCallException {
-		return new RestResponseBodyAssertion(asString(), response);
+	public FluentStringAssertion<RestResponse> assertThat() throws RestCallException {
+		return new FluentStringAssertion<>(asString(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

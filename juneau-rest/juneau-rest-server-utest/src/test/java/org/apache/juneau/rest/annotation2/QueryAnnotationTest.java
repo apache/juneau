@@ -294,26 +294,50 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void e01_optionalParam_integer() throws Exception {
-		e.get("/a?f1=123").run().assertStatus().equals(200).assertBody().is("123");
-		e.get("/a").run().assertStatus().equals(200).assertBody().is("null");
+		e.get("/a?f1=123")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("123");
+		e.get("/a")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void e02_optionalParam_bean() throws Exception {
-		e.get("/b?f1=a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
-		e.get("/b").run().assertStatus().equals(200).assertBody().is("null");
+		e.get("/b?f1=a=1,b=foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("{a:1,b:'foo'}");
+		e.get("/b")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void e03_optionalParam_listOfBeans() throws Exception {
-		e.get("/c?f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		e.get("/c").run().assertStatus().equals(200).assertBody().is("null");
+		e.get("/c?f1=@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		e.get("/c")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void e04_optionalParam_listOfOptionals() throws Exception {
-		e.get("/d?f1=@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		e.get("/d").run().assertStatus().equals(200).assertBody().is("null");
+		e.get("/d?f1=@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		e.get("/d")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 

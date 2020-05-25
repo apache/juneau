@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -49,16 +48,25 @@ public class HyperlinkTest {
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertEquals("<a href=\"/foo\">bar</a>", a.get("/a01").accept("text/html+stripped").run().getBodyAsString());
+		a.get("/a01")
+			.accept("text/html+stripped")
+			.run()
+			.assertBody().is("<a href=\"/foo\">bar</a>");
 	}
 
 	@Test
 	public void a02_array() throws Exception {
-		assertEquals("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>", a.get("/a02").accept("text/html+stripped").run().getBodyAsString());
+		a.get("/a02")
+			.accept("text/html+stripped")
+			.run()
+			.assertBody().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
 	}
 
 	@Test
 	public void a03_collection() throws Exception {
-		assertEquals("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>", a.get("/a03").accept("text/html+stripped").run().getBodyAsString());
+		a.get("/a03")
+			.accept("text/html+stripped")
+			.run()
+			.assertBody().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
 	}
 }

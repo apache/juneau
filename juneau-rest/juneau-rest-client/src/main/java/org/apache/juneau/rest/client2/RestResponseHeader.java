@@ -19,6 +19,8 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
@@ -131,6 +133,86 @@ public class RestResponseHeader implements Header {
 	 */
 	public String asString() {
 		return getValue();
+	}
+
+	/**
+	 * Returns the value of this header as a CSV array header.
+	 *
+	 * @return The value of this header as a CSV array header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicCsvArrayHeader asCsvArrayHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicCsvArrayHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as a date header.
+	 *
+	 * @return The value of this header as a date header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicDateHeader asDateHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicDateHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as an entity validator array header.
+	 *
+	 * @return The value of this header as an entity validator array header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicEntityValidatorArrayHeader asEntityValidatorArrayHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicEntityValidatorArrayHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as an integer header.
+	 *
+	 * @return The value of this header as an integer header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicIntegerHeader asIntegerHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicIntegerHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as a long header.
+	 *
+	 * @return The value of this header as a long header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicLongHeader asLongHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicLongHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as a range array header.
+	 *
+	 * @return The value of this header as a range array header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicRangeArrayHeader asRangeArrayHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicRangeArrayHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as a string header.
+	 *
+	 * @return The value of this header as a string header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicHeader asHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicHeader(getName(), v);
+	}
+
+	/**
+	 * Returns the value of this header as a URI header.
+	 *
+	 * @return The value of this header as a URI header, or <jk>null</jk> if header was not present.
+	 */
+	public BasicUriHeader asUriHeader() {
+		String v = getValue();
+		return v == null ? null : new BasicUriHeader(getName(), v);
 	}
 
 	/**
@@ -559,8 +641,68 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public RestResponseHeaderAssertion assertThat() throws RestCallException {
-		return new RestResponseHeaderAssertion(asString(), response);
+	public FluentStringAssertion<RestResponse> assertThat() throws RestCallException {
+		return new FluentStringAssertion<>(asString(), response);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on an integer response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content age is greather than 1.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentIntegerAssertion<RestResponse> assertThatInteger() throws RestCallException {
+		BasicIntegerHeader h = asIntegerHeader();
+		return new FluentIntegerAssertion<>(h == null ? -1 : h.asInt(), response);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a long response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response body is not too long.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentLongAssertion<RestResponse> assertThatLong() throws RestCallException {
+		BasicLongHeader h = asLongHeader();
+		return new FluentLongAssertion<>(h == null ? -1 : h.asLong(), response);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentDateAssertion<RestResponse> assertThatDate() throws RestCallException {
+		BasicDateHeader h = asDateHeader();
+		return new FluentDateAssertion<>(h == null ? null : h.asDate(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

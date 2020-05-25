@@ -18,6 +18,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 
@@ -332,31 +333,37 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	}
 
 	/**
-	 * Returns the body of the request as a string.
-	 *
-	 * @return The body of the request as a string.
-	 */
-	public String getBodyAsString() {
-		try {
-			return baos.toString("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
 	 * Returns the body of the request.
 	 *
 	 * @return The body of the request.
 	 */
 	@Override /* MockHttpResponse */
-	public byte[] getBody() {
-		return baos.toByteArray();
+	public MockServletResponseBody getBody() {
+		return new MockServletResponseBody(this, baos.toByteArray());
 	}
 
 	@Override /* MockHttpResponse */
 	public Map<String,String[]> getHeaders() {
 		return headerMap;
+	}
+
+	/**
+	 * Used for fluent assertion calls against a response header.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Returns the Foo header as a string.</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.getResponseHeader(<js>"Foo"</js>).asString();
+	 * </p>
+	 *
+	 * @param name The response header name.
+	 * @return A new fluent-style assertion object.
+	 */
+	public MockServletResponseHeader getResponseHeader(String name) {
+		return new MockServletResponseHeader(this, name, getHeader(name));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -368,17 +375,17 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response status code is 200 or 404.</jc>
+	 * 	<jc>// Validates that the response status code is 200 or 404.</jc>
 	 * 	mockClient
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertStatus().isOneOf(200,404);
+	 * 		.assertStatus().isAny(200,404);
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.
 	 */
-	public MockServletResponseStatusCodeAssertion assertStatus() {
-		return new MockServletResponseStatusCodeAssertion(getStatus(), this);
+	public FluentIntegerAssertion<MockServletResponse> assertStatus() {
+		return new FluentIntegerAssertion<>(getStatus(), this);
 	}
 
 	/**
@@ -386,17 +393,18 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body has the text "OK".</jc>
+	 * 	<jc>// Validates that the response body has the text "OK".</jc>
 	 * 	mockClient
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equals(<js>"OK"</js>);
+	 * 		.assertBody().is(<js>"OK"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.
+	 * @throws IOException An error occurred.
 	 */
-	public MockServletResponseBodyAssertion assertBody() {
-		return new MockServletResponseBodyAssertion(getBodyAsString(), this);
+	public FluentStringAssertion<MockServletResponse> assertBody() throws IOException {
+		return getBody().assertThat();
 	}
 
 	/**
@@ -404,7 +412,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response has the header Foo and contains "bar".</jc>
+	 * 	<jc>// Validates that the response has the header Foo and contains "bar".</jc>
 	 * 	mockClient
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
@@ -414,9 +422,73 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * @param name The header name.
 	 * @return A new fluent-style assertion object.
+	 * @throws IOException An error occurred.
 	 */
-	public MockServletResponseHeaderAssertion assertHeader(String name) {
-		return new MockServletResponseHeaderAssertion(getHeader(name), this);
+	public FluentStringAssertion<MockServletResponse> assertHeader(String name) throws IOException {
+		return getResponseHeader(name).assertThat();
+	}
+
+	/**
+	 * Used for fluent assertion calls against integer response headers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the age of the response exists and is greater than 1.</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertIntegerHeader(<js>"Age"</js>).exists()
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent-style assertion object.
+	 * @throws IOException An error occurred.
+	 */
+	public FluentIntegerAssertion<MockServletResponse> assertIntegerHeader(String name) throws IOException {
+		return getResponseHeader(name).assertThatInt();
+	}
+
+	/**
+	 * Used for fluent assertion calls against long response headers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response length is not too long.</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertLongHeader(<js>"Length"</js>).exists()
+	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent-style assertion object.
+	 * @throws IOException An error occurred.
+	 */
+	public FluentLongAssertion<MockServletResponse> assertLongHeader(String name) throws IOException {
+		return getResponseHeader(name).assertThatLong();
+	}
+
+	/**
+	 * Used for fluent assertion calls against date response headers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response isn't expired.</jc>
+	 * 	mockClient
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertDateHeader(<js>"Expires"</js>).exists()
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent-style assertion object.
+	 * @throws IOException An error occurred.
+	 */
+	public FluentDateAssertion<MockServletResponse> assertDateHeader(String name) throws IOException {
+		return getResponseHeader(name).assertThatDate();
 	}
 
 	/**
@@ -424,16 +496,16 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response has the header Foo and contains "bar".</jc>
+	 * 	<jc>// Validates that the response charset is UTF-8.</jc>
 	 * 	mockClient
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertCharset().equals("utf-8");
+	 * 		.assertCharset().equalsIgnoreCase("utf-8");
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.
 	 */
-	public MockServletResponseHeaderAssertion assertCharset() {
-		return new MockServletResponseHeaderAssertion(getCharacterEncoding(), this);
+	public FluentStringAssertion<MockServletResponse> assertCharset() {
+		return new FluentStringAssertion<>(getCharacterEncoding(), this);
 	}
 }

@@ -60,26 +60,53 @@ public class HeaderAnnotationTest {
 
 	@Test
 	public void a01_optionalParam_integer() throws Exception {
-		a.get("/a").header("f1", 123).run().assertStatus().equals(200).assertBody().is("123");
-		a.get("/a").run().assertStatus().equals(200).assertBody().is("null");
+		a.get("/a").header("f1", 123)
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("123");
+		a.get("/a")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void a02_optionalParam_bean() throws Exception {
-		a.get("/b").header("f1", "a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
-		a.get("/b").run().assertStatus().equals(200).assertBody().is("null");
+		a.get("/b")
+			.header("f1", "a=1,b=foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("{a:1,b:'foo'}");
+		a.get("/b")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void a03_optionalParam_listOfBeans() throws Exception {
-		a.get("/c").header("f1", "@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		a.get("/c").run().assertStatus().equals(200).assertBody().is("null");
+		a.get("/c")
+			.header("f1", "@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		a.get("/c")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 	@Test
 	public void a04_optionalParam_listOfOptionals() throws Exception {
-		a.get("/d").header("f1", "@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
-		a.get("/d").run().assertStatus().equals(200).assertBody().is("null");
+		a.get("/d")
+			.header("f1", "@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
+		a.get("/d")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("null");
 	}
 
 

@@ -32,7 +32,7 @@ public class BasicHeader extends org.apache.http.message.BasicHeader {
 	 * @param name Header name.
 	 * @param value Header value.
 	 */
-	protected BasicHeader(String name, String value) {
+	public BasicHeader(String name, String value) {
 		super(name, value);
 	}
 

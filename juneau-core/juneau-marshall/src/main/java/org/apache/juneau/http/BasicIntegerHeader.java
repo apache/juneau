@@ -41,7 +41,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param name HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicIntegerHeader(String name, Object value) {
+	public BasicIntegerHeader(String name, Object value) {
 		super(name, StringUtils.asString(value));
 		this.value = toInt(value);
 	}

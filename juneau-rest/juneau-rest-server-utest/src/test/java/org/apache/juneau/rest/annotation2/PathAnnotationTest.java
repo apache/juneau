@@ -64,28 +64,42 @@ public class PathAnnotationTest {
 
 	@Test
 	public void a00_nonExistentPath() throws Exception {
-		a.get("/bad?noTrace=true").run().assertStatus().equals(404);
+		a.get("/bad?noTrace=true")
+			.run()
+			.assertStatus().is(404);
 	}
 	@Test
 	public void a01_noPath() throws Exception {
-		a.get(null).run().assertBody().is("GET");
-		a.get().run().assertBody().is("GET");
+		a.get(null)
+			.run()
+			.assertBody().is("GET");
+		a.get()
+			.run()
+			.assertBody().is("GET");
 	}
 	@Test
 	public void a02_simplePath() throws Exception {
-		a.get("/a").run().assertBody().is("GET /a");
+		a.get("/a")
+			.run()
+			.assertBody().is("GET /a");
 	}
 	@Test
 	public void a03_simplePathOneVar() throws Exception {
-		a.get("/a/foo").run().assertBody().is("GET /a foo");
+		a.get("/a/foo")
+			.run()
+			.assertBody().is("GET /a foo");
 	}
 	@Test
 	public void a04_simplePathTwoVars() throws Exception {
-		a.get("/a/foo/bar").run().assertBody().is("GET /a foo,bar");
+		a.get("/a/foo/bar")
+			.run()
+			.assertBody().is("GET /a foo,bar");
 	}
 	@Test
 	public void a05_simplePathWithRemainder() throws Exception {
-		a.get("/a/foo/123/baz").run().assertBody().is("GET /a foo,123,r=baz");
+		a.get("/a/foo/123/baz")
+			.run()
+			.assertBody().is("GET /a foo,123,r=baz");
 	}
 	@Test
 	public void a06_urlEncodedPathPart() throws Exception {
@@ -93,8 +107,12 @@ public class PathAnnotationTest {
 		// This should match /get1/{foo} and not /get1/{foo}/{bar}
 		// NOTE:  When testing on Tomcat, must specify the following system property:
 		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
-		a.get("/a/x%2Fy").run().assertBody().is("GET /a x/y");
-		a.get("/a/x%2Fy/x%2Fy").run().assertBody().is("GET /a x/y,x/y");
+		a.get("/a/x%2Fy")
+			.run()
+			.assertBody().is("GET /a x/y");
+		a.get("/a/x%2Fy/x%2Fy")
+			.run()
+			.assertBody().is("GET /a x/y,x/y");
 	}
 
 	//=================================================================================================================
@@ -140,43 +158,75 @@ public class PathAnnotationTest {
 
 	@Test
 	public void b01_int() throws Exception {
-		b.get("/int/123/foo").run().assertBody().is("123");
-		b.get("/int/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/int/123/foo")
+			.run()
+			.assertBody().is("123");
+		b.get("/int/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b02_short() throws Exception {
-		b.get("/short/123/foo").run().assertBody().is("123");
-		b.get("/short/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/short/123/foo")
+			.run()
+			.assertBody().is("123");
+		b.get("/short/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b03_long() throws Exception {
-		b.get("/long/123/foo").run().assertBody().is("123");
-		b.get("/long/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/long/123/foo")
+			.run()
+			.assertBody().is("123");
+		b.get("/long/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b04_char() throws Exception {
-		b.get("/char/c/foo").run().assertBody().is("c");
-		b.get("/char/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/char/c/foo")
+			.run()
+			.assertBody().is("c");
+		b.get("/char/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b05_float() throws Exception {
-		b.get("/float/1.23/foo").run().assertBody().is("1.23");
-		b.get("/float/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/float/1.23/foo")
+			.run()
+			.assertBody().is("1.23");
+		b.get("/float/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b06_double() throws Exception {
-		b.get("/double/1.23/foo").run().assertBody().is("1.23");
-		b.get("/double/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/double/1.23/foo")
+			.run()
+			.assertBody().is("1.23");
+		b.get("/double/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b07_byte() throws Exception {
-		b.get("/byte/123/foo").run().assertBody().is("123");
-		b.get("/byte/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/byte/123/foo")
+			.run()
+			.assertBody().is("123");
+		b.get("/byte/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b08_boolean() throws Exception {
-		b.get("/boolean/true/foo").run().assertBody().is("true");
-		b.get("/boolean/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		b.get("/boolean/true/foo")
+			.run()
+			.assertBody().is("true");
+		b.get("/boolean/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 
 	//=================================================================================================================
@@ -222,43 +272,75 @@ public class PathAnnotationTest {
 
 	@Test
 	public void c01_Integer() throws Exception {
-		c.get("/Integer/123/foo").run().assertBody().is("123");
-		c.get("/Integer/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Integer/123/foo")
+			.run()
+			.assertBody().is("123");
+		c.get("/Integer/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c02_Short() throws Exception {
-		c.get("/Short/123/foo").run().assertBody().is("123");
-		c.get("/Short/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Short/123/foo")
+			.run()
+			.assertBody().is("123");
+		c.get("/Short/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c03_Long() throws Exception {
-		c.get("/Long/123/foo").run().assertBody().is("123");
-		c.get("/Long/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Long/123/foo")
+			.run()
+			.assertBody().is("123");
+		c.get("/Long/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c04_Char() throws Exception {
-		c.get("/Character/c/foo").run().assertBody().is("c");
-		c.get("/Character/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Character/c/foo")
+			.run()
+			.assertBody().is("c");
+		c.get("/Character/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c05_Float() throws Exception {
-		c.get("/Float/1.23/foo").run().assertBody().is("1.23");
-		c.get("/Float/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Float/1.23/foo")
+			.run()
+			.assertBody().is("1.23");
+		c.get("/Float/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c06_Double() throws Exception {
-		c.get("/Double/1.23/foo").run().assertBody().is("1.23");
-		c.get("/Double/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Double/1.23/foo")
+			.run()
+			.assertBody().is("1.23");
+		c.get("/Double/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c07_Byte() throws Exception {
-		c.get("/Byte/123/foo").run().assertBody().is("123");
-		c.get("/Byte/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Byte/123/foo")
+			.run()
+			.assertBody().is("123");
+		c.get("/Byte/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c08_Boolean() throws Exception {
-		c.get("/Boolean/true/foo").run().assertBody().is("true");
-		c.get("/Boolean/bad/foo?noTrace=true").run().assertStatus().equals(400);
+		c.get("/Boolean/true/foo")
+			.run()
+			.assertBody().is("true");
+		c.get("/Boolean/bad/foo?noTrace=true")
+			.run()
+			.assertStatus().is(400);
 	}
 
 	//=================================================================================================================
@@ -278,7 +360,9 @@ public class PathAnnotationTest {
 	@Test
 	public void d01_uuid() throws Exception {
 		UUID uuid = UUID.randomUUID();
-		d.get("/uuid/" + uuid).run().assertBody().is(uuid.toString());
+		d.get("/uuid/" + uuid)
+			.run()
+			.assertBody().is(uuid.toString());
 	}
 
 	//=================================================================================================================
@@ -312,23 +396,33 @@ public class PathAnnotationTest {
 
 	@Test
 	public void e01_normal1() throws Exception {
-		e.get("/x/x1/x2").run().assertBody().is("{m:'normal1',foo:'x1',bar:'x2'}");
+		e.get("/x/x1/x2")
+			.run()
+			.assertBody().is("{m:'normal1',foo:'x1',bar:'x2'}");
 	}
 	@Test
 	public void e02_normal2() throws Exception {
-		e.get("/x/x1/x/x2/x").run().assertBody().is("{m:'normal2',foo:'x1',bar:'x2'}");
+		e.get("/x/x1/x/x2/x")
+			.run()
+			.assertBody().is("{m:'normal2',foo:'x1',bar:'x2'}");
 	}
 	@Test
 	public void e03_numbers1() throws Exception {
-		e.get("/y/y1/y2").run().assertBody().is("{m:'numbers1','0':'y1','1':'y2'}");
+		e.get("/y/y1/y2")
+			.run()
+			.assertBody().is("{m:'numbers1','0':'y1','1':'y2'}");
 	}
 	@Test
 	public void e04_numbers2() throws Exception {
-		e.get("/y/y1/y/y2/y").run().assertBody().is("{m:'numbers2','0':'y1','1':'y2'}");
+		e.get("/y/y1/y/y2/y")
+			.run()
+			.assertBody().is("{m:'numbers2','0':'y1','1':'y2'}");
 	}
 	@Test
 	public void e05_numbers3() throws Exception {
-		e.get("/z/z1/z/z2/z").run().assertBody().is("{m:'numbers3','0':'z2','1':'z1'}");
+		e.get("/z/z1/z/z2/z")
+			.run()
+			.assertBody().is("{m:'numbers3','0':'z2','1':'z1'}");
 	}
 
 	//=================================================================================================================
@@ -369,78 +463,126 @@ public class PathAnnotationTest {
 
 	@Test
 	public void f01a_noPath() throws Exception {
-		f.get("/f/x1/x2").run().assertBody().is("noPath: {a:'x1',b:'x2'}");
+		f.get("/f/x1/x2")
+			.run()
+			.assertBody().is("noPath: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f01b_incompletePath() throws Exception {
-		f.get("/f/x1").run().assertStatus().equals(404);
-		f.get("/f").run().assertStatus().equals(404);
+		f.get("/f/x1")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f01c_noPath_blanks() throws Exception {
-		f.get("/f//").run().assertStatus().equals(404);
-		f.get("/f/x/").run().assertStatus().equals(404);
-		f.get("/f//x").run().assertStatus().equals(404);
+		f.get("/f//")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f/x/")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f//x")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f02a_noPath2() throws Exception {
-		f.get("/f/x1/x2/foo").run().assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
+		f.get("/f/x1/x2/foo")
+			.run()
+			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f02b_noPath2_blanks() throws Exception {
-		f.get("/f///foo").run().assertStatus().equals(404);
-		f.get("/f/x1//foo").run().assertStatus().equals(404);
-		f.get("/f//x2/foo").run().assertStatus().equals(404);
+		f.get("/f///foo")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f/x1//foo")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f//x2/foo")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f03a_noVars() throws Exception {
-		f.get("/f/x1/x2/a").run().assertBody().is("noVars: {a:'x1',b:'x2'}");
+		f.get("/f/x1/x2/a")
+			.run()
+			.assertBody().is("noVars: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f03b_noVars_blanks() throws Exception {
-		f.get("/f///a").run().assertStatus().equals(404);
-		f.get("/f/x1//a").run().assertStatus().equals(404);
-		f.get("/f//x2/a").run().assertStatus().equals(404);
+		f.get("/f///a")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f/x1//a")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f//x2/a")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f04a_twoVars() throws Exception {
-		f.get("/f/x1/x2/b/x3/x4").run().assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+		f.get("/f/x1/x2/b/x3/x4")
+			.run()
+			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f04b_twoVars_blanks() throws Exception {
-		f.get("/f//x2/b/x3/x4").run().assertStatus().equals(404);
-		f.get("/f/x1//b/x3/x4").run().assertStatus().equals(404);
-		f.get("/f/x1/x2/b//x4").run().assertStatus().equals(200);
-		f.get("/f/x1/x2/b/x3/").run().assertStatus().equals(200);
-		f.get("/f///b//").run().assertStatus().equals(404);
+		f.get("/f//x2/b/x3/x4")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f/x1//b/x3/x4")
+			.run()
+			.assertStatus().is(404);
+		f.get("/f/x1/x2/b//x4")
+			.run()
+			.assertStatus().is(200);
+		f.get("/f/x1/x2/b/x3/")
+			.run()
+			.assertStatus().is(200);
+		f.get("/f///b//")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f05_twoVarsOverlapping() throws Exception {
-		f.get("/f/x1/x2/c/x3/x4").run().assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
+		f.get("/f/x1/x2/c/x3/x4")
+			.run()
+			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
 	}
 
 	@Test
 	public void f06a_withRemainder() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4").run().assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+		f.get("/f/x1/x2/d/x3/x4")
+			.run()
+			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f06b_withRemainder_lank() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4/").run().assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+		f.get("/f/x1/x2/d/x3/x4/")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f06c_withRemainderWithStuff() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4/foo/bar").run().assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+		f.get("/f/x1/x2/d/x3/x4/foo/bar")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	//=================================================================================================================
@@ -454,66 +596,106 @@ public class PathAnnotationTest {
 
 	@Test
 	public void g01a_noPath() throws Exception {
-		g.get("/f/x1/x2").run().assertBody().is("noPath: {a:'x1',b:'x2'}");
+		g.get("/f/x1/x2")
+			.run()
+			.assertBody().is("noPath: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void g01b_incompletePath() throws Exception {
-		g.get("/f/x1").run().assertStatus().equals(404);
-		g.get("/f").run().assertStatus().equals(404);
+		g.get("/f/x1")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g01c_noPath_blanks() throws Exception {
-		g.get("/f//").run().assertStatus().equals(404);
-		g.get("/f/x1/").run().assertStatus().equals(404);
-		g.get("/f//x2").run().assertStatus().equals(404);
+		g.get("/f//")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f/x1/")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f//x2")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g02a_noVars() throws Exception {
-		g.get("/f/x1/x2/a").run().assertBody().is("noVars: {a:'x1',b:'x2'}");
+		g.get("/f/x1/x2/a")
+			.run()
+			.assertBody().is("noVars: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void g02b_noVars_blanks() throws Exception {
-		g.get("/f///a").run().assertStatus().equals(404);
-		g.get("/f/x1//a").run().assertStatus().equals(404);
-		g.get("/f//x2/a").run().assertStatus().equals(404);
+		g.get("/f///a")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f/x1//a")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f//x2/a")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g03a_twoVars() throws Exception {
-		g.get("/f/x1/x2/b/x3/x4").run().assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+		g.get("/f/x1/x2/b/x3/x4")
+			.run()
+			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g03b_twoVars_blanks() throws Exception {
-		g.get("/f//x2/b/x3/x4").run().assertStatus().equals(404);
-		g.get("/f/x1//b/x3/x4").run().assertStatus().equals(404);
-		g.get("/f/x1/x2/b//x4").run().assertStatus().equals(200);
-		g.get("/f/x1/x2/b/x3/").run().assertStatus().equals(200);
-		g.get("/f///b//").run().assertStatus().equals(404);
+		g.get("/f//x2/b/x3/x4")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f/x1//b/x3/x4")
+			.run()
+			.assertStatus().is(404);
+		g.get("/f/x1/x2/b//x4")
+			.run()
+			.assertStatus().is(200);
+		g.get("/f/x1/x2/b/x3/")
+			.run()
+			.assertStatus().is(200);
+		g.get("/f///b//")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g04_twoVarsOverlapping() throws Exception {
-		g.get("/f/x1/x2/c/x3/x4").run().assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
+		g.get("/f/x1/x2/c/x3/x4")
+			.run()
+			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
 	}
 
 	@Test
 	public void g05a_withRemainder() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4").run().assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+		g.get("/f/x1/x2/d/x3/x4")
+			.run()
+			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g05b_withRemainderBlank() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4/").run().assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+		g.get("/f/x1/x2/d/x3/x4/")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g05c_withRemainderWithStuff() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4/foo/bar").run().assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+		g.get("/f/x1/x2/d/x3/x4/foo/bar")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	//=================================================================================================================
@@ -527,79 +709,135 @@ public class PathAnnotationTest {
 
 	@Test
 	public void h01a_noPath() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2").run().assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2")
+			.run()
+			.assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h01b_incompletePath() throws Exception {
 		// These are 405 instead of 404 because when children don't match, we try to find a matching Java method.
-		h.get("/h/ha1/hb1/f/x1").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1").run().assertStatus().equals(404);
-		h.get("/h/ha1").run().assertStatus().equals(404);
-		h.get("/h").run().assertStatus().equals(404);
+		h.get("/h/ha1/hb1/f/x1")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h01c_noPath_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2").run().assertStatus().equals(404);
-		h.get("/h/ha1//f/x1/x2").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f//x2").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f/x1/").run().assertStatus().equals(404);
-		h.get("/h///f//").run().assertStatus().equals(404);
+		h.get("/h//hb1/f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1//f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f//x2")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f/x1/")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h///f//")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h02a_noPath2() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/foo").run().assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/foo")
+			.run()
+			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h02b_noPath2_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2/foo").run().assertStatus().equals(404);
-		h.get("/h/ha1//f/x1/x2/foo").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f//x2/foo").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f/x1//foo").run().assertStatus().equals(404);
-		h.get("/h///f///foo").run().assertStatus().equals(404);
+		h.get("/h//hb1/f/x1/x2/foo")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1//f/x1/x2/foo")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f//x2/foo")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f/x1//foo")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h///f///foo")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h03a_noVars() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/a").run().assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/a")
+			.run()
+			.assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h03b_noVars_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2/a").run().assertStatus().equals(404);
-		h.get("/h/ha1//f/x1/x2/a").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f//x2/a").run().assertStatus().equals(404);
-		h.get("/h/ha1/hb1/f/x1//a").run().assertStatus().equals(404);
-		h.get("/h///f///a").run().assertStatus().equals(404);
+		h.get("/h//hb1/f/x1/x2/a")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1//f/x1/x2/a")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f//x2/a")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h/ha1/hb1/f/x1//a")
+			.run()
+			.assertStatus().is(404);
+		h.get("/h///f///a")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h04_twoVars() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/b/x3/x4").run().assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/b/x3/x4")
+			.run()
+			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h05_twoVarsOverlapping() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/c/x3/x4").run().assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/c/x3/x4")
+			.run()
+			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06a_withRemainder() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4").run().assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4")
+			.run()
+			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06b_withRemainderBlank() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/").run().assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06c_withRemainderWithStuff() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar").run().assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	//=================================================================================================================
@@ -613,65 +851,111 @@ public class PathAnnotationTest {
 
 	@Test
 	public void i01a_noPath() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2").run().assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
+			.run()
+			.assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i01b_incompletePath() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1").run().assertStatus().equals(404);
-		i.get("/i/ia1").run().assertStatus().equals(404);
-		i.get("/i").run().assertStatus().equals(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void i01c_noPath_blanks() throws Exception {
-		i.get("/i//ib1/h/ha1/hb1/f/x1/x2").run().assertStatus().equals(404);
-		i.get("/i/ia1//h/ha1/hb1/f/x1/x2").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h//hb1/f/x1/x2").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1//f/x1/x2").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f//x2").run().assertStatus().equals(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/").run().assertStatus().equals(404);
-		i.get("/i///h///f//").run().assertStatus().equals(404);
+		i.get("/i//ib1/h/ha1/hb1/f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1//h/ha1/hb1/f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h//hb1/f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1//f/x1/x2")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f//x2")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/")
+			.run()
+			.assertStatus().is(404);
+		i.get("/i///h///f//")
+			.run()
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void i02_noPath2() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo").run().assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo")
+			.run()
+			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i03_noVars() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/a").run().assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/a")
+			.run()
+			.assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i04_twoVars() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/b/x3/x4").run().assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/b/x3/x4")
+			.run()
+			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i05_twoVarsOverlapping() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/c/x3/x4").run().assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/c/x3/x4")
+			.run()
+			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06a_withRemainder() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4").run().assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4")
+			.run()
+			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06b_withRemainderBlank() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/").run().assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06c_withRemainderWithStuff() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar").run().assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
+			.run()
+			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	//=================================================================================================================
@@ -704,22 +988,34 @@ public class PathAnnotationTest {
 
 	@Test
 	public void j01_optionalParam_integer() throws Exception {
-		j.get("/a/123").run().assertStatus().equals(200).assertBody().is("123");
+		j.get("/a/123")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("123");
 	}
 
 	@Test
 	public void j02_optionalParam_bean() throws Exception {
-		j.get("/b/a=1,b=foo").run().assertStatus().equals(200).assertBody().is("{a:1,b:'foo'}");
+		j.get("/b/a=1,b=foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("{a:1,b:'foo'}");
 	}
 
 	@Test
 	public void j03_optionalParam_listOfBeans() throws Exception {
-		j.get("/c/@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		j.get("/c/@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test
 	public void j04_optionalParam_listOfOptionals() throws Exception {
-		j.get("/d/@((a=1,b=foo))").run().assertStatus().equals(200).assertBody().is("[{a:1,b:'foo'}]");
+		j.get("/d/@((a=1,b=foo))")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 
 
@@ -1125,10 +1421,22 @@ public class PathAnnotationTest {
 
 	@Test
 	public void u01_nonRequiredPath() throws Exception {
-		u1.get("/u1/foo/u2").run().assertStatus().equals(200).assertBody().is("foo");
-		u1.get("/u1/foo/u2/foo/xxx").run().assertStatus().equals(200).assertBody().is("foo,xxx");
-		u2.get("/").run().assertStatus().equals(200).assertBody().is("nil");
-		u2.get("/foo/xxx").run().assertStatus().equals(200).assertBody().is("nil,xxx");
+		u1.get("/u1/foo/u2")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo");
+		u1.get("/u1/foo/u2/foo/xxx")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("foo,xxx");
+		u2.get("/")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("nil");
+		u2.get("/foo/xxx")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("nil,xxx");
 	}
 
 	//=================================================================================================================
@@ -1155,13 +1463,37 @@ public class PathAnnotationTest {
 
 	@Test
 	public void v01_multiplePaths() throws Exception {
-		v1.get("/v1/v1foo/v2").run().assertStatus().equals(200).assertBody().is("1,v1foo,nil");
-		v1.get("/v1/v1foo/v2/v2foo").run().assertStatus().equals(200).assertBody().is("1,v1foo,v2foo");
-		v1.get("/v1/v1foo/v2/foo").run().assertStatus().equals(200).assertBody().is("2,v1foo,nil");
-		v1.get("/v1/v1foo/v2/foo/v2foo").run().assertStatus().equals(200).assertBody().is("2,v1foo,v2foo");
-		v2.get("/v2").run().assertStatus().equals(200).assertBody().is("1,nil,nil");
-		v2.get("/v2/v2foo").run().assertStatus().equals(200).assertBody().is("1,nil,v2foo");
-		v2.get("/v2/foo").run().assertStatus().equals(200).assertBody().is("2,nil,nil");
-		v2.get("/v2/foo/v2foo").run().assertStatus().equals(200).assertBody().is("2,nil,v2foo");
+		v1.get("/v1/v1foo/v2")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1,v1foo,nil");
+		v1.get("/v1/v1foo/v2/v2foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1,v1foo,v2foo");
+		v1.get("/v1/v1foo/v2/foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("2,v1foo,nil");
+		v1.get("/v1/v1foo/v2/foo/v2foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("2,v1foo,v2foo");
+		v2.get("/v2")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1,nil,nil");
+		v2.get("/v2/v2foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("1,nil,v2foo");
+		v2.get("/v2/foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("2,nil,nil");
+		v2.get("/v2/foo/v2foo")
+			.run()
+			.assertStatus().is(200)
+			.assertBody().is("2,nil,v2foo");
 	}
 }

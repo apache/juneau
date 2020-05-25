@@ -42,7 +42,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicRangeArrayHeader(String name, String value) {
+	public BasicRangeArrayHeader(String name, String value) {
 		super(name, value);
 		this.typeRanges = StringRange.parse(value);
 		this.typeRangesList = AList.unmodifiable(typeRanges);

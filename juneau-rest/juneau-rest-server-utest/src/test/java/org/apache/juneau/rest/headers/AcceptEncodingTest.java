@@ -72,37 +72,37 @@ public class AcceptEncodingTest {
 	@Test
 	public void a03_noCompression_nomatch() throws Exception {
 		a.get("?noTrace=true").acceptEncoding("mycoding,identity;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,identity;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("mycoding,*;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,*;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("identity;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("identity;q=0.0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("*;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("*;q=0.0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['identity']"
@@ -134,38 +134,38 @@ public class AcceptEncodingTest {
 	}
 	@Test
 	public void b03_withCompression_gzip() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").run().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").run().getBody().asBytes()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").run().getBody().asBytes()));
 	}
 	@Test
 	public void b04_withCompression_gzip_qValues() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").run().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").run().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().getBody()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").run().getBody().asBytes()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").run().getBody().asBytes()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().getBody().asBytes()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().getBody().asBytes()));
 	}
 	@Test
 	public void b05_withCompression_nomatch() throws Exception {
 		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0.0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("*;q=0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("*;q=0.0").run()
-			.assertStatus().equals(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
@@ -240,11 +240,11 @@ public class AcceptEncodingTest {
 		byte[] body;
 		body = c.get("/c03").acceptEncoding("mycoding").run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
-			.getBody();
+			.getBody().asBytes();
 		assertEquals("foo", decompress(body));
 		body = c.get("/c03").acceptEncoding("*").run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
-			.getBody();
+			.getBody().asBytes();
 		assertEquals("foo", decompress(body));
 	}
 	@Test

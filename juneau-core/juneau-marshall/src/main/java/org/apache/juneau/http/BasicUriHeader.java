@@ -41,7 +41,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param name The HTTP header name.
 	 * @param value The raw header value.
 	 */
-	protected BasicUriHeader(String name, String value) {
+	public BasicUriHeader(String name, String value) {
 		super(name, value);
 		this.value = StringUtils.trim(value);
 	}

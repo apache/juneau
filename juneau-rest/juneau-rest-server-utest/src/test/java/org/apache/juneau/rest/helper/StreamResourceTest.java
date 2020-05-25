@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -69,36 +68,50 @@ public class StreamResourceTest {
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertEquals("foo", a.get("/a01").run().getBodyAsString());
+		a.get("/a01")
+			.run()
+			.assertBody().is("foo");
 	}
 
 	@Test
 	public void a02_headers() throws Exception {
-		assertEquals("Bar", a.get("/a02").run().getHeader("Foo"));
+		a.get("/a02")
+			.run()
+			.assertHeader("Foo").is("Bar");
 	}
 
 	@Test
 	public void a03_contentType() throws Exception {
-		assertEquals("application/json", a.get("/a03").run().getHeader("Content-Type"));
+		a.get("/a03")
+			.run()
+			.assertHeader("Content-Type").is("application/json");
 	}
 
 	@Test
 	public void a04_byteArray() throws Exception {
-		assertEquals("foo", a.get("/a04").run().getBodyAsString());
+		a.get("/a04")
+			.run()
+			.assertBody().is("foo");
 	}
 
 	@Test
 	public void a05_inputStream() throws Exception {
-		assertEquals("foo", a.get("/a05").run().getBodyAsString());
+		a.get("/a05")
+			.run()
+			.assertBody().is("foo");
 	}
 
 	@Test
 	public void a06_reader() throws Exception {
-		assertEquals("foo", a.get("/a06").run().getBodyAsString());
+		a.get("/a06")
+			.run()
+			.assertBody().is("foo");
 	}
 
 	@Test
 	public void a07_charSequence() throws Exception {
-		assertEquals("foo", a.get("/a07").run().getBodyAsString());
+		a.get("/a07")
+			.run()
+			.assertBody().is("foo");
 	}
 }

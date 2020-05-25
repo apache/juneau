@@ -55,15 +55,24 @@ public class ResponseHeaderAnnotationTest {
 
 	@Test
 	public void a01_valueOnParameterPojo() throws Exception {
-		a.get("/a01").run().assertStatus().equals(200).assertHeader("Foo").is("foo");
+		a.get("/a01")
+			.run()
+			.assertStatus().is(200)
+			.assertHeader("Foo").is("foo");
 	}
 	@Test
 	public void a02_valueOnParameterString() throws Exception {
-		a.get("/a02").run().assertStatus().equals(200).assertHeader("Foo").is("foo");
+		a.get("/a02")
+			.run()
+			.assertStatus().is(200)
+			.assertHeader("Foo").is("foo");
 	}
 	@Test
 	public void a03_valueOnParameterOverrideName() throws Exception {
-		a.get("/a03").run().assertStatus().equals(200).assertHeader("Bar").is("foo");
+		a.get("/a03")
+			.run()
+			.assertStatus().is(200)
+			.assertHeader("Bar").is("foo");
 	}
 
 	//=================================================================================================================
