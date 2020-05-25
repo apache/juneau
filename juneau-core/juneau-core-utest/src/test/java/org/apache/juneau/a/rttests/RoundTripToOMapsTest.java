@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -26,6 +27,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripToOMapsTest extends RoundTripTest {
 
 	public RoundTripToOMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

@@ -13,17 +13,13 @@
 package org.apache.juneau.rest.annotation;
 
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests related to @HtmlDoc(navlinks) annotation.
- *
- * TODO - Remove in 9.0.  Replaced by HtmlDocConfigNavlinksTest.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings({"serial","deprecation"})
 public class HtmlDocNavlinksTest {
 

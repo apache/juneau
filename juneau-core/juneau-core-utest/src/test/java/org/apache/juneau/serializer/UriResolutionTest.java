@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -31,7 +33,7 @@ import org.junit.runners.*;
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class UriResolutionTest {
 

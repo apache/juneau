@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
@@ -19,6 +21,7 @@ import org.junit.*;
 /**
  * Tests the @CsvConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class CsvConfigAnnotationTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

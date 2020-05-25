@@ -13,11 +13,12 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
-
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.HttpUtils.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class HttpUtilsTest {
 
 	public interface A {

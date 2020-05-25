@@ -13,6 +13,7 @@
 package org.apache.juneau.https;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -26,6 +27,7 @@ import org.junit.runners.*;
  * Verifies that the MediaRange and MediaType classes parse and sort Accept headers correctly.
  */
 @RunWith(Parameterized.class)
+@FixMethodOrder(NAME_ASCENDING)
 public class MediaRangeTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

@@ -14,14 +14,14 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.parser.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class StaticFilesMappingTest {
 
 	private static Collection<StaticFileMapping> parse(String input) throws ParseException {

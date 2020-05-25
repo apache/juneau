@@ -13,17 +13,13 @@
 package org.apache.juneau.rest.headers;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.helper.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Validates the handling of the Accept-Charset header.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class ResourceDescriptionTest {
 
 	@Test

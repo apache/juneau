@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
@@ -21,6 +22,7 @@ import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @SuppressWarnings({"resource"})
+@FixMethodOrder(NAME_ASCENDING)
 public class UonParserReaderTest {
 
 	//====================================================================================================

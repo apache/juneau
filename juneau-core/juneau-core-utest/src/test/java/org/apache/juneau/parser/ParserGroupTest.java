@@ -13,12 +13,13 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class ParserGroupTest {
 
 	//====================================================================================================

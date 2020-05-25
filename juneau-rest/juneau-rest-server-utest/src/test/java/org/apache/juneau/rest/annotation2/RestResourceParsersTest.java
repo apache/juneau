@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.IOException;
 
@@ -24,13 +25,8 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @RestMethod(parsers).
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestResourceParsersTest {
 
 	//=================================================================================================================

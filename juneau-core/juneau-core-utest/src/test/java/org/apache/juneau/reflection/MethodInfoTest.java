@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class MethodInfoTest {
 
 	@Documented

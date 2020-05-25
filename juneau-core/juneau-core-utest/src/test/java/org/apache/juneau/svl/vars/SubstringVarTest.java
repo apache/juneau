@@ -13,10 +13,12 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class SubstringVarTest {
 
 	//====================================================================================================
@@ -36,11 +38,11 @@ public class SubstringVarTest {
 		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},-24}"));
 		assertEquals("bar", vr.resolve("$ST{$S{SubstringVarTest.test},-3}"));
 		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},-7}"));
-		
+
 		// $ST{stringArg, start, end}
 		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},0,7}"));
 		assertEquals("oo", vr.resolve("$ST{$S{SubstringVarTest.test},1,3}"));
 		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},-2, 2}"));
-		
+
 	}
 }

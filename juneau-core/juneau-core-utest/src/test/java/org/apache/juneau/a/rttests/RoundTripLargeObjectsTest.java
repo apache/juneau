@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -34,6 +35,7 @@ import org.junit.runners.*;
  */
 @Ignore
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripLargeObjectsTest extends RoundTripTest {
 
 	private static final int NUM_RUNS = 10;

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -28,13 +30,8 @@ import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @RestMethod(inherit).
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestMethodInheritTest {
 
 	//=================================================================================================================

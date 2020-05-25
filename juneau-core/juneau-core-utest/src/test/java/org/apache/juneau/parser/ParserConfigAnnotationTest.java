@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.nio.charset.*;
 import java.util.function.*;
@@ -28,6 +29,7 @@ import org.junit.*;
 /**
  * Tests the @ParserConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class ParserConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

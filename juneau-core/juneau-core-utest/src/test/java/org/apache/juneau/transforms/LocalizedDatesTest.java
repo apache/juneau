@@ -14,6 +14,7 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -26,6 +27,7 @@ import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
 @SuppressWarnings("deprecation")
+@FixMethodOrder(NAME_ASCENDING)
 public class LocalizedDatesTest {
 
 	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));

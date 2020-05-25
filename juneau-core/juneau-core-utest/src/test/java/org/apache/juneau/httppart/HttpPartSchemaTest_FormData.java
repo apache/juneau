@@ -13,7 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
-
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import org.apache.juneau.*;
@@ -23,9 +23,8 @@ import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class HttpPartSchemaTest_FormData {
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
@@ -29,13 +30,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests various aspects of parameters passed to methods annotated with @RestMethod.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestParamsTest {
 
 	//=================================================================================================================

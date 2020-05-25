@@ -13,10 +13,12 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class PatternReplaceVarTest {
 
 	//====================================================================================================
@@ -34,13 +36,13 @@ public class PatternReplaceVarTest {
 		assertEquals("coo bar", vr.resolve("$PR{$S{PatternReplaceVarTest.test},^f?,co}"));
 		assertEquals("fine", vr.resolve("$PR{$S{PatternReplaceVarTest.test},oo*,ine}"));
 		assertEquals("FOO FOO", vr.resolve("$PR{$S{PatternReplaceVarTest.test},([a-z]+),FOO}"));
-		
-		// Replacements using matched sub classes 
+
+		// Replacements using matched sub classes
 		assertEquals("size=23px;display=none;", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},(size=([\\d]+)),\\$1px}"));
 		assertEquals("size=??px;display=none;", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},[\\d]+,??px}"));
 		assertEquals("size=23;display=none", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},;\\$,}"));
 		assertEquals("size=23;none=display;", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},;(*)=(*[^;]),;\\$2=\\$1}"));
-		
+
 
 	}
 }

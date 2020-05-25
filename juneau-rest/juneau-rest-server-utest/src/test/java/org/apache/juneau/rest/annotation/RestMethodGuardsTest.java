@@ -12,16 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @RestMethod(guards).
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestMethodGuardsTest {
 
 	//=================================================================================================================

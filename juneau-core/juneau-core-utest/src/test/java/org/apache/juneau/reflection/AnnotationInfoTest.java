@@ -15,6 +15,7 @@ package org.apache.juneau.reflection;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.annotation.*;
 import java.util.function.*;
@@ -22,6 +23,7 @@ import java.util.function.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class AnnotationInfoTest {
 
 	private static void check(String expected, Object o) {

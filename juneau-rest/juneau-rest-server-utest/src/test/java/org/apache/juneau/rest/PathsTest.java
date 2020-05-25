@@ -13,19 +13,15 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests various aspects of URL path parts.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class PathsTest {
 
 	//=================================================================================================================

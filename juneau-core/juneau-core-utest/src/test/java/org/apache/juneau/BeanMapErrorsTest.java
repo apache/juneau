@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.stream.*;
 
@@ -22,6 +23,7 @@ import org.junit.*;
 /**
  * Tests various error conditions when defining beans.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanMapErrorsTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

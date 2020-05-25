@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -23,9 +24,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class CallbackStringsTest {
 
 	//=================================================================================================================

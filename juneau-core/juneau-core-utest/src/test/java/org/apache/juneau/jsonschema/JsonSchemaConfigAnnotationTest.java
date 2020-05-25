@@ -13,6 +13,7 @@
 package org.apache.juneau.jsonschema;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -28,6 +29,7 @@ import org.junit.*;
 /**
  * Tests the @JsonSchemaConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class JsonSchemaConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

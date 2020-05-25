@@ -13,11 +13,13 @@
 package org.apache.juneau.marshall;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class PlainTextTest {
 
 	CharMarshall m = PlainText.DEFAULT;

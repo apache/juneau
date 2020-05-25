@@ -239,7 +239,15 @@
 		.beanFilters(BeanFilter.<jsm>create</jsm>(MyBean.<jk>class</jk>).bpi(<js>"foo,bar,baz"</js>).build())
 		.build();
 		</p>
-	<li><c>BeanContext.REST_pojoSwaps</c> replaced with {@link oaj.BeanContext#BEAN_swaps} (and builder methods as well).
+	<li>
+		<c>BeanContext.REST_pojoSwaps</c> replaced with {@link oaj.BeanContext#BEAN_swaps} (and builder methods as well).
+	<li>
+		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
+		<ul>
+			<li class='jac'>{@link oaj.BeanInterceptor}
+			<li class='ja'>{@link oaj.annotation.Bean#interceptor Bean(interceptor)}
+			<li class='jm'>{@link oaj.BeanContextBuilder#beanInterceptor(Class,Class)}
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

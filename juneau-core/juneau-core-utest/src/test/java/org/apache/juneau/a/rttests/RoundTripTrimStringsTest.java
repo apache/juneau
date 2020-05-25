@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
@@ -22,6 +23,7 @@ import org.junit.*;
 /**
  * Tests for the {@link Serializer#SERIALIZER_trimStrings} and {@link Parser#PARSER_trimStrings}.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripTrimStringsTest extends RoundTripTest {
 
 	public RoundTripTrimStringsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

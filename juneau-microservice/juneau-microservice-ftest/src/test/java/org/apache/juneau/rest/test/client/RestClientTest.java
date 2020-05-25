@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.regex.*;
 
@@ -23,6 +24,7 @@ import org.apache.juneau.rest.test.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class RestClientTest extends RestTestcase {
 
 	private static String URL = "/testRestClient";

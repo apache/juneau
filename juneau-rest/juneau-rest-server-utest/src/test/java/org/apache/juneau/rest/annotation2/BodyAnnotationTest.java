@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation2;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
@@ -39,13 +40,8 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the @Body annotation.
- */
-@SuppressWarnings({"serial"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BodyAnnotationTest {
 
 	//=================================================================================================================
@@ -298,6 +294,7 @@ public class BodyAnnotationTest {
 		public B03 b03(B03 b) {
 			return b;
 		}
+		@SuppressWarnings("serial")
 		@Body
 		public static class B03 extends LinkedList<B02> {}
 		@RestMethod(name=PUT, path="/InputStreamTransform")

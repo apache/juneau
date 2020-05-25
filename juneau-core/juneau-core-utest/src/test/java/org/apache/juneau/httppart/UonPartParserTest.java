@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -22,10 +23,9 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
-import org.junit.runners.*;
 
 @SuppressWarnings({"rawtypes"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class UonPartParserTest {
 
 	private static UonParserSession p = UonParser.DEFAULT.createSession();

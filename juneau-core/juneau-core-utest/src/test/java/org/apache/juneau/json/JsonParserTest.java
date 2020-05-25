@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
@@ -23,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class JsonParserTest {
 
 	private static final JsonParser p = JsonParser.DEFAULT;

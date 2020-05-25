@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
@@ -21,12 +22,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests inheritance of annotations from interfaces.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class AnnotationInheritanceTest {
 
 	//=================================================================================================================

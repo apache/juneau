@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.helper;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
@@ -21,12 +22,8 @@ import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the {@link BasicRestInfoProvider} class.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class StreamResourceTest {
 
 	@Rest

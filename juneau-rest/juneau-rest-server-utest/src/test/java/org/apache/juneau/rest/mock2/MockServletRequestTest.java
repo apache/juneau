@@ -14,15 +14,11 @@ package org.apache.juneau.rest.mock2;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the {@link MockServletRequest} class.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class MockServletRequestTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

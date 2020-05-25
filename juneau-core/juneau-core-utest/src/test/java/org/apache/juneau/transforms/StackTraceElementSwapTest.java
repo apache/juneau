@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.marshall.*;
 import org.junit.*;
@@ -20,6 +21,7 @@ import org.junit.*;
 /**
  * Tests the {@link StackTraceElementSwap} class.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class StackTraceElementSwapTest {
 
 	private String write(StackTraceElement ste) {

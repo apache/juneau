@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ReaderFilterTest {
 
 	//====================================================================================================

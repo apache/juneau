@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
@@ -32,12 +33,8 @@ import org.apache.juneau.rest.mock2.MockRemote;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests inheritance of annotations from interfaces.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class EndToEndInterfaceTest {
 
 	//=================================================================================================================

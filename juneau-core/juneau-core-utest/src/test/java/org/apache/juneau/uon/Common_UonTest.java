@@ -14,6 +14,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 import java.net.URI;
@@ -24,6 +25,7 @@ import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class Common_UonTest {
 	UonParser p = UonParser.DEFAULT;
 	UonParser pe = UonParser.DEFAULT_DECODING;

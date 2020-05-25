@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -28,12 +29,11 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
-import org.junit.runners.*;
 
 /**
  * Superclass for tests that verify results against all supported content types.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 @SuppressWarnings({"rawtypes"})
 public abstract class ComboSerializeTest {
 

@@ -14,18 +14,14 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.json.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Validates the functionality of the UrlPathPattern class.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class UrlPathPatternTest {
 
 	private void shouldMatch(UrlPathPattern p, String path, String expected) {

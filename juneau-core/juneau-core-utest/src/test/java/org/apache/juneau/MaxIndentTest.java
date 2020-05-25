@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 
 import org.apache.juneau.html.*;
@@ -31,7 +33,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"serial"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class MaxIndentTest {
 
 	@Parameterized.Parameters

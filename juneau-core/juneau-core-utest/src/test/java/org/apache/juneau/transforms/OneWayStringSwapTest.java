@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
@@ -22,6 +23,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public abstract class OneWayStringSwapTest<T> {
 
 	private final String label;

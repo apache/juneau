@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -21,6 +23,7 @@ import org.junit.*;
 /**
  * Tests the @PlainTextConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class PlainTextConfigAnnotationTest {
 
 	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();

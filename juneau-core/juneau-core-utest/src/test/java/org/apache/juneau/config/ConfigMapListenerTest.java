@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigMapListenerTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

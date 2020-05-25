@@ -13,6 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
 import java.util.*;
@@ -29,6 +30,7 @@ import org.junit.*;
 /**
  * Tests the @RdfConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class RdfConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

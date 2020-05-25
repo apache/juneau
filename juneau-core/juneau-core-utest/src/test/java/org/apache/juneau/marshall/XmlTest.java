@@ -14,12 +14,14 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class XmlTest {
 
 	CharMarshall m = Xml.DEFAULT;

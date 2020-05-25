@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
@@ -24,6 +25,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripGenericsTest extends RoundTripTest {
 
 	public RoundTripGenericsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

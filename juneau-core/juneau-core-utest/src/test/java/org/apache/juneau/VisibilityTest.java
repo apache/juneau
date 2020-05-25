@@ -14,11 +14,13 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.a.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class VisibilityTest {
 
 	//====================================================================================================

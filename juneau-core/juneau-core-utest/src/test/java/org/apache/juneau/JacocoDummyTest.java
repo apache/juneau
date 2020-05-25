@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.internal.*;
@@ -19,6 +21,7 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class JacocoDummyTest {
 
 	//====================================================================================================

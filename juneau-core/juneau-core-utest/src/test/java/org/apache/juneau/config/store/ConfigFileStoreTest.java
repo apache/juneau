@@ -13,6 +13,7 @@
 package org.apache.juneau.config.store;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -20,6 +21,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigFileStoreTest {
 
 	private static final File DIR = new File("./config");

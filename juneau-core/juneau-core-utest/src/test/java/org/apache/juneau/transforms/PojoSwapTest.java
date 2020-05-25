@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
@@ -26,6 +27,7 @@ import org.junit.*;
 /**
  * Tests the example code in the PojoSwap class.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class PojoSwapTest {
 
 	public static class MyPojo {}

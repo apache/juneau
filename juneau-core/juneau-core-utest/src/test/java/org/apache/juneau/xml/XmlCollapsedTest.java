@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -24,6 +25,7 @@ import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class XmlCollapsedTest {
 
 	//====================================================================================================

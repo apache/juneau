@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class FieldInfoTest {
 
 	@Documented

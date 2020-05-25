@@ -15,12 +15,14 @@ package org.apache.juneau;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.apache.juneau.json.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class IgnoredClassesTest {
 
 	//====================================================================================================

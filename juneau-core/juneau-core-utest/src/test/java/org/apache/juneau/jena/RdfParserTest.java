@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.URI;
 import java.time.*;
@@ -27,6 +28,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class RdfParserTest {
 
 	@Before

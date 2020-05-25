@@ -14,6 +14,7 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -24,6 +25,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class CommonParserTest {
 
 	private String wrap(String in) {

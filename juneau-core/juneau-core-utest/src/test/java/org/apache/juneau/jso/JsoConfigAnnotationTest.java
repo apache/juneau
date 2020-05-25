@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
@@ -19,6 +21,7 @@ import org.junit.*;
 /**
  * Tests the @JsoConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class JsoConfigAnnotationTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

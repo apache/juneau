@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 import java.net.URI;
@@ -25,6 +26,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class CommonTest {
 
 	//====================================================================================================

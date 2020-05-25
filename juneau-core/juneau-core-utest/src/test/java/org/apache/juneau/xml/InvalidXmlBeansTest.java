@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ import org.junit.runners.*;
  * Verifies that the correct error messages are displayed when you do something wrong with the @Xml annotation.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class InvalidXmlBeansTest {
 
 	private static final XmlSerializer

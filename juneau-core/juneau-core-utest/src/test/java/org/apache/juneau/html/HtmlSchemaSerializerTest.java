@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ import org.junit.*;
 /**
  * Most of the heavy testing for HtmlSchemaSerializer is done in JsonSchemaGeneratorTest.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class HtmlSchemaSerializerTest {
 
 	//====================================================================================================

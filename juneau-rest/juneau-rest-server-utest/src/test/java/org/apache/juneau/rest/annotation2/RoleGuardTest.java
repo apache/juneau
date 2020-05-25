@@ -12,16 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the @Rest(roleGuard) and @RestMethod(roleGuard) annotations.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RoleGuardTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

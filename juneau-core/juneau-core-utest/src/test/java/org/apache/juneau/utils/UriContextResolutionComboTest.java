@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -27,7 +28,7 @@ import org.junit.runners.*;
  * Verifies that the resolveUri() methods in UriContext work correctly.
  */
 @RunWith(Parameterized.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class UriContextResolutionComboTest {
 
 	@Parameterized.Parameters

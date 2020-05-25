@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.junit.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({"unchecked","serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	static Class<?>[] ANNOTATED_CLASSES={L2.class, M2.class};

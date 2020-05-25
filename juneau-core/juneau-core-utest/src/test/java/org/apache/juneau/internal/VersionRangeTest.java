@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
+@FixMethodOrder(NAME_ASCENDING)
 public class VersionRangeTest {
 
 	@Parameterized.Parameters

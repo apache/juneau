@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -25,13 +26,8 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests various aspects of headers in general.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class HeadersTest {
 
 	//====================================================================================================

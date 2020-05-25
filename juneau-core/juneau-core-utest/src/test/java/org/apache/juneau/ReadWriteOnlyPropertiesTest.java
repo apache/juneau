@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -23,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-
+@FixMethodOrder(NAME_ASCENDING)
 public class ReadWriteOnlyPropertiesTest {
 
 	//------------------------------------------------------------------------------------------------------------------

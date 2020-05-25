@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.format;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -27,7 +28,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class JsonParserEdgeCasesTest {
 
 	@Parameterized.Parameters

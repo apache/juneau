@@ -18,6 +18,7 @@ import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -41,7 +42,7 @@ import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class InterfaceProxyTest {
 

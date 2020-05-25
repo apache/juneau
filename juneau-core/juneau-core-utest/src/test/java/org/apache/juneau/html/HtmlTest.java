@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -25,6 +26,7 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes","serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class HtmlTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

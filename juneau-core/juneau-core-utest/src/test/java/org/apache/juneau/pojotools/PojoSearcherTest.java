@@ -14,6 +14,7 @@ package org.apache.juneau.pojotools;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -28,6 +29,7 @@ import org.junit.*;
 /**
  * Tests the PojoSearcher class.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class PojoSearcherTest {
 
 	private static BeanSession bs = BeanContext.DEFAULT.createSession();

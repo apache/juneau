@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
@@ -27,9 +28,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class OpenApiPartParserTest {
 
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.createSession();

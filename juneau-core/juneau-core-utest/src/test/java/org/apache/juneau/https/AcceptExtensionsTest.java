@@ -14,6 +14,7 @@ package org.apache.juneau.https;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.*;
 import org.junit.*;
@@ -21,6 +22,7 @@ import org.junit.*;
 /**
  * Verifies that the Accept class handles parameters and extensions correctly.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class AcceptExtensionsTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

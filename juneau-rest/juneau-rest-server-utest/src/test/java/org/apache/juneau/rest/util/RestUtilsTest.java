@@ -16,18 +16,14 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests for the RestUtils class.
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestUtilsTest {
 
 	//=================================================================================================================

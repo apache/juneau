@@ -14,9 +14,11 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.reflect.Mutaters.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class MutatersTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

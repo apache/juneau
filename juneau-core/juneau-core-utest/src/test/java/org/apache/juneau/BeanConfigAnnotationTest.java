@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -27,12 +28,11 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
-import org.junit.runners.*;
 
 /**
  * Tests the @BeanConfig annotation.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

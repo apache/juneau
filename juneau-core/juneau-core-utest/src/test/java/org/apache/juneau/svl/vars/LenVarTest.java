@@ -13,10 +13,12 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class LenVarTest {
 
 	//====================================================================================================
@@ -32,10 +34,10 @@ public class LenVarTest {
 		// $LN{stringArg} examples
 		assertEquals("1", vr.resolve("$LN{J}"));
 		assertEquals("len=7", vr.resolve("len=$LN{$S{LenVarTest.test}}"));
-		
+
 		// $LN{stringArg, delimiter} examples
 		assertEquals("5", vr.resolve("$LN{$S{LenVarTest.test2},.}"));
 
-		
+
 	}
 }

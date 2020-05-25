@@ -15,6 +15,7 @@ package org.apache.juneau.a.rttests;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
@@ -37,6 +38,7 @@ import org.junit.*;
  * with the same objects for all serializers and parsers.
  */
 @SuppressWarnings({"unchecked","rawtypes","serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public RoundTripTransformBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

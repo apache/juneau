@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.exceptions;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -22,11 +23,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 import org.apache.juneau.http.exception.*;
 
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

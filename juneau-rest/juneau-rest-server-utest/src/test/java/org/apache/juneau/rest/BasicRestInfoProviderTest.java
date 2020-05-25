@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 
@@ -38,12 +39,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the {@link BasicRestInfoProvider} class.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicRestInfoProviderTest {
 
 	//=================================================================================================================

@@ -14,13 +14,13 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class ReflectionMapTest {
 
 	private static ReflectionMap.Builder<Number> create() {

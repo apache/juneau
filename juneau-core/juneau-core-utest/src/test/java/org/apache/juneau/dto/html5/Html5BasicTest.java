@@ -14,9 +14,11 @@ package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class Html5BasicTest {
 
 	@Test

@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client2;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.math.*;
 import java.util.*;
@@ -29,12 +30,8 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests the @Path annotation.
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class PathAnnotationTest {
 
 	public static class Bean {

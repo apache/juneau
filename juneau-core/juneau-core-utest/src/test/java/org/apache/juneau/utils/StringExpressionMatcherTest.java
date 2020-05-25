@@ -13,13 +13,13 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.text.*;
 
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class StringExpressionMatcherTest {
 
 	private void shouldMatch(StringExpressionMatcher m, String...input) {

@@ -14,6 +14,7 @@ package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
@@ -25,6 +26,7 @@ import org.junit.*;
 /**
  * Tests the {@link MsgPackParser} class.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class MsgPackParserTest {
 
 	//====================================================================================================

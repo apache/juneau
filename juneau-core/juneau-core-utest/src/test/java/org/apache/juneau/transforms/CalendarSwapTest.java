@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 import java.util.*;
@@ -34,6 +35,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings("deprecation")
+@FixMethodOrder(NAME_ASCENDING)
 public class CalendarSwapTest {
 
 	static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));

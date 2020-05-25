@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static java.lang.String.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
@@ -24,9 +25,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class OpenApiPartSerializerTest {
 
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.createSession();

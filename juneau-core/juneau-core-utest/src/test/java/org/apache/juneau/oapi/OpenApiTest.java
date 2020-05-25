@@ -13,6 +13,7 @@
 package org.apache.juneau.oapi;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
@@ -31,6 +32,7 @@ import org.junit.*;
 /**
  * Tests the OpenApiSerializer and OpenApiParser classes.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class OpenApiTest {
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;

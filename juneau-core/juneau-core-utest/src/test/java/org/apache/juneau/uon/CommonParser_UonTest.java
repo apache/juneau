@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ import org.apache.juneau.parser.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class CommonParser_UonTest {
 
 	ReaderParser p = UonParser.create().dictionary(A1.class).build();

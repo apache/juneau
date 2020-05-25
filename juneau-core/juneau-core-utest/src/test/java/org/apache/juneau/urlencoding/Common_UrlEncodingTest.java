@@ -14,6 +14,7 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 import java.net.URI;
@@ -24,6 +25,7 @@ import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class Common_UrlEncodingTest {
 	UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 

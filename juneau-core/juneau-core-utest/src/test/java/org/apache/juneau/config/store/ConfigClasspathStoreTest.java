@@ -13,12 +13,14 @@
 package org.apache.juneau.config.store;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.util.concurrent.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigClasspathStoreTest {
 
 	@Test

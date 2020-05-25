@@ -15,6 +15,7 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.rest.client2.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigTest extends RestTestcase {
 
 	private static String URL = "/testConfig";

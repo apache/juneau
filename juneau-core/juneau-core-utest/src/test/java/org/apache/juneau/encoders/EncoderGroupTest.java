@@ -13,10 +13,11 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class EncoderGroupTest {
 
 	//====================================================================================================

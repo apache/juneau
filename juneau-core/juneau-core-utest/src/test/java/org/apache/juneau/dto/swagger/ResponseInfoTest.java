@@ -15,6 +15,7 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -25,6 +26,7 @@ import org.junit.*;
 /**
  * Testcase for {@link ResponseInfo}.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class ResponseInfoTest {
 
 	/**

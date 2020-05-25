@@ -15,6 +15,7 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.json.*;
 import org.junit.*;
@@ -22,6 +23,7 @@ import org.junit.*;
 /**
  * Testcase for {@link Tag}.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class TagTest {
 
 	/**

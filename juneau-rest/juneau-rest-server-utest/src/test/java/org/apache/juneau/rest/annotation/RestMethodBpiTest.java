@@ -12,16 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.junit.runners.MethodSorters.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @RestMethod(bpi/bpx).
- */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestMethodBpiTest {
 
 	//=================================================================================================================
@@ -110,7 +108,7 @@ public class RestMethodBpiTest {
 		a.get("/a06").uon().execute().assertBody("(_b=foo)");
 		a.get("/a06").urlEnc().execute().assertBody("_b=foo");
 	}
-	
+
 	//=================================================================================================================
 	// BPX on normal bean
 	//=================================================================================================================

@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.function.*;
 
@@ -30,6 +31,7 @@ import org.junit.*;
 /**
  * Tests the @XmlConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class XmlConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

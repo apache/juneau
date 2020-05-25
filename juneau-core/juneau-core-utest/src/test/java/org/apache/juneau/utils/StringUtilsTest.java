@@ -15,6 +15,7 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.math.*;
 import java.util.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class StringUtilsTest {
 
 	//====================================================================================================

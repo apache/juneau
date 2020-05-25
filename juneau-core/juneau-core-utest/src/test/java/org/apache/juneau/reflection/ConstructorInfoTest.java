@@ -14,6 +14,7 @@ package org.apache.juneau.reflection;
 
 import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConstructorInfoTest {
 
 	private static void check(String expected, Object o) {

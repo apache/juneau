@@ -15,6 +15,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
@@ -22,6 +23,7 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class CommonXmlTest {
 
 	private RdfSerializerBuilder getBasicSerializer() {

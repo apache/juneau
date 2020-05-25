@@ -13,11 +13,13 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class XmlParserTest {
 
 	@Test

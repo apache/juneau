@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -28,7 +29,7 @@ import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
 @SuppressWarnings({"serial","rawtypes","unchecked"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicHtmlTest {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {

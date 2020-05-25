@@ -14,12 +14,14 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.commons.lang3.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class CollectionUtilsTest {
 
 	private String[] strings(String s) {

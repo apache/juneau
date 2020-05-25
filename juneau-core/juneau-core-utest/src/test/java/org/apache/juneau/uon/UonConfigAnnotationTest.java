@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.function.*;
 
@@ -25,6 +26,7 @@ import org.junit.*;
 /**
  * Tests the @UonConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class UonConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

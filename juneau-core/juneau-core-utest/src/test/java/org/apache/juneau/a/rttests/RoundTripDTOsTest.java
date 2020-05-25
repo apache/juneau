@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.parser.*;
@@ -23,7 +24,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({})
+@FixMethodOrder(NAME_ASCENDING)
 public class RoundTripDTOsTest extends RoundTripTest {
 
 	public RoundTripDTOsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {

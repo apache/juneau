@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.transform.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes"})
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanConfigTest {
 
 	//====================================================================================================

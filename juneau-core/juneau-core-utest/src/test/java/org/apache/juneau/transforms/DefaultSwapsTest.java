@@ -13,6 +13,7 @@
 package org.apache.juneau.transforms;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
 import java.time.chrono.*;
@@ -30,9 +31,8 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class DefaultSwapsTest {
 
 	//------------------------------------------------------------------------------------------------------------------

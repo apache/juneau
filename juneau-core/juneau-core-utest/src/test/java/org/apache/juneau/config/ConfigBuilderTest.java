@@ -16,12 +16,14 @@ import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.apache.juneau.config.store.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigBuilderTest {
 
 	private static File tempDir;

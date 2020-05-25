@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ import org.apache.juneau.parser.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class ParserGenericsTest {
 
 	//====================================================================================================

@@ -13,6 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.function.*;
 
@@ -27,6 +28,7 @@ import org.junit.*;
 /**
  * Tests the @SerializerConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class SerializerConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

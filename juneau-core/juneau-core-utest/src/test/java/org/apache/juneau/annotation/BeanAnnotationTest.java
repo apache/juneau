@@ -13,12 +13,14 @@
 package org.apache.juneau.annotation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanAnnotationTest {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.https;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -25,6 +27,7 @@ import org.junit.runners.*;
  * Verifies that the Content-Type class handles matching correctly.
  */
 @RunWith(Parameterized.class)
+@FixMethodOrder(NAME_ASCENDING)
 public class ContentTypeTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {

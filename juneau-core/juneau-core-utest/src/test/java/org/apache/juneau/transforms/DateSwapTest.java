@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -21,6 +23,7 @@ import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @SuppressWarnings("deprecation")
+@FixMethodOrder(NAME_ASCENDING)
 public class DateSwapTest {
 
 	@BeforeClass

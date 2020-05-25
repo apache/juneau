@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.concurrent.*;
 
@@ -24,9 +25,8 @@ import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class ClientFuturesTest {
 
 	//=================================================================================================================

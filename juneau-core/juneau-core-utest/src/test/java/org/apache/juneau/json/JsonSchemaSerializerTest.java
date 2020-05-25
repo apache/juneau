@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
@@ -20,6 +21,7 @@ import org.junit.*;
 /**
  * Most of the heavy testing for JsonSchemaSerializer is done in JsonSchemaGeneratorTest.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class JsonSchemaSerializerTest {
 
 	//====================================================================================================

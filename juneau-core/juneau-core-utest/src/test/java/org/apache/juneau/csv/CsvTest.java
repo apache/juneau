@@ -13,12 +13,14 @@
 package org.apache.juneau.csv;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class CsvTest {
 
 	//====================================================================================================

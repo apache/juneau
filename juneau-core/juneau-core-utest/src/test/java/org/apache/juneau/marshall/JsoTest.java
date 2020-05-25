@@ -13,9 +13,11 @@
 package org.apache.juneau.marshall;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class JsoTest {
 
 	StreamMarshall m = Jso.DEFAULT;

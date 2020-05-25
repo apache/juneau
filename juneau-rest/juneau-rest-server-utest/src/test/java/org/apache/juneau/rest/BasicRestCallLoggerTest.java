@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.RestCallLoggingDetail.*;
 import static java.util.logging.Level.*;
 
@@ -23,9 +24,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicRestCallLoggerTest {
 
 	static class TestLogger extends Logger {

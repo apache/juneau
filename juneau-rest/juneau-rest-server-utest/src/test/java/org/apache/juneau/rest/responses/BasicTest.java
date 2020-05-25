@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.responses;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import java.net.*;
@@ -24,10 +25,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.http.response.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicTest {
 
 	//-----------------------------------------------------------------------------------------------------------------

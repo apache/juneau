@@ -12,18 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @RestMethod(messages).
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestResourceMessagesTest {
 
 	//====================================================================================================

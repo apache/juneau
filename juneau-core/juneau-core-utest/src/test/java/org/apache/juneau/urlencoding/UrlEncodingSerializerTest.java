@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class UrlEncodingSerializerTest {
 
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.builder().addRootType().build();

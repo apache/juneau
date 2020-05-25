@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -19,13 +21,8 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-/**
- * Tests that validate the behavior of @Rest(logging).
- */
-@SuppressWarnings({})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestResourceLoggingTest {
 
 	private static String string(RestCallLoggerConfig config) {

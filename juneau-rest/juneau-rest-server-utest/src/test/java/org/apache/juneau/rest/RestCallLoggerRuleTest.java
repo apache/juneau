@@ -13,15 +13,15 @@
 package org.apache.juneau.rest;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.logging.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class RestCallLoggerRuleTest {
 
 	static final Throwable T1 = new IndexOutOfBoundsException();

@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
@@ -27,9 +28,7 @@ import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.test.*;
 import org.junit.*;
 
-/**
- * Tests client-side form posts.
- */
+@FixMethodOrder(NAME_ASCENDING)
 public class FormDataTest extends RestTestcase {
 
 	//=================================================================================================================

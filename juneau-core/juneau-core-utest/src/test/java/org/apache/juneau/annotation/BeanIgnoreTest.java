@@ -13,10 +13,12 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.json.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanIgnoreTest {
 
 	//------------------------------------------------------------------------------------------------------------------

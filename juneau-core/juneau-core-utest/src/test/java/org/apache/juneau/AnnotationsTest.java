@@ -14,14 +14,14 @@ package org.apache.juneau;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.*;
-import org.junit.runners.*;
 
 
 @SuppressWarnings({"rawtypes"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class AnnotationsTest {
 
 	//====================================================================================================

@@ -13,10 +13,12 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes"})
+@FixMethodOrder(NAME_ASCENDING)
 public class BeanContextTest {
 
 	BeanContext bc = BeanContext.DEFAULT;

@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.beans.*;
 import java.util.*;
@@ -20,9 +21,8 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
-import org.junit.runners.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicBeanTests {
 
 	//------------------------------------------------------------------------------------------------------------------

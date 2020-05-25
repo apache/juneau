@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ConfigInterfaceTest {
 
 	Config cf;

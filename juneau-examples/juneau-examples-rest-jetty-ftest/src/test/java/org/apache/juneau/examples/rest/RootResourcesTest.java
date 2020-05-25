@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
@@ -22,6 +23,7 @@ import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.helper.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class RootResourcesTest extends RestTestcase {
 
 	private static boolean debug = false;

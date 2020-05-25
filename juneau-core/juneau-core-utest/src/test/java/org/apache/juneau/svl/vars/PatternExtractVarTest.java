@@ -13,10 +13,12 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class PatternExtractVarTest {
 
 	//====================================================================================================
@@ -30,13 +32,13 @@ public class PatternExtractVarTest {
 		System.setProperty("PatternExtractVarTest.test2", "size=23");
 
 		assertEquals("foo bar", vr.resolve("$PE{$S{PatternExtractVarTest.test},(.*),1}"));
-		
+
 		assertEquals("size", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),1}"));
 		assertEquals("23", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),2}"));
 		assertEquals("size=23", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),0}"));
 		assertEquals("", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),-2}"));
 		assertEquals("", vr.resolve("$PE{$S{PatternExtractVarTest.test2},(.*)=([0-9]+),54}"));
-		
+
 
 	}
 }

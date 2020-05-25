@@ -14,6 +14,7 @@ package org.apache.juneau.pojotools;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -22,6 +23,7 @@ import org.junit.*;
 /**
  * Tests the PojoPaginator class.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class PojoViewerTest {
 
 	PojoViewer p = new PojoViewer();

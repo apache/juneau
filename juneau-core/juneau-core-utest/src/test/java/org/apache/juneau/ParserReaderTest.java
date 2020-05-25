@@ -13,12 +13,14 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ParserReaderTest {
 
 	//====================================================================================================

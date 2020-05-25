@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class ExecutableInfoTest {
 
 	private static void check(String expected, Object o) {

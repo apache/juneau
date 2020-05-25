@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.util.*;
@@ -29,6 +30,7 @@ import org.junit.*;
 /**
  * Tests the @HtmlDocConfig annotation.
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class HtmlDocConfigAnnotationTest {
 
 	private static void check(String expected, Object o) {

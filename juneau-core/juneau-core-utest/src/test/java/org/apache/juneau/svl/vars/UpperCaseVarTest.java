@@ -13,10 +13,12 @@
 package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class UpperCaseVarTest {
 
 	//====================================================================================================

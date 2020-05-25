@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -25,6 +26,7 @@ import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
 @SuppressWarnings({"serial"})
+@FixMethodOrder(NAME_ASCENDING)
 public class BasicXmlTest {
 
 	private static final XmlSerializer

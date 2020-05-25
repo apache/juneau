@@ -14,6 +14,7 @@ package org.apache.juneau.dto.cognos;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class CognosXmlTest {
 
 	//====================================================================================================

@@ -13,12 +13,14 @@
 package org.apache.juneau.internal;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.junit.*;
 
 @SuppressWarnings("unchecked")
+@FixMethodOrder(NAME_ASCENDING)
 public class ReadOnlyArrayListTest {
 
 	private static <T> UnmodifiableArray<T> create(T...t) {

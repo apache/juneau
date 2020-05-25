@@ -14,6 +14,7 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -21,6 +22,7 @@ import java.util.*;
 
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class MsgPackTest {
 
 	StreamMarshall m = MsgPack.DEFAULT;

@@ -13,12 +13,14 @@
 package org.apache.juneau.dto.jsonschema;
 
 import static org.junit.Assert.*;
+import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
 
 import org.apache.juneau.json.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class JsonSchemaTest {
 
 	@Test
