@@ -190,7 +190,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			sType = eType.getSerializedClassMeta(this);
 		}
 
-		String typeName = getBeanTypeName(eType, aType, bpm);
+		String typeName = getBeanTypeName(this, eType, aType, bpm);
 
 		RDFNode n = null;
 

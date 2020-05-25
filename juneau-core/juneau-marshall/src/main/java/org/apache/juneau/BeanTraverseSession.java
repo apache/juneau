@@ -131,6 +131,18 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if we're processing the root node.
+	 *
+	 * <p>
+	 * Must be called after {@link #push(String, Object, ClassMeta)} and before {@link #pop()}.
+	 *
+	 * @return <jk>true</jk> if we're processing the root node.
+	 */
+	protected final boolean isRoot() {
+		return depth == 1;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions} is enabled, and the specified
 	 * object is already higher up in the traversal chain.
 	 *
@@ -154,7 +166,7 @@ public class BeanTraverseSession extends BeanSession {
 
 	/**
 	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
-	 * 
+	 *
 	 * @return <jk>true</jk> if we're about to exceed the max depth for the document.
 	 */
 	protected final boolean willExceedDepth() {

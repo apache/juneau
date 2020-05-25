@@ -3771,11 +3771,11 @@ public class RestClientTest {
 	}
 
 	public static class O48 {
-		private int foo;
-		public int getFoo() { return foo; }
-		public void setFoo(int foo) { this.foo = foo; }
+		private String foo;
+		public String getFoo() { return foo; }
+		public void setFoo(String foo) { this.foo = foo; }
 		public O48 init() {
-			foo = 1;
+			foo = "foo";
 			return this;
 		}
 	}
@@ -3785,12 +3785,12 @@ public class RestClientTest {
 		@Override
 		public Object readProperty(O48 bean, String name, Object value) {
 			getterCalled = true;
-			return value;
+			return "x" + value;
 		}
 		@Override
 		public Object writeProperty(O48 bean, String name, Object value) {
 			setterCalled = true;
-			return value;
+			return value.toString().substring(1);
 		}
 	}
 
@@ -3804,104 +3804,216 @@ public class RestClientTest {
 			.post("/echoBody", new O48().init())
 			.run()
 			.cacheBody()
-			.assertBody().is("{foo:1}")
+			.assertBody().is("{foo:'xfoo'}")
 			.getBody().as(O48.class)
 		;
-		assertEquals(1, x.foo);
+		assertEquals("foo", x.foo);
 		assertTrue(O48Interceptor.getterCalled);
 		assertTrue(O48Interceptor.setterCalled);
 	}
 
-	//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient propertyFilter(Class<?> on, Class<? extends org.apache.juneau.transform.PropertyFilter> value) {
-//		super.propertyFilter(on, value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-//		super.propertyNamer(value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-//		super.propertyNamer(on, value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient sortProperties() {
-//		super.sortProperties();
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient sortProperties(java.lang.Class<?>...on) {
-//		super.sortProperties(on);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient stopClass(Class<?> on, Class<?> value) {
-//		super.stopClass(on, value);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient swaps(Object...values) {
-//		super.swaps(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient swapsRemove(Object...values) {
-//		super.swapsRemove(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient swapsReplace(Object...values) {
-//		super.swapsReplace(values);
-//		return this;
-//	}
-//
-//	@Test
-//	public void o0_beanContext_() throws Exception {
-//	}
-//	@Override /* GENERATED - BeanContextBuilder */
-//	public MockRestClient timeZone(TimeZone value) {
-//		super.timeZone(value);
-//		return this;
-//	}
-//
+	public static class O49 {
+		private String fooBar;
+		public String getFooBar() { return fooBar; }
+		public void setFooBar(String fooBar) { this.fooBar = fooBar; }
+		public O49 init() {
+			fooBar = "fooBar";
+			return this;
+		}
+	}
+
+	@Test
+	public void o049_beanContext_propertyNamer() throws Exception {
+		O49 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.propertyNamer(PropertyNamerDLC.class)
+			.build()
+			.post("/echoBody", new O49().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{'foo-bar':'fooBar'}")
+			.getBody().as(O49.class)
+		;
+		assertEquals("fooBar", x.fooBar);
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.propertyNamer(O49.class, PropertyNamerDLC.class)
+			.build()
+			.post("/echoBody", new O49().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{'foo-bar':'fooBar'}")
+			.getBody().as(O49.class)
+		;
+		assertEquals("fooBar", x.fooBar);
+	}
+
+	public static class O50 {
+		public int foo, bar, baz;
+		public O50 init() {
+			foo = 1;
+			bar = 2;
+			baz = 3;
+			return this;
+		}
+	}
+
+	@Test
+	public void o050_beanContext_sortProperties() throws Exception {
+		O50 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortProperties()
+			.build()
+			.post("/echoBody", new O50().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(O50.class)
+		;
+		assertEquals(1, x.foo);
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.sortProperties(O50.class)
+			.build()
+			.post("/echoBody", new O50().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(O50.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O51a {
+		public int foo;
+	}
+
+	public static class O51b extends O51a {
+		public int bar;
+		public O51b init() {
+			foo = 1;
+			bar = 2;
+			return this;
+		}
+	}
+
+	@Test
+	public void o051_beanContext_stopClass() throws Exception {
+		O51b x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.stopClass(O51b.class, O51a.class)
+			.build()
+			.post("/echoBody", new O51b().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2}")
+			.getBody().as(O51b.class)
+		;
+		assertEquals(0, x.foo);
+		assertEquals(2, x.bar);
+	}
+
+	public static class O52 {
+		public int foo;
+		public O52 init() {
+			this.foo = 1;
+			return this;
+		}
+	}
+
+	public static class O52Swap extends PojoSwap<O52,Integer> {
+		@Override
+		public Integer swap(BeanSession session, O52 o) { return o.foo; }
+		@Override
+		public O52 unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new O52().init(); }
+	}
+
+	@Test
+	public void o052_beanContext_swaps() throws Exception {
+		O52 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.swaps(O52Swap.class)
+			.build()
+			.post("/echoBody", new O52().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("1")
+			.getBody().as(O52.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O53 {
+		public int foo;
+		public O53 init() {
+			foo = 1;
+			return this;
+		}
+	}
+
+	public static class O53Swap extends StringSwap<O53> {
+		@Override
+		public String swap(BeanSession session, O53 o) throws Exception {
+			assertEquals(TimeZone.getTimeZone("Z"), session.getTimeZone());
+			return super.swap(session, o);
+		}
+
+		@Override
+		public O53 unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+			assertEquals(TimeZone.getTimeZone("Z"), session.getTimeZone());
+			return super.unswap(session, f, hint);
+		}
+	}
+
+	@Test
+	public void o053_beanContext_timeZone() throws Exception {
+		O53 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.timeZone(TimeZone.getTimeZone("Z"))
+			.build()
+			.post("/echoBody", new O53().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:1}")
+			.getBody().as(O53.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
+	public static class O54 {
+		public int foo;
+		public O54 init() {
+			this.foo = 1;
+			return this;
+		}
+	}
+
+	@Test
+	public void o054_beanContext_typeName() throws Exception {
+		O54 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.typeName(O54.class, "foo")
+			.addRootType()
+			.build()
+			.post("/echoBody", new O54().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{_type:'foo',foo:1}")
+			.getBody().as(O54.class)
+		;
+		assertEquals(1, x.foo);
+	}
+
 //	@Test
 //	public void o0_beanContext_() throws Exception {
 //	}

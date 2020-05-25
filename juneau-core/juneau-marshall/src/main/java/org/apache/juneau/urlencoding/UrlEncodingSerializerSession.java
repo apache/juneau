@@ -103,7 +103,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			aType = object();
 
 		sType = aType;
-		String typeName = getBeanTypeName(eType, aType, null);
+		String typeName = getBeanTypeName(this, eType, aType, null);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getSwap(this);

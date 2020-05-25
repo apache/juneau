@@ -531,16 +531,17 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Resolves the dictionary name for the actual type.
 	 *
+	 * @param session The current serializer session.
 	 * @param eType The expected type of the bean property.
 	 * @param aType The actual type of the bean property.
 	 * @param pMeta The current bean property being serialized.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
-	protected final String getBeanTypeName(ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
+	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType)
 			return null;
 
-		if (! isAddBeanTypes())
+		if (! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;
 
 		String eTypeTn = eType.getDictionaryName();

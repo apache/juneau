@@ -114,7 +114,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		sType = aType;
-		String typeName = getBeanTypeName(eType, aType, pMeta);
+		String typeName = getBeanTypeName(this, eType, aType, pMeta);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getSwap(this);
