@@ -43,12 +43,14 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -4091,53 +4093,217 @@ public class RestClientTest {
 			.assertBody().is("{foo:null}")
 			.getBody().as(P1.class);
 	}
-//
-//	@Test
-//	public void p02_context_addToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder addTo(String name, Object value) {
-//
-//	@Test
-//	public void p03_context_appendToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder appendTo(String name, Object value) {
-//
-//	@Test
-//	public void p04_context_prependToStringObject() throws Exception { fail(); }
-////	public RestClientBuilder prependTo(String name, Object value) {
-//
-//	@Test
-//	public void p05_context_addToStringStringObject() throws Exception { fail(); }
-////	public RestClientBuilder addTo(String name, String key, Object value) {
-//
-//	@Test
-//	public void p06_context_apply() throws Exception { fail(); }
-////	public RestClientBuilder apply(PropertyStore copyFrom) {
-//
-//	@Test
-//	public void p07_context_applyAnnotationsClasses() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(java.lang.Class<?>...fromClasses) {
-//
-//	@Test
-//	public void p08_context_applyAnnotationsMethods() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(Method...fromMethods) {
-//
-//	@Test
-//	public void p09_context_applyAnnotationsAnnotationList() throws Exception { fail(); }
-////	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
-//
-//	@Test
-//	public void p10_context_removeFrom() throws Exception { fail(); }
-////	public RestClientBuilder removeFrom(String name, Object value) {
-//
-//	@Test
-//	public void p11_context_setMap() throws Exception { fail(); }
-////	public RestClientBuilder set(Map<String,Object> properties) {
-//
-//	@Test
-//	public void p12_context_setStringObject() throws Exception { fail(); }
-////	public RestClientBuilder set(String name, Object value) {
-//
-//	@Test
-//	public void p13_context_annotations() throws Exception { fail(); }
-////	public RestClientBuilder annotations(Annotation...values) {
 
+	public static class P2 {
+		public String foo;
+		@Override
+		public String toString() {
+			return foo;
+		}
+		public static P2 fromString(String s) {
+			P2 p2 = new P2();
+			p2.foo = s;
+			return p2;
+		}
+	}
+
+	@Test
+	public void p02_context_addToStringObject() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.addTo(BeanContext.BEAN_notBeanClasses,P2.class)
+			.build()
+			.post("/echoBody", P2.fromString("bar"))
+			.run()
+			.cacheBody()
+			.assertBody().is("'bar'")
+			.getBody().as(P2.class);
+	}
+
+	public static class P3 {
+		public int foo;
+		public P3 init() {
+			foo = 1;
+			return this;
+		}
+	}
+
+	public static class P3s extends PojoSwap<P3,Integer> {
+		@Override
+		public Integer swap(BeanSession session, P3 o) { return o.foo; }
+		@Override
+		public P3 unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new P3().init(); }
+	}
+
+	@Test
+	public void p03_context_appendToStringObject() throws Exception {
+		P3 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.appendTo(BeanContext.BEAN_swaps,P3s.class)
+			.build()
+			.post("/echoBody", new P3().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("1")
+			.getBody().as(P3.class);
+		assertEquals(1, x.foo);
+	}
+
+	@Test
+	public void p04_context_prependToStringObject() throws Exception {
+		P3 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.prependTo(BeanContext.BEAN_swaps,P3s.class)
+			.build()
+			.post("/echoBody", new P3().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("1")
+			.getBody().as(P3.class);
+		assertEquals(1, x.foo);
+	}
+
+	public static class P6 {
+		public int foo;
+		public P6 init() {
+			this.foo = 1;
+			return this;
+		}
+	}
+
+	@Test
+	public void p06_context_apply() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.json()
+			.apply(SimpleJsonSerializer.DEFAULT.getPropertyStore())
+			.build()
+			.post("/echoBody", new P6().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:1}")
+			.getBody().as(P6.class);
+	}
+
+	public static class P7 {
+		public int foo,bar,baz;
+		public P7 init() {
+			foo = 1;
+			bar = 2;
+			baz = 3;
+			return this;
+		}
+	}
+
+	@org.apache.juneau.annotation.Bean(sort=true, on="P7")
+	public static class P7a {}
+
+	@BeanConfig(sortProperties="true")
+	public static class P7b {}
+
+	@Test
+	public void p07_context_applyAnnotationsClasses() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.applyAnnotations(P7a.class)
+			.build()
+			.post("/echoBody", new P7().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(P7.class);
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.applyAnnotations(P7b.class)
+			.build()
+			.post("/echoBody", new P7().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(P7.class);
+	}
+
+	public static class P8a {
+		@BeanConfig(sortProperties="true")
+		public void foo() {}
+	}
+
+	@Test
+	public void p08_context_applyAnnotationsMethods() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.applyAnnotations(P8a.class.getMethod("foo"))
+			.build()
+			.post("/echoBody", new P7().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(P7.class);
+	}
+
+	@Test
+	public void p09_context_applyAnnotationsAnnotationList() throws Exception {
+		AnnotationList al = ClassInfo.of(P7b.class).getAnnotationList(ConfigAnnotationFilter.INSTANCE);
+		VarResolverSession vr = VarResolver.DEFAULT.createSession();
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.applyAnnotations(al,vr)
+			.build()
+			.post("/echoBody", new P7().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(P7.class);
+	}
+
+	@Test
+	public void p10_context_removeFrom() throws Exception {
+		P3 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.appendTo(BeanContext.BEAN_swaps,P3s.class)
+			.removeFrom(BeanContext.BEAN_swaps,P3s.class)
+			.build()
+			.post("/echoBody", new P3().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:1}")
+			.getBody().as(P3.class);
+		assertEquals(1, x.foo);
+	}
+
+	@Test
+	public void p12_context_setStringObject() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.json()
+			.set(JsonSerializer.JSON_simpleMode,true)
+			.build()
+			.post("/echoBody", new P3().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:1}")
+			.getBody().as(P3.class);
+	}
+
+	@Test
+	public void p13_context_annotations() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.annotations(new BeanAnnotation(P7.class).sort(true))
+			.build()
+			.post("/echoBody", new P7().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{bar:2,baz:3,foo:1}")
+			.getBody().as(P7.class);
+	}
 }
