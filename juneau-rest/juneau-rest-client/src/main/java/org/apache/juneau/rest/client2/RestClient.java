@@ -3521,8 +3521,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 				s = sb.toString();
 			}
 		}
-		if (s.indexOf('{') != -1)
-			s = s.replace("{", "%7B").replace("}", "%7D");
+		s = fixUrl(s);
 		return new URI(s);
 	}
 

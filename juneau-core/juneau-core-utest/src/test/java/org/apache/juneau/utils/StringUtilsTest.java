@@ -1020,4 +1020,18 @@ public class StringUtilsTest {
 		assertObjectEquals("['x','y<a,b>','z']", splitMethodArgs("x,y<a,b>,z"));
 		assertObjectEquals("['x','y<a<b,c>,d<e,f>>','z']", splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"));
 	}
+
+	//====================================================================================================
+	// fixUrl(String)
+	//====================================================================================================
+	@Test
+	public void testFixUrl() throws Exception {
+		assertEquals(null, fixUrl(null));
+		assertEquals("", fixUrl(""));
+		assertEquals("xxx", fixUrl("xxx"));
+		assertEquals("+x+x+", fixUrl(" x x "));
+		assertEquals("++x++x++", fixUrl("  x  x  "));
+		assertEquals("foo%7Bbar%7Dbaz", fixUrl("foo{bar}baz"));
+		assertEquals("%7Dfoo%7Bbar%7Dbaz%7B", fixUrl("}foo{bar}baz{"));
+	}
 }

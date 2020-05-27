@@ -2838,4 +2838,46 @@ public final class StringUtils {
 
 		return l.toArray(new String[l.size()]);
 	}
+
+	private static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0','9').range('A','Z').range('a','z').build();
+
+	/**
+	 * Attempts to escape any invalid characters found in a URI.
+	 *
+	 * @param in The URI to fix.
+	 * @return The fixed URI.
+	 */
+	public static String fixUrl(String in) {
+
+		if (in == null)
+			return null;
+
+		StringBuilder sb = null;
+
+		int m = 0;
+		for (int i = 0; i < in.length(); i++) {
+			char c = in.charAt(i);
+			if (c <= 127 && ! URI_CHARS.contains(c)) {
+				sb = append(sb, in.substring(m, i));
+				if (c == ' ')
+					sb.append("+");
+				else
+					sb.append('%').append(toHex2(c));
+				m = i+1;
+			}
+		}
+		if (sb != null) {
+			sb.append(in.substring(m));
+			return sb.toString();
+		}
+		return in;
+
+	}
+
+	private static StringBuilder append(StringBuilder sb, String in) {
+		if (sb == null)
+			return new StringBuilder(in);
+		sb.append(in);
+		return sb;
+	}
 }
