@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -47,10 +48,10 @@ public class RestResourceTest {
 	@Rest(allowBodyParam="true")
 	public static class A4 extends A2 {}
 
-	static MockRest a1 = MockRest.build(A1.class);
-	static MockRest a2 = MockRest.build(A2.class);
-	static MockRest a3 = MockRest.build(A3.class);
-	static MockRest a4 = MockRest.build(A4.class);
+	static MockRestClient a1 = MockRestClient.build(A1.class);
+	static MockRestClient a2 = MockRestClient.build(A2.class);
+	static MockRestClient a3 = MockRestClient.build(A3.class);
+	static MockRestClient a4 = MockRestClient.build(A4.class);
 
 	@Test
 	public void a01_allowBodyParam_true() throws Exception {
@@ -111,14 +112,14 @@ public class RestResourceTest {
 	@Rest(allowedHeaderParams="None")
 	public static class B8 extends B5 {}
 
-	static MockRest b1 = MockRest.build(B1.class);
-	static MockRest b2 = MockRest.build(B2.class);
-	static MockRest b3 = MockRest.build(B3.class);
-	static MockRest b4 = MockRest.build(B4.class);
-	static MockRest b5 = MockRest.build(B5.class);
-	static MockRest b6 = MockRest.build(B6.class);
-	static MockRest b7 = MockRest.build(B7.class);
-	static MockRest b8 = MockRest.build(B8.class);
+	static MockRestClient b1 = MockRestClient.build(B1.class);
+	static MockRestClient b2 = MockRestClient.build(B2.class);
+	static MockRestClient b3 = MockRestClient.build(B3.class);
+	static MockRestClient b4 = MockRestClient.build(B4.class);
+	static MockRestClient b5 = MockRestClient.build(B5.class);
+	static MockRestClient b6 = MockRestClient.build(B6.class);
+	static MockRestClient b7 = MockRestClient.build(B7.class);
+	static MockRestClient b8 = MockRestClient.build(B8.class);
 
 	@Test
 	public void b01_allowedHeaderParams_default() throws Exception {
@@ -219,14 +220,14 @@ public class RestResourceTest {
 	@Rest(allowedMethodHeaders="None")
 	public static class C8 extends C5 {}
 
-	static MockRest c1 = MockRest.build(C1.class);
-	static MockRest c2 = MockRest.build(C2.class);
-	static MockRest c3 = MockRest.build(C3.class);
-	static MockRest c4 = MockRest.build(C4.class);
-	static MockRest c5 = MockRest.build(C5.class);
-	static MockRest c6 = MockRest.build(C6.class);
-	static MockRest c7 = MockRest.build(C7.class);
-	static MockRest c8 = MockRest.build(C8.class);
+	static MockRestClient c1 = MockRestClient.build(C1.class);
+	static MockRestClient c2 = MockRestClient.build(C2.class);
+	static MockRestClient c3 = MockRestClient.build(C3.class);
+	static MockRestClient c4 = MockRestClient.build(C4.class);
+	static MockRestClient c5 = MockRestClient.build(C5.class);
+	static MockRestClient c6 = MockRestClient.build(C6.class);
+	static MockRestClient c7 = MockRestClient.build(C7.class);
+	static MockRestClient c8 = MockRestClient.build(C8.class);
 
 	@Test
 	public void c01_allowedMethodHeaders_default() throws Exception {
@@ -234,7 +235,7 @@ public class RestResourceTest {
 		c1.put("/", "").run().assertBody().is("PUT");
 		c1.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c1.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c1.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c1.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -243,7 +244,7 @@ public class RestResourceTest {
 		c2.put("/", "").run().assertBody().is("PUT");
 		c2.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c2.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c2.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c2.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -252,7 +253,7 @@ public class RestResourceTest {
 		c3.put("/", "").run().assertBody().is("PUT");
 		c3.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c3.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c3.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c3.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -261,7 +262,7 @@ public class RestResourceTest {
 		c4.put("/", "").run().assertBody().is("PUT");
 		c4.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c4.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c4.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("FOO");
+		c4.request(GET,"/").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -270,7 +271,7 @@ public class RestResourceTest {
 		c5.put("/", "").run().assertBody().is("PUT");
 		c5.get("/").header("X-Method", "PUT").run().assertBody().is("PUT");
 		c5.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c5.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("FOO");
+		c5.request(GET,"/").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -279,7 +280,7 @@ public class RestResourceTest {
 		c6.put("/", "").run().assertBody().is("PUT");
 		c6.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c6.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c6.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c6.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -288,7 +289,7 @@ public class RestResourceTest {
 		c7.put("/", "").run().assertBody().is("PUT");
 		c7.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c7.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c7.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c7.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -297,7 +298,7 @@ public class RestResourceTest {
 		c8.put("/", "").run().assertBody().is("PUT");
 		c8.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c8.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c8.request("GET","/",null,"").header("X-Method","FOO").run().assertBody().is("GET");
+		c8.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -327,6 +328,7 @@ public class RestResourceTest {
 		}
 		@RestMethod
 		public String head() {
+			// Note that HTTP client is going to ignore this body.
 			return "HEAD";
 		}
 		@RestMethod
@@ -363,117 +365,117 @@ public class RestResourceTest {
 	@Rest(allowedMethodParams="None")
 	public static class D8 extends D5 {}
 
-	static MockRest d1 = MockRest.build(D1.class);
-	static MockRest d2 = MockRest.build(D2.class);
-	static MockRest d3 = MockRest.build(D3.class);
-	static MockRest d4 = MockRest.build(D4.class);
-	static MockRest d5 = MockRest.build(D5.class);
-	static MockRest d6 = MockRest.build(D6.class);
-	static MockRest d7 = MockRest.build(D7.class);
-	static MockRest d8 = MockRest.build(D8.class);
+	static MockRestClient d1 = MockRestClient.build(D1.class);
+	static MockRestClient d2 = MockRestClient.build(D2.class);
+	static MockRestClient d3 = MockRestClient.build(D3.class);
+	static MockRestClient d4 = MockRestClient.build(D4.class);
+	static MockRestClient d5 = MockRestClient.build(D5.class);
+	static MockRestClient d6 = MockRestClient.build(D6.class);
+	static MockRestClient d7 = MockRestClient.build(D7.class);
+	static MockRestClient d8 = MockRestClient.build(D8.class);
 
 	@Test
 	public void d01_allowedMethodHeaders_default() throws Exception {
 		d1.get("/").run().assertBody().is("GET");
 		d1.put("/", "").run().assertBody().is("PUT");
-		d1.head("/").run().assertBody().is("HEAD");
+		d1.head("/").run().assertBody().is("");
 		d1.options("/").run().assertBody().is("OPTIONS");
 		d1.get("/?method=PUT").run().assertBody().is("GET");
 		d1.put("/?method=GET", "").run().assertBody().is("PUT");
 		d1.get("/?method=HEAD").run().assertBody().is("HEAD");
 		d1.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
-		d1.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d1.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d02_allowedMethodParams_GET_only() throws Exception {
 		d2.get("/").run().assertBody().is("GET");
 		d2.put("/", "").run().assertBody().is("PUT");
-		d2.head("/").run().assertBody().is("HEAD");
+		d2.head("/").run().assertBody().is("");
 		d2.options("/").run().assertBody().is("OPTIONS");
 		d2.get("/?method=PUT").run().assertBody().is("GET");
 		d2.put("/?method=GET", "").run().assertBody().is("GET");
 		d2.get("/?method=HEAD").run().assertBody().is("GET");
 		d2.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d2.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d2.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d03_allowedMethodParams_GET_caseSensitivity() throws Exception {
 		d3.get("/").run().assertBody().is("GET");
 		d3.put("/", "").run().assertBody().is("PUT");
-		d3.head("/").run().assertBody().is("HEAD");
+		d3.head("/").run().assertBody().is("");
 		d3.options("/").run().assertBody().is("OPTIONS");
 		d3.get("/?method=PUT").run().assertBody().is("GET");
 		d3.put("/?method=GET", "").run().assertBody().is("GET");
 		d3.get("/?method=HEAD").run().assertBody().is("GET");
 		d3.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d3.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d3.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d04_allowedMethodParams_FOO_only() throws Exception {
 		d4.get("/").run().assertBody().is("GET");
 		d4.put("/", "").run().assertBody().is("PUT");
-		d4.head("/").run().assertBody().is("HEAD");
+		d4.head("/").run().assertBody().is("");
 		d4.options("/").run().assertBody().is("OPTIONS");
 		d4.get("/?method=PUT").run().assertBody().is("GET");
 		d4.put("/?method=GET", "").run().assertBody().is("PUT");
 		d4.get("/?method=HEAD").run().assertBody().is("GET");
 		d4.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d4.request("GET","/?method=FOO",null,"").run().assertBody().is("FOO");
+		d4.request(GET,"/?method=FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void d05_allowedMethodParams_allMethods() throws Exception {
 		d5.get("/").run().assertBody().is("GET");
 		d5.put("/", "").run().assertBody().is("PUT");
-		d5.head("/").run().assertBody().is("HEAD");
+		d5.head("/").run().assertBody().is("");
 		d5.options("/").run().assertBody().is("OPTIONS");
 		d5.get("/?method=PUT").run().assertBody().is("PUT");
 		d5.put("/?method=GET", "").run().assertBody().is("GET");
 		d5.get("/?method=HEAD").run().assertBody().is("HEAD");
 		d5.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
-		d5.request("GET","/?method=FOO",null,"").run().assertBody().is("FOO");
+		d5.request(GET,"/?method=FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
 	public void d06_allowedMethodParams_none() throws Exception {
 		d6.get("/").run().assertBody().is("GET");
 		d6.put("/", "").run().assertBody().is("PUT");
-		d6.head("/").run().assertBody().is("HEAD");
+		d6.head("/").run().assertBody().is("");
 		d6.options("/").run().assertBody().is("OPTIONS");
 		d6.get("/?method=PUT").run().assertBody().is("GET");
 		d6.put("/?method=GET", "").run().assertBody().is("PUT");
 		d6.get("/?method=HEAD").run().assertBody().is("GET");
 		d6.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d6.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d6.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d07_allowedMethodParams_none_caseSensitivity() throws Exception {
 		d7.get("/").run().assertBody().is("GET");
 		d7.put("/", "").run().assertBody().is("PUT");
-		d7.head("/").run().assertBody().is("HEAD");
+		d7.head("/").run().assertBody().is("");
 		d7.options("/").run().assertBody().is("OPTIONS");
 		d7.get("/?method=PUT").run().assertBody().is("GET");
 		d7.put("/?method=GET", "").run().assertBody().is("PUT");
 		d7.get("/?method=HEAD").run().assertBody().is("GET");
 		d7.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d7.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d7.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
 	public void d08_allowedMethodParams_none_overridingParent() throws Exception {
 		d8.get("/").run().assertBody().is("GET");
 		d8.put("/", "").run().assertBody().is("PUT");
-		d8.head("/").run().assertBody().is("HEAD");
+		d8.head("/").run().assertBody().is("");
 		d8.options("/").run().assertBody().is("OPTIONS");
 		d8.get("/?method=PUT").run().assertBody().is("GET");
 		d8.put("/?method=GET", "").run().assertBody().is("PUT");
 		d8.get("/?method=HEAD").run().assertBody().is("GET");
 		d8.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d8.request("GET","/?method=FOO",null,"").run().assertBody().is("GET");
+		d8.request(GET,"/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test

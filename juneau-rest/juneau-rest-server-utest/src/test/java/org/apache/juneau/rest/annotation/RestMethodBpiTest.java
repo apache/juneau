@@ -57,7 +57,7 @@ public class RestMethodBpiTest {
 			return new MyBeanA().init();
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -144,7 +144,7 @@ public class RestMethodBpiTest {
 			return new MyBeanA().init();
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01() throws Exception {
@@ -230,7 +230,7 @@ public class RestMethodBpiTest {
 			return new MyBeanB().init();
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01() throws Exception {
@@ -316,7 +316,7 @@ public class RestMethodBpiTest {
 			return new MyBeanB().init();
 		}
 	}
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01() throws Exception {
@@ -384,7 +384,7 @@ public class RestMethodBpiTest {
 			return new MyBeanA().init();
 		}
 	}
-	static MockRest e = MockRest.build(E.class);
+	static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01() throws Exception {
@@ -420,7 +420,7 @@ public class RestMethodBpiTest {
 			return new MyBeanA().init();
 		}
 	}
-	static MockRest f = MockRest.build(F.class);
+	static MockRestClient f = MockRestClient.build(F.class);
 
 	@Test
 	public void f01() throws Exception {
@@ -469,7 +469,7 @@ public class RestMethodBpiTest {
 			return new MyBeanA().init();
 		}
 	}
-	static MockRest g = MockRest.build(G.class);
+	static MockRestClient g = MockRestClient.build(G.class);
 
 	@Test
 	public void g01() throws Exception {

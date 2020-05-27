@@ -49,7 +49,7 @@ public class RestResourcePathTest {
 	@Rest(path="/p2")
 	public static class A02 extends A02a {}
 
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_nestedChildren() throws Exception {

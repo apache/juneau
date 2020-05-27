@@ -30,16 +30,16 @@ public class ResponseStatusAnnotationTest {
 	public static class A {
 		@RestMethod
 		public void a01(@ResponseStatus Value<Integer> status) {
-			status.set(100);
+			status.set(202);
 		}
 	}
 
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
 		a.get("/a01")
 			.run()
-			.assertStatus().is(100);
+			.assertStatusCode().is(202);
 	}
 }

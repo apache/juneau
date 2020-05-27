@@ -31,7 +31,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRest a1 = MockRest.build(A1.class);
+	static MockRestClient a1 = MockRestClient.build(A1.class);
 
 	@Test
 	public void a01a() throws Exception {
@@ -45,11 +45,13 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void a01b_preventPathTraversals() throws Exception {
 		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(404);
+			.assertStatusCode().is(404);
 		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(404);
+			.assertStatusCode().is(404);
 	}
 
 	@Rest(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
@@ -59,7 +61,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRest a2 = MockRest.build(A1.class);
+	static MockRestClient a2 = MockRestClient.build(A1.class);
 
 	@Test
 	public void a02a() throws Exception {
@@ -73,11 +75,13 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void a02b_preventPathTraversals() throws Exception {
 		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(404);
+			.assertStatusCode().is(404);
 		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(404);
+			.assertStatusCode().is(404);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -91,7 +95,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01() throws Exception {
@@ -122,8 +126,8 @@ public class RestResourceStaticFilesTest {
 		}
 	}
 
-	static MockRest c1 = MockRest.build(C1.class);
-	static MockRest c2 = MockRest.build(C2.class);
+	static MockRestClient c1 = MockRestClient.build(C1.class);
+	static MockRestClient c2 = MockRestClient.build(C2.class);
 
 	@Test
 	public void c01() throws Exception {
@@ -170,7 +174,7 @@ public class RestResourceStaticFilesTest {
 		}
 	}
 
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01() throws Exception {

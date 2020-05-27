@@ -322,7 +322,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * POJOs are converted to fully renderable HTML pages.
 	 *
 	 * <p>
-	 * 	{@link HtmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	{@link HtmlDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
 	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
 	 * 			bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.
@@ -368,7 +368,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Same as {@link #htmlDoc()} but without the header and body tags and page title and description.
 	 *
 	 * <p>
-	 * 	{@link HtmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	{@link HtmlStrippedDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 	 * 	<ul>
 	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}),
 	 * 			bean context property setters (e.g. {@link #swaps(Object...)}), or generic property setters (e.g. {@link #set(String, Object)}) defined on this builder class.

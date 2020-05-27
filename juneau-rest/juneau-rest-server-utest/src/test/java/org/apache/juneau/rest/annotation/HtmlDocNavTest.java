@@ -49,7 +49,7 @@ public class HtmlDocNavTest {
 			return "OK";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -99,7 +99,7 @@ public class HtmlDocNavTest {
 			return "OK";
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01() throws Exception {

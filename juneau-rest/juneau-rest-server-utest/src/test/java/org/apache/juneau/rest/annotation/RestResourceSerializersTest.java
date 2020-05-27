@@ -117,7 +117,7 @@ public class RestResourceSerializersTest {
 			return "test406";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_serializerOnClass() throws Exception {
@@ -127,8 +127,9 @@ public class RestResourceSerializersTest {
 			.assertBody().is("text/a - test1");
 		a.get("/a01?noTrace=true")
 			.accept("text/b")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
 				"Supported media-types: ['text/a'"
@@ -138,8 +139,9 @@ public class RestResourceSerializersTest {
 	public void a02_serializerOnMethod() throws Exception {
 		a.get("/a02?noTrace=true")
 			.accept("text/a")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -171,8 +173,9 @@ public class RestResourceSerializersTest {
 	public void a05_validErrorResponse() throws Exception {
 		a.get("/a05?noTrace=true")
 			.accept("text/bad")
+			.ignoreErrors()
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
 				"Supported media-types: ['text/a"

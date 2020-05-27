@@ -35,13 +35,20 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Represents a request to a remote REST resource.
@@ -99,10 +106,442 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Convenience method for specifying JSON as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * {@link JsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
+	 * 		{@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest json() {
+		return serializer(JsonSerializer.DEFAULT).parser(JsonParser.DEFAULT);
+	}
+
+	/**
+	 * Convenience method for specifying Simplified JSON as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * Simplified JSON is typically useful for automated tests because you can do simple string comparison of results
+	 * without having to escape lots of quotes.
+	 *
+	 * <p>
+	 * 	{@link SimpleJsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+	 * 		by {@link #header(String,Object)} or {@link #accept(Object)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
+	 * 		by {@link #header(String,Object)} or {@link #contentType(Object)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
+	 * 	<ul>
+	 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+	 * 		last-enabled language if the headers are not set.
+	 * 	</ul>
+	 * <p>
+	 * 	Identical to calling <c>serializer(SimpleJsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest simpleJson() {
+		return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying XML as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses XML marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().xml().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest xml() {
+		return serializer(XmlSerializer.class).parser(XmlParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying HTML as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * POJOs are converted to HTML without any sort of doc wrappers.
+	 *
+	 * <p>
+	 * 	{@link HtmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(HtmlSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses HTML marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().html().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest html() {
+		return serializer(HtmlSerializer.class).parser(HtmlParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying HTML DOC as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * POJOs are converted to fully renderable HTML pages.
+	 *
+	 * <p>
+	 * 	{@link HtmlDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(HtmlDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses HTML Doc marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlDoc().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest htmlDoc() {
+		return serializer(HtmlDocSerializer.class).parser(HtmlParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying Stripped HTML DOC as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * Same as {@link #htmlDoc()} but without the header and body tags and page title and description.
+	 *
+	 * <p>
+	 * 	{@link HtmlStrippedDocSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(HtmlStrippedDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses HTML Stripped Doc marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest htmlStrippedDoc() {
+		return serializer(HtmlStrippedDocSerializer.class).parser(HtmlParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying Plain Text as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * Plain text marshalling typically only works on simple POJOs that can be converted to and from strings using
+	 * swaps, swap methods, etc...
+	 *
+	 * <p>
+	 * 	{@link PlainTextSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().plainText().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest plainText() {
+		return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying MessagePack as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * MessagePack is a binary equivalent to JSON that takes up considerably less space than JSON.
+	 *
+	 * <p>
+	 * 	{@link MsgPackSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().msgPack().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest msgPack() {
+		return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying UON as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * UON is Url-Encoding Object notation that is equivalent to JSON but suitable for transmission as URL-encoded
+	 * query and form post values.
+	 *
+	 * <p>
+	 * 	{@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses UON marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().uon().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest uon() {
+		return serializer(UonSerializer.class).parser(UonParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying URL-Encoding as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * 	{@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 		<li>This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing
+	 * 			the request body.  Instead, the part serializer specified via {@link RestClientBuilder#partSerializer(Class)} is used.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().urlEnc().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest urlEnc() {
+		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
+	}
+
+	/**
+	 * Convenience method for specifying OpenAPI as the marshalling transmission media type for this request only.
+	 *
+	 * <p>
+	 * OpenAPI is a language that allows serialization to formats that use {@link HttpPartSchema} objects to describe their structure.
+	 *
+	 * <p>
+	 * 	{@link OpenApiSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+	 * 	<ul>
+	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 		<li>Typically the {@link RestRequest#body(Object, HttpPartSchema)} method will be used to specify the body of the request with the
+	 * 			schema describing it's structure.
+	 * 	</ul>
+	 * <p>
+	 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+	 * 	<ul>
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 			bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 * 		<li>Typically the {@link RestResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+	 * 	</ul>
+	 * <p>
+	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(Object)}.
+	 * <p>
+	 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
+	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(Object)}.
+	 * <p>
+	 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
+	 * 	RestClient c = RestClient.<jsm>create</jsm>().openApi().build();
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest openApi() {
+		return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
+	}
+
+	/**
 	 * Specifies the serializer to use on the request body.
 	 *
 	 * <p>
 	 * Overrides the serializers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * 	The serializer is not modified by an of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 	bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
 	 *
 	 * <p>
 	 * If the <c>Content-Type</c> header is not set on the request, it will be set to the media type of this serializer.
@@ -116,10 +555,35 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
+	 * Specifies the serializer to use on the request body.
+	 *
+	 * <p>
+	 * Overrides the serializers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * 	The serializer can be configured using any of the serializer property setters (e.g. {@link RestClientBuilder#sortCollections()}),
+	 * 	bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 *
+	 * <p>
+	 * If the <c>Content-Type</c> header is not set on the request, it will be set to the media type of this serializer.
+	 *
+	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest serializer(Class<? extends Serializer> serializer) {
+		this.serializer = client.getInstance(serializer);
+		return this;
+	}
+
+	/**
 	 * Specifies the parser to use on the response body.
 	 *
 	 * <p>
 	 * Overrides the parsers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * 	The parser is not modified by any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 	bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
 	 *
 	 * <p>
 	 * If the <c>Accept</c> header is not set on the request, it will be set to the media type of this parser.
@@ -129,6 +593,27 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 */
 	public RestRequest parser(Parser parser) {
 		this.parser = parser;
+		return this;
+	}
+
+	/**
+	 * Specifies the parser to use on the response body.
+	 *
+	 * <p>
+	 * Overrides the parsers specified on the {@link RestClient}.
+	 *
+	 * <p>
+	 * 	The parser can be configured using any of the parser property setters (e.g. {@link RestClientBuilder#strict()}),
+	 * 	bean context property setters (e.g. {@link RestClientBuilder#swaps(Object...)}), or generic property setters (e.g. {@link RestClientBuilder#set(String, Object)}) defined on this builder class.
+	 *
+	 * <p>
+	 * If the <c>Accept</c> header is not set on the request, it will be set to the media type of this parser.
+	 *
+	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest parser(Class<? extends Parser> parser) {
+		this.parser = client.getInstance(parser);
 		return this;
 	}
 

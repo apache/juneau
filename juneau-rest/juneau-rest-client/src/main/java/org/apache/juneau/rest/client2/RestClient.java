@@ -1850,6 +1850,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	final Level logRequestsLevel;
 	private final boolean logToConsole;
 	private StackTraceElement[] closedStack;
+	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
 
 	// These are read directly by RestCall.
 	final SerializerGroup serializers;
@@ -2263,6 +2264,28 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	}
 
 	/**
+	 * Perform a <c>HEAD</c> request against the specified URL.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>{@link URIBuilder}
+	 * 		<li class='jc'>{@link URI}
+	 * 		<li class='jc'>{@link URL}
+	 * 		<li class='jc'>{@link String}
+	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest head(Object url) throws RestCallException {
+		return request("HEAD", url, false);
+	}
+
+	/**
 	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
 	 * against the specified URL.
 	 *
@@ -2585,6 +2608,34 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 	/**
 	 * Perform a generic REST call.
+	 *
+	 * @param method The HTTP method.
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>{@link URIBuilder}
+	 * 		<li class='jc'>{@link URI}
+	 * 		<li class='jc'>{@link URL}
+	 * 		<li class='jc'>{@link String}
+	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest request(HttpMethod method, Object url) throws RestCallException {
+		RestRequest rc = request(method.name(), url, method.hasContent());
+		return rc;
+	}
+
+	/**
+	 * Perform a generic REST call.
+	 *
+	 * <p>
+	 * Typically you're going to use {@link #request(HttpMethod, Object)} or {@link #request(HttpMethod, Object, Object)},
+	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
 	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
 	 * @param url
@@ -3380,6 +3431,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		}
 		List<Parser> l = parsers.getParsers();
 		return l.size() == 1 ? l.get(0) : null;
+	}
+
+	@SuppressWarnings("unchecked")
+	<T extends Context> T getInstance(Class<T> c) {
+		Context o = requestContexts.get(c);
+		if (o == null) {
+			o = ContextCache.INSTANCE.create(c, getPropertyStore());
+			requestContexts.put(c, o);
+		}
+		return (T)o;
 	}
 
 	@Override /* Context */

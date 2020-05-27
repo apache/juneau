@@ -60,7 +60,7 @@ public class RestMethodPathTest {
 			return "h";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_overlappingPaths() throws Exception {
@@ -100,7 +100,7 @@ public class RestMethodPathTest {
 			return "b";
 		}
 	}
-	static MockRest b2 = MockRest.build(B2.class);
+	static MockRestClient b2 = MockRestClient.build(B2.class);
 
 	@Test
 	public void b01_pathOverriddenByChild() throws Exception {

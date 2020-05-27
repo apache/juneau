@@ -44,7 +44,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_default() throws Exception {
@@ -107,9 +107,9 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest b1 = MockRest.build(B1.class);
-	static MockRest b2 = MockRest.build(B2.class);
-	static MockRest b3 = MockRest.build(B3.class);
+	static MockRestClient b1 = MockRestClient.build(B1.class);
+	static MockRestClient b2 = MockRestClient.build(B2.class);
+	static MockRestClient b3 = MockRestClient.build(B3.class);
 
 	@Test
 	public void b01_logging() throws Exception {
@@ -215,10 +215,10 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest c1 = MockRest.build(C1.class);
-	static MockRest c2 = MockRest.build(C2.class);
-	static MockRest c3 = MockRest.build(C3.class);
-	static MockRest c4 = MockRest.build(C4.class);
+	static MockRestClient c1 = MockRestClient.build(C1.class);
+	static MockRestClient c2 = MockRestClient.build(C2.class);
+	static MockRestClient c3 = MockRestClient.build(C3.class);
+	static MockRestClient c4 = MockRestClient.build(C4.class);
 
 	@Test
 	public void c01_useStackTraceHashing() throws Exception {
@@ -321,9 +321,9 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest d1 = MockRest.build(D1.class);
-	static MockRest d2 = MockRest.build(D2.class);
-	static MockRest d3 = MockRest.build(D3.class);
+	static MockRestClient d1 = MockRestClient.build(D1.class);
+	static MockRestClient d2 = MockRestClient.build(D2.class);
+	static MockRestClient d3 = MockRestClient.build(D3.class);
 
 	@Test
 	public void d01_stackTraceHashingTimeout() throws Exception {
@@ -429,10 +429,10 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest e1 = MockRest.build(E1.class);
-	static MockRest e2 = MockRest.build(E2.class);
-	static MockRest e3 = MockRest.build(E3.class);
-	static MockRest e4 = MockRest.build(E4.class);
+	static MockRestClient e1 = MockRestClient.build(E1.class);
+	static MockRestClient e2 = MockRestClient.build(E2.class);
+	static MockRestClient e3 = MockRestClient.build(E3.class);
+	static MockRestClient e4 = MockRestClient.build(E4.class);
 
 	@Test
 	public void e01_noTrace() throws Exception {
@@ -535,9 +535,9 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest f1 = MockRest.build(F1.class);
-	static MockRest f2 = MockRest.build(F2.class);
-	static MockRest f3 = MockRest.build(F3.class);
+	static MockRestClient f1 = MockRestClient.build(F1.class);
+	static MockRestClient f2 = MockRestClient.build(F2.class);
+	static MockRestClient f3 = MockRestClient.build(F3.class);
 
 	@Test
 	public void f01_rules() throws Exception {
@@ -629,8 +629,8 @@ public class RestResourceLoggingTest {
 			return string(req.getCallLoggerConfig().getRules());
 		}
 	}
-	static MockRest g1 = MockRest.build(G1.class);
-	static MockRest g2 = MockRest.build(G2.class);
+	static MockRestClient g1 = MockRestClient.build(G1.class);
+	static MockRestClient g2 = MockRestClient.build(G2.class);
 
 	@Test
 	public void g01_rules() throws Exception {
@@ -669,17 +669,19 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRest MY_REST = MockRest.build(MyRestClass.class);
+	static MockRestClient MY_REST = MockRestClient.build(MyRestClass.class);
 
 	@Test
 	public void test() throws Exception {
 		MY_REST.post("/foo?foo=bar", "Foo")
+			.ignoreErrors()
 			.header("Foo", "bar")
 			.run()
-			.assertStatus().is(500);
+			.assertStatusCode().is(500);
 		MY_REST.post("/foo?foo=bar", "Foo")
+			.ignoreErrors()
 			.header("Foo", "bar")
 			.run()
-			.assertStatus().is(500);
+			.assertStatusCode().is(500);
 	}
 }
