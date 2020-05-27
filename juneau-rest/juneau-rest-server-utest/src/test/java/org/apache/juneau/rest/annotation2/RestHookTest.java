@@ -79,7 +79,7 @@ public class RestHookTest {
 			return req.getBody().asType(String.class);
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	public static class A01 extends ReaderParser {
 		public A01(PropertyStore ps) {
@@ -159,7 +159,7 @@ public class RestHookTest {
 			return null;
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	public static class B01 extends WriterSerializer {
 		public B01(PropertyStore ps) {
@@ -214,7 +214,7 @@ public class RestHookTest {
 
 	@Rest(children={C_Super.class,C_Sub.class})
 	public static class C {}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Rest(path="/super")
 	public static class C_Super {
@@ -289,7 +289,7 @@ public class RestHookTest {
 	//====================================================================================================
 	@Rest(children={D_Super.class,D_Sub.class})
 	public static class D {}
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Rest(path="/super")
 	public static class D_Super {
@@ -387,7 +387,7 @@ public class RestHookTest {
 		}
 	)
 	public static class E {}
-	static MockRest e = MockRest.build(E.class);
+	static MockRestClient e = MockRestClient.build(E.class);
 
 	@Rest(path="/super")
 	public static class E_Super {
@@ -502,7 +502,7 @@ public class RestHookTest {
 				.a("4", res.getHeader("start4-called"));
 		}
 	}
-	static MockRest f = MockRest.build(F.class);
+	static MockRestClient f = MockRestClient.build(F.class);
 
 	public static class F_Parent {
 		private boolean start1Called;
@@ -553,7 +553,7 @@ public class RestHookTest {
 				.a("4", res.getHeader("pre4-called"));
 		}
 	}
-	static MockRest g = MockRest.build(G.class);
+	static MockRestClient g = MockRestClient.build(G.class);
 
 	public static class G_Parent {
 		private boolean pre1Called;
@@ -600,7 +600,7 @@ public class RestHookTest {
 			return "OK";
 		}
 	}
-	static MockRest h = MockRest.build(H.class);
+	static MockRestClient h = MockRestClient.build(H.class);
 
 	public static class H_Parent {
 		private boolean post1Called;

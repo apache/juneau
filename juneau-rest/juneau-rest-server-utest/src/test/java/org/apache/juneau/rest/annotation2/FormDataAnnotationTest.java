@@ -45,7 +45,7 @@ public class FormDataAnnotationTest {
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -80,7 +80,7 @@ public class FormDataAnnotationTest {
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"]";
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01() throws Exception {
@@ -128,7 +128,7 @@ public class FormDataAnnotationTest {
 				.a("f3", f3);
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_defaultFormData() throws Exception {
@@ -180,7 +180,7 @@ public class FormDataAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest d = MockRest.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
+	static MockRestClient d = MockRestClient.create(D.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
 
 	@Test
 	public void d01_optionalParam_integer() throws Exception {

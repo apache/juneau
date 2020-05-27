@@ -50,7 +50,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_get() throws Exception {
@@ -110,7 +110,7 @@ public class QueryAnnotationTest {
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_get1() throws Exception {
@@ -170,7 +170,7 @@ public class QueryAnnotationTest {
 			return x;
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_StringArray() throws Exception {
@@ -238,7 +238,7 @@ public class QueryAnnotationTest {
 				.a("f3", f3);
 		}
 	}
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_defaultQuery() throws Exception {
@@ -290,7 +290,7 @@ public class QueryAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest e = MockRest.buildJson(E.class);
+	static MockRestClient e = MockRestClient.buildJson(E.class);
 
 	@Test
 	public void e01_optionalParam_integer() throws Exception {

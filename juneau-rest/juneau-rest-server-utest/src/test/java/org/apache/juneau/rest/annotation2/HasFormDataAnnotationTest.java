@@ -36,7 +36,7 @@ public class HasFormDataAnnotationTest {
 		}
 
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_post() throws Exception {

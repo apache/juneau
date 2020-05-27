@@ -1890,7 +1890,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
 	public RestRequest stringBody(String input) throws RestCallException {
-		return body(new StringReader(input));
+		return body(input == null ? null : new StringReader(input));
 	}
 
 	/**
@@ -2803,7 +2803,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 			if (hasInput || formData != null) {
 
-				if (hasInput && formData != null)
+				if (hasInput && formData != null && input != null)
 					throw new RestCallException("Both input and form-data found on same request.");
 
 				if (request2 == null)
