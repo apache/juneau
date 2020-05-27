@@ -49,7 +49,7 @@ public class ClientVersionTest {
 			return "2";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_defaultHeader() throws Exception {
@@ -92,7 +92,7 @@ public class ClientVersionTest {
 			return "2";
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_testCustomHeader() throws Exception {

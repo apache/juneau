@@ -334,6 +334,21 @@ public class RestResponseBody implements HttpEntity {
 		}
 	}
 
+
+	/**
+	 * Returns the HTTP response message body as a byte array.
+	 *
+	 * 	The HTTP response message body reader, never <jk>null</jk>.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
+	 * @return The HTTP response body as a byte array.
+	 * @throws IOException If an exception occurred.
+	 */
+	public byte[] asBytes() throws IOException {
+		cache();
+		return cache;
+	}
+
+
 	/**
 	 * Pipes the contents of the response to the specified output stream.
 	 *

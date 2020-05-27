@@ -103,13 +103,13 @@ public class AcceptCharsetTest {
 			}
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_testCharsetOnResponse() throws Exception {
 		b.put("/charsetOnResponse", null).plainText().run().assertBody().is("UTF-8/UTF-8");
 		b.put("/charsetOnResponse", null).plainText().acceptCharset("Shift_JIS").run().assertBody().is("UTF-8/Shift_JIS");
-		b.put("/charsetOnResponse?noTrace=true", null).plainText().acceptCharset("BAD").run().assertStatusCode().is(406).assertBody().contains("No supported charsets in header 'Accept-Charset': 'BAD'");
+		b.put("/charsetOnResponse?noTrace=true", null).ignoreErrors().plainText().acceptCharset("BAD").run().assertStatusCode().is(406).assertBody().contains("No supported charsets in header 'Accept-Charset': 'BAD'");
 		b.put("/charsetOnResponse", null).plainText().acceptCharset("UTF-8").run().assertBody().is("UTF-8/UTF-8");
 		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad,iso-8859-1").run().assertBody().is("UTF-8/ISO-8859-1");
 		b.put("/charsetOnResponse", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").run().assertBody().is("UTF-8/ISO-8859-1");

@@ -25,6 +25,7 @@ import org.apache.http.params.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.utils.*;
@@ -327,6 +328,20 @@ public class RestResponse implements HttpResponse {
 	 */
 	public FluentDateAssertion<RestResponse> assertDateHeader(String name) throws RestCallException {
 		return getHeader(name).assertThatDate();
+	}
+
+	public FluentStringAssertion<RestResponse> assertCharset() throws RestCallException {
+		return new FluentStringAssertion<>(getCharacterEncoding(), this);
+	}
+
+	public String getCharacterEncoding() throws RestCallException {
+		Set<String> s = getContentType().getParameters().get("charset");
+		return s == null ? "utf-8" : s.iterator().next();
+
+	}
+
+	public ContentType getContentType() throws RestCallException {
+		return getHeader("Content-Type").as(ContentType.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

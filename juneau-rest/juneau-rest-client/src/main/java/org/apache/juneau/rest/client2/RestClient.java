@@ -2076,6 +2076,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	}
 
 	/**
+	 * Perform a <c>GET</c> request against the root URL.
+	 *
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest get() throws RestCallException {
+		return request("GET", null, false);
+	}
+
+
+	/**
 	 * Perform a <c>PUT</c> request against the specified URL.
 	 *
 	 * @param url
