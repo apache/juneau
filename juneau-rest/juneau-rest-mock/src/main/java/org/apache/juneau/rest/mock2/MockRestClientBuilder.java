@@ -62,6 +62,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	protected MockRestClientBuilder() {
 		super(null);
 		rootUrl("http://localhost");
+		ignoreErrors();
 	}
 
 	@Override /* ContextBuilder */

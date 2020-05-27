@@ -67,20 +67,20 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_codeOnClass() throws Exception {
 		a.get("/a01")
 			.run()
-			.assertStatusCode().is(201)
+			.assertStatus().is(201)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void a02_codeOnThrown() throws Exception {
 		a.get("/a02")
 			.run()
-			.assertStatusCode().is(501);
+			.assertStatus().is(501);
 	}
 
 	//=================================================================================================================
@@ -125,34 +125,34 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_useOnMethod() throws Exception {
 		b.get("/b01")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void b03_useOnClass() throws Exception {
 		b.get("/b03")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void b05_useOnThrown() throws Exception {
 		b.get("/b05")
 			.run()
-			.assertStatusCode().is(500)
+			.assertStatus().is(500)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void b07_useOnParameter() throws Exception {
 		b.get("/b07")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 
@@ -228,62 +228,62 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_useOnMethod() throws Exception {
 		d.get("/d01")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d02_useOnClass() throws Exception {
 		d.get("/d02")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d03_useOnThrown() throws Exception {
 		d.get("/d03")
 			.run()
-			.assertStatusCode().is(500)
+			.assertStatus().is(500)
 			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d04_useOnParameter() throws Exception {
 		d.get("/d04")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo|bar");
 	}
 	@Test
 	public void d05_useOnMethodBytes() throws Exception {
 		d.get("/d05")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d06_useOnClassBytes() throws Exception {
 		d.get("/d06")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d07_useOnThrownBytes() throws Exception {
 		d.get("/d07")
 			.run()
-			.assertStatusCode().is(500)
+			.assertStatus().is(500)
 			.assertBody().is("Zm9v");
 	}
 	@Test
 	public void d08_useOnParameterBytes() throws Exception {
 		d.get("/d08")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("Zm9v");
 	}
 
@@ -323,34 +323,34 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest e = MockRest.build(E.class);
+	static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01_basic_onParameter() throws Exception {
 		e.get("/e01")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void e02_basic_onType() throws Exception {
 		e.get("/e02")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void e03_basic_onMethod() throws Exception {
 		e.get("/e03")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void e04_basic_onReturnedType() throws Exception {
 		e.get("/e04")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 	}
 
@@ -387,14 +387,14 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest f = MockRest.build(F.class);
+	static MockRestClient f = MockRestClient.build(F.class);
 	static Swagger sf = getSwagger(F.class);
 
 	@Test
 	public void f01a_basic_onParameter() throws Exception {
 		f.get("/f01")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1|2");
 	}
 	@Test
@@ -406,7 +406,7 @@ public class ResponseAnnotationTest {
 	public void f02a_basic_onType() throws Exception {
 		f.get("/f02")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1|2");
 	}
 	@Test
@@ -418,7 +418,7 @@ public class ResponseAnnotationTest {
 	public void f03a_basic_onMethod() throws Exception {
 		f.get("/f03")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1|2");
 	}
 	@Test
@@ -430,7 +430,7 @@ public class ResponseAnnotationTest {
 	public void f04a_basic_onReturnedType() throws Exception {
 		f.get("/f04")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1|2");
 	}
 	@Test
@@ -472,14 +472,14 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest g = MockRest.build(G.class);
+	static MockRestClient g = MockRestClient.build(G.class);
 	static Swagger sg = getSwagger(G.class);
 
 	@Test
 	public void g01a_basic_onParameter() throws Exception {
 		g.get("/g01").json()
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[1,2]");
 	}
 	@Test
@@ -491,7 +491,7 @@ public class ResponseAnnotationTest {
 	public void g02a_basic_onType() throws Exception {
 		g.get("/g02").json()
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[1,2]");
 	}
 	@Test
@@ -503,7 +503,7 @@ public class ResponseAnnotationTest {
 	public void g03a_basic_onMethod() throws Exception {
 		g.get("/g03").json()
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[1,2]");
 	}
 	@Test
@@ -515,7 +515,7 @@ public class ResponseAnnotationTest {
 	public void g04a_basic_onReturnedType() throws Exception {
 		g.get("/g04").json()
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[1,2]");
 	}
 	@Test
@@ -541,13 +541,13 @@ public class ResponseAnnotationTest {
 			return body;
 		}
 	}
-	static MockRest j = MockRest.build(J.class);
+	static MockRestClient j = MockRestClient.build(J.class);
 
 	@Test
 	public void j01a_basic() throws Exception {
 		j.post("/j01", "foo").accept("text/plain")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo")
 			.assertHeader("Content-Type").is("text/plain");
 	}

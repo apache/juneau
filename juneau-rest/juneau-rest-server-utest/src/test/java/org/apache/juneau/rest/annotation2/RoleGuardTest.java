@@ -36,16 +36,16 @@ public class RoleGuardTest {
 
 	@Test
 	public void a01a_onClass_simple_pass() throws Exception {
-		a1.get().roles("foo").run().assertStatusCode().is(200);
-		a1.get().roles("foo","bar").run().assertStatusCode().is(200);
-		a1.get().roles("bar","foo").run().assertStatusCode().is(200);
+		a1.get().roles("foo").run().assertStatus().is(200);
+		a1.get().roles("foo","bar").run().assertStatus().is(200);
+		a1.get().roles("bar","foo").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void a01b_onClass_simple_fail() throws Exception {
-		a1.get().run().assertStatusCode().is(403);
-		a1.get().roles("foo2").run().assertStatusCode().is(403);
-		a1.get().roles("foo2","bar").run().assertStatusCode().is(403);
+		a1.get().run().assertStatus().is(403);
+		a1.get().roles("foo2").run().assertStatus().is(403);
+		a1.get().roles("foo2","bar").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -63,16 +63,16 @@ public class RoleGuardTest {
 
 	@Test
 	public void a02a_onMethod_simple_pass() throws Exception {
-		a2.get().roles("foo").run().assertStatusCode().is(200);
-		a2.get().roles("foo","bar").run().assertStatusCode().is(200);
-		a2.get().roles("bar","foo").run().assertStatusCode().is(200);
+		a2.get().roles("foo").run().assertStatus().is(200);
+		a2.get().roles("foo","bar").run().assertStatus().is(200);
+		a2.get().roles("bar","foo").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void a02b_onMethod_simple_fail() throws Exception {
-		a2.get().run().assertStatusCode().is(403);
-		a2.get().roles("foo2").run().assertStatusCode().is(403);
-		a2.get().roles("foo2","bar").run().assertStatusCode().is(403);
+		a2.get().run().assertStatus().is(403);
+		a2.get().roles("foo2").run().assertStatus().is(403);
+		a2.get().roles("foo2","bar").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -90,18 +90,18 @@ public class RoleGuardTest {
 
 	@Test
 	public void a03a_onBoth_simple_pass() throws Exception {
-		a3.get().roles("foo","bar").run().assertStatusCode().is(200);
-		a3.get().roles("bar","foo").run().assertStatusCode().is(200);
-		a3.get().roles("bar","foo","baz").run().assertStatusCode().is(200);
+		a3.get().roles("foo","bar").run().assertStatus().is(200);
+		a3.get().roles("bar","foo").run().assertStatus().is(200);
+		a3.get().roles("bar","foo","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void a03b_onBoth_simple_fail() throws Exception {
-		a3.get().run().assertStatusCode().is(403);
-		a3.get().roles("foo").run().assertStatusCode().is(403);
-		a3.get().roles("bar").run().assertStatusCode().is(403);
-		a3.get().roles("foo2").run().assertStatusCode().is(403);
-		a3.get().roles("foo2","bar").run().assertStatusCode().is(403);
+		a3.get().run().assertStatus().is(403);
+		a3.get().roles("foo").run().assertStatus().is(403);
+		a3.get().roles("bar").run().assertStatus().is(403);
+		a3.get().roles("foo2").run().assertStatus().is(403);
+		a3.get().roles("foo2","bar").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -129,21 +129,21 @@ public class RoleGuardTest {
 
 	@Test
 	public void a04a_inheritence_simple_pass() throws Exception {
-		a4.get().roles("foo","bar","baz","qux").run().assertStatusCode().is(200);
-		a4.get().roles("foo","bar","baz","qux","quux").run().assertStatusCode().is(200);
+		a4.get().roles("foo","bar","baz","qux").run().assertStatus().is(200);
+		a4.get().roles("foo","bar","baz","qux","quux").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void a04b_inheritence_simple_fail() throws Exception {
-		a3.get().run().assertStatusCode().is(403);
-		a3.get().roles("foo").run().assertStatusCode().is(403);
-		a3.get().roles("bar").run().assertStatusCode().is(403);
-		a3.get().roles("baz").run().assertStatusCode().is(403);
-		a3.get().roles("qux").run().assertStatusCode().is(403);
-		a4.get().roles("foo","bar","baz").run().assertStatusCode().is(403);
-		a4.get().roles("foo","bar","qux").run().assertStatusCode().is(403);
-		a4.get().roles("foo","baz","qux").run().assertStatusCode().is(403);
-		a4.get().roles("bar","baz","qux").run().assertStatusCode().is(403);
+		a3.get().run().assertStatus().is(403);
+		a3.get().roles("foo").run().assertStatus().is(403);
+		a3.get().roles("bar").run().assertStatus().is(403);
+		a3.get().roles("baz").run().assertStatus().is(403);
+		a3.get().roles("qux").run().assertStatus().is(403);
+		a4.get().roles("foo","bar","baz").run().assertStatus().is(403);
+		a4.get().roles("foo","bar","qux").run().assertStatus().is(403);
+		a4.get().roles("foo","baz","qux").run().assertStatus().is(403);
+		a4.get().roles("bar","baz","qux").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -194,130 +194,130 @@ public class RoleGuardTest {
 	@Test
 	public void b01a_orsWithComma_pass() throws Exception {
 		// @Rest(roleGuard="foo,bar")
-		b1a.get().roles("foo").run().assertStatusCode().is(200);
-		b1a.get().roles("bar").run().assertStatusCode().is(200);
-		b1a.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1a.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1a.get().roles("foo").run().assertStatus().is(200);
+		b1a.get().roles("bar").run().assertStatus().is(200);
+		b1a.get().roles("foo","bar").run().assertStatus().is(200);
+		b1a.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01b_orsWithComma_fail() throws Exception {
 		// @Rest(roleGuard="foo,bar")
-		b1a.get().roles().run().assertStatusCode().is(403);
-		b1a.get().roles("baz").run().assertStatusCode().is(403);
+		b1a.get().roles().run().assertStatus().is(403);
+		b1a.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01c_orsWithSinglePipe_pass() throws Exception {
 		// @Rest(roleGuard="foo | bar")
-		b1b.get().roles("foo").run().assertStatusCode().is(200);
-		b1b.get().roles("bar").run().assertStatusCode().is(200);
-		b1b.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1b.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1b.get().roles("foo").run().assertStatus().is(200);
+		b1b.get().roles("bar").run().assertStatus().is(200);
+		b1b.get().roles("foo","bar").run().assertStatus().is(200);
+		b1b.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01d_orsWithSinglePipe_fail() throws Exception {
 		// @Rest(roleGuard="foo | bar")
-		b1b.get().roles().run().assertStatusCode().is(403);
-		b1b.get().roles("baz").run().assertStatusCode().is(403);
+		b1b.get().roles().run().assertStatus().is(403);
+		b1b.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01e_orsWithDoublePipe_pass() throws Exception {
 		// @Rest(roleGuard="foo || bar")
-		b1c.get().roles("foo").run().assertStatusCode().is(200);
-		b1c.get().roles("bar").run().assertStatusCode().is(200);
-		b1c.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1c.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1c.get().roles("foo").run().assertStatus().is(200);
+		b1c.get().roles("bar").run().assertStatus().is(200);
+		b1c.get().roles("foo","bar").run().assertStatus().is(200);
+		b1c.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01f_orsWithDoublePipe_fail() throws Exception {
 		// @Rest(roleGuard="foo || bar")
-		b1c.get().roles().run().assertStatusCode().is(403);
-		b1c.get().roles("baz").run().assertStatusCode().is(403);
+		b1c.get().roles().run().assertStatus().is(403);
+		b1c.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01g_andsWithSingleAmp_pass() throws Exception {
 		// @Rest(roleGuard="foo & bar")
-		b1d.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1d.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1d.get().roles("foo","bar").run().assertStatus().is(200);
+		b1d.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01h_andsWithSingleAmp_fail() throws Exception {
 		// @Rest(roleGuard="foo & bar")
-		b1d.get().roles().run().assertStatusCode().is(403);
-		b1d.get().roles("foo").run().assertStatusCode().is(403);
-		b1d.get().roles("bar").run().assertStatusCode().is(403);
-		b1d.get().roles("baz").run().assertStatusCode().is(403);
+		b1d.get().roles().run().assertStatus().is(403);
+		b1d.get().roles("foo").run().assertStatus().is(403);
+		b1d.get().roles("bar").run().assertStatus().is(403);
+		b1d.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01i_andsWithDoubleAmp_pass() throws Exception {
 		// @Rest(roleGuard="foo && bar")
-		b1e.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1e.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1e.get().roles("foo","bar").run().assertStatus().is(200);
+		b1e.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01j_andsWithDoubleAmp_fail() throws Exception {
 		// @Rest(roleGuard="foo && bar")
-		b1e.get().roles().run().assertStatusCode().is(403);
-		b1e.get().roles("foo").run().assertStatusCode().is(403);
-		b1e.get().roles("bar").run().assertStatusCode().is(403);
-		b1e.get().roles("baz").run().assertStatusCode().is(403);
+		b1e.get().roles().run().assertStatus().is(403);
+		b1e.get().roles("foo").run().assertStatus().is(403);
+		b1e.get().roles("bar").run().assertStatus().is(403);
+		b1e.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01k_andsWithDoubleAmpAndParens_pass() throws Exception {
 		// @Rest(roleGuard="(foo) && (bar)")
-		b1f.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1f.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1f.get().roles("foo","bar").run().assertStatus().is(200);
+		b1f.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01l_andsWithDoubleAmpAndParens_fail() throws Exception {
 		// @Rest(roleGuard="(foo) && (bar)")
-		b1f.get().roles().run().assertStatusCode().is(403);
-		b1f.get().roles("foo").run().assertStatusCode().is(403);
-		b1f.get().roles("bar").run().assertStatusCode().is(403);
-		b1f.get().roles("baz").run().assertStatusCode().is(403);
+		b1f.get().roles().run().assertStatus().is(403);
+		b1f.get().roles("foo").run().assertStatus().is(403);
+		b1f.get().roles("bar").run().assertStatus().is(403);
+		b1f.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01m_complex_pass() throws Exception {
 		// @Rest(roleGuard="foo && (bar || baz)")
-		b1g.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b1g.get().roles("foo","baz").run().assertStatusCode().is(200);
-		b1g.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1g.get().roles("foo","bar").run().assertStatus().is(200);
+		b1g.get().roles("foo","baz").run().assertStatus().is(200);
+		b1g.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01n_complex_fail() throws Exception {
 		// @Rest(roleGuard="foo && (bar || baz)")
-		b1g.get().roles().run().assertStatusCode().is(403);
-		b1g.get().roles("foo").run().assertStatusCode().is(403);
-		b1g.get().roles("bar","baz").run().assertStatusCode().is(403);
-		b1g.get().roles("baz").run().assertStatusCode().is(403);
+		b1g.get().roles().run().assertStatus().is(403);
+		b1g.get().roles("foo").run().assertStatus().is(403);
+		b1g.get().roles("bar","baz").run().assertStatus().is(403);
+		b1g.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b01o_complex_pass() throws Exception {
 		// @Rest(roleGuard="foo || (bar && baz)")
-		b1h.get().roles("foo").run().assertStatusCode().is(200);
-		b1h.get().roles("bar","baz").run().assertStatusCode().is(200);
-		b1h.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b1h.get().roles("foo").run().assertStatus().is(200);
+		b1h.get().roles("bar","baz").run().assertStatus().is(200);
+		b1h.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b01p_complex_fail() throws Exception {
 		// @Rest(roleGuard="foo || (bar && baz)")
-		b1h.get().roles().run().assertStatusCode().is(403);
-		b1h.get().roles("bar").run().assertStatusCode().is(403);
-		b1h.get().roles("baz").run().assertStatusCode().is(403);
+		b1h.get().roles().run().assertStatus().is(403);
+		b1h.get().roles("bar").run().assertStatus().is(403);
+		b1h.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -400,130 +400,130 @@ public class RoleGuardTest {
 	@Test
 	public void b02a_orsWithComma_pass() throws Exception {
 		// @RestMethod(roleGuard="foo,bar")
-		b2a.get().roles("foo").run().assertStatusCode().is(200);
-		b2a.get().roles("bar").run().assertStatusCode().is(200);
-		b2a.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2a.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2a.get().roles("foo").run().assertStatus().is(200);
+		b2a.get().roles("bar").run().assertStatus().is(200);
+		b2a.get().roles("foo","bar").run().assertStatus().is(200);
+		b2a.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02b_orsWithComma_fail() throws Exception {
 		// @RestMethod(roleGuard="foo,bar")
-		b2a.get().roles().run().assertStatusCode().is(403);
-		b2a.get().roles("baz").run().assertStatusCode().is(403);
+		b2a.get().roles().run().assertStatus().is(403);
+		b2a.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02c_orsWithSinglePipe_pass() throws Exception {
 		// @RestMethod(roleGuard="foo | bar")
-		b2b.get().roles("foo").run().assertStatusCode().is(200);
-		b2b.get().roles("bar").run().assertStatusCode().is(200);
-		b2b.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2b.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2b.get().roles("foo").run().assertStatus().is(200);
+		b2b.get().roles("bar").run().assertStatus().is(200);
+		b2b.get().roles("foo","bar").run().assertStatus().is(200);
+		b2b.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02d_orsWithSinglePipe_fail() throws Exception {
 		// @RestMethod(roleGuard="foo | bar")
-		b2b.get().roles().run().assertStatusCode().is(403);
-		b2b.get().roles("baz").run().assertStatusCode().is(403);
+		b2b.get().roles().run().assertStatus().is(403);
+		b2b.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02e_orsWithDoublePipe_pass() throws Exception {
 		// @RestMethod(roleGuard="foo || bar")
-		b2c.get().roles("foo").run().assertStatusCode().is(200);
-		b2c.get().roles("bar").run().assertStatusCode().is(200);
-		b2c.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2c.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2c.get().roles("foo").run().assertStatus().is(200);
+		b2c.get().roles("bar").run().assertStatus().is(200);
+		b2c.get().roles("foo","bar").run().assertStatus().is(200);
+		b2c.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02f_orsWithDoublePipe_fail() throws Exception {
 		// @RestMethod(roleGuard="foo || bar")
-		b2c.get().roles().run().assertStatusCode().is(403);
-		b2c.get().roles("baz").run().assertStatusCode().is(403);
+		b2c.get().roles().run().assertStatus().is(403);
+		b2c.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02g_andsWithSingleAmp_pass() throws Exception {
 		// @RestMethod(roleGuard="foo & bar")
-		b2d.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2d.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2d.get().roles("foo","bar").run().assertStatus().is(200);
+		b2d.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02h_andsWithSingleAmp_fail() throws Exception {
 		// @RestMethod(roleGuard="foo & bar")
-		b2d.get().roles().run().assertStatusCode().is(403);
-		b2d.get().roles("foo").run().assertStatusCode().is(403);
-		b2d.get().roles("bar").run().assertStatusCode().is(403);
-		b2d.get().roles("baz").run().assertStatusCode().is(403);
+		b2d.get().roles().run().assertStatus().is(403);
+		b2d.get().roles("foo").run().assertStatus().is(403);
+		b2d.get().roles("bar").run().assertStatus().is(403);
+		b2d.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02i_andsWithDoubleAmp_pass() throws Exception {
 		// @RestMethod(roleGuard="foo && bar")
-		b2e.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2e.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2e.get().roles("foo","bar").run().assertStatus().is(200);
+		b2e.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02j_andsWithDoubleAmp_fail() throws Exception {
 		// @RestMethod(roleGuard="foo && bar")
-		b2e.get().roles().run().assertStatusCode().is(403);
-		b2e.get().roles("foo").run().assertStatusCode().is(403);
-		b2e.get().roles("bar").run().assertStatusCode().is(403);
-		b2e.get().roles("baz").run().assertStatusCode().is(403);
+		b2e.get().roles().run().assertStatus().is(403);
+		b2e.get().roles("foo").run().assertStatus().is(403);
+		b2e.get().roles("bar").run().assertStatus().is(403);
+		b2e.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02k_andsWithDoubleAmpAndParens_pass() throws Exception {
 		// @RestMethod(roleGuard="(foo) && (bar)")
-		b2f.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2f.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2f.get().roles("foo","bar").run().assertStatus().is(200);
+		b2f.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02l_andsWithDoubleAmpAndParens_fail() throws Exception {
 		// @RestMethod(roleGuard="(foo) && (bar)")
-		b2f.get().roles().run().assertStatusCode().is(403);
-		b2f.get().roles("foo").run().assertStatusCode().is(403);
-		b2f.get().roles("bar").run().assertStatusCode().is(403);
-		b2f.get().roles("baz").run().assertStatusCode().is(403);
+		b2f.get().roles().run().assertStatus().is(403);
+		b2f.get().roles("foo").run().assertStatus().is(403);
+		b2f.get().roles("bar").run().assertStatus().is(403);
+		b2f.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02m_complex_pass() throws Exception {
 		// @RestMethod(roleGuard="foo && (bar || baz)")
-		b2g.get().roles("foo","bar").run().assertStatusCode().is(200);
-		b2g.get().roles("foo","baz").run().assertStatusCode().is(200);
-		b2g.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2g.get().roles("foo","bar").run().assertStatus().is(200);
+		b2g.get().roles("foo","baz").run().assertStatus().is(200);
+		b2g.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02n_complex_fail() throws Exception {
 		// @RestMethod(roleGuard="foo && (bar || baz)")
-		b2g.get().roles().run().assertStatusCode().is(403);
-		b2g.get().roles("foo").run().assertStatusCode().is(403);
-		b2g.get().roles("bar","baz").run().assertStatusCode().is(403);
-		b2g.get().roles("baz").run().assertStatusCode().is(403);
+		b2g.get().roles().run().assertStatus().is(403);
+		b2g.get().roles("foo").run().assertStatus().is(403);
+		b2g.get().roles("bar","baz").run().assertStatus().is(403);
+		b2g.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void b02o_complex_pass() throws Exception {
 		// @RestMethod(roleGuard="foo || (bar && baz)")
-		b2h.get().roles("foo").run().assertStatusCode().is(200);
-		b2h.get().roles("bar","baz").run().assertStatusCode().is(200);
-		b2h.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		b2h.get().roles("foo").run().assertStatus().is(200);
+		b2h.get().roles("bar","baz").run().assertStatus().is(200);
+		b2h.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void b02p_complex_fail() throws Exception {
 		// @RestMethod(roleGuard="foo || (bar && baz)")
-		b2h.get().roles().run().assertStatusCode().is(403);
-		b2h.get().roles("bar").run().assertStatusCode().is(403);
-		b2h.get().roles("baz").run().assertStatusCode().is(403);
+		b2h.get().roles().run().assertStatus().is(403);
+		b2h.get().roles("bar").run().assertStatus().is(403);
+		b2h.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -574,130 +574,130 @@ public class RoleGuardTest {
 	@Test
 	public void c01a_orPatternsWithComma_pass() throws Exception {
 		// @Rest(roleGuard="fo*,*ar")
-		c1a.get().roles("foo").run().assertStatusCode().is(200);
-		c1a.get().roles("bar").run().assertStatusCode().is(200);
-		c1a.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1a.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1a.get().roles("foo").run().assertStatus().is(200);
+		c1a.get().roles("bar").run().assertStatus().is(200);
+		c1a.get().roles("foo","bar").run().assertStatus().is(200);
+		c1a.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01b_orPatternsWithComma_fail() throws Exception {
 		// @Rest(roleGuard="fo*,*ar")
-		c1a.get().roles().run().assertStatusCode().is(403);
-		c1a.get().roles("baz").run().assertStatusCode().is(403);
+		c1a.get().roles().run().assertStatus().is(403);
+		c1a.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01c_orPatternsWithSinglePipe_pass() throws Exception {
 		// @Rest(roleGuard="fo* | *ar")
-		c1b.get().roles("foo").run().assertStatusCode().is(200);
-		c1b.get().roles("bar").run().assertStatusCode().is(200);
-		c1b.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1b.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1b.get().roles("foo").run().assertStatus().is(200);
+		c1b.get().roles("bar").run().assertStatus().is(200);
+		c1b.get().roles("foo","bar").run().assertStatus().is(200);
+		c1b.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01d_orPatternsWithSinglePipe_fail() throws Exception {
 		// @Rest(roleGuard="fo* | *ar")
-		c1b.get().roles().run().assertStatusCode().is(403);
-		c1b.get().roles("baz").run().assertStatusCode().is(403);
+		c1b.get().roles().run().assertStatus().is(403);
+		c1b.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01e_orPatternsWithDoublePipe_pass() throws Exception {
 		// @Rest(roleGuard="fo* || *ar")
-		c1c.get().roles("foo").run().assertStatusCode().is(200);
-		c1c.get().roles("bar").run().assertStatusCode().is(200);
-		c1c.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1c.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1c.get().roles("foo").run().assertStatus().is(200);
+		c1c.get().roles("bar").run().assertStatus().is(200);
+		c1c.get().roles("foo","bar").run().assertStatus().is(200);
+		c1c.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01f_orPatternsWithDoublePipe_fail() throws Exception {
 		// @Rest(roleGuard="fo* || *ar")
-		c1c.get().roles().run().assertStatusCode().is(403);
-		c1c.get().roles("baz").run().assertStatusCode().is(403);
+		c1c.get().roles().run().assertStatus().is(403);
+		c1c.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01g_andPatternsWithSingleAmp_pass() throws Exception {
 		// @Rest(roleGuard="fo* & *ar")
-		c1d.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1d.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1d.get().roles("foo","bar").run().assertStatus().is(200);
+		c1d.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01h_andPatternsWithSingleAmp_fail() throws Exception {
 		// @Rest(roleGuard="fo* & *ar")
-		c1d.get().roles().run().assertStatusCode().is(403);
-		c1d.get().roles("foo").run().assertStatusCode().is(403);
-		c1d.get().roles("bar").run().assertStatusCode().is(403);
-		c1d.get().roles("baz").run().assertStatusCode().is(403);
+		c1d.get().roles().run().assertStatus().is(403);
+		c1d.get().roles("foo").run().assertStatus().is(403);
+		c1d.get().roles("bar").run().assertStatus().is(403);
+		c1d.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01i_andPatternsWithDoubleAmp_pass() throws Exception {
 		// @Rest(roleGuard="fo* && *ar")
-		c1e.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1e.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1e.get().roles("foo","bar").run().assertStatus().is(200);
+		c1e.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01j_andPatternsWithDoubleAmp_fail() throws Exception {
 		// @Rest(roleGuard="fo* && *ar")
-		c1e.get().roles().run().assertStatusCode().is(403);
-		c1e.get().roles("foo").run().assertStatusCode().is(403);
-		c1e.get().roles("bar").run().assertStatusCode().is(403);
-		c1e.get().roles("baz").run().assertStatusCode().is(403);
+		c1e.get().roles().run().assertStatus().is(403);
+		c1e.get().roles("foo").run().assertStatus().is(403);
+		c1e.get().roles("bar").run().assertStatus().is(403);
+		c1e.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01k_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		// @Rest(roleGuard="(fo*) && (*ar)")
-		c1f.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1f.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1f.get().roles("foo","bar").run().assertStatus().is(200);
+		c1f.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01l_andPatternsWithDoubleAmpAndParens_fail() throws Exception {
 		// @Rest(roleGuard="(fo*) && (*ar)")
-		c1f.get().roles().run().assertStatusCode().is(403);
-		c1f.get().roles("foo").run().assertStatusCode().is(403);
-		c1f.get().roles("bar").run().assertStatusCode().is(403);
-		c1f.get().roles("baz").run().assertStatusCode().is(403);
+		c1f.get().roles().run().assertStatus().is(403);
+		c1f.get().roles("foo").run().assertStatus().is(403);
+		c1f.get().roles("bar").run().assertStatus().is(403);
+		c1f.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01m_complexPatterns_pass() throws Exception {
 		// @Rest(roleGuard="fo* && (*ar || *az)")
-		c1g.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c1g.get().roles("foo","baz").run().assertStatusCode().is(200);
-		c1g.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1g.get().roles("foo","bar").run().assertStatus().is(200);
+		c1g.get().roles("foo","baz").run().assertStatus().is(200);
+		c1g.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01n_complexPatterns_fail() throws Exception {
 		// @Rest(roleGuard="fo* && (*ar || *az)")
-		c1g.get().roles().run().assertStatusCode().is(403);
-		c1g.get().roles("foo").run().assertStatusCode().is(403);
-		c1g.get().roles("bar","baz").run().assertStatusCode().is(403);
-		c1g.get().roles("baz").run().assertStatusCode().is(403);
+		c1g.get().roles().run().assertStatus().is(403);
+		c1g.get().roles("foo").run().assertStatus().is(403);
+		c1g.get().roles("bar","baz").run().assertStatus().is(403);
+		c1g.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c01o_complexPatterns_pass() throws Exception {
 		// @Rest(roleGuard="fo* || (*ar && *az)")
-		c1h.get().roles("foo").run().assertStatusCode().is(200);
-		c1h.get().roles("bar","baz").run().assertStatusCode().is(200);
-		c1h.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c1h.get().roles("foo").run().assertStatus().is(200);
+		c1h.get().roles("bar","baz").run().assertStatus().is(200);
+		c1h.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c01p_complexPatterns_fail() throws Exception {
 		// @Rest(roleGuard="fo* || (*ar && *az)")
-		c1h.get().roles().run().assertStatusCode().is(403);
-		c1h.get().roles("bar").run().assertStatusCode().is(403);
-		c1h.get().roles("baz").run().assertStatusCode().is(403);
+		c1h.get().roles().run().assertStatus().is(403);
+		c1h.get().roles("bar").run().assertStatus().is(403);
+		c1h.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -780,130 +780,130 @@ public class RoleGuardTest {
 	@Test
 	public void c02a_orPatternsWithComma_pass() throws Exception {
 		// @RestMethod(roleGuard="fo*,*ar")
-		c2a.get().roles("foo").run().assertStatusCode().is(200);
-		c2a.get().roles("bar").run().assertStatusCode().is(200);
-		c2a.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2a.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2a.get().roles("foo").run().assertStatus().is(200);
+		c2a.get().roles("bar").run().assertStatus().is(200);
+		c2a.get().roles("foo","bar").run().assertStatus().is(200);
+		c2a.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02b_orPatternsWithComma_fail() throws Exception {
 		// @RestMethod(roleGuard="fo*,*ar")
-		c2a.get().roles().run().assertStatusCode().is(403);
-		c2a.get().roles("baz").run().assertStatusCode().is(403);
+		c2a.get().roles().run().assertStatus().is(403);
+		c2a.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02c_orPatternsWithSinglePipe_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* | *ar")
-		c2b.get().roles("foo").run().assertStatusCode().is(200);
-		c2b.get().roles("bar").run().assertStatusCode().is(200);
-		c2b.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2b.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2b.get().roles("foo").run().assertStatus().is(200);
+		c2b.get().roles("bar").run().assertStatus().is(200);
+		c2b.get().roles("foo","bar").run().assertStatus().is(200);
+		c2b.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02d_orPatternsWithSinglePipe_fail() throws Exception {
 		// @RestMethod(roleGuard="fo* | *ar")
-		c2b.get().roles().run().assertStatusCode().is(403);
-		c2b.get().roles("baz").run().assertStatusCode().is(403);
+		c2b.get().roles().run().assertStatus().is(403);
+		c2b.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02e_orPatternsWithDoublePipe_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* || *ar")
-		c2c.get().roles("foo").run().assertStatusCode().is(200);
-		c2c.get().roles("bar").run().assertStatusCode().is(200);
-		c2c.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2c.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2c.get().roles("foo").run().assertStatus().is(200);
+		c2c.get().roles("bar").run().assertStatus().is(200);
+		c2c.get().roles("foo","bar").run().assertStatus().is(200);
+		c2c.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02f_orPatternsWithDoublePipe_fail() throws Exception {
 		// @RestMethod(roleGuard="foo || bar")
-		c2c.get().roles().run().assertStatusCode().is(403);
-		c2c.get().roles("baz").run().assertStatusCode().is(403);
+		c2c.get().roles().run().assertStatus().is(403);
+		c2c.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02g_andPatternsWithSingleAmp_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* & *ar")
-		c2d.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2d.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2d.get().roles("foo","bar").run().assertStatus().is(200);
+		c2d.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02h_andPatternsWithSingleAmp_fail() throws Exception {
 		// @RestMethod(roleGuard="fo* & *ar")
-		c2d.get().roles().run().assertStatusCode().is(403);
-		c2d.get().roles("foo").run().assertStatusCode().is(403);
-		c2d.get().roles("bar").run().assertStatusCode().is(403);
-		c2d.get().roles("baz").run().assertStatusCode().is(403);
+		c2d.get().roles().run().assertStatus().is(403);
+		c2d.get().roles("foo").run().assertStatus().is(403);
+		c2d.get().roles("bar").run().assertStatus().is(403);
+		c2d.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02i_andPatternsWithDoubleAmp_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* && *ar")
-		c2e.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2e.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2e.get().roles("foo","bar").run().assertStatus().is(200);
+		c2e.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02j_andPatternsWithDoubleAmp_fail() throws Exception {
 		// @RestMethod(roleGuard="fo* && *ar")
-		c2e.get().roles().run().assertStatusCode().is(403);
-		c2e.get().roles("foo").run().assertStatusCode().is(403);
-		c2e.get().roles("bar").run().assertStatusCode().is(403);
-		c2e.get().roles("baz").run().assertStatusCode().is(403);
+		c2e.get().roles().run().assertStatus().is(403);
+		c2e.get().roles("foo").run().assertStatus().is(403);
+		c2e.get().roles("bar").run().assertStatus().is(403);
+		c2e.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02k_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		// @RestMethod(roleGuard="(fo*) && (*ar)")
-		c2f.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2f.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2f.get().roles("foo","bar").run().assertStatus().is(200);
+		c2f.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02l_andPatternsWithDoubleAmpAndParens_fail() throws Exception {
 		// @RestMethod(roleGuard="(fo*) && (*ar)")
-		c2f.get().roles().run().assertStatusCode().is(403);
-		c2f.get().roles("foo").run().assertStatusCode().is(403);
-		c2f.get().roles("bar").run().assertStatusCode().is(403);
-		c2f.get().roles("baz").run().assertStatusCode().is(403);
+		c2f.get().roles().run().assertStatus().is(403);
+		c2f.get().roles("foo").run().assertStatus().is(403);
+		c2f.get().roles("bar").run().assertStatus().is(403);
+		c2f.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02m_complexPatterns_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* && (*ar || *az)")
-		c2g.get().roles("foo","bar").run().assertStatusCode().is(200);
-		c2g.get().roles("foo","baz").run().assertStatusCode().is(200);
-		c2g.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2g.get().roles("foo","bar").run().assertStatus().is(200);
+		c2g.get().roles("foo","baz").run().assertStatus().is(200);
+		c2g.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02n_complexPatterns_fail() throws Exception {
 		// @RestMethod(roleGuard="fo* && (*ar || *az)")
-		c2g.get().roles().run().assertStatusCode().is(403);
-		c2g.get().roles("foo").run().assertStatusCode().is(403);
-		c2g.get().roles("bar","baz").run().assertStatusCode().is(403);
-		c2g.get().roles("baz").run().assertStatusCode().is(403);
+		c2g.get().roles().run().assertStatus().is(403);
+		c2g.get().roles("foo").run().assertStatus().is(403);
+		c2g.get().roles("bar","baz").run().assertStatus().is(403);
+		c2g.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	@Test
 	public void c02o_complexPatterns_pass() throws Exception {
 		// @RestMethod(roleGuard="fo* || (*ar && *az)")
-		c2h.get().roles("foo").run().assertStatusCode().is(200);
-		c2h.get().roles("bar","baz").run().assertStatusCode().is(200);
-		c2h.get().roles("foo","bar","baz").run().assertStatusCode().is(200);
+		c2h.get().roles("foo").run().assertStatus().is(200);
+		c2h.get().roles("bar","baz").run().assertStatus().is(200);
+		c2h.get().roles("foo","bar","baz").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void c02p_complexPatterns_fail() throws Exception {
 		// @RestMethod(roleGuard="fo* || (*ar && *az)")
-		c2h.get().roles().run().assertStatusCode().is(403);
-		c2h.get().roles("bar").run().assertStatusCode().is(403);
-		c2h.get().roles("baz").run().assertStatusCode().is(403);
+		c2h.get().roles().run().assertStatus().is(403);
+		c2h.get().roles("bar").run().assertStatus().is(403);
+		c2h.get().roles("baz").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -923,11 +923,11 @@ public class RoleGuardTest {
 	@Test
 	public void d01_patternsWithoutRoles_fail() throws Exception {
 		// @RestMethod(roleGuard="fo*,*bar")
-		d.get().roles().run().assertStatusCode().is(403);
-		d.get().roles("foo").run().assertStatusCode().is(403);
-		d.get().roles("bar").run().assertStatusCode().is(403);
-		d.get().roles("baz").run().assertStatusCode().is(403);
-		d.get().roles("foo","bar").run().assertStatusCode().is(403);
+		d.get().roles().run().assertStatus().is(403);
+		d.get().roles("foo").run().assertStatus().is(403);
+		d.get().roles("bar").run().assertStatus().is(403);
+		d.get().roles("baz").run().assertStatus().is(403);
+		d.get().roles("foo","bar").run().assertStatus().is(403);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -947,15 +947,15 @@ public class RoleGuardTest {
 	@Test
 	public void e01_anyRole_pass() throws Exception {
 		// @RestMethod(roleGuard="*")
-		e.get().roles("foo").run().assertStatusCode().is(200);
-		e.get().roles("bar").run().assertStatusCode().is(200);
-		e.get().roles("baz").run().assertStatusCode().is(200);
-		e.get().roles("foo","bar").run().assertStatusCode().is(200);
+		e.get().roles("foo").run().assertStatus().is(200);
+		e.get().roles("bar").run().assertStatus().is(200);
+		e.get().roles("baz").run().assertStatus().is(200);
+		e.get().roles("foo","bar").run().assertStatus().is(200);
 	}
 
 	@Test
 	public void e02_anyRole_fail() throws Exception {
 		// @RestMethod(roleGuard="*")
-		e.get().roles().run().assertStatusCode().is(403);
+		e.get().roles().run().assertStatus().is(403);
 	}
 }

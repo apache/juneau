@@ -572,7 +572,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.cache()
 	 * 		.getBody().as(m, LinkedList.<jk>class</jk>, String.<jk>class</jk>)
 	 * 		.getBody().pipeTo(outputStream)
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 * 	List&lt;String&gt; l = m.get();
 	 * </p>
 	 *
@@ -674,7 +674,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.cache()
 	 * 		.getBody().as(m, MyBean.<jk>class</jk>)
 	 * 		.getBody().pipeTo(outputStream)
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 * 	MyBean b = m.get();
 	 * </p>
 	 *
@@ -853,7 +853,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.cache()
 	 * 		.getBody().as(m, cm)
 	 * 		.getBody().pipeTo(outputStream)
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 * 	MyBean b = m.get();
 	 * </p>
 	 *
@@ -1337,7 +1337,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>))
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 *
 	 * 	<jk>if</jk> (m.get().matches())
 	 * 		String foo = m.group(1);
@@ -1411,7 +1411,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, <js>"foo=(.*)"</js>)
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 *
 	 * 	<jk>if</jk> (m.get().matches())
 	 * 		String foo = m.group(1);
@@ -1486,7 +1486,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, <js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>)
-	 * 		.assertStatusCode(200);
+	 * 		.assertStatus().is(200);
 	 *
 	 * 	<jk>if</jk> (m.get().matches())
 	 * 		String foo = m.group(1);

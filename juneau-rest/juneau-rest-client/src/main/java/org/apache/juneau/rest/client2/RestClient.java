@@ -81,7 +81,10 @@ import org.apache.http.client.CookieStore;
  * <p class='bcode w800'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
  * 	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().build()) {
- * 		MyBean b = c.get(<jsf>URL</jsf>).run().assertStatusCode(200).getBody().as(MyBean.<jk>class</jk>);
+ * 		MyBean b = c.get(<jsf>URL</jsf>)
+ * 			.run()
+ * 			.assertStatus().is(200)
+ * 			.getBody().as(MyBean.<jk>class</jk>);
  * 	}
  * </p>
  *
@@ -92,7 +95,7 @@ import org.apache.http.client.CookieStore;
  * 	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().build()) {
  * 		RestRequest req = c.get(<jsf>URL</jsf>);
  * 		RestResponse res = req.run();
- * 		res.assertStatusCode(200);
+ * 		res.assertStatus().is(200);
  * 		RestResponseBody body = res.getBody();
  * 		MyBean b = body.as(MyBean.<jk>class</jk>);
  * 	}
@@ -519,7 +522,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode(Mutable) getStatusCode(Mutable&lt;Integer&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase(Mutable) getReasonPhrase(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponse#assertStatusCode() assertStatusCode()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link RestResponseStatusLineAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -550,10 +553,16 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Status assertion using a static value.</jc>
- * 	String body = c.get(<jsf>URL</jsf>).run().assertStatusCode(200).getBody().asString();
+ * 	String body = c.get(<jsf>URL</jsf>)
+ * 		.run()
+ * 		.assertStatus().is(200)
+ * 		.getBody().asString();
  *
  * 	<jc>// Status assertion using a predicate.</jc>
- * 	String body = c.get(<jsf>URL</jsf>).run().assertStatusCode(x -&gt; x &lt; 400).getBody().asString();
+ * 	String body = c.get(<jsf>URL</jsf>)
+ * 		.run()
+ * 		.assertStatus().passes(x -&gt; x &lt; 400)
+ * 		.getBody().asString();
  * </p>
  *
  *
@@ -1282,6 +1291,45 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	public static final String RESTCLIENT_headers = PREFIX + "headers.lo";
 
 	/**
+	 * Configuration property:  Ignore errors.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_ignoreErrors RESTCLIENT_ignoreErrors}
+	 * 	<li><b>Name:</b>  <js>"RestClient.ignoreErrors.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>Default:</b>  <jk>false</jk> (<jk>true</jk> for <l>MockRestClient</l>)
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#ignoreErrors()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#ignoreErrors(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#ignoreErrors()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
+	 * be thrown.
+	 * <p>
+	 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
+	 * 	RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreErrors()
+	 * 		.build()
+	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
+	 * 		.run()
+	 * 		.assertStatus().is(500);
+	 * </p>
+	 */
+	public static final String RESTCLIENT_ignoreErrors = PREFIX + "ignoreErrors.b";
+
+	/**
 	 * Configuration property:  Call interceptors.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1848,6 +1896,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	final DetailLevel logRequests;
 	final BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 	final Level logRequestsLevel;
+	final boolean ignoreErrors;
 	private final boolean logToConsole;
 	private StackTraceElement[] closedStack;
 	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
@@ -1898,6 +1947,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, debug);
+		this.ignoreErrors = getBooleanProperty(RESTCLIENT_ignoreErrors, false);
 		this.logger = getInstanceProperty(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
 		this.logRequests = getInstanceProperty(RESTCLIENT_logRequests, DetailLevel.class, debug ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = getInstanceProperty(RESTCLIENT_logRequestsLevel, Level.class, debug ? Level.WARNING : Level.OFF);

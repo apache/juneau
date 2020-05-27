@@ -45,13 +45,11 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void a01b_preventPathTraversals() throws Exception {
 		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
-			.ignoreErrors()
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
-			.ignoreErrors()
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Rest(staticFiles={"xdocs2:xdocs2:{Foo:'Bar',Baz:'Qux'},xdocs:xdocs"})
@@ -75,13 +73,11 @@ public class RestResourceStaticFilesTest {
 	@Test
 	public void a02b_preventPathTraversals() throws Exception {
 		a1.get("/xdocs/xsubdocs/../test.txt?noTrace=true")
-			.ignoreErrors()
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		a1.get("/xdocs/xsubdocs/%2E%2E/test.txt?noTrace=true")
-			.ignoreErrors()
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

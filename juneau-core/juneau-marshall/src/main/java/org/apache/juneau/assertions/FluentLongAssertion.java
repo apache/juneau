@@ -31,10 +31,9 @@ import org.apache.juneau.marshall.*;
  * </p>
  * @param <R> The return type.
  */
-public class FluentLongAssertion<R> {
+public class FluentLongAssertion<R> extends FluentAssertion<R> {
 
 	private final Long value;
-	private final R returns;
 
 	/**
 	 * Constructor.
@@ -43,8 +42,8 @@ public class FluentLongAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentLongAssertion(Long value, R returns) {
+		super(returns);
 		this.value = value;
-		this.returns = returns;
 	}
 
 	/**
@@ -56,11 +55,11 @@ public class FluentLongAssertion<R> {
 	 */
 	public R equals(Long value) throws AssertionError {
 		if (this.value == value)
-			return returns;
+			return returns();
 		exists();
 		if (! this.value.equals(value))
 			throw new BasicAssertionError("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -86,11 +85,11 @@ public class FluentLongAssertion<R> {
 	 */
 	public R doesNotEqual(Long value) throws AssertionError {
 		if (this.value != value)
-			return returns;
+			return returns();
 		exists();
 		if (this.value.equals(value))
 			throw new BasicAssertionError("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -142,7 +141,7 @@ public class FluentLongAssertion<R> {
 	public R isNull() throws AssertionError {
 		if (value != null)
 			throw new BasicAssertionError("Value was not null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -154,7 +153,7 @@ public class FluentLongAssertion<R> {
 	public R isNotNull() throws AssertionError {
 		if (value == null)
 			throw new BasicAssertionError("Value was null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -168,7 +167,7 @@ public class FluentLongAssertion<R> {
 		exists();
 		for (Long v : values)
 			if (this.value.equals(v))
-				return returns;
+				return returns();
 		throw new BasicAssertionError("Expected value not found.\n\tExpected=[{0}]\n\tActual=[{1}]", SimpleJson.DEFAULT.toString(values), value);
 	}
 
@@ -184,7 +183,7 @@ public class FluentLongAssertion<R> {
 		for (Long v : values)
 			if (this.value.equals(v))
 				throw new BasicAssertionError("Unexpected value found.\n\tUnexpected=[{0}]\n\tActual=[{1}]", v, value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -198,7 +197,7 @@ public class FluentLongAssertion<R> {
 		exists();
 		if (! (this.value > value))
 				throw new BasicAssertionError("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -226,7 +225,7 @@ public class FluentLongAssertion<R> {
 		exists();
 		if (! (this.value >= value))
 				throw new BasicAssertionError("Value was not greater than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -254,7 +253,7 @@ public class FluentLongAssertion<R> {
 		exists();
 		if (! (this.value < value))
 				throw new BasicAssertionError("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -282,7 +281,7 @@ public class FluentLongAssertion<R> {
 		exists();
 		if (! (this.value <= value))
 				throw new BasicAssertionError("Value was not less than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -310,7 +309,7 @@ public class FluentLongAssertion<R> {
 	public R isBetween(Long lower, Long upper) throws AssertionError {
 		isLessThanOrEquals(upper);
 		isGreaterThanOrEquals(lower);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -323,6 +322,6 @@ public class FluentLongAssertion<R> {
 	public R passes(Predicate<Long> test) throws AssertionError {
 		if (! test.test(value))
 			throw new BasicAssertionError("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns;
+		return returns();
 	}
 }

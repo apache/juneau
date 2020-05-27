@@ -2278,6 +2278,71 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * <i><l>RestClient</l> configuration property:</i>  Ignore errors.
+	 *
+	 * <p>
+	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
+	 * be thrown.
+	 * <p>
+	 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
+	 * 	RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreErrors()
+	 * 		.build()
+	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
+	 * 		.run()
+	 * 		.assertStatus().is(500);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_ignoreErrors}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder ignoreErrors() {
+		return ignoreErrors(true);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:</i>  Ignore errors.
+	 *
+	 * <p>
+	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
+	 * be thrown.
+	 * <p>
+	 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
+	 * 	RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.ignoreErrors()
+	 * 		.build()
+	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
+	 * 		.run()
+	 * 		.assertStatus().is(500);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_ignoreErrors}
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder ignoreErrors(boolean value) {
+		return set(RESTCLIENT_ignoreErrors, value);
+	}
+
+	/**
 	 * <i><l>RestClient</l> configuration property:</i>  Call interceptors.
 	 *
 	 * <p>

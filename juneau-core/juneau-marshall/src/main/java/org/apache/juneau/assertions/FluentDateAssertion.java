@@ -31,10 +31,9 @@ import org.apache.juneau.*;
  * </p>
  * @param <R> The return type.
  */
-public class FluentDateAssertion<R> {
+public class FluentDateAssertion<R> extends FluentAssertion<R> {
 
 	private final Date value;
-	private final R returns;
 
 	/**
 	 * Constructor.
@@ -43,8 +42,8 @@ public class FluentDateAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentDateAssertion(Date value, R returns) {
+		super(returns);
 		this.value = value;
-		this.returns = returns;
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class FluentDateAssertion<R> {
 	public R equals(Date value) throws AssertionError {
 		if (! this.value.equals(value))
 			throw new BasicAssertionError("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -84,7 +83,7 @@ public class FluentDateAssertion<R> {
 	public R doesNotEqual(Date value) throws AssertionError {
 		if (this.value.equals(value))
 			throw new BasicAssertionError("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -136,7 +135,7 @@ public class FluentDateAssertion<R> {
 	public R isNull() throws AssertionError {
 		if (value != null)
 			throw new BasicAssertionError("Value was not null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class FluentDateAssertion<R> {
 	public R isNotNull() throws AssertionError {
 		if (value == null)
 			throw new BasicAssertionError("Value was null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -161,7 +160,7 @@ public class FluentDateAssertion<R> {
 	public R isAfter(Date value) throws AssertionError {
 		if (! (this.value.after(value)))
 				throw new BasicAssertionError("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -174,7 +173,7 @@ public class FluentDateAssertion<R> {
 	public R isBefore(Date value) throws AssertionError {
 		if (! (this.value.before(value)))
 				throw new BasicAssertionError("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -188,7 +187,7 @@ public class FluentDateAssertion<R> {
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		isBefore(upper);
 		isAfter(lower);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -201,6 +200,6 @@ public class FluentDateAssertion<R> {
 	public R passes(Predicate<Date> test) throws AssertionError {
 		if (! test.test(value))
 			throw new BasicAssertionError("Value did not pass predicate test.\n\tValue=[{0}]", value);
-		return returns;
+		return returns();
 	}
 }

@@ -1676,6 +1676,7 @@ public class RestClientTest {
 				.create(A.class)
 				.simpleJson()
 				.errorCodes(x -> x == 200)
+				.ignoreErrors(false)
 				.build()
 				.get("/echo")
 				.run();
@@ -1698,7 +1699,7 @@ public class RestClientTest {
 			.get("/echo")
 			.runFuture()
 			.get()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().contains("HTTP GET /echo");
 	}
 

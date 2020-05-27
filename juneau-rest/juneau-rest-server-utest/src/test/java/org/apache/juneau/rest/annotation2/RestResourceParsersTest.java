@@ -124,7 +124,7 @@ public class RestResourceParsersTest {
 			return in;
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_parserOnClass() throws Exception {
@@ -135,7 +135,7 @@ public class RestResourceParsersTest {
 		a.put("/parserOnClass?noTrace=true", "test1")
 			.contentType("text/b")
 			.run()
-			.assertStatusCode().is(415)
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
 				"Supported media-types: ['text/a"
@@ -150,7 +150,7 @@ public class RestResourceParsersTest {
 		a.put("/parserOnMethod?noTrace=true", "test2")
 			.contentType("text/a")
 			.run()
-			.assertStatusCode().is(415)
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -183,7 +183,7 @@ public class RestResourceParsersTest {
 		a.put("/validErrorResponse?noTrace=true", "test1")
 			.contentType("text/bad")
 			.run()
-			.assertStatusCode().is(415)
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
 				"Supported media-types: ['text/a"

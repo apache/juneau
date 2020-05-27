@@ -296,11 +296,11 @@ public class QueryAnnotationTest {
 	public void e01_optionalParam_integer() throws Exception {
 		e.get("/a?f1=123")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("123");
 		e.get("/a")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("null");
 	}
 
@@ -308,11 +308,11 @@ public class QueryAnnotationTest {
 	public void e02_optionalParam_bean() throws Exception {
 		e.get("/b?f1=a=1,b=foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 		e.get("/b")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("null");
 	}
 
@@ -320,11 +320,11 @@ public class QueryAnnotationTest {
 	public void e03_optionalParam_listOfBeans() throws Exception {
 		e.get("/c?f1=@((a=1,b=foo))")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		e.get("/c")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("null");
 	}
 
@@ -332,11 +332,11 @@ public class QueryAnnotationTest {
 	public void e04_optionalParam_listOfOptionals() throws Exception {
 		e.get("/d?f1=@((a=1,b=foo))")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		e.get("/d")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("null");
 	}
 

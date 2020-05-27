@@ -45,7 +45,7 @@ public class StatusCodesTest {
 	public void a01a_OK() throws Exception {
 		a.put("/a01", "foo")
 			.run()
-			.assertStatusCode().is(200);
+			.assertStatus().is(200);
 	}
 
 	//=================================================================================================================
@@ -113,7 +113,7 @@ public class StatusCodesTest {
 		b.put("/nonExistentBeanProperties?noTrace=true", "{f2:'foo'}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
 			);
@@ -123,7 +123,7 @@ public class StatusCodesTest {
 		b.put("/nonExistentBeanProperties?noTrace=true", "{f1:'foo', f2:'foo'}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Unknown property 'f2' encountered while trying to parse into class 'org.apache.juneau.rest.StatusCodesTest$B$B01'"
 			);
@@ -133,7 +133,7 @@ public class StatusCodesTest {
 		b.put("/wrongDataType?noTrace=true", "{f1:'foo'}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Invalid number"
 			);
@@ -143,7 +143,7 @@ public class StatusCodesTest {
 		b.put("/parseIntoNonConstructableBean?noTrace=true", "{f1:1}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"could not be instantiated"
 			);
@@ -153,7 +153,7 @@ public class StatusCodesTest {
 		b.put("/parseIntoNonStaticInnerClass?noTrace=true", "{f1:1}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"could not be instantiated"
 			);
@@ -163,7 +163,7 @@ public class StatusCodesTest {
 		b.put("/parseIntoNonPublicInnerClass?noTrace=true", "{f1:1}")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Class is not public"
 			);
@@ -173,7 +173,7 @@ public class StatusCodesTest {
 		b.put("/thrownConstructorException?noTrace=true", "'foo'")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Test error"
 			);
@@ -183,7 +183,7 @@ public class StatusCodesTest {
 		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=foo", "'foo'")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Could not parse query parameter 'p1'."
 			);
@@ -193,7 +193,7 @@ public class StatusCodesTest {
 		b.put("/setParameterToInvalidTypes/foo?noTrace=true&p1=1", "'foo'")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Could not parse path parameter 'a1'."
 			);
@@ -204,7 +204,7 @@ public class StatusCodesTest {
 			.header("h1", "foo")
 			.json()
 			.run()
-			.assertStatusCode().is(400)
+			.assertStatus().is(400)
 			.assertBody().contains(
 				"Could not parse header 'h1'."
 			);
@@ -227,7 +227,7 @@ public class StatusCodesTest {
 	public void c01_badPath() throws Exception {
 		c.get("/bad?noTrace=true")
 			.run()
-			.assertStatusCode().is(404)
+			.assertStatus().is(404)
 			.assertBody().contains(
 				"Method 'GET' not found on resource with matching pattern on path '/bad'"
 			);
@@ -235,7 +235,7 @@ public class StatusCodesTest {
 	public void c02_badMethod() throws Exception {
 		c.put("?noTrace=true", null)
 			.run()
-			.assertStatusCode().is(405)
+			.assertStatus().is(405)
 			.assertBody().contains(
 				"Method 'PUT' not found on resource."
 			);
@@ -264,7 +264,7 @@ public class StatusCodesTest {
 	public void d01() throws Exception {
 		d.get("/d?noTrace=true")
 			.run()
-			.assertStatusCode().is(412)
+			.assertStatus().is(412)
 			.assertBody().contains(
 				"Method 'GET' not found on resource on path '/d' with matching matcher."
 			);

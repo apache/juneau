@@ -99,6 +99,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(uri);
+		this.ignoreErrors = client.ignoreErrors;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -652,6 +653,9 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 
 	/**
 	 * Prevent {@link RestCallException RestCallExceptions} from being thrown when HTTP status 400+ is encountered.
+	 *
+	 * <p>
+	 * This overrides the <l>ignoreErrors</l> property on the client.
 	 *
 	 * @return This object (for method chaining).
 	 */

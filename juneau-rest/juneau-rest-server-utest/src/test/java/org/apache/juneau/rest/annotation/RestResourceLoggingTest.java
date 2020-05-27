@@ -674,14 +674,12 @@ public class RestResourceLoggingTest {
 	@Test
 	public void test() throws Exception {
 		MY_REST.post("/foo?foo=bar", "Foo")
-			.ignoreErrors()
 			.header("Foo", "bar")
 			.run()
-			.assertStatusCode().is(500);
+			.assertStatus().is(500);
 		MY_REST.post("/foo?foo=bar", "Foo")
-			.ignoreErrors()
 			.header("Foo", "bar")
 			.run()
-			.assertStatusCode().is(500);
+			.assertStatus().is(500);
 	}
 }

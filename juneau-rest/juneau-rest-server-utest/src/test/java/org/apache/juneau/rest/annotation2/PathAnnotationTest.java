@@ -66,7 +66,7 @@ public class PathAnnotationTest {
 	public void a00_nonExistentPath() throws Exception {
 		a.get("/bad?noTrace=true")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 	@Test
 	public void a01_noPath() throws Exception {
@@ -163,7 +163,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		b.get("/int/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b02_short() throws Exception {
@@ -172,7 +172,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		b.get("/short/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b03_long() throws Exception {
@@ -181,7 +181,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		b.get("/long/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b04_char() throws Exception {
@@ -190,7 +190,7 @@ public class PathAnnotationTest {
 			.assertBody().is("c");
 		b.get("/char/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b05_float() throws Exception {
@@ -199,7 +199,7 @@ public class PathAnnotationTest {
 			.assertBody().is("1.23");
 		b.get("/float/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b06_double() throws Exception {
@@ -208,7 +208,7 @@ public class PathAnnotationTest {
 			.assertBody().is("1.23");
 		b.get("/double/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b07_byte() throws Exception {
@@ -217,7 +217,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		b.get("/byte/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void b08_boolean() throws Exception {
@@ -226,7 +226,7 @@ public class PathAnnotationTest {
 			.assertBody().is("true");
 		b.get("/boolean/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 
 	//=================================================================================================================
@@ -277,7 +277,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		c.get("/Integer/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c02_Short() throws Exception {
@@ -286,7 +286,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		c.get("/Short/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c03_Long() throws Exception {
@@ -295,7 +295,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		c.get("/Long/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c04_Char() throws Exception {
@@ -304,7 +304,7 @@ public class PathAnnotationTest {
 			.assertBody().is("c");
 		c.get("/Character/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c05_Float() throws Exception {
@@ -313,7 +313,7 @@ public class PathAnnotationTest {
 			.assertBody().is("1.23");
 		c.get("/Float/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c06_Double() throws Exception {
@@ -322,7 +322,7 @@ public class PathAnnotationTest {
 			.assertBody().is("1.23");
 		c.get("/Double/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c07_Byte() throws Exception {
@@ -331,7 +331,7 @@ public class PathAnnotationTest {
 			.assertBody().is("123");
 		c.get("/Byte/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 	@Test
 	public void c08_Boolean() throws Exception {
@@ -340,7 +340,7 @@ public class PathAnnotationTest {
 			.assertBody().is("true");
 		c.get("/Boolean/bad/foo?noTrace=true")
 			.run()
-			.assertStatusCode().is(400);
+			.assertStatus().is(400);
 	}
 
 	//=================================================================================================================
@@ -472,23 +472,23 @@ public class PathAnnotationTest {
 	public void f01b_incompletePath() throws Exception {
 		f.get("/f/x1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f01c_noPath_blanks() throws Exception {
 		f.get("/f//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f/x/")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f//x")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -502,13 +502,13 @@ public class PathAnnotationTest {
 	public void f02b_noPath2_blanks() throws Exception {
 		f.get("/f///foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f/x1//foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f//x2/foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -522,13 +522,13 @@ public class PathAnnotationTest {
 	public void f03b_noVars_blanks() throws Exception {
 		f.get("/f///a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f/x1//a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f//x2/a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -542,19 +542,19 @@ public class PathAnnotationTest {
 	public void f04b_twoVars_blanks() throws Exception {
 		f.get("/f//x2/b/x3/x4")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f/x1//b/x3/x4")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		f.get("/f/x1/x2/b//x4")
 			.run()
-			.assertStatusCode().is(200);
+			.assertStatus().is(200);
 		f.get("/f/x1/x2/b/x3/")
 			.run()
-			.assertStatusCode().is(200);
+			.assertStatus().is(200);
 		f.get("/f///b//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -605,23 +605,23 @@ public class PathAnnotationTest {
 	public void g01b_incompletePath() throws Exception {
 		g.get("/f/x1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g01c_noPath_blanks() throws Exception {
 		g.get("/f//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f/x1/")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f//x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -635,13 +635,13 @@ public class PathAnnotationTest {
 	public void g02b_noVars_blanks() throws Exception {
 		g.get("/f///a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f/x1//a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f//x2/a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -655,19 +655,19 @@ public class PathAnnotationTest {
 	public void g03b_twoVars_blanks() throws Exception {
 		g.get("/f//x2/b/x3/x4")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f/x1//b/x3/x4")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		g.get("/f/x1/x2/b//x4")
 			.run()
-			.assertStatusCode().is(200);
+			.assertStatus().is(200);
 		g.get("/f/x1/x2/b/x3/")
 			.run()
-			.assertStatusCode().is(200);
+			.assertStatus().is(200);
 		g.get("/f///b//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -719,38 +719,38 @@ public class PathAnnotationTest {
 		// These are 405 instead of 404 because when children don't match, we try to find a matching Java method.
 		h.get("/h/ha1/hb1/f/x1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h01c_noPath_blanks() throws Exception {
 		h.get("/h//hb1/f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1//f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f//x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f/x1/")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h///f//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -764,19 +764,19 @@ public class PathAnnotationTest {
 	public void h02b_noPath2_blanks() throws Exception {
 		h.get("/h//hb1/f/x1/x2/foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1//f/x1/x2/foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f//x2/foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f/x1//foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h///f///foo")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -790,19 +790,19 @@ public class PathAnnotationTest {
 	public void h03b_noVars_blanks() throws Exception {
 		h.get("/h//hb1/f/x1/x2/a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1//f/x1/x2/a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f//x2/a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h/ha1/hb1/f/x1//a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		h.get("/h///f///a")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -860,53 +860,53 @@ public class PathAnnotationTest {
 	public void i01b_incompletePath() throws Exception {
 		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1/hb1/f")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1/hb1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
 	public void i01c_noPath_blanks() throws Exception {
 		i.get("/i//ib1/h/ha1/hb1/f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1//h/ha1/hb1/f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h//hb1/f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1//f/x1/x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1/hb1/f//x2")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 		i.get("/i///h///f//")
 			.run()
-			.assertStatusCode().is(404);
+			.assertStatus().is(404);
 	}
 
 	@Test
@@ -990,7 +990,7 @@ public class PathAnnotationTest {
 	public void j01_optionalParam_integer() throws Exception {
 		j.get("/a/123")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("123");
 	}
 
@@ -998,7 +998,7 @@ public class PathAnnotationTest {
 	public void j02_optionalParam_bean() throws Exception {
 		j.get("/b/a=1,b=foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 	}
 
@@ -1006,7 +1006,7 @@ public class PathAnnotationTest {
 	public void j03_optionalParam_listOfBeans() throws Exception {
 		j.get("/c/@((a=1,b=foo))")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 
@@ -1014,7 +1014,7 @@ public class PathAnnotationTest {
 	public void j04_optionalParam_listOfOptionals() throws Exception {
 		j.get("/d/@((a=1,b=foo))")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 
@@ -1423,19 +1423,19 @@ public class PathAnnotationTest {
 	public void u01_nonRequiredPath() throws Exception {
 		u1.get("/u1/foo/u2")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo");
 		u1.get("/u1/foo/u2/foo/xxx")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("foo,xxx");
 		u2.get("/")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("nil");
 		u2.get("/foo/xxx")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("nil,xxx");
 	}
 
@@ -1465,35 +1465,35 @@ public class PathAnnotationTest {
 	public void v01_multiplePaths() throws Exception {
 		v1.get("/v1/v1foo/v2")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1,v1foo,nil");
 		v1.get("/v1/v1foo/v2/v2foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1,v1foo,v2foo");
 		v1.get("/v1/v1foo/v2/foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("2,v1foo,nil");
 		v1.get("/v1/v1foo/v2/foo/v2foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("2,v1foo,v2foo");
 		v2.get("/v2")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1,nil,nil");
 		v2.get("/v2/v2foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("1,nil,v2foo");
 		v2.get("/v2/foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("2,nil,nil");
 		v2.get("/v2/foo/v2foo")
 			.run()
-			.assertStatusCode().is(200)
+			.assertStatus().is(200)
 			.assertBody().is("2,nil,v2foo");
 	}
 }

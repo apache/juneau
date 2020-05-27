@@ -10,36 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.assertions;
 
-import static org.junit.runners.MethodSorters.*;
+/**
+ * Parent class of all fluent assertion calls.
+ *
+ * @param <R> The return type.
+ */
+public abstract class FluentAssertion<R> {
 
-import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock2.*;
-import org.junit.*;
+	private final R returns;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ResponseStatusAnnotationTest {
-
-	//=================================================================================================================
-	// Test on parameter
-	//=================================================================================================================
-
-	@Rest
-	public static class A {
-		@RestMethod
-		public void a01(@ResponseStatus Value<Integer> status) {
-			status.set(202);
-		}
+	/**
+	 * Constructor.
+	 *
+	 * @param returns The object to return after the test.
+	 */
+	protected FluentAssertion(R returns) {
+		this.returns = returns;
 	}
 
-	static MockRestClient a = MockRestClient.build(A.class);
-
-	@Test
-	public void a01() throws Exception {
-		a.get("/a01")
-			.run()
-			.assertStatus().is(202);
+	/**
+	 * Returns the object that the fluent methods on this class should return.
+	 *
+	 * @return The response object.
+	 */
+	protected R returns() {
+		return returns;
 	}
 }

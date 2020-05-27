@@ -384,7 +384,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	 *
 	 * @return A new fluent-style assertion object.
 	 */
-	public FluentIntegerAssertion<MockServletResponse> assertStatusCode() {
+	public FluentIntegerAssertion<MockServletResponse> assertStatus() {
 		return new FluentIntegerAssertion<>(getStatus(), this);
 	}
 

@@ -58,7 +58,7 @@ public class ContentEncodingTest {
 	@Test
 	public void a02_noCompression_invalid() throws Exception {
 		a.put("?noTrace=true", compress("foo")).contentEncoding("mycoding").run()
-			.assertStatusCode().is(415)
+			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
 				"Supported codings: ['identity']"

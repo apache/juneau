@@ -72,37 +72,37 @@ public class AcceptEncodingTest {
 	@Test
 	public void a03_noCompression_nomatch() throws Exception {
 		a.get("?noTrace=true").acceptEncoding("mycoding,identity;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,identity;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("mycoding,*;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'mycoding,*;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("identity;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("identity;q=0.0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("*;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['identity']"
 			);
 		a.get("?noTrace=true").acceptEncoding("*;q=0.0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['identity']"
@@ -147,25 +147,25 @@ public class AcceptEncodingTest {
 	@Test
 	public void b05_withCompression_nomatch() throws Exception {
 		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0.0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("*;q=0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
 		b.get("/b01?noTrace=true").acceptEncoding("*;q=0.0").run()
-			.assertStatusCode().is(406)
+			.assertStatus().is(406)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
 				"Supported codings: ['mycoding','identity']"

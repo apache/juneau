@@ -32,10 +32,9 @@ import org.apache.juneau.internal.*;
  * </p>
  * @param <R> The return type.
  */
-public class FluentStringAssertion<R> {
+public class FluentStringAssertion<R> extends FluentAssertion<R> {
 
 	private final String text;
-	private final R returns;
 
 	/**
 	 * Constructor.
@@ -44,8 +43,8 @@ public class FluentStringAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentStringAssertion(String text, R returns) {
+		super(returns);
 		this.text = text;
-		this.returns = returns;
 	}
 
 	/**
@@ -66,7 +65,7 @@ public class FluentStringAssertion<R> {
 			}
 			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
 		}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -101,7 +100,7 @@ public class FluentStringAssertion<R> {
 			}
 			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
 		}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -121,7 +120,7 @@ public class FluentStringAssertion<R> {
 			}
 			throw new BasicAssertionError("Text equaled unexpected.\n\tText=[{1}]", value, text);
 		}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -155,7 +154,7 @@ public class FluentStringAssertion<R> {
 			}
 			throw new BasicAssertionError("Text equaled unexpected.\n\tText=[{1}]", value, text);
 		}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -177,7 +176,7 @@ public class FluentStringAssertion<R> {
 				}
 				throw new BasicAssertionError("Text did not contain expected substring.\n\tExpected=[{0}]\n\tActual=[{1}]", substring, text);
 			}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class FluentStringAssertion<R> {
 				}
 				throw new BasicAssertionError("Text contained unexpected substring.\n\tExpected=[{0}]\n\tActual=[{1}]", substring, text);
 			}
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -237,7 +236,7 @@ public class FluentStringAssertion<R> {
 	public R isNull() throws AssertionError {
 		if (text != null)
 			throw new BasicAssertionError("Text was not null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -249,7 +248,7 @@ public class FluentStringAssertion<R> {
 	public R isNotNull() throws AssertionError {
 		if (text == null)
 			throw new BasicAssertionError("Text was null.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -261,7 +260,7 @@ public class FluentStringAssertion<R> {
 	public R isEmpty() throws AssertionError {
 		if (! text.isEmpty())
 			throw new BasicAssertionError("Text was not empty.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -275,7 +274,7 @@ public class FluentStringAssertion<R> {
 			throw new BasicAssertionError("Text was null.");
 		if (text.isEmpty())
 			throw new BasicAssertionError("Text was empty.");
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -288,7 +287,7 @@ public class FluentStringAssertion<R> {
 	public R passes(Predicate<String> test) throws AssertionError {
 		if (! test.test(text))
 			throw new BasicAssertionError("Text did not pass predicate test.\n\tText=[{0}]", text);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -325,7 +324,7 @@ public class FluentStringAssertion<R> {
 		Pattern p = Pattern.compile(regex, flags);
 		if (! p.matcher(text).matches())
 			throw new BasicAssertionError("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", regex, text);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -340,7 +339,7 @@ public class FluentStringAssertion<R> {
 		Pattern p = Pattern.compile(regex, flags);
 		if (p.matcher(text).matches())
 			throw new BasicAssertionError("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", regex, text);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -353,7 +352,7 @@ public class FluentStringAssertion<R> {
 	public R matches(Pattern pattern) throws AssertionError {
 		if (! pattern.matcher(text).matches())
 			throw new BasicAssertionError("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", pattern.pattern(), text);
-		return returns;
+		return returns();
 	}
 
 	/**
@@ -366,6 +365,6 @@ public class FluentStringAssertion<R> {
 	public R doesNotMatch(Pattern pattern) throws AssertionError {
 		if (pattern.matcher(text).matches())
 			throw new BasicAssertionError("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", pattern.pattern(), text);
-		return returns;
+		return returns();
 	}
 }

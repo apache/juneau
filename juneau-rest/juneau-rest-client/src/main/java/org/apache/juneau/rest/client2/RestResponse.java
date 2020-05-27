@@ -158,15 +158,15 @@ public class RestResponse implements HttpResponse {
 	 * 	MyBean bean = client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertStatusCode().is(200)
+	 * 		.assertStatus().is(200)
 	 * 		.getBody().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertStatusCode() throws RestCallException {
-		return new FluentIntegerAssertion<>(getStatusCode(), this);
+	public RestResponseStatusLineAssertion assertStatus() throws RestCallException {
+		return new RestResponseStatusLineAssertion(getStatusLine(), this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -206,6 +206,30 @@ public class RestResponse implements HttpResponse {
 	 */
 	public RestResponseHeader getHeader(String name) {
 		return new RestResponseHeader(request, this, getLastHeader(name)).parser(partParser);
+	}
+
+	/**
+	 * Shortcut for retrieving the response charset from the <l>Content-Type</l> header.
+	 *
+	 * @return The response charset.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public String getCharacterEncoding() throws RestCallException {
+		Set<String> s = getContentType().getParameters().get("charset");
+		return s == null || s.isEmpty() ? "utf-8" : s.iterator().next();
+	}
+
+	/**
+	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
+	 *
+	 * <p>
+	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
+	 *
+	 * @return The response charset.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public ContentType getContentType() throws RestCallException {
+		return getHeader("Content-Type").as(ContentType.class);
 	}
 
 	/**
@@ -330,18 +354,52 @@ public class RestResponse implements HttpResponse {
 		return getHeader(name).assertThatDate();
 	}
 
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response character encoding.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertCharset().is(<js>"utf-8"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
 	public FluentStringAssertion<RestResponse> assertCharset() throws RestCallException {
 		return new FluentStringAssertion<>(getCharacterEncoding(), this);
 	}
 
-	public String getCharacterEncoding() throws RestCallException {
-		Set<String> s = getContentType().getParameters().get("charset");
-		return s == null ? "utf-8" : s.iterator().next();
-
-	}
-
-	public ContentType getContentType() throws RestCallException {
-		return getHeader("Content-Type").as(ContentType.class);
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response content type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is JSON.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertContentType().is(<js>"application/json"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * Note that this is equivalent to the following code:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is JSON.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentStringAssertion<RestResponse> assertContentType() throws RestCallException {
+		return getHeader("Content-Type").assertThat();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
