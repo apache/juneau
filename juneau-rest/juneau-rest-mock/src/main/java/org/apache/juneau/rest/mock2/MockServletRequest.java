@@ -287,6 +287,11 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (res.getStatus() == 0)
 			throw new RuntimeException("Response status was 0.");
 
+		// A bug in HttpClient causes an infinite loop if the response is less than 200.
+		// As a workaround, just add 1000 to the status code (which is better than an infinite loop).
+		if (res.getStatus() < 200)
+			res.setStatus(1000 + res.getStatus());
+
 		if (debug)
 			log(this, res);
 

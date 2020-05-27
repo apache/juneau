@@ -20,6 +20,10 @@ import java.util.logging.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
+import org.apache.http.*;
+import org.apache.http.client.*;
+import org.apache.http.client.entity.*;
+import org.apache.http.conn.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
@@ -32,6 +36,18 @@ import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
+
+import javax.net.ssl.*;
+
+import org.apache.http.auth.*;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.config.*;
+import org.apache.http.config.*;
+import org.apache.http.conn.routing.*;
+import org.apache.http.conn.socket.*;
+import org.apache.http.conn.util.*;
+import org.apache.http.cookie.*;
+import org.apache.http.protocol.*;
 
 /**
  * Mocked {@link RestClient}.
@@ -545,6 +561,30 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder addInterceptorFirst(HttpRequestInterceptor itcp) {
+		super.addInterceptorFirst(itcp);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder addInterceptorFirst(HttpResponseInterceptor itcp) {
+		super.addInterceptorFirst(itcp);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder addInterceptorLast(HttpRequestInterceptor itcp) {
+		super.addInterceptorLast(itcp);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder addInterceptorLast(HttpResponseInterceptor itcp) {
+		super.addInterceptorLast(itcp);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder addRootType() {
 		super.addRootType();
 		return this;
@@ -553,6 +593,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder authorization(Object value) {
 		super.authorization(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder backoffManager(BackoffManager backoffManager) {
+		super.backoffManager(backoffManager);
 		return this;
 	}
 
@@ -593,6 +639,42 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
+		super.connectionBackoffStrategy(connectionBackoffStrategy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
+		super.connectionManager(connManager);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder connectionManagerShared(boolean shared) {
+		super.connectionManagerShared(shared);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
+		super.connectionReuseStrategy(reuseStrategy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+		super.connectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
+		super.contentDecoderRegistry(contentDecoderMap);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder contentLength(Object value) {
 		super.contentLength(value);
 		return this;
@@ -617,14 +699,110 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+		super.defaultAuthSchemeRegistry(authSchemeRegistry);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
+		super.defaultConnectionConfig(config);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+		super.defaultCookieSpecRegistry(cookieSpecRegistry);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultCookieStore(CookieStore cookieStore) {
+		super.defaultCookieStore(cookieStore);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
+		super.defaultCredentialsProvider(credentialsProvider);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultHeaders(Collection<? extends org.apache.http.Header> defaultHeaders) {
+		super.defaultHeaders(defaultHeaders);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultRequestConfig(RequestConfig config) {
+		super.defaultRequestConfig(config);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder defaultSocketConfig(SocketConfig config) {
+		super.defaultSocketConfig(config);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableAuthCaching() {
+		super.disableAuthCaching();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableAutomaticRetries() {
+		super.disableAutomaticRetries();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableConnectionState() {
+		super.disableConnectionState();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableContentCompression() {
+		super.disableContentCompression();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableCookieManagement() {
+		super.disableCookieManagement();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder disableRedirectHandling() {
+		super.disableRedirectHandling();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder errorCodes(Predicate<Integer> value) {
 		super.errorCodes(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder evictExpiredConnections() {
+		super.evictExpiredConnections();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
+		super.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
 	}
 
@@ -755,6 +933,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
+		super.httpProcessor(httpprocessor);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder ifMatch(Object value) {
 		super.ifMatch(value);
 		return this;
@@ -781,6 +965,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder ifUnmodifiedSince(Object value) {
 		super.ifUnmodifiedSince(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder ignoreErrors() {
+		super.ignoreErrors();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder ignoreErrors(boolean value) {
+		super.ignoreErrors(value);
 		return this;
 	}
 
@@ -812,6 +1008,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder json() {
 		super.json();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
+		super.keepAliveStrategy(keepAliveStrategy);
 		return this;
 	}
 
@@ -860,6 +1062,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder marshalls(Marshall...value) {
 		super.marshalls(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
+		super.maxConnPerRoute(maxConnPerRoute);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder maxConnTotal(int maxConnTotal) {
+		super.maxConnTotal(maxConnTotal);
 		return this;
 	}
 
@@ -997,8 +1211,26 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder proxy(HttpHost proxy) {
+		super.proxy(proxy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
+		super.proxyAuthenticationStrategy(proxyAuthStrategy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder proxyAuthorization(Object value) {
 		super.proxyAuthorization(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+		super.publicSuffixMatcher(publicSuffixMatcher);
 		return this;
 	}
 
@@ -1045,14 +1277,44 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
+		super.redirectStrategy(redirectStrategy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder referer(Object value) {
 		super.referer(value);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
+		super.requestExecutor(requestExec);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
+		super.retryHandler(retryHandler);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder rootUrl(Object value) {
 		super.rootUrl(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
+		super.routePlanner(routePlanner);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
+		super.schemePortResolver(schemePortResolver);
 		return this;
 	}
 
@@ -1082,6 +1344,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
+		super.serviceUnavailableRetryStrategy(serviceUnavailStrategy);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder simpleJson() {
 		super.simpleJson();
 		return this;
@@ -1106,8 +1374,32 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder sslContext(SSLContext sslContext) {
+		super.sslContext(sslContext);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
+		super.sslHostnameVerifier(hostnameVerifier);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+		super.sslSocketFactory(sslSocketFactory);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder strict() {
 		super.strict();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
+		super.targetAuthenticationStrategy(targetAuthStrategy);
 		return this;
 	}
 
@@ -1178,6 +1470,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder useSystemProperties() {
+		super.useSystemProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;
@@ -1186,6 +1484,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder userAgent(Object value) {
 		super.userAgent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder userAgent(String userAgent) {
+		super.userAgent(userAgent);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
+		super.userTokenHandler(userTokenHandler);
 		return this;
 	}
 

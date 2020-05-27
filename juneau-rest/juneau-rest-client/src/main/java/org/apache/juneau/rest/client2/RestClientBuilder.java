@@ -4722,6 +4722,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableRedirectHandling()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableRedirectHandling() {
 		httpClientBuilder.disableRedirectHandling();
 		return this;
@@ -4738,6 +4739,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
 		httpClientBuilder.setRedirectStrategy(redirectStrategy);
 		return this;
@@ -4750,6 +4752,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 		httpClientBuilder.setDefaultCookieSpecRegistry(cookieSpecRegistry);
 		return this;
@@ -4762,6 +4765,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
 		httpClientBuilder.setRequestExecutor(requestExec);
 		return this;
@@ -4779,6 +4783,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 		httpClientBuilder.setSSLHostnameVerifier(hostnameVerifier);
 		return this;
@@ -4795,6 +4800,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 		httpClientBuilder.setPublicSuffixMatcher(publicSuffixMatcher);
 		return this;
@@ -4812,6 +4818,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLContext(SSLContext)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder sslContext(SSLContext sslContext) {
 		httpClientBuilder.setSSLContext(sslContext);
 		return this;
@@ -4828,6 +4835,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 		httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
 		return this;
@@ -4844,6 +4852,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnTotal(int)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder maxConnTotal(int maxConnTotal) {
 		httpClientBuilder.setMaxConnTotal(maxConnTotal);
 		return this;
@@ -4860,6 +4869,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
 		httpClientBuilder.setMaxConnPerRoute(maxConnPerRoute);
 		return this;
@@ -4876,6 +4886,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultSocketConfig(SocketConfig config) {
 		httpClientBuilder.setDefaultSocketConfig(config);
 		return this;
@@ -4892,6 +4903,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
 		httpClientBuilder.setDefaultConnectionConfig(config);
 		return this;
@@ -4909,6 +4921,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 		httpClientBuilder.setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 		return this;
@@ -4921,6 +4934,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
 		this.httpClientConnectionManager = connManager;
 		httpClientBuilder.setConnectionManager(connManager);
@@ -4938,6 +4952,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder connectionManagerShared(boolean shared) {
 		httpClientBuilder.setConnectionManagerShared(shared);
 		return this;
@@ -4950,6 +4965,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 		httpClientBuilder.setConnectionReuseStrategy(reuseStrategy);
 		return this;
@@ -4962,6 +4978,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 		httpClientBuilder.setKeepAliveStrategy(keepAliveStrategy);
 		return this;
@@ -4974,6 +4991,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 		httpClientBuilder.setTargetAuthenticationStrategy(targetAuthStrategy);
 		return this;
@@ -4986,6 +5004,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 		httpClientBuilder.setProxyAuthenticationStrategy(proxyAuthStrategy);
 		return this;
@@ -5002,6 +5021,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
 		httpClientBuilder.setUserTokenHandler(userTokenHandler);
 		return this;
@@ -5013,6 +5033,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableConnectionState()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableConnectionState() {
 		httpClientBuilder.disableConnectionState();
 		return this;
@@ -5025,6 +5046,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
 		httpClientBuilder.setSchemePortResolver(schemePortResolver);
 		return this;
@@ -5042,6 +5064,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserAgent(String)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder userAgent(String userAgent) {
 		httpClientBuilder.setUserAgent(userAgent);
 		return this;
@@ -5059,6 +5082,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultHeaders(Collection<? extends Header> defaultHeaders) {
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
 		return this;
@@ -5075,6 +5099,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder addInterceptorFirst(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -5091,6 +5116,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder addInterceptorLast(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -5107,6 +5133,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder addInterceptorFirst(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -5123,6 +5150,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder addInterceptorLast(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -5138,6 +5166,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableCookieManagement()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableCookieManagement() {
 		httpClientBuilder.disableCookieManagement();
 		return this;
@@ -5153,6 +5182,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableContentCompression()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableContentCompression() {
 		httpClientBuilder.disableContentCompression();
 		return this;
@@ -5168,6 +5198,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAuthCaching()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableAuthCaching() {
 		httpClientBuilder.disableAuthCaching();
 		return this;
@@ -5180,6 +5211,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
 		httpClientBuilder.setHttpProcessor(httpprocessor);
 		return this;
@@ -5196,6 +5228,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
 		httpClientBuilder.setRetryHandler(retryHandler);
 		return this;
@@ -5207,6 +5240,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAutomaticRetries()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder disableAutomaticRetries() {
 		httpClientBuilder.disableAutomaticRetries();
 		return this;
@@ -5223,6 +5257,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxy(HttpHost)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder proxy(HttpHost proxy) {
 		httpClientBuilder.setProxy(proxy);
 		return this;
@@ -5235,6 +5270,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
 		httpClientBuilder.setRoutePlanner(routePlanner);
 		return this;
@@ -5247,6 +5283,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 		httpClientBuilder.setConnectionBackoffStrategy(connectionBackoffStrategy);
 		return this;
@@ -5259,6 +5296,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder backoffManager(BackoffManager backoffManager) {
 		httpClientBuilder.setBackoffManager(backoffManager);
 		return this;
@@ -5271,6 +5309,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 		httpClientBuilder.setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 		return this;
@@ -5283,6 +5322,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultCookieStore(CookieStore cookieStore) {
 		httpClientBuilder.setDefaultCookieStore(cookieStore);
 		return this;
@@ -5295,6 +5335,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
 		return this;
@@ -5307,6 +5348,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 		httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
 		return this;
@@ -5319,6 +5361,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		httpClientBuilder.setContentDecoderRegistry(contentDecoderMap);
 		return this;
@@ -5331,6 +5374,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder defaultRequestConfig(RequestConfig config) {
 		httpClientBuilder.setDefaultRequestConfig(config);
 		return this;
@@ -5342,6 +5386,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#useSystemProperties()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder useSystemProperties() {
 		httpClientBuilder.useSystemProperties();
 		return this;
@@ -5359,6 +5404,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictExpiredConnections()
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder evictExpiredConnections() {
 		httpClientBuilder.evictExpiredConnections();
 		return this;
@@ -5378,6 +5424,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 	 */
+	@ConfigurationProperty
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;

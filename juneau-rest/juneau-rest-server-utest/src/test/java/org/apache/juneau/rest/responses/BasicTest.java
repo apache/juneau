@@ -59,7 +59,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy(); }
 	}
 
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.create(A.class).disableRedirectHandling().build();
 
 	@Test
 	public void a01_accepted() throws Exception {
@@ -79,7 +79,7 @@ public class BasicTest {
 	public void a03_continue() throws Exception {
 		a.get("/continue")
 			.run()
-			.assertStatus().is(100)
+			.assertStatus().is(1100)
 			.assertBody().is("Continue");
 	}
 	@Test
@@ -93,7 +93,7 @@ public class BasicTest {
 	public void a05_earlyHints() throws Exception {
 		a.get("/earlyHints")
 			.run()
-			.assertStatus().is(103)
+			.assertStatus().is(1103)
 			.assertBody().is("Early Hints");
 	}
 	@Test
@@ -135,8 +135,7 @@ public class BasicTest {
 	public void a11_noContent() throws Exception {
 		a.get("/noContent")
 			.run()
-			.assertStatus().is(204)
-			.assertBody().is("No Content");
+			.assertStatus().is(204);
 	}
 	@Test
 	public void a12_nonAuthoritiveInformation() throws Exception {
@@ -149,8 +148,7 @@ public class BasicTest {
 	public void a13_notModified() throws Exception {
 		a.get("/notModified")
 			.run()
-			.assertStatus().is(304)
-			.assertBody().is("Not Modified");
+			.assertStatus().is(304);
 	}
 	@Test
 	public void a14_ok() throws Exception {
@@ -177,15 +175,14 @@ public class BasicTest {
 	public void a17_processing() throws Exception {
 		a.get("/processing")
 			.run()
-			.assertStatus().is(102)
+			.assertStatus().is(1102)
 			.assertBody().is("Processing");
 	}
 	@Test
 	public void a18_resetContent() throws Exception {
 		a.get("/resetContent")
 			.run()
-			.assertStatus().is(205)
-			.assertBody().is("Reset Content");
+			.assertStatus().is(205);
 	}
 	@Test
 	public void a19_seeOther() throws Exception {
@@ -198,7 +195,7 @@ public class BasicTest {
 	public void a20_switchingProtocols() throws Exception {
 		a.get("/switchingProtocols")
 			.run()
-			.assertStatus().is(101)
+			.assertStatus().is(1101)
 			.assertBody().is("Switching Protocols");
 	}
 	@Test
@@ -228,7 +225,7 @@ public class BasicTest {
 		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
 	}
 
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.create(B.class).disableRedirectHandling().build();
 
 	@Test
 	public void b01_movedPermanently() throws Exception {
@@ -289,7 +286,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy("foo"); }
 	}
 
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.create(C.class).disableRedirectHandling().build();
 
 	@Test
 	public void c01_accepted() throws Exception {
@@ -309,7 +306,7 @@ public class BasicTest {
 	public void c03_continue() throws Exception {
 		c.get("/continue")
 			.run()
-			.assertStatus().is(100)
+			.assertStatus().is(1100)
 			.assertBody().is("foo");
 	}
 	@Test
@@ -323,7 +320,7 @@ public class BasicTest {
 	public void c05_earlyHints() throws Exception {
 		c.get("/earlyHints")
 			.run()
-			.assertStatus().is(103)
+			.assertStatus().is(1103)
 			.assertBody().is("foo");
 	}
 	@Test
@@ -365,8 +362,7 @@ public class BasicTest {
 	public void c11_noContent() throws Exception {
 		c.get("/noContent")
 			.run()
-			.assertStatus().is(204)
-			.assertBody().is("foo");
+			.assertStatus().is(204);
 	}
 	@Test
 	public void c12_nonAuthoritiveInformation() throws Exception {
@@ -379,8 +375,7 @@ public class BasicTest {
 	public void c13_notModified() throws Exception {
 		c.get("/notModified")
 			.run()
-			.assertStatus().is(304)
-			.assertBody().is("foo");
+			.assertStatus().is(304);
 	}
 	@Test
 	public void c14_ok() throws Exception {
@@ -407,15 +402,14 @@ public class BasicTest {
 	public void c17_processing() throws Exception {
 		c.get("/processing")
 			.run()
-			.assertStatus().is(102)
+			.assertStatus().is(1102)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c18_resetContent() throws Exception {
 		c.get("/resetContent")
 			.run()
-			.assertStatus().is(205)
-			.assertBody().is("foo");
+			.assertStatus().is(205);
 	}
 	@Test
 	public void c19_seeOther() throws Exception {
@@ -428,7 +422,7 @@ public class BasicTest {
 	public void c20_switchingProtocols() throws Exception {
 		c.get("/switchingProtocols")
 			.run()
-			.assertStatus().is(101)
+			.assertStatus().is(1101)
 			.assertBody().is("foo");
 	}
 	@Test
@@ -455,7 +449,7 @@ public class BasicTest {
 		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
 	}
 
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_accepted() throws Exception {

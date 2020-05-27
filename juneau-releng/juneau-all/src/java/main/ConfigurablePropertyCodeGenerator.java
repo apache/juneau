@@ -67,7 +67,7 @@ public class ConfigurablePropertyCodeGenerator {
 		JsonSerializerBuilder.class,
 		JsoParserBuilder.class,
 		JsoSerializerBuilder.class,
-		MockRestClient.class,
+		MockRestClientBuilder.class,
 		MsgPackParserBuilder.class,
 		MsgPackSerializerBuilder.class,
 		OpenApiParserBuilder.class,
