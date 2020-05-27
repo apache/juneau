@@ -39,7 +39,7 @@ public class StatusCodesTest {
 			return new StringReader(b);
 		}
 	}
-	private static MockRest a = MockRest.build(A.class);
+	private static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01a_OK() throws Exception {
@@ -106,12 +106,11 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRest b = MockRest.build(B.class);
+	private static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01a_nonExistentBeanProperties() throws Exception {
-		b.put("/nonExistentBeanProperties?noTrace=true", "{f2:'foo'}")
-			.json()
+		b.put("/nonExistentBeanProperties?noTrace=true", "{f2:'foo'}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -120,8 +119,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b01b_nonExistentBeanProperties() throws Exception {
-		b.put("/nonExistentBeanProperties?noTrace=true", "{f1:'foo', f2:'foo'}")
-			.json()
+		b.put("/nonExistentBeanProperties?noTrace=true", "{f1:'foo', f2:'foo'}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -130,8 +128,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b02_wrongDataType() throws Exception {
-		b.put("/wrongDataType?noTrace=true", "{f1:'foo'}")
-			.json()
+		b.put("/wrongDataType?noTrace=true", "{f1:'foo'}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -140,8 +137,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b03_parseIntoNonConstructableBean() throws Exception {
-		b.put("/parseIntoNonConstructableBean?noTrace=true", "{f1:1}")
-			.json()
+		b.put("/parseIntoNonConstructableBean?noTrace=true", "{f1:1}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -150,8 +146,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b04_parseIntoNonStaticInnerClass() throws Exception {
-		b.put("/parseIntoNonStaticInnerClass?noTrace=true", "{f1:1}")
-			.json()
+		b.put("/parseIntoNonStaticInnerClass?noTrace=true", "{f1:1}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -160,8 +155,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b05_parseIntoNonStaticInnerClass() throws Exception {
-		b.put("/parseIntoNonPublicInnerClass?noTrace=true", "{f1:1}")
-			.json()
+		b.put("/parseIntoNonPublicInnerClass?noTrace=true", "{f1:1}", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -170,8 +164,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b06_thrownConstructorException() throws Exception {
-		b.put("/thrownConstructorException?noTrace=true", "'foo'")
-			.json()
+		b.put("/thrownConstructorException?noTrace=true", "'foo'", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -180,8 +173,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Query() throws Exception {
-		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=foo", "'foo'")
-			.json()
+		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=foo", "'foo'", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -190,8 +182,7 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Path() throws Exception {
-		b.put("/setParameterToInvalidTypes/foo?noTrace=true&p1=1", "'foo'")
-			.json()
+		b.put("/setParameterToInvalidTypes/foo?noTrace=true&p1=1", "'foo'", "application/json")
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -200,9 +191,8 @@ public class StatusCodesTest {
 	}
 	@Test
 	public void b07a_setParameterToInvalidTypes_Header() throws Exception {
-		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=1", "'foo'")
+		b.put("/setParameterToInvalidTypes/123?noTrace=true&p1=1", "'foo'", "application/json")
 			.header("h1", "foo")
-			.json()
 			.run()
 			.assertStatus().is(400)
 			.assertBody().contains(
@@ -221,7 +211,7 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRest c = MockRest.build(C.class);
+	private static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_badPath() throws Exception {
@@ -258,7 +248,7 @@ public class StatusCodesTest {
 			}
 		}
 	}
-	private static MockRest d = MockRest.build(D.class);
+	private static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01() throws Exception {
