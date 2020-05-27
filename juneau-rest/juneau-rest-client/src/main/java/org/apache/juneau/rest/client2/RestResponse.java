@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
-public final class RestResponse implements HttpResponse {
+public class RestResponse implements HttpResponse {
 
 	private final RestClient client;
 	private final RestRequest request;

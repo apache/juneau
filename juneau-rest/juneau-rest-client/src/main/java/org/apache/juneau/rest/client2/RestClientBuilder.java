@@ -125,6 +125,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return new RestClient(getPropertyStore());
 	}
 
+	@Override /* ContextBuilder */
+	public <T extends Context> T build(Class<T> c) {
+		set(RESTCLIENT_httpClient, getHttpClient());
+		set(RESTCLIENT_httpClientBuilder, getHttpClientBuilder());
+		return super.build(c);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Convenience marshalling support methods.
 	//------------------------------------------------------------------------------------------------------------------

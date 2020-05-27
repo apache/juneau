@@ -922,7 +922,6 @@ public class InterfaceProxyTest {
 			};
 		}
 	}
-	static MockRest interfaceProxyResource = MockRest.build(InterfaceProxyResource.class);
 
 	private static Map<String,InterfaceProxy> cache = new LinkedHashMap<>();
 

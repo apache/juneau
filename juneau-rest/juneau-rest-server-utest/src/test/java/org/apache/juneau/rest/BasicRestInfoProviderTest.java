@@ -2337,7 +2337,7 @@ public class BasicRestInfoProviderTest {
 		}
 	}
 
-	static MockRest p = MockRest.build(P.class);
+	static MockRestClient p = MockRestClient.build(P.class);
 
 	@Test
 	public void p01_bodyWithReadOnlyProperty() throws Exception {

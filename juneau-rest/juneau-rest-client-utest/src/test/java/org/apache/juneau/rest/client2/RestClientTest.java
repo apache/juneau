@@ -127,8 +127,24 @@ public class RestClientTest {
 	public void a01_overrideHttpClient() {
 		HttpClientBuilder cb = HttpClientBuilder.create();
 		CloseableHttpClient hc = HttpClientBuilder.create().build();
-		RestClient.create().httpClientBuilder(cb).build();
-		RestClient.create().httpClient(hc).build();
+		RestClient.create().httpClientBuilder(cb).build().builder().build();
+		RestClient.create().httpClient(hc).build().builder().build();
+	}
+
+	public static class A2 extends RestClientBuilder {}
+
+	@Test
+	public void a02_useNoArgConstructor() {
+//		new A2()
+//			.
+//		.create(A.class)
+//		.simpleJson()
+//		.logToConsole()
+//		.build()
+//		.post("/bean", bean)
+//		.complete();
+//		A2.create().httpClientBuilder(cb).build().builder().build();
+//		RestClient.create().httpClient(hc).build().builder().build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

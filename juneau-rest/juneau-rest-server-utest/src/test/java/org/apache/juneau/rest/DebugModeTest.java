@@ -113,8 +113,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a1 = MockRest.buildSimpleJson(A1.class);
-	static MockRest a1d = MockRest.create(A1.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient a1 = MockRestClient.buildSimpleJson(A1.class);
+	static MockRestClient a1d = MockRestClient.create(A1.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void a01_debugDefault() throws Exception {
@@ -188,8 +188,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a1a = MockRest.buildSimpleJson(A1a.class);
-	static MockRest a1ad = MockRest.create(A1a.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient a1a = MockRestClient.buildSimpleJson(A1a.class);
+	static MockRestClient a1ad = MockRestClient.create(A1a.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void a01a_debugDefault() throws Exception {
@@ -267,8 +267,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a2 = MockRest.buildSimpleJson(A2.class);
-	static MockRest a2d = MockRest.create(A2.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient a2 = MockRestClient.buildSimpleJson(A2.class);
+	static MockRestClient a2d = MockRestClient.create(A2.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void a02_debugTrue() throws Exception {
@@ -346,8 +346,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a3 = MockRest.buildSimpleJson(A3.class);
-	static MockRest a3d = MockRest.create(A3.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient a3 = MockRestClient.buildSimpleJson(A3.class);
+	static MockRestClient a3d = MockRestClient.create(A3.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void a03_restDebugFalse() throws Exception {
@@ -425,8 +425,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest a4 = MockRest.buildSimpleJson(A4.class);
-	static MockRest a4d = MockRest.create(A4.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient a4 = MockRestClient.buildSimpleJson(A4.class);
+	static MockRestClient a4d = MockRestClient.create(A4.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void a04_debugPerRequest() throws Exception {
@@ -486,7 +486,7 @@ public class DebugModeTest {
 			LOGGER.log(config, req, res);
 		}
 	}
-	static MockRest b1 = MockRest.buildSimpleJson(B1.class);
+	static MockRestClient b1 = MockRestClient.buildSimpleJson(B1.class);
 
 	@Test
 	public void b01_debugDefault() throws Exception {
@@ -512,7 +512,7 @@ public class DebugModeTest {
 			LOGGER.log(config, req, res);
 		}
 	}
-	static MockRest b2 = MockRest.buildSimpleJson(B2.class);
+	static MockRestClient b2 = MockRestClient.buildSimpleJson(B2.class);
 
 	@Test
 	public void b02_debugDefault() throws Exception {
@@ -700,8 +700,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest c1 = MockRest.buildSimpleJson(C1.class);
-	static MockRest c1d = MockRest.create(C1.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient c1 = MockRestClient.buildSimpleJson(C1.class);
+	static MockRestClient c1d = MockRestClient.create(C1.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void c01_debugDefault() throws Exception {
@@ -1034,8 +1034,8 @@ public class DebugModeTest {
 			return req.isDebug();
 		}
 	}
-	static MockRest c2 = MockRest.buildSimpleJson(C2.class);
-	static MockRest c2d = MockRest.create(C2.class).simpleJson().header("X-Debug", true).build();
+	static MockRestClient c2 = MockRestClient.buildSimpleJson(C2.class);
+	static MockRestClient c2d = MockRestClient.create(C2.class).simpleJson().header("X-Debug", true).build();
 
 	@Test
 	public void c02_debugTrue() throws Exception {

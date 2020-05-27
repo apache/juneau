@@ -44,7 +44,7 @@ public class BeanContextPropertiesTest  {
 			return "d1="+df.swap(session, d1)+",d2="+df.swap(session, d2)+",d3="+df.swap(session, d3)+"";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_testClassTransforms() throws Exception {

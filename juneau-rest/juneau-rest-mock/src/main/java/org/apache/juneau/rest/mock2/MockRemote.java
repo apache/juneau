@@ -40,7 +40,7 @@ import org.apache.juneau.xml.*;
  */
 public class MockRemote<T> {
 
-	private MockRest.Builder mrb;
+	private MockRestBuilder mrb;
 	private RestClientBuilder rcb = RestClient.create();
 	private final Class<T> intf;
 
