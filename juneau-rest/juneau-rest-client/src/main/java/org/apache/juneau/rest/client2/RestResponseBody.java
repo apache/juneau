@@ -341,10 +341,18 @@ public class RestResponseBody implements HttpEntity {
 	 * 	The HTTP response message body reader, never <jk>null</jk>.
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
 	 * @return The HTTP response body as a byte array.
-	 * @throws IOException If an exception occurred.
+	 * @throws RestCallException If an exception occurred.
 	 */
-	public byte[] asBytes() throws IOException {
-		cache();
+	public byte[] asBytes() throws RestCallException {
+		if (cache == null) {
+			try {
+				cache = IOUtils.readBytes(entity.getContent());
+			} catch (IOException e) {
+				throw new RestCallException(e);
+			} finally {
+				response.close();
+			}
+		}
 		return cache;
 	}
 

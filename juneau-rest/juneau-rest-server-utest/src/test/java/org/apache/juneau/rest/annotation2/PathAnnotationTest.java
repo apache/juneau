@@ -60,7 +60,7 @@ public class PathAnnotationTest {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a00_nonExistentPath() throws Exception {
@@ -154,7 +154,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_int() throws Exception {
@@ -268,7 +268,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_Integer() throws Exception {
@@ -355,7 +355,7 @@ public class PathAnnotationTest {
 			return uuid;
 		}
 	}
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_uuid() throws Exception {
@@ -392,7 +392,7 @@ public class PathAnnotationTest {
 			return OMap.of("m", "numbers3", "0", foo, "1", bar);
 		}
 	}
-	static MockRest e = MockRest.build(E.class);
+	static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01_normal1() throws Exception {
@@ -459,7 +459,7 @@ public class PathAnnotationTest {
 			return SimpleJson.DEFAULT.format(msg, args);
 		}
 	}
-	static MockRest f = MockRest.create(F.class).servletPath("/f").build();
+	static MockRestClient f = MockRestClient.create(F.class).servletPath("/f").build();
 
 	@Test
 	public void f01a_noPath() throws Exception {
@@ -592,7 +592,7 @@ public class PathAnnotationTest {
 	@Rest(children={F.class})
 	public static class G {}
 
-	static MockRest g = MockRest.create(G.class).build();
+	static MockRestClient g = MockRestClient.create(G.class).build();
 
 	@Test
 	public void g01a_noPath() throws Exception {
@@ -705,7 +705,7 @@ public class PathAnnotationTest {
 	@Rest(path="/h/{ha}/{hb}", children={F.class})
 	public static class H {}
 
-	static MockRest h = MockRest.create(H.class).servletPath("/h").build();
+	static MockRestClient h = MockRestClient.create(H.class).servletPath("/h").build();
 
 	@Test
 	public void h01a_noPath() throws Exception {
@@ -847,7 +847,7 @@ public class PathAnnotationTest {
 	@Rest(path="/i/{ia}/{ib}", children={H.class})
 	public static class I {}
 
-	static MockRest i = MockRest.create(I.class).servletPath("/i").build();
+	static MockRestClient i = MockRestClient.create(I.class).servletPath("/i").build();
 
 	@Test
 	public void i01a_noPath() throws Exception {
@@ -984,7 +984,7 @@ public class PathAnnotationTest {
 			return f1;
 		}
 	}
-	static MockRest j = MockRest.buildJson(J.class);
+	static MockRestClient j = MockRestClient.buildJson(J.class);
 
 	@Test
 	public void j01_optionalParam_integer() throws Exception {
@@ -1416,8 +1416,8 @@ public class PathAnnotationTest {
 		}
 	}
 
-	static MockRest u1 = MockRest.build(U1.class);
-	static MockRest u2 = MockRest.build(U2.class);
+	static MockRestClient u1 = MockRestClient.build(U1.class);
+	static MockRestClient u2 = MockRestClient.build(U2.class);
 
 	@Test
 	public void u01_nonRequiredPath() throws Exception {
@@ -1458,8 +1458,8 @@ public class PathAnnotationTest {
 		}
 	}
 
-	static MockRest v1 = MockRest.build(V1.class);
-	static MockRest v2 = MockRest.build(V2.class);
+	static MockRestClient v1 = MockRestClient.build(V1.class);
+	static MockRestClient v2 = MockRestClient.build(V2.class);
 
 	@Test
 	public void v01_multiplePaths() throws Exception {

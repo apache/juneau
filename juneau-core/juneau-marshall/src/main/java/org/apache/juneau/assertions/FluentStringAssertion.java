@@ -235,7 +235,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNull() throws AssertionError {
 		if (text != null)
-			throw new BasicAssertionError("Text was not null.");
+			throw new BasicAssertionError("Text was not null.  Text=["+text+"]");
 		return returns();
 	}
 

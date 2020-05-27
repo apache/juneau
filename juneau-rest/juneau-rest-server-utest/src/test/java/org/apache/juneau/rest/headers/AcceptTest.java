@@ -67,7 +67,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest a = MockRest.build(A.class);
+	private static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
@@ -108,7 +108,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest b = MockRest.build(B.class);
+	private static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
@@ -142,7 +142,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest c = MockRest.build(C.class);
+	private static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
@@ -189,7 +189,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest d = MockRest.build(D.class);
+	private static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_accept_valid() throws Exception {
@@ -229,7 +229,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest e = MockRest.build(E.class);
+	private static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
@@ -269,7 +269,7 @@ public class AcceptTest {
 			return in;
 		}
 	}
-	private static MockRest f = MockRest.build(F.class);
+	private static MockRestClient f = MockRestClient.build(F.class);
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {

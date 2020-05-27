@@ -49,7 +49,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_noCompression() throws Exception {
@@ -120,7 +120,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {
@@ -213,46 +213,62 @@ public class AcceptEncodingTest {
 			w.flush();
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_direct1() throws Exception {
-		c.get("/c01").acceptEncoding("mycoding").run()
+		c.get("/c01")
+			.acceptEncoding("mycoding")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
-		c.get("/c01").acceptEncoding("*").run()
+		c.get("/c01")
+			.acceptEncoding("*")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c02_direct2() throws Exception {
-		c.get("/c02").acceptEncoding("mycoding").run()
+		c.get("/c02")
+			.acceptEncoding("mycoding")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
-		c.get("/c02").acceptEncoding("*").run()
+		c.get("/c02")
+			.acceptEncoding("*")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c03_direct3() throws Exception {
 		byte[] body;
-		body = c.get("/c03").acceptEncoding("mycoding").run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+		body = c.get("/c03")
+			.acceptEncoding("mycoding")
+			.run()
+			.assertHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
 		assertEquals("foo", decompress(body));
-		body = c.get("/c03").acceptEncoding("*").run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+		body = c.get("/c03")
+			.acceptEncoding("*")
+			.run()
+			.assertHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
 		assertEquals("foo", decompress(body));
 	}
 	@Test
 	public void c04_direct4() throws Exception {
-		c.get("/c04").acceptEncoding("mycoding").run()
+		c.get("/c04")
+			.acceptEncoding("mycoding")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
-		c.get("/c04").acceptEncoding("*").run()
+		c.get("/c04")
+			.acceptEncoding("*")
+			.run()
 			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 	}

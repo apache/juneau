@@ -81,6 +81,22 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		ignoreErrors();
 	}
 
+	public MockRestClientBuilder contextPath(String value) {
+		mrb.contextPath(value);
+		return this;
+	}
+
+	public MockRestClientBuilder servletPath(String value) {
+		mrb.servletPath(value);
+		return this;
+	}
+
+	public MockRestClientBuilder roles(String...values) {
+		mrb.roles(values);
+		return this;
+	}
+
+
 	@Override /* ContextBuilder */
 	public MockRestClient build() {
 		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
