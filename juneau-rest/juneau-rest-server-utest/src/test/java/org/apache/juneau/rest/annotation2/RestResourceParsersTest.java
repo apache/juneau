@@ -135,7 +135,7 @@ public class RestResourceParsersTest {
 		a.put("/parserOnClass?noTrace=true", "test1")
 			.contentType("text/b")
 			.run()
-			.assertStatus().is(415)
+			.assertStatusCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
 				"Supported media-types: ['text/a"
@@ -150,7 +150,7 @@ public class RestResourceParsersTest {
 		a.put("/parserOnMethod?noTrace=true", "test2")
 			.contentType("text/a")
 			.run()
-			.assertStatus().is(415)
+			.assertStatusCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -183,7 +183,7 @@ public class RestResourceParsersTest {
 		a.put("/validErrorResponse?noTrace=true", "test1")
 			.contentType("text/bad")
 			.run()
-			.assertStatus().is(415)
+			.assertStatusCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
 				"Supported media-types: ['text/a"

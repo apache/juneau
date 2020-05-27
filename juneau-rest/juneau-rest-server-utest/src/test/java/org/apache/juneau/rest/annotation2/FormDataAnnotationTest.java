@@ -186,11 +186,11 @@ public class FormDataAnnotationTest {
 	public void d01_optionalParam_integer() throws Exception {
 		d.post("/a", "f1=123")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("123");
 		d.post("/a", "null")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -198,11 +198,11 @@ public class FormDataAnnotationTest {
 	public void d02_optionalParam_bean() throws Exception {
 		d.post("/b", "f1=a=1,b=foo")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 		d.post("/b", "null")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -210,11 +210,11 @@ public class FormDataAnnotationTest {
 	public void d03_optionalParam_listOfBeans() throws Exception {
 		d.post("/c", "f1=@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		d.post("/c", "null")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -222,11 +222,11 @@ public class FormDataAnnotationTest {
 	public void d04_optionalParam_listOfOptionals() throws Exception {
 		d.post("/d", "f1=@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		d.post("/d", "null")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("null");
 	}
 

@@ -89,7 +89,7 @@ public class AcceptTest {
 		a.put("/a01?noTrace=true", null)
 			.accept("text/s3")
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains("Unsupported media-type in request header 'Accept': 'text/s3'");
 	}
 
@@ -120,7 +120,7 @@ public class AcceptTest {
 		b.put("/b?noTrace=true", null)
 			.accept("text/s4")
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3']"
@@ -168,7 +168,7 @@ public class AcceptTest {
 		c.put("/c?noTrace=true", null)
 			.accept("text/s4")
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3','text/s1','text/s2']"
@@ -207,7 +207,7 @@ public class AcceptTest {
 		d.put("/d?noTrace=true", null)
 			.accept("bad/*")
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
 				"Supported media-types: ['text/s1','text/s2']"
@@ -241,13 +241,13 @@ public class AcceptTest {
 		e.put("/d?noTrace=true", null)
 			.accept("text/s1")
 			.run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
 				"Supported media-types: ['text/s3']"
 			);
 		e.put("/d?noTrace=true", null).accept("text/s2").run()
-			.assertStatus().is(406)
+			.assertStatusCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
 				"Supported media-types: ['text/s3']"

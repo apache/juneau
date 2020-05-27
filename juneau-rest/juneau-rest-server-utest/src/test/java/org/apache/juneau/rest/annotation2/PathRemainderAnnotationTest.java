@@ -86,7 +86,7 @@ public class PathRemainderAnnotationTest {
 	public void b01_optionalParam_integer() throws Exception {
 		b.get("/a/123")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("123");
 	}
 
@@ -94,7 +94,7 @@ public class PathRemainderAnnotationTest {
 	public void b02_optionalParam_bean() throws Exception {
 		b.get("/b/a=1,b=foo")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 	}
 
@@ -102,7 +102,7 @@ public class PathRemainderAnnotationTest {
 	public void b03_optionalParam_listOfBeans() throws Exception {
 		b.get("/c/@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 
@@ -110,7 +110,7 @@ public class PathRemainderAnnotationTest {
 	public void b04_optionalParam_listOfOptionals() throws Exception {
 		b.get("/d/@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertStatusCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 	}
 }
