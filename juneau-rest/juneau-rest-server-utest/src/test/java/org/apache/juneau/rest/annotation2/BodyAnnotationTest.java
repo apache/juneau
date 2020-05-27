@@ -127,11 +127,12 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest a = MockRest.build(A.class);
+	private static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01a_onParameter_String() throws Exception {
-		a.put("/String", "'foo'").json()
+		a.put("/String", "foo")
+			.json()
 			.run()
 			.assertBody().is("'foo'");
 	}
@@ -229,19 +230,19 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a08a_onParameter_Map() throws Exception {
-		a.put("/Map", "{foo:123}").json()
+		a.put("/Map", "{foo:123}", "application/json")
 			.run()
 			.assertBody().is("{foo:123}");
 	}
 	@Test
 	public void a08b_onParameter_Map_noContentType() throws Exception {
-		a.put("/Map", "(foo=123)")
+		a.put("/Map", "(foo=123)", "text/openapi")
 			.run()
 			.assertStatus().is(415);
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
-		a.put("/enum", "'ONE'").json()
+		a.put("/enum", "'ONE'", "application/json")
 			.run()
 			.assertBody().is("'ONE'");
 	}
@@ -253,20 +254,20 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a11a_onParameter_Bean() throws Exception {
-		a.put("/Bean", "{f1:'a'}").json()
+		a.put("/Bean", "{f1:'a'}", "application/json")
 			.run()
 			.assertBody().is("{f1:'a'}");
 	}
 	@Test
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
-		a.put("/Bean", "(f1=a)")
+		a.put("/Bean", "(f1=a)", "text/openapi")
 			.run()
 			.assertStatus().is(415);
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
 		// Content-Type should always be ignored.
-		a.put("/InputStream", "'a'").json()
+		a.put("/InputStream", "'a'", "application/json")
 			.run()
 			.assertBody().is("'\\'a\\''");
 	}
@@ -279,7 +280,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void a13a_onParameter_Reader() throws Exception {
 		// Content-Type should always be ignored.
-		a.put("/Reader", "'a'").json()
+		a.put("/Reader", "'a'", "application/json")
 			.run()
 			.assertBody().is("'\\'a\\''");
 	}
@@ -292,7 +293,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void a14a_onParameter_InputStreamTransform() throws Exception {
 		// Input stream transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.put("/InputStreamTransform?noTrace=true", "'a'").json()
+		a.put("/InputStreamTransform?noTrace=true", "'a'", "application/json")
 			.run()
 			.assertBody().contains("Bad Request");
 	}
@@ -305,7 +306,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void a15a_onParameter_ReaderTransform() throws Exception {
 		// Reader transform requests must not specify Content-Type or else gets resolved as POJO.
-		a.put("/ReaderTransform?noTrace=true", "'a'").json()
+		a.put("/ReaderTransform?noTrace=true", "'a'", "application/json")
 			.run()
 			.assertBody().contains("Bad Request");
 	}
@@ -318,7 +319,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void a16a_onParameter_StringTransform() throws Exception {
 		// When Content-Type specified and matched, treated as a parsed POJO.
-		a.put("/StringTransform", "'a'").json()
+		a.put("/StringTransform", "'a'", "application/json")
 			.run()
 			.assertBody().is("'a'");
 	}

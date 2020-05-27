@@ -60,11 +60,11 @@ public class AnnotationInheritanceTest {
 		}
 	}
 
-	private static MockRest a = MockRest.build(A.class);
+	private static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_inherited_Body() throws Exception {
-		a.put("/a01", "'foo'").json().run().assertBody().is("'foo'");
+		a.put("/a01", "foo").json().run().assertBody().is("'foo'");
 	}
 	@Test
 	public void a02_inherited_Query() throws Exception {

@@ -133,7 +133,7 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 * @return This object (for method chaining).
 	 */
 	public RestRequest json() {
-		return serializer(JsonSerializer.DEFAULT).parser(JsonParser.DEFAULT);
+		return serializer(JsonSerializer.class).parser(JsonParser.class);
 	}
 
 	/**
@@ -1862,6 +1862,38 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
+	 * Sets the body of this request as straight text bypassing the serializer.
+	 *
+	 * <p class='bcode w800'>
+	 * 	client.put(<js>"/foo"</js>)
+	 * 		.body(<jk>new</jk> StringReader(<js>"foo"</js>))
+	 * 		.contentType(""
+	 * 		.run();
+	 *
+	 * client.put(<js>"/foo"</js>)
+	 * 		.stringBody(<js>"foo"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * <p>
+	 * Note that this is different than the following which will serialize <l>foo</l> as a JSON string <l>"foo"</l>.
+	 * <p class='bcode w800'>
+	 * 	client.put(<js>"/foo"</js>)
+	 * 		.json()
+	 * 		.body(<js>"foo"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param input
+	 * 	The input to be sent to the REST resource (only valid for PUT/POST/PATCH) requests.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
+	 */
+	public RestRequest stringBody(String input) throws RestCallException {
+		return body(new StringReader(input));
+	}
+
+	/**
 	 * Sets the body of this request.
 	 *
 	 * @param input
@@ -2802,8 +2834,11 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 				}
 				else if (serializer != null)
 					entity = new SerializedHttpEntity(input, serializer, requestBodySchema, contentType);
-				else
+				else {
+					if (input == null)
+						input = "";
 					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
+				}
 
 				request2.setEntity(entity);
 			}

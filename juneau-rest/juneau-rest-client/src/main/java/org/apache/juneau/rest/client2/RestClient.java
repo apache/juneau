@@ -2137,7 +2137,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		return request("GET", null, false);
 	}
 
-
 	/**
 	 * Perform a <c>PUT</c> request against the specified URL.
 	 *
@@ -2178,6 +2177,31 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public RestRequest put(Object url, Object body) throws RestCallException {
 		return request("PUT", url, true).body(body);
+	}
+
+	/**
+	 * Perform a <c>PUT</c> request against the specified URL using a plain text body bypassing the serializer.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>{@link URIBuilder}
+	 * 		<li class='jc'>{@link URI}
+	 * 		<li class='jc'>{@link URL}
+	 * 		<li class='jc'>{@link String}
+	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * @param contentType The content type of the request.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request
+	 * 	and getting the response as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest put(Object url, String body, String contentType) throws RestCallException {
+		return request("PUT", url, true).stringBody(body).contentType(contentType);
 	}
 
 	/**
@@ -2250,6 +2274,32 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public RestRequest post(Object url, Object body) throws RestCallException {
 		return request("POST", url, true).body(body);
+	}
+
+	/**
+	 * Perform a <c>POST</c> request against the specified URL as a plain text body bypassing the serializer.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>{@link URIBuilder}
+	 * 		<li class='jc'>{@link URI}
+	 * 		<li class='jc'>{@link URL}
+	 * 		<li class='jc'>{@link String}
+	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * @param contentType
+	 * 	The content type of the request.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest post(Object url, String body, String contentType) throws RestCallException {
+		return request("POST", url, true).stringBody(body).contentType(contentType);
 	}
 
 	/**
@@ -2521,6 +2571,30 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 */
 	public RestRequest patch(Object url, Object body) throws RestCallException {
 		return request("PATCH", url, true).body(body);
+	}
+
+	/**
+	 * Perform a <c>PATCH</c> request against the specified URL as a plain text body bypassing the serializer.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li class='jc'>{@link URIBuilder}
+	 * 		<li class='jc'>{@link URI}
+	 * 		<li class='jc'>{@link URL}
+	 * 		<li class='jc'>{@link String}
+	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest pathString(Object url, String body) throws RestCallException {
+		return request("PATCH", url, true).stringBody(body);
 	}
 
 	/**
