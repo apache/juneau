@@ -168,13 +168,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public MockRestClient build() {
-		MockRest mr = mrb.build();
-		connectionManager(new MockHttpClientConnectionManager(mr));
-		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
-		if (rootUrl == null)
-			rootUrl = "http://localhost";
-		rootUrl(rootUrl + mr.rootUrl);
-		return super.build(MockRestClient.class);
+		return build(MockRestClient.class);
 	}
 
 	@Override /* ContextBuilder */
