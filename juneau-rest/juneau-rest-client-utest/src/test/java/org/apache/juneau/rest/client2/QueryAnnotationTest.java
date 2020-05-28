@@ -84,7 +84,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="a") String getA09b(@Query NameValuePairs b);
 	}
 
-	private static A01 a01 = MockRemote.build(A01.class, A.class);
+	private static A01 a01 = MockRestClient.build(A.class).getRemote(A01.class);
 
 	@Test
 	public void a01_int() throws Exception {
@@ -187,7 +187,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getB04(@Query(n="x",df="",aev=true) String b);
 	}
 
-	private static BR br = MockRemote.build(BR.class, B.class);
+	private static BR br = MockRestClient.build(B.class).getRemote(BR.class);
 
 	@Test
 	public void b01a_default() throws Exception {
@@ -264,7 +264,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/b") String getC07b(@Query(n="x",cf="uon") String...b);
 	}
 
-	private static CR cr = MockRemote.build(CR.class, C.class);
+	private static CR cr = MockRestClient.build(C.class).getRemote(CR.class);
 
 	@Test
 	public void c01a_default() throws Exception {
@@ -383,7 +383,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getC16c(@Query(n="x",min="1",max="10",emin=true,emax=true) Byte b);
 	}
 
-	private static DR dr = MockRemote.build(DR.class, D.class);
+	private static DR dr = MockRestClient.build(D.class).getRemote(DR.class);
 
 	@Test
 	public void d01a_int_defaultExclusive() throws Exception {
@@ -720,7 +720,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getE06(@Query(n="x",items=@Items(cf="pipes",ui=true)) String[]...b);
 	}
 
-	private static ER er = MockRemote.build(ER.class, E.class);
+	private static ER er = MockRestClient.build(E.class).getRemote(ER.class);
 
 	@Test
 	public void e01_minMax() throws Exception {
@@ -779,7 +779,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getF06(@Query(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
-	private static FR fr = MockRemote.build(FR.class, F.class);
+	private static FR fr = MockRestClient.build(F.class).getRemote(FR.class);
 
 	@Test
 	public void f01_minMaxLength() throws Exception {
@@ -852,7 +852,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getG16(@Query(n="x",mo="2") Byte b);
 	}
 
-	private static GR gr = MockRemote.build(GR.class, G.class);
+	private static GR gr = MockRestClient.build(G.class).getRemote(GR.class);
 
 	@Test
 	public void g01_multipleOf_int() throws Exception {
@@ -944,7 +944,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getH03(@Query(n="x",r=true) String b);
 	}
 
-	private static HR hr = MockRemote.build(HR.class, H.class);
+	private static HR hr = MockRestClient.build(H.class).getRemote(HR.class);
 
 	@Test
 	public void h01_required_default() throws Exception {
@@ -979,7 +979,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getI03(@Query(n="x",sie=true) String b);
 	}
 
-	private static IR ir = MockRemote.build(IR.class, I.class);
+	private static IR ir = MockRestClient.build(I.class).getRemote(IR.class);
 
 	@Test
 	public void h01_skipIfEmpty_default() throws Exception {
@@ -1011,7 +1011,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="/") String getJ01(@Query(n="x",serializer=XPartSerializer.class) String b);
 	}
 
-	private static JR jr = MockRemote.build(JR.class, J.class);
+	private static JR jr = MockRestClient.build(J.class).getRemote(JR.class);
 
 	@Test
 	public void j01_serializer() throws Exception {

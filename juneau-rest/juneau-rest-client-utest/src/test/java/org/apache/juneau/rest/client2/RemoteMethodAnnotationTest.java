@@ -88,7 +88,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void a01_inferredMethodsAndPaths() throws Exception {
-		A01 t = MockRemote.build(A01.class, A.class);
+		A01 t = MockRestClient.build(A.class).getRemote(A01.class);
 		assertEquals("foo", t.doGet());
 		assertEquals("foo", t.doGET());
 		assertEquals("qux", t.doFoo());
@@ -98,7 +98,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void a02_inferredMethodsAndPaths_futures() throws Exception {
-		A02 t = MockRemote.build(A02.class, A.class);
+		A02 t = MockRestClient.build(A.class).getRemote(A02.class);
 		assertEquals("foo", t.doGet().get());
 		assertEquals("foo", t.doGET().get());
 		assertEquals("qux", t.doFoo().get());
@@ -108,7 +108,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void a03_inferredMethodsAndPaths_completableFutures() throws Exception {
-		A03 t = MockRemote.build(A03.class, A.class);
+		A03 t = MockRestClient.build(A.class).getRemote(A03.class);
 		assertEquals("foo", t.doGet().get());
 		assertEquals("foo", t.doGET().get());
 		assertEquals("qux", t.doFoo().get());
@@ -174,7 +174,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void b01_returnTypes() throws Exception {
-		B01 t = MockRemote.build(B01.class, B.class);
+		B01 t = MockRestClient.build(B.class).getRemote(B01.class);
 		t.b01();
 		assertEquals("foo", t.b02());
 		assertEquals("bar", IOUtils.read(t.b02a().getEntity().getContent()));
@@ -184,7 +184,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void b02_returnTypes_futures() throws Exception {
-		B02 t = MockRemote.build(B02.class, B.class);
+		B02 t = MockRestClient.build(B.class).getRemote(B02.class);
 		t.b01().get();
 		assertEquals("foo", t.b02().get());
 		assertEquals("bar", IOUtils.read(t.b02a().get().getEntity().getContent()));
@@ -194,7 +194,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void b03_returnTypes_completableFutures() throws Exception {
-		B03 t = MockRemote.build(B03.class, B.class);
+		B03 t = MockRestClient.build(B.class).getRemote(B03.class);
 		t.b01().get();
 		assertEquals("foo", t.b02().get());
 		assertEquals("bar", IOUtils.read(t.b02a().get().getEntity().getContent()));
@@ -265,7 +265,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void c01_returnTypes_json() throws Exception {
-		C01 t = MockRemote.buildJson(C01.class, C.class);
+		C01 t = MockRestClient.buildJson(C.class).getRemote(C01.class);
 		assertEquals("foo", t.c01a("foo"));
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo")));
@@ -274,7 +274,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void c02_returnTypes_json_futures() throws Exception {
-		C02 t = MockRemote.buildJson(C02.class, C.class);
+		C02 t = MockRestClient.buildJson(C.class).getRemote(C02.class);
 		assertEquals("foo", t.c01a("foo").get());
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").get().getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo").get()));
@@ -283,7 +283,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void c03_returnTypes_json_completableFutures() throws Exception {
-		C03 t = MockRemote.buildJson(C03.class, C.class);
+		C03 t = MockRestClient.buildJson(C.class).getRemote(C03.class);
 		assertEquals("foo", t.c01a("foo").get());
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").get().getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo").get()));
@@ -354,7 +354,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
-		D01 t = MockRemote.create(D01.class, D.class).openApi().build();
+		D01 t = MockRestClient.create(D.class).openApi().build().getRemote(D01.class);
 		assertEquals("foo", t.d01a("foo"));
 		assertEquals("foo", IOUtils.read(t.d01b("foo").getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo")));
@@ -363,7 +363,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void d02_returnTypes_partSerialization_futures() throws Exception {
-		D02 t = MockRemote.create(D02.class, D.class).openApi().build();
+		D02 t = MockRestClient.create(D.class).openApi().build().getRemote(D02.class);
 		assertEquals("foo", t.d01a("foo").get());
 		assertEquals("foo", IOUtils.read(t.d01b("foo").get().getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo").get()));
@@ -372,7 +372,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void d03_returnTypes_partSerialization_completableutures() throws Exception {
-		D03 t = MockRemote.create(D03.class, D.class).openApi().build();
+		D03 t = MockRestClient.create(D.class).openApi().build().getRemote(D03.class);
 		assertEquals("foo", t.d01a("foo").get());
 		assertEquals("foo", IOUtils.read(t.d01b("foo").get().getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo").get()));

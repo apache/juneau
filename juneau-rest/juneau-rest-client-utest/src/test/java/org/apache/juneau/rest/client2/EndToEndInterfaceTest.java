@@ -29,7 +29,6 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.helper.*;
-import org.apache.juneau.rest.mock2.MockRemote;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -76,7 +75,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IA ia = MockRemote.buildJson(IA.class, A.class);
+	private static IA ia = MockRestClient.buildJson(A.class).getRemote(IA.class);
 
 	@Test
 	public void a01_splitAnnotations_Body() throws Exception {
@@ -130,7 +129,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IB ib = MockRemote.create(IB.class, B.class).json().build();
+	private static IB ib = MockRestClient.create(B.class).json().build().getRemote(IB.class);
 
 	@Test
 	public void b01_combinedAnnotations_Body() throws Exception {
@@ -320,7 +319,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static ID id = MockRemote.build(ID.class, D.class);
+	private static ID id = MockRestClient.build(D.class).getRemote(ID.class);
 
 	@Test
 	public void d01_StreamResource() throws Exception {
@@ -340,7 +339,7 @@ public class EndToEndInterfaceTest {
 		assertEquals("text/foo", r.getMediaType().toString());
 	}
 
-	private static ID id2 = MockRemote.build(ID.class, D.class);
+	private static ID id2 = MockRestClient.build(D.class).getRemote(ID.class);
 
 	@Test
 	public void d03_StreamResource_noMediaTypes() throws Exception {
@@ -535,7 +534,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE iea = MockRemote.build(IE.class, EA.class);
+	private static IE iea = MockRestClient.create(EA.class).ignoreErrors(false).build().getRemote(IE.class);
 
 	@Test
 	public void ea01_badRequest() {
@@ -970,7 +969,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE ieb = MockRemote.build(IE.class, EB.class);
+	private static IE ieb = MockRestClient.create(EB.class).ignoreErrors(false).build().getRemote(IE.class);
 
 	@Test
 	public void eb01_badRequest() {
@@ -1447,7 +1446,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IF ifa = MockRemote.create(IF.class, F.class).json().build();
+	private static IF ifa = MockRestClient.create(F.class).json().build().getRemote(IF.class);
 
 	@Test
 	public void fa01_badRequest() {
@@ -1603,7 +1602,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IG ig = MockRemote.build(IG.class, G.class);
+	private static IG ig = MockRestClient.build(G.class).getRemote(IG.class);
 
 	@Test
 	public void g01_reader() throws Exception {

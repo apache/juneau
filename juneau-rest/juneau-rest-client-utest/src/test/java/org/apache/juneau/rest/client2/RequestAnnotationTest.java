@@ -74,7 +74,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(ARequest req);
 	}
 
-	private static AR ar = MockRemote.create(AR.class, A.class).build();
+	private static AR ar = MockRestClient.build(A.class).getRemote(AR.class);
 
 	@Test
 	public void a01_basic() throws Exception {
@@ -138,7 +138,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(BRequest req);
 	}
 
-	private static BR br = MockRemote.build(BR.class, B.class);
+	private static BR br = MockRestClient.build(B.class).getRemote(BR.class);
 
 	@Test
 	public void b01_annotationOnParent() throws Exception {
@@ -202,7 +202,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(CRequest req);
 	}
 
-	private static CR cr = MockRemote.build(CR.class, C.class);
+	private static CR cr = MockRestClient.build(C.class).getRemote(CR.class);
 
 	@Test
 	public void c01_annotationOnInterface() throws Exception {
@@ -254,7 +254,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(@Request DRequest req);
 	}
 
-	private static DR dr = MockRemote.build(DR.class, D.class);
+	private static DR dr = MockRestClient.build(D.class).getRemote(DR.class);
 
 	@Test
 	public void d01_annotationOnParameter() throws Exception {
@@ -307,7 +307,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(ERequest req);
 	}
 
-	private static ER er = MockRemote.build(ER.class, E.class);
+	private static ER er = MockRestClient.build(E.class).getRemote(ER.class);
 
 	@Test
 	public void e01_partSerializer() throws Exception {

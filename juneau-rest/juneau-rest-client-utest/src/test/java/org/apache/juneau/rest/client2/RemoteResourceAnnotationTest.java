@@ -18,7 +18,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.rest.mock2.MockRemote;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -59,7 +58,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a01_noPath() throws Exception {
-		A01a t = MockRemote.build(A01a.class, A.class);
+		A01a t = MockRestClient.build(A.class).getRemote(A01a.class);
 		assertEquals("foo", t.a01());
 		assertEquals("foo", t.a01a());
 		assertEquals("foo", t.a01b());
@@ -77,7 +76,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02a_normalPath() throws Exception {
-		A02a t = MockRemote.build(A02a.class, A.class);
+		A02a t = MockRestClient.build(A.class).getRemote(A02a.class);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -95,7 +94,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02b_normalPathWithSlashes() throws Exception {
-		A02b t = MockRemote.build(A02b.class, A.class);
+		A02b t = MockRestClient.build(A.class).getRemote(A02b.class);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -133,7 +132,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03a_normalPath() throws Exception {
-		A03a t = MockRemote.build(A03a.class, A.class);
+		A03a t = MockRestClient.build(A.class).getRemote(A03a.class);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
@@ -151,7 +150,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03b_normalPathWithSlashes() throws Exception {
-		A03b t = MockRemote.build(A03b.class, A.class);
+		A03b t = MockRestClient.build(A.class).getRemote(A03b.class);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
