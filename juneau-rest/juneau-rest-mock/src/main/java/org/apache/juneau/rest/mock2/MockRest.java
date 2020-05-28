@@ -66,22 +66,25 @@ public class MockRest implements MockHttpConnection {
 	private final RestContext ctx;
 
 	/** Debug mode enabled. */
-	protected final boolean debug;
+	private final boolean debug;
 
 	final String contextPath, servletPath, rootUrl;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param b Builder.
+	 * @param impl The {@link Rest @Rest} annotated servlet.
+	 * @param contextPath The context path of the servlet.
+	 * @param servletPath The servlet path of the servlet.
+	 * @param debug Enable debug mode on the servlet side.
 	 */
-	protected MockRest(MockRestBuilder b) {
+	protected MockRest(Object impl, String contextPath, String servletPath, boolean debug) {
 		try {
-			debug = false;
-			Class<?> c = b.impl instanceof Class ? (Class<?>)b.impl : b.impl.getClass();
+			this.debug = debug;
+			Class<?> c = impl instanceof Class ? (Class<?>)impl : impl.getClass();
 			Map<Class<?>,RestContext> contexts = debug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
 			if (! contexts.containsKey(c)) {
-				Object o = b.impl instanceof Class ? ((Class<?>)b.impl).newInstance() : b.impl;
+				Object o = impl instanceof Class ? ((Class<?>)impl).newInstance() : impl;
 				RestContextBuilder rcb = RestContext.create(o);
 				if (debug) {
 					rcb.debug(Enablement.TRUE);
@@ -97,29 +100,14 @@ public class MockRest implements MockHttpConnection {
 				contexts.put(c, rc);
 			}
 			ctx = contexts.get(c);
-			contextPath = b.contextPath;
-			if (b.servletPath.isEmpty())
-				b.servletPath = toValidContextPath(ctx.getPath());
-			servletPath = b.servletPath;
+			this.contextPath = contextPath;
+			if (servletPath.isEmpty())
+				servletPath = toValidContextPath(ctx.getPath());
+			this.servletPath = servletPath;
 			rootUrl = new StringBuilder().append(contextPath).append(servletPath).toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Creates a new builder with the specified REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * No <c>Accept</c> or <c>Content-Type</c> header is specified by default.
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestBuilder create(Object impl) {
-		return new MockRestBuilder(impl);
 	}
 
 	/**

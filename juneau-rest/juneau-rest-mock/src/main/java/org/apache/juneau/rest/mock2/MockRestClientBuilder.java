@@ -17,6 +17,8 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
 
+import static org.apache.juneau.rest.util.RestUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
@@ -60,7 +62,8 @@ import org.apache.http.protocol.*;
  */
 public class MockRestClientBuilder extends RestClientBuilder {
 
-	private MockRestBuilder mrb;
+	Object impl;
+	String contextPath = "", servletPath = "";
 
 	/**
 	 * Constructor.
@@ -105,7 +108,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder contextPath(String value) {
-		mrb.contextPath(value);
+		this.contextPath = toValidContextPath(value);
 		return this;
 	}
 
@@ -127,11 +130,11 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * 	<li>Leading slash is added if needed.
 	 * </ul>
 	 *
-	 * @param value The servlet path.
+	 * @param value The context path.
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder servletPath(String value) {
-		mrb.servletPath(value);
+		this.servletPath = toValidContextPath(value);
 		return this;
 	}
 
@@ -173,7 +176,11 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-		MockRest mr = mrb.build();
+	//	Object impl = mrb.impl;
+	//	String contextPath = mrb.contextPath;
+	//	String servletPath = mrb.servletPath;
+		boolean debug = (peek(BeanContext.BEAN_debug) == Boolean.TRUE);
+		MockRest mr = new MockRest(impl, contextPath, servletPath, debug);
 		connectionManager(new MockHttpClientConnectionManager(mr));
 		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
 		if (rootUrl == null)
@@ -189,7 +196,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder bean(Object bean) {
-		mrb = MockRest.create(bean);
+		impl = bean;
 		return this;
 	}
 
