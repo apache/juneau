@@ -168,8 +168,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public MockRestClient build() {
-		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
-			mrb.debug();
 		MockRest mr = mrb.build();
 		connectionManager(new MockHttpClientConnectionManager(mr));
 		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
@@ -181,8 +179,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
-			mrb.debug();
 		MockRest mr = mrb.build();
 		connectionManager(new MockHttpClientConnectionManager(mr));
 		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);

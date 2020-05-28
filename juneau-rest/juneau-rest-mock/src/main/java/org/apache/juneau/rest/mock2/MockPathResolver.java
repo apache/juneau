@@ -23,7 +23,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.
  */
-public class PathResolver {
+public class MockPathResolver {
 
 	private String uri, target, contextPath, servletPath, remainder;
 	private String error;
@@ -44,7 +44,7 @@ public class PathResolver {
 	 * @param pathVars
 	 * 	Optional path variables to resolve in the context path or servlet path.
 	 */
-	public PathResolver(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
+	public MockPathResolver(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 		try {
 			init(target, contextPath, servletPath, pathToResolve, pathVars);
 		} catch (Exception e) {

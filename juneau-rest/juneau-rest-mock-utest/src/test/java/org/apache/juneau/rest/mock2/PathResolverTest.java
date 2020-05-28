@@ -20,7 +20,7 @@ import org.junit.*;
 
 public class PathResolverTest {
 
-	public static class PathResolver2 extends PathResolver {
+	public static class PathResolver2 extends MockPathResolver {
 
 		public PathResolver2(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 			super(target, contextPath, servletPath, pathToResolve, pathVars);

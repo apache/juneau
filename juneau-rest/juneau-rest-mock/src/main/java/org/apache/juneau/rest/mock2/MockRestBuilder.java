@@ -14,8 +14,6 @@ package org.apache.juneau.rest.mock2;
 
 import static org.apache.juneau.rest.util.RestUtils.*;
 
-import java.util.*;
-
 import javax.servlet.http.*;
 
 /**
@@ -24,74 +22,10 @@ import javax.servlet.http.*;
 public class MockRestBuilder {
 
 	Object impl;
-	boolean debug;
-	Map<String,Object> headers = new LinkedHashMap<>();
 	String contextPath = "", servletPath = "";
 
 	MockRestBuilder(Object impl) {
 		this.impl = impl;
-	}
-
-	/**
-	 * Enable debug mode.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder debug() {
-		this.debug = true;
-		header("X-Debug", true);
-		return this;
-	}
-
-	/**
-	 * Adds a header to every request.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk> (will be skipped).
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder header(String name, Object value) {
-		this.headers.put(name, value);
-		return this;
-	}
-
-	/**
-	 * Adds the specified headers to every request.
-	 *
-	 * @param value
-	 * 	The header values.
-	 * 	<br>Can be <jk>null</jk> (existing values will be cleared).
-	 * 	<br><jk>null</jk> null map values will be ignored.
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder headers(Map<String,Object> value) {
-		if (value != null)
-			this.headers.putAll(value);
-		else
-			this.headers.clear();
-		return this;
-	}
-
-	/**
-	 * Specifies the <c>Accept</c> header to every request.
-	 *
-	 * @param value The <c>Accept</c> header value.
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder accept(String value) {
-		return header("Accept", value);
-	}
-
-	/**
-	 * Specifies the  <c>Content-Type</c> header to every request.
-	 *
-	 * @param value The <c>Content-Type</c> header value.
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder contentType(String value) {
-		return header("Content-Type", value);
 	}
 
 	/**

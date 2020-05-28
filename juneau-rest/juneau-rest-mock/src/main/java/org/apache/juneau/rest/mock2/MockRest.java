@@ -65,9 +65,6 @@ public class MockRest implements MockHttpConnection {
 
 	private final RestContext ctx;
 
-	/** Requests headers to add to every request. */
-	protected final Map<String,Object> headers;
-
 	/** Debug mode enabled. */
 	protected final boolean debug;
 
@@ -80,7 +77,7 @@ public class MockRest implements MockHttpConnection {
 	 */
 	protected MockRest(MockRestBuilder b) {
 		try {
-			debug = b.debug;
+			debug = false;
 			Class<?> c = b.impl instanceof Class ? (Class<?>)b.impl : b.impl.getClass();
 			Map<Class<?>,RestContext> contexts = debug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
 			if (! contexts.containsKey(c)) {
@@ -100,7 +97,6 @@ public class MockRest implements MockHttpConnection {
 				contexts.put(c, rc);
 			}
 			ctx = contexts.get(c);
-			headers = new LinkedHashMap<>(b.headers);
 			contextPath = b.contextPath;
 			if (b.servletPath.isEmpty())
 				b.servletPath = toValidContextPath(ctx.getPath());
@@ -146,7 +142,7 @@ public class MockRest implements MockHttpConnection {
 	 */
 	@Override /* MockHttpConnection */
 	public MockServletRequest request(String method, String uri, Header[] headers, Object body) {
-		PathResolver pr = new PathResolver(null, contextPath, servletPath == null ? ctx.getPath() : servletPath, uri, null);
+		MockPathResolver pr = new MockPathResolver(null, contextPath, servletPath == null ? ctx.getPath() : servletPath, uri, null);
 		if (pr.getError() != null)
 			throw new RuntimeException(pr.getError());
 
@@ -157,32 +153,16 @@ public class MockRest implements MockHttpConnection {
 			.debug(debug)
 			.restContext(ctx);
 
-		if (this.headers != null)
-			for (Map.Entry<String,Object> e : this.headers.entrySet())
-				setHeader(r, e.getKey(), e.getValue());
-		if (headers != null)
-			for (Header h : headers)
-				setHeader(r, h.getName(), h.getValue());
+		if (headers != null) {
+			for (Header h : headers) {
+				if (h.getName().equals("X-Roles")) {
+					r.roles(StringUtils.split(h.getValue().toString(), ','));
+				} else {
+					r.header(h.getName(), h.getValue());
+				}
+			}
+		}
 
 		return r;
-	}
-
-	private static void setHeader(MockServletRequest r, String name, Object value) {
-		if (name.equals("X-Roles"))
-			r.roles(StringUtils.split(value.toString(), ','));
-		else
-			r.header(name, value);
-	}
-
-
-	/**
-	 * Returns the headers that were defined in this class.
-	 *
-	 * @return
-	 * 	The headers that were defined in this class.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public Map<String,Object> getHeaders() {
-		return headers;
 	}
 }
