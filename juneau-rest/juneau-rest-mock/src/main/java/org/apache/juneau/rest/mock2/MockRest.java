@@ -18,6 +18,8 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -75,8 +77,6 @@ public class MockRest implements MockHttpConnection {
 
 	final String contextPath, servletPath;
 
-	private final String[] roles;
-
 	/**
 	 * Constructor.
 	 *
@@ -107,7 +107,6 @@ public class MockRest implements MockHttpConnection {
 			headers = new LinkedHashMap<>(b.headers);
 			contextPath = b.contextPath;
 			servletPath = b.servletPath;
-			roles = b.roles;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -255,9 +254,30 @@ public class MockRest implements MockHttpConnection {
 	 * @return A new servlet request.
 	 */
 	@Override /* MockHttpConnection */
-	public MockServletRequest request(String method, String path, Map<String,Object> headers, Object body) {
+	public MockServletRequest request(String method, String path, Header[] headers, Object body) {
 		String p = RestUtils.trimContextPath(ctx.getPath(), path);
-		return MockServletRequest.create(method, p).roles(roles).contextPath(emptyIfNull(contextPath)).servletPath(emptyIfNull(servletPath)).body(body).headers(this.headers).headers(headers).debug(debug).restContext(ctx);
+		MockServletRequest r = MockServletRequest.create(method, p)
+			.contextPath(emptyIfNull(contextPath))
+			.servletPath(emptyIfNull(servletPath))
+			.body(body)
+			.debug(debug)
+			.restContext(ctx);
+
+		if (this.headers != null)
+			for (Map.Entry<String,Object> e : this.headers.entrySet())
+				setHeader(r, e.getKey(), e.getValue());
+		if (headers != null)
+			for (Header h : headers)
+				setHeader(r, h.getName(), h.getValue());
+
+		return r;
+	}
+
+	private static void setHeader(MockServletRequest r, String name, Object value) {
+		if (name.equals("X-Roles"))
+			r.roles(StringUtils.split(value.toString(), ','));
+		else
+			r.header(name, value);
 	}
 
 	/**
@@ -300,7 +320,7 @@ public class MockRest implements MockHttpConnection {
 	 * @param path The URI path.
 	 * @return A new servlet request.
 	 */
-	public MockServletRequest request(String method, Map<String,Object> headers, String path) {
+	public MockServletRequest request(String method, Header[] headers, String path) {
 		return request(method, path, headers, null);
 	}
 

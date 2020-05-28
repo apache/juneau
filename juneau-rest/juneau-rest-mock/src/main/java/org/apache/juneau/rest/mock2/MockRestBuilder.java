@@ -16,6 +16,8 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.util.*;
 
+import javax.servlet.http.*;
+
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -29,7 +31,6 @@ public class MockRestBuilder {
 	boolean debug;
 	Map<String,Object> headers = new LinkedHashMap<>();
 	String contextPath, servletPath;
-	String[] roles = new String[0];
 
 	MockRestBuilder(Object impl) {
 		this.impl = impl;
@@ -239,16 +240,25 @@ public class MockRestBuilder {
 	 * Identifies the context path for the REST resource.
 	 *
 	 * <p>
-	 * If not specified, uses <js>""</js>.
+	 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+	 * 	object correctly.
 	 *
-	 * @param value
-	 * 	The context path.
-	 * 	<br>Must not be <jk>null</jk> and must either be blank or start but not end with a <js>'/'</js> character.
+	 * <p>
+	 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+	 *
+	 * <p>
+	 * 	The following fixes are applied to non-conforming strings.
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param value The context path.
 	 * @return This object (for method chaining).
 	 */
 	public MockRestBuilder contextPath(String value) {
-		validateContextPath(value);
-		this.contextPath = value;
+		this.contextPath = toValidContextPath(value);
 		return this;
 	}
 
@@ -256,38 +266,25 @@ public class MockRestBuilder {
 	 * Identifies the servlet path for the REST resource.
 	 *
 	 * <p>
-	 * If not specified, uses <js>""</js>.
+	 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+	 * 	object correctly.
 	 *
-	 * @param value
-	 * 	The servlet path.
-	 * 	<br>Must not be <jk>null</jk> and must either be blank or start but not end with a <js>'/'</js> character.
+	 * <p>
+	 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+	 *
+	 * <p>
+	 * 	The following fixes are applied to non-conforming strings.
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param value The context path.
 	 * @return This object (for method chaining).
 	 */
 	public MockRestBuilder servletPath(String value) {
-		validateServletPath(value);
-		this.servletPath = value;
-		return this;
-	}
-
-	/**
-	 * Adds the specified security roles for all requests.
-	 *
-	 * @param values The role names to add to all requests (e.g. <js>"ROLE_ADMIN"</js>).
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder roles(String...values) {
-		this.roles = values;
-		return this;
-	}
-
-	/**
-	 * Adds the specified security role for all requests.
-	 *
-	 * @param value The role name to add to all requests (e.g. <js>"ROLE_ADMIN"</js>).
-	 * @return This object (for method chaining).
-	 */
-	public MockRestBuilder role(String value) {
-		this.roles = new String[]{value};
+		this.servletPath = toValidContextPath(value);
 		return this;
 	}
 

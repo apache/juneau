@@ -28,6 +28,7 @@ import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -38,6 +39,7 @@ import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 
 import javax.net.ssl.*;
+import javax.servlet.http.*;
 
 import org.apache.http.auth.*;
 import org.apache.http.client.CookieStore;
@@ -81,19 +83,86 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		ignoreErrors();
 	}
 
+	/**
+	 * Identifies the context path for the REST resource.
+	 *
+	 * <p>
+	 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+	 * 	object correctly.
+	 *
+	 * <p>
+	 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+	 *
+	 * <p>
+	 * 	The following fixes are applied to non-conforming strings.
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param value The context path.
+	 * @return This object (for method chaining).
+	 */
 	public MockRestClientBuilder contextPath(String value) {
 		mrb.contextPath(value);
 		return this;
 	}
 
+	/**
+	 * Identifies the servlet path for the REST resource.
+	 *
+	 * <p>
+	 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+	 * 	object correctly.
+	 *
+	 * <p>
+	 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+	 *
+	 * <p>
+	 * 	The following fixes are applied to non-conforming strings.
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param value The servlet path.
+	 * @return This object (for method chaining).
+	 */
 	public MockRestClientBuilder servletPath(String value) {
 		mrb.servletPath(value);
 		return this;
 	}
 
+	/**
+	 * Specifies the roles to set on the <l>HttpServletRequest</l> object.
+	 *
+	 * <p>
+	 * Typically used for security testing.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Admin users should be able to make POST requests.</jc>
+	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+	 * 		.roles(<js>"ROLE_ADMIN"</js>)
+	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
+	 * 		.run()
+	 * 		.assertStatus().is(200);
+	 *
+	 * 	<jc>// Non-admin users should be rejected.</jc>
+	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+	 * 		.roles(<js>"ROLE_USER"</js>)
+	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
+	 * 		.run()
+	 * 		.assertStatus().is(401);
+	 * </p>
+	 *
+	 * @param values The role names to set on the servlet request.
+	 * @return This object (for method chaining).
+	 */
 	public MockRestClientBuilder roles(String...values) {
-		mrb.roles(values);
-		return this;
+		return header("X-Roles", StringUtils.join(values, ','));
 	}
 
 

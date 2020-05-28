@@ -32,7 +32,7 @@ public class RoleGuardTest {
 			return "OK";
 		}
 	}
-	static MockRest a1 = MockRest.build(A1.class);
+	static MockRestClient a1 = MockRestClient.build(A1.class);
 
 	@Test
 	public void a01a_onClass_simple_pass() throws Exception {
@@ -59,7 +59,7 @@ public class RoleGuardTest {
 			return "OK";
 		}
 	}
-	static MockRest a2 = MockRest.build(A2.class);
+	static MockRestClient a2 = MockRestClient.build(A2.class);
 
 	@Test
 	public void a02a_onMethod_simple_pass() throws Exception {
@@ -86,7 +86,7 @@ public class RoleGuardTest {
 			return "OK";
 		}
 	}
-	static MockRest a3 = MockRest.build(A3.class);
+	static MockRestClient a3 = MockRestClient.build(A3.class);
 
 	@Test
 	public void a03a_onBoth_simple_pass() throws Exception {
@@ -125,7 +125,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	static MockRest a4 = MockRest.build(A4b.class);
+	static MockRestClient a4 = MockRestClient.build(A4b.class);
 
 	@Test
 	public void a04a_inheritence_simple_pass() throws Exception {
@@ -182,14 +182,14 @@ public class RoleGuardTest {
 	@Rest(roleGuard="foo || (bar && baz)")
 	public static class B1h extends B1 {}
 
-	static MockRest b1a = MockRest.build(B1a.class);
-	static MockRest b1b = MockRest.build(B1b.class);
-	static MockRest b1c = MockRest.build(B1c.class);
-	static MockRest b1d = MockRest.build(B1d.class);
-	static MockRest b1e = MockRest.build(B1e.class);
-	static MockRest b1f = MockRest.build(B1f.class);
-	static MockRest b1g = MockRest.build(B1g.class);
-	static MockRest b1h = MockRest.build(B1h.class);
+	static MockRestClient b1a = MockRestClient.build(B1a.class);
+	static MockRestClient b1b = MockRestClient.build(B1b.class);
+	static MockRestClient b1c = MockRestClient.build(B1c.class);
+	static MockRestClient b1d = MockRestClient.build(B1d.class);
+	static MockRestClient b1e = MockRestClient.build(B1e.class);
+	static MockRestClient b1f = MockRestClient.build(B1f.class);
+	static MockRestClient b1g = MockRestClient.build(B1g.class);
+	static MockRestClient b1h = MockRestClient.build(B1h.class);
 
 	@Test
 	public void b01a_orsWithComma_pass() throws Exception {
@@ -388,14 +388,14 @@ public class RoleGuardTest {
 		}
 	}
 
-	static MockRest b2a = MockRest.build(B2a.class);
-	static MockRest b2b = MockRest.build(B2b.class);
-	static MockRest b2c = MockRest.build(B2c.class);
-	static MockRest b2d = MockRest.build(B2d.class);
-	static MockRest b2e = MockRest.build(B2e.class);
-	static MockRest b2f = MockRest.build(B2f.class);
-	static MockRest b2g = MockRest.build(B2g.class);
-	static MockRest b2h = MockRest.build(B2h.class);
+	static MockRestClient b2a = MockRestClient.build(B2a.class);
+	static MockRestClient b2b = MockRestClient.build(B2b.class);
+	static MockRestClient b2c = MockRestClient.build(B2c.class);
+	static MockRestClient b2d = MockRestClient.build(B2d.class);
+	static MockRestClient b2e = MockRestClient.build(B2e.class);
+	static MockRestClient b2f = MockRestClient.build(B2f.class);
+	static MockRestClient b2g = MockRestClient.build(B2g.class);
+	static MockRestClient b2h = MockRestClient.build(B2h.class);
 
 	@Test
 	public void b02a_orsWithComma_pass() throws Exception {
@@ -562,14 +562,14 @@ public class RoleGuardTest {
 	@Rest(roleGuard="fo* || (*ar && *az)")
 	public static class C1h extends C1 {}
 
-	static MockRest c1a = MockRest.build(C1a.class);
-	static MockRest c1b = MockRest.build(C1b.class);
-	static MockRest c1c = MockRest.build(C1c.class);
-	static MockRest c1d = MockRest.build(C1d.class);
-	static MockRest c1e = MockRest.build(C1e.class);
-	static MockRest c1f = MockRest.build(C1f.class);
-	static MockRest c1g = MockRest.build(C1g.class);
-	static MockRest c1h = MockRest.build(C1h.class);
+	static MockRestClient c1a = MockRestClient.build(C1a.class);
+	static MockRestClient c1b = MockRestClient.build(C1b.class);
+	static MockRestClient c1c = MockRestClient.build(C1c.class);
+	static MockRestClient c1d = MockRestClient.build(C1d.class);
+	static MockRestClient c1e = MockRestClient.build(C1e.class);
+	static MockRestClient c1f = MockRestClient.build(C1f.class);
+	static MockRestClient c1g = MockRestClient.build(C1g.class);
+	static MockRestClient c1h = MockRestClient.build(C1h.class);
 
 	@Test
 	public void c01a_orPatternsWithComma_pass() throws Exception {
@@ -768,14 +768,14 @@ public class RoleGuardTest {
 		}
 	}
 
-	static MockRest c2a = MockRest.build(C2a.class);
-	static MockRest c2b = MockRest.build(C2b.class);
-	static MockRest c2c = MockRest.build(C2c.class);
-	static MockRest c2d = MockRest.build(C2d.class);
-	static MockRest c2e = MockRest.build(C2e.class);
-	static MockRest c2f = MockRest.build(C2f.class);
-	static MockRest c2g = MockRest.build(C2g.class);
-	static MockRest c2h = MockRest.build(C2h.class);
+	static MockRestClient c2a = MockRestClient.build(C2a.class);
+	static MockRestClient c2b = MockRestClient.build(C2b.class);
+	static MockRestClient c2c = MockRestClient.build(C2c.class);
+	static MockRestClient c2d = MockRestClient.build(C2d.class);
+	static MockRestClient c2e = MockRestClient.build(C2e.class);
+	static MockRestClient c2f = MockRestClient.build(C2f.class);
+	static MockRestClient c2g = MockRestClient.build(C2g.class);
+	static MockRestClient c2h = MockRestClient.build(C2h.class);
 
 	@Test
 	public void c02a_orPatternsWithComma_pass() throws Exception {
@@ -918,7 +918,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.build(D.class);
 
 	@Test
 	public void d01_patternsWithoutRoles_fail() throws Exception {
@@ -942,7 +942,7 @@ public class RoleGuardTest {
 		}
 	}
 
-	static MockRest e = MockRest.build(E.class);
+	static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01_anyRole_pass() throws Exception {

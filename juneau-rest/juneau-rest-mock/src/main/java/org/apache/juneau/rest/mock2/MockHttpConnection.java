@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import java.util.*;
+import org.apache.http.*;
 
 /**
  * Represent the basic connection for mock HTTP requests.
@@ -33,5 +33,5 @@ public interface MockHttpConnection {
 	 * @return A new mock request.
 	 * @throws Exception
 	 */
-	MockHttpRequest request(String method, String path, Map<String,Object> headers, Object body) throws Exception;
+	MockHttpRequest request(String method, String path, Header[] headers, Object body) throws Exception;
 }

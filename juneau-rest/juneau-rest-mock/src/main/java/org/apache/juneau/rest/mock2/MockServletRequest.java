@@ -261,7 +261,8 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * Adds the specified role on this request.
 	 *
 	 * <p>
-	 * Note that {@link MockRestBuilder#roles(String...)} can be used to set the roles for all requests.
+	 * Note that {@link MockRestClientBuilder#roles(String...)} and {@link org.apache.juneau.rest.client2.RestRequest#roles(Object...)}
+	 * 	can be used to set the roles on requests.
 	 *
 	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
 	 * @return This object (for method chaining).

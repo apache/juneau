@@ -485,6 +485,29 @@ public final class RestUtils {
 	}
 
 	/**
+	 * Converts the specified path segment to a valid context path.
+	 *
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param s The value to convert.
+	 * @return The converted path.
+	 */
+	public static String toValidContextPath(String s) {
+		if (s == null || s.isEmpty())
+			return "";
+		s = trimTrailingSlashes(s);
+		if (s.isEmpty())
+			return s;
+		if (s.charAt(0) != '/')
+			s = '/' + s;
+		return s;
+	}
+
+	/**
 	 * Throws a {@link RuntimeException} if the method {@link #isValidContextPath(String)} returns <jk>false</jk> for the specified value.
 	 *
 	 * @param value The value to test.
