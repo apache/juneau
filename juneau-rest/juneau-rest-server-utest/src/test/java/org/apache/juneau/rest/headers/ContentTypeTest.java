@@ -68,25 +68,24 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest a = MockRest.build(A.class);
+	private static MockRestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
-		a.put("/a01", null)
+		a.put("/a01", null, "")
 			.run()
 			.assertBody().is("p2");
-		a.put("/a01", null).contentType("text/p1")
+		a.put("/a01", null, "text/p1")
 			.run()
 			.assertBody().is("p1");
-		a.put("/a01", null).contentType("text/p2")
+		a.put("/a01", null, "text/p2")
 			.run()
 			.assertBody().is("p2");
 	}
 
 	@Test
 	public void a02_defaultHeadersOnServletAnnotation_invalid() throws Exception {
-		a.put("/a01?noTrace=true", null)
-			.contentType("text/p3")
+		a.put("/a01?noTrace=true", null, "text/p3")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
@@ -107,7 +106,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest b = MockRest.build(B.class);
+	private static MockRestClient b = MockRestClient.build(B.class);
 
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
@@ -116,21 +115,21 @@ public class ContentTypeTest {
 
 	@Test
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
-		b.put("/b?noTrace=true", null)
+		b.put("/b?noTrace=true", null, "")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.put("/b?noTrace=true", null).contentType("text/p1")
+		b.put("/b?noTrace=true", null, "text/p1")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		b.put("/b?noTrace=true", null).contentType("text/p2")
+		b.put("/b?noTrace=true", null, "text/p2")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains(
@@ -154,14 +153,14 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest c = MockRest.build(C.class);
+	private static MockRestClient c = MockRestClient.build(C.class);
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		c.put("/c", null).run().assertBody().is("p2");
-		c.put("/c", null).contentType("text/p1").run().assertBody().is("p1");
-		c.put("/c", null).contentType("text/p2").run().assertBody().is("p2");
-		c.put("/c", null).contentType("text/p3").run().assertBody().is("p3");
+		c.put("/c", null, "").run().assertBody().is("p2");
+		c.put("/c", null, "text/p1").run().assertBody().is("p1");
+		c.put("/c", null, "text/p2").run().assertBody().is("p2");
+		c.put("/c", null, "text/p3").run().assertBody().is("p3");
 	}
 
 	@Test
@@ -190,30 +189,27 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest e = MockRest.build(E.class);
+	private static MockRestClient e = MockRestClient.build(E.class);
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
-		e.put("/e", null)
+		e.put("/e", null, "")
 			.run()
 			.assertBody().is("p3");
-		e.put("/e", null)
-			.contentType("text/p3")
+		e.put("/e", null, "text/p3")
 			.run()
 			.assertBody().is("p3");
 	}
 	@Test
 	public void e02_restMethodParserSerializerAnnotations_invalid() throws Exception {
-		e.put("/e?noTrace=true", null)
-			.contentType("text/p1")
+		e.put("/e?noTrace=true", null, "text/p1")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
-		e.put("/e?noTrace=true", null)
-			.contentType("text/p2")
+		e.put("/e?noTrace=true", null, "text/p2")
 			.run()
 			.assertStatus().is(415)
 			.assertBody().contains(
@@ -238,23 +234,20 @@ public class ContentTypeTest {
 		}
 	}
 
-	private static MockRest f = MockRest.build(F.class);
+	private static MockRestClient f = MockRestClient.build(F.class);
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {
-		f.put("/f", null)
+		f.put("/f", null, "")
 			.run()
 			.assertBody().is("p3");
-		f.put("/f", null)
-			.contentType("text/p1")
+		f.put("/f", null, "text/p1")
 			.run()
 			.assertBody().is("p1");
-		f.put("/f", null)
-			.contentType("text/p2")
+		f.put("/f", null, "text/p2")
 			.run()
 			.assertBody().is("p2");
-		f.put("/f", null)
-			.contentType("text/p3")
+		f.put("/f", null, "text/p3")
 			.run()
 			.assertBody().is("p3");
 	}
