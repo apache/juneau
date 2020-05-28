@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.internal.*;
@@ -78,7 +79,15 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
 			RequestLine rl = request.getRequestLine();
-			req = c.request(rl.getMethod(), rl.getUri(), request.getAllHeaders(), null);
+			String path = rl.getUri();
+			String target = "http://localhost";
+			if (request instanceof HttpRequestWrapper) {
+				HttpHost httpHost = ((HttpRequestWrapper)request).getTarget();
+				if (httpHost != null)
+					target = httpHost.toURI();
+			}
+			path = target + path;
+			req = c.request(rl.getMethod(), path, request.getAllHeaders(), null);
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);
 		}

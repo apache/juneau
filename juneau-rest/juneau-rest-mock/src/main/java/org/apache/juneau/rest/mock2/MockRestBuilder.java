@@ -30,7 +30,7 @@ public class MockRestBuilder {
 	Object impl;
 	boolean debug;
 	Map<String,Object> headers = new LinkedHashMap<>();
-	String contextPath, servletPath;
+	String contextPath = "", servletPath = "";
 
 	MockRestBuilder(Object impl) {
 		this.impl = impl;

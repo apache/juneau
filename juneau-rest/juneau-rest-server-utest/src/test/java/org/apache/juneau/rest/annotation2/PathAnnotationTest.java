@@ -463,124 +463,124 @@ public class PathAnnotationTest {
 
 	@Test
 	public void f01a_noPath() throws Exception {
-		f.get("/f/x1/x2")
+		f.get("http://localhost/f/x1/x2")
 			.run()
 			.assertBody().is("noPath: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f01b_incompletePath() throws Exception {
-		f.get("/f/x1")
+		f.get("http://localhost/f/x1")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f")
+		f.get("http://localhost/f")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f01c_noPath_blanks() throws Exception {
-		f.get("/f//")
+		f.get("http://localhost/f//")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f/x/")
+		f.get("http://localhost/f/x/")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f//x")
+		f.get("http://localhost/f//x")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f02a_noPath2() throws Exception {
-		f.get("/f/x1/x2/foo")
+		f.get("http://localhost/f/x1/x2/foo")
 			.run()
 			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f02b_noPath2_blanks() throws Exception {
-		f.get("/f///foo")
+		f.get("http://localhost/f///foo")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f/x1//foo")
+		f.get("http://localhost/f/x1//foo")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f//x2/foo")
+		f.get("http://localhost/f//x2/foo")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f03a_noVars() throws Exception {
-		f.get("/f/x1/x2/a")
+		f.get("http://localhost/f/x1/x2/a")
 			.run()
 			.assertBody().is("noVars: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void f03b_noVars_blanks() throws Exception {
-		f.get("/f///a")
+		f.get("http://localhost/f///a")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f/x1//a")
+		f.get("http://localhost/f/x1//a")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f//x2/a")
+		f.get("http://localhost/f//x2/a")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f04a_twoVars() throws Exception {
-		f.get("/f/x1/x2/b/x3/x4")
+		f.get("http://localhost/f/x1/x2/b/x3/x4")
 			.run()
 			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f04b_twoVars_blanks() throws Exception {
-		f.get("/f//x2/b/x3/x4")
+		f.get("http://localhost/f//x2/b/x3/x4")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f/x1//b/x3/x4")
+		f.get("http://localhost/f/x1//b/x3/x4")
 			.run()
 			.assertStatus().is(404);
-		f.get("/f/x1/x2/b//x4")
+		f.get("http://localhost/f/x1/x2/b//x4")
 			.run()
 			.assertStatus().is(200);
-		f.get("/f/x1/x2/b/x3/")
+		f.get("http://localhost/f/x1/x2/b/x3/")
 			.run()
 			.assertStatus().is(200);
-		f.get("/f///b//")
+		f.get("http://localhost/f///b//")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void f05_twoVarsOverlapping() throws Exception {
-		f.get("/f/x1/x2/c/x3/x4")
+		f.get("http://localhost/f/x1/x2/c/x3/x4")
 			.run()
 			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
 	}
 
 	@Test
 	public void f06a_withRemainder() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4")
+		f.get("http://localhost/f/x1/x2/d/x3/x4")
 			.run()
 			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f06b_withRemainder_lank() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4/")
+		f.get("http://localhost/f/x1/x2/d/x3/x4/")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void f06c_withRemainderWithStuff() throws Exception {
-		f.get("/f/x1/x2/d/x3/x4/foo/bar")
+		f.get("http://localhost/f/x1/x2/d/x3/x4/foo/bar")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
@@ -596,104 +596,104 @@ public class PathAnnotationTest {
 
 	@Test
 	public void g01a_noPath() throws Exception {
-		g.get("/f/x1/x2")
+		g.get("http://localhost/f/x1/x2")
 			.run()
 			.assertBody().is("noPath: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void g01b_incompletePath() throws Exception {
-		g.get("/f/x1")
+		g.get("http://localhost/f/x1")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f")
+		g.get("http://localhost/f")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g01c_noPath_blanks() throws Exception {
-		g.get("/f//")
+		g.get("http://localhost/f//")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f/x1/")
+		g.get("http://localhost/f/x1/")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f//x2")
+		g.get("http://localhost/f//x2")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g02a_noVars() throws Exception {
-		g.get("/f/x1/x2/a")
+		g.get("http://localhost/f/x1/x2/a")
 			.run()
 			.assertBody().is("noVars: {a:'x1',b:'x2'}");
 	}
 
 	@Test
 	public void g02b_noVars_blanks() throws Exception {
-		g.get("/f///a")
+		g.get("http://localhost/f///a")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f/x1//a")
+		g.get("http://localhost/f/x1//a")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f//x2/a")
+		g.get("http://localhost/f//x2/a")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g03a_twoVars() throws Exception {
-		g.get("/f/x1/x2/b/x3/x4")
+		g.get("http://localhost/f/x1/x2/b/x3/x4")
 			.run()
 			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g03b_twoVars_blanks() throws Exception {
-		g.get("/f//x2/b/x3/x4")
+		g.get("http://localhost/f//x2/b/x3/x4")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f/x1//b/x3/x4")
+		g.get("http://localhost/f/x1//b/x3/x4")
 			.run()
 			.assertStatus().is(404);
-		g.get("/f/x1/x2/b//x4")
+		g.get("http://localhost/f/x1/x2/b//x4")
 			.run()
 			.assertStatus().is(200);
-		g.get("/f/x1/x2/b/x3/")
+		g.get("http://localhost/f/x1/x2/b/x3/")
 			.run()
 			.assertStatus().is(200);
-		g.get("/f///b//")
+		g.get("http://localhost/f///b//")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void g04_twoVarsOverlapping() throws Exception {
-		g.get("/f/x1/x2/c/x3/x4")
+		g.get("http://localhost/f/x1/x2/c/x3/x4")
 			.run()
 			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4'}");
 	}
 
 	@Test
 	public void g05a_withRemainder() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4")
+		g.get("http://localhost/f/x1/x2/d/x3/x4")
 			.run()
 			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g05b_withRemainderBlank() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4/")
+		g.get("http://localhost/f/x1/x2/d/x3/x4/")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	@Test
 	public void g05c_withRemainderWithStuff() throws Exception {
-		g.get("/f/x1/x2/d/x3/x4/foo/bar")
+		g.get("http://localhost/f/x1/x2/d/x3/x4/foo/bar")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
@@ -709,7 +709,7 @@ public class PathAnnotationTest {
 
 	@Test
 	public void h01a_noPath() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
@@ -717,125 +717,125 @@ public class PathAnnotationTest {
 	@Test
 	public void h01b_incompletePath() throws Exception {
 		// These are 405 instead of 404 because when children don't match, we try to find a matching Java method.
-		h.get("/h/ha1/hb1/f/x1")
+		h.get("http://localhost/h/ha1/hb1/f/x1")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f")
+		h.get("http://localhost/h/ha1/hb1/f")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1")
+		h.get("http://localhost/h/ha1/hb1")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1")
+		h.get("http://localhost/h/ha1")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h")
+		h.get("http://localhost/h")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h01c_noPath_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2")
+		h.get("http://localhost/h//hb1/f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1//f/x1/x2")
+		h.get("http://localhost/h/ha1//f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f//x2")
+		h.get("http://localhost/h/ha1/hb1/f//x2")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f/x1/")
+		h.get("http://localhost/h/ha1/hb1/f/x1/")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h///f//")
+		h.get("http://localhost/h///f//")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h02a_noPath2() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/foo")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/foo")
 			.run()
 			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h02b_noPath2_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2/foo")
+		h.get("http://localhost/h//hb1/f/x1/x2/foo")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1//f/x1/x2/foo")
+		h.get("http://localhost/h/ha1//f/x1/x2/foo")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f//x2/foo")
+		h.get("http://localhost/h/ha1/hb1/f//x2/foo")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f/x1//foo")
+		h.get("http://localhost/h/ha1/hb1/f/x1//foo")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h///f///foo")
+		h.get("http://localhost/h///f///foo")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h03a_noVars() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/a")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/a")
 			.run()
 			.assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h03b_noVars_blanks() throws Exception {
-		h.get("/h//hb1/f/x1/x2/a")
+		h.get("http://localhost/h//hb1/f/x1/x2/a")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1//f/x1/x2/a")
+		h.get("http://localhost/h/ha1//f/x1/x2/a")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f//x2/a")
+		h.get("http://localhost/h/ha1/hb1/f//x2/a")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h/ha1/hb1/f/x1//a")
+		h.get("http://localhost/h/ha1/hb1/f/x1//a")
 			.run()
 			.assertStatus().is(404);
-		h.get("/h///f///a")
+		h.get("http://localhost/h///f///a")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void h04_twoVars() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/b/x3/x4")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/b/x3/x4")
 			.run()
 			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h05_twoVarsOverlapping() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/c/x3/x4")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/c/x3/x4")
 			.run()
 			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06a_withRemainder() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/d/x3/x4")
 			.run()
 			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06b_withRemainderBlank() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/d/x3/x4/")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	@Test
 	public void h06c_withRemainderWithStuff() throws Exception {
-		h.get("/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
+		h.get("http://localhost/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
@@ -851,109 +851,109 @@ public class PathAnnotationTest {
 
 	@Test
 	public void i01a_noPath() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertBody().is("noPath: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i01b_incompletePath() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1")
+		i.get("http://localhost/i/ia1/ib1/h/ha1")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h")
+		i.get("http://localhost/i/ia1/ib1/h")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1")
+		i.get("http://localhost/i/ia1/ib1")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1")
+		i.get("http://localhost/i/ia1")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i")
+		i.get("http://localhost/i")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void i01c_noPath_blanks() throws Exception {
-		i.get("/i//ib1/h/ha1/hb1/f/x1/x2")
+		i.get("http://localhost/i//ib1/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1//h/ha1/hb1/f/x1/x2")
+		i.get("http://localhost/i/ia1//h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h//hb1/f/x1/x2")
+		i.get("http://localhost/i/ia1/ib1/h//hb1/f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1//f/x1/x2")
+		i.get("http://localhost/i/ia1/ib1/h/ha1//f/x1/x2")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f//x2")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f//x2")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/")
 			.run()
 			.assertStatus().is(404);
-		i.get("/i///h///f//")
+		i.get("http://localhost/i///h///f//")
 			.run()
 			.assertStatus().is(404);
 	}
 
 	@Test
 	public void i02_noPath2() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo")
 			.run()
 			.assertBody().is("noPath2: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i03_noVars() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/a")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/a")
 			.run()
 			.assertBody().is("noVars: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i04_twoVars() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/b/x3/x4")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/b/x3/x4")
 			.run()
 			.assertBody().is("twoVars: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i05_twoVarsOverlapping() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/c/x3/x4")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/c/x3/x4")
 			.run()
 			.assertBody().is("twoVarsOverlapping: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06a_withRemainder() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4")
 			.run()
 			.assertBody().is("withRemainder: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06b_withRemainderBlank() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	@Test
 	public void i06c_withRemainderWithStuff() throws Exception {
-		i.get("/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
+		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/d/x3/x4/foo/bar")
 			.run()
 			.assertBody().is("withRemainder: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
@@ -1421,11 +1421,11 @@ public class PathAnnotationTest {
 
 	@Test
 	public void u01_nonRequiredPath() throws Exception {
-		u1.get("/u1/foo/u2")
+		u1.get("http://localhost/u1/foo/u2")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("foo");
-		u1.get("/u1/foo/u2/foo/xxx")
+		u1.get("http://localhost/u1/foo/u2/foo/xxx")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("foo,xxx");
@@ -1463,35 +1463,35 @@ public class PathAnnotationTest {
 
 	@Test
 	public void v01_multiplePaths() throws Exception {
-		v1.get("/v1/v1foo/v2")
+		v1.get("http://localhost/v1/v1foo/v2")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("1,v1foo,nil");
-		v1.get("/v1/v1foo/v2/v2foo")
+		v1.get("http://localhost/v1/v1foo/v2/v2foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("1,v1foo,v2foo");
-		v1.get("/v1/v1foo/v2/foo")
+		v1.get("http://localhost/v1/v1foo/v2/foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("2,v1foo,nil");
-		v1.get("/v1/v1foo/v2/foo/v2foo")
+		v1.get("http://localhost/v1/v1foo/v2/foo/v2foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("2,v1foo,v2foo");
-		v2.get("/v2")
+		v2.get("http://localhost/v2")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("1,nil,nil");
-		v2.get("/v2/v2foo")
+		v2.get("http://localhost/v2/v2foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("1,nil,v2foo");
-		v2.get("/v2/foo")
+		v2.get("http://localhost/v2/foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("2,nil,nil");
-		v2.get("/v2/foo/v2foo")
+		v2.get("http://localhost/v2/foo/v2foo")
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("2,nil,v2foo");

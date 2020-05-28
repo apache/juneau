@@ -27,11 +27,11 @@ public interface MockHttpConnection {
 	 * Creates a mocked HTTP request.
 	 *
 	 * @param method The HTTP request method.
-	 * @param path The HTTP request path.
+	 * @param uri The fully-qualified URI of the request.
 	 * @param headers Optional HTTP request headers.
 	 * @param body The HTTP request body.
 	 * @return A new mock request.
 	 * @throws Exception
 	 */
-	MockHttpRequest request(String method, String path, Header[] headers, Object body) throws Exception;
+	MockHttpRequest request(String method, String uri, Header[] headers, Object body) throws Exception;
 }

@@ -60,7 +60,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text did not equal expected.");
 				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				sb.append("\nActual  : [").append(text == null ? null : text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
 				System.err.println(sb.toString());
 			}
 			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);

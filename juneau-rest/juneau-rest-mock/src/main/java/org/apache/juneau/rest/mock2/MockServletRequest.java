@@ -102,15 +102,15 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * </ul>
 	 *
 	 * @param method The HTTP method  name.
-	 * @param path The request path.
+	 * @param uri The request path.
 	 * @param pathArgs Optional path arguments.
 	 *
 	 * @return A new request.
 	 */
-	public static MockServletRequest create(String method, String path, Object...pathArgs) {
+	public static MockServletRequest create(String method, String uri, Object...pathArgs) {
 		return create()
 			.method(method)
-			.uri(StringUtils.format(path, pathArgs));
+			.uri(StringUtils.format(uri, pathArgs));
 	}
 
 	/**

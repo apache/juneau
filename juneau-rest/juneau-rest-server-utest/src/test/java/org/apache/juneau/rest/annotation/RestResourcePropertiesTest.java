@@ -81,6 +81,6 @@ public class RestResourcePropertiesTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/p2").accept("text/plain").run().assertBody().is("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p2,R1b=/,R2=bar,R3=,R4=a1,R5=c,R6=c");
+		a.get("/p2").accept("text/plain").run().assertBody().is("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=/p1/p2,R1b=/p1,R2=bar,R3=,R4=a1,R5=c,R6=c");
 	}
 }

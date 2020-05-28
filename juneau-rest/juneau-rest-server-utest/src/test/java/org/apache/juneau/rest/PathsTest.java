@@ -52,11 +52,11 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
-	static MockRest a = MockRest.build(A.class);
+	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").build();
 
 	@Test
 	public void a01() throws Exception {
-		a.get("http://localhost/cp/sp").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp").run()
 			.assertBody().contains("pathInfo:null")
 			.assertBody().contains("pathRemainder:null")
 			.assertBody().contains("pathRemainderUndecoded:null")
@@ -71,7 +71,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("http://localhost/cp/sp/").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp/").run()
 			.assertBody().contains("pathInfo:'/'")
 			.assertBody().contains("pathRemainder:''")
 			.assertBody().contains("pathRemainderUndecoded:''")
@@ -86,7 +86,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("http://localhost/cp/sp//").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp//").run()
 			.assertBody().contains("pathInfo:'//'")
 			.assertBody().contains("pathRemainder:'/'")
 			.assertBody().contains("pathRemainderUndecoded:'/'")
@@ -101,7 +101,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("http://localhost/cp/sp///").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp///").run()
 			.assertBody().contains("pathInfo:'///'")
 			.assertBody().contains("pathRemainder:'//'")
 			.assertBody().contains("pathRemainderUndecoded:'//'")
@@ -116,7 +116,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("http://localhost/cp/sp/foo/bar").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp/foo/bar").run()
 			.assertBody().contains("pathInfo:'/foo/bar'")
 			.assertBody().contains("pathRemainder:'foo/bar'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar'")
@@ -131,7 +131,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a06() throws Exception {
-		a.get("http://localhost/cp/sp/foo/bar/").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp/foo/bar/").run()
 			.assertBody().contains("pathInfo:'/foo/bar/'")
 			.assertBody().contains("pathRemainder:'foo/bar/'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar/'")
@@ -146,7 +146,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a07() throws Exception {
-		a.get("http://localhost/cp/sp//foo//bar//").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp//foo//bar//").run()
 			.assertBody().contains("pathInfo:'//foo//bar//'")
 			.assertBody().contains("pathRemainder:'/foo//bar//'")
 			.assertBody().contains("pathRemainderUndecoded:'/foo//bar//'")
@@ -161,7 +161,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a08() throws Exception {
-		a.get("http://localhost/cp/sp/%20").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp/%20").run()
 			.assertBody().contains("pathInfo:'/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'%20'")
@@ -176,7 +176,7 @@ public class PathsTest {
 	}
 	@Test
 	public void a09() throws Exception {
-		a.get("http://localhost/cp/sp/+").contextPath("/cp").servletPath("/sp").run()
+		a.get("http://localhost/cp/sp/+").run()
 			.assertBody().contains("pathInfo:'/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'+'")
@@ -200,11 +200,11 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
-	static MockRest b = MockRest.build(B.class);
+	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").build();
 
 	@Test
 	public void b01() throws Exception {
-		b.get("http://localhost/cp/sp/subpath").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath").run()
 			.assertBody().contains("pathInfo:'/subpath'")
 			.assertBody().contains("pathRemainder:null")
 			.assertBody().contains("pathRemainderUndecoded:null")
@@ -219,7 +219,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("http://localhost/cp/sp/subpath/").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath/").run()
 			.assertBody().contains("pathInfo:'/subpath/'")
 			.assertBody().contains("pathRemainder:''")
 			.assertBody().contains("pathRemainderUndecoded:''")
@@ -234,7 +234,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("http://localhost/cp/sp/subpath//").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath//").run()
 			.assertBody().contains("pathInfo:'/subpath//'")
 			.assertBody().contains("pathRemainder:'/'")
 			.assertBody().contains("pathRemainderUndecoded:'/'")
@@ -249,7 +249,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("http://localhost/cp/sp/subpath///").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath///").run()
 			.assertBody().contains("pathInfo:'/subpath///'")
 			.assertBody().contains("pathRemainder:'//'")
 			.assertBody().contains("pathRemainderUndecoded:'//'")
@@ -264,7 +264,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("http://localhost/cp/sp/subpath/foo/bar").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath/foo/bar").run()
 			.assertBody().contains("pathInfo:'/subpath/foo/bar'")
 			.assertBody().contains("pathRemainder:'foo/bar'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar'")
@@ -279,7 +279,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b06() throws Exception {
-		b.get("http://localhost/cp/sp/subpath/foo/bar/").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath/foo/bar/").run()
 			.assertBody().contains("pathInfo:'/subpath/foo/bar/'")
 			.assertBody().contains("pathRemainder:'foo/bar/'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar/'")
@@ -294,7 +294,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b07() throws Exception {
-		b.get("http://localhost/cp/sp/subpath//foo//bar//").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath//foo//bar//").run()
 			.assertBody().contains("pathInfo:'/subpath//foo//bar//'")
 			.assertBody().contains("pathRemainder:'/foo//bar//'")
 			.assertBody().contains("pathRemainderUndecoded:'/foo//bar//'")
@@ -309,7 +309,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b08() throws Exception {
-		b.get("http://localhost/cp/sp/subpath/%20").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath/%20").run()
 			.assertBody().contains("pathInfo:'/subpath/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'%20'")
@@ -324,7 +324,7 @@ public class PathsTest {
 	}
 	@Test
 	public void b09() throws Exception {
-		b.get("http://localhost/cp/sp/subpath/+").contextPath("/cp").servletPath("/sp").run()
+		b.get("http://localhost/cp/sp/subpath/+").run()
 			.assertBody().contains("pathInfo:'/subpath/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'+'")
@@ -352,11 +352,11 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
-	static MockRest c = MockRest.build(C.class);
+	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").build();
 
 	@Test
 	public void c01() throws Exception {
-		c.get("http://localhost/cp/sp/a").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a").run()
 			.assertBody().contains("pathInfo:null")
 			.assertBody().contains("pathRemainder:null")
 			.assertBody().contains("pathRemainderUndecoded:null")
@@ -371,7 +371,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c02() throws Exception {
-		c.get("http://localhost/cp/sp/a/").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a/").run()
 			.assertBody().contains("pathInfo:'/'")
 			.assertBody().contains("pathRemainder:''")
 			.assertBody().contains("pathRemainderUndecoded:''")
@@ -386,7 +386,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c03() throws Exception {
-		c.get("http://localhost/cp/sp/a//").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a//").run()
 			.assertBody().contains("pathInfo:'//'")
 			.assertBody().contains("pathRemainder:'/'")
 			.assertBody().contains("pathRemainderUndecoded:'/'")
@@ -401,7 +401,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c04() throws Exception {
-		c.get("http://localhost/cp/sp/a///").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a///").run()
 			.assertBody().contains("pathInfo:'///'")
 			.assertBody().contains("pathRemainder:'//'")
 			.assertBody().contains("pathRemainderUndecoded:'//'")
@@ -416,7 +416,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c05() throws Exception {
-		c.get("http://localhost/cp/sp/a/foo/bar").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a/foo/bar").run()
 			.assertBody().contains("pathInfo:'/foo/bar'")
 			.assertBody().contains("pathRemainder:'foo/bar'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar'")
@@ -431,7 +431,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c06() throws Exception {
-		c.get("http://localhost/cp/sp/a/foo/bar/").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a/foo/bar/").run()
 			.assertBody().contains("pathInfo:'/foo/bar/'")
 			.assertBody().contains("pathRemainder:'foo/bar/'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar/'")
@@ -446,7 +446,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c07() throws Exception {
-		c.get("http://localhost/cp/sp/a//foo//bar//").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a//foo//bar//").run()
 			.assertBody().contains("pathInfo:'//foo//bar//'")
 			.assertBody().contains("pathRemainder:'/foo//bar//'")
 			.assertBody().contains("pathRemainderUndecoded:'/foo//bar//'")
@@ -461,7 +461,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c08() throws Exception {
-		c.get("http://localhost/cp/sp/a/%20").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a/%20").run()
 			.assertBody().contains("pathInfo:'/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'%20'")
@@ -476,7 +476,7 @@ public class PathsTest {
 	}
 	@Test
 	public void c09() throws Exception {
-		c.get("http://localhost/cp/sp/a/+").contextPath("/cp").servletPath("/sp").run()
+		c.get("http://localhost/cp/sp/a/+").run()
 			.assertBody().contains("pathInfo:'/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'+'")
@@ -504,11 +504,11 @@ public class PathsTest {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}
-	static MockRest d = MockRest.build(D.class);
+	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").build();
 
 	@Test
 	public void d01() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath").run()
 			.assertBody().contains("pathInfo:'/subpath'")
 			.assertBody().contains("pathRemainder:null")
 			.assertBody().contains("pathRemainderUndecoded:null")
@@ -523,7 +523,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d02() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath/").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath/").run()
 			.assertBody().contains("pathInfo:'/subpath/'")
 			.assertBody().contains("pathRemainder:''")
 			.assertBody().contains("pathRemainderUndecoded:''")
@@ -538,7 +538,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d03() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath//").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath//").run()
 			.assertBody().contains("pathInfo:'/subpath//'")
 			.assertBody().contains("pathRemainder:'/'")
 			.assertBody().contains("pathRemainderUndecoded:'/'")
@@ -553,7 +553,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d04() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath///").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath///").run()
 			.assertBody().contains("pathInfo:'/subpath///'")
 			.assertBody().contains("pathRemainder:'//'")
 			.assertBody().contains("pathRemainderUndecoded:'//'")
@@ -568,7 +568,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d05() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath/foo/bar").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath/foo/bar").run()
 			.assertBody().contains("pathInfo:'/subpath/foo/bar'")
 			.assertBody().contains("pathRemainder:'foo/bar'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar'")
@@ -583,7 +583,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d06() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath/foo/bar/").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath/foo/bar/").run()
 			.assertBody().contains("pathInfo:'/subpath/foo/bar/'")
 			.assertBody().contains("pathRemainder:'foo/bar/'")
 			.assertBody().contains("pathRemainderUndecoded:'foo/bar/'")
@@ -598,7 +598,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d07() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath//foo//bar//").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath//foo//bar//").run()
 			.assertBody().contains("pathInfo:'/subpath//foo//bar//'")
 			.assertBody().contains("pathRemainder:'/foo//bar//'")
 			.assertBody().contains("pathRemainderUndecoded:'/foo//bar//'")
@@ -613,7 +613,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d08() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath/%20").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath/%20").run()
 			.assertBody().contains("pathInfo:'/subpath/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'%20'")
@@ -628,7 +628,7 @@ public class PathsTest {
 	}
 	@Test
 	public void d09() throws Exception {
-		d.get("http://localhost/cp/sp/a/subpath/+").contextPath("/cp").servletPath("/sp").run()
+		d.get("http://localhost/cp/sp/a/subpath/+").run()
 			.assertBody().contains("pathInfo:'/subpath/ '")
 			.assertBody().contains("pathRemainder:' '")
 			.assertBody().contains("pathRemainderUndecoded:'+'")

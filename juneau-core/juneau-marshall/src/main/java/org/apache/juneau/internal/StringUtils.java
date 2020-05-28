@@ -1467,7 +1467,7 @@ public final class StringUtils {
 		if (s == null)
 			return null;
 
-		if (s.indexOf('{') == -1)
+		if (m == null || m.isEmpty() || s.indexOf('{') == -1)
 			return s;
 
 		int S1 = 1;	   // Not in variable, looking for {
@@ -1842,6 +1842,20 @@ public final class StringUtils {
 			return null;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
+		return s;
+	}
+
+	/**
+	 * Trims <js>'/'</js> characters from the beginning of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return A new trimmed string, or the same string if no trimming was necessary.
+	 */
+	public static String trimLeadingSlashes(String s) {
+		if (s == null)
+			return null;
+		while (s.length() > 0 && s.charAt(0) == '/')
+			s = s.substring(1);
 		return s;
 	}
 
@@ -2879,5 +2893,22 @@ public final class StringUtils {
 			return new StringBuilder(in);
 		sb.append(in);
 		return sb;
+	}
+
+	/**
+	 * Counts the number of the specified character in the specified string.
+	 *
+	 * @param s The string to check.
+	 * @param c The character to check for.
+	 * @return The number of those characters or zero if the string was <jk>null</jk>.
+	 */
+	public static int countChars(String s, char c) {
+		int count = 0;
+		if (s == null)
+			return count;
+		for (int i = 0; i < s.length(); i++)
+			if (s.charAt(i) == c)
+				count++;
+		return count;
 	}
 }

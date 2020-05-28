@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -24,7 +24,6 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -75,7 +74,7 @@ public class MockRest implements MockHttpConnection {
 	/** Debug mode enabled. */
 	protected final boolean debug;
 
-	final String contextPath, servletPath;
+	final String contextPath, servletPath, rootUrl;
 
 	/**
 	 * Constructor.
@@ -106,7 +105,10 @@ public class MockRest implements MockHttpConnection {
 			ctx = contexts.get(c);
 			headers = new LinkedHashMap<>(b.headers);
 			contextPath = b.contextPath;
+			if (b.servletPath.isEmpty())
+				b.servletPath = toValidContextPath(ctx.getPath());
 			servletPath = b.servletPath;
+			rootUrl = new StringBuilder().append(contextPath).append(servletPath).toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -239,7 +241,7 @@ public class MockRest implements MockHttpConnection {
 	 * Performs a REST request against the REST interface.
 	 *
 	 * @param method The HTTP method
-	 * @param path The URI path.
+	 * @param uri The request URI.
 	 * @param headers Optional headers to include in the request.
 	 * @param body
 	 * 	The body of the request.
@@ -254,11 +256,14 @@ public class MockRest implements MockHttpConnection {
 	 * @return A new servlet request.
 	 */
 	@Override /* MockHttpConnection */
-	public MockServletRequest request(String method, String path, Header[] headers, Object body) {
-		String p = RestUtils.trimContextPath(ctx.getPath(), path);
-		MockServletRequest r = MockServletRequest.create(method, p)
-			.contextPath(emptyIfNull(contextPath))
-			.servletPath(emptyIfNull(servletPath))
+	public MockServletRequest request(String method, String uri, Header[] headers, Object body) {
+		PathResolver pr = new PathResolver(null, contextPath, servletPath == null ? ctx.getPath() : servletPath, uri, null);
+		if (pr.getError() != null)
+			throw new RuntimeException(pr.getError());
+
+		MockServletRequest r = MockServletRequest.create(method, pr.getURI())
+			.contextPath(pr.getContextPath())
+			.servletPath(pr.getServletPath())
 			.body(body)
 			.debug(debug)
 			.restContext(ctx);
@@ -280,178 +285,6 @@ public class MockRest implements MockHttpConnection {
 			r.header(name, value);
 	}
 
-	/**
-	 * Performs a REST request against the REST interface.
-	 *
-	 * @param method The HTTP method
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest request(String method, String path) {
-		return request(method, path, null, null);
-	}
-
-	/**
-	 * Performs a REST request against the REST interface.
-	 *
-	 * @param method The HTTP method
-	 * @param path The URI path.
-	 * @param body
-	 * 	The body of the request.
-	 * 	<br>Can be any of the following data types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	Any other types are converted to a string using the <c>toString()</c> method.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest request(String method, String path, Object body) {
-		return request(method, path, null, body);
-	}
-
-	/**
-	 * Performs a REST request against the REST interface.
-	 *
-	 * @param method The HTTP method
-	 * @param headers Optional headers to include in the request.
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest request(String method, Header[] headers, String path) {
-		return request(method, path, headers, null);
-	}
-
-	/**
-	 * Perform a GET request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest get(String path) {
-		return request("GET", path, null, null);
-	}
-
-	/**
-	 * Shortcut for <code>get(<js>""</js>)</code>
-	 *
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest get() {
-		return get("");
-	}
-
-	/**
-	 * Perform a PUT request.
-	 *
-	 * @param path The URI path.
-	 * @param body
-	 * 	The body of the request.
-	 * 	<br>Can be any of the following data types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	Any other types are converted to a string using the <c>toString()</c> method.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest put(String path, Object body)  {
-		return request("PUT", path, null, body);
-	}
-
-	/**
-	 * Perform a POST request.
-	 *
-	 * @param path The URI path.
-	 * @param body
-	 * 	The body of the request.
-	 * 	<br>Can be any of the following data types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	Any other types are converted to a string using the <c>toString()</c> method.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest post(String path, Object body) {
-		return request("POST", path, null, body);
-	}
-
-	/**
-	 * Perform a DELETE request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest delete(String path) {
-		return request("DELETE", path, null, null);
-	}
-
-	/**
-	 * Perform a HEAD request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest head(String path) {
-		return request("HEAD", path, null, null);
-	}
-
-	/**
-	 * Perform an OPTIONS request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest options(String path) {
-		return request("OPTIONS", path, null, null);
-	}
-
-	/**
-	 * Perform a PATCH request.
-	 *
-	 * @param path The URI path.
-	 * @param body
-	 * 	The body of the request.
-	 * 	<br>Can be any of the following data types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	Any other types are converted to a string using the <c>toString()</c> method.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest patch(String path, Object body) {
-		return request("PATCH", path, null, body);
-	}
-
-	/**
-	 * Perform a CONNECT request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest connect(String path) {
-		return request("CONNECT", path, null, null);
-	}
-
-	/**
-	 * Perform a TRACE request.
-	 *
-	 * @param path The URI path.
-	 * @return A new servlet request.
-	 */
-	public MockServletRequest trace(String path) {
-		return request("TRACE", path, null, null);
-	}
 
 	/**
 	 * Returns the headers that were defined in this class.

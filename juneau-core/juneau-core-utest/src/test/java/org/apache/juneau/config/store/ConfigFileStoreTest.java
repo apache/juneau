@@ -24,7 +24,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ConfigFileStoreTest {
 
-	private static final File DIR = new File("./config");
+	private static final File DIR = new File("./target/config");
 
 	@After
 	public void cleanUp() {

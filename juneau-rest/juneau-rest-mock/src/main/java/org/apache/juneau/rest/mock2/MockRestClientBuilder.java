@@ -170,7 +170,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	public MockRestClient build() {
 		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
 			mrb.debug();
-		connectionManager(new MockHttpClientConnectionManager(mrb.build()));
+		MockRest mr = mrb.build();
+		connectionManager(new MockHttpClientConnectionManager(mr));
+		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
+		if (rootUrl == null)
+			rootUrl = "http://localhost";
+		rootUrl(rootUrl + mr.rootUrl);
 		return super.build(MockRestClient.class);
 	}
 
@@ -178,7 +183,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	public <T extends Context> T build(Class<T> c) {
 		if (peek(BeanContext.BEAN_debug) == Boolean.TRUE)
 			mrb.debug();
-		connectionManager(new MockHttpClientConnectionManager(mrb.build()));
+		MockRest mr = mrb.build();
+		connectionManager(new MockHttpClientConnectionManager(mr));
+		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
+		if (rootUrl == null)
+			rootUrl = "http://localhost";
+		rootUrl(rootUrl + mr.rootUrl);
 		return super.build(c);
 	}
 

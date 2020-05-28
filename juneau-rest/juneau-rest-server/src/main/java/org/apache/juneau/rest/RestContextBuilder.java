@@ -401,7 +401,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public String getPath() {
 		Object p = peek(REST_path);
-		return p == null ? "_" : p.toString();
+		return p == null ? "" : p.toString();
 	}
 
 	//----------------------------------------------------------------------------------------------------
