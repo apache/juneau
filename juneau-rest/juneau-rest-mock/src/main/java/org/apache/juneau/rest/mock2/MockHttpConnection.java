@@ -18,8 +18,8 @@ import org.apache.http.*;
  * Represent the basic connection for mock HTTP requests.
  *
  * <p>
- * Used as a shim between the server and client APIs that allow the <c>RestClient</c>
- * class to send and receive mocked requests using the <c>MockRest</c> interface.
+ * Used as a shim between the server and client APIs that allow the <l>MockRestClient</l> class to send and receive mocked
+ * requests directly against <ja>@Rest</ja>-annotated beans.
  */
 public interface MockHttpConnection {
 
@@ -33,5 +33,5 @@ public interface MockHttpConnection {
 	 * @return A new mock request.
 	 * @throws Exception
 	 */
-	MockHttpRequest request(String method, String uri, Header[] headers, Object body) throws Exception;
+	MockHttpRequest request(String method, String uri, Header[] headers) throws Exception;
 }

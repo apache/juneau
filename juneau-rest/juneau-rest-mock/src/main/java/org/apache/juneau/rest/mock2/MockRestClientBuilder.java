@@ -62,7 +62,7 @@ import org.apache.http.protocol.*;
  */
 public class MockRestClientBuilder extends RestClientBuilder {
 
-	Object impl;
+	Object restBean;
 	String contextPath = "", servletPath = "";
 
 	/**
@@ -176,27 +176,24 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-	//	Object impl = mrb.impl;
-	//	String contextPath = mrb.contextPath;
-	//	String servletPath = mrb.servletPath;
 		boolean debug = (peek(BeanContext.BEAN_debug) == Boolean.TRUE);
-		MockRest mr = new MockRest(impl, contextPath, servletPath, debug);
+		MockHttpConnectionImpl mr = new MockHttpConnectionImpl(restBean, contextPath, servletPath, debug);
 		connectionManager(new MockHttpClientConnectionManager(mr));
 		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
 		if (rootUrl == null)
 			rootUrl = "http://localhost";
-		rootUrl(rootUrl + mr.rootUrl);
+		rootUrl(rootUrl + mr.getResourcePath());
 		return super.build(c);
 	}
 
 	/**
-	 * Specifies the {@link Rest}-annotated bean to test against.
+	 * Specifies the {@link Rest}-annotated bean class or instance to test against.
 	 *
-	 * @param bean The {@link Rest}-annotated bean to test against.
+	 * @param bean The {@link Rest}-annotated bean class or instance.
 	 * @return This object (for method chaining).
 	 */
-	public MockRestClientBuilder bean(Object bean) {
-		impl = bean;
+	public MockRestClientBuilder restBean(Object bean) {
+		restBean = bean;
 		return this;
 	}
 

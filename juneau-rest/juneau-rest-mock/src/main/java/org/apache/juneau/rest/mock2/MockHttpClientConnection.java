@@ -87,7 +87,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 					target = httpHost.toURI();
 			}
 			path = target + path;
-			req = c.request(rl.getMethod(), path, request.getAllHeaders(), null);
+			req = c.request(rl.getMethod(), path, request.getAllHeaders());
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);
 		}

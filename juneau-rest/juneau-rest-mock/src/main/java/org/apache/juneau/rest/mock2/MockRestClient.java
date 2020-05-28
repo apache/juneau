@@ -45,7 +45,7 @@ public class MockRestClient extends RestClient {
 	 * @return A new builder.
 	 */
 	public static MockRestClientBuilder create(Object impl) {
-		return new MockRestClientBuilder().bean(impl);
+		return new MockRestClientBuilder().restBean(impl);
 	}
 
 	/**

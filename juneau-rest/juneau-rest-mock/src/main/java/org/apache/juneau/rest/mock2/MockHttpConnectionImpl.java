@@ -13,78 +13,42 @@
 package org.apache.juneau.rest.mock2;
 
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Creates a mocked interface against a REST resource class.
- *
- * <p>
- * Allows you to test your REST resource classes without a running servlet container.
- *
- * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
- *  <jk>public class</jk> MockTest {
- *
- *  	<jc>// Our REST resource to test.</jc>
- *  	<ja>@Rest</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
- *  	<jk>public static class</jk> MyRest {
- *
- *  		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
- *  		<jk>public</jk> String echo(<ja>@Body</ja> String b) {
- *  			<jk>return</jk> b;
- *  		}
- *  	}
- *
- *  <ja>@Test</ja>
- *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
- *  	MockRest
- *  		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
- *  		.json()
- *  		.build()
- *  		.put(<js>"/String"</js>, <js>"'foo'"</js>)
- *  		.execute()
- *  		.assertStatus(200)
- *  		.assertBody(<js>"'foo'"</js>);
- *  }
- * </p>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
- * </ul>
+ * An implementation of a shim that allows HTTP clients to make direct calls to <ja>@Rest</ja>-annotated resources.
  */
-public class MockRest implements MockHttpConnection {
-	private static Map<Class<?>,RestContext> CONTEXTS_DEBUG = new ConcurrentHashMap<>(), CONTEXTS_NORMAL = new ConcurrentHashMap<>();
+public class MockHttpConnectionImpl implements MockHttpConnection {
+	private static Map<Class<?>,RestContext>
+		CONTEXTS_DEBUG = new ConcurrentHashMap<>(),
+		CONTEXTS_NORMAL = new ConcurrentHashMap<>();
 
-	private final RestContext ctx;
-
-	/** Debug mode enabled. */
+	private final RestContext restBeanCtx;
 	private final boolean debug;
-
-	final String contextPath, servletPath, rootUrl;
+	private final String contextPath, servletPath;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param impl The {@link Rest @Rest} annotated servlet.
+	 * @param restBean The {@link Rest @Rest} annotated servlet class or instance
 	 * @param contextPath The context path of the servlet.
 	 * @param servletPath The servlet path of the servlet.
 	 * @param debug Enable debug mode on the servlet side.
 	 */
-	protected MockRest(Object impl, String contextPath, String servletPath, boolean debug) {
+	protected MockHttpConnectionImpl(Object restBean, String contextPath, String servletPath, boolean debug) {
 		try {
 			this.debug = debug;
-			Class<?> c = impl instanceof Class ? (Class<?>)impl : impl.getClass();
+			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			Map<Class<?>,RestContext> contexts = debug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
 			if (! contexts.containsKey(c)) {
-				Object o = impl instanceof Class ? ((Class<?>)impl).newInstance() : impl;
+				Object o = restBean instanceof Class ? ((Class<?>)restBean).newInstance() : restBean;
 				RestContextBuilder rcb = RestContext.create(o);
 				if (debug) {
 					rcb.debug(Enablement.TRUE);
@@ -99,15 +63,18 @@ public class MockRest implements MockHttpConnection {
 				rc.postInitChildFirst();
 				contexts.put(c, rc);
 			}
-			ctx = contexts.get(c);
+			restBeanCtx = contexts.get(c);
 			this.contextPath = contextPath;
 			if (servletPath.isEmpty())
-				servletPath = toValidContextPath(ctx.getPath());
+				servletPath = toValidContextPath(restBeanCtx.getPath());
 			this.servletPath = servletPath;
-			rootUrl = new StringBuilder().append(contextPath).append(servletPath).toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	String getResourcePath() {
+		return new StringBuilder().append(contextPath).append(servletPath).toString();
 	}
 
 	/**
@@ -115,39 +82,29 @@ public class MockRest implements MockHttpConnection {
 	 *
 	 * @param method The HTTP method
 	 * @param uri The request URI.
-	 * @param headers Optional headers to include in the request.
-	 * @param body
-	 * 	The body of the request.
-	 * 	<br>Can be any of the following data types:
-	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link InputStream}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	Any other types are converted to a string using the <c>toString()</c> method.
+	 * @param headers Headers to include in the request.  Not <jk>null</jk>.
 	 * @return A new servlet request.
 	 */
 	@Override /* MockHttpConnection */
-	public MockServletRequest request(String method, String uri, Header[] headers, Object body) {
-		MockPathResolver pr = new MockPathResolver(null, contextPath, servletPath == null ? ctx.getPath() : servletPath, uri, null);
+	public MockServletRequest request(String method, String uri, Header[] headers) {
+
+		MockPathResolver pr = new MockPathResolver(null, contextPath, servletPath, uri, null);
 		if (pr.getError() != null)
 			throw new RuntimeException(pr.getError());
 
-		MockServletRequest r = MockServletRequest.create(method, pr.getURI())
+		MockServletRequest r = MockServletRequest
+			.create(method, pr.getURI())
 			.contextPath(pr.getContextPath())
 			.servletPath(pr.getServletPath())
-			.body(body)
 			.debug(debug)
-			.restContext(ctx);
+			.restContext(restBeanCtx);
 
-		if (headers != null) {
-			for (Header h : headers) {
-				if (h.getName().equals("X-Roles")) {
-					r.roles(StringUtils.split(h.getValue().toString(), ','));
-				} else {
-					r.header(h.getName(), h.getValue());
-				}
+		for (Header h : headers) {
+			String n = h.getName(), v = h.getValue();
+			if (n.equals("X-Roles")) {
+				r.roles(split(v, ','));
+			} else {
+				r.header(n, v);
 			}
 		}
 
