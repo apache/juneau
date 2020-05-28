@@ -1401,6 +1401,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Sets the value for the <c>Content-Encoding</c> request header on all requests.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Content-Encoding"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	@ConfigurationProperty
+	public RestClientBuilder contentEncoding(Object value) {
+		return header("Content-Encoding", value);
+	}
+
+	/**
 	 * Sets the value for the <c>Date</c> request header on all requests.
 	 *
 	 * <p>

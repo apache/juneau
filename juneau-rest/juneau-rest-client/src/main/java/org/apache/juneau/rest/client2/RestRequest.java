@@ -2442,6 +2442,20 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	}
 
 	/**
+	 * Sets the value for the <c>Content-Encoding</c> request header.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Content-Encoding"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest contentEncoding(Object value) throws RestCallException {
+		return header("Content-Encoding", value);
+	}
+
+	/**
 	 * Sets the value for the <c>Date</c> request header.
 	 *
 	 * <p>
