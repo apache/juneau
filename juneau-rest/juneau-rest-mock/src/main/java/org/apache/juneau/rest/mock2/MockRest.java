@@ -20,11 +20,8 @@ import java.util.concurrent.*;
 
 import org.apache.http.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Creates a mocked interface against a REST resource class.
@@ -127,114 +124,6 @@ public class MockRest implements MockHttpConnection {
 	 */
 	public static MockRestBuilder create(Object impl) {
 		return new MockRestBuilder(impl);
-	}
-
-	/**
-	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * <c>Accept</c> and <c>Content-Type</c> headers are not added to the request.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bpcode w800'>
-	 * 	MockRest.create(impl, <jk>null</jk>, <jk>null</jk>).build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new {@link MockRest} object.
-	 */
-	public static MockRest build(Object impl) {
-		return build(impl, null, null);
-	}
-
-	/**
-	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * <c>Accept</c> and <c>Content-Type</c> headers are set to the primary media types on the specified marshall.
-	 *
-	 * <p>
-	 * Note that the marshall itself is not involved in any serialization or parsing.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bpcode w800'>
-	 * 	MockRest.create(impl, SimpleJson.<jsf>DEFAULT</jsf>).marshall(m).build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param m
-	 * 	The marshall to use for specifying the <c>Accept</c> and <c>Content-Type</c> headers.
-	 * 	<br>If <jk>null</jk>, headers will be reset.
-	 * @return A new {@link MockRest} object.
-	 */
-	public static MockRest build(Object impl, Marshall m) {
-		return create(impl).marshall(m).build();
-	}
-
-	/**
-	 * Convenience method for creating a MockRest over the specified REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * <c>Accept</c> and <c>Content-Type</c> headers are set to the primary media types on the specified serializer and parser.
-	 *
-	 * <p>
-	 * Note that the serializer and parsers are not involved in any serialization or parsing.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bpcode w800'>
-	 * 	MockRest.create(impl).serializer(s).parser(p).build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @param s
-	 * 	The serializer to use for specifying the <c>Content-Type</c> header.
-	 * 	<br>If <jk>null</jk>, header will be reset.
-	 * @param p
-	 * 	The parser to use for specifying the <c>Accept</c> header.
-	 * 	<br>If <jk>null</jk>, header will be reset.
-	 * @return A new {@link MockRest} object.
-	 */
-	public static MockRest build(Object impl, Serializer s, Parser p) {
-		return create(impl).serializer(s).parser(p).build();
-	}
-
-	/**
-	 * Shortcut builder.
-	 *
-	 * <p>
-	 * Shortcut for calling <c>create(impl).json().build()</c>.
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new {@link MockRest} object.
-	 */
-	public static MockRest buildJson(Object impl) {
-		return create(impl).json().build();
-	}
-
-	/**
-	 * Shortcut builder.
-	 *
-	 * <p>
-	 * Shortcut for calling <c>create(impl).simpleJson().build()</c>.
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new {@link MockRest} object.
-	 */
-	public static MockRest buildSimpleJson(Object impl) {
-		return create(impl).simpleJson().build();
 	}
 
 	/**
