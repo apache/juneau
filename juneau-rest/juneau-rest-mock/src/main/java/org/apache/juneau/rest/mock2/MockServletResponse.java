@@ -91,6 +91,19 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public void setCharacterEncoding(String charset) {
 		this.characterEncoding = charset;
+		updateContentTypeHeader();
+	}
+
+	private void updateContentTypeHeader() {
+		String contentType = getContentType();
+		String charset = characterEncoding;
+		if (contentType != null && charset != null) {
+			if (contentType.indexOf("charset=") != -1)
+				contentType = contentType.replaceAll("\\;\\s*charset=.*", "");
+			if (! "UTF-8".equalsIgnoreCase(charset))
+				contentType = contentType + ";charset=" + charset;
+			header("Content-Type", contentType);
+		}
 	}
 
 	/**
@@ -128,6 +141,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public void setContentType(String type) {
 		setHeader("Content-Type", type);
+		updateContentTypeHeader();
 	}
 
 	/**
