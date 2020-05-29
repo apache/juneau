@@ -1,0 +1,162 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.4-new} 
+MockRestClient
+
+<p>
+	The {@link oajr.mock2.MockRestClient} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
+	and {@link aoj.http.remote.Remote @Remote}-annotated classes.
+</p>
+<p>
+	The {@link oajr.mock2.MockRestClient} itself extends from {@link oajr.client.RestClient} providing it with the rich
+	feature set of that API.
+	The following shows a simple example of invoking a PUT method on a simple REST interface and asserting
+	the correct status code and response body: 
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MockTest {
+	
+		<jc>// A simple bean with one field.</jc>
+		<jk>public static class</jk> MyBean {
+			<jk>public int</jk> <jf>foo</jf> = 1;
+		}
+
+		<jc>// Our REST resource to test.</jc>
+		<jc>// Simply echos the response.</jc>
+		<ja>@Rest</ja>(
+			serializers=SimpleJsonSerializer.<jk>class</jk>, 
+			parsers=JsonParser.<jk>class</jk>
+		)
+		<jk>public static class</jk> EchoRest {
+	
+			<ja>@RestMethod</ja>(
+				name=<jsf>PUT</jsf>, 
+				path=<js>"/echo"</js>
+			)
+			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean bean) {
+				<jk>return</jk> bean;
+			}
+		}
+		
+		<jc>// Our JUnit test.</jc>
+		<ja>@Test</ja>
+		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+		
+			MyBean myBean = <jk>new</jk> MyBean();
+		
+			<jc>// Do a round-trip on the bean through the REST interface</jc>
+			myBean = MockRestClient
+				.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
+				.simpleJson()
+				.build()
+				.put(<js>"/echo"</js>, myBean)
+				.run()
+				.assertStatus().is(200)
+				.assertBody().is(<js>"{foo:1}"</js>)
+				.getBody().as(MyBean.<jk>class</jk>);
+				
+			<jsm>assertEquals</jsm>(1, myBean.<jf>foo</jf>);
+		}
+	}
+</p>
+<p>
+	Breaking apart the fluent method call above will help you understand how this works.
+</p>
+<p class='bpcode w800'>
+ 	<ja>@Test</ja>
+	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+      
+		<jc>// Instantiate our mock client.</jc>
+		MockRestClient client = MockRestClient
+			.<jsm>create</jsm>(EchoRest.<jk>class</jk>)
+			.simpleJson()
+			.build();
+      
+		<jc>// Create a request.</jc>
+		RestRequest req = client.put(<js>"/echo"</js>, myBean);
+      
+		<jc>// Execute it (by calling RestCallHandler.service(...) and then returning the response object).</jc>
+		RestResponse res = req.run();
+      
+		<jc>// Run assertion tests on the results.</jc>
+		res.assertStatus().is(200);
+		res.assertBody().is(<js>"'foo'"</js>);
+		
+		myBean = res.getBody().as(MyBean.<jk>class</jk>);
+	}
+</p>
+<p>
+	The concept of the design is simple.  The {@link oajr.mock2.MockRestClient} class is used to create instances of {@link oajr.mock2.MockServletRequest}
+	and {@link oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
+	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
+	actually having to run in a servlet container.	
+	All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
+	over-the-wire transmission is the only aspect being bypassed.
+</p>
+<p>
+	The <c>create(Object)</c> method can take in either <c>Class</c> objects or pre-instantiated beans.
+	The latter is particularly useful for testing Spring beans.
+</p>
+<hr>
+<p>
+	The {@link oajr.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
+	be sent to the console:
+</p>
+<p class='bpcode w800'>
+	MockRestClient mr = MockRestClient
+		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+		.debug()
+		.simpleJson()
+		.build();
+</p>
+<hr>
+<p>
+	The {@link oajr.mock2.MockRestclient} class can also be used for testing of {@link oaj.http.annotation.Remote}-annotated
+	interfaces against {@link oajr.annotation.Rest @Rest}-annotated resources.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our remote resource to test.</jc>
+	<ja>@Remote</ja>
+	<jk>public interface</jk> MyRemoteInterface {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
+	}
+
+	<jc>// Our mocked-up REST interface to test against.</jc>
+	<ja>@Rest</ja>
+	<jk>public class</jk> MyRest {
+	
+		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
+			<jk>return</jk> id;
+		}
+	}
+
+	<ja>@Test</ja>
+	<jk>public void</jk> testProxy() {
+		MyRemoteInterface mri = MockRestClient
+			.create(MyRest.<jk>class</jk>)
+			.json()
+			.build()
+			.getRemote(MyRemoteInterface.<jk>class</jk>);
+		
+		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
+	}
+</p>
+
+
