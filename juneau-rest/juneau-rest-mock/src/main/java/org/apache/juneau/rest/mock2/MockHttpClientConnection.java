@@ -115,7 +115,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	@Override /* HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		BasicHttpEntity e = new BasicHttpEntity();
-		e.setContent(res.getBody().asInputStream());
+		e.setContent(new ByteArrayInputStream(res.getBody()));
 		response.setEntity(e);
 	}
 

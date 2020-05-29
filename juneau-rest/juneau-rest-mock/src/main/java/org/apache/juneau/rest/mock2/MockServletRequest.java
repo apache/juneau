@@ -317,7 +317,11 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 			for (String h2 : h.getValue())
 				sb.append("\n").append(h.getKey()).append(": ").append(h2);
 		sb.append("\n---response content---\n");
-		sb.append(res.getBody().asString());
+		try {
+			sb.append(IOUtils.read(res.getBody()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		sb.append("\n=== END =======================================================================");
 
 		System.err.println(sb);  // NOT DEBUG
