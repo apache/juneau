@@ -61,7 +61,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
-public final class RestRequest extends BeanSession implements HttpUriRequest, Configurable {
+public class RestRequest extends BeanSession implements HttpUriRequest, Configurable {
 
 	private static final ContentType TEXT_PLAIN = ContentType.create("text/plain");
 
@@ -89,16 +89,15 @@ public final class RestRequest extends BeanSession implements HttpUriRequest, Co
 	 *
 	 * @param client The client that created this request.
 	 * @param request The wrapped Apache HTTP client request object.
-	 * @param uri The URI for this call.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected RestRequest(RestClient client, HttpRequestBase request, URI uri) throws RestCallException {
+	protected RestRequest(RestClient client, HttpRequestBase request) throws RestCallException {
 		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
 		this.request = request;
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializerSession();
-		this.uriBuilder = new URIBuilder(uri);
+		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
 	}
 

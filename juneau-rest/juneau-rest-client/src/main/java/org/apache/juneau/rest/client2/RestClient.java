@@ -2806,6 +2806,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		final String methodUC = method.toUpperCase(Locale.ENGLISH);
 		try {
 			HttpRequestBase reqb = null;
+			final URI uri = toURI(url);
 			if (hasBody) {
 				reqb = new HttpEntityEnclosingRequestBase() {
 					@Override /* HttpRequest */
@@ -2813,7 +2814,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 						return methodUC;
 					}
 				};
-				req = new RestRequest(this, reqb, toURI(url));
+				reqb.setURI(uri);
+				req = createRequest(reqb);
 			} else {
 				reqb = new HttpRequestBase() {
 					@Override /* HttpRequest */
@@ -2821,7 +2823,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 						return methodUC;
 					}
 				};
-				req = new RestRequest(this, reqb, toURI(url));
+				reqb.setURI(uri);
+				req = createRequest(reqb);
 			}
 		} catch (URISyntaxException e1) {
 			throw new RestCallException(e1);
@@ -2839,6 +2842,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		req.interceptors(interceptors);
 
 		return req;
+	}
+
+	/**
+	 * Creates a {@link RestRequest} object from the specified {@link HttpRequest} object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
+	 *
+	 * @param httpRequest The request object to wrap.
+	 * @return A new {@link RestRequest} object.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	protected RestRequest createRequest(HttpRequestBase httpRequest) throws RestCallException {
+		return new RestRequest(this, httpRequest);
 	}
 
 	/**
