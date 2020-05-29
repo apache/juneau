@@ -418,7 +418,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean dictionary.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictonary(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -2986,7 +2986,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swapsReplace(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #set(String,Object)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
@@ -3000,7 +3000,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <i><l>BeanContext</l> configuration property:</i>  POJO swaps.
 	 *
 	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swapsRemove(Object...)}
+	 * 	<b>Deprecated</b> - Use {@link #removeFrom(String,Object)}
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")

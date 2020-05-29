@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{8.1.0-new} 
+{8.1.0-new,8.1.4-updated} 
 Logging / Debugging
 
 <p>
@@ -102,11 +102,15 @@ Logging / Debugging
 		}
 	}
 
-	<jk>static</jk> MockRest <jsf>MY_REST</jsf> = MockRest.<jsm>build</jsm>(MyRestClass.<jk>class</jk>, <jk>null</jk>);
-
 	<ja>@Test</ja>
 	<jk>public void</jk> test() <jk>throws</jk> Exception {
-		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
+		MockRestClient.<jsm>create</jsm>(MyRestClass.<jk>class</jk>)
+			.simpleJson()
+			.build()
+			.post<(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>)
+			.header(<js>"Foo"</js>, <js>"bar"</js>)
+			.run()
+			.assertStatus().is(500);
 	}
 </p>
 <p>
@@ -311,12 +315,15 @@ Logging / Debugging
 		}
 	}
 
-	<jk>static</jk> MockRest <jsf>MY_REST</jsf> = MockRest.<jsm>build</jsm>(MyRestClass.<jk>class</jk>, <jk>null</jk>);
-
 	<ja>@Test</ja>
 	<jk>public void</jk> test() <jk>throws</jk> Exception {
-		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
-		<jsf>MY_REST</jsf>.<jsm>post</jsm>(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>).header(<js>"Foo"</js>, <js>"bar"</js>).execute().assertStatus(500);
+		MockRestClient.<jsm>create</jsm>(MyRestClass.<jk>class</jk>)
+			.json()
+			.build()
+			.post(<js>"/foo?foo=bar"</js>, <js>"Foo"</js>)
+			.header(<js>"Foo"</js>, <js>"bar"</js>)
+			.run()
+			.assertStatus().is(500);
 	}
 </p>
 <p>
