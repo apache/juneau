@@ -53,6 +53,7 @@ public class RestResponse implements HttpResponse {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param client The RestClient that created this response.
 	 * @param request The REST request.
 	 * @param response The HTTP response.  Can be <jk>null</jk>.

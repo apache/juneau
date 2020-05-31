@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import org.apache.http.*;
+import org.apache.http.client.methods.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
@@ -102,6 +104,20 @@ public class MockRestClient extends RestClient {
 		return create(impl).simpleJson().build(MockRestClient.class);
 	}
 
+	/**
+	 * Creates a {@link RestRequest} object from the specified {@link HttpRequest} object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
+	 *
+	 * @param httpRequest The request object to wrap.
+	 * @return A new {@link RestRequest} object.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	@Override
+	protected MockRestRequest createRequest(HttpRequestBase httpRequest) throws RestCallException {
+		return new MockRestRequest(this, httpRequest);
+	}
 
 	// <CONFIGURATION-PROPERTIES>
 
