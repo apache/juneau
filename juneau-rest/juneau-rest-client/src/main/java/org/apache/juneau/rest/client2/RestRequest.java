@@ -88,13 +88,30 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Constructs a REST call with the specified method name.
 	 *
 	 * @param client The client that created this request.
-	 * @param request The wrapped Apache HTTP client request object.
+	 * @param uri The target URI.
+	 * @param method The HTTP method name (uppercase).
+	 * @param hasBody Whether this method has a body.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected RestRequest(RestClient client, HttpRequestBase request) throws RestCallException {
+	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
 		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
-		this.request = request;
+		if (hasBody) {
+			this.request = new HttpEntityEnclosingRequestBase() {
+				@Override /* HttpRequest */
+				public String getMethod() {
+					return method;
+				}
+			};
+		} else {
+			this.request = new HttpRequestBase() {
+				@Override /* HttpRequest */
+				public String getMethod() {
+					return method;
+				}
+			};
+		}
+		this.request.setURI(uri);
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(request.getURI());

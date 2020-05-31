@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import java.net.*;
+
 import javax.servlet.http.*;
 
 import org.apache.http.*;
-import org.apache.http.client.methods.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client2.*;
 
@@ -32,11 +33,13 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	 * Constructs a REST call with the specified method name.
 	 *
 	 * @param client The client that created this request.
-	 * @param request The wrapped Apache HTTP client request object.
+	 * @param uri The target URI.
+	 * @param method The HTTP method name (uppercase).
+	 * @param hasBody Whether this method has a body.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected MockRestRequest(RestClient client, HttpRequestBase request) throws RestCallException {
-		super(client, request);
+	protected MockRestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
+		super(client, uri, method, hasBody);
 	}
 	/**
 	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.

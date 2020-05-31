@@ -2802,46 +2802,25 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			throw new RestCallException("RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = null;
-		final String methodUC = method.toUpperCase(Locale.ENGLISH);
 		try {
-			HttpRequestBase reqb = null;
-			final URI uri = toURI(url);
-			if (hasBody) {
-				reqb = new HttpEntityEnclosingRequestBase() {
-					@Override /* HttpRequest */
-					public String getMethod() {
-						return methodUC;
-					}
-				};
-				reqb.setURI(uri);
-				req = createRequest(reqb);
-			} else {
-				reqb = new HttpRequestBase() {
-					@Override /* HttpRequest */
-					public String getMethod() {
-						return methodUC;
-					}
-				};
-				reqb.setURI(uri);
-				req = createRequest(reqb);
-			}
+			RestRequest req = createRequest(toURI(url), method.toUpperCase(Locale.ENGLISH), hasBody);
+
+			for (Object o : headers)
+				req.header(toHeader(o));
+
+			for (Object o : query)
+				req.query(toQuery(o));
+
+			for (Object o : formData)
+				req.formData(toFormData(o));
+
+			req.interceptors(interceptors);
+
+			return req;
+
 		} catch (URISyntaxException e1) {
 			throw new RestCallException(e1);
 		}
-
-		for (Object o : headers)
-			req.header(toHeader(o));
-
-		for (Object o : query)
-			req.query(toQuery(o));
-
-		for (Object o : formData)
-			req.formData(toFormData(o));
-
-		req.interceptors(interceptors);
-
-		return req;
 	}
 
 	/**
@@ -2850,12 +2829,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
 	 *
-	 * @param httpRequest The request object to wrap.
+	 * @param uri The target.
+	 * @param method The HTTP method (uppercase).
+	 * @param hasBody Whether this method has a request entity.
 	 * @return A new {@link RestRequest} object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected RestRequest createRequest(HttpRequestBase httpRequest) throws RestCallException {
-		return new RestRequest(this, httpRequest);
+	protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
+		return new RestRequest(this, uri, method, hasBody);
 	}
 
 	/**

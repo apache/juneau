@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import java.net.*;
+
 import org.apache.http.*;
-import org.apache.http.client.methods.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
@@ -110,13 +111,15 @@ public class MockRestClient extends RestClient {
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
 	 *
-	 * @param httpRequest The request object to wrap.
+	 * @param uri The target.
+	 * @param method The HTTP method (uppercase).
+	 * @param hasBody Whether this method has a request entity.
 	 * @return A new {@link RestRequest} object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	@Override
-	protected MockRestRequest createRequest(HttpRequestBase httpRequest) throws RestCallException {
-		return new MockRestRequest(this, httpRequest);
+	protected MockRestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
+		return new MockRestRequest(this, uri, method, hasBody);
 	}
 
 	// <CONFIGURATION-PROPERTIES>
