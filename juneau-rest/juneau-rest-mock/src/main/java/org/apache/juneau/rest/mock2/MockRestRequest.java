@@ -41,6 +41,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	protected MockRestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
 		super(client, uri, method, hasBody);
 	}
+
 	/**
 	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
 	 *

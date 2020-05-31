@@ -97,25 +97,51 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
 		if (hasBody) {
-			this.request = new HttpEntityEnclosingRequestBase() {
-				@Override /* HttpRequest */
-				public String getMethod() {
-					return method;
-				}
-			};
+			this.request = new EntityRequest(method);
 		} else {
-			this.request = new HttpRequestBase() {
-				@Override /* HttpRequest */
-				public String getMethod() {
-					return method;
-				}
-			};
+			this.request = new Request(method);
 		}
 		this.request.setURI(uri);
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
+	}
+
+	private class Request extends HttpRequestBase implements RestRequestCreated {
+		private final String method;
+
+		Request(String method) {
+			this.method = method;
+		}
+
+		@Override /* RestRequestCreated */
+		public RestRequest getRestRequest() {
+			return RestRequest.this;
+		}
+
+		@Override /* HttpRequestBase */
+		public String getMethod() {
+			return method;
+		}
+	}
+
+	private class EntityRequest extends HttpEntityEnclosingRequestBase implements RestRequestCreated {
+		private final String method;
+
+		EntityRequest(String method) {
+			this.method = method;
+		}
+
+		@Override /* RestRequestCreated */
+		public RestRequest getRestRequest() {
+			return RestRequest.this;
+		}
+
+		@Override /* HttpRequestBase */
+		public String getMethod() {
+			return method;
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
