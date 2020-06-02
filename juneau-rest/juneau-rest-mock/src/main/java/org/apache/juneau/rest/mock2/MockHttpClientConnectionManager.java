@@ -27,7 +27,10 @@ import org.apache.http.protocol.*;
  */
 public class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
-	final ConnectionRequest cr;
+	private ConnectionRequest cr;
+	private MockRestClient restClient;
+	private MockHttpConnection httpConnection;
+
 
 	/**
 	 * Constructor.
@@ -35,7 +38,11 @@ public class MockHttpClientConnectionManager implements HttpClientConnectionMana
 	 * @param c The mocked connection.
 	 */
 	public MockHttpClientConnectionManager(final MockHttpConnection c) {
-		final HttpClientConnection hcc = new MockHttpClientConnection(c);
+		this.httpConnection = c;
+	}
+
+	public void init(MockRestClient mrc) {
+		final HttpClientConnection hcc = new MockHttpClientConnection(httpConnection, restClient);
 		this.cr = new ConnectionRequest() {
 			@Override
 			public boolean cancel() {

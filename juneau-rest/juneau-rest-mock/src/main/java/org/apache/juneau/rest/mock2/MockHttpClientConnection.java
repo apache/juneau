@@ -29,6 +29,7 @@ import org.apache.juneau.internal.*;
 public class MockHttpClientConnection implements HttpClientConnection {
 
 	private final MockHttpConnection c;
+	private final MockRestClient rc;
 	private volatile MockHttpRequest req;
 	private volatile MockHttpResponse res;
 
@@ -37,8 +38,9 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	 *
 	 * @param c The API for performing the connections.
 	 */
-	public MockHttpClientConnection(MockHttpConnection c) {
+	public MockHttpClientConnection(MockHttpConnection c, MockRestClient rc) {
 		this.c = c;
+		this.rc = rc;
 	}
 
 	@Override /* HttpClientConnection */

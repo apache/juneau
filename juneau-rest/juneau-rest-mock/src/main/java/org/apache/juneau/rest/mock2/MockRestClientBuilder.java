@@ -178,7 +178,9 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	public <T extends Context> T build(Class<T> c) {
 		boolean debug = (peek(BeanContext.BEAN_debug) == Boolean.TRUE);
 		MockHttpConnectionImpl mr = new MockHttpConnectionImpl(restBean, contextPath, servletPath, debug);
-		connectionManager(new MockHttpClientConnectionManager(mr));
+		MockHttpClientConnectionManager cm = new MockHttpClientConnectionManager(mr);
+		set("MockRestClient.MockHttpClientConnectionManager.o", cm);
+		connectionManager(cm);
 		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
 		if (rootUrl == null)
 			rootUrl = "http://localhost";

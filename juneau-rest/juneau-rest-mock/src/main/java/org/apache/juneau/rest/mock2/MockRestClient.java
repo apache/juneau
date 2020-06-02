@@ -37,6 +37,7 @@ public class MockRestClient extends RestClient {
 	 */
 	public MockRestClient(PropertyStore ps) {
 		super(ps);
+		ps.getInstanceProperty("MockRestClient.MockHttpClientConnectionManager.o", MockHttpClientConnectionManager.class, null).init(this);
 	}
 
 	/**
