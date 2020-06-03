@@ -2722,44 +2722,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Sets the value for the <c>X-Roles</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"X-Roles"</js>, value);</code>
-	 *
-	 * <p>
-	 * Typically not used in production, but allows you to set roles on a request for use in mocked testing.
-	 * For example, the <l>MockRestClient</l> class uses this value to directly set roles on the <l>HttpServletRequest</l>
-	 * object.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Admin users should be able to make POST requests.</jc>
-	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
-	 * 		.roles(<js>"ROLE_ADMIN"</js>)
-	 * 		.run()
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	<jc>// Non-admin users should be rejected.</jc>
-	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
-	 * 		.roles(<js>"ROLE_USER"</js>)
-	 * 		.run()
-	 * 		.assertStatus().is(401);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new header value converted to a comma-delimited list.
-	 * 	<p>Non-string values are converted to strings using the {@link #toString()} method.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest roles(Object...value) throws RestCallException {
-		return header("X-Roles", StringUtils.join(value, ','));
-	}
-
-	/**
 	 * Sets the value for the <c>TE</c> request header.
 	 *
 	 * <p>

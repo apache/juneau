@@ -23,7 +23,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.
  */
-public class MockPathResolver {
+class MockPathResolver {
 
 	private String uri, target, contextPath, servletPath, remainder;
 	private String error;

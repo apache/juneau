@@ -112,6 +112,31 @@ MockRestClient
 </p>
 <hr>
 <p>
+	The {@link oajr.mock2.MockRestRequest} object has convenience methods provided to allow you to set properties
+	directly on the underlying {@link javax.servlet.HttpServletRequest} object.  The following example shows how
+	this can be used to directly set roles on the request object to perform security testing.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
+	public class A {
+		<ja>@RestMethod</ja>
+		<jk>public</jk> String get() {
+			<jk>return</jk> <js>"OK"</js>;
+		}
+	}
+
+	<ja>@Test</ja>
+	<jk>public void</jk> mytest() <jk>throws</jk> Exception {
+		MockRestClient a = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
+
+		<jc>// Admin user should get 200, but anyone else should get 403-Unauthorized.</jc>
+		a.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
+		a.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
+	}
+</p>
+<hr>
+<p>
 	The {@link oajr.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
 	be sent to the console:
 </p>
@@ -124,7 +149,7 @@ MockRestClient
 </p>
 <hr>
 <p>
-	The {@link oajr.mock2.MockRestclient} class can also be used for testing of {@link oaj.http.annotation.Remote}-annotated
+	The {@link oajr.mock2.MockRestClient} class can also be used for testing of {@link oaj.http.annotation.Remote}-annotated
 	interfaces against {@link oajr.annotation.Rest @Rest}-annotated resources.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -141,7 +166,7 @@ MockRestClient
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
-		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
 			<jk>return</jk> id;
 		}

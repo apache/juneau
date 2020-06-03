@@ -28,11 +28,10 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
 */
-public class MockServletResponse implements HttpServletResponse, MockHttpResponse {
+public class MockServletResponse implements HttpServletResponse {
 
 	private String characterEncoding = "UTF-8";
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	private long contentLength = 0;
 	private int bufferSize = 0;
 	private Locale locale;
 	private int sc;
@@ -49,20 +48,10 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	}
 
 	/**
-	 * Returns the content length.
-	 *
-	 * @return The content length.
-	 */
-	public long getContentLength() {
-		return contentLength;
-	}
-
-	/**
 	 * Returns the response message.
 	 *
 	 * @return The response message.
 	 */
-	@Override /* MockHttpResponse */
 	public String getMessage() {
 		return msg;
 	}
@@ -105,36 +94,14 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		}
 	}
 
-	/**
-	 * Fluent setter for {@link #setCharacterEncoding(String)}.
-	 *
-	 * @param value The new property value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletResponse characterEncoding(String value) {
-		setCharacterEncoding(value);
-		return this;
-	}
-
 	@Override /* HttpServletResponse */
 	public void setContentLength(int len) {
-		this.contentLength = len;
-	}
-
-	/**
-	 * Fluent setter for {@link #setContentLength(int)}.
-	 *
-	 * @param value The new property value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletResponse contentLength(int value) {
-		setContentLength(value);
-		return this;
+		header("Content-Length", String.valueOf(len));
 	}
 
 	@Override /* HttpServletResponse */
 	public void setContentLengthLong(long len) {
-		this.contentLength = len;
+		header("Content-Length", String.valueOf(len));
 	}
 
 	@Override /* HttpServletResponse */
@@ -143,31 +110,9 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		updateContentTypeHeader();
 	}
 
-	/**
-	 * Fluent setter for {@link #setContentType(String)}.
-	 *
-	 * @param value The new property value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletResponse contentType(String value) {
-		setContentType(value);
-		return this;
-	}
-
 	@Override /* HttpServletResponse */
 	public void setBufferSize(int size) {
 		this.bufferSize = size;
-	}
-
-	/**
-	 * Fluent setter for {@link #bufferSize(int)}.
-	 *
-	 * @param value The new property value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletResponse bufferSize(int value) {
-		setBufferSize(value);
-		return this;
 	}
 
 	@Override /* HttpServletResponse */
@@ -195,17 +140,6 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public void setLocale(Locale loc) {
 		this.locale = loc;
-	}
-
-	/**
-	 * Fluent setter for {@link #setLocale(Locale)}.
-	 *
-	 * @param value The new property value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletResponse locale(Locale value) {
-		setLocale(value);
-		return this;
 	}
 
 	@Override /* HttpServletResponse */
@@ -345,18 +279,11 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 		return headerMap.keySet();
 	}
 
-	/**
-	 * Returns the body of the request.
-	 *
-	 * @return The body of the request.
-	 */
-	@Override /* MockHttpResponse */
-	public byte[] getBody() {
+	byte[] getBody() {
 		return baos.toByteArray();
 	}
 
-	@Override /* MockHttpResponse */
-	public Map<String,String[]> getHeaders() {
+	Map<String,String[]> getHeaders() {
 		return headerMap;
 	}
 }

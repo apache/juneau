@@ -16,6 +16,43 @@ import java.util.logging.*;
 
 /**
  * Simplified logger for intercepting and asserting logging messages.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Instantiate a mock logger.</jc>
+ * 	MockLogger ml = <jk>new</jk> MockLogger();
+ *
+ * 	<jc>// Associate it with a MockRestClient.</jc>
+ * 	MockRestClient
+ * 		.<jsm>create</jsm>(MyRestResource.<jk>class</jk>)
+ * 		.simpleJson()
+ * 		.logger(ml)
+ * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
+ * 		.build()
+ * 		.post(<js>"/bean"</js>, bean)
+ * 		.complete();
+ *
+ * 	<jc>// Assert that logging occurred.</jc>
+ * 	ml.assertLevel(Level.<jsf>SEVERE</jsf>);
+ * 	ml.assertMessageContains(
+ * 		<js>"=== HTTP Call (outgoing) ======================================================"</js>,
+ * 		<js>"=== REQUEST ==="</js>,
+ * 		<js>"POST http://localhost/bean"</js>,
+ * 		<js>"---request headers---"</js>,
+ * 		<js>"	Accept: application/json+simple"</js>,
+ * 		<js>"---request entity---"</js>,
+ * 		<js>"application/json+simple"</js>,
+ * 		<js>"---request content---"</js>,
+ * 		<js>"{f:1}"</js>,
+ * 		<js>"=== RESPONSE ==="</js>,
+ * 		<js>"HTTP/1.1 200 "</js>,
+ * 		<js>"---response headers---"</js>,
+ * 		<js>"	Content-Type: application/json"</js>,
+ * 		<js>"---response content---"</js>,
+ * 		<js>"{f:1}"</js>,
+ * 		<js>"=== END ======================================================================="</js>
+ * 	);
+ * </p>
  */
 public class MockLogger extends Logger {
 

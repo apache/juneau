@@ -20,11 +20,23 @@ import javax.servlet.http.*;
 /**
  * An implementation of {@link HttpSession} for mocking purposes.
  *
+ * <p>
+ * Session-based tests can use this API to create customized instances of {@link HttpSession} objects
+ * that can be passed to the {@link MockRestRequest#httpSession(HttpSession)} method.
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */
 public class MockHttpSession implements HttpSession {
+
+	private Map<String,Object> attributes = new LinkedHashMap<>(), values = new LinkedHashMap<>();
+
+	private long creationTime, lastAccessedTime;
+	private int maxInactiveInterval;
+	private String id;
+	private ServletContext servletContext;
+	private boolean isNew = false;
 
 	/**
 	 * Creates a new HTTP session.
@@ -35,33 +47,126 @@ public class MockHttpSession implements HttpSession {
 		return new MockHttpSession();
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Setter methods
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the creation time on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getCreationTime()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession creationTime(long value) {
+		this.creationTime = value;
+		return this;
+	}
+
+	/**
+	 * Sets the last-accessed time on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getLastAccessedTime()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession lastAccessedTime(long value) {
+		this.lastAccessedTime = value;
+		return this;
+	}
+
+	/**
+	 * Sets the max-inactive interval time on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getMaxInactiveInterval()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession maxInactiveInterval(int value) {
+		this.maxInactiveInterval = value;
+		return this;
+	}
+
+	/**
+	 * Sets the id on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getId()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession id(String value) {
+		this.id = value;
+		return this;
+	}
+
+	/**
+	 * Sets the servlet context on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getServletContext()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession servletContext(ServletContext value) {
+		this.servletContext = value;
+		return this;
+	}
+
+	/**
+	 * Sets the is-new value on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#isNew()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public MockHttpSession isNew(boolean value) {
+		this.isNew = value;
+		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// HttpSession methods
+	//------------------------------------------------------------------------------------------------------------------
+
 	@Override /* HttpSession */
 	public long getCreationTime() {
-		return 0;
+		return creationTime;
 	}
 
 	@Override /* HttpSession */
 	public String getId() {
-		return null;
+		return id;
 	}
 
 	@Override /* HttpSession */
 	public long getLastAccessedTime() {
-		return 0;
+		return lastAccessedTime;
 	}
 
 	@Override /* HttpSession */
 	public ServletContext getServletContext() {
-		return null;
+		return servletContext;
 	}
 
 	@Override /* HttpSession */
-	public void setMaxInactiveInterval(int interval) {
+	public void setMaxInactiveInterval(int value) {
+		this.maxInactiveInterval = value;
 	}
 
 	@Override /* HttpSession */
 	public int getMaxInactiveInterval() {
-		return 0;
+		return maxInactiveInterval;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -72,38 +177,42 @@ public class MockHttpSession implements HttpSession {
 
 	@Override /* HttpSession */
 	public Object getAttribute(String name) {
-		return null;
+		return attributes.get(name);
 	}
 
 	@Override /* HttpSession */
 	public Object getValue(String name) {
-		return null;
+		return values.get(name);
 	}
 
 	@Override /* HttpSession */
 	public Enumeration<String> getAttributeNames() {
-		return Collections.enumeration(Collections.emptyList());
+		return Collections.enumeration(attributes.keySet());
 	}
 
 	@Override /* HttpSession */
 	public String[] getValueNames() {
-		return null;
+		return values.keySet().toArray(new String[0]);
 	}
 
 	@Override /* HttpSession */
 	public void setAttribute(String name, Object value) {
+		attributes.put(name, value);
 	}
 
 	@Override /* HttpSession */
 	public void putValue(String name, Object value) {
+		values.put(name, value);
 	}
 
 	@Override /* HttpSession */
 	public void removeAttribute(String name) {
+		attributes.remove(name);
 	}
 
 	@Override /* HttpSession */
 	public void removeValue(String name) {
+		values.remove(name);
 	}
 
 	@Override /* HttpSession */
@@ -112,6 +221,6 @@ public class MockHttpSession implements HttpSession {
 
 	@Override /* HttpSession */
 	public boolean isNew() {
-		return false;
+		return isNew;
 	}
 }

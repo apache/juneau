@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import javax.servlet.http.*;
-
 import org.apache.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client2.*;
 
 /**
- * An implementation of {@link HttpServletResponse} for mocking purposes.
+ * A subclass of {@link RestResponse} with additional features for mocked testing.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
@@ -37,5 +35,6 @@ public class MockRestResponse extends org.apache.juneau.rest.client2.RestRespons
 	 */
 	protected MockRestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
 		super(client, request, response, parser);
+		((MockRestClient)client).currentResponse(this);
 	}
 }

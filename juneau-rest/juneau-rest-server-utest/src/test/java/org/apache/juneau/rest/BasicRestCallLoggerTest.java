@@ -160,7 +160,7 @@ public class BasicRestCallLoggerTest {
 
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
-		MockServletRequest req = req().uri("/foo").query("bar", "baz");
+		MockServletRequest req = req().uri("/foo");
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -182,7 +182,7 @@ public class BasicRestCallLoggerTest {
 
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc);
-		MockServletRequest req = req().uri("/foo").query("bar", "baz");
+		MockServletRequest req = req().uri("/foo");
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -210,7 +210,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -241,7 +241,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -271,7 +271,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -300,7 +300,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -330,7 +330,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -360,7 +360,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc, new StackTraceDatabase(100000, null)).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);
@@ -390,7 +390,7 @@ public class BasicRestCallLoggerTest {
 		TestLogger tc = new TestLogger();
 		BasicRestCallLogger cl = logger(tc, new StackTraceDatabase(-2, null)).resetStackTraces();
 		Exception e = new StringIndexOutOfBoundsException();
-		MockServletRequest req = req().uri("/foo").query("bar", "baz").attribute("Exception", e);
+		MockServletRequest req = req().uri("/foo").attribute("Exception", e);
 		MockServletResponse res = res(200);
 
 		cl.log(lc, req, res);

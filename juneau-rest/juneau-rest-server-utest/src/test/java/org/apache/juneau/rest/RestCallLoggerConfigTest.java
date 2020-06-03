@@ -299,7 +299,7 @@ public class RestCallLoggerConfigTest {
 		RestCallLoggerConfig lcw = wrapped(lc);
 
 		MockServletRequest req = req();
-		MockServletRequest reqNoTrace = req().noTrace();
+		MockServletRequest reqNoTrace = req().noTrace(true);
 		MockServletRequest reqNoTraceAttrTrue = req().attribute("NoTrace", true);
 		MockServletRequest reqNoTraceAttrFalse = req().attribute("NoTrace", false);
 		MockServletRequest reqNoTraceAttrOther = req().attribute("NoTrace", "foo");

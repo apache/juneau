@@ -23,19 +23,18 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * An implementation of {@link HttpServletRequest} for mocking purposes.
+ * A mutable implementation of {@link HttpServletRequest} for mocking purposes.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
  */
-public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
+public class MockServletRequest implements HttpServletRequest {
 
 	private String method = "GET";
 	private Map<String,String[]> queryDataMap = new LinkedHashMap<>();
@@ -51,12 +50,11 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	private String remoteAddr = "";
 	private String remoteHost = "";
 	private Locale locale = Locale.ENGLISH;
-	private String realPath;
 	private int remotePort;
 	private String localName;
 	private String localAddr;
 	private int localPort;
-	private RequestDispatcher requestDispatcher;
+	private Map<String,RequestDispatcher> requestDispatcher = new LinkedHashMap<>();
 	private ServletContext servletContext;
 	private DispatcherType dispatcherType;
 	private String authType;
@@ -71,9 +69,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	private String requestURI;
 	private String servletPath = "";
 	private HttpSession httpSession = MockHttpSession.create();
-	private RestContext restContext;
 	private String uri = "";
-	private boolean debug = false;
 	private Set<String> roles = new LinkedHashSet<>();
 
 	/**
@@ -119,7 +115,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @param uri The URI of the request.
 	 * @return This object (for method chaining).
 	 */
-	@Override /* MockHttpRequest */
 	public MockServletRequest uri(String uri) {
 		uri = emptyIfNull(uri);
 		this.uri = uri;
@@ -131,17 +126,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 			queryDataMap.putAll(RestUtils.parseQuery(qs));
 		}
 
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 *
-	 * @param restContext The rest context.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest restContext(RestContext restContext) {
-		this.restContext = restContext;
 		return this;
 	}
 
@@ -159,10 +143,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Adds the specified role on this request.
 	 *
-	 * <p>
-	 * Note that {@link MockRestClientBuilder#roles(String...)} and {@link org.apache.juneau.rest.client2.RestRequest#roles(Object...)}
-	 * 	can be used to set the roles on requests.
-	 *
 	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).
 	 * @return This object (for method chaining).
 	 */
@@ -172,67 +152,11 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
-	 * Executes this request and returns the response object.
-	 *
-	 * @return The response object.
-	 * @throws IOException Stream exception occurred.
-	 * @throws ServletException Servlet exception occurred.
-	 */
-	@Override /* MockHttpRequest */
-	public MockServletResponse run() throws ServletException, IOException {
-		MockServletResponse res = MockServletResponse.create();
-		restContext.getCallHandler().execute(this, res);
-
-		// If the status isn't set, something's broken.
-		if (res.getStatus() == 0)
-			throw new RuntimeException("Response status was 0.");
-
-		// A bug in HttpClient causes an infinite loop if the response is less than 200.
-		// As a workaround, just add 1000 to the status code (which is better than an infinite loop).
-		if (res.getStatus() < 200)
-			res.setStatus(1000 + res.getStatus());
-
-		if (debug)
-			log(this, res);
-
-		return res;
-	}
-
-	private void log(MockServletRequest req, MockServletResponse res) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n=== HTTP Call (mock/incoming/outgoing) ========================================");
-
-		sb.append("\n=== REQUEST ===");
-		sb.append("\n---request headers---");
-		for (Map.Entry<String,String[]> h : req.getHeaders().entrySet())
-			for (String h2 : h.getValue())
-				sb.append("\n").append(h.getKey()).append(": ").append(h2);
-		sb.append("\n---request entity---");
-		sb.append(body == null ? "NONE" : new String(body));
-		sb.append("\n=== RESPONSE ===");
-		sb.append("\nStatus: ").append(res.getStatus());
-		sb.append("\n---response headers---");
-		for (Map.Entry<String,String[]> h : res.getHeaders().entrySet())
-			for (String h2 : h.getValue())
-				sb.append("\n").append(h.getKey()).append(": ").append(h2);
-		sb.append("\n---response content---\n");
-		try {
-			sb.append(IOUtils.read(res.getBody()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		sb.append("\n=== END =======================================================================");
-
-		System.err.println(sb);  // NOT DEBUG
-	}
-
-	/**
 	 * Fluent setter.
 	 *
 	 * @param value The method name for this request.
 	 * @return This object (for method chaining).
 	 */
-	@Override /* MockHttpRequest */
 	public MockServletRequest method(String value) {
 		this.method = value;
 		return this;
@@ -329,17 +253,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Fluent setter.
 	 *
-	 * @param value The real path.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest realPath(String value) {
-		this.realPath = value;
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 *
 	 * @param value The remote port.
 	 * @return This object (for method chaining).
 	 */
@@ -384,11 +297,12 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Fluent setter.
 	 *
+	 * @param name The path to resolve.
 	 * @param value The request dispatcher.
 	 * @return This object (for method chaining).
 	 */
-	public MockServletRequest requestDispatcher(RequestDispatcher value) {
-		this.requestDispatcher = value;
+	public MockServletRequest requestDispatcher(String name, RequestDispatcher value) {
+		this.requestDispatcher.put(name, value);
 		return this;
 	}
 
@@ -681,12 +595,12 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 
 	@Override /* HttpServletRequest */
 	public RequestDispatcher getRequestDispatcher(String path) {
-		return requestDispatcher;
+		return requestDispatcher.get(path);
 	}
 
 	@Override /* HttpServletRequest */
 	public String getRealPath(String path) {
-		return realPath;
+		return path;
 	}
 
 	@Override /* HttpServletRequest */
@@ -770,15 +684,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	public Enumeration<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
 		return Collections.enumeration(Arrays.asList(s == null ? new String[0] : s));
-	}
-
-	/**
-	 * Returns the headers defined on this request.
-	 *
-	 * @return The headers defined on this request.  Never <jk>null</jk>.
-	 */
-	public Map<String,String[]> getHeaders() {
-		return headerMap;
 	}
 
 	@Override /* HttpServletRequest */
@@ -948,26 +853,12 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Fluent setter.
 	 *
-	 * @param headers Headers to add to this request.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest headers(Map<String,Object> headers) {
-		if (headers != null)
-			for (Map.Entry<String,Object> e : headers.entrySet())
-				header(e.getKey(), e.getValue());
-		return this;
-	}
-
-	/**
-	 * Fluent setter.
-	 *
 	 * @param name Header name.
 	 * @param value
 	 * 	Header value.
 	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
 	 * @return This object (for method chaining).
 	 */
-	@Override /* MockHttpRequest */
 	public MockServletRequest header(String name, Object value) {
 		if (value != null) {
 			String[] v1 = (value instanceof String[]) ? (String[])value : new String[]{value.toString()};
@@ -1005,7 +896,6 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return This object (for method chaining).
 	 */
-	@Override /* MockHttpRequest */
 	public MockServletRequest body(Object value) {
 		try {
 			if (value instanceof byte[])
@@ -1024,352 +914,9 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		return this;
 	}
 
-	/**
-	 * Adds a form data entry to this request.
-	 *
-	 * @param key The form data key.
-	 * @param value The form data value.
-	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest formData(String key, Object value) {
-		if (formDataMap == null)
-			formDataMap = new LinkedHashMap<>();
-		String s = stringify(value);
-		String[] existing = formDataMap.get(key);
-		if (existing == null)
-			existing = new String[]{s};
-		else
-			existing = AList.of(existing).a(s).asArrayOf(String.class);
-		formDataMap.put(key, existing);
-		return this;
-	}
-
-	/**
-	 * Adds a query data entry to this request.
-	 *
-	 * @param key The query key.
-	 * @param value The query value.
-	 * 	<br>The value is converted to a simple string using {@link Object#toString()}.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest query(String key, Object value) {
-		String s = stringify(value);
-		String[] existing = queryDataMap.get(key);
-		if (existing == null)
-			existing = new String[]{s};
-		else
-			existing = AList.of(existing).a(s).asArrayOf(String.class);
-		queryDataMap.put(key, existing);
-		queryString = null;
-		return this;
-	}
-
 	//=================================================================================================================
 	// Convenience methods - headers
 	//=================================================================================================================
-
-	/**
-	 * Specifies the <c>Accept</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest accept(Object value) {
-		return header("Accept", value);
-	}
-
-	/**
-	 * Specifies the <c>Accept-Charset</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptCharset(Object value) {
-		return header("Accept-Charset", value);
-	}
-
-	/**
-	 * Specifies the <c>Accept-Encoding</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptEncoding(Object value) {
-		return header("Accept-Encoding", value);
-	}
-
-	/**
-	 * Specifies the <c>Accept-Language</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest acceptLanguage(Object value) {
-		return header("Accept-Language", value);
-	}
-
-	/**
-	 * Specifies the <c>Authorization</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest authorization(Object value) {
-		return header("Authorization", value);
-	}
-
-	/**
-	 * Specifies the <c>Cache-Control</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest cacheControl(Object value) {
-		return header("Cache-Control", value);
-	}
-
-	/**
-	 * Specifies the <c>X-Client-Version</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest clientVersion(Object value) {
-		return header("X-Client-Version", value);
-	}
-
-	/**
-	 * Specifies the <c>Connection</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest connection(Object value) {
-		return header("Connection", value);
-	}
-
-	/**
-	 * Specifies the <c>Content-Encoding</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest contentEncoding(Object value) {
-		return header("Content-Encoding", value);
-	}
-
-	/**
-	 * Specifies the <c>Content-Length</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest contentLength(Object value) {
-		return header("Content-Length", value);
-	}
-
-	/**
-	 * Specifies the <c>Content-Type</c> header value on the request.
-	 *
-	 * @param value The new value.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest contentType(Object value) {
-		return header("Content-Type", value);
-	}
-
-	/**
-	 * Specifies the <c>Date</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest date(Object value) {
-		return header("Date", value);
-	}
-
-	/**
-	 * Specifies the <c>Expect</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest expect(Object value) {
-		return header("Expect", value);
-	}
-
-	/**
-	 * Specifies the <c>From</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest from(Object value) {
-		return header("From", value);
-	}
-
-	/**
-	 * Specifies the <c>Host</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest host(Object value) {
-		return header("Host", value);
-	}
-
-	/**
-	 * Specifies the <c>If-Match</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest ifMatch(Object value) {
-		return header("If-Match", value);
-	}
-
-	/**
-	 * Specifies the <c>If-Modified-Since</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest ifModifiedSince(Object value) {
-		return header("If-Modified-Since", value);
-	}
-
-	/**
-	 * Specifies the <c>If-None-Match</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest ifNoneMatch(Object value) {
-		return header("If-None-Match", value);
-	}
-
-	/**
-	 * Specifies the <c>If-Range</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest ifRange(Object value) {
-		return header("If-Range", value);
-	}
-
-	/**
-	 * Specifies the <c>If-Unmodified-Since</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest ifUnmodifiedSince(Object value) {
-		return header("If-Unmodified-Since", value);
-	}
-
-	/**
-	 * Specifies the <c>Max-Forwards</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest maxForwards(Object value) {
-		return header("Max-Forwards", value);
-	}
-
-	/**
-	 * Specifies the <c>Pragma</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest pragma(Object value) {
-		return header("Pragma", value);
-	}
-
-	/**
-	 * Specifies the <c>Proxy-Authorization</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest proxyAuthorization(Object value) {
-		return header("Proxy-Authorization", value);
-	}
-
-	/**
-	 * Specifies the <c>Range</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest range(Object value) {
-		return header("Range", value);
-	}
-
-	/**
-	 * Specifies the <c>Referer</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest referer(Object value) {
-		return header("Referer", value);
-	}
-
-	/**
-	 * Specifies the <c>TE</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest te(Object value) {
-		return header("TE", value);
-	}
-
-	/**
-	 * Specifies the <c>Upgrade</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest upgrade(Object value) {
-		return header("Upgrade", value);
-	}
-
-	/**
-	 * Specifies the <c>User-Agent</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest userAgent(Object value) {
-		return header("User-Agent", value);
-	}
-
-	/**
-	 * Specifies the <c>Warning</c> header value on the request.
-	 *
-	 * @param value The new value for the header.
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest warning(Object value) {
-		return header("Warning", value);
-	}
-
-	/**
-	 * Enabled debug mode on this request.
-	 *
-	 * <p>
-	 * Causes information about the request execution to be sent to STDERR.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest debug() {
-		return debug(true);
-	}
 
 	/**
 	 * Enabled debug mode on this request.
@@ -1380,23 +927,10 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @param value The enable flag value.
 	 * @return This object (for method chaining).
 	 */
-	public MockServletRequest debug(boolean value) {
-		this.debug = value;
+	protected MockServletRequest debug(boolean value) {
 		if (value)
 			header("X-Debug", true);
 		return this;
-	}
-
-	/**
-	 * Enabled no-trace on this request.
-	 *
-	 * <p>
-	 * Prevents errors from being logged on the server side if no-trace per-request is enabled.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public MockServletRequest noTrace() {
-		return noTrace(true);
 	}
 
 	/**
@@ -1409,7 +943,8 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest noTrace(boolean value) {
-		header("X-NoTrace", true);
+		if (value)
+			header("X-NoTrace", true);
 		return this;
 	}
 }

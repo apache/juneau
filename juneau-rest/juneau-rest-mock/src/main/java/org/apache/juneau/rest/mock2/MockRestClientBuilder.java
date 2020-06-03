@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import static org.apache.juneau.rest.mock2.MockRestClient.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -30,7 +32,6 @@ import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -54,7 +55,7 @@ import org.apache.http.cookie.*;
 import org.apache.http.protocol.*;
 
 /**
- * Mocked {@link RestClient}.
+ * Builder class for {@link MockRestClient} objects.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-mock}
@@ -62,11 +63,9 @@ import org.apache.http.protocol.*;
  */
 public class MockRestClientBuilder extends RestClientBuilder {
 
-	Object restBean;
-	String contextPath = "", servletPath = "";
-
 	/**
 	 * Constructor.
+	 *
 	 * @param ps
 	 * 	Initial configuration properties for this builder.
 	 */
@@ -82,8 +81,17 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 */
 	protected MockRestClientBuilder() {
 		super(null);
-		rootUrl("http://localhost");
 		ignoreErrors();
+	}
+
+	/**
+	 * Specifies the {@link Rest}-annotated bean class or instance to test against.
+	 *
+	 * @param bean The {@link Rest}-annotated bean class or instance.
+	 * @return This object (for method chaining).
+	 */
+	public MockRestClientBuilder restBean(Object bean) {
+		return set(MOCKRESTCLIENT_restBean, bean);
 	}
 
 	/**
@@ -108,8 +116,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder contextPath(String value) {
-		this.contextPath = toValidContextPath(value);
-		return this;
+		return set(MOCKRESTCLIENT_contextPath, toValidContextPath(value));
 	}
 
 	/**
@@ -134,40 +141,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public MockRestClientBuilder servletPath(String value) {
-		this.servletPath = toValidContextPath(value);
-		return this;
+		return set(MOCKRESTCLIENT_servletPath, toValidContextPath(value));
 	}
-
-	/**
-	 * Specifies the roles to set on the <l>HttpServletRequest</l> object.
-	 *
-	 * <p>
-	 * Typically used for security testing.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Admin users should be able to make POST requests.</jc>
-	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.roles(<js>"ROLE_ADMIN"</js>)
-	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
-	 * 		.run()
-	 * 		.assertStatus().is(200);
-	 *
-	 * 	<jc>// Non-admin users should be rejected.</jc>
-	 * 	MockRestClient.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-	 * 		.roles(<js>"ROLE_USER"</js>)
-	 * 		.post(<js>"/url"</js>, <jk>new</jk> MyBean())
-	 * 		.run()
-	 * 		.assertStatus().is(401);
-	 * </p>
-	 *
-	 * @param values The role names to set on the servlet request.
-	 * @return This object (for method chaining).
-	 */
-	public MockRestClientBuilder roles(String...values) {
-		return header("X-Roles", StringUtils.join(values, ','));
-	}
-
 
 	@Override /* ContextBuilder */
 	public MockRestClient build() {
@@ -176,27 +151,10 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-		boolean debug = (peek(BeanContext.BEAN_debug) == Boolean.TRUE);
-		MockHttpConnectionImpl mr = new MockHttpConnectionImpl(restBean, contextPath, servletPath, debug);
-		MockHttpClientConnectionManager cm = new MockHttpClientConnectionManager(mr);
-		set("MockRestClient.MockHttpClientConnectionManager.o", cm);
+		MockHttpClientConnectionManager cm = new MockHttpClientConnectionManager();
+		set(MOCKRESTCLIENT_mockHttpClientConnectionManager, cm);
 		connectionManager(cm);
-		Object rootUrl = peek(RestClient.RESTCLIENT_rootUri);
-		if (rootUrl == null)
-			rootUrl = "http://localhost";
-		rootUrl(rootUrl + mr.getResourcePath());
 		return super.build(c);
-	}
-
-	/**
-	 * Specifies the {@link Rest}-annotated bean class or instance to test against.
-	 *
-	 * @param bean The {@link Rest}-annotated bean class or instance.
-	 * @return This object (for method chaining).
-	 */
-	public MockRestClientBuilder restBean(Object bean) {
-		restBean = bean;
-		return this;
 	}
 
 	// <CONFIGURATION-PROPERTIES>

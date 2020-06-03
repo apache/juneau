@@ -21,28 +21,23 @@ import org.apache.http.conn.routing.*;
 import org.apache.http.protocol.*;
 
 /**
- * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockHttpConnection} class.
+ * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockRestClient} class.
+ *
+ * <p>
+ * This class is instantiated by the {@link MockRestClientBuilder} class.
  *
  * This implementation is NOT thread safe.
  */
-public class MockHttpClientConnectionManager implements HttpClientConnectionManager {
+class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	private ConnectionRequest cr;
-	private MockRestClient restClient;
-	private MockHttpConnection httpConnection;
-
 
 	/**
-	 * Constructor.
+	 * Post-creation initialization method.
 	 *
-	 * @param c The mocked connection.
+	 * @param mockRestClient Allows the connection manager to reference the mock rest client that created it.
 	 */
-	public MockHttpClientConnectionManager(final MockHttpConnection c) {
-		this.httpConnection = c;
-	}
-
-	public void init(MockRestClient mrc) {
-		final HttpClientConnection hcc = new MockHttpClientConnection(httpConnection, restClient);
+	public void init(MockRestClient mockRestClient) {
 		this.cr = new ConnectionRequest() {
 			@Override
 			public boolean cancel() {
@@ -50,7 +45,7 @@ public class MockHttpClientConnectionManager implements HttpClientConnectionMana
 			}
 			@Override
 			public HttpClientConnection get(long timeout, TimeUnit tunit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
-				return hcc;
+				return mockRestClient;
 			}
 		};
 	}
