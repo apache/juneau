@@ -135,16 +135,7 @@ public class RestClientTest {
 
 	@Test
 	public void a02_useNoArgConstructor() {
-//		new A2()
-//			.
-//		.create(A.class)
-//		.simpleJson()
-//		.logToConsole()
-//		.build()
-//		.post("/bean", bean)
-//		.complete();
-//		A2.create().httpClientBuilder(cb).build().builder().build();
-//		RestClient.create().httpClient(hc).build().builder().build();
+		new A2().build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -344,15 +335,29 @@ public class RestClientTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void d01_pooled() throws RestCallException {
-		MockRestClient
-			.create(A.class)
+	public void d01_pooled() throws Exception {
+		RestClient rc = RestClient
+			.create()
 			.simpleJson()
 			.pooled()
-			.build()
-			.get("/echo")
-			.run()
-			.assertBody().contains("HTTP GET /echo");
+			.build();
+		Object hc = rc.httpClient;
+		assertEquals("PoolingHttpClientConnectionManager", ClassInfo.of(hc).getDeclaredField("connManager").accessible().invoke(hc).getClass().getSimpleName());
+
+		rc = RestClient
+			.create()
+			.simpleJson()
+			.build();
+		hc = rc.httpClient;
+		assertEquals("BasicHttpClientConnectionManager", ClassInfo.of(hc).getDeclaredField("connManager").accessible().invoke(hc).getClass().getSimpleName());
+
+		rc = MockRestClient
+			.create(A.class)
+			.pooled()
+			.simpleJson()
+			.build();
+		hc = rc.httpClient;
+		assertEquals("MockHttpClientConnectionManager", ClassInfo.of(hc).getDeclaredField("connManager").accessible().invoke(hc).getClass().getSimpleName());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

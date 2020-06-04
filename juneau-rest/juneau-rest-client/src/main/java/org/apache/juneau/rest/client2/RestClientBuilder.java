@@ -115,7 +115,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Provided so that this class can be easily subclassed.
 	 */
 	protected RestClientBuilder() {
-		super(null);
+		this(null);
 	}
 
 	@Override /* ContextBuilder */

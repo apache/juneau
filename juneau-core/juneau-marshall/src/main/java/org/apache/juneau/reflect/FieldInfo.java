@@ -324,6 +324,16 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
+	 * @return This object (for method chaining).
+	 */
+	public FieldInfo accessible() {
+		setAccessible();
+		return this;
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public boolean setAccessible() {
@@ -378,5 +388,17 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public String getName() {
 		return f.getName();
+	}
+
+	/**
+	 * Invokes this field on the specified object.
+	 *
+	 * @param o The object containing the field.
+	 * @return The field value.
+	 * @throws IllegalAccessException Field was not accessible.
+	 * @throws IllegalArgumentException Field does not belong to object.
+	 */
+	public Object invoke(Object o) throws IllegalArgumentException, IllegalAccessException {
+		return f.get(o);
 	}
 }

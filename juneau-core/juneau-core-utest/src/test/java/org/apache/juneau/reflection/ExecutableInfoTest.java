@@ -570,10 +570,10 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void setAccessible() {
-		f_isPublic.setAccessible();
-		f_isProtected.setAccessible();
-		f_isPrivate.setAccessible();
-		f_isDefault.setAccessible();
+		f_isPublic.accessible();
+		f_isProtected.accessible();
+		f_isPrivate.accessible();
+		f_isDefault.accessible();
 	}
 
 	@Test

@@ -686,6 +686,16 @@ public abstract class ExecutableInfo {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
+	 * @return This object (for method chaining).
+	 */
+	public ExecutableInfo accessible() {
+		setAccessible();
+		return this;
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public final boolean setAccessible() {
