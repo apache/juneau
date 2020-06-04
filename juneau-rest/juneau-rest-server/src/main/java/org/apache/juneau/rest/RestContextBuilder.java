@@ -2648,6 +2648,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -2668,6 +2680,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - ContextBuilder */
 	public RestContextBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -2912,18 +2930,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -2968,12 +2974,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

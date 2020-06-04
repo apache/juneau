@@ -104,6 +104,18 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlStrippedDocSerializerBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -136,6 +148,12 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlStrippedDocSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -380,18 +398,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -436,12 +442,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

@@ -742,6 +742,18 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -774,6 +786,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SerializerBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -1018,18 +1036,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -1074,12 +1080,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

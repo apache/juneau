@@ -103,6 +103,18 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public MsgPackParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MsgPackParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public MsgPackParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -135,6 +147,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MsgPackParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MsgPackParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -379,18 +397,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -435,12 +441,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

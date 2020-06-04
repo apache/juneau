@@ -324,6 +324,18 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -356,6 +368,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -600,18 +618,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -656,12 +662,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

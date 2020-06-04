@@ -14,13 +14,11 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.BeanContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
-import java.time.*;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.*;
@@ -29,7 +27,6 @@ import java.util.logging.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -49,9 +46,6 @@ public class BeanSession extends Session {
 	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
 
 	private final BeanContext ctx;
-	private final Locale locale;
-	private final TimeZone timeZone;
-	private final MediaType mediaType;
 	private final HttpPartSchema schema;
 	private Stack<StringBuilder> sbStack = new Stack<>();
 
@@ -67,9 +61,6 @@ public class BeanSession extends Session {
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		locale = getProperty(BEAN_locale, Locale.class, ctx.getLocale());
-		timeZone = getProperty(BEAN_timeZone, TimeZone.class, ctx.getTimeZone());
-		mediaType = getProperty(BEAN_mediaType, MediaType.class, ctx.getMediaType());
 		schema = args.schema;
 	}
 
@@ -1421,38 +1412,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Locale.
-	 *
-	 * <p>
-	 * The locale is determined in the following order:
-	 * <ol>
-	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
-	 * 	<li>Locale returned by {@link Locale#getDefault()}.
-	 * </ol>
-	 *
-	 * @see BeanContext#BEAN_locale
-	 * @return The session locale.
-	 */
-	public final Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * Configuration property:  Media type.
-	 *
-	 * <p>
-	 * For example, <js>"application/json"</js>.
-	 *
-	 * @see BeanContext#BEAN_mediaType
-	 * @return The media type for this session, or <jk>null</jk> if not specified.
-	 */
-	public final MediaType getMediaType() {
-		return mediaType;
-	}
-
-	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * @see BeanContext#BEAN_notBeanClasses
@@ -1519,42 +1478,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
-	 * </ol>
-	 *
-	 * @see BeanContext#BEAN_timeZone
-	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
-	 */
-	public final TimeZone getTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
-	 * </ol>
-	 *
-	 * @see BeanContext#BEAN_timeZone
-	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
-	 */
-	public final ZoneId getTimeZoneId() {
-		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
-	}
-
-	/**
 	 * Configuration property:  Use enum names.
 	 *
 	 * @see BeanContext#BEAN_useEnumNames
@@ -1612,10 +1535,7 @@ public class BeanSession extends Session {
 		return super.toMap()
 			.a("Context", ctx.toMap())
 			.a("BeanSession", new DefaultFilteringOMap()
-				.a("locale", locale)
-				.a("mediaType", mediaType)
 				.a("schema", schema)
-				.a("timeZone", timeZone)
 			);
 	}
 }

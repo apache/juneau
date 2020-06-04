@@ -256,6 +256,18 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlSerializerBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSerializerBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlSerializerBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -288,6 +300,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSerializerBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -532,18 +550,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -588,12 +594,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

@@ -249,7 +249,7 @@ public class ReaderResource implements Writable {
 
 	@ResponseHeader("Content-Type")
 	@Override /* Writeable */
-	public MediaType getMediaType() {
+	public MediaType getContentType() {
 		return mediaType;
 	}
 

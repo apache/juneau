@@ -51,7 +51,7 @@ public class StringMessage implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public MediaType getMediaType() {
+	public MediaType getContentType() {
 		return null;
 	}
 

@@ -1326,7 +1326,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
+	 * 	<li class='jf'>{@link Context#CONTEXT_locale}
 	 * </ul>
 	 */
 	String locale() default "";
@@ -1343,7 +1343,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
+	 * 	<li class='jf'>{@link Context#CONTEXT_mediaType}
 	 * </ul>
 	 */
 	String mediaType() default "";
@@ -1577,7 +1577,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
+	 * 	<li class='jf'>{@link Context#CONTEXT_timeZone}
 	 * </ul>
 	 */
 	String timeZone() default "";

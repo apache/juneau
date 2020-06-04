@@ -20,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -274,6 +275,18 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -306,6 +319,12 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 

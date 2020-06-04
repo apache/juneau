@@ -177,6 +177,18 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* GENERATED - SessionArgs */
+	public SerializerSessionArgs locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
+	public SerializerSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
 	public SerializerSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
@@ -188,27 +200,15 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanSessionArgs */
-	public SerializerSessionArgs locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanSessionArgs */
-	public SerializerSessionArgs mediaType(MediaType value) {
-		super.mediaType(value);
+	@Override /* GENERATED - SessionArgs */
+	public SerializerSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanSessionArgs */
 	public SerializerSessionArgs schema(HttpPartSchema value) {
 		super.schema(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanSessionArgs */
-	public SerializerSessionArgs timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

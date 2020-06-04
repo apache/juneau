@@ -219,6 +219,18 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -251,6 +263,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -495,18 +513,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -551,12 +557,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

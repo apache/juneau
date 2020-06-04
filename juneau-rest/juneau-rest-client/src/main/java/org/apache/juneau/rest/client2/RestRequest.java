@@ -2877,7 +2877,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = new InputStreamEntity((InputStream)input, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (input instanceof ReaderResource) {
 					ReaderResource r = (ReaderResource)input;
-					contentType(r.getMediaType());
+					contentType(r.getContentType());
 					headers(r.getHeaders());
 					entity = new StringEntity(IOUtils.read(r.getContents()), getRequestContentType(TEXT_PLAIN));
 				}

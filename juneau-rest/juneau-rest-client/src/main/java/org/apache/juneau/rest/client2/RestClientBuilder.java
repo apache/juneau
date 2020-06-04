@@ -4353,6 +4353,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -4385,6 +4397,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -4638,18 +4656,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -4694,12 +4700,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

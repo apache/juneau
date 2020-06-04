@@ -1908,7 +1908,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	@Override /* Writable */
-	public MediaType getMediaType() {
+	public MediaType getContentType() {
 		return MediaType.PLAIN;
 	}
 

@@ -336,7 +336,7 @@ public class EndToEndInterfaceTest {
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
 		assertEquals("bar", r.getHeaders().get("ETag"));
-		assertEquals("text/foo", r.getMediaType().toString());
+		assertEquals("text/foo", r.getContentType().toString());
 	}
 
 	private static ID id2 = MockRestClient.build(D.class).getRemote(ID.class);
@@ -354,7 +354,7 @@ public class EndToEndInterfaceTest {
 		ReaderResource r = id2.readerResource();
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
-		assertEquals("text/foo", r.getMediaType().toString());
+		assertEquals("text/foo", r.getContentType().toString());
 	}
 
 	//=================================================================================================================

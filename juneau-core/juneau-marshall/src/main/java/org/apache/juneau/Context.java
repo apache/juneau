@@ -16,9 +16,11 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.transform.*;
 
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
@@ -116,13 +118,215 @@ public abstract class Context {
 	 */
 	public static final String CONTEXT_debug = PREFIX + ".debug.b";
 
+	/**
+	 * Configuration property:  Locale.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_locale CONTEXT_locale}
+	 * 	<li><b>Name:</b>  <js>"Context.locale.s"</js>
+	 * 	<li><b>Data type:</b>  {@link java.util.Locale}
+	 * 	<li><b>System property:</b>  <c>Context.locale</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_LOCALE</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link java.util.Locale#getDefault()})
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#locale(Locale)}
+	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#locale(Locale)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Specifies the default locale for serializer and parser sessions when not specified via {@link SessionArgs#locale(Locale)}.
+	 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
+	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
+	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getLocale().equals(Locale.<jsf>UK</jsf>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return</jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.locale(Locale.<jsf>UK</jsf>)
+	 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>CONTEXT_locale</jsf>, Locale.<jsf>UK</jsf>)
+	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyBeanSwap.<jk>class</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 *
+	 * 		<jc>// Produces "null" if in the UK.</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	}
+	 * </p>
+	 */
+	public static final String CONTEXT_locale = PREFIX + ".locale.s";
+
+	/**
+	 * Configuration property:  Media type.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_mediaType CONTEXT_mediaType}
+	 * 	<li><b>Name:</b>  <js>"Context.mediaType.s"</js>
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.http.MediaType}
+	 * 	<li><b>System property:</b>  <c>Context.mediaType</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_MEDIATYPE</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#mediaType(MediaType)}
+	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#mediaType(MediaType)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Specifies the default media type for serializer and parser sessions when not specified via {@link SessionArgs#mediaType(MediaType)}.
+	 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
+	 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
+	 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
+	 * serializer or parser.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getMediaType().equals(<js>"application/json"</js>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return</jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.mediaType(MediaType.<jsf>JSON</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>CONTEXT_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
+	 *
+	 * 		<jc>// Produces "null" since it's JSON.</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	}
+	 * </p>
+	 */
+	public static final String CONTEXT_mediaType = PREFIX + ".mediaType.s";
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_timeZone CONTEXT_timeZone}
+	 * 	<li><b>Name:</b>  <js>"Context.timeZone.s"</js>
+	 * 	<li><b>Data type:</b>  {@link java.util.TimeZone}
+	 * 	<li><b>System property:</b>  <c>Context.timeZone</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_TIMEZONE</c>
+	 * 	<li><b>Default:</b>  <jk>null</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#timeZone(TimeZone)}
+	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#timeZone(TimeZone)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link SessionArgs#timeZone(TimeZone)}.
+	 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
+	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
+	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
+	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
+	 * 		<ja>@Override</ja>
+	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
+	 * 			<jk>if</jk> (session.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
+	 * 				<jk>return null</jk>;
+	 * 			<jk>return</jk> o.toString();
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.timeZone(TimeZone.<jsf>GMT</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>CONTEXT_timeZone</jsf>, TimeZone.<jsf>GMT</jsf>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Define on session-args instead.</jc>
+	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
+	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
+	 *
+	 * 		<jc>// Produces "null" since the time zone is GMT.</jc>
+	 * 		String json = s.serialize(<jk>new</jk> MyBean());
+	 * 	}
+	 * </p>
+	 */
+	public static final String CONTEXT_timeZone = PREFIX + ".timeZone.s";
 
 
 	private final PropertyStore propertyStore;
 	private final int identityCode;
 
-	private final boolean
-		debug;
+	private final boolean debug;
+	private final Locale locale;
+	private final TimeZone timeZone;
+	private final MediaType mediaType;
 
 	/**
 	 * Constructor for this class.
@@ -137,6 +341,9 @@ public abstract class Context {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
 		debug = getBooleanProperty(CONTEXT_debug, false);
+		locale = getInstanceProperty(CONTEXT_locale, Locale.class, Locale.getDefault());
+		timeZone = getInstanceProperty(CONTEXT_timeZone, TimeZone.class, null);
+		mediaType = getInstanceProperty(CONTEXT_mediaType, MediaType.class, null);
 	}
 
 	/**
@@ -626,6 +833,39 @@ public abstract class Context {
 	 */
 	protected boolean isDebug() {
 		return debug;
+	}
+
+	/**
+	 * Locale.
+	 *
+	 * @see #CONTEXT_locale
+	 * @return
+	 * 	The default locale for serializer and parser sessions.
+	 */
+	protected final Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * Media type.
+	 *
+	 * @see #CONTEXT_mediaType
+	 * @return
+	 * 	The default media type value for serializer and parser sessions.
+	 */
+	protected final MediaType getMediaType() {
+		return mediaType;
+	}
+
+	/**
+	 * Time zone.
+	 *
+	 * @see #CONTEXT_timeZone
+	 * @return
+	 * 	The default timezone for serializer and parser sessions.
+	 */
+	protected final TimeZone getTimeZone() {
+		return timeZone;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

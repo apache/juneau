@@ -208,6 +208,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -240,6 +252,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -484,18 +502,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -540,12 +546,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

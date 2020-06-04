@@ -138,6 +138,18 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -170,6 +182,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -414,18 +432,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -470,12 +476,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

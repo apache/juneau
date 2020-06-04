@@ -107,6 +107,18 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -139,6 +151,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -383,18 +401,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -439,12 +445,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

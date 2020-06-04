@@ -103,6 +103,18 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -135,6 +147,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -379,18 +397,6 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -435,12 +441,6 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

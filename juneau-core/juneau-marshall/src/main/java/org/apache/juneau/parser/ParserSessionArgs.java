@@ -131,6 +131,18 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	}
 
 	@Override /* GENERATED - SessionArgs */
+	public ParserSessionArgs locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
+	public ParserSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
 	public ParserSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
@@ -142,27 +154,15 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		return this;
 	}
 
-	@Override /* GENERATED - BeanSessionArgs */
-	public ParserSessionArgs locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanSessionArgs */
-	public ParserSessionArgs mediaType(MediaType value) {
-		super.mediaType(value);
+	@Override /* GENERATED - SessionArgs */
+	public ParserSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanSessionArgs */
 	public ParserSessionArgs schema(HttpPartSchema value) {
 		super.schema(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanSessionArgs */
-	public ParserSessionArgs timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

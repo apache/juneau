@@ -2672,117 +2672,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Locale.
-	 *
-	 * <p>
-	 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSessionArgs#locale(Locale)}.
-	 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
-	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
-	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getLocale().equals(Locale.<jsf>UK</jsf>))
-	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.locale(Locale.<jsf>UK</jsf>)
-	 * 		.pojoSwaps(MyBeanSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_locale</jsf>, Locale.<jsf>UK</jsf>)
-	 * 		.addTo(<jsf>BEAN_pojoSwaps</jsf>, MyBeanSwap.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
-	 *
-	 * 		<jc>// Produces "null" if in the UK.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanContextBuilder locale(Locale value) {
-		return set(BEAN_locale, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Media type.
-	 *
-	 * <p>
-	 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSessionArgs#mediaType(MediaType)}.
-	 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
-	 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
-	 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
-	 * serializer or parser.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
-	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
-	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getMediaType().equals(<js>"application/json"</js>))
-	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.mediaType(MediaType.<jsf>JSON</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_mediaType</jsf>, MediaType.<jsf>JSON</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession session = s.createSession(sessionArgs)) {
-	 *
-	 * 		<jc>// Produces "null" since it's JSON.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_mediaType}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanContextBuilder mediaType(MediaType value) {
-		return set(BEAN_mediaType, value);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:</i>  Bean class exclusions.
 	 *
 	 * <p>
@@ -3294,60 +3183,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  TimeZone.
-	 *
-	 * <p>
-	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSessionArgs#timeZone(TimeZone)}.
-	 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-	 * objects to strings by accessing it via the session passed into the {@link PojoSwap#swap(BeanSession, Object)} and
-	 * {@link PojoSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
-	 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
-	 * 		<ja>@Override</ja>
-	 * 		public String swap(BeanSession session, MyBean o) throws Exception {
-	 * 			<jk>if</jk> (session.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
-	 * 				<jk>return null</jk>;
-	 * 			<jk>return</jk> o.toString();
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.timeZone(TimeZone.<jsf>GMT</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_timeZone</jsf>, TimeZone.<jsf>GMT</jsf>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Define on session-args instead.</jc>
-	 * 	SerializerSessionArgs sessionArgs = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
-	 * 	<jk>try</jk> (WriterSerializerSession ss = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(sessionArgs)) {
-	 *
-	 * 		<jc>// Produces "null" since the time zone is GMT.</jc>
-	 * 		String json = s.serialize(<jk>new</jk> MyBean());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanContextBuilder timeZone(TimeZone value) {
-		return set(BEAN_timeZone, value);
-	}
-
-	/**
 	 * An identifying name for this class.
 	 *
 	 * <p>
@@ -3711,6 +3546,18 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -3743,6 +3590,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 

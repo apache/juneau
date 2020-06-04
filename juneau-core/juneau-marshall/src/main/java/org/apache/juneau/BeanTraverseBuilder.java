@@ -293,6 +293,18 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -325,6 +337,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -569,18 +587,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -625,12 +631,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

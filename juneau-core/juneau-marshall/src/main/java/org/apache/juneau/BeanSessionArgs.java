@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -52,46 +50,6 @@ public class BeanSessionArgs extends SessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * The session locale.
-	 *
-	 * <p>
-	 * Specifies the default locale for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_locale}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanSessionArgs locale(Locale value) {
-		property(BEAN_locale, value);
-		return this;
-	}
-
-	/**
-	 * The session media type.
-	 *
-	 * <p>
-	 * Specifies the default media type value for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_mediaType}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanSessionArgs mediaType(MediaType value) {
-		property(BEAN_mediaType, value);
-		return this;
-	}
-
-	/**
 	 * HTTP-part schema.
 	 *
 	 * <p>
@@ -108,31 +66,23 @@ public class BeanSessionArgs extends SessionArgs {
 		return this;
 	}
 
-	/**
-	 * The session timezone.
-	 *
-	 * <p>
-	 * Specifies the default timezone for serializer and parser sessions.
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_timeZone}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BeanSessionArgs timeZone(TimeZone value) {
-		property(BEAN_timeZone, value);
-		return this;
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - SessionArgs */
 	public BeanSessionArgs debug(Boolean value) {
 		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
+	public BeanSessionArgs locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
+	public BeanSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
 		return this;
 	}
 
@@ -145,6 +95,12 @@ public class BeanSessionArgs extends SessionArgs {
 	@Override /* GENERATED - SessionArgs */
 	public BeanSessionArgs property(String key, Object value) {
 		super.property(key, value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
+	public BeanSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 

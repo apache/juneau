@@ -171,6 +171,18 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -203,6 +215,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -447,18 +465,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -503,12 +509,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

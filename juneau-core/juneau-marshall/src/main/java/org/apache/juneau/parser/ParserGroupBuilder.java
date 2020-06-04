@@ -421,6 +421,18 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -453,6 +465,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -697,18 +715,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -753,12 +759,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

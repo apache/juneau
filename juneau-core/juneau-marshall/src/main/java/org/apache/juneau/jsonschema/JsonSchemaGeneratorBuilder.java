@@ -354,6 +354,18 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -386,6 +398,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder set(String name, Object value) {
 		super.set(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
+		super.timeZone(value);
 		return this;
 	}
 
@@ -630,18 +648,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -686,12 +692,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder swaps(Object...values) {
 		super.swaps(values);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
-		super.timeZone(value);
 		return this;
 	}
 

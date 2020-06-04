@@ -642,9 +642,9 @@ public class LocalizedDatesTest {
 		BeanContextBuilder bcb = BeanContext.create();
 		bcb.swaps(swap);
 		if (contextLocale != null)
-			bcb.set(BEAN_locale, contextLocale);
+			bcb.set(CONTEXT_locale, contextLocale);
 		if (contextTimeZone != null)
-			bcb.set(BEAN_timeZone, contextTimeZone);
+			bcb.set(CONTEXT_timeZone, contextTimeZone);
 		bc = bcb.build();
 	}
 

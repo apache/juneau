@@ -112,9 +112,9 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		for (Class<?> c : a.interfaces())
 			psb.prependTo(BEAN_annotations, new BeanAnnotation(c).interfaceClass(c));
 		if (! a.locale().isEmpty())
-			psb.set(BEAN_locale, locale(a.locale()));
+			psb.set(CONTEXT_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())
-			psb.set(BEAN_mediaType, mediaType(a.mediaType()));
+			psb.set(CONTEXT_mediaType, mediaType(a.mediaType()));
 		if (a.notBeanClasses().length != 0)
 			psb.addTo(BEAN_notBeanClasses, a.notBeanClasses());
 		if (a.notBeanClasses_replace().length != 0)
@@ -144,7 +144,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (a.swaps_remove().length != 0)
 			psb.removeFrom(BEAN_swaps, a.swaps_remove());
 		if (! a.timeZone().isEmpty())
-			psb.set(BEAN_timeZone, timeZone(a.timeZone()));
+			psb.set(CONTEXT_timeZone, timeZone(a.timeZone()));
 		if (! a.useEnumNames().isEmpty())
 			psb.set(BEAN_useEnumNames, bool(a.useEnumNames()));
 		if (! a.useInterfaceProxies().isEmpty())
