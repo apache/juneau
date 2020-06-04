@@ -36,6 +36,17 @@ public class BasicUriHeader extends BasicHeader {
 	final String value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicUriHeader} object.
+	 */
+	public static BasicUriHeader of(String name, String value) {
+		return new BasicUriHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

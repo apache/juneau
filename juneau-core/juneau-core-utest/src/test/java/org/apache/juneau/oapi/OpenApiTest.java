@@ -64,7 +64,7 @@ public class OpenApiTest {
 	@Test
 	public void a01a_noType_formatDefault() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tNone().build();
+		HttpPartSchema ps = T_NONE;
 		String s = serialize(ps, in);
 		assertEquals("foo", s);
 		String r = parse(ps, s, String.class);
@@ -74,7 +74,7 @@ public class OpenApiTest {
 	@Test
 	public void a01b_noType_formatDefault_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tNone().build();
+		HttpPartSchema ps = T_NONE;
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 	}
@@ -280,7 +280,7 @@ public class OpenApiTest {
 	@Test
 	public void b01_typeString_formatDefault() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tString().build();
+		HttpPartSchema ps = T_STRING;
 		String s = serialize(ps, in);
 		assertEquals("foo", s);
 		String r = parse(ps, s, String.class);
@@ -290,7 +290,7 @@ public class OpenApiTest {
 	@Test
 	public void b02_typeString_formatByte() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tByte().build();
+		HttpPartSchema ps = T_BYTE;
 		String s = serialize(ps, in);
 		assertEquals("Zm9v", s);
 		String r = parse(ps, s, String.class);
@@ -300,7 +300,7 @@ public class OpenApiTest {
 	@Test
 	public void b03_typeString_formatBinary() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tBinary().build();
+		HttpPartSchema ps = T_BINARY;
 		String s = serialize(ps, in);
 		assertEquals("666F6F", s);
 		String r = parse(ps, s, String.class);
@@ -310,7 +310,7 @@ public class OpenApiTest {
 	@Test
 	public void b04_typeString_formatBinarySpaced() throws Exception {
 		String in = "foo";
-		HttpPartSchema ps = tBinarySpaced().build();
+		HttpPartSchema ps = T_BINARY_SPACED;
 		String s = serialize(ps, in);
 		assertEquals("66 6F 6F", s);
 		String r = parse(ps, s, String.class);
@@ -320,7 +320,7 @@ public class OpenApiTest {
 	@Test
 	public void b05_typeString_formatDate_String() throws Exception {
 		String in = "2012-12-21";
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
 		String r = parse(ps, s, String.class);
@@ -330,7 +330,7 @@ public class OpenApiTest {
 	@Test
 	public void b06_typeString_formatDate_Calendar() throws Exception {
 		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -341,7 +341,7 @@ public class OpenApiTest {
 	@Test
 	public void b07_typeString_formatDate_Date() throws Exception {
 		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -352,7 +352,7 @@ public class OpenApiTest {
 	@Test
 	public void b08_typeString_formatDate_Temporal() throws Exception {
 		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -363,7 +363,7 @@ public class OpenApiTest {
 	@Test
 	public void b09_typeString_formatDate_Other() throws Exception {
 		StringBuilder in = new StringBuilder("2012-12-21");
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21", s);
 		String r = parse(ps, s, String.class);
@@ -373,7 +373,7 @@ public class OpenApiTest {
 	@Test
 	public void b10_typeString_formatDate_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -383,7 +383,7 @@ public class OpenApiTest {
 	@Test
 	public void b11_typeString_formatDateTime_String() throws Exception {
 		String in = "2012-12-21T00:00:00";
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
 		String r = parse(ps, s, String.class);
@@ -393,7 +393,7 @@ public class OpenApiTest {
 	@Test
 	public void b12_typeString_formatDateTime_Calendar() throws Exception {
 		Calendar in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null);
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -404,7 +404,7 @@ public class OpenApiTest {
 	@Test
 	public void b13_typeString_formatDateTime_Date() throws Exception {
 		Date in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).getTime();
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -415,7 +415,7 @@ public class OpenApiTest {
 	@Test
 	public void b14_typeString_formatDateTime_Temporal() throws Exception {
 		Instant in = CalendarUtils.parseCalendar("2012-12-21", CalendarUtils.Format.ISO8601_D, null, null).toInstant();
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00Z", s);
 		Calendar r = parse(ps, s, Calendar.class);
@@ -426,7 +426,7 @@ public class OpenApiTest {
 	@Test
 	public void b15_typeString_formatDate_Other() throws Exception {
 		StringBuilder in = new StringBuilder("2012-12-21T00:00:00");
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("2012-12-21T00:00:00", s);
 		String r = parse(ps, s, String.class);
@@ -436,7 +436,7 @@ public class OpenApiTest {
 	@Test
 	public void b16_typeString_formatDate_null() throws Exception {
 		String in = null;
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		String s = serialize(ps, in);
 		assertEquals("null", s);
 		String r = parse(ps, s, String.class);
@@ -450,7 +450,7 @@ public class OpenApiTest {
 	@Test
 	public void c01_typeBoolean_formatDefault_String() throws Exception {
 		String in = "true";
-		HttpPartSchema ps = tBoolean().build();
+		HttpPartSchema ps = T_BOOLEAN;
 		String s = serialize(ps, in);
 		assertEquals("true", s);
 		String r = parse(ps, s, String.class);
@@ -460,7 +460,7 @@ public class OpenApiTest {
 	@Test
 	public void c02_typeBoolean_formatDefault_Boolean() throws Exception {
 		Boolean in = true;
-		HttpPartSchema ps = tBoolean().build();
+		HttpPartSchema ps = T_BOOLEAN;
 		String s = serialize(ps, in);
 		assertEquals("true", s);
 		Boolean r = parse(ps, s, Boolean.class);
@@ -474,7 +474,7 @@ public class OpenApiTest {
 	@Test
 	public void d01_typeInteger_formatDefault_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tInteger().build();
+		HttpPartSchema ps = T_INTEGER;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		String r = parse(ps, s, String.class);
@@ -484,7 +484,7 @@ public class OpenApiTest {
 	@Test
 	public void d02_typeInteger_formatDefault_Integer() throws Exception {
 		Integer in = 123;
-		HttpPartSchema ps = tInteger().build();
+		HttpPartSchema ps = T_INTEGER;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		Integer r = parse(ps, s, Integer.class);
@@ -494,7 +494,7 @@ public class OpenApiTest {
 	@Test
 	public void d03_typeInteger_formatInt32_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tInt32().build();
+		HttpPartSchema ps = T_INT32;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		String r = parse(ps, s, String.class);
@@ -504,7 +504,7 @@ public class OpenApiTest {
 	@Test
 	public void d04_typeInteger_formatInt32_Integer() throws Exception {
 		Integer in = 123;
-		HttpPartSchema ps = tInt32().build();
+		HttpPartSchema ps = T_INT32;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		Integer r = parse(ps, s, Integer.class);
@@ -514,7 +514,7 @@ public class OpenApiTest {
 	@Test
 	public void d05_typeInteger_formatInt64_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tInt64().build();
+		HttpPartSchema ps = T_INT64;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		String r = parse(ps, s, String.class);
@@ -524,7 +524,7 @@ public class OpenApiTest {
 	@Test
 	public void d06_typeInteger_formatInt64_Long() throws Exception {
 		Long in = 123l;
-		HttpPartSchema ps = tInt64().build();
+		HttpPartSchema ps = T_INT64;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		Long r = parse(ps, s, Long.class);
@@ -538,7 +538,7 @@ public class OpenApiTest {
 	@Test
 	public void e01_tNumberDefault_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tNumber().build();
+		HttpPartSchema ps = T_NUMBER;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		String r = parse(ps, s, String.class);
@@ -548,7 +548,7 @@ public class OpenApiTest {
 	@Test
 	public void e02_tNumberDefault_Float() throws Exception {
 		Float in = 123f;
-		HttpPartSchema ps = tNumber().build();
+		HttpPartSchema ps = T_NUMBER;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		Float r = parse(ps, s, Float.class);
@@ -558,7 +558,7 @@ public class OpenApiTest {
 	@Test
 	public void e03_tNumberFloat_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tFloat().build();
+		HttpPartSchema ps = T_FLOAT;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		String r = parse(ps, s, String.class);
@@ -568,7 +568,7 @@ public class OpenApiTest {
 	@Test
 	public void e04_tNumberFloat_Integer() throws Exception {
 		Float in = 123f;
-		HttpPartSchema ps = tFloat().build();
+		HttpPartSchema ps = T_FLOAT;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		Float r = parse(ps, s, Float.class);
@@ -578,7 +578,7 @@ public class OpenApiTest {
 	@Test
 	public void e05_tNumberDouble_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tDouble().build();
+		HttpPartSchema ps = T_DOUBLE;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		String r = parse(ps, s, String.class);
@@ -588,7 +588,7 @@ public class OpenApiTest {
 	@Test
 	public void e06_tNumberDouble_Double() throws Exception {
 		Double in = 123d;
-		HttpPartSchema ps = tDouble().build();
+		HttpPartSchema ps = T_DOUBLE;
 		String s = serialize(ps, in);
 		assertEquals("123.0", s);
 		Double r = parse(ps, s, Double.class);
@@ -602,7 +602,7 @@ public class OpenApiTest {
 	@Test
 	public void f01_tArray_String() throws Exception {
 		String in = "123";
-		HttpPartSchema ps = tArray().build();
+		HttpPartSchema ps = T_ARRAY;
 		try {
 			serialize(ps, in);
 			fail("Exception expected");
@@ -615,7 +615,7 @@ public class OpenApiTest {
 	@SuppressWarnings("unchecked")
 	public void f02a_tArray_StringList() throws Exception {
 		List<String> in = AList.of("123");
-		HttpPartSchema ps = tArray().build();
+		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		List<String> r = parse(ps, s, List.class, String.class);
@@ -652,7 +652,7 @@ public class OpenApiTest {
 	@Test
 	public void f03a_tArray_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArray().build();
+		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
@@ -702,7 +702,7 @@ public class OpenApiTest {
 	@Test
 	public void f04_tArray_StringArrayMutator() throws Exception {
 		F04 in = new F04("a");
-		HttpPartSchema ps = tArray().build();
+		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		SimpleJson.DEFAULT.println(in);
 		assertEquals("a", s);
@@ -719,7 +719,7 @@ public class OpenApiTest {
 	@Test
 	public void f05a_tArrayUon_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArrayUon().build();
+		HttpPartSchema ps = T_ARRAY_UON;
 		String s = serialize(ps, in);
 		assertEquals("@(123)", s);
 		int[] r = parse(ps, s, int[].class);
@@ -735,7 +735,7 @@ public class OpenApiTest {
 	@Test
 	public void f05b_tArrayUon_3dIntArray() throws Exception {
 		int[][][] in = {{{123}}};
-		HttpPartSchema ps = tArrayUon().build();
+		HttpPartSchema ps = T_ARRAY_UON;
 		String s = serialize(ps, in);
 		assertEquals("@(@(@(123)))", s);
 		int[][][] r = parse(ps, s, int[][][].class);
@@ -752,7 +752,7 @@ public class OpenApiTest {
 	@Test
 	public void f06a_tArrayPipes_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArrayPipes().build();
+		HttpPartSchema ps = T_ARRAY_PIPES;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
@@ -768,7 +768,7 @@ public class OpenApiTest {
 	@Test
 	public void f06b_tArrayPipes_3dIntArray() throws Exception {
 		int[][][] in = {{{123}}};
-		HttpPartSchema ps = tArrayPipes().build();
+		HttpPartSchema ps = T_ARRAY_PIPES;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
@@ -785,7 +785,7 @@ public class OpenApiTest {
 	@Test
 	public void f07a_tArraySsv_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArraySsv().build();
+		HttpPartSchema ps = T_ARRAY_SSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
@@ -801,7 +801,7 @@ public class OpenApiTest {
 	@Test
 	public void f07b_tArraySsv_3dIntArray() throws Exception {
 		int[][][] in = {{{123}}};
-		HttpPartSchema ps = tArraySsv().build();
+		HttpPartSchema ps = T_ARRAY_SSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
@@ -818,7 +818,7 @@ public class OpenApiTest {
 	@Test
 	public void f08a_tArrayTsv_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArrayTsv().build();
+		HttpPartSchema ps = T_ARRAY_TSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
@@ -834,7 +834,7 @@ public class OpenApiTest {
 	@Test
 	public void f08b_tArrayTsv_3dIntArray() throws Exception {
 		int[][][] in = {{{123}}};
-		HttpPartSchema ps = tArrayTsv().build();
+		HttpPartSchema ps = T_ARRAY_TSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
@@ -851,7 +851,7 @@ public class OpenApiTest {
 	@Test
 	public void f09a_tArrayCsv_IntArray() throws Exception {
 		int[] in = new int[]{123};
-		HttpPartSchema ps = tArrayCsv().build();
+		HttpPartSchema ps = T_ARRAY_CSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
@@ -867,7 +867,7 @@ public class OpenApiTest {
 	@Test
 	public void f09b_tArrayCsv_3dIntArray() throws Exception {
 		int[][][] in = {{{123}}};
-		HttpPartSchema ps = tArrayCsv().build();
+		HttpPartSchema ps = T_ARRAY_CSV;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
@@ -903,7 +903,7 @@ public class OpenApiTest {
 	@Test
 	public void g01a_objectType_formatDefault_Map() throws Exception {
 		OMap in = OMap.of("a","b");
-		HttpPartSchema ps = tObject().build();
+		HttpPartSchema ps = T_OBJECT;
 		String s = serialize(ps, in);
 		assertEquals("a=b", s);
 		OMap r = parse(ps, s, OMap.class);

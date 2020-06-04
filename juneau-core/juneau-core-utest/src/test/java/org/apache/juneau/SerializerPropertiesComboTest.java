@@ -320,7 +320,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='https://localhost:80/context/resource/foo'/>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.properties(OMap.of(SERIALIZER_uriContext, new UriContext("https://localhost:80", "/context", "/resource", "/path"), SERIALIZER_uriRelativity, UriRelativity.PATH_INFO, SERIALIZER_uriResolution, UriResolution.ABSOLUTE))
+				.properties(OMap.of(SERIALIZER_uriContext, UriContext.of("https://localhost:80", "/context", "/resource", "/path"), SERIALIZER_uriRelativity, UriRelativity.PATH_INFO, SERIALIZER_uriResolution, UriResolution.ABSOLUTE))
 				.convert(x -> new T9())
 				.skipTest(x -> x.contains("parseRdf") || x.contains("verifyRdf"))
 			},

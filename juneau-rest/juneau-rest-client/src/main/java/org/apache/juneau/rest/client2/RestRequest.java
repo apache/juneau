@@ -943,6 +943,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
 	 *
+	 * <p>
+	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * <jc>// Creates path "/bar|baz"</jc>
+	 * 	client
+	 * 		.get(<js>"/{foo}"</js>)
+	 * 		.path(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest path(String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return path(name, value, null, schema);
+	}
+
+	/**
+	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -1237,6 +1267,59 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest query(String name, Object value) throws RestCallException {
 		return query(DEFAULT_FLAGS, name, value, partSerializer, null);
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
+	 * <p>
+	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Creates query parameter "foo=bar|baz"</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.query(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link OMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</ul>
+	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest query(String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return query(DEFAULT_FLAGS, name, value, partSerializer, schema);
 	}
 
 	/**
@@ -1614,6 +1697,59 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formData(String name, Object value) throws RestCallException {
 		return formData(DEFAULT_FLAGS, name, value, partSerializer, null);
+	}
+
+	/**
+	 * Adds a form-data parameter to the request body.
+	 *
+	 * <p>
+	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Creates form-data parameter "foo=bar|baz"</jc>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formData(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
+	 * 	</ul>
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>For single value parameters:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value parameters:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link OMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
+	 * 			<ul>
+	 * 				<li>Sets the entire query string to the contents of the input.
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</ul>
+	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest formData(String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return formData(DEFAULT_FLAGS, name, value, partSerializer, schema);
 	}
 
 	/**
@@ -2087,6 +2223,55 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest header(String name, Object value) throws RestCallException {
 		return header(DEFAULT_FLAGS, name, value, partSerializer, null);
+	}
+
+	/**
+	 * Appends a header on the request.
+	 *
+	 * <p>
+	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Creates header "Foo=bar|baz"</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * 	<ul>
+	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
+	 * 	</ul>
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>For single value headers:
+	 * 		<ul>
+	 * 			<li>Can be any POJO.
+	 * 			<li>Converted to a string using the specified part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>For multi-value headers:
+	 * 		<ul>
+	 * 			<li>{@link Map} / {@link OMap} / bean
+	 * 			<ul>
+	 * 				<li>Values can be any POJO.
+	 * 				<li>Values converted to a string using the configured part serializer.
+	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 			</ul>
+	 * 			<li>{@link NameValuePairs}
+	 * 			<ul>
+	 * 				<li>Values converted directly to strings.
+	 * 			</ul>
+	 * 		</ul>
+	 * 	</ul>
+	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest header(String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return header(DEFAULT_FLAGS, name, value, partSerializer, schema);
 	}
 
 	/**

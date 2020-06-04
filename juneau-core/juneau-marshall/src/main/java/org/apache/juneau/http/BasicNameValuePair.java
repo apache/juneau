@@ -27,6 +27,17 @@ public class BasicNameValuePair implements NameValuePair {
 	private Object value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicNameValuePair} object.
+	 */
+	public static BasicNameValuePair of(String name, Object value) {
+		return new BasicNameValuePair(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The parameter name.

@@ -164,7 +164,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a CSV array header, never <jk>null</jk>.
 	 */
 	public BasicCsvArrayHeader asCsvArrayHeader() {
-		return new BasicCsvArrayHeader(getName(), getValue());
+		return BasicCsvArrayHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a date header, never <jk>null</jk>.
 	 */
 	public BasicDateHeader asDateHeader() {
-		return new BasicDateHeader(getName(), getValue());
+		return BasicDateHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as an entity validator array header, never <jk>null</jk>.
 	 */
 	public BasicEntityValidatorArrayHeader asEntityValidatorArrayHeader() {
-		return new BasicEntityValidatorArrayHeader(getName(), getValue());
+		return BasicEntityValidatorArrayHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as an integer header, never <jk>null</jk>.
 	 */
 	public BasicIntegerHeader asIntegerHeader() {
-		return new BasicIntegerHeader(getName(), getValue());
+		return BasicIntegerHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a long header, never <jk>null</jk>.
 	 */
 	public BasicLongHeader asLongHeader() {
-		return new BasicLongHeader(getName(), getValue());
+		return BasicLongHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a range array header, never <jk>null</jk>.
 	 */
 	public BasicRangeArrayHeader asRangeArrayHeader() {
-		return new BasicRangeArrayHeader(getName(), getValue());
+		return BasicRangeArrayHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a string header, never <jk>null</jk>.
 	 */
 	public BasicStringHeader asStringHeader() {
-		return new BasicStringHeader(getName(), getValue());
+		return BasicStringHeader.of(getName(), getValue());
 	}
 
 	/**
@@ -227,7 +227,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a URI header, never <jk>null</jk>.
 	 */
 	public BasicUriHeader asUriHeader() {
-		return new BasicUriHeader(getName(), getValue());
+		return BasicUriHeader.of(getName(), getValue());
 	}
 
 	/**

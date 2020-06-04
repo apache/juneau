@@ -55,6 +55,18 @@ public class UriResolver {
 	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param resolution Rule on how URIs should be resolved.
+	 * @param relativity Rule on what relative URIs are relative to.
+	 * @param uriContext Current URI context (i.e. the current URI 'location').
+	 * @return A new {@link UriResolver} object.
+	 */
+	public static UriResolver of(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {
+		return new UriResolver(resolution, relativity, uriContext);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param resolution Rule on how URIs should be resolved.

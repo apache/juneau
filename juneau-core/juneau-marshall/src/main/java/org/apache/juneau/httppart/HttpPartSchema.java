@@ -57,6 +57,94 @@ public class HttpPartSchema {
 	/** Reusable instance of this object, all default settings. */
 	public static final HttpPartSchema DEFAULT = HttpPartSchema.create().allowEmptyValue(true).build();
 
+	/** Boolean type */
+	public static final HttpPartSchema T_BOOLEAN = HttpPartSchema.tBoolean().build();
+
+	/** File type */
+	public static final HttpPartSchema T_FILE = HttpPartSchema.tFile().build();
+
+	/** Integer type */
+	public static final HttpPartSchema T_INTEGER = HttpPartSchema.tInteger().build();
+
+	/** Int32 type */
+	public static final HttpPartSchema T_INT32 = HttpPartSchema.tInt32().build();
+
+	/** Int64 type */
+	public static final HttpPartSchema T_INT64 = HttpPartSchema.tInt64().build();
+
+	/** No type */
+	public static final HttpPartSchema T_NONE = HttpPartSchema.tNone().build();
+
+	/** Number type */
+	public static final HttpPartSchema T_NUMBER = HttpPartSchema.tNumber().build();
+
+	/** Float type */
+	public static final HttpPartSchema T_FLOAT = HttpPartSchema.tFloat().build();
+
+	/** Double type */
+	public static final HttpPartSchema T_DOUBLE = HttpPartSchema.tDouble().build();
+
+	/** String type */
+	public static final HttpPartSchema T_STRING = HttpPartSchema.tString().build();
+
+	/** Byte type */
+	public static final HttpPartSchema T_BYTE = HttpPartSchema.tByte().build();
+
+	/** Binary type */
+	public static final HttpPartSchema T_BINARY = HttpPartSchema.tBinary().build();
+
+	/** Spaced binary type */
+	public static final HttpPartSchema T_BINARY_SPACED = HttpPartSchema.tBinarySpaced().build();
+
+	/** Date type */
+	public static final HttpPartSchema T_DATE = HttpPartSchema.tDate().build();
+
+	/** Date-time type */
+	public static final HttpPartSchema T_DATETIME = HttpPartSchema.tDateTime().build();
+
+	/** UON-formated simple type */
+	public static final HttpPartSchema T_UON = HttpPartSchema.tUon().build();
+
+	/** Array type */
+	public static final HttpPartSchema T_ARRAY = HttpPartSchema.tArray().build();
+
+	/** Comma-delimited array type */
+	public static final HttpPartSchema T_ARRAY_CSV = HttpPartSchema.tArrayCsv().build();
+
+	/** Pipe-delimited array type */
+	public static final HttpPartSchema T_ARRAY_PIPES = HttpPartSchema.tArrayPipes().build();
+
+	/** Space-delimited array type */
+	public static final HttpPartSchema T_ARRAY_SSV = HttpPartSchema.tArraySsv().build();
+
+	/** Tab-delimited array type */
+	public static final HttpPartSchema T_ARRAY_TSV = HttpPartSchema.tArrayTsv().build();
+
+	/** UON-formatted array type */
+	public static final HttpPartSchema T_ARRAY_UON = HttpPartSchema.tArrayUon().build();
+
+	/** Multi-part array type */
+	public static final HttpPartSchema T_ARRAY_MULTI = HttpPartSchema.tArrayMulti().build();
+
+	/** Object type */
+	public static final HttpPartSchema T_OBJECT = HttpPartSchema.tObject().build();
+
+	/** Comma-delimited object type */
+	public static final HttpPartSchema T_OBJECT_CSV = HttpPartSchema.tObjectCsv().build();
+
+	/** Pipe-delimited object type */
+	public static final HttpPartSchema T_OBJECT_PIPES = HttpPartSchema.tObjectPipes().build();
+
+	/** Space-delimited object type */
+	public static final HttpPartSchema T_OBJECT_SSV = HttpPartSchema.tObjectSsv().build();
+
+	/** Tab-delimited object type */
+	public static final HttpPartSchema T_OBJECT_TSV = HttpPartSchema.tObjectTsv().build();
+
+	/** UON-formated object type */
+	public static final HttpPartSchema T_OBJECT_UON = HttpPartSchema.tObjectUon().build();
+
+
 	final String name;
 	final Set<Integer> codes;
 	final String _default;

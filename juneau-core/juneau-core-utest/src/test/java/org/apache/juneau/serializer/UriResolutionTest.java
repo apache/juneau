@@ -52,7 +52,7 @@ public class UriResolutionTest {
 		public Input(UriResolution resolution, UriRelativity relativity, String authority, String context, String resource, String path) {
 			this.resolution = resolution;
 			this.relativity = relativity;
-			this.context = new UriContext(authority, context, resource, path);
+			this.context = UriContext.of(authority, context, resource, path);
 		}
 	}
 

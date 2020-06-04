@@ -32,6 +32,17 @@ public class BasicStringHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicStringHeader} object.
+	 */
+	public static BasicStringHeader of(String name, String value) {
+		return new BasicStringHeader(name, value);
+	}
+
+	/**
 	 * Constructor
 	 *
 	 * @param name Header name.

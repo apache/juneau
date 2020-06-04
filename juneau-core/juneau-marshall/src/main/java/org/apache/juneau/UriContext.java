@@ -52,6 +52,23 @@ public class UriContext {
 	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param authority
+	 * 	The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
+	 * @param contextRoot
+	 * 	The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
+	 * @param servletPath
+	 * 	The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
+	 * @param pathInfo
+	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
+	 * @return A new {@link UriContext} object.
+	 */
+	public static UriContext of(String authority, String contextRoot, String servletPath, String pathInfo) {
+		return new UriContext(authority, contextRoot, servletPath, pathInfo);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * <p>

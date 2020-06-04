@@ -41,6 +41,17 @@ public class BasicDateHeader extends BasicHeader {
 	private final ZonedDateTime zdt;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicDateHeader} object.
+	 */
+	public static BasicDateHeader of(String name, String value) {
+		return new BasicDateHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

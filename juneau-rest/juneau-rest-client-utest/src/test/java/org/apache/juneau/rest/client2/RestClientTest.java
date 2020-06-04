@@ -470,11 +470,11 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new BasicObjectHeader("Foo", "bar"))
+			.header(BasicObjectHeader.of("Foo", "bar"))
 			.header("Check", "Foo")
 			.build()
 			.get("/checkHeader")
-			.header(new BasicObjectHeader("Foo", "baz"))
+			.header(BasicObjectHeader.of("Foo", "baz"))
 			.run()
 			.assertBody().is("['bar','baz']");
 	}
@@ -568,11 +568,11 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.headers(new BasicObjectHeader("Foo", "bar"))
+			.headers(BasicObjectHeader.of("Foo", "bar"))
 			.header("Check", "Foo")
 			.build()
 			.get("/checkHeader")
-			.headers(new BasicObjectHeader("Foo", "baz"))
+			.headers(BasicObjectHeader.of("Foo", "baz"))
 			.run()
 			.assertBody().is("['bar','baz']");
 	}
@@ -706,6 +706,19 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.run()
 			.assertBody().is("['foo']");
+	}
+
+	@Test
+	public void f23a_headers_contentEncoding() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.contentEncoding("identity")
+			.header("Check", "Content-Encoding")
+			.build()
+			.get("/checkHeader")
+			.run()
+			.assertBody().is("['identity']");
 	}
 
 	@Test
@@ -947,7 +960,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.userAgent("foo")
+			.userAgent(new StringBuilder("foo"))
 			.header("Check", "User-Agent")
 			.build()
 			.get("/checkHeader")
@@ -1571,6 +1584,58 @@ public class RestClientTest {
 			.assertBody().is("['x{f:1}','x{f:1}']");
 	}
 
+	@Test
+	public void h08_headers_withSchema() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.header("Foo", AList.of("bar","baz"), HttpPartSchema.T_ARRAY_CSV)
+			.header("Check", "Foo")
+			.build()
+			.get("/checkHeader")
+			.run()
+			.assertBody().is("['bar,baz']");
+	}
+
+	@Test
+	public void h09_headers_nullHeader() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.headers(BasicStringHeader.of("Foo", "bar"), null)
+			.header("Check", "Foo")
+			.build()
+			.get("/checkHeader")
+			.run()
+			.assertBody().is("['bar']");
+	}
+
+	@Test
+	public void h10_headers_invalidHeader() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.headers("Foo");
+			fail("Exception expected");
+		} catch (RuntimeException e) {
+			assertEquals("Invalid type passed to headers(Object...):  java.lang.String", e.getLocalizedMessage());
+		}
+	}
+
+	@Test
+	public void h10_headers_invalidHeaderPairs() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.headerPairs("Foo");
+			fail("Exception expected");
+		} catch (RuntimeException e) {
+			assertEquals("Odd number of parameters passed into headerPairs(Object...)", e.getLocalizedMessage());
+		}
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Query
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1593,15 +1658,52 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.query(new BasicNameValuePair("Foo","f1"))
+			.query(BasicNameValuePair.of("Foo","f1"))
 			.query(OMap.of("Foo","f2"))
 			.query(AMap.of("Foo","f3"))
 			.query(NameValuePairs.of("Foo","f4","Foo","f5"))
-			.query(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
+			.query(BasicNameValuePair.of("Foo","f6"), BasicNameValuePair.of("Foo","f7"))
 			.build()
 			.get("/checkQuery")
 			.run()
 			.assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+	}
+
+	@Test
+	public void i03_query_withSchema() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("Foo",AList.of("bar","baz"), HttpPartSchema.T_ARRAY_PIPES)
+			.build()
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=bar%7Cbaz");
+	}
+
+	@Test
+	public void i04_query_withNull() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query(BasicNameValuePair.of("Foo","bar"), null)
+			.build()
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=bar");
+	}
+
+	@Test
+	public void i05_query_invalid() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.query(BasicNameValuePair.of("Foo","bar"), "Baz");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Invalid type passed to query(Object...):  java.lang.String", e.getMessage());
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1625,15 +1727,52 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.formData(new BasicNameValuePair("Foo","f1"))
+			.formData(BasicNameValuePair.of("Foo","f1"))
 			.formData(OMap.of("Foo","f2"))
 			.formData(AMap.of("Foo","f3"))
 			.formData(NameValuePairs.of("Foo","f4","Foo","f5"))
-			.formData(new BasicNameValuePair("Foo","f6"), new BasicNameValuePair("Foo","f7"))
+			.formData(BasicNameValuePair.of("Foo","f6"), BasicNameValuePair.of("Foo","f7"))
 			.build()
 			.post("/checkFormData")
 			.run()
 			.assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7");
+	}
+
+	@Test
+	public void j03_formData_withSchema() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData("Foo",AList.of("bar","baz"), HttpPartSchema.T_ARRAY_PIPES)
+			.build()
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=bar%7Cbaz");
+	}
+
+	@Test
+	public void j04_formData_withNull() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData(BasicNameValuePair.of("Foo","bar"), null)
+			.build()
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=bar");
+	}
+
+	@Test
+	public void j05_formData_invalid() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.formData(BasicNameValuePair.of("Foo","bar"), "Baz");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Invalid type passed to formData(Object...):  java.lang.String", e.getMessage());
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2329,7 +2468,7 @@ public class RestClientTest {
 			.simpleJson()
 			.uriResolution(UriResolution.ABSOLUTE)
 			.uriRelativity(UriRelativity.PATH_INFO)
-			.uriContext(new UriContext("http://localhost:80", "/context", "/resource", "/path"))
+			.uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path"))
 			.build()
 			.post("/echoBody", x)
 			.run()
@@ -2340,7 +2479,7 @@ public class RestClientTest {
 			.simpleJson()
 			.uriResolution(UriResolution.NONE)
 			.uriRelativity(UriRelativity.RESOURCE)
-			.uriContext(new UriContext("http://localhost:80", "/context", "/resource", "/path"))
+			.uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path"))
 			.build()
 			.post("/echoBody", x)
 			.run()

@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -20,6 +21,17 @@ import org.apache.juneau.annotation.*;
 @BeanIgnore
 public class BasicHeader extends org.apache.http.message.BasicHeader {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicHeader} object.
+	 */
+	public static BasicHeader of(String name, Object value) {
+		return new BasicHeader(name, StringUtils.asString(value));
+	}
 
 	/**
 	 * Constructor.

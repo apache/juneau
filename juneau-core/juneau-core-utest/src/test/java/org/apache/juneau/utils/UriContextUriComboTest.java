@@ -200,7 +200,7 @@ public class UriContextUriComboTest {
 		private final UriContext uriContext;
 
 		public Input(String authority, String context, String resource, String path) {
-			this.uriContext = new UriContext(authority, context, resource, path);
+			this.uriContext = UriContext.of(authority, context, resource, path);
 		}
 	}
 

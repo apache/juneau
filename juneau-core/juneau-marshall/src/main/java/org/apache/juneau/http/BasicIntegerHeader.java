@@ -37,6 +37,17 @@ public class BasicIntegerHeader extends BasicHeader {
 	private final Integer value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicIntegerHeader} object.
+	 */
+	public static BasicIntegerHeader of(String name, Object value) {
+		return new BasicIntegerHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name HTTP header name.

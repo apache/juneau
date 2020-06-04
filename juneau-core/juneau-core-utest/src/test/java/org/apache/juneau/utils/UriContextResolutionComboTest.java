@@ -995,61 +995,61 @@ public class UriContextResolutionComboTest {
 
 	@Test
 	public void a01_testAbsoluteResource() {
-		assertEquals(r.aResource, new UriResolver(ABSOLUTE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aResource, UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a02_testAppendAbsoluteResource() {
-		assertEquals(r.aResource, new UriResolver(ABSOLUTE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aResource, UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a03_testAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, new UriResolver(ABSOLUTE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aPathInfo, UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a04_testAppendAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, new UriResolver(ABSOLUTE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aPathInfo, UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a05_testRootRelativeResource() {
-		assertEquals(r.rrResource, new UriResolver(ROOT_RELATIVE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrResource, UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a06_testAppendRootRelativeResource() {
-		assertEquals(r.rrResource, new UriResolver(ROOT_RELATIVE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrResource, UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a07_testRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, new UriResolver(ROOT_RELATIVE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrPathInfo, UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a08_testAppendRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, new UriResolver(ROOT_RELATIVE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrPathInfo, UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a09_testNoneResource() {
-		assertEquals(r.nResource, new UriResolver(NONE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nResource, UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a10_testAppendNoneResource() {
-		assertEquals(r.nResource, new UriResolver(NONE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nResource, UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a11_testNonePathInfo() {
-		assertEquals(r.nPathInfo, new UriResolver(NONE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nPathInfo, UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a12_testAppendNonePathInfo() {
-		assertEquals(r.nPathInfo, new UriResolver(NONE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nPathInfo, UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 }

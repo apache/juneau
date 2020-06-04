@@ -882,7 +882,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null)
-			uriContext = new UriContext(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
+			uriContext = UriContext.of(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
 		return uriContext;
 	}
 
@@ -894,7 +894,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The URI resolver for this request.
 	 */
 	public UriResolver getUriResolver(UriResolution resolution, UriRelativity relativity) {
-		return new UriResolver(resolution, relativity, getUriContext());
+		return UriResolver.of(resolution, relativity, getUriContext());
 	}
 
 	/**
@@ -904,7 +904,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The URI resolver for this request.
 	 */
 	public UriResolver getUriResolver() {
-		return new UriResolver(context.getUriResolution(), context.getUriRelativity(), getUriContext());
+		return UriResolver.of(context.getUriResolution(), context.getUriRelativity(), getUriContext());
 	}
 
 	/**

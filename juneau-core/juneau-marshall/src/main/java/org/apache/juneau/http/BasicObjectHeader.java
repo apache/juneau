@@ -25,6 +25,17 @@ public class BasicObjectHeader extends BasicHeader {
 	private final Object value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicObjectHeader} object.
+	 */
+	public static BasicObjectHeader of(String name, Object value) {
+		return new BasicObjectHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

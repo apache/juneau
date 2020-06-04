@@ -37,6 +37,17 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	private final List<StringRange> typeRangesList;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicRangeArrayHeader} object.
+	 */
+	public static BasicRangeArrayHeader of(String name, String value) {
+		return new BasicRangeArrayHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

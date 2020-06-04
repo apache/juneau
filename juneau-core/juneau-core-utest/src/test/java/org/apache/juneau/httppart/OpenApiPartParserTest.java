@@ -48,7 +48,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void a01_inputValidations_nullInput() throws Exception {
-		HttpPartSchema s = tNone().build();
+		HttpPartSchema s = T_NONE;
 		assertNull(parse(s, null, String.class));
 
 		s = tNone().required(false).build();
@@ -285,7 +285,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c01_stringType_simple() throws Exception {
-		HttpPartSchema s = tString().build();
+		HttpPartSchema s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
 	}
 
@@ -298,7 +298,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c03_stringType_byteFormat() throws Exception {
-		HttpPartSchema s = tByte().build();
+		HttpPartSchema s = T_BYTE;
 		String in = base64Encode("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
@@ -308,7 +308,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c04_stringType_binaryFormat() throws Exception {
-		HttpPartSchema s = tBinary().build();
+		HttpPartSchema s = T_BINARY;
 		String in = toHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
@@ -318,7 +318,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c05_stringType_binarySpacedFormat() throws Exception {
-		HttpPartSchema s = tBinarySpaced().build();
+		HttpPartSchema s = T_BINARY_SPACED;
 		String in = toSpacedHex("foo".getBytes());
 		assertEquals("foo", parse(s, in, String.class));
 		assertEquals("foo", IOUtils.read(parse(s, in, InputStream.class)));
@@ -328,7 +328,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c06_stringType_dateFormat() throws Exception {
-		HttpPartSchema s = tDate().build();
+		HttpPartSchema s = T_DATE;
 		String in = "2012-12-21";
 		assertTrue(parse(s, in, String.class).contains("2012"));
 		assertTrue(parse(s, in, Date.class).toString().contains("2012"));
@@ -338,7 +338,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c07_stringType_dateTimeFormat() throws Exception {
-		HttpPartSchema s = tDateTime().build();
+		HttpPartSchema s = T_DATETIME;
 		String in = "2012-12-21T12:34:56.789";
 		assertTrue(parse(s, in, String.class).contains("2012"));
 		assertTrue(parse(s, in, Date.class).toString().contains("2012"));
@@ -348,7 +348,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c08_stringType_uonFormat() throws Exception {
-		HttpPartSchema s = tUon().build();
+		HttpPartSchema s = T_UON;
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("foo", parse(s, "'foo'", String.class));
 		assertEquals("C2-foo", parse(s, "'foo'", C2.class).toString());
@@ -358,7 +358,7 @@ public class OpenApiPartParserTest {
 	@Test
 	public void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
-		HttpPartSchema s = tString().build();
+		HttpPartSchema s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals("'foo'", parse(s, "'foo'", String.class));
 		assertEquals("C2-foo", parse(s, "foo", C2.class).toString());
@@ -400,7 +400,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c12a_stringType_nullKeyword_plain() throws Exception {
-		HttpPartSchema s = tString().build();
+		HttpPartSchema s = T_STRING;
 		assertEquals(null, parse(s, "null", String.class));
 	}
 
@@ -413,7 +413,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void c12c_stringType_nullKeyword_uon() throws Exception {
-		HttpPartSchema s = tUon().build();
+		HttpPartSchema s = T_UON;
 		assertEquals(null, parse(s, "null", String.class));
 		assertEquals("null", parse(s, "'null'", String.class));
 	}
@@ -445,7 +445,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d01_arrayType_collectionFormatCsv() throws Exception {
-		HttpPartSchema s = tArrayCsv().build();
+		HttpPartSchema s = T_ARRAY_CSV;
 		assertObjectEquals("['foo','bar']", parse(s, "foo,bar", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "foo,bar", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "foo,bar", D[].class));
@@ -458,7 +458,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d02_arrayType_collectionFormatPipes() throws Exception {
-		HttpPartSchema s = tArrayPipes().build();
+		HttpPartSchema s = T_ARRAY_PIPES;
 		assertObjectEquals("['foo','bar']", parse(s, "foo|bar", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "foo|bar", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "foo|bar", D[].class));
@@ -471,7 +471,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d03_arrayType_collectionFormatSsv() throws Exception {
-		HttpPartSchema s = tArraySsv().build();
+		HttpPartSchema s = T_ARRAY_SSV;
 		assertObjectEquals("['foo','bar']", parse(s, "foo bar", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "foo bar", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "foo bar", D[].class));
@@ -484,7 +484,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d04_arrayType_collectionFormatTsv() throws Exception {
-		HttpPartSchema s = tArrayTsv().build();
+		HttpPartSchema s = T_ARRAY_TSV;
 		assertObjectEquals("['foo','bar']", parse(s, "foo\tbar", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "foo\tbar", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "foo\tbar", D[].class));
@@ -497,7 +497,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema s = tArrayUon().build();
+		HttpPartSchema s = T_ARRAY_UON;
 		assertObjectEquals("['foo','bar']", parse(s, "@(foo,bar)", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "@(foo,bar)", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "@(foo,bar)", D[].class));
@@ -510,7 +510,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d06a_arrayType_collectionFormatNone() throws Exception {
-		HttpPartSchema s = tArray().build();
+		HttpPartSchema s = T_ARRAY;
 		assertObjectEquals("['foo','bar']", parse(s, "foo,bar", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "foo,bar", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "foo,bar", D[].class));
@@ -522,7 +522,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
-		HttpPartSchema s = tArray().build();
+		HttpPartSchema s = T_ARRAY;
 		assertObjectEquals("['foo','bar']", parse(s, "@(foo,bar)", String[].class));
 		assertObjectEquals("['foo','bar']", parse(s, "@(foo,bar)", Object[].class));
 		assertObjectEquals("['D-foo','D-bar']", parse(s, "@(foo,bar)", D[].class));
@@ -535,7 +535,7 @@ public class OpenApiPartParserTest {
 	@Test
 	public void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi should not do any sort of splitting.
-		HttpPartSchema s = tArrayMulti().build();
+		HttpPartSchema s = T_ARRAY_MULTI;
 		assertObjectEquals("['foo,bar']", parse(s, "foo,bar", String[].class));
 		assertObjectEquals("['foo,bar']", parse(s, "foo,bar", Object[].class));
 		assertObjectEquals("['D-foo,bar']", parse(s, "foo,bar", D[].class));
@@ -618,7 +618,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void e01_booleanType() throws Exception {
-		HttpPartSchema s = tBoolean().build();
+		HttpPartSchema s = T_BOOLEAN;
 		assertEquals(true, parse(s, "true", boolean.class));
 		assertEquals(true, parse(s, "true", Boolean.class));
 		assertNull(parse(s, "null", Boolean.class));
@@ -723,7 +723,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void f01_integerType_int32() throws Exception {
-		HttpPartSchema s = tInt32().build();
+		HttpPartSchema s = T_INT32;
 		assertObjectEquals("1", parse(s, "1", int.class));
 		assertObjectEquals("1", parse(s, "1", Integer.class));
 		assertObjectEquals("1", parse(s, "1", short.class));
@@ -791,7 +791,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void f04_integerType_int64() throws Exception {
-		HttpPartSchema s = tInt64().build();
+		HttpPartSchema s = T_INT64;
 		assertObjectEquals("1", parse(s, "1", int.class));
 		assertObjectEquals("1", parse(s, "1", Integer.class));
 		assertObjectEquals("1", parse(s, "1", short.class));
@@ -906,7 +906,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void g01_numberType_float() throws Exception {
-		HttpPartSchema s = tFloat().build();
+		HttpPartSchema s = T_FLOAT;
 		assertObjectEquals("1.0", parse(s, "1", float.class));
 		assertObjectEquals("1.0", parse(s, "1", Float.class));
 		assertObjectEquals("1.0", parse(s, "1", double.class));
@@ -964,7 +964,7 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void g04_numberType_double() throws Exception {
-		HttpPartSchema s = tDouble().build();
+		HttpPartSchema s = T_DOUBLE;
 		assertObjectEquals("1.0", parse(s, "1", float.class));
 		assertObjectEquals("1.0", parse(s, "1", Float.class));
 		assertObjectEquals("1.0", parse(s, "1", double.class));

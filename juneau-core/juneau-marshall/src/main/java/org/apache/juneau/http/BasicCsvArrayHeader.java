@@ -38,6 +38,17 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	private final String[] value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicCsvArrayHeader} object.
+	 */
+	public static BasicCsvArrayHeader of(String name, String value) {
+		return new BasicCsvArrayHeader(name, split(value));
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

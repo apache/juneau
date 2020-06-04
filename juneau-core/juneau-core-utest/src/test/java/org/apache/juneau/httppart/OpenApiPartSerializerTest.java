@@ -41,7 +41,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void a01_outputValidations_nullOutput() throws Exception {
-		HttpPartSchema ps = tNone().build();
+		HttpPartSchema ps = T_NONE;
 		assertEquals("null", serialize(ps, null));
 
 		ps = tNone().required(false).build();
@@ -210,7 +210,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c01_stringType_simple() throws Exception {
-		HttpPartSchema ps = tString().build();
+		HttpPartSchema ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
 	}
 
@@ -223,7 +223,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c03_stringType_byteFormat() throws Exception {
-		HttpPartSchema ps = tByte().build();
+		HttpPartSchema ps = T_BYTE;
 		byte[] foob = "foo".getBytes();
 		String expected = base64Encode(foob);
 		assertEquals(expected, serialize(ps, foob));
@@ -234,7 +234,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c04_stringType_binaryFormat() throws Exception {
-		HttpPartSchema ps = tBinary().build();
+		HttpPartSchema ps = T_BINARY;
 		byte[] foob = "foo".getBytes();
 		String expected = toHex(foob);
 		assertEquals(expected, serialize(ps, foob));
@@ -245,7 +245,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c05_stringType_binarySpacedFormat() throws Exception {
-		HttpPartSchema ps = tBinarySpaced().build();
+		HttpPartSchema ps = T_BINARY_SPACED;
 		byte[] foob = "foo".getBytes();
 		String expected = toSpacedHex(foob);
 		assertEquals(expected, serialize(ps, foob));
@@ -256,7 +256,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c06_stringType_dateFormat() throws Exception {
-		HttpPartSchema ps = tDate().build();
+		HttpPartSchema ps = T_DATE;
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
@@ -264,7 +264,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c07_stringType_dateTimeFormat() throws Exception {
-		HttpPartSchema ps = tDateTime().build();
+		HttpPartSchema ps = T_DATETIME;
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(serialize(ps, in).contains("2012"));
 		assertEquals("null", serialize(ps, null));
@@ -272,7 +272,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c08_stringType_uonFormat() throws Exception {
-		HttpPartSchema ps = tUon().build();
+		HttpPartSchema ps = T_UON;
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("'foo'", serialize(ps, "'foo'"));
 		assertEquals("foo", serialize(ps, new C2("foo")));
@@ -285,7 +285,7 @@ public class OpenApiPartSerializerTest {
 	@Test
 	public void c09_stringType_noneFormat() throws Exception {
 		// If no format is specified, then we should transform directly from a string.
-		HttpPartSchema ps = tString().build();
+		HttpPartSchema ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("'foo'", serialize(ps, "'foo'"));
 		assertEquals("foo", serialize(ps, new C2("foo")));
@@ -324,7 +324,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c12_stringType_uonKeywords_plain() throws Exception {
-		HttpPartSchema ps = tString().build();
+		HttpPartSchema ps = T_STRING;
 		// When serialized normally, the following should not be quoted.
 		assertEquals("true", serialize(ps, "true"));
 		assertEquals("false", serialize(ps, "false"));
@@ -336,7 +336,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void c13_stringType_uonKeywords_uon() throws Exception {
-		HttpPartSchema ps = tUon().build();
+		HttpPartSchema ps = T_UON;
 		// When serialized as UON, the following should be quoted so that they're not confused with booleans or numbers.
 		assertEquals("'true'", serialize(ps, "true"));
 		assertEquals("'false'", serialize(ps, "false"));
@@ -363,7 +363,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d01_arrayType_collectionFormatCsv() throws Exception {
-		HttpPartSchema ps = tArrayCsv().build();
+		HttpPartSchema ps = T_ARRAY_CSV;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -377,7 +377,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d02_arrayType_collectionFormatPipes() throws Exception {
-		HttpPartSchema ps = tArrayPipes().build();
+		HttpPartSchema ps = T_ARRAY_PIPES;
 		assertEquals("foo|bar|null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo|bar|null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo|bar|null|null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -389,7 +389,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d03_arrayType_collectionFormatSsv() throws Exception {
-		HttpPartSchema ps = tArraySsv().build();
+		HttpPartSchema ps = T_ARRAY_SSV;
 		assertEquals("foo bar null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo bar null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo bar null null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -401,7 +401,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d04_arrayType_collectionFormatTsv() throws Exception {
-		HttpPartSchema ps = tArrayTsv().build();
+		HttpPartSchema ps = T_ARRAY_TSV;
 		assertEquals("foo\tbar\tnull", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull\tnull", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -413,7 +413,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema ps = tArrayUon().build();
+		HttpPartSchema ps = T_ARRAY_UON;
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new Object[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
@@ -425,7 +425,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d06a_arrayType_collectionFormatNone() throws Exception {
-		HttpPartSchema ps = tArray().build();
+		HttpPartSchema ps = T_ARRAY;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -438,7 +438,7 @@ public class OpenApiPartSerializerTest {
 	@Test
 	public void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi really shouldn't be applicable to collections of values, so just use csv.
-		HttpPartSchema ps = tArrayMulti().build();
+		HttpPartSchema ps = T_ARRAY_MULTI;
 		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
 		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
@@ -503,7 +503,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void e01_booleanType() throws Exception {
-		HttpPartSchema ps = tBoolean().build();
+		HttpPartSchema ps = T_BOOLEAN;
 		assertEquals("true", serialize(ps, true));
 		assertEquals("true", serialize(ps, "true"));
 		assertEquals("true", serialize(ps, new E1(true)));
@@ -596,7 +596,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void f01_integerType_int32() throws Exception {
-		HttpPartSchema ps = tInt32().build();
+		HttpPartSchema ps = T_INT32;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, new Integer(1)));
 		assertEquals("1", serialize(ps, (short)1));
@@ -663,7 +663,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void f04_integerType_int64() throws Exception {
-		HttpPartSchema ps = tInt64().build();
+		HttpPartSchema ps = T_INT64;
 		assertEquals("1", serialize(ps, 1));
 		assertEquals("1", serialize(ps, new Integer(1)));
 		assertEquals("1", serialize(ps, (short)1));
@@ -775,7 +775,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void g01_numberType_float() throws Exception {
-		HttpPartSchema ps = tFloat().build();
+		HttpPartSchema ps = T_FLOAT;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, new Float(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
@@ -833,7 +833,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void g04_numberType_double() throws Exception {
-		HttpPartSchema ps = tDouble().build();
+		HttpPartSchema ps = T_DOUBLE;
 		assertEquals("1.0", serialize(ps, 1f));
 		assertEquals("1.0", serialize(ps, new Float(1f)));
 		assertEquals("1.0", serialize(ps, 1d));
@@ -917,7 +917,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void h02_objectType_uon() throws Exception {
-		HttpPartSchema ps = tObjectUon().build();
+		HttpPartSchema ps = T_OBJECT_UON;
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, new H1("1",2,true)));
 		assertEquals("()", serialize(ps, new H1(null,null,null)));
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, OMap.ofJson("{f1:'1',f2:2,f3:true}")));

@@ -37,6 +37,17 @@ public class BasicLongHeader extends BasicHeader {
 	private final Long value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicLongHeader} object.
+	 */
+	public static BasicLongHeader of(String name, Object value) {
+		return new BasicLongHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.

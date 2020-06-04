@@ -36,6 +36,17 @@ public class BasicEntityValidatorArrayHeader extends BasicHeader {
 	private final EntityValidator[] value;
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicEntityValidatorArrayHeader} object.
+	 */
+	public static BasicEntityValidatorArrayHeader of(String name, String value) {
+		return new BasicEntityValidatorArrayHeader(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The HTTP header name.
