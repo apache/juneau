@@ -56,7 +56,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanTraverseBuilder detectRecursions(boolean value) {
 		return set(BEANTRAVERSE_detectRecursions, value);
@@ -103,7 +103,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanTraverseBuilder detectRecursions() {
 		return set(BEANTRAVERSE_detectRecursions, true);
 	}
@@ -116,7 +116,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanTraverseBuilder ignoreRecursions(boolean value) {
 		return set(BEANTRAVERSE_ignoreRecursions, value);
@@ -166,7 +166,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanTraverseBuilder ignoreRecursions() {
 		return set(BEANTRAVERSE_ignoreRecursions, true);
 	}
@@ -202,7 +202,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanTraverseBuilder initialDepth(int value) {
 		return set(BEANTRAVERSE_initialDepth, value);
 	}
@@ -237,12 +237,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanTraverseBuilder maxDepth(int value) {
 		return set(BEANTRAVERSE_maxDepth, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder add(Map<String,Object> properties) {
@@ -283,6 +283,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -457,12 +463,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -664,7 +664,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	@Override /* Context */
 	public BeanTraverseContext build() {

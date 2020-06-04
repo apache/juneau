@@ -80,7 +80,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder fileCharset(Charset value) {
 		return set(WSERIALIZER_fileCharset, value);
 	}
@@ -114,7 +114,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -155,7 +155,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -193,7 +193,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder sq() {
 		return quoteChar('\'');
 	}
@@ -228,7 +228,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder streamCharset(Charset value) {
 		return set(WSERIALIZER_streamCharset, value);
 	}
@@ -241,7 +241,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public WriterSerializerBuilder useWhitespace(boolean value) {
 		return set(WSERIALIZER_useWhitespace, value);
@@ -275,7 +275,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public WriterSerializerBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -309,12 +309,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerBuilder ws() {
 		return useWhitespace();
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public WriterSerializerBuilder add(Map<String,Object> properties) {
@@ -355,6 +355,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public WriterSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public WriterSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -529,12 +535,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public WriterSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public WriterSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -832,7 +832,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	@Override /* Context */
 	public WriterSerializer build() {

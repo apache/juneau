@@ -52,7 +52,7 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder add(Map<String,Object> properties) {
@@ -93,6 +93,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -267,12 +273,6 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -528,5 +528,5 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

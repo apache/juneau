@@ -85,7 +85,7 @@ public class UnavailableForLegalReasons extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public UnavailableForLegalReasons header(String name, Object val) {
@@ -93,5 +93,5 @@ public class UnavailableForLegalReasons extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

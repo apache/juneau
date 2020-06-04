@@ -85,7 +85,7 @@ public class BadRequest extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public BadRequest header(String name, Object val) {
@@ -93,5 +93,5 @@ public class BadRequest extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

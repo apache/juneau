@@ -52,7 +52,6 @@ public class BeanSession extends Session {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
-	private final boolean debug;
 	private final HttpPartSchema schema;
 	private Stack<StringBuilder> sbStack = new Stack<>();
 
@@ -66,11 +65,10 @@ public class BeanSession extends Session {
 	 * 	Runtime session arguments.
 	 */
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
-		super(args);
+		super(ctx, args);
 		this.ctx = ctx;
 		locale = getProperty(BEAN_locale, Locale.class, ctx.getLocale());
 		timeZone = getProperty(BEAN_timeZone, TimeZone.class, ctx.getTimeZone());
-		debug = getProperty(BEAN_debug, Boolean.class, ctx.isDebug());
 		mediaType = getProperty(BEAN_mediaType, MediaType.class, ctx.getMediaType());
 		schema = args.schema;
 	}
@@ -1180,8 +1178,8 @@ public class BeanSession extends Session {
 	 */
 	@Override
 	public void addWarning(String msg, Object... args) {
-		if (debug)
-			LOG.log(Level.WARNING, msg, args);
+		if (isDebug())
+			LOG.log(Level.WARNING, ()->args.length == 0 ? msg : MessageFormat.format(msg, args));
 		super.addWarning(msg, args);
 	}
 
@@ -1326,17 +1324,6 @@ public class BeanSession extends Session {
 	 */
 	protected final String getBeanTypePropertyName() {
 		return ctx.getBeanTypePropertyName();
-	}
-
-	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * @see BeanContext#BEAN_debug
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	protected final boolean isDebug() {
-		return debug;
 	}
 
 	/**
@@ -1616,7 +1603,7 @@ public class BeanSession extends Session {
 
 	@Override /* Session */
 	public void checkForWarnings() {
-		if (debug)
+		if (isDebug())
 			super.checkForWarnings();
 	}
 
@@ -1625,7 +1612,6 @@ public class BeanSession extends Session {
 		return super.toMap()
 			.a("Context", ctx.toMap())
 			.a("BeanSession", new DefaultFilteringOMap()
-				.a("debug", debug)
 				.a("locale", locale)
 				.a("mediaType", mediaType)
 				.a("schema", schema)

@@ -27,7 +27,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
@@ -273,7 +272,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder annotations(Annotation...values) {
 		return prependTo(BEAN_annotations, values);
 	}
@@ -324,7 +323,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanClassVisibility(Visibility value) {
 		return set(BEAN_beanClassVisibility, value);
 	}
@@ -378,7 +377,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanConstructorVisibility(Visibility value) {
 		return set(BEAN_beanConstructorVisibility, value);
 	}
@@ -395,7 +394,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionary(Object...values) {
 		return prependTo(BEAN_beanDictionary, values);
 	}
@@ -409,7 +408,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionary(Class<?>...values) {
 		return prependTo(BEAN_beanDictionary, values);
 	}
@@ -423,7 +422,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
 		return set(BEAN_beanDictionary, values);
 	}
@@ -437,7 +436,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionaryReplace(Object...values) {
 		return set(BEAN_beanDictionary, values);
 	}
@@ -451,7 +450,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
 		return removeFrom(BEAN_beanDictionary, values);
 	}
@@ -465,7 +464,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanDictionaryRemove(Object...values) {
 		return removeFrom(BEAN_beanDictionary, values);
 	}
@@ -528,7 +527,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link Visibility#PUBLIC}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanFieldVisibility(Visibility value) {
 		return set(BEAN_beanFieldVisibility, value);
 	}
@@ -541,7 +540,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanContextBuilder beanFilters(Object...values) {
 		return prependTo(BEAN_beanFilters, values);
@@ -555,7 +554,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanContextBuilder beanFiltersReplace(Object...values) {
 		return set(BEAN_beanFilters, values);
@@ -569,7 +568,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanContextBuilder beanFiltersRemove(Object...values) {
 		return removeFrom(BEAN_beanFilters, values);
@@ -625,7 +624,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).interceptor(value));
 	}
@@ -638,7 +637,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
 		return set(BEAN_beanMapPutReturnsOldValue, value);
@@ -679,7 +678,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanMapPutReturnsOldValue() {
 		return set(BEAN_beanMapPutReturnsOldValue, true);
 	}
@@ -732,7 +731,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link Visibility#PUBLIC}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beanMethodVisibility(Visibility value) {
 		return set(BEAN_beanMethodVisibility, value);
 	}
@@ -746,7 +745,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
 		return set(BEAN_beansRequireDefaultConstructor, value);
 	}
@@ -804,7 +803,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireDefaultConstructor() {
 		return set(BEAN_beansRequireDefaultConstructor, true);
 	}
@@ -818,7 +817,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireSerializable(boolean value) {
 		return set(BEAN_beansRequireSerializable, value);
 	}
@@ -871,7 +870,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireSerializable() {
 		return set(BEAN_beansRequireSerializable, true);
 	}
@@ -885,7 +884,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
 		return set(BEAN_beansRequireSettersForGetters, value);
 	}
@@ -936,7 +935,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireSettersForGetters() {
 		return set(BEAN_beansRequireSettersForGetters, true);
 	}
@@ -950,7 +949,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansRequireSomeProperties(boolean value) {
 		return set(BEAN_beansRequireSomeProperties, value);
 	}
@@ -998,7 +997,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder beansDontRequireSomeProperties() {
 		return set(BEAN_beansRequireSomeProperties, false);
 	}
@@ -1059,7 +1058,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpi(Class<?> beanClass, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpi(properties));
 	}
@@ -1122,7 +1121,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpi(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
 			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(asString(e.getValue())));
@@ -1187,7 +1186,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpi(String beanClassName, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpi(properties));
 	}
@@ -1240,7 +1239,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpx(Class<?> beanClass, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpx(properties));
 	}
@@ -1295,7 +1294,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpx(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
 			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(asString(e.getValue())));
@@ -1347,7 +1346,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpx(String beanClassName, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpx(properties));
 	}
@@ -1403,7 +1402,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpro(Class<?> beanClass, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpro(properties));
 	}
@@ -1461,7 +1460,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpro(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
 			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(asString(e.getValue())));
@@ -1521,7 +1520,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpro(String beanClassName, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpro(properties));
 	}
@@ -1576,7 +1575,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpwo(Class<?> beanClass, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClass.getName()).bpwo(properties));
 	}
@@ -1633,7 +1632,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>Values are comma-delimited lists of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpwo(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
 			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(asString(e.getValue())));
@@ -1692,7 +1691,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param properties Comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder bpwo(String beanClassName, String properties) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(beanClassName).bpwo(properties));
 	}
@@ -1706,66 +1705,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder debug(boolean value) {
-		return set(BEAN_debug, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:</i>  Debug mode.
-	 *
-	 * <p>
-	 * Enables the following additional information during serialization:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean getters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Enables the following additional information during parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean setters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with debug enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.debug()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@ConfigurationProperty
-	public BeanContextBuilder debug() {
-		return set(BEAN_debug, true);
+		return set(CONTEXT_debug, value);
 	}
 
 	/**
@@ -1859,7 +1801,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dictionary(Object...values) {
 		return prependTo(BEAN_beanDictionary, values);
 	}
@@ -1907,7 +1849,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dictionaryOn(Class<?> on, Class<?>...values) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).dictionary(values));
 	}
@@ -1955,7 +1897,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param o An instance of the POJO class used for examples.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
 		return putTo(BEAN_examples, pojoClass.getName(), o);
 	}
@@ -1998,7 +1940,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param json The simple JSON representation of the example.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public <T> BeanContextBuilder exampleJson(Class<T> pojoClass, String json) {
 		try {
 			return putTo(BEAN_examples, pojoClass.getName(), SimpleJson.DEFAULT.read(json, pojoClass));
@@ -2015,7 +1957,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
 		return putTo(BEAN_bpx, beanClass.getName(), properties);
 	}
@@ -2028,7 +1970,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder excludeProperties(Map<String,String> values) {
 		return set(BEAN_bpx, values);
 	}
@@ -2041,7 +1983,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder excludeProperties(String beanClassName, String value) {
 		return putTo(BEAN_bpx, beanClassName, value);
 	}
@@ -2055,7 +1997,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder fluentSetters(boolean value) {
 		return set(BEAN_fluentSetters, value);
 	}
@@ -2109,7 +2051,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder fluentSetters() {
 		return set(BEAN_fluentSetters, true);
 	}
@@ -2149,7 +2091,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param on The class that this applies to.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder fluentSetters(Class<?> on) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).fluentSetters(true));
 	}
@@ -2163,7 +2105,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
 	}
@@ -2206,7 +2148,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters() {
 		return set(BEAN_ignoreInvocationExceptionsOnGetters, true);
 	}
@@ -2220,7 +2162,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
 	}
@@ -2263,7 +2205,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
 		return set(BEAN_ignoreInvocationExceptionsOnSetters, true);
 	}
@@ -2277,7 +2219,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignorePropertiesWithoutSetters(boolean value) {
 		return set(BEAN_ignorePropertiesWithoutSetters, value);
 	}
@@ -2324,7 +2266,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dontIgnorePropertiesWithoutSetters() {
 		return set(BEAN_ignorePropertiesWithoutSetters, false);
 	}
@@ -2338,7 +2280,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreTransientFields(boolean value) {
 		return set(BEAN_ignoreTransientFields, value);
 	}
@@ -2382,7 +2324,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dontIgnoreTransientFields() {
 		return set(BEAN_ignoreTransientFields, false);
 	}
@@ -2396,7 +2338,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownBeanProperties, value);
 	}
@@ -2437,7 +2379,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreUnknownBeanProperties() {
 		return set(BEAN_ignoreUnknownBeanProperties, true);
 	}
@@ -2451,7 +2393,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		return set(BEAN_ignoreUnknownNullBeanProperties, value);
 	}
@@ -2492,7 +2434,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dontIgnoreUnknownNullBeanProperties() {
 		return set(BEAN_ignoreUnknownNullBeanProperties, false);
 	}
@@ -2541,7 +2483,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param implClass The implementation class.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		return putTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
@@ -2590,7 +2532,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
 			putTo(BEAN_implClasses, e.getKey().getName(), e.getValue());
@@ -2605,7 +2547,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder includeProperties(Class<?> beanClass, String value) {
 		return putTo(BEAN_bpi, beanClass.getName(), value);
 	}
@@ -2618,7 +2560,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder includeProperties(Map<String,String> values) {
 		return set(BEAN_bpi, values);
 	}
@@ -2631,7 +2573,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated public BeanContextBuilder includeProperties(String beanClassName, String value) {
 		return putTo(BEAN_bpi, beanClassName, value);
 	}
@@ -2677,7 +2619,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder interfaceClass(Class<?> on, Class<?> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).interfaceClass(value));
 	}
@@ -2722,7 +2664,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder interfaces(Class<?>...value) {
 		for (Class<?> v : value)
 			prependTo(BEAN_annotations, new BeanAnnotation(v).interfaceClass(v));
@@ -2780,7 +2722,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder locale(Locale value) {
 		return set(BEAN_locale, value);
 	}
@@ -2835,7 +2777,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder mediaType(MediaType value) {
 		return set(BEAN_mediaType, value);
 	}
@@ -2898,7 +2840,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder notBeanClasses(Object...values) {
 		return addTo(BEAN_notBeanClasses, values);
 	}
@@ -2950,7 +2892,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder notBeanPackages(Object...values) {
 		for (Object o : values) {
 			if (o instanceof Package)
@@ -2977,7 +2919,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder pojoSwaps(Object...values) {
 		return appendTo(BEAN_pojoSwaps, values);
 	}
@@ -2991,7 +2933,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder pojoSwapsReplace(Object...values) {
 		return set(BEAN_pojoSwaps, values);
 	}
@@ -3005,7 +2947,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder pojoSwapsRemove(Object...values) {
 		return removeFrom(BEAN_pojoSwaps, values);
 	}
@@ -3057,7 +2999,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link PropertyNamerDefault}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder propertyNamer(Class<? extends PropertyNamer> value) {
 		return set(BEAN_propertyNamer, value);
 	}
@@ -3097,7 +3039,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is {@link PropertyNamerDefault}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).propertyNamer(value));
 	}
@@ -3111,7 +3053,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder sortProperties(boolean value) {
 		return set(BEAN_sortProperties, value);
 	}
@@ -3165,7 +3107,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder sortProperties() {
 		return set(BEAN_sortProperties, true);
 	}
@@ -3203,7 +3145,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param on The bean classes to sort properties on.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder sortProperties(Class<?>...on) {
 		for (Class<?> c : on)
 			prependTo(BEAN_annotations, new BeanAnnotation(c).sort(true));
@@ -3250,7 +3192,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder stopClass(Class<?> on, Class<?> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).stopClass(value));
 	}
@@ -3346,7 +3288,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder swaps(Object...values) {
 		return appendTo(BEAN_swaps, values);
 	}
@@ -3400,7 +3342,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder timeZone(TimeZone value) {
 		return set(BEAN_timeZone, value);
 	}
@@ -3446,7 +3388,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder typeName(Class<?> on, String value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).typeName(value));
 	}
@@ -3499,7 +3441,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is <js>"_type"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder typePropertyName(String value) {
 		return set(BEAN_typePropertyName, value);
 	}
@@ -3545,7 +3487,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<br>The default is <js>"_type"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder typePropertyName(Class<?> on, String value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).typePropertyName(value));
 	}
@@ -3559,7 +3501,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder useEnumNames(boolean value) {
 		return set(BEAN_useEnumNames, value);
 	}
@@ -3610,7 +3552,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder useEnumNames() {
 		return set(BEAN_useEnumNames, true);
 	}
@@ -3624,7 +3566,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder useInterfaceProxies(boolean value) {
 		return set(BEAN_useInterfaceProxies, value);
 	}
@@ -3666,7 +3608,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder dontUseInterfaceProxies() {
 		return set(BEAN_useInterfaceProxies, false);
 	}
@@ -3680,7 +3622,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
 		return set(BEAN_useJavaBeanIntrospector, value);
 	}
@@ -3713,12 +3655,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public BeanContextBuilder useJavaBeanIntrospector() {
 		return set(BEAN_useJavaBeanIntrospector, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder add(Map<String,Object> properties) {
@@ -3763,6 +3705,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -3798,5 +3746,5 @@ public class BeanContextBuilder extends ContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

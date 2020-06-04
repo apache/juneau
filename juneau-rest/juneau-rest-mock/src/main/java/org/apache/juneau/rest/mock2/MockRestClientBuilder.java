@@ -157,7 +157,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		return super.build(c);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder add(Map<String,Object> properties) {
@@ -198,6 +198,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -372,12 +378,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -1578,5 +1578,5 @@ public class MockRestClientBuilder extends RestClientBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -53,7 +53,7 @@ public class SwitchingProtocols extends HttpResponse {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpResponse */
 	public SwitchingProtocols header(String name, Object val) {
@@ -61,5 +61,5 @@ public class SwitchingProtocols extends HttpResponse {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -370,7 +370,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		return set(ISPARSER_binaryFormat, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder add(Map<String,Object> properties) {
@@ -411,6 +411,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -585,12 +591,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -792,5 +792,5 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

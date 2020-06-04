@@ -85,7 +85,7 @@ public class MisdirectedRequest extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public MisdirectedRequest header(String name, Object val) {
@@ -93,5 +93,5 @@ public class MisdirectedRequest extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

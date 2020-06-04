@@ -81,7 +81,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public OutputStreamSerializerBuilder binaryFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
@@ -94,13 +94,13 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public OutputStreamSerializerBuilder binaryFormat(String value) {
 		return set(OSSERIALIZER_binaryFormat, BinaryFormat.valueOf(value));
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public OutputStreamSerializerBuilder add(Map<String,Object> properties) {
@@ -141,6 +141,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OutputStreamSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OutputStreamSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -315,12 +321,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OutputStreamSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OutputStreamSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -618,7 +618,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	@Override /* Context */
 	public OutputStreamSerializer build() {

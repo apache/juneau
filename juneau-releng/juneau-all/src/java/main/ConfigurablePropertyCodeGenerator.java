@@ -151,7 +151,11 @@ public class ConfigurablePropertyCodeGenerator {
 		SeeOther.class,
 		SwitchingProtocols.class,
 		TemporaryRedirect.class,
-		UseProxy.class
+		UseProxy.class,
+		SessionArgs.class,
+		BeanSessionArgs.class,
+		SerializerSessionArgs.class,
+		ParserSessionArgs.class
 	};
 
 	private static String[] SOURCE_PATHS = {
@@ -170,7 +174,7 @@ public class ConfigurablePropertyCodeGenerator {
 		for (Class<?> c : classes) {
 			Set<Method> s = new TreeSet<>(new MethodComparator());
 			for (Method m : c.getDeclaredMethods()) {
-				if (m.getAnnotation(ConfigurationProperty.class) != null) {
+				if (m.getAnnotation(FluentSetter.class) != null) {
 					s.add(m);
 				}
 			}
@@ -182,10 +186,10 @@ public class ConfigurablePropertyCodeGenerator {
 			System.err.println("Processing " + f.getName());
 			String s = IOUtils.read(f);
 
-			int i1 = s.indexOf("<CONFIGURATION-PROPERTIES>"), i2 = s.indexOf("</CONFIGURATION-PROPERTIES>");
+			int i1 = s.indexOf("<FluentSetters>"), i2 = s.indexOf("</FluentSetters>");
 			String cpSection = null;
 			if (i1 != -1 && i2 != -1) {
-				cpSection = s.substring(i1+26, i2);
+				cpSection = s.substring(i1+15, i2);
 			} else {
 				System.err.println("...skipped " + f.getName());
 				continue;
@@ -259,7 +263,7 @@ public class ConfigurablePropertyCodeGenerator {
 				}
 			}
 
-			s = s.substring(0, i1+26) + sb.toString() + "\n\n\t// " + s.substring(i2);
+			s = s.substring(0, i1+15) + sb.toString() + "\n\n\t// " + s.substring(i2);
 			IOUtils.write(f, new StringReader(s));
 		}
 

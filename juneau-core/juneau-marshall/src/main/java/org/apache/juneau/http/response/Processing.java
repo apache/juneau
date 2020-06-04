@@ -55,7 +55,7 @@ public class Processing extends HttpResponse {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpResponse */
 	public Processing header(String name, Object val) {
@@ -63,5 +63,5 @@ public class Processing extends HttpResponse {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

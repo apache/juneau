@@ -3761,7 +3761,7 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			boolean debug = getBooleanProperty(BEAN_debug, false);
+			boolean debug = isDebug();
 
 			Enablement de = getInstanceProperty(REST_debug, Enablement.class, debug ? Enablement.TRUE : Enablement.FALSE);
 			if (de != null)
@@ -4835,25 +4835,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public Set<String> getAllowedMethodParams() {
 		return allowedMethodParams;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if debug mode is enabled on this resource.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #getDebug(Method)}
-	 * </div>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_debug}
-	 * </ul>
-	 *
-	 * @return <jk>true</jk> if setting is enabled.
-	 */
-	@Deprecated
-	@Override
-	public boolean isDebug() {
-		return debug == Enablement.TRUE;
 	}
 
 	/**

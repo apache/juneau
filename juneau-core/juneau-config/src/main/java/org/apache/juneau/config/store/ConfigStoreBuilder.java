@@ -47,7 +47,7 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigStoreBuilder add(Map<String,Object> properties) {
@@ -92,6 +92,12 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigStoreBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -127,5 +133,5 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

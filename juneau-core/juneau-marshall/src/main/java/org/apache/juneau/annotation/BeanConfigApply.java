@@ -88,7 +88,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 		if (! a.typePropertyName().isEmpty())
 			psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
 		if (! a.debug().isEmpty())
-			psb.set(BEAN_debug, bool(a.debug()));
+			psb.set(CONTEXT_debug, bool(a.debug()));
 		for (CS e : a.example())
 			psb.putTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
 		if (a.examples().length > 0)

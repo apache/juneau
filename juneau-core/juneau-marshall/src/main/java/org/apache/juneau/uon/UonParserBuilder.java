@@ -73,7 +73,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonParserBuilder decoding(boolean value) {
 		return set(UON_decoding, value);
 	}
@@ -90,7 +90,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonParserBuilder decoding() {
 		return decoding(true);
 	}
@@ -104,7 +104,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public UonParserBuilder validateEnd(boolean value) {
 		return set(UON_validateEnd, value);
 	}
@@ -121,12 +121,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonParserBuilder validateEnd() {
 		return set(UON_validateEnd, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public UonParserBuilder add(Map<String,Object> properties) {
@@ -167,6 +167,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UonParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -341,12 +347,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -596,5 +596,5 @@ public class UonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

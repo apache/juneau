@@ -75,7 +75,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
@@ -102,7 +102,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
@@ -115,7 +115,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
 		return set(JSONSCHEMA_allowNestedDescriptions, value);
@@ -133,7 +133,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
 	}
@@ -146,7 +146,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaSerializerBuilder allowNestedExamples(boolean value) {
 		return set(JSONSCHEMA_allowNestedExamples, value);
@@ -164,7 +164,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedExamples() {
 		return set(JSONSCHEMA_allowNestedExamples, true);
 	}
@@ -188,7 +188,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -212,7 +212,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder beanDefMapper(BeanDefMapper value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -235,7 +235,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
@@ -248,7 +248,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaSerializerBuilder useBeanDefs(boolean value) {
 		return set(JSONSCHEMA_useBeanDefs, value);
@@ -268,12 +268,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaSerializerBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder add(Map<String,Object> properties) {
@@ -314,6 +314,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -488,12 +494,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -851,5 +851,5 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

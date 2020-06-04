@@ -63,7 +63,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder autoCloseStreams(boolean value) {
 		return set(PARSER_autoCloseStreams, value);
 	}
@@ -95,7 +95,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder autoCloseStreams() {
 		return set(PARSER_autoCloseStreams, true);
 	}
@@ -133,7 +133,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder debugOutputLines(int value) {
 		return set(PARSER_debugOutputLines, value);
 	}
@@ -187,7 +187,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder listener(Class<? extends ParserListener> value) {
 		return set(PARSER_listener, value);
 	}
@@ -201,7 +201,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder strict(boolean value) {
 		return set(PARSER_strict, value);
 	}
@@ -263,7 +263,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder strict() {
 		return set(PARSER_strict, true);
 	}
@@ -277,7 +277,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder trimStrings(boolean value) {
 		return set(PARSER_trimStrings, value);
 	}
@@ -311,7 +311,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder trimStrings() {
 		return set(PARSER_trimStrings, true);
 	}
@@ -325,7 +325,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder unbuffered(boolean value) {
 		return set(PARSER_unbuffered, value);
 	}
@@ -380,12 +380,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ParserBuilder unbuffered() {
 		return set(PARSER_unbuffered, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder add(Map<String,Object> properties) {
@@ -426,6 +426,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -600,12 +606,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -807,7 +807,7 @@ public class ParserBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	@Override /* Context */
 	public Parser build() {

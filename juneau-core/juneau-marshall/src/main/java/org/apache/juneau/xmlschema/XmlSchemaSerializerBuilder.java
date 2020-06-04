@@ -55,7 +55,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* XmlSerializerBuilder */
 	public XmlSchemaSerializerBuilder addNamespaceUrisToRoot(boolean value) {
@@ -722,5 +722,5 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

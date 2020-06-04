@@ -47,7 +47,7 @@ public abstract class HttpResponse {
 	 * @param val The header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HttpResponse header(String name, Object val) {
 		headers.a(name, val);
 		return this;
@@ -70,7 +70,7 @@ public abstract class HttpResponse {
 		return message;
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

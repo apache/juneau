@@ -180,7 +180,7 @@ public class HttpException extends RuntimeException {
 	 * @param val The header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HttpException header(String name, Object val) {
 		headers.a(name, val);
 		return this;
@@ -203,7 +203,7 @@ public class HttpException extends RuntimeException {
 		return emptyIfNull(getLocalizedMessage());
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

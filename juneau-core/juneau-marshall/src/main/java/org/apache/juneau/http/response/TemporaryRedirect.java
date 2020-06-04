@@ -91,7 +91,7 @@ public class TemporaryRedirect extends HttpResponse {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpResponse */
 	public TemporaryRedirect header(String name, Object val) {
@@ -99,5 +99,5 @@ public class TemporaryRedirect extends HttpResponse {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

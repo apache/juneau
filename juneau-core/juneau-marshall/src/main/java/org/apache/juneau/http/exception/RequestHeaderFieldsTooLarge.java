@@ -85,7 +85,7 @@ public class RequestHeaderFieldsTooLarge extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public RequestHeaderFieldsTooLarge header(String name, Object val) {
@@ -93,5 +93,5 @@ public class RequestHeaderFieldsTooLarge extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

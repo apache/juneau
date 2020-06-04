@@ -142,7 +142,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder addBeanTypes(boolean value) {
 		return set(SERIALIZER_addBeanTypes, value);
@@ -160,7 +160,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder addBeanTypes() {
 		return set(SERIALIZER_addBeanTypes, true);
 	}
@@ -173,7 +173,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder addRootType(boolean value) {
 		return set(SERIALIZER_addRootType, value);
@@ -191,7 +191,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder addRootType() {
 		return set(SERIALIZER_addRootType, true);
 	}
@@ -204,7 +204,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder keepNullProperties(boolean value) {
 		return set(SERIALIZER_keepNullProperties, value);
@@ -222,7 +222,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder keepNullProperties() {
 		return set(SERIALIZER_keepNullProperties, true);
 	}
@@ -241,7 +241,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
 	}
@@ -254,7 +254,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder sortCollections(boolean value) {
 		return set(SERIALIZER_sortCollections, value);
@@ -272,7 +272,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder sortCollections() {
 		return set(SERIALIZER_sortCollections, true);
 	}
@@ -285,7 +285,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder sortMaps(boolean value) {
 		return set(SERIALIZER_sortMaps, value);
@@ -303,7 +303,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
 	}
@@ -316,7 +316,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder trimEmptyCollections(boolean value) {
 		return set(SERIALIZER_trimEmptyCollections, value);
@@ -334,7 +334,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder trimEmptyCollections() {
 		return set(SERIALIZER_trimEmptyCollections, true);
 	}
@@ -347,7 +347,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder trimEmptyMaps(boolean value) {
 		return set(SERIALIZER_trimEmptyMaps, value);
@@ -365,7 +365,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder trimEmptyMaps() {
 		return set(SERIALIZER_trimEmptyMaps, true);
 	}
@@ -378,7 +378,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder trimNullProperties(boolean value) {
 		return set(SERIALIZER_trimNullProperties, value);
@@ -392,7 +392,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder trimStrings(boolean value) {
 		return set(SERIALIZER_trimStrings, value);
@@ -410,7 +410,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder trimStrings() {
 		return set(SERIALIZER_trimStrings, true);
 	}
@@ -428,7 +428,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
 	}
@@ -448,7 +448,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
 	}
@@ -468,7 +468,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
@@ -491,7 +491,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
@@ -516,7 +516,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder fileCharset(Charset value) {
 		return set(WSERIALIZER_fileCharset, value);
 	}
@@ -536,7 +536,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -556,7 +556,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -573,7 +573,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder sq() {
 		return quoteChar('\'');
 	}
@@ -596,7 +596,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is the system JVM setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder streamCharset(Charset value) {
 		return set(WSERIALIZER_streamCharset, value);
 	}
@@ -609,7 +609,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public SerializerGroupBuilder useWhitespace(boolean value) {
 		return set(WSERIALIZER_useWhitespace, value);
@@ -626,7 +626,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -643,12 +643,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SerializerGroupBuilder ws() {
 		return useWhitespace();
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder add(Map<String,Object> properties) {
@@ -689,6 +689,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -863,12 +869,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -1094,5 +1094,5 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

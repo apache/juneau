@@ -72,7 +72,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
 		return set(XML_eventAllocator, value);
 	}
@@ -90,7 +90,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder eventAllocator(Class<? extends XMLEventAllocator> value) {
 		return set(XML_eventAllocator, value);
 	}
@@ -104,7 +104,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder preserveRootElement(boolean value) {
 		return set(XML_preserveRootElement, value);
 	}
@@ -121,7 +121,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder preserveRootElement() {
 		return set(XML_preserveRootElement, true);
 	}
@@ -139,7 +139,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder reporter(XMLReporter value) {
 		return set(XML_reporter, value);
 	}
@@ -157,7 +157,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder reporter(Class<? extends XMLReporter> value) {
 		return set(XML_reporter, value);
 	}
@@ -175,7 +175,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder resolver(XMLResolver value) {
 		return set(XML_resolver, value);
 	}
@@ -193,7 +193,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder resolver(Class<? extends XMLResolver> value) {
 		return set(XML_resolver, value);
 	}
@@ -207,7 +207,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder validating(boolean value) {
 		return set(XML_validating, value);
 	}
@@ -224,12 +224,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public XmlParserBuilder validating() {
 		return set(XML_validating, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public XmlParserBuilder add(Map<String,Object> properties) {
@@ -270,6 +270,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public XmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public XmlParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -444,12 +450,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public XmlParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -699,5 +699,5 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -86,7 +86,7 @@ public class NetworkAuthenticationRequired extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public NetworkAuthenticationRequired header(String name, Object val) {
@@ -94,5 +94,5 @@ public class NetworkAuthenticationRequired extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

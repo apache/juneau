@@ -57,7 +57,7 @@ public class Ok extends HttpResponse {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpResponse */
 	public Ok header(String name, Object val) {
@@ -65,5 +65,5 @@ public class Ok extends HttpResponse {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

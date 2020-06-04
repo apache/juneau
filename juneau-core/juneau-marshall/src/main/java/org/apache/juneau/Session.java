@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.Context.*;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -37,15 +38,19 @@ public abstract class Session {
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
 
+	private final boolean debug;
+
 
 	/**
 	 * Default constructor.
 	 *
+	 * @param ctx The context object.
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected Session(SessionArgs args) {
+	protected Session(Context ctx, SessionArgs args) {
 		this.properties = args.properties == null ? OMap.EMPTY_MAP : args.properties;
+		debug = getProperty(CONTEXT_debug, Boolean.class, ctx.isDebug());
 	}
 
 	/**
@@ -286,6 +291,21 @@ public abstract class Session {
 	public void checkForWarnings() {
 		if (warnings != null && ! warnings.isEmpty())
 			throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Configuration properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * @see BeanContext#CONTEXT_debug
+	 * @return
+	 * 	<jk>true</jk> if debug mode is enabled.
+	 */
+	protected final boolean isDebug() {
+		return debug;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

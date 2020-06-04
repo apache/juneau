@@ -68,7 +68,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		}
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public RestMethodContextBuilder add(Map<String,Object> properties) {
@@ -109,6 +109,12 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestMethodContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestMethodContextBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -283,12 +289,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -490,5 +490,5 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

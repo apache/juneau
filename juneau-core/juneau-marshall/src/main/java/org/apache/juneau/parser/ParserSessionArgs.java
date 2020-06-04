@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Runtime arguments common to all parser sessions.
@@ -64,6 +65,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public ParserSessionArgs fileCharset(Charset value) {
 		property(ReaderParser.RPARSER_fileCharset, value);
 		return this;
@@ -77,6 +79,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public ParserSessionArgs javaMethod(Method value) {
 		this.javaMethod = value;
 		return this;
@@ -90,6 +93,7 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public ParserSessionArgs outer(Object value) {
 		this.outer = value;
 		return this;
@@ -112,52 +116,57 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public ParserSessionArgs streamCharset(Charset value) {
 		property(ReaderParser.RPARSER_streamCharset, value);
 		return this;
 	}
 
-	@Override /* BeanSessionArgs */
+	// <FluentSetters>
+
+	@Override /* GENERATED - SessionArgs */
 	public ParserSessionArgs debug(Boolean value) {
 		super.debug(value);
 		return this;
 	}
 
-	@Override /* BeanSessionArgs */
-	public ParserSessionArgs locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public ParserSessionArgs mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public ParserSessionArgs schema(HttpPartSchema value) {
-		super.schema(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public ParserSessionArgs timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* SessionArgs */
+	@Override /* GENERATED - SessionArgs */
 	public ParserSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
 
-	@Override /* SessionArgs */
+	@Override /* GENERATED - SessionArgs */
 	public ParserSessionArgs property(String key, Object value) {
 		super.property(key, value);
 		return this;
 	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public ParserSessionArgs locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public ParserSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public ParserSessionArgs schema(HttpPartSchema value) {
+		super.schema(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public ParserSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	// </FluentSetters>
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods

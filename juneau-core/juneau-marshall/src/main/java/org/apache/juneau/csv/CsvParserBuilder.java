@@ -53,7 +53,7 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public CsvParserBuilder add(Map<String,Object> properties) {
@@ -94,6 +94,12 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public CsvParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public CsvParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -268,12 +274,6 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public CsvParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public CsvParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -523,5 +523,5 @@ public class CsvParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

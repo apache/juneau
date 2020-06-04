@@ -85,7 +85,7 @@ public class UpgradeRequired extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public UpgradeRequired header(String name, Object val) {
@@ -93,5 +93,5 @@ public class UpgradeRequired extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

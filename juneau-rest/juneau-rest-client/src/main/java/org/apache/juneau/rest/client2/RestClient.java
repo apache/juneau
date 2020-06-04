@@ -853,7 +853,7 @@ import org.apache.http.client.CookieStore;
  * <p class='w900'>
  * Enabling debug mode has the following effects:
  * <ul>
- * 	<li>{@link BeanContext#BEAN_debug} is enabled.
+ * 	<li>{@link Context#CONTEXT_debug} is enabled.
  * 	<li>{@link #RESTCLIENT_leakDetection} is enabled.
  * 	<li>{@link RestClientBuilder#logToConsole()} is called.
  * </ul>
@@ -1425,7 +1425,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link RestClient#BEAN_debug}.
+	 * Automatically enabled with {@link Context#CONTEXT_debug}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1853,7 +1853,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 	private final List<Object> headers, query, formData;
 	final CloseableHttpClient httpClient;
-	private final boolean keepHttpClientOpen, debug, leakDetection;
+	private final boolean keepHttpClientOpen, leakDetection;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
@@ -1912,15 +1912,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class, null);
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
-		this.debug = getBooleanProperty(BEAN_debug, false);
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
-		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, debug);
+		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, isDebug());
 		this.ignoreErrors = getBooleanProperty(RESTCLIENT_ignoreErrors, false);
 		this.logger = getInstanceProperty(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
-		this.logRequests = getInstanceProperty(RESTCLIENT_logRequests, DetailLevel.class, debug ? DetailLevel.FULL : DetailLevel.NONE);
-		this.logRequestsLevel = getInstanceProperty(RESTCLIENT_logRequestsLevel, Level.class, debug ? Level.WARNING : Level.OFF);
-		this.logToConsole = getBooleanProperty(RESTCLIENT_logToConsole, debug);
+		this.logRequests = getInstanceProperty(RESTCLIENT_logRequests, DetailLevel.class, isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
+		this.logRequestsLevel = getInstanceProperty(RESTCLIENT_logRequestsLevel, Level.class, isDebug() ? Level.WARNING : Level.OFF);
+		this.logToConsole = getBooleanProperty(RESTCLIENT_logToConsole, isDebug());
 		this.logRequestsPredicate = getInstanceProperty(RESTCLIENT_logRequestsPredicate, BiPredicate.class, LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		SerializerGroupBuilder sgb = SerializerGroup.create();
@@ -1977,7 +1976,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 		this.interceptors = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 
-		creationStack = debug ? Thread.currentThread().getStackTrace() : null;
+		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 	}
 
 	/**
@@ -3229,7 +3228,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		if (logToConsole)
 			System.err.println(msg(msg, args).get());
 	}
-	
+
 	private Supplier<String> msg(String msg, Object...args) {
 		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
 	}
@@ -3554,7 +3553,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	public OMap toMap() {
 		return super.toMap()
 			.a("RestClient", new DefaultFilteringOMap()
-				.a("debug", debug)
 				.a("errorCodes", errorCodes)
 				.a("executorService", executorService)
 				.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)

@@ -65,7 +65,7 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonParserBuilder validateEnd(boolean value) {
 		return set(JSON_validateEnd, value);
 	}
@@ -82,12 +82,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonParserBuilder validateEnd() {
 		return set(JSON_validateEnd, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonParserBuilder add(Map<String,Object> properties) {
@@ -128,6 +128,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -302,12 +308,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -557,5 +557,5 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

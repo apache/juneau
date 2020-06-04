@@ -900,7 +900,7 @@ public abstract class ParserSession extends BeanSession {
 	 *
 	 * <p>
 	 * This always returns a value for input of type {@link CharSequence}.
-	 * <br>For other input types, use {@link BeanContext#BEAN_debug} setting to enable caching to a string
+	 * <br>For other input types, use {@link Context#CONTEXT_debug} setting to enable caching to a string
 	 * before parsing so that this method returns the input.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.

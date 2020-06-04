@@ -112,7 +112,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public OpenApiSerializerBuilder format(HttpPartFormat value) {
 		return set(OAPI_format, value);
 	}
@@ -174,12 +174,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public OpenApiSerializerBuilder collectionFormat(HttpPartCollectionFormat value) {
 		return set(OAPI_collectionFormat, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder add(Map<String,Object> properties) {
@@ -220,6 +220,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -394,12 +400,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -763,5 +763,5 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

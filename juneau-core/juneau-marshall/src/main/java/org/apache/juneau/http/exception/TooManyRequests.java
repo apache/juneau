@@ -86,7 +86,7 @@ public class TooManyRequests extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public TooManyRequests header(String name, Object val) {
@@ -94,5 +94,5 @@ public class TooManyRequests extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -78,7 +78,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is {@link BinaryFormat#HEX}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public InputStreamParserBuilder binaryFormat(BinaryFormat value) {
 		return set(ISPARSER_binaryFormat, value);
 	}
@@ -92,12 +92,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public InputStreamParserBuilder binaryFormat(String value) {
 		return set(ISPARSER_binaryFormat, BinaryFormat.valueOf(value));
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public InputStreamParserBuilder add(Map<String,Object> properties) {
@@ -138,6 +138,12 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public InputStreamParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public InputStreamParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -312,12 +318,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public InputStreamParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -555,7 +555,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	@Override /* Context */
 	public InputStreamParser build() {

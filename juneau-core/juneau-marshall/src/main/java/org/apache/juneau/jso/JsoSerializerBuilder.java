@@ -52,7 +52,7 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder add(Map<String,Object> properties) {
@@ -93,6 +93,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsoSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -267,12 +273,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -576,5 +576,5 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

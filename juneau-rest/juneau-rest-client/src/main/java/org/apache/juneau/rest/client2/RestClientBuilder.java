@@ -174,7 +174,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder json() {
 		return serializer(JsonSerializer.class).parser(JsonParser.class);
 	}
@@ -221,7 +221,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder simpleJson() {
 		return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
 	}
@@ -264,7 +264,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder xml() {
 		return serializer(XmlSerializer.class).parser(XmlParser.class);
 	}
@@ -310,7 +310,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder html() {
 		return serializer(HtmlSerializer.class).parser(HtmlParser.class);
 	}
@@ -356,7 +356,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder htmlDoc() {
 		return serializer(HtmlDocSerializer.class).parser(HtmlParser.class);
 	}
@@ -402,7 +402,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder htmlStrippedDoc() {
 		return serializer(HtmlStrippedDocSerializer.class).parser(HtmlParser.class);
 	}
@@ -449,7 +449,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder plainText() {
 		return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
 	}
@@ -495,7 +495,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder msgPack() {
 		return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
 	}
@@ -542,7 +542,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder uon() {
 		return serializer(UonSerializer.class).parser(UonParser.class);
 	}
@@ -587,7 +587,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder urlEnc() {
 		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
 	}
@@ -636,7 +636,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder openApi() {
 		return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
 	}
@@ -755,7 +755,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder httpClientBuilder(HttpClientBuilder value) {
 		this.httpClientBuilder = value;
 		return this;
@@ -829,7 +829,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder httpClient(CloseableHttpClient value) {
 		this.httpClient = value;
 		return this;
@@ -873,7 +873,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The logger to use for logging.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder logger(Logger value) {
 		return set(RESTCLIENT_logger, value);
 	}
@@ -900,7 +900,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder logToConsole() {
 		return set(RESTCLIENT_logToConsole, true);
 	}
@@ -956,7 +956,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param level The log level.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder logRequests(DetailLevel detail, Level level) {
 		set(RESTCLIENT_logRequests, detail);
 		set(RESTCLIENT_logRequestsLevel, level);
@@ -1013,7 +1013,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder pooled() {
 		this.pooled = true;
 		return this;
@@ -1037,7 +1037,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param pw The password.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder basicAuth(String host, int port, String user, String pw) {
 		AuthScope scope = new AuthScope(host, port);
 		Credentials up = new UsernamePasswordCredentials(user, pw);
@@ -1085,7 +1085,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
 	}
@@ -1120,7 +1120,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder header(String name, Object value, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).schema(schema));
 	}
@@ -1149,7 +1149,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder header(String name, Object value) {
 		return header(name, value, null, null);
 	}
@@ -1175,7 +1175,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder header(Object header) {
 		return appendTo(RESTCLIENT_headers, header);
 	}
@@ -1214,7 +1214,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("rawtypes")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
 			if (h instanceof Header || h instanceof NameValuePair)
@@ -1252,7 +1252,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder headerPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into headerPairs(Object...)");
@@ -1271,7 +1271,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder accept(Object value) {
 		return header("Accept", value);
 	}
@@ -1285,7 +1285,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder acceptCharset(Object value) {
 		return header("Accept-Charset", value);
 	}
@@ -1299,7 +1299,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder acceptEncoding(Object value) {
 		return header("Accept-Encoding", value);
 	}
@@ -1313,7 +1313,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder acceptLanguage(Object value) {
 		return header("Accept-Language", value);
 	}
@@ -1327,7 +1327,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder authorization(Object value) {
 		return header("Authorization", value);
 	}
@@ -1341,7 +1341,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder cacheControl(Object value) {
 		return header("Cache-Control", value);
 	}
@@ -1352,7 +1352,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The version string (e.g. <js>"1.2.3"</js>)
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder clientVersion(Object value) {
 		return header("X-Client-Version", value);
 	}
@@ -1366,7 +1366,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connection(Object value) {
 		return header("Connection", value);
 	}
@@ -1380,7 +1380,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder contentLength(Object value) {
 		return header("Content-Length", value);
 	}
@@ -1395,7 +1395,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder contentType(Object value) {
 		return header("Content-Type", value);
 	}
@@ -1409,7 +1409,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder contentEncoding(Object value) {
 		return header("Content-Encoding", value);
 	}
@@ -1423,7 +1423,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder date(Object value) {
 		return header("Date", value);
 	}
@@ -1437,7 +1437,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder expect(Object value) {
 		return header("Expect", value);
 	}
@@ -1451,7 +1451,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder forwarded(Object value) {
 		return header("Forwarded", value);
 	}
@@ -1465,7 +1465,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder from(Object value) {
 		return header("From", value);
 	}
@@ -1479,7 +1479,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder host(Object value) {
 		return header("Host", value);
 	}
@@ -1493,7 +1493,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ifMatch(Object value) {
 		return header("If-Match", value);
 	}
@@ -1507,7 +1507,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ifModifiedSince(Object value) {
 		return header("If-Modified-Since", value);
 	}
@@ -1521,7 +1521,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ifNoneMatch(Object value) {
 		return header("If-None-Match", value);
 	}
@@ -1535,7 +1535,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ifRange(Object value) {
 		return header("If-Range", value);
 	}
@@ -1549,7 +1549,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ifUnmodifiedSince(Object value) {
 		return header("If-Unmodified-Since", value);
 	}
@@ -1563,7 +1563,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder maxForwards(Object value) {
 		return header("Max-Forwards", value);
 	}
@@ -1578,7 +1578,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder noTrace() {
 		return header("No-Trace", true);
 	}
@@ -1592,7 +1592,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder origin(Object value) {
 		return header("Origin", value);
 	}
@@ -1606,7 +1606,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder pragma(Object value) {
 		return header("Pragma", value);
 	}
@@ -1620,7 +1620,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder proxyAuthorization(Object value) {
 		return header("Proxy-Authorization", value);
 	}
@@ -1634,7 +1634,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder range(Object value) {
 		return header("Range", value);
 	}
@@ -1648,7 +1648,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder referer(Object value) {
 		return header("Referer", value);
 	}
@@ -1662,7 +1662,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder te(Object value) {
 		return header("TE", value);
 	}
@@ -1676,7 +1676,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder userAgent(Object value) {
 		return header("User-Agent", value);
 	}
@@ -1690,7 +1690,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder upgrade(Object value) {
 		return header("Upgrade", value);
 	}
@@ -1704,7 +1704,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder via(Object value) {
 		return header("Via", value);
 	}
@@ -1718,7 +1718,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder warning(Object value) {
 		return header("Warning", value);
 	}
@@ -1761,7 +1761,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
 	}
@@ -1796,7 +1796,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).schema(schema));
 	}
@@ -1821,7 +1821,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder query(String name, Object value) {
 		return query(name, value, null, null);
 	}
@@ -1859,7 +1859,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("rawtypes")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder query(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
@@ -1897,7 +1897,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder queryPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
@@ -1944,7 +1944,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
 	}
@@ -1979,7 +1979,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).schema(schema));
 	}
@@ -2004,7 +2004,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder formData(String name, Object value) {
 		return formData(name, value, null, null);
 	}
@@ -2042,7 +2042,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("rawtypes")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder formData(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
@@ -2080,7 +2080,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder formDataPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(Object...)");
@@ -2131,7 +2131,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder callHandler(Class<? extends RestCallHandler> value) {
 		return set(RESTCLIENT_callHandler, value);
 	}
@@ -2172,7 +2172,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder callHandler(RestCallHandler value) {
 		return set(RESTCLIENT_callHandler, value);
 	}
@@ -2201,7 +2201,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder errorCodes(Predicate<Integer> value) {
 		return set(RESTCLIENT_errorCodes, value);
 	}
@@ -2255,7 +2255,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
 		set(RESTCLIENT_executorService, executorService);
 		set(RESTCLIENT_executorServiceShutdownOnClose, shutdownOnClose);
@@ -2286,7 +2286,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder keepHttpClientOpen() {
 		return set(RESTCLIENT_keepHttpClientOpen, true);
 	}
@@ -2318,7 +2318,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ignoreErrors() {
 		return ignoreErrors(true);
 	}
@@ -2351,7 +2351,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ignoreErrors(boolean value) {
 		return set(RESTCLIENT_ignoreErrors, value);
 	}
@@ -2410,7 +2410,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @throws Exception If one or more interceptors could not be created.
 	 */
 	@SuppressWarnings("unchecked")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) throws Exception {
 		RestCallInterceptor[] x = new RestCallInterceptor[values.length];
 		for (int i = 0; i < values.length; i++)
@@ -2469,7 +2469,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder interceptors(RestCallInterceptor...value) {
 		for (RestCallInterceptor r : value) {
 			addInterceptorLast((HttpRequestInterceptor)r);
@@ -2489,7 +2489,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link RestClient#BEAN_debug}.
+	 * Automatically enabled with {@link Context#CONTEXT_debug}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2509,7 +2509,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder leakDetection() {
 		return set(RESTCLIENT_leakDetection, true);
 	}
@@ -2539,7 +2539,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder marshall(Marshall value) {
 		if (value != null)
 			serializer(value.getSerializer()).parser(value.getParser());
@@ -2571,7 +2571,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder marshalls(Marshall...value) {
 		for (Marshall m : value)
 			if (m != null)
@@ -2613,7 +2613,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder parser(Class<? extends Parser> value) {
 		return parsers(value);
 	}
@@ -2651,7 +2651,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder parser(Parser value) {
 		return parsers(value);
 	}
@@ -2694,7 +2694,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder parsers(Class<? extends Parser>...value) {
 		return prependTo(RESTCLIENT_parsers, value);
 	}
@@ -2736,7 +2736,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder parsers(Parser...value) {
 		return prependTo(RESTCLIENT_parsers, value);
 	}
@@ -2768,7 +2768,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
 		return set(RESTCLIENT_partParser, value);
 	}
@@ -2800,7 +2800,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder partParser(HttpPartParser value) {
 		return set(RESTCLIENT_partParser, value);
 	}
@@ -2832,7 +2832,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
 		return set(RESTCLIENT_partSerializer, value);
 	}
@@ -2864,7 +2864,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder partSerializer(HttpPartSerializer value) {
 		return set(RESTCLIENT_partSerializer, value);
 	}
@@ -2901,7 +2901,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder rootUrl(Object value) {
 		return set(RESTCLIENT_rootUri, value);
 	}
@@ -2940,7 +2940,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder serializer(Class<? extends Serializer> value) {
 		return serializers(value);
 	}
@@ -2978,7 +2978,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is {@link JsonSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder serializer(Serializer value) {
 		return serializers(value);
 	}
@@ -3021,7 +3021,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder serializers(Class<? extends Serializer>...value) {
 		return prependTo(RESTCLIENT_serializers, value);
 	}
@@ -3063,7 +3063,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is {@link JsonSerializer}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder serializers(Serializer...value) {
 		return prependTo(RESTCLIENT_serializers, value);
 	}
@@ -3120,7 +3120,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder detectRecursions() {
 		return set(BEANTRAVERSE_detectRecursions, true);
 	}
@@ -3172,7 +3172,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ignoreRecursions() {
 		return set(BEANTRAVERSE_ignoreRecursions, true);
 	}
@@ -3216,7 +3216,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>0</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder initialDepth(int value) {
 		return set(BEANTRAVERSE_initialDepth, value);
 	}
@@ -3252,7 +3252,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder maxDepth(int value) {
 		return set(BEANTRAVERSE_maxDepth, value);
 	}
@@ -3308,7 +3308,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addBeanTypes() {
 		return set(SERIALIZER_addBeanTypes, true);
 	}
@@ -3361,7 +3361,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addRootType() {
 		return set(SERIALIZER_addRootType, true);
 	}
@@ -3402,7 +3402,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder keepNullProperties() {
 		return set(SERIALIZER_keepNullProperties, true);
 	}
@@ -3440,7 +3440,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sortCollections() {
 		return set(SERIALIZER_sortCollections, true);
 	}
@@ -3478,7 +3478,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
 	}
@@ -3523,7 +3523,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder trimEmptyCollections() {
 		return set(SERIALIZER_trimEmptyCollections, true);
 	}
@@ -3567,7 +3567,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder trimEmptyMaps() {
 		return set(SERIALIZER_trimEmptyMaps, true);
 	}
@@ -3602,7 +3602,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder trimStringsOnWrite() {
 		return set(SERIALIZER_trimStrings, true);
 	}
@@ -3650,7 +3650,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder uriContext(UriContext value) {
 		return set(SERIALIZER_uriContext, value);
 	}
@@ -3688,7 +3688,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is {@link UriRelativity#RESOURCE}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder uriRelativity(UriRelativity value) {
 		return set(SERIALIZER_uriRelativity, value);
 	}
@@ -3728,7 +3728,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is {@link UriResolution#NONE}
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder uriResolution(UriResolution value) {
 		return set(SERIALIZER_uriResolution, value);
 	}
@@ -3767,7 +3767,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <c>100</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -3811,7 +3811,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -3852,7 +3852,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sq() {
 		return set(WSERIALIZER_quoteChar, '\'');
 	}
@@ -3888,7 +3888,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder useWhitespace() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -3925,7 +3925,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder ws() {
 		return set(WSERIALIZER_useWhitespace, true);
 	}
@@ -3975,7 +3975,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is <c>5</c>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder debugOutputLines(int value) {
 		set(PARSER_debugOutputLines, value);
 		return this;
@@ -4041,7 +4041,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder strict() {
 		return set(PARSER_strict, true);
 	}
@@ -4078,7 +4078,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder trimStringsOnRead() {
 		return set(PARSER_trimStrings, true);
 	}
@@ -4146,7 +4146,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder oapiFormat(HttpPartFormat value) {
 		return set(OAPI_format, value);
 	}
@@ -4205,7 +4205,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder oapiCollectionFormat(HttpPartCollectionFormat value) {
 		return set(OAPI_collectionFormat, value);
 	}
@@ -4258,7 +4258,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
 	}
@@ -4297,12 +4297,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder paramFormatPlain() {
 		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder add(Map<String,Object> properties) {
@@ -4343,6 +4343,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -4520,12 +4526,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -4733,7 +4733,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	//------------------------------------------------------------------------------------------------
 	// Passthrough methods for HttpClientBuilder.
@@ -4745,7 +4745,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableRedirectHandling()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableRedirectHandling() {
 		httpClientBuilder.disableRedirectHandling();
 		return this;
@@ -4762,7 +4762,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder redirectStrategy(RedirectStrategy redirectStrategy) {
 		httpClientBuilder.setRedirectStrategy(redirectStrategy);
 		return this;
@@ -4775,7 +4775,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 		httpClientBuilder.setDefaultCookieSpecRegistry(cookieSpecRegistry);
 		return this;
@@ -4788,7 +4788,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder requestExecutor(HttpRequestExecutor requestExec) {
 		httpClientBuilder.setRequestExecutor(requestExec);
 		return this;
@@ -4806,7 +4806,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 		httpClientBuilder.setSSLHostnameVerifier(hostnameVerifier);
 		return this;
@@ -4823,7 +4823,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 		httpClientBuilder.setPublicSuffixMatcher(publicSuffixMatcher);
 		return this;
@@ -4841,7 +4841,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLContext(SSLContext)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sslContext(SSLContext sslContext) {
 		httpClientBuilder.setSSLContext(sslContext);
 		return this;
@@ -4858,7 +4858,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 		httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
 		return this;
@@ -4875,7 +4875,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnTotal(int)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder maxConnTotal(int maxConnTotal) {
 		httpClientBuilder.setMaxConnTotal(maxConnTotal);
 		return this;
@@ -4892,7 +4892,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder maxConnPerRoute(int maxConnPerRoute) {
 		httpClientBuilder.setMaxConnPerRoute(maxConnPerRoute);
 		return this;
@@ -4909,7 +4909,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultSocketConfig(SocketConfig config) {
 		httpClientBuilder.setDefaultSocketConfig(config);
 		return this;
@@ -4926,7 +4926,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultConnectionConfig(ConnectionConfig config) {
 		httpClientBuilder.setDefaultConnectionConfig(config);
 		return this;
@@ -4944,7 +4944,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 		httpClientBuilder.setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 		return this;
@@ -4957,7 +4957,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
 		this.httpClientConnectionManager = connManager;
 		httpClientBuilder.setConnectionManager(connManager);
@@ -4975,7 +4975,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connectionManagerShared(boolean shared) {
 		httpClientBuilder.setConnectionManagerShared(shared);
 		return this;
@@ -4988,7 +4988,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 		httpClientBuilder.setConnectionReuseStrategy(reuseStrategy);
 		return this;
@@ -5001,7 +5001,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 		httpClientBuilder.setKeepAliveStrategy(keepAliveStrategy);
 		return this;
@@ -5014,7 +5014,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 		httpClientBuilder.setTargetAuthenticationStrategy(targetAuthStrategy);
 		return this;
@@ -5027,7 +5027,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 		httpClientBuilder.setProxyAuthenticationStrategy(proxyAuthStrategy);
 		return this;
@@ -5044,7 +5044,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder userTokenHandler(UserTokenHandler userTokenHandler) {
 		httpClientBuilder.setUserTokenHandler(userTokenHandler);
 		return this;
@@ -5056,7 +5056,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableConnectionState()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableConnectionState() {
 		httpClientBuilder.disableConnectionState();
 		return this;
@@ -5069,7 +5069,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder schemePortResolver(SchemePortResolver schemePortResolver) {
 		httpClientBuilder.setSchemePortResolver(schemePortResolver);
 		return this;
@@ -5087,7 +5087,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setUserAgent(String)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder userAgent(String userAgent) {
 		httpClientBuilder.setUserAgent(userAgent);
 		return this;
@@ -5105,7 +5105,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultHeaders(Collection)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultHeaders(Collection<? extends Header> defaultHeaders) {
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
 		return this;
@@ -5122,7 +5122,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addInterceptorFirst(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -5139,7 +5139,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addInterceptorLast(HttpResponseInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -5156,7 +5156,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addInterceptorFirst(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorFirst(itcp);
 		return this;
@@ -5173,7 +5173,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder addInterceptorLast(HttpRequestInterceptor itcp) {
 		httpClientBuilder.addInterceptorLast(itcp);
 		return this;
@@ -5189,7 +5189,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableCookieManagement()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableCookieManagement() {
 		httpClientBuilder.disableCookieManagement();
 		return this;
@@ -5205,7 +5205,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableContentCompression()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableContentCompression() {
 		httpClientBuilder.disableContentCompression();
 		return this;
@@ -5221,7 +5221,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAuthCaching()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableAuthCaching() {
 		httpClientBuilder.disableAuthCaching();
 		return this;
@@ -5234,7 +5234,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder httpProcessor(HttpProcessor httpprocessor) {
 		httpClientBuilder.setHttpProcessor(httpprocessor);
 		return this;
@@ -5251,7 +5251,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder retryHandler(HttpRequestRetryHandler retryHandler) {
 		httpClientBuilder.setRetryHandler(retryHandler);
 		return this;
@@ -5263,7 +5263,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#disableAutomaticRetries()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder disableAutomaticRetries() {
 		httpClientBuilder.disableAutomaticRetries();
 		return this;
@@ -5280,7 +5280,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setProxy(HttpHost)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder proxy(HttpHost proxy) {
 		httpClientBuilder.setProxy(proxy);
 		return this;
@@ -5293,7 +5293,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder routePlanner(HttpRoutePlanner routePlanner) {
 		httpClientBuilder.setRoutePlanner(routePlanner);
 		return this;
@@ -5306,7 +5306,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 		httpClientBuilder.setConnectionBackoffStrategy(connectionBackoffStrategy);
 		return this;
@@ -5319,7 +5319,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder backoffManager(BackoffManager backoffManager) {
 		httpClientBuilder.setBackoffManager(backoffManager);
 		return this;
@@ -5332,7 +5332,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 		httpClientBuilder.setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 		return this;
@@ -5345,7 +5345,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultCookieStore(CookieStore cookieStore) {
 		httpClientBuilder.setDefaultCookieStore(cookieStore);
 		return this;
@@ -5358,7 +5358,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
 		return this;
@@ -5371,7 +5371,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 		httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
 		return this;
@@ -5384,7 +5384,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		httpClientBuilder.setContentDecoderRegistry(contentDecoderMap);
 		return this;
@@ -5397,7 +5397,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder defaultRequestConfig(RequestConfig config) {
 		httpClientBuilder.setDefaultRequestConfig(config);
 		return this;
@@ -5409,7 +5409,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#useSystemProperties()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder useSystemProperties() {
 		httpClientBuilder.useSystemProperties();
 		return this;
@@ -5427,7 +5427,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictExpiredConnections()
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder evictExpiredConnections() {
 		httpClientBuilder.evictExpiredConnections();
 		return this;
@@ -5447,7 +5447,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;

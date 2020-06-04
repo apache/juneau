@@ -56,7 +56,7 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder add(Map<String,Object> properties) {
@@ -97,6 +97,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -271,12 +277,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -574,5 +574,5 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

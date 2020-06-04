@@ -98,7 +98,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default value is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonSerializerBuilder encoding(boolean value) {
 		return set(UON_encoding, value);
 	}
@@ -142,7 +142,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonSerializerBuilder encoding() {
 		return set(UON_encoding, true);
 	}
@@ -194,7 +194,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 * 	<br>The default value is {@link ParamFormat#UON}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
 	}
@@ -228,12 +228,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UonSerializerBuilder paramFormatPlain() {
 		return set(UON_paramFormat, ParamFormat.PLAINTEXT);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public UonSerializerBuilder add(Map<String,Object> properties) {
@@ -274,6 +274,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UonSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UonSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -448,12 +454,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UonSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -793,5 +793,5 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

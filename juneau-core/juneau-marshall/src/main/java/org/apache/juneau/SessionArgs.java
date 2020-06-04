@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.Context.*;
+
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -37,6 +40,29 @@ public class SessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Debug mode.
+	 *
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul>
+	 * 	<li> When bean setters throws exceptions, the exception includes the object stack information in order to determine how that method was invoked.
+	 * </ul>
+	 *
+	 * <p>
+	 * If not specified, defaults to {@link Context#CONTEXT_debug}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SessionArgs debug(Boolean value) {
+		property(CONTEXT_debug, value);
+		return this;
+	}
+
+	/**
 	 * Session-level properties.
 	 *
 	 * <p>
@@ -47,6 +73,7 @@ public class SessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SessionArgs properties(OMap value) {
 		this.properties = value;
 		return this;
@@ -59,6 +86,7 @@ public class SessionArgs {
 	 * @param value The property value.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SessionArgs property(String key, Object value) {
 		if (value == null) {
 			if (properties != null)
@@ -103,4 +131,8 @@ public class SessionArgs {
 	public String toString() {
 		return SimpleJsonSerializer.DEFAULT_READABLE.toString(toMap());
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

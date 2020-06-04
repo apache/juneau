@@ -65,7 +65,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder juneauNs(String value) {
 		return set(RDF_juneauNs, value);
 	}
@@ -77,7 +77,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder juneauBpNs(String value) {
 		return set(RDF_juneauBpNs, value);
 	}
@@ -108,7 +108,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder arp_iriRules(String value) {
 		return set(RDF_arp_iriRules, value);
 	}
@@ -135,7 +135,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder arp_errorMode(String value) {
 		return set(RDF_arp_errorMode, value);
 	}
@@ -150,7 +150,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder arp_embedding(boolean value) {
 		return set(RDF_arp_embedding, value);
 	}
@@ -165,7 +165,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_xmlBase(String value) {
 		return set(RDF_rdfxml_xmlBase, value);
 	}
@@ -181,7 +181,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_longId(boolean value) {
 		return set(RDF_rdfxml_longId, value);
 	}
@@ -196,7 +196,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_allowBadUris(boolean value) {
 		return set(RDF_rdfxml_allowBadUris, value);
 	}
@@ -233,7 +233,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_relativeUris(String value) {
 		return set(RDF_rdfxml_relativeUris, value);
 	}
@@ -258,7 +258,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_showXmlDeclaration(String value) {
 		return set(RDF_rdfxml_showXmlDeclaration, value);
 	}
@@ -276,7 +276,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_showDoctypeDeclaration(boolean value) {
 		return set(RDF_rdfxml_showDoctypeDeclaration, value);
 	}
@@ -291,7 +291,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_tab(int value) {
 		return set(RDF_rdfxml_tab, value);
 	}
@@ -306,7 +306,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_attributeQuoteChar(String value) {
 		return set(RDF_rdfxml_attributeQuoteChar, value);
 	}
@@ -323,7 +323,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder rdfxml_blockRules(String value) {
 		return set(RDF_rdfxml_blockRules, value);
 	}
@@ -338,7 +338,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_minGap(int value) {
 		return set(RDF_n3_minGap, value);
 	}
@@ -353,7 +353,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_objectLists(boolean value) {
 		return set(RDF_n3_objectLists, value);
 	}
@@ -368,7 +368,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_subjectColumn(int value) {
 		return set(RDF_n3_subjectColumn, value);
 	}
@@ -383,7 +383,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_propertyColumn(int value) {
 		return set(RDF_n3_propertyColumn, value);
 	}
@@ -398,7 +398,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_indentProperty(int value) {
 		return set(RDF_n3_indentProperty, value);
 	}
@@ -414,7 +414,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_widePropertyLen(int value) {
 		return set(RDF_n3_widePropertyLen, value);
 	}
@@ -429,7 +429,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_abbrevBaseUri(boolean value) {
 		return set(RDF_n3_abbrevBaseUri, value);
 	}
@@ -444,7 +444,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_usePropertySymbols(boolean value) {
 		return set(RDF_n3_usePropertySymbols, value);
 	}
@@ -459,7 +459,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_useTripleQuotedStrings(boolean value) {
 		return set(RDF_n3_useTripleQuotedStrings, value);
 	}
@@ -474,7 +474,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3_useDoubles(boolean value) {
 		return set(RDF_n3_useDoubles, value);
 	}
@@ -507,7 +507,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder collectionFormat(String value) {
 		return set(RDF_collectionFormat, value);
 	}
@@ -537,7 +537,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder collectionFormat(RdfCollectionFormat value) {
 		return set(RDF_collectionFormat, value);
 	}
@@ -554,7 +554,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder juneauBpNs(Namespace value) {
 		return set(RDF_juneauBpNs, value);
 	}
@@ -571,7 +571,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder juneauNs(Namespace value) {
 		return set(RDF_juneauNs, value);
 	}
@@ -616,7 +616,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder language(String value) {
 		return set(RDF_language, value);
 	}
@@ -637,7 +637,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder looseCollections(boolean value) {
 		return set(RDF_looseCollections, value);
 	}
@@ -654,7 +654,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder looseCollections() {
 		return set(RDF_looseCollections, true);
 	}
@@ -671,7 +671,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder n3() {
 		return language(Constants.LANG_N3);
 	}
@@ -688,7 +688,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder ntriple() {
 		return language(Constants.LANG_NTRIPLE);
 	}
@@ -708,7 +708,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder trimWhitespace(boolean value) {
 		return set(RDF_trimWhitespace, value);
 	}
@@ -725,7 +725,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder trimWhitespace() {
 		return set(RDF_trimWhitespace, true);
 	}
@@ -739,7 +739,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder turtle() {
 		return language(Constants.LANG_TURTLE);
 	}
@@ -753,7 +753,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder xml() {
 		return language(Constants.LANG_RDF_XML);
 	}
@@ -767,12 +767,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public RdfParserBuilder xmlabbrev() {
 		return language(Constants.LANG_RDF_XML_ABBREV);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public RdfParserBuilder add(Map<String,Object> properties) {
@@ -813,6 +813,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RdfParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -987,12 +993,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -1242,5 +1242,5 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

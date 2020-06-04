@@ -49,7 +49,7 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigMemoryStoreBuilder add(Map<String,Object> properties) {
@@ -94,6 +94,12 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigMemoryStoreBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigMemoryStoreBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -129,5 +135,5 @@ public class ConfigMemoryStoreBuilder extends ConfigStoreBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

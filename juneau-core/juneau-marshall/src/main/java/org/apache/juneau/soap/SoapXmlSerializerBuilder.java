@@ -68,12 +68,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <js>"http://www.w3.org/2003/05/soap-envelope"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public SoapXmlSerializerBuilder soapAction(String value) {
 		return set(SOAPXML_SOAPAction, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public SoapXmlSerializerBuilder add(Map<String,Object> properties) {
@@ -114,6 +114,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SoapXmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SoapXmlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -288,12 +294,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SoapXmlSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SoapXmlSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -675,5 +675,5 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

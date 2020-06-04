@@ -85,7 +85,7 @@ public class HttpVersionNotSupported extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public HttpVersionNotSupported header(String name, Object val) {
@@ -93,5 +93,5 @@ public class HttpVersionNotSupported extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

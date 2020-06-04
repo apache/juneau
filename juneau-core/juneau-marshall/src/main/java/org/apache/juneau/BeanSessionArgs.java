@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
@@ -51,28 +52,6 @@ public class BeanSessionArgs extends SessionArgs {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Debug mode.
-	 *
-	 * <p>
-	 * Enables the following additional information during parsing:
-	 * <ul>
-	 * 	<li> When bean setters throws exceptions, the exception includes the object stack information in order to determine how that method was invoked.
-	 * </ul>
-	 *
-	 * <p>
-	 * If not specified, defaults to {@link BeanContext#BEAN_debug}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public BeanSessionArgs debug(Boolean value) {
-		property(BEAN_debug, value);
-		return this;
-	}
-
-	/**
 	 * The session locale.
 	 *
 	 * <p>
@@ -86,6 +65,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public BeanSessionArgs locale(Locale value) {
 		property(BEAN_locale, value);
 		return this;
@@ -105,6 +85,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public BeanSessionArgs mediaType(MediaType value) {
 		property(BEAN_mediaType, value);
 		return this;
@@ -121,6 +102,7 @@ public class BeanSessionArgs extends SessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public BeanSessionArgs schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
@@ -140,22 +122,33 @@ public class BeanSessionArgs extends SessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public BeanSessionArgs timeZone(TimeZone value) {
 		property(BEAN_timeZone, value);
 		return this;
 	}
 
-	@Override /* SessionArgs */
+	// <FluentSetters>
+
+	@Override /* GENERATED - SessionArgs */
+	public BeanSessionArgs debug(Boolean value) {
+		super.debug(value);
+		return this;
+	}
+
+	@Override /* GENERATED - SessionArgs */
 	public BeanSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
 
-	@Override /* SessionArgs */
+	@Override /* GENERATED - SessionArgs */
 	public BeanSessionArgs property(String key, Object value) {
 		super.property(key, value);
 		return this;
 	}
+
+	// </FluentSetters>
 
 	@Override /* SessionArgs */
 	public OMap toMap() {

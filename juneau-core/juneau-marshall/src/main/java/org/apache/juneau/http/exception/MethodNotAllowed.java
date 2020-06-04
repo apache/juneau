@@ -85,7 +85,7 @@ public class MethodNotAllowed extends HttpException {
 	// Fluent setters.
 	//------------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - HttpException */
 	public MethodNotAllowed header(String name, Object val) {
@@ -93,5 +93,5 @@ public class MethodNotAllowed extends HttpException {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -73,7 +73,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder addDescriptionsTo(String value) {
 		return set(JSONSCHEMA_addDescriptionsTo, value);
 	}
@@ -100,7 +100,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is an empty string.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder addExamplesTo(String value) {
 		return set(JSONSCHEMA_addExamplesTo, value);
 	}
@@ -113,7 +113,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions(boolean value) {
 		return set(JSONSCHEMA_allowNestedDescriptions, value);
@@ -131,7 +131,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
 	}
@@ -144,7 +144,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaGeneratorBuilder allowNestedExamples(boolean value) {
 		return set(JSONSCHEMA_allowNestedExamples, value);
@@ -162,7 +162,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedExamples() {
 		return set(JSONSCHEMA_allowNestedExamples, true);
 	}
@@ -186,7 +186,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder beanDefMapper(Class<? extends BeanDefMapper> value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -210,7 +210,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder beanDefMapper(BeanDefMapper value) {
 		return set(JSONSCHEMA_beanDefMapper, value);
 	}
@@ -233,7 +233,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	The schema.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
 	}
@@ -260,7 +260,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	A comma-delimited list of types to ignore.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder ignoreTypes(String value) {
 		return set(JSONSCHEMA_ignoreTypes, value);
 	}
@@ -273,7 +273,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSchemaGeneratorBuilder useBeanDefs(boolean value) {
 		return set(JSONSCHEMA_useBeanDefs, value);
@@ -298,12 +298,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSchemaGeneratorBuilder useBeanDefs() {
 		return set(JSONSCHEMA_useBeanDefs, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder add(Map<String,Object> properties) {
@@ -344,6 +344,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -518,12 +524,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -749,5 +749,5 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

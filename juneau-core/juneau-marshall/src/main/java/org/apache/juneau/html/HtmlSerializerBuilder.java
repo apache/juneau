@@ -64,7 +64,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
 		return set(HTML_addKeyValueTableHeaders, value);
@@ -82,7 +82,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HtmlSerializerBuilder addKeyValueTableHeaders() {
 		return set(HTML_addKeyValueTableHeaders, true);
 	}
@@ -95,7 +95,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
 		return set(HTML_detectLinksInStrings, value);
@@ -114,7 +114,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HtmlSerializerBuilder dontDetectLinksInStrings() {
 		return set(HTML_detectLinksInStrings, false);
 	}
@@ -134,7 +134,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is <js>"label"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HtmlSerializerBuilder labelParameter(String value) {
 		return set(HTML_labelParameter, value);
 	}
@@ -147,7 +147,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public HtmlSerializerBuilder detectLabelParameters(boolean value) {
 		return set(HTML_detectLabelParameters, value);
@@ -165,7 +165,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HtmlSerializerBuilder dontDetectLabelParameters() {
 		return set(HTML_detectLabelParameters, false);
 	}
@@ -186,7 +186,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * 	<br>The default is {@link AnchorText#TO_STRING}.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
 		return set(HTML_uriAnchorText, value);
 	}
@@ -199,13 +199,13 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public HtmlSerializerBuilder uriAnchorText(String value) {
 		return set(HTML_uriAnchorText, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSerializerBuilder add(Map<String,Object> properties) {
@@ -246,6 +246,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -420,12 +426,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -807,5 +807,5 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

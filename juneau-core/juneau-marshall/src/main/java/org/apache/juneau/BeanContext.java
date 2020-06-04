@@ -1168,76 +1168,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
 
 	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.debug</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DEBUG</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>true</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#debug()}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanSessionArgs#debug(Boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Enables the following additional information during serialization:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean getters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * 	<li>
-	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Enables the following additional information during parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		When bean setters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with debug enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.debug()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
-	 */
-	public static final String BEAN_debug = PREFIX + ".debug.b";
-
-	/**
 	 * Configuration property:  POJO examples.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2626,8 +2556,7 @@ public class BeanContext extends Context implements MetaProvider {
 		useJavaBeanIntrospector,
 		useEnumNames,
 		sortProperties,
-		fluentSetters,
-		debug;
+		fluentSetters;
 
 	private final Visibility
 		beanConstructorVisibility,
@@ -2708,7 +2637,6 @@ public class BeanContext extends Context implements MetaProvider {
 		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
 		fluentSetters = getBooleanProperty(BEAN_fluentSetters, false);
 		typePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
-		debug = getBooleanProperty(BEAN_debug, false);
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = getProperty(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
@@ -4231,16 +4159,6 @@ public class BeanContext extends Context implements MetaProvider {
 		return emptySet();
 	}
 
-	/**
-	 * Debug mode.
-	 *
-	 * @see #BEAN_debug
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	protected boolean isDebug() {
-		return debug;
-	}
 
 	/**
 	 * POJO examples.

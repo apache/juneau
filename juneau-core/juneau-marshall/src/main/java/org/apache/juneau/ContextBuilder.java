@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.Context.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -27,6 +29,7 @@ import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;
@@ -117,7 +120,7 @@ public abstract class ContextBuilder {
 	 * @param copyFrom The property store whose settings are being copied.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder apply(PropertyStore copyFrom) {
 		this.psb.apply(copyFrom);
 		return this;
@@ -153,7 +156,7 @@ public abstract class ContextBuilder {
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		this.psb.applyAnnotations(al, r);
 		return this;
@@ -213,7 +216,7 @@ public abstract class ContextBuilder {
 	 * @param fromClasses The classes on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder applyAnnotations(Class<?>...fromClasses) {
 		for (Class<?> c : fromClasses)
 			applyAnnotations(ClassInfo.of(c).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
@@ -277,7 +280,7 @@ public abstract class ContextBuilder {
 	 * @param fromMethods The methods on which the annotations are defined.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder applyAnnotations(Method...fromMethods) {
 		for (Method m : fromMethods)
 			applyAnnotations(MethodInfo.of(m).getAnnotationList(ConfigAnnotationFilter.INSTANCE), VarResolver.DEFAULT.createSession());
@@ -311,6 +314,63 @@ public abstract class ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * <i><l>Context</l> configuration property:</i>  Debug mode.
+	 *
+	 * <p>
+	 * Enables the following additional information during serialization:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean getters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * 	<li>
+	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean setters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with debug enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.debug()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ContextBuilder debug() {
+		return set(CONTEXT_debug, true);
+	}
 
 	/**
 	 * Sets a free-form configuration property on this object.
@@ -419,7 +479,7 @@ public abstract class ContextBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder set(String name, Object value) {
 		psb.set(name, value);
 		return this;
@@ -509,7 +569,7 @@ public abstract class ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder set(Map<String,Object> properties) {
 		psb.set(properties);
 		return this;
@@ -564,7 +624,7 @@ public abstract class ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder add(Map<String,Object> properties) {
 		psb.add(properties);
 		return this;
@@ -616,7 +676,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder addTo(String name, Object value) {
 		psb.addTo(name, value);
 		return this;
@@ -670,7 +730,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a LIST property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder appendTo(String name, Object value) {
 		psb.appendTo(name, value);
 		return this;
@@ -724,7 +784,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a LIST property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder prependTo(String name, Object value) {
 		psb.prependTo(name, value);
 		return this;
@@ -783,7 +843,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder putTo(String name, String key, Object value) {
 		psb.putTo(name, key, value);
 		return this;
@@ -842,7 +902,7 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a MAP property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder putAllTo(String name, Object value) {
 		psb.putAllTo(name, value);
 		return this;
@@ -876,13 +936,13 @@ public abstract class ContextBuilder {
 	 * @return This object (for method chaining).
 	 * @throws ConfigException If property is not a SET/LIST/MAP property.
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public ContextBuilder removeFrom(String name, Object value) {
 		psb.removeFrom(name, value);
 		return this;
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

@@ -25,4 +25,4 @@ import java.lang.annotation.*;
  */
 @Target(METHOD)
 @Retention(RUNTIME)
-public @interface ConfigurationProperty {}
+public @interface FluentSetter {}

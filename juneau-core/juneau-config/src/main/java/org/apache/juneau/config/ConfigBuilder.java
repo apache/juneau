@@ -294,7 +294,7 @@ public class ConfigBuilder extends ContextBuilder {
 		return set(CONFIG_readOnly, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder add(Map<String,Object> properties) {
@@ -339,6 +339,12 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -374,5 +380,5 @@ public class ConfigBuilder extends ContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

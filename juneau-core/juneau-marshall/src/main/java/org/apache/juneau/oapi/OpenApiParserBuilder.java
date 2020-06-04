@@ -110,7 +110,7 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public OpenApiParserBuilder format(HttpPartFormat value) {
 		return set(OAPI_format, value);
 	}
@@ -163,12 +163,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public OpenApiParserBuilder collectionFormat(HttpPartCollectionFormat value) {
 		return set(OAPI_collectionFormat, value);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder add(Map<String,Object> properties) {
@@ -209,6 +209,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -383,12 +389,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -656,5 +656,5 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

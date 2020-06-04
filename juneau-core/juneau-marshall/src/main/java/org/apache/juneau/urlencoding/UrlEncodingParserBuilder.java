@@ -65,7 +65,7 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated
-	@ConfigurationProperty
+	@FluentSetter
 	public UrlEncodingParserBuilder expandedParams(boolean value) {
 		return set(URLENC_expandedParams, value);
 	}
@@ -82,12 +82,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public UrlEncodingParserBuilder expandedParams() {
 		return set(URLENC_expandedParams, true);
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingParserBuilder add(Map<String,Object> properties) {
@@ -128,6 +128,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -302,12 +308,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -575,5 +575,5 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

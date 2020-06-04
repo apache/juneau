@@ -18,6 +18,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session}
@@ -45,10 +46,83 @@ public abstract class Context {
 
 	static final String PREFIX = "Context";
 
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.Context#CONTEXT_debug CONTEXT_debug}
+	 * 	<li><b>Name:</b>  <js>"Context.debug.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>Context.debug</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONTEXT_DEBUG</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.ContextBuilder#debug()}
+	 * 			<li class='jm'>{@link org.apache.juneau.SessionArgs#debug(Boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * Enables the following additional information during serialization:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean getters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * 	<li>
+	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
+	 * </ul>
+	 *
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		When bean setters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Create a serializer with debug enabled.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.debug()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public</jk> Object <jf>f</jf>;
+	 * 	}
+	 * 	A a = <jk>new</jk> A();
+	 * 	a.<jf>f</jf> = a;
+	 *
+	 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
+	 * 	String json = s.serialize(a);
+	 * </p>
+	 */
+	public static final String CONTEXT_debug = PREFIX + ".debug.b";
+
 
 
 	private final PropertyStore propertyStore;
 	private final int identityCode;
+
+	private final boolean
+		debug;
 
 	/**
 	 * Constructor for this class.
@@ -62,6 +136,7 @@ public abstract class Context {
 	public Context(PropertyStore ps, boolean allowReuse) {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
+		debug = getBooleanProperty(CONTEXT_debug, false);
 	}
 
 	/**
@@ -536,6 +611,21 @@ public abstract class Context {
 			return false;
 		Context c = (Context)o;
 		return (c.propertyStore.equals(propertyStore));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Debug mode.
+	 *
+	 * @see #CONTEXT_debug
+	 * @return
+	 * 	<jk>true</jk> if debug mode is enabled.
+	 */
+	protected boolean isDebug() {
+		return debug;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

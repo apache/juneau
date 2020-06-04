@@ -223,7 +223,7 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		return this;
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder add(Map<String,Object> properties) {
@@ -268,6 +268,12 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder debug() {
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder prependTo(String name, Object value) {
 		super.prependTo(name, value);
 		return this;
@@ -303,5 +309,5 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

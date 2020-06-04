@@ -52,7 +52,7 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsoParserBuilder add(Map<String,Object> properties) {
@@ -93,6 +93,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsoParserBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsoParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -267,12 +273,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoParserBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -516,5 +516,5 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }

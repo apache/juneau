@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -70,6 +71,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs fileCharset(Charset value) {
 		property(WriterSerializer.WSERIALIZER_fileCharset, value);
 		return this;
@@ -83,6 +85,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs javaMethod(Method value) {
 		this.javaMethod = value;
 		return this;
@@ -99,6 +102,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs resolver(VarResolverSession value) {
 		this.resolver = value;
 		return this;
@@ -121,6 +125,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs streamCharset(Charset value) {
 		property(WriterSerializer.WSERIALIZER_streamCharset, value);
 		return this;
@@ -140,6 +145,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs uriContext(UriContext value) {
 		property(SERIALIZER_uriContext, value);
 		return this;
@@ -156,52 +162,57 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public SerializerSessionArgs useWhitespace(Boolean value) {
 		property(WriterSerializer.WSERIALIZER_useWhitespace, value);
 		return this;
 	}
 
-	@Override /* BeanSessionArgs */
+	// <FluentSetters>
+
+	@Override /* GENERATED - SessionArgs */
 	public SerializerSessionArgs debug(Boolean value) {
 		super.debug(value);
 		return this;
 	}
 
-	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs locale(Locale value) {
-		super.locale(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs mediaType(MediaType value) {
-		super.mediaType(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs schema(HttpPartSchema value) {
-		super.schema(value);
-		return this;
-	}
-
-	@Override /* BeanSessionArgs */
-	public SerializerSessionArgs timeZone(TimeZone value) {
-		super.timeZone(value);
-		return this;
-	}
-
-	@Override /* SessionArgs */
+	@Override /* GENERATED - SessionArgs */
 	public SerializerSessionArgs properties(OMap value) {
 		super.properties(value);
 		return this;
 	}
 
-	@Override /* SessionArgs */
+	@Override /* GENERATED - SessionArgs */
 	public SerializerSessionArgs property(String key, Object value) {
 		super.property(key, value);
 		return this;
 	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public SerializerSessionArgs locale(Locale value) {
+		super.locale(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public SerializerSessionArgs mediaType(MediaType value) {
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public SerializerSessionArgs schema(HttpPartSchema value) {
+		super.schema(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanSessionArgs */
+	public SerializerSessionArgs timeZone(TimeZone value) {
+		super.timeZone(value);
+		return this;
+	}
+
+	// </FluentSetters>
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods

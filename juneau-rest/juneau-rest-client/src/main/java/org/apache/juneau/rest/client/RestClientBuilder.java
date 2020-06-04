@@ -2352,7 +2352,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return set(UON_paramFormat, "PLAINTEXT");
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder beanClassVisibility(Visibility value) {
@@ -2801,7 +2801,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 
 	//------------------------------------------------------------------------------------------------
 	// Passthrough methods for HttpClientBuilder.

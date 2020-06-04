@@ -943,7 +943,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_debug}
+	 * 	<li class='jf'>{@link Context#CONTEXT_debug}
 	 * </ul>
 	 */
 	String debug() default "";

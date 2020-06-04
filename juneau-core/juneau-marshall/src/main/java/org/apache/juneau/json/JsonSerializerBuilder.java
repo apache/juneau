@@ -64,7 +64,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSerializerBuilder escapeSolidus(boolean value) {
 		return set(JSON_escapeSolidus, value);
@@ -82,7 +82,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSerializerBuilder escapeSolidus() {
 		return set(JSON_escapeSolidus, true);
 	}
@@ -95,7 +95,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 * </div>
 	 */
 	@SuppressWarnings("javadoc")
-	@ConfigurationProperty
+	@FluentSetter
 	@Deprecated
 	public JsonSerializerBuilder simple(boolean value) {
 		return set(JSON_simpleMode, value);
@@ -113,7 +113,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSerializerBuilder simple() {
 		return simple(true);
 	}
@@ -131,12 +131,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	@ConfigurationProperty
+	@FluentSetter
 	public JsonSerializerBuilder ssq() {
 		return simple().sq();
 	}
 
-	// <CONFIGURATION-PROPERTIES>
+	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSerializerBuilder add(Map<String,Object> properties) {
@@ -177,6 +177,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSerializerBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
 		super.applyAnnotations(al, r);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 
@@ -351,12 +357,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSerializerBuilder bpx(String beanClassName, String properties) {
 		super.bpx(beanClassName, properties);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSerializerBuilder debug() {
-		super.debug();
 		return this;
 	}
 
@@ -696,5 +696,5 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		return this;
 	}
 
-	// </CONFIGURATION-PROPERTIES>
+	// </FluentSetters>
 }
