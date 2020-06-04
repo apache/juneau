@@ -24,7 +24,7 @@ import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class MarshallTest {
+public class RestClientMarshallsTest {
 
 	public static class Bean {
 		public int f;
@@ -75,6 +75,8 @@ public class MarshallTest {
 	private static RestClient a1g = MockRestClient.create(A.class).uon().build();
 	private static RestClient a1h = MockRestClient.create(A.class).urlEnc().build();
 	private static RestClient a1i = MockRestClient.create(A.class).openApi().build();
+	private static RestClient a1j = MockRestClient.create(A.class).htmlDoc().build();
+	private static RestClient a1k = MockRestClient.create(A.class).htmlStrippedDoc().debug().build();
 
 	@Test
 	public void a01_singleLanguages() throws Exception {
@@ -132,6 +134,19 @@ public class MarshallTest {
 			.run()
 			.assertStatus().is(200)
 			.getBody().as(Bean.class).check();
+		a1j.post("/a01", bean)
+			.header("X-Accept", "text/html")
+			.header("X-Content-Type", "text/html")
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1k.post("/a01", bean)
+			.debug()
+			.header("X-Accept", "text/html")
+			.header("X-Content-Type", "text/html+stripped")
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
 	}
 
 	@Test
@@ -146,11 +161,11 @@ public class MarshallTest {
 			.getBody().as(Bean.class).check();
 	}
 
-	private static RestClient a1j = MockRestClient.create(A.class).build();
+	private static RestClient a3 = MockRestClient.create(A.class).build();
 
 	@Test
 	public void a03_noLanguages() throws Exception {
-		a1j.post("/a01", bean)
+		a3.post("/a01", bean)
 			.header("Accept", "application/json")
 			.header("Content-Type", "application/json")
 			.header("X-Accept", "application/json")

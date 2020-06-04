@@ -724,6 +724,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder contentEncoding(Object value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder contentLength(Object value) {
 		super.contentLength(value);
 		return this;

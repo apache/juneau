@@ -263,7 +263,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			String contextPath = ps.getProperty(MOCKRESTCLIENT_contextPath, String.class, null);
 			String servletPath = ps.getProperty(MOCKRESTCLIENT_servletPath, String.class, null);
 			String rootUrl = ps.getProperty(RESTCLIENT_rootUri, String.class, "http://localhost");
-			boolean isDebug = ps.getProperty(RESTCLIENT_debug, Boolean.class, false);
+			boolean isDebug = ps.getProperty(BEAN_debug, Boolean.class, false);
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			Map<Class<?>,RestContext> contexts = isDebug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
@@ -693,12 +693,4 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void flush() throws IOException {}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	// <CONFIGURATION-PROPERTIES>
-
-	// </CONFIGURATION-PROPERTIES>
 }

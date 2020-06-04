@@ -2489,7 +2489,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
+	 * Automatically enabled with {@link RestClient#BEAN_debug}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -4412,6 +4412,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	/**
+	 * This method has no effect on this class.
+	 */
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
@@ -4562,12 +4565,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	/**
+	 * This method has no effect on this class.
+	 */
 	@Override /* GENERATED - BeanContextBuilder */
 	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
 		super.example(pojoClass, o);
 		return this;
 	}
 
+	/**
+	 * This method has no effect on this class.
+	 */
 	@Override /* GENERATED - BeanContextBuilder */
 	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
 		super.exampleJson(pojoClass, json);

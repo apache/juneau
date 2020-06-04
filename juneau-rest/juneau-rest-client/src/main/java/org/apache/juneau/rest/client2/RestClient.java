@@ -1008,37 +1008,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
 
 	/**
-	 * Configuration property:  Debug.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_debug RESTCLIENT_debug}
-	 * 	<li><b>Name:</b>  <js>"RestClient.debug.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestClient.debug</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCLIENT_DEBUG</c>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#debug()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Enable debug mode.
-	 *
-	 * <p>
-	 * Has the following effects:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link BeanContext#BEAN_debug} is enabled.
-	 * 	<li>{@link #RESTCLIENT_leakDetection} is enabled.
-	 * 	<li>{@link RestClientBuilder#logToConsole()} is called.
-	 * </ul>
-	 */
-	public static final String RESTCLIENT_debug = PREFIX + "debug.b";
-
-	/**
 	 * Configuration property:  Error codes predicate.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1456,7 +1425,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * when the <c>finalize</c> methods are invoked.
 	 *
 	 * <p>
-	 * Automatically enabled with {@link RestClient#RESTCLIENT_debug}.
+	 * Automatically enabled with {@link RestClient#BEAN_debug}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1943,7 +1912,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class, null);
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
-		this.debug = getBooleanProperty(RESTCLIENT_debug, getBooleanProperty(BEAN_debug, false));
+		this.debug = getBooleanProperty(BEAN_debug, false);
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
 		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, debug);
@@ -3241,9 +3210,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @param args Optional message arguments.
 	 */
 	protected void log(Level level, Throwable t, String msg, Object...args) {
-		logger.log(level, t, ()->args.length == 0 ? msg : MessageFormat.format(msg, args));
+		logger.log(level, t, msg(msg, args));
 		if (logToConsole) {
-			System.err.println(msg);
+			System.err.println(msg(msg, args).get());
 			t.printStackTrace();
 		}
 	}
@@ -3256,9 +3225,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @param args The arguments.
 	 */
 	protected void log(Level level, String msg, Object...args) {
-		logger.log(level, msg, args);
+		logger.log(level, msg(msg, args));
 		if (logToConsole)
-			System.err.println(MessageFormat.format(msg, args));
+			System.err.println(msg(msg, args).get());
+	}
+	
+	private Supplier<String> msg(String msg, Object...args) {
+		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
 	}
 
 	//------------------------------------------------------------------------------------------------
