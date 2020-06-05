@@ -14,6 +14,8 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.function.*;
+
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
@@ -115,6 +117,17 @@ public class SerializedNameValuePair implements NameValuePair {
 		}
 
 		/**
+		 * Sets the POJO to serialize to the parameter value.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder value(Supplier<Object> value) {
+			this.value = value;
+			return this;
+		}
+
+		/**
 		 * Sets the HTTP part type.
 		 *
 		 * @param value The new value for this property.
@@ -189,15 +202,18 @@ public class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			if (value == null) {
+			Object v = value;
+			if (v instanceof Supplier)
+				v = ((Supplier<?>)v).get();
+			if (v == null) {
 				if (schema == null)
 					return null;
 				if (schema.getDefault() == null && ! schema.isRequired())
 					return null;
 			}
-			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
+			if (isEmpty(v) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(type, schema, value);
+			return serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
 			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
 		} catch (SerializeException e) {

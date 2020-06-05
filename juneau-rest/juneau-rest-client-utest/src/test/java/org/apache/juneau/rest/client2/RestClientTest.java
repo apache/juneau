@@ -1576,12 +1576,11 @@ public class RestClientTest {
 			.create(A.class)
 			.simpleJson()
 			.header("Check", "Foo")
-			.header("Foo", bean, new XPartSerializer(), null)
+			.header("Foo", bean, null, new XPartSerializer())
 			.build()
 			.get("/checkHeader")
-			.header(AddFlag.DEFAULT_FLAGS,"Foo",bean,new XPartSerializer().createPartSession(null),null)
 			.run()
-			.assertBody().is("['x{f:1}','x{f:1}']");
+			.assertBody().is("['x{f:1}']");
 	}
 
 	@Test

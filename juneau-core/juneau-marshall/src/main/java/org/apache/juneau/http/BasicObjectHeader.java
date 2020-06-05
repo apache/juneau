@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import java.util.function.*;
+
 import org.apache.http.message.BasicHeader;
 import org.apache.juneau.internal.*;
 
@@ -32,6 +34,17 @@ public class BasicObjectHeader extends BasicHeader {
 	 * @return A new {@link BasicObjectHeader} object.
 	 */
 	public static BasicObjectHeader of(String name, Object value) {
+		return new BasicObjectHeader(name, value);
+	}
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * @return A new {@link BasicObjectHeader} object.
+	 */
+	public static BasicObjectHeader of(String name, Supplier<?> value) {
 		return new BasicObjectHeader(name, value);
 	}
 

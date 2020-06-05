@@ -1056,14 +1056,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, myPartSerializer, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1074,19 +1071,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	public RestClientBuilder header(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
 	}
 
@@ -1095,14 +1092,47 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
+	}
+
+	/**
+	 * Sets a header on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1122,6 +1152,38 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Object value, HttpPartSchema schema) {
+		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).schema(schema));
+	}
+
+	/**
+	 * Sets a header on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema) {
 		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).schema(schema));
 	}
 
@@ -1152,6 +1214,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder header(String name, Object value) {
 		return header(name, value, null, null);
+	}
+
+	/**
+	 * Sets a header on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
+	 * </ul>
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder header(String name, Supplier<?> value) {
+		return header(name, value, (HttpPartSchema)null, null);
 	}
 
 	/**
@@ -1732,14 +1823,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, myPartSerializer, value, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1750,19 +1838,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder query(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	public RestClientBuilder query(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
 	}
 
@@ -1771,14 +1859,47 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, value, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1806,6 +1927,38 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema) {
+		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).schema(schema));
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
@@ -1824,6 +1977,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value) {
 		return query(name, value, null, null);
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder query(String name, Supplier<?> value) {
+		return query(name, value, (HttpPartSchema)null, null);
 	}
 
 	/**
@@ -1915,14 +2093,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, myPartSerializer, value, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1933,19 +2108,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>Converted to a string using the specified part serializer.
 	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
-	 * @param serializer The serializer to use for serializing the value to a string.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
-	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder formData(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
 	}
 
@@ -1954,14 +2129,47 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
-	 *
-	 * 	HttpPartSchema schema = <jsm>tArrayPipes</jsm>().build();  <jc>// Pipe-delimited array.</jc>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, value, schema);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @param serializer The serializer to use for serializing the value to a string.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, then the {@link HttpPartSerializer} defined on the client is used ({@link OpenApiSerializer} by default).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
+	}
+
+	/**
+	 * Adds a form-data parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
 	 * 		.build();
 	 * </p>
 	 *
@@ -1989,6 +2197,38 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 *
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @param schema The schema object that defines the format of the output.
+	 * 	<ul>
+	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema) {
+		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).schema(schema));
+	}
+
+	/**
+	 * Adds a form-data parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
@@ -2007,6 +2247,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value) {
 		return formData(name, value, null, null);
+	}
+
+	/**
+	 * Adds a form-data parameter to all request bodies.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder formData(String name, Supplier<?> value) {
+		return formData(name, value, (HttpPartSchema)null, null);
 	}
 
 	/**

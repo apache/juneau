@@ -24,6 +24,7 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.regex.*;
 
 import javax.xml.bind.*;
@@ -2815,6 +2816,8 @@ public final class StringUtils {
 	 * @return The value converted to a string or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static String asString(Object value) {
+		if (value instanceof Supplier)
+			value = ((Supplier<?>)value).get();
 		return value == null ? null : value.toString();
 	}
 
