@@ -123,6 +123,7 @@ public class MockServletRequest implements HttpServletRequest {
 			String qs = uri.substring(uri.indexOf('?') + 1);
 			if (qs.indexOf('#') != -1)
 				qs = qs.substring(0, qs.indexOf('#'));
+			queryString = qs;
 			queryDataMap.putAll(RestUtils.parseQuery(qs));
 		}
 

@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
-import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.http.*;
@@ -53,6 +52,7 @@ import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -121,20 +121,7 @@ public class RestClientTest {
 		CALENDAR.set(2000, 11, 31, 12, 34, 56);
 	}
 
-	public static class TestSupplier implements Supplier<Object> {
-		public Object value;
 
-		public TestSupplier set(Object value) {
-			this.value = value;
-			return this;
-		}
-
-		@Override
-		public Object get() {
-			return value;
-		}
-
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Override client and builder.
@@ -428,7 +415,7 @@ public class RestClientTest {
 
 	@Test
 	public void f01a_supplierHeader() throws Exception {
-		TestSupplier s = new TestSupplier().set("foo");
+		TestSupplier s = TestSupplier.of("foo");
 
 		RestClient rc = MockRestClient
 			.create(A.class)
@@ -1638,6 +1625,30 @@ public class RestClientTest {
 	}
 
 	@Test
+	public void h08a_headers_withSchemaAndSupplier() throws Exception {
+		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
+
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.header("Check", "Foo")
+			.header("Foo", s, HttpPartSchema.T_ARRAY_PIPES)
+			.build();
+
+		rc.get("/checkHeader")
+			.header("Foo", s, HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().is("['foo|bar','foo|bar']");
+
+		s.set(new String[]{"bar","baz"});
+
+		rc.get("/checkHeader")
+			.header("Foo", s, HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().is("['bar|baz','bar|baz']");
+	}
+
+	@Test
 	public void h09_headers_nullHeader() throws Exception {
 		MockRestClient
 			.create(A.class)
@@ -1719,6 +1730,31 @@ public class RestClientTest {
 			.get("/checkQuery")
 			.run()
 			.assertBody().is("Foo=bar%7Cbaz");
+	}
+
+	@Test
+	public void i03a_query_withSchemaAndSupplier() throws Exception {
+		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
+
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("Foo", s, HttpPartSchema.T_ARRAY_PIPES)
+			.build();
+
+		rc
+			.get("/checkQuery")
+			.query("Bar", s, HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().is("Foo=foo%7Cbar&Bar=foo%7Cbar");
+
+		s.set(new String[]{"bar","baz"});
+
+		rc
+			.get("/checkQuery")
+			.query("Bar", s, HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().is("Foo=bar%7Cbaz&Bar=bar%7Cbaz");
 	}
 
 	@Test
