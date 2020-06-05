@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;

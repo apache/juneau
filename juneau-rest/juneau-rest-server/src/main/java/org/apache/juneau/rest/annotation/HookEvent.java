@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
@@ -121,7 +122,7 @@ public enum HookEvent {
 	 * 			<li>{@link Connection}
 	 * 			<li>{@link ContentLength}
 	 * 			<li>{@link ContentType}
-	 * 			<li>{@link org.apache.juneau.http.Date}
+	 * 			<li>{@link org.apache.juneau.http.header.Date}
 	 * 			<li>{@link Expect}
 	 * 			<li>{@link From}
 	 * 			<li>{@link Host}

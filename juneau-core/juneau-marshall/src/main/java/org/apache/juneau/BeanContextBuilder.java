@@ -1118,7 +1118,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this builder.
 	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
-	 * 	<br>Values are comma-delimited lists of property names.
+	 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -1291,7 +1291,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this builder.
 	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
-	 * 	<br>Values are comma-delimited lists of property names.
+	 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -1457,7 +1457,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this builder.
 	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
-	 * 	<br>Values are comma-delimited lists of property names.
+	 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -1629,7 +1629,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @param values
 	 * 	The values to add to this builder.
 	 * 	<br>Keys are bean class names which can be a simple name, fully-qualified name, or <js>"*"</js> for all beans.
-	 * 	<br>Values are comma-delimited lists of property names.
+	 * 	<br>Values are comma-delimited lists of property names.  Non-String objects are first converted to Strings.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter

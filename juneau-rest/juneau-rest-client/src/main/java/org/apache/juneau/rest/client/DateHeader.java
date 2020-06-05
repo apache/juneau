@@ -26,7 +26,7 @@ import org.apache.http.message.BasicHeader;
  * 	Header h = <jk>new</jk> Header(name, DateUtils.<jsm>formatDate</jsm>(value));
  * </p>
  *
- * @deprecated Use {@link org.apache.juneau.http.Date}
+ * @deprecated Use {@link org.apache.juneau.http.header.Date}
  */
 @Deprecated
 public final class DateHeader extends BasicHeader {

@@ -118,7 +118,12 @@ public class MediaType implements Comparable<MediaType>  {
 		return mt;
 	}
 
-	MediaType(String mt) {
+	/**
+	 * Constructor.
+	 *
+	 * @param mt The media type string.
+	 */
+	protected MediaType(String mt) {
 		Builder b = new Builder(mt);
 		this.mediaType = b.mediaType;
 		this.type = b.type;

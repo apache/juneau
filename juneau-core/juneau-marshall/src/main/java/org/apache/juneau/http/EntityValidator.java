@@ -36,7 +36,7 @@ public class EntityValidator {
 	 *
 	 * @param value The validator string value.
 	 */
-	protected EntityValidator(String value) {
+	public EntityValidator(String value) {
 		value = value.trim();
 		isWeak = value.startsWith("W/");
 		if (isWeak)

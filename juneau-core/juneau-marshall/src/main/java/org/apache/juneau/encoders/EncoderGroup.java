@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.

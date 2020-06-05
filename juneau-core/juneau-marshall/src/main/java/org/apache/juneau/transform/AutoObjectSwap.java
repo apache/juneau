@@ -79,7 +79,7 @@ public class AutoObjectSwap<T> extends PojoSwap<T,Object> {
 
 	private static final Set<String>
 		SWAP_METHOD_NAMES = ASet.unmodifiable("swap", "toObject"),
-		UNSWAP_METHOD_NAMES = ASet.unmodifiable("unswap", "create", "fromObject");
+		UNSWAP_METHOD_NAMES = ASet.unmodifiable("unswap", "create", "fromObject", "of");
 
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.

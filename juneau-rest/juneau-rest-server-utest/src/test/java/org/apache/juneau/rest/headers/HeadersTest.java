@@ -19,8 +19,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -44,111 +44,111 @@ public class HeadersTest {
 
 		@RestMethod
 		public String accept(Accept accept) {
-			return accept.toString();
+			return accept.getValue();
 		}
 		@RestMethod
 		public String acceptCharset(AcceptCharset acceptCharset) {
-			return acceptCharset.toString();
+			return acceptCharset.getValue();
 		}
 		@RestMethod
 		public String acceptEncoding(AcceptEncoding acceptEncoding) {
-			return acceptEncoding.toString();
+			return acceptEncoding.getValue();
 		}
 		@RestMethod
 		public String acceptLanguage(AcceptLanguage acceptLanguage) {
-			return acceptLanguage.toString();
+			return acceptLanguage.getValue();
 		}
 		@RestMethod
 		public String authorization(Authorization authorization) {
-			return authorization.toString();
+			return authorization.getValue();
 		}
 		@RestMethod
 		public String cacheControl(CacheControl cacheControl) {
-			return cacheControl.toString();
+			return cacheControl.getValue();
 		}
 		@RestMethod
 		public String connection(Connection connection) {
-			return connection.toString();
+			return connection.getValue();
 		}
 		@RestMethod
 		public String contentLength(ContentLength contentLength) {
-			return contentLength.toString();
+			return contentLength.getValue();
 		}
 		@RestMethod
 		public String contentType(ContentType contentType) {
-			return contentType.toString();
+			return contentType.getValue();
 		}
 		@RestMethod
-		public String date(org.apache.juneau.http.Date date) {
-			return date.toString();
+		public String date(org.apache.juneau.http.header.Date date) {
+			return date.getValue();
 		}
 		@RestMethod
 		public String expect(Expect expect) {
-			return expect.toString();
+			return expect.getValue();
 		}
 		@RestMethod
 		public String from(From from) {
-			return from.toString();
+			return from.getValue();
 		}
 		@RestMethod
 		public String host(Host host) {
-			return host.toString();
+			return host.getValue();
 		}
 		@RestMethod
 		public String ifMatch(IfMatch ifMatch) {
-			return ifMatch.toString();
+			return ifMatch.getValue();
 		}
 		@RestMethod
 		public String ifModifiedSince(IfModifiedSince ifModifiedSince) {
-			return ifModifiedSince.toString();
+			return ifModifiedSince.getValue();
 		}
 		@RestMethod
 		public String ifNoneMatch(IfNoneMatch ifNoneMatch) {
-			return ifNoneMatch.toString();
+			return ifNoneMatch.getValue();
 		}
 		@RestMethod
 		public String ifRange(IfRange ifRange) {
-			return ifRange.toString();
+			return ifRange.getValue();
 		}
 		@RestMethod
 		public String ifUnmodifiedSince(IfUnmodifiedSince ifUnmodifiedSince) {
-			return ifUnmodifiedSince.toString();
+			return ifUnmodifiedSince.getValue();
 		}
 		@RestMethod
 		public String maxForwards(MaxForwards maxForwards) {
-			return maxForwards.toString();
+			return maxForwards.getValue();
 		}
 		@RestMethod
 		public String pragma(Pragma pragma) {
-			return pragma.toString();
+			return pragma.getValue();
 		}
 		@RestMethod
 		public String proxyAuthorization(ProxyAuthorization proxyAuthorization) {
-			return proxyAuthorization.toString();
+			return proxyAuthorization.getValue();
 		}
 		@RestMethod
 		public String range(Range range) {
-			return range.toString();
+			return range.getValue();
 		}
 		@RestMethod
 		public String referer(Referer referer) {
-			return referer.toString();
+			return referer.getValue();
 		}
 		@RestMethod
 		public String te(TE te) {
-			return te.toString();
+			return te.getValue();
 		}
 		@RestMethod
 		public String upgrade(Upgrade upgrade) {
-			return upgrade.toString();
+			return upgrade.getValue();
 		}
 		@RestMethod
 		public String userAgent(UserAgent userAgent) {
-			return userAgent.toString();
+			return userAgent.getValue();
 		}
 		@RestMethod
 		public String warning(Warning warning) {
-			return warning.toString();
+			return warning.getValue();
 		}
 	}
 	private static MockRestClient a = MockRestClient.build(A.class);
@@ -778,7 +778,7 @@ public class HeadersTest {
 	@Test
 	public void sa25_upgrade() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/upgrade","get","header","Upgrade");
-		assertObjectEquals("{'in':'header',name:'Upgrade',type:'array',items:{type:'string'},collectionFormat:'csv'}", pi);
+		assertObjectEquals("{'in':'header',name:'Upgrade',type:'string'}", pi);
 	}
 	@Test
 	public void sa26_userAgent() throws Exception {

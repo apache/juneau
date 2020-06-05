@@ -28,6 +28,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.utils.*;

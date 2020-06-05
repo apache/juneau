@@ -25,7 +25,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.internal.*;
@@ -34,6 +33,7 @@ import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Abstract class for defining Remote Interface Services.

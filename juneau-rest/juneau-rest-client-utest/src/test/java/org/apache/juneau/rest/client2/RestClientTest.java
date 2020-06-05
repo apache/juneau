@@ -37,6 +37,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
@@ -470,11 +471,11 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(BasicObjectHeader.of("Foo", "bar"))
+			.header(BasicStringHeader.of("Foo", "bar"))
 			.header("Check", "Foo")
 			.build()
 			.get("/checkHeader")
-			.header(BasicObjectHeader.of("Foo", "baz"))
+			.header(BasicStringHeader.of("Foo", "baz"))
 			.run()
 			.assertBody().is("['bar','baz']");
 	}
@@ -568,11 +569,11 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.headers(BasicObjectHeader.of("Foo", "bar"))
+			.headers(BasicStringHeader.of("Foo", "bar"))
 			.header("Check", "Foo")
 			.build()
 			.get("/checkHeader")
-			.headers(BasicObjectHeader.of("Foo", "baz"))
+			.headers(BasicStringHeader.of("Foo", "baz"))
 			.run()
 			.assertBody().is("['bar','baz']");
 	}
@@ -1148,7 +1149,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new org.apache.juneau.http.Date("Sun, 31 Dec 2000 12:34:56 GMT"))
+			.header(new org.apache.juneau.http.header.Date("Sun, 31 Dec 2000 12:34:56 GMT"))
 			.header("Check", "Date")
 			.build()
 			.get("/checkHeader")
@@ -1161,7 +1162,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.header(new org.apache.juneau.http.Date(CALENDAR))
+			.header(new org.apache.juneau.http.header.Date(CALENDAR))
 			.header("Check", "Date")
 			.build()
 			.get("/checkHeader")

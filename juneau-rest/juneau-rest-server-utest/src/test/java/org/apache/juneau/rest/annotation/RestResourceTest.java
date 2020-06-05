@@ -84,7 +84,7 @@ public class RestResourceTest {
 	public static class B {
 		@RestMethod
 		public String put(RequestHeaders h) {
-			return "Accept="+h.getAccept()+",Content-Type=" + h.getContentType() + ",Custom=" + h.getString("Custom");
+			return "Accept="+h.getAccept().getValue()+",Content-Type=" + h.getContentType().getValue() + ",Custom=" + h.getString("Custom");
 		}
 	}
 
