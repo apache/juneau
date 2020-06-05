@@ -202,9 +202,7 @@ public class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			Object v = value;
-			if (v instanceof Supplier)
-				v = ((Supplier<?>)v).get();
+			Object v = unwrap(value);
 			if (v == null) {
 				if (schema == null)
 					return null;
@@ -224,5 +222,11 @@ public class SerializedNameValuePair implements NameValuePair {
 	@Override /* Object */
 	public String toString() {
 		return name + "=" + getValue();
+	}
+
+	private Object unwrap(Object o) {
+		if (o instanceof Supplier)
+			return ((Supplier<?>)o).get();
+		return o;
 	}
 }

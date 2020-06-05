@@ -15,6 +15,7 @@ package org.apache.juneau.http;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -156,6 +157,24 @@ public class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairs append(String name, Object value) {
+		super.add(new BasicNameValuePair(name, value));
+		return this;
+	}
+
+	/**
+	 * Appends the specified name/value pair to the end of this list using a value supplier.
+	 *
+	 * <p>
+	 * The pair is added as a {@link BasicNameValuePair}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicNameValuePair#getValue()}.
+	 *
+	 * @param name The pair name.
+	 * @param value The pair value supplier.
+	 * @return This object (for method chaining).
+	 */
+	public NameValuePairs append(String name, Supplier<?> value) {
 		super.add(new BasicNameValuePair(name, value));
 		return this;
 	}

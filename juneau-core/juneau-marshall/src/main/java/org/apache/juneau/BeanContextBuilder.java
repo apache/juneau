@@ -1124,7 +1124,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder bpi(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(stringify(e.getValue())));
 		return this;
 	}
 
@@ -1297,7 +1297,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder bpx(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(stringify(e.getValue())));
 		return this;
 	}
 
@@ -1463,7 +1463,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder bpro(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(stringify(e.getValue())));
 		return this;
 	}
 
@@ -1635,7 +1635,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder bpwo(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(asString(e.getValue())));
+			prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(stringify(e.getValue())));
 		return this;
 	}
 

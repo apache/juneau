@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -82,7 +83,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Header */
 	public String getValue() {
-		return StringUtils.asString(getRawValue());
+		return stringify(getRawValue());
 	}
 
 	/**
@@ -91,10 +92,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The raw value of the header.
 	 */
 	protected Object getRawValue() {
-		if (value instanceof Supplier) {
-			return ((Supplier<?>)value).get();
-		}
-		return value;
+		return unwrap(value);
 	}
 
 	@Override
@@ -134,6 +132,18 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	protected boolean isSupplier(Object o) {
 		return o instanceof Supplier;
+	}
+
+	/**
+	 * If the specified object is a {@link Supplier}, returns the supplied value, otherwise the same value.
+	 *
+	 * @param o The object to unwrap.
+	 * @return The unwrapped object.
+	 */
+	protected Object unwrap(Object o) {
+		if (o instanceof Supplier)
+			return ((Supplier<?>)o).get();
+		return o;
 	}
 
 	@Override /* Object */

@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
@@ -110,7 +111,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 			return null;
 		if (o instanceof String)
 			return (String)o;
-		return StringUtils.joine(getParsedValue(), ',');
+		return joine(getParsedValue(), ',');
 	}
 
 	/**
@@ -154,12 +155,12 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		AList<String> l = AList.of();
 		if (o instanceof Collection) {
 			for (Object o2 : (Collection<?>)o)
-				l.add(StringUtils.asString(o2));
+				l.add(stringify(o2));
 		} else if (o.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(StringUtils.asString(Array.get(o, i)));
+				l.add(stringify(Array.get(o, i)));
 		} else {
-			for (String s : StringUtils.split(o.toString()))
+			for (String s : split(o.toString()))
 				l.add(s);
 		}
 		return l.unmodifiable();

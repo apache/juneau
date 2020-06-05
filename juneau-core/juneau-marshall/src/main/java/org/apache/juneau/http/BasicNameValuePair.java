@@ -13,6 +13,9 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
+
+import java.util.function.*;
+
 import org.apache.http.*;
 
 /**
@@ -38,6 +41,20 @@ public class BasicNameValuePair implements NameValuePair {
 	}
 
 	/**
+	 * Convenience creator using supplier.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return A new {@link BasicNameValuePair} object.
+	 */
+	public static BasicNameValuePair of(String name, Supplier<?> value) {
+		return new BasicNameValuePair(name, value);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param name The parameter name.
@@ -55,6 +72,12 @@ public class BasicNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return stringify(value);
+		return stringify(unwrap(value));
+	}
+
+	private Object unwrap(Object o) {
+		if (o instanceof Supplier)
+			return ((Supplier<?>)o).get();
+		return o;
 	}
 }

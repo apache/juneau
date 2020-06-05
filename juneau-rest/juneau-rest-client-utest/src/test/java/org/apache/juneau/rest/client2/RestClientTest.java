@@ -20,6 +20,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.http.*;
@@ -118,6 +119,21 @@ public class RestClientTest {
 	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
 	static {
 		CALENDAR.set(2000, 11, 31, 12, 34, 56);
+	}
+
+	public static class TestSupplier implements Supplier<Object> {
+		public Object value;
+
+		public TestSupplier set(Object value) {
+			this.value = value;
+			return this;
+		}
+
+		@Override
+		public Object get() {
+			return value;
+		}
+
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -408,6 +424,30 @@ public class RestClientTest {
 			.header("Foo","baz")
 			.run()
 			.assertBody().is("['bar','baz']");
+	}
+
+	@Test
+	public void f01a_supplierHeader() throws Exception {
+		TestSupplier s = new TestSupplier().set("foo");
+
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.header("Check", "Foo")
+			.header("Foo", s)
+			.build();
+
+		rc.get("/checkHeader")
+			.header("Foo", s)
+			.run()
+			.assertBody().is("['foo','foo']");
+
+		s.set("bar");
+
+		rc.get("/checkHeader")
+			.header("Foo", s)
+			.run()
+			.assertBody().is("['bar','bar']");
 	}
 
 	@Test

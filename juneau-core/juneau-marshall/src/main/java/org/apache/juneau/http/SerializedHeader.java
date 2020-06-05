@@ -14,6 +14,8 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.function.*;
+
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
@@ -63,6 +65,7 @@ public class SerializedHeader extends BasicStringHeader {
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
 	public SerializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
@@ -107,6 +110,19 @@ public class SerializedHeader extends BasicStringHeader {
 		 * @return This object (for method chaining).
 		 */
 		public Builder value(Object value) {
+			this.value = value;
+			return this;
+		}
+
+		/**
+		 * Sets the POJO supplier to serialize to the parameter value.
+		 * <p>
+		 * Value is re-evaluated on each call to {@link #getValue()}.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder value(Supplier<?> value) {
 			this.value = value;
 			return this;
 		}
@@ -158,15 +174,16 @@ public class SerializedHeader extends BasicStringHeader {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			if (value == null) {
+			Object v = unwrap(value);
+			if (v == null) {
 				if (schema == null)
 					return null;
 				if (schema.getDefault() == null && ! schema.isRequired())
 					return null;
 			}
-			if (isEmpty(value) && skipIfEmpty && schema.getDefault() == null)
+			if (isEmpty(v) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(HttpPartType.HEADER, schema, value);
+			return serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {
 			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
