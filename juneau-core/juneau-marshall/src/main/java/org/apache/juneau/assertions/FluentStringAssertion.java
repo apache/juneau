@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 import java.util.regex.*;
@@ -55,7 +56,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R equals(String value) throws AssertionError {
-		if (! StringUtils.isEquals(value, text)) {
+		if (! isEquals(value, text)) {
 			if (value != null && value.startsWith("x")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text did not equal expected.");
@@ -83,6 +84,28 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Asserts that the text equals the specified value after the text has been URL-decoded.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R urlDecodedIs(String value) throws AssertionError {
+		String t = urlDecode(text);
+		if (! isEqualsIc(value, t)) {
+			if (value != null && value.startsWith("x")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Text did not equal expected.");
+				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				sb.append("\nActual  : [").append(t.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
+				System.err.println(sb.toString());
+			}
+			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, t);
+		}
+		return returns();
+	}
+
+	/**
 	 * Asserts that the text equals the specified value ignoring case.
 	 *
 	 * @param value The value to check against.
@@ -90,7 +113,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R equalsIc(String value) throws AssertionError {
-		if (! StringUtils.isEqualsIc(value, text)) {
+		if (! isEqualsIc(value, text)) {
 			if (value != null && value.startsWith("x")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text did not equal expected.");
@@ -111,7 +134,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
-		if (StringUtils.isEquals(value, text)) {
+		if (isEquals(value, text)) {
 			if (value != null && value.startsWith("x")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text equaled unexpected.");
@@ -145,7 +168,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
-		if (StringUtils.isEqualsIc(value, text)) {
+		if (isEqualsIc(value, text)) {
 			if (value != null && value.startsWith("x")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Text equaled unexpected.");

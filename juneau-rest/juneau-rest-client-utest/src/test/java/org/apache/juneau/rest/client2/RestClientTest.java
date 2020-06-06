@@ -29,11 +29,13 @@ import org.apache.http.auth.*;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.BasicNameValuePair;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.exception.*;
@@ -54,6 +56,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -414,7 +417,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f01a_supplierHeader() throws Exception {
+	public void f02_supplierHeader() throws Exception {
 		TestSupplier s = TestSupplier.of("foo");
 
 		RestClient rc = MockRestClient
@@ -438,7 +441,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f02_beanHeader() throws Exception {
+	public void f03_beanHeader() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -452,7 +455,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f03_nullHeaders() throws Exception {
+	public void f04_nullHeaders() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -466,7 +469,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f04_header_Header() throws Exception {
+	public void f05_header_Header() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -480,7 +483,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f05_header_NameValuePair() throws Exception {
+	public void f06_header_NameValuePair() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -494,7 +497,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f06_header_HttpHeader() throws Exception {
+	public void f07_header_HttpHeader() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -508,7 +511,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f07_headers_Header() throws Exception {
+	public void f08_headers_Header() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -522,7 +525,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f08_headers_OMap() throws Exception {
+	public void f09_headers_OMap() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -536,7 +539,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f09_headers_Map() throws Exception {
+	public void f10_headers_Map() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -550,7 +553,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f10_headers_NameValuePairs() throws Exception {
+	public void f11_headers_NameValuePairs() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -564,7 +567,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f11_headers_NameValuePair() throws Exception {
+	public void f12_headers_NameValuePair() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -578,7 +581,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f12_headers_pairs() throws Exception {
+	public void f13_headers_pairs() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -592,7 +595,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f13_headers_HttpHeader() throws Exception {
+	public void f14_headers_HttpHeader() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -606,7 +609,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f14_headers_accept() throws Exception {
+	public void f15_headers_accept() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -620,7 +623,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f15_headers_acceptCharset() throws Exception {
+	public void f16_headers_acceptCharset() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -633,7 +636,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f16_headers_acceptEncoding() throws Exception {
+	public void f17_headers_acceptEncoding() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -646,7 +649,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f17_headers_acceptLanguage() throws Exception {
+	public void f18_headers_acceptLanguage() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -659,7 +662,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f18_headers_authorization() throws Exception {
+	public void f19_headers_authorization() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -672,7 +675,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f19_headers_cacheControl() throws Exception {
+	public void f20_headers_cacheControl() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -685,7 +688,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f20_headers_clientVersion() throws Exception {
+	public void f21_headers_clientVersion() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -698,7 +701,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f21_headers_connection() throws Exception {
+	public void f22_headers_connection() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -711,7 +714,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f22_headers_contentLength() throws Exception {
+	public void f23_headers_contentLength() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -724,7 +727,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f23_headers_contentType() throws Exception {
+	public void f24_headers_contentType() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -737,7 +740,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f23a_headers_contentEncoding() throws Exception {
+	public void f25_headers_contentEncoding() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -750,7 +753,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f24_headers_date() throws Exception {
+	public void f26_headers_date() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -763,7 +766,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f25_headers_expect() throws Exception {
+	public void f27_headers_expect() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -776,7 +779,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f26_headers_forwarded() throws Exception {
+	public void f28_headers_forwarded() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -789,7 +792,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f27_headers_from() throws Exception {
+	public void f29_headers_from() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -802,7 +805,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f28_headers_host() throws Exception {
+	public void f30_headers_host() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -815,7 +818,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f29_headers_ifMatch() throws Exception {
+	public void f31_headers_ifMatch() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -828,7 +831,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f30_headers_ifModifiedSince() throws Exception {
+	public void f32_headers_ifModifiedSince() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -841,7 +844,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f31_headers_ifNoneMatch() throws Exception {
+	public void f33_headers_ifNoneMatch() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -854,7 +857,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f32_headers_ifRange() throws Exception {
+	public void f34_headers_ifRange() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -867,7 +870,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f33_headers_ifUnmodifiedSince() throws Exception {
+	public void f35_headers_ifUnmodifiedSince() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -880,7 +883,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f34_headers_maxForwards() throws Exception {
+	public void f36_headers_maxForwards() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -893,7 +896,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f35_headers_noTrace() throws Exception {
+	public void f37_headers_noTrace() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -906,7 +909,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f36_headers_origin() throws Exception {
+	public void f38_headers_origin() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -919,7 +922,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f37_headers_pragma() throws Exception {
+	public void f39_headers_pragma() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -932,7 +935,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f38_headers_proxyAuthorization() throws Exception {
+	public void f40_headers_proxyAuthorization() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -945,7 +948,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f39_headers_range() throws Exception {
+	public void f41_headers_range() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -958,7 +961,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f40_headers_referer() throws Exception {
+	public void f42_headers_referer() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -971,7 +974,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f41_headers_te() throws Exception {
+	public void f43_headers_te() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -984,7 +987,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f42_headers_userAgent() throws Exception {
+	public void f44_headers_userAgent() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -997,7 +1000,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f43_headers_upgrade() throws Exception {
+	public void f45_headers_upgrade() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1010,7 +1013,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f44_headers_via() throws Exception {
+	public void f46_headers_via() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1023,7 +1026,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void f45_headers_warning() throws Exception {
+	public void f47_headers_warning() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1729,11 +1732,13 @@ public class RestClientTest {
 			.build()
 			.get("/checkQuery")
 			.run()
-			.assertBody().is("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz")
+		;
 	}
 
 	@Test
-	public void i03a_query_withSchemaAndSupplier() throws Exception {
+	public void i04_query_withSchemaAndSupplier() throws Exception {
 		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
 
 		RestClient rc = MockRestClient
@@ -1746,7 +1751,9 @@ public class RestClientTest {
 			.get("/checkQuery")
 			.query("Bar", s, HttpPartSchema.T_ARRAY_PIPES)
 			.run()
-			.assertBody().is("Foo=foo%7Cbar&Bar=foo%7Cbar");
+			.assertBody().is("Foo=foo%7Cbar&Bar=foo%7Cbar")
+			.assertBody().urlDecodedIs("Foo=foo|bar&Bar=foo|bar")
+		;
 
 		s.set(new String[]{"bar","baz"});
 
@@ -1754,11 +1761,67 @@ public class RestClientTest {
 			.get("/checkQuery")
 			.query("Bar", s, HttpPartSchema.T_ARRAY_PIPES)
 			.run()
-			.assertBody().is("Foo=bar%7Cbaz&Bar=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz&Bar=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz&Bar=bar|baz")
+		;
 	}
 
 	@Test
-	public void i04_query_withNull() throws Exception {
+	public void i05_query_withSchemaAndSupplierAndSerializer() throws Exception {
+		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
+
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("Foo", s, HttpPartSchema.T_ARRAY_PIPES, new XPartSerializer())
+			.build();
+
+		rc
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=x%5B%27foo%27%2C%27bar%27%5D")
+			.assertBody().urlDecodedIs("Foo=x['foo','bar']")
+		;
+
+		s.set(AList.of("bar","baz"));
+
+		rc
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=x%5B%27bar%27%2C%27baz%27%5D")
+			.assertBody().urlDecodedIs("Foo=x['bar','baz']")
+		;
+	}
+
+	@Test
+	public void i06_query_withSupplier() throws Exception {
+		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
+
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("Foo", s)
+			.build();
+
+		rc
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=foo%2Cbar")
+			.assertBody().urlDecodedIs("Foo=foo,bar")
+		;
+
+		s.set(AList.of("bar","baz"));
+
+		rc
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("Foo=bar%2Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar,baz")
+		;
+	}
+
+	@Test
+	public void i07_query_withNull() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1770,7 +1833,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void i05_query_invalid() throws Exception {
+	public void i08_query_invalid() throws Exception {
 		try {
 			MockRestClient
 				.create(A.class)
@@ -1779,6 +1842,43 @@ public class RestClientTest {
 			fail();
 		} catch (Exception e) {
 			assertEquals("Invalid type passed to query(Object...):  java.lang.String", e.getMessage());
+		}
+	}
+
+	@Test
+	public void i09_queryPairs() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.queryPairs("foo","bar","baz","qux")
+			.build()
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("foo=bar&baz=qux")
+		;
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.queryPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2"))
+			.build()
+			.get("/checkQuery")
+			.run()
+			.assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2")
+			.assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2")
+		;
+	}
+
+	@Test
+	public void i10_queryPairs_invalid() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.queryPairs("foo","bar","baz");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Odd number of parameters passed into queryPairs(Object...)", e.getMessage());
 		}
 	}
 
@@ -1823,7 +1923,90 @@ public class RestClientTest {
 			.build()
 			.post("/checkFormData")
 			.run()
-			.assertBody().is("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz")
+		;
+	}
+
+	@Test
+	public void j03a_formData_withSupplier() throws Exception {
+		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
+
+		RestClient rc= MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData("Foo", s)
+			.build();
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=foo%2Cbar")
+			.assertBody().urlDecodedIs("Foo=foo,bar")
+		;
+
+		s.set(OList.of("bar","baz"));
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=bar%2Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar,baz")
+		;
+	}
+
+	@Test
+	public void j03a_formData_withSupplierAndSerializer() throws Exception {
+		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
+
+		RestClient rc= MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData("Foo", s, HttpPartSchema.T_ARRAY_PIPES, new XPartSerializer())
+			.build();
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=x%5B%27foo%27%2C%27bar%27%5D")
+			.assertBody().urlDecodedIs("Foo=x['foo','bar']")
+		;
+
+		s.set(OList.of("bar","baz"));
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=x%5B%27bar%27%2C%27baz%27%5D")
+			.assertBody().urlDecodedIs("Foo=x['bar','baz']")
+		;
+	}
+
+	@Test
+	public void j03a_formData_withSupplierAndSchema() throws Exception {
+		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
+
+		RestClient rc= MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formData("Foo", s, HttpPartSchema.T_ARRAY_PIPES)
+			.build();
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=foo%7Cbar")
+			.assertBody().urlDecodedIs("Foo=foo|bar")
+		;
+
+		s.set(AList.of("bar","baz"));
+
+		rc
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("Foo=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz")
+		;
 	}
 
 	@Test
@@ -1851,6 +2034,42 @@ public class RestClientTest {
 		}
 	}
 
+	@Test
+	public void j06_formDataPairs() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formDataPairs("foo","bar","baz","qux")
+			.build()
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("foo=bar&baz=qux")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.formDataPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2"))
+			.build()
+			.post("/checkFormData")
+			.run()
+			.assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2")
+			.assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2")
+		;
+	}
+
+	@Test
+	public void j05_formDataPairs_invalid() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.formDataPairs("foo","bar","baz");
+			fail();
+		} catch (Exception e) {
+			assertEquals("Odd number of parameters passed into formDataPairs(Object...)", e.getMessage());
+		}
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// RestClient properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1875,6 +2094,7 @@ public class RestClientTest {
 			return super.execute(target, request, context);
 		}
 	}
+
 	@Test
 	public void k01_restClient_CallHandlerClass() throws Exception {
 		MockRestClient
@@ -1887,6 +2107,29 @@ public class RestClientTest {
 			.header("Foo","f2")
 			.run()
 			.assertBody().is("['f1','f2','baz']");
+	}
+
+	@Test
+	public void k02_restClient_CallHandlerObject() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.callHandler(new RestCallHandler() {
+				@Override
+				public HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
+					return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http", 1, 1), 201, null));
+				}
+				@Override
+				public HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
+					return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http", 1, 1), 201, null));
+				}
+			})
+			.header("Foo", "f1")
+			.build()
+			.get("/checkHeader")
+			.header("Foo","f2")
+			.run()
+			.assertStatus().is(201);
 	}
 
 	@Test
@@ -2663,6 +2906,15 @@ public class RestClientTest {
 			.post("/echoBody", x)
 			.run()
 			.assertBody().is("{\n\tf1: 'foo'\n}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.useWhitespace()
+			.build()
+			.post("/echoBody", x)
+			.run()
+			.assertBody().is("{\n\tf1: 'foo'\n}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2745,7 +2997,9 @@ public class RestClientTest {
 			.get("/checkQuery")
 			.query("Foo", "bar baz")
 			.run()
-			.assertBody().is("Foo=%27bar+baz%27");
+			.assertBody().is("Foo=%27bar+baz%27")
+			.assertBody().urlDecodedIs("Foo='bar baz'")
+		;
 	}
 
 	@Test
@@ -2758,19 +3012,59 @@ public class RestClientTest {
 		rc.get("/checkQuery")
 			.query("Foo", new String[]{"bar","baz"})
 			.run()
-			.assertBody().is("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz")
+		;
 
 		rc.post("/checkFormData")
 			.formData("Foo", new String[]{"bar","baz"})
 			.run()
-			.assertBody().is("Foo=bar%7Cbaz");
+			.assertBody().is("Foo=bar%7Cbaz")
+			.assertBody().urlDecodedIs("Foo=bar|baz")
+		;
 
 		rc.get("/checkHeader")
 			.header("Check", "Foo")
 			.header("Foo", new String[]{"bar","baz"})
 			.accept("text/json+simple")
 			.run()
-			.assertBody().is("['bar|baz']");
+			.assertBody().is("['bar|baz']")
+		;
+	}
+
+	@Test
+	public void n03_urlEnc_paramFormat() throws Exception {
+		 OMap map = OMap.of(
+			"foo", "bar",
+			"baz", new String[]{"qux", "true", "123"}
+		);
+
+		 MockRestClient
+			.create(A.class)
+			.urlEnc()
+			.paramFormat(ParamFormat.PLAINTEXT)
+			.build()
+			.post("/echoBody", map)
+			.run()
+			.assertBody().is("foo=bar&baz=qux,true,123");
+
+		 MockRestClient
+			.create(A.class)
+			.urlEnc()
+			.paramFormatPlain()
+			.build()
+			.post("/echoBody", map)
+			.run()
+			.assertBody().is("foo=bar&baz=qux,true,123");
+
+		 MockRestClient
+			.create(A.class)
+			.urlEnc()
+			.paramFormat(ParamFormat.UON)
+			.build()
+			.post("/echoBody", map)
+			.run()
+			.assertBody().is("foo=bar&baz=@(qux,'true','123')");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2801,39 +3095,49 @@ public class RestClientTest {
 
 		rc1.post("/echoBody", new O1())
 			.run()
-			.assertBody().is("'O1'");
+			.assertBody().is("'O1'")
+		;
 		rc2.post("/echoBody", new O1())
 			.run()
-			.assertBody().is("{f:1}");
+			.assertBody().is("{f:1}")
+		;
 
 		rc1.get("/checkQuery")
 			.query("foo", new O1())
 			.run()
-			.assertBody().is("foo=O1");
+			.assertBody().is("foo=O1")
+		;
 		rc2.get("/checkQuery")
 			.query("foo", new O1())
 			.run()
-			.assertBody().is("foo=f%3D1");
+			.assertBody().is("foo=f%3D1")
+			.assertBody().urlDecodedIs("foo=f=1")
+		;
 
 		rc1.formPost("/checkFormData")
 			.formData("foo", new O1())
 			.run()
-			.assertBody().is("foo=O1");
+			.assertBody().is("foo=O1")
+		;
 		rc2.formPost("/checkFormData")
 			.formData("foo", new O1())
 			.run()
-			.assertBody().is("foo=f%3D1");
+			.assertBody().is("foo=f%3D1")
+			.assertBody().urlDecodedIs("foo=f=1")
+		;
 
 		rc1.get("/checkHeader")
 			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
-			.assertBody().is("['O1']");
+			.assertBody().is("['O1']")
+		;
 		rc2.get("/checkHeader")
 			.header("foo", new O1())
 			.header("Check", "foo")
 			.run()
-			.assertBody().is("['f=1']");
+			.assertBody().is("['f=1']")
+		;
 	}
 
 	public static class O2 {

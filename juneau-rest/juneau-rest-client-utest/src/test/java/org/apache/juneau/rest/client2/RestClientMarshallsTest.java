@@ -447,4 +447,18 @@ public class RestClientMarshallsTest {
 			.assertStatus().is(200)
 			.getBody().as(Bean.class).check();
 	}
+
+	@Test
+	public void d03_nullMarshall() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.marshalls(Json.DEFAULT, null)
+			.build()
+			.post("/a01", bean)
+			.header("X-Accept", "application/json")
+			.header("X-Content-Type", "application/json")
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+	}
 }
