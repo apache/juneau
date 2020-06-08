@@ -268,7 +268,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			Map<Class<?>,RestContext> contexts = isDebug ? CONTEXTS_DEBUG : CONTEXTS_NORMAL;
 			if (! contexts.containsKey(c)) {
-				Object o = restBean instanceof Class ? ((Class<?>)restBean).newInstance() : restBean;
+				boolean isClass = restBean instanceof Class;
+				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
 				RestContextBuilder rcb = RestContext.create(o);
 				if (isDebug) {
 					rcb.debug(Enablement.TRUE);
@@ -276,7 +277,10 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				}
 				RestContext rc = rcb.build();
 				if (o instanceof RestServlet) {
-					((RestServlet)o).setContext(rc);
+					RestServlet rs = (RestServlet)o;
+					if (! rs.isInitialized())
+						rs.setContext(rc);
+					rc = rs.getContext();
 				} else {
 					rc.postInit();
 				}

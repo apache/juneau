@@ -76,7 +76,7 @@ public class RestClientMarshallsTest {
 	private static RestClient a1h = MockRestClient.create(A.class).urlEnc().build();
 	private static RestClient a1i = MockRestClient.create(A.class).openApi().build();
 	private static RestClient a1j = MockRestClient.create(A.class).htmlDoc().build();
-	private static RestClient a1k = MockRestClient.create(A.class).htmlStrippedDoc().debug().build();
+	private static RestClient a1k = MockRestClient.create(A.class).htmlStrippedDoc().build();
 
 	@Test
 	public void a01_singleLanguages() throws Exception {
@@ -141,7 +141,6 @@ public class RestClientMarshallsTest {
 			.assertStatus().is(200)
 			.getBody().as(Bean.class).check();
 		a1k.post("/a01", bean)
-			.debug()
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html+stripped")
 			.run()

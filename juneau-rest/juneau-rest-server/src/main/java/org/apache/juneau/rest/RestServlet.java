@@ -106,6 +106,15 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
+	 *
+	 * @return <jk>true</jk> if this servlet has been initialized and {@link #getContext()} returns a value.
+	 */
+	public synchronized boolean isInitialized() {
+		return isInitialized;
+	}
+
+	/**
 	 * Sets the resource resolver to use for this servlet and all child servlets.
 	 * <p>
 	 * This method can be called immediately following object construction, but must be called before {@link #init(ServletConfig)} is called.
@@ -166,7 +175,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	 *
 	 * @return The context information on this servlet.
 	 */
-	protected synchronized RestContext getContext() {
+	public synchronized RestContext getContext() {
 		if (context == null)
 			throw new InternalServerError("RestContext object not set on resource.");
 		return context;
