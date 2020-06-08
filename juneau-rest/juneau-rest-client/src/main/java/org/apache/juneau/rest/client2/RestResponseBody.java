@@ -1539,6 +1539,9 @@ public class RestResponseBody implements HttpEntity {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertBody()} method to instantiate a fluent assertions object.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>

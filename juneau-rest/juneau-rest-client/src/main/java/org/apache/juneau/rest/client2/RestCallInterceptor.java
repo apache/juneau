@@ -19,7 +19,28 @@ import org.apache.http.*;
  * listening for call lifecycle events.
  *
  * <p>
- * Useful if you want to prevent {@link RestCallException RestCallExceptions} from being thrown on error conditions.
+ * The {@link BasicRestCallInterceptor} is provided as an adapter class for implementing this interface.
+ *
+ * <p>
+ * Note that the {@link RestClient} class itself implements this interface so you can achieve the same results by
+ * overriding the methods on the client class as well.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Specialized client that adds a header to every request.</jc>
+ * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
+ * 		<ja>@Override</ja>
+ * 		<jk>public void</jk> onInit(RestRequest req) {
+ * 			req.header(<js>"Foo"</js>, <js>"bar"</js>);
+ * 		}
+ * 	}
+ *
+ *	<jc>// Instantiate the client.</jc>
+ *	MyRestClient c = RestClient
+ *		.<jsm>create</jsm>()
+ *		.json()
+ *		.build(MyRestClient.<jk>class</jk>);
+ * </p>
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -31,7 +52,7 @@ public interface RestCallInterceptor extends HttpRequestInterceptor, HttpRespons
 
 	/**
 	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been
-	 * set on the request from the client.
+	 * copied from the client to the request object.
 	 *
 	 * @param req The HTTP request object.
 	 * @throws Exception Any exception can be thrown.

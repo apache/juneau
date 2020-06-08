@@ -601,6 +601,9 @@ public class RestResponseHeader implements Header {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertHeader(String)} method to instantiate a fluent assertions object.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
@@ -663,13 +666,16 @@ public class RestResponseHeader implements Header {
 	/**
 	 * Provides the ability to perform fluent-style assertions on an integer response header.
 	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertIntHeader(String)} method to instantiate a fluent assertions object.
+	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content age is greather than 1.</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * 		.assertIntHeader(<js>"Age"</js>).isGreaterThan(1);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -682,6 +688,9 @@ public class RestResponseHeader implements Header {
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on a long response header.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertLongHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -702,6 +711,9 @@ public class RestResponseHeader implements Header {
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertDateHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>

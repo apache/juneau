@@ -949,7 +949,7 @@ import org.apache.http.client.CookieStore;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public class RestClient extends BeanContext implements HttpClient, Closeable {
+public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -2025,6 +2025,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
 	 *
+	 * <p>
+	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
+	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(Class)}
+	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler)}
+	 * </ul>
+	 *
 	 * @param target The target host for the request.
 	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
 	 * 		target or by inspecting the request.
@@ -2038,7 +2047,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	protected HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
+	@Override /* RestCallHandler */
+	public HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
 		return callHandler.execute(target, request, context);
 	}
 
@@ -2048,6 +2058,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
 	 *
+	 * <p>
+	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
+	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(Class)}
+	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler)}
+	 * </ul>
+	 *
 	 * @param target The target host for the request.
 	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
 	 * 		target or by inspecting the request.
@@ -2061,7 +2080,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	protected HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
+	@Override /* RestCallHandler */
+	public HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
 		return callHandler.execute(target, request, context);
 	}
 
@@ -2776,6 +2796,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 			for (Object o : formData)
 				req.formData(toFormData(o));
 
+			req.interceptors(this);
 			req.interceptors(interceptors);
 
 			return req;
@@ -3225,6 +3246,101 @@ public class RestClient extends BeanContext implements HttpClient, Closeable {
 
 	private Supplier<String> msg(String msg, Object...args) {
 		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
+	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// RestCallInterceptor methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Interceptor method called before a request is sent to the server.
+	 *
+	 * <p>
+	 * Subclasses can override this method to intercept the request and perform special modifications.
+	 * The default behavior is a no-op.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * </ul>
+	 */
+	@Override /* HttpRequestInterceptor */
+	public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+		// Default is a no-op.
+	}
+
+	/**
+	 * Interceptor method called before the message body is evaluated.
+	 *
+	 * <p>
+	 * Subclasses can override this method to intercept the response and perform special modifications.
+	 * The default behavior is a no-op.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * </ul>
+	 */
+	@Override /* HttpRequestInterceptor */
+	public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
+		// Default is a no-op.
+	}
+
+	/**
+	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been copied from the client.
+	 *
+	 * <p>
+	 * Subclasses can override this method to intercept the request and perform special modifications.
+	 * The default behavior is a no-op.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * </ul>
+	 */
+	@Override /* RestCallInterceptor */
+	public void onInit(RestRequest req) throws Exception {
+		// Default is a no-op.
+	}
+
+	/**
+	 * Interceptor method called immediately after an HTTP response has been received.
+	 *
+	 * <p>
+	 * Subclasses can override this method to intercept the response and perform special modifications.
+	 * The default behavior is a no-op.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * </ul>
+	 */
+	@Override /* RestCallInterceptor */
+	public void onConnect(RestRequest req, RestResponse res) throws Exception {
+		// Default is a no-op.
+	}
+
+	/**
+	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been set on the request from the client.
+	 *
+	 * <p>
+	 * Subclasses can override this method to handle any cleanup operations.
+	 * The default behavior is a no-op.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * </ul>
+	 */
+	@Override /* RestCallInterceptor */
+	public void onClose(RestRequest req, RestResponse res) throws Exception {
+		// Default is a no-op.
 	}
 
 	//------------------------------------------------------------------------------------------------
