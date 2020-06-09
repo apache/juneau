@@ -34,6 +34,7 @@ import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.annotation.URI;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.BasicNameValuePair;
@@ -303,12 +304,56 @@ public class RestClientTest {
 	@Test
 	public void a10_basicCalls_head() throws Exception {
 		MockRestClient
-		.create(A.class)
-		.simpleJson()
-		.build()
-		.head("/bean")
-		.run()
-		.assertBody().is("");
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.head("/bean")
+			.run()
+			.assertBody().is("");
+	}
+
+	@Test
+	public void a11_basicCalls_formPost() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean", bean)
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean")
+			.body(bean)
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean", NameValuePairs.of("f","1"))
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean", BasicNameValuePair.of("f","1"))
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPostPairs("/bean", "f", "1")
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

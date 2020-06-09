@@ -45,6 +45,7 @@ import org.apache.juneau.xml.*;
 public class ConfigurablePropertyCodeGenerator {
 
 	static Class<?>[] classes = new Class<?>[]{
+		BasicRuntimeException.class,
 		BeanContextBuilder.class,
 		BeanTraverseBuilder.class,
 		ConfigBuilder.class,

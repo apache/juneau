@@ -172,7 +172,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestClient#options(Object) options(Object url)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(Object url, Object body)}
  * 		<li class='jm'>{@link RestClient#formPost(Object) formPost(Object url)}
- * 		<li class='jm'>{@link RestClient#formPost(Object,NameValuePairs) formPost(Object url, NameValuePairs parameters)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,NameValuePair...) formPost(Object url, NameValuePair...parameters)}
  * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPost(Object url, Object...parameters)}
  * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object url, Object body)}
@@ -2408,6 +2407,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	The object to serialize and transmit to the URL as the body of the request.
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link HttpEntity} - Serialized directly.
+	 * 		<li class='jc'>{@link NameValuePair} - URL-encoded as a single name-value pair.
+	 * 		<li class='jc'>{@link NameValuePair} array - URL-encoded as name value pairs.
+	 * 		<li class='jc'>{@link NameValuePairs} - URL-encoded as name value pairs.
 	 * 		<li class='jc'>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
 	 * 	</ul>
 	 * @return
@@ -2416,8 +2418,21 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPost(Object url, Object body) throws RestCallException {
-		return request("POST", url, true)
-			.body(body instanceof HttpEntity ? body : new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
+		RestRequest req = request("POST", url, true);
+		try {
+			if (body instanceof NameValuePair)
+				return req.body(new UrlEncodedFormEntity(AList.of((NameValuePair)body)));
+			if (body instanceof NameValuePair[])
+				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
+			if (body instanceof NameValuePairs)
+				return req.body(new UrlEncodedFormEntity((NameValuePairs)body));
+			if (body instanceof HttpEntity)
+				return req.body(body);
+			return req.body(new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
+		} catch (UnsupportedEncodingException e) {
+			// Should never happen.
+			throw new RestCallException(e);
+		}
 	}
 
 	/**
@@ -2440,35 +2455,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 */
 	public RestRequest formPost(Object url) throws RestCallException {
 		return request("POST", url, true);
-	}
-
-	/**
-	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URL.
-	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
-	 * 	Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>{@link URIBuilder}
-	 * 		<li class='jc'>{@link URI}
-	 * 		<li class='jc'>{@link URL}
-	 * 		<li class='jc'>{@link String}
-	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param parameters
-	 * 	The parameters of the form post.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest formPost(Object url, NameValuePairs parameters) throws RestCallException {
-		try {
-			return request("POST", url, true).body(new UrlEncodedFormEntity(parameters));
-		} catch (UnsupportedEncodingException e) {
-			throw new RestCallException(e);
-		}
 	}
 
 	/**

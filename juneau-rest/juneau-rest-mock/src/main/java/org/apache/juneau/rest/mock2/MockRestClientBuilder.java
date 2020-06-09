@@ -886,13 +886,31 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder formData(String name, Supplier<?> value) {
+		super.formData(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder formData(String name, Object value, HttpPartSchema schema) {
 		super.formData(name, value, schema);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema) {
+		super.formData(name, value, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder formData(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		super.formData(name, value, schema, serializer);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		super.formData(name, value, schema, serializer);
 		return this;
 	}
@@ -928,13 +946,31 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder header(String name, Supplier<?> value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder header(String name, Object value, HttpPartSchema schema) {
 		super.header(name, value, schema);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema) {
+		super.header(name, value, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder header(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		super.header(name, value, schema, serializer);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		super.header(name, value, schema, serializer);
 		return this;
 	}
@@ -1302,13 +1338,31 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder query(String name, Supplier<?> value) {
+		super.query(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder query(String name, Object value, HttpPartSchema schema) {
 		super.query(name, value, schema);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema) {
+		super.query(name, value, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder query(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
+		super.query(name, value, schema, serializer);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		super.query(name, value, schema, serializer);
 		return this;
 	}
