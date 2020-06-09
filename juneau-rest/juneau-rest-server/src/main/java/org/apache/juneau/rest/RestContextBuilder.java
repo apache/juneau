@@ -237,8 +237,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			try {
 				m.invoke(resource, args);
 			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RestServletException("Exception thrown from @RestHook(INIT) method {0}.{0}.", m.getDeclaringClass().getSimpleName(), m.getSignature()).initCause(e);
+				throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{0}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 			}
 		}
 		return this;

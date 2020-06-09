@@ -137,6 +137,8 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	public <T> T invoke(Object...args) throws ExecutableException {
 		try {
 			return (T)c.newInstance(args);
+		} catch (InvocationTargetException e) {
+			throw new ExecutableException(e.getTargetException());
 		} catch (Exception e) {
 			throw new ExecutableException(e);
 		}

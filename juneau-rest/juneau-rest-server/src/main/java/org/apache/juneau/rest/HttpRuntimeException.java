@@ -22,7 +22,7 @@ import org.apache.juneau.reflect.*;
 /**
  * A {@link RuntimeException} meant to wrap a non-{@link RuntimeException}.
  */
-public final class HttpRuntimeException extends RuntimeException {
+public final class HttpRuntimeException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	final Throwable t;
@@ -33,6 +33,7 @@ public final class HttpRuntimeException extends RuntimeException {
 	 * @param t Wrapped exception.
 	 */
 	public HttpRuntimeException(Throwable t) {
+		super(t, t == null ? "" : t.getMessage());
 		this.t = t;
 	}
 

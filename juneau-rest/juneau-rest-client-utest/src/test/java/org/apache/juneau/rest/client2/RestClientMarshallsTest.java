@@ -448,9 +448,10 @@ public class RestClientMarshallsTest {
 	}
 
 	@Test
-	public void d03_nullMarshall() throws Exception {
+	public void d03_nullMarshalls() throws Exception {
 		MockRestClient
 			.create(A.class)
+			.marshall(null)
 			.marshalls(Json.DEFAULT, null)
 			.build()
 			.post("/a01", bean)

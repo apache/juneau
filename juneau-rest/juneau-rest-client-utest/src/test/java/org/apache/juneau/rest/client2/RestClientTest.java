@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.io.*;
@@ -86,11 +87,35 @@ public class RestClientTest {
 	@Rest
 	public static class A extends BasicRest {
 		@RestMethod(path="/bean")
+		public Bean getBean() {
+			return bean;
+		}
+		@RestMethod(path="/bean")
 		public Bean postBean(@Body Bean b) {
 			return b;
 		}
+		@RestMethod(path="/bean")
+		public Bean putBean(@Body Bean b) {
+			return b;
+		}
+		@RestMethod(path="/bean")
+		public Bean deleteBean() {
+			return bean;
+		}
+		@RestMethod(path="/bean")
+		public Bean optionsBean() {
+			return bean;
+		}
+		@RestMethod(path="/bean")
+		public Bean headBean() {
+			return bean;
+		}
 		@RestMethod(path="/echo")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
+			return req.toString();
+		}
+		@RestMethod(path="/echo")
+		public String putEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();
 		}
 		@RestMethod(path="/echo")
@@ -117,7 +142,12 @@ public class RestClientTest {
 		public Reader postFormData(org.apache.juneau.rest.RestRequest req) {
 			return new StringReader(req.getFormData().asQueryString());
 		}
+		@RestMethod(path="/", name="*")
+		public Reader echoMethod(@Method String method) {
+			return new StringReader(method);
+		}
 	}
+
 
 	private static final Calendar CALENDAR = new GregorianCalendar(TimeZone.getTimeZone("Z"));
 	static {
@@ -143,6 +173,142 @@ public class RestClientTest {
 	@Test
 	public void a02_useNoArgConstructor() {
 		new A2().build();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Closing
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void a03_close_basic() throws IOException {
+		RestClient.create().build().close();
+		RestClient.create().build().closeQuietly();
+		RestClient.create().keepHttpClientOpen().build().close();
+		RestClient.create().keepHttpClientOpen().build().closeQuietly();
+		RestClient.create().set(RESTCLIENT_httpClient, null).keepHttpClientOpen().build().close();
+
+		ExecutorService es = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
+		RestClient.create().executorService(es, true).build().close();
+		RestClient.create().executorService(es, true).build().closeQuietly();
+		RestClient.create().executorService(es, false).build().close();
+		RestClient.create().executorService(es, false).build().closeQuietly();
+
+		RestClient.create().debug().build().close();
+		RestClient.create().debug().build().closeQuietly();
+	}
+
+	@Test
+	public void a04_basicCalls() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.build();
+		rc.get().run().assertBody().is("GET");
+		rc.get("/").run().assertBody().is("GET");
+		rc.get("").run().assertBody().is("GET");
+		rc.put("/", null).run().assertBody().is("PUT");
+		rc.post("/", null).run().assertBody().is("POST");
+		rc.delete("/").run().assertBody().is("DELETE");
+		rc.formPost("/").run().assertBody().is("POST");
+	}
+
+	@Test
+	public void a05_basicCalls_get() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/bean")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a06_basicCalls_put() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.put("/bean", bean)
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.put("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.put("/bean")
+			.body(bean)
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a07_basicCalls_post() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/bean", bean)
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/bean")
+			.body(bean)
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a08_basicCalls_delete() throws Exception {
+		MockRestClient
+		.create(A.class)
+		.simpleJson()
+		.build()
+		.delete("/bean")
+		.run()
+		.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a09_basicCalls_options() throws Exception {
+		MockRestClient
+		.create(A.class)
+		.simpleJson()
+		.build()
+		.options("/bean")
+		.run()
+		.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a10_basicCalls_head() throws Exception {
+		MockRestClient
+		.create(A.class)
+		.simpleJson()
+		.build()
+		.head("/bean")
+		.run()
+		.assertBody().is("");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -2394,6 +2560,50 @@ public class RestClientTest {
 	}
 
 	@Test
+	public void k14a_restClient_invalidSerializersAndParsers() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.prependTo(RESTCLIENT_serializers, String.class)
+				.build();
+			fail();
+		} catch (ContextRuntimeException e) {
+			assertEquals("RESTCLIENT_serializers property had invalid class of type 'java.lang.String'", e.getCause(ConfigException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.prependTo(RESTCLIENT_serializers, "")
+				.build();
+			fail();
+		} catch (ContextRuntimeException e) {
+			assertEquals("RESTCLIENT_serializers property had invalid object of type 'java.lang.String'", e.getCause(ConfigException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.prependTo(RESTCLIENT_parsers, String.class)
+				.build();
+			fail();
+		} catch (ContextRuntimeException e) {
+			assertEquals("RESTCLIENT_parsers property had invalid class of type 'java.lang.String'", e.getCause(ConfigException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.prependTo(RESTCLIENT_parsers, "")
+				.build();
+			fail();
+		} catch (ContextRuntimeException e) {
+			assertEquals("RESTCLIENT_parsers property had invalid object of type 'java.lang.String'", e.getCause(ConfigException.class).getMessage());
+		}
+	}
+
+
+	@Test
 	public void k15_restClient_serializersClasses_parsersClasses() throws Exception {
 		@SuppressWarnings("unchecked")
 		RestClient rc = MockRestClient
@@ -2515,6 +2725,13 @@ public class RestClientTest {
 			.build();
 		Bean b = rc
 			.get("/")
+			.header("Foo",bean)
+			.run()
+			.assertHeader("Foo").is("x{f:1}")
+			.getHeader("Foo").as(Bean.class);
+		assertEquals("{f:1}", b.toString());
+		b = rc
+			.get()
 			.header("Foo",bean)
 			.run()
 			.assertHeader("Foo").is("x{f:1}")
@@ -3380,6 +3597,21 @@ public class RestClientTest {
 		public String toString() {
 			return f1;
 		}
+	}
+
+	public static class O05a {}
+
+	@Test
+	public void o05a_beanContext_beansDontRequireSomeProperties() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.beansDontRequireSomeProperties()
+			.simpleJson()
+			.build()
+			.post("/echoBody", new O05a())
+			.run()
+			.assertBody().is("{}")
+		;
 	}
 
 	@Test
@@ -4572,6 +4804,21 @@ public class RestClientTest {
 			.getBody().as(O35.class)
 		;
 		assertEquals(1, x.foo);
+
+		x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.typeName(O35.class, "foo")
+			.typePropertyName(O35.class, "X")
+			.addRootType()
+			.build()
+			.post("/echoBody", new O35().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{X:'foo',foo:1}")
+			.getBody().as(O35.class)
+		;
+		assertEquals(1, x.foo);
 	}
 
 	public static enum O37e {
@@ -4611,6 +4858,41 @@ public class RestClientTest {
 			.getBody().as(O37.class)
 		;
 		assertEquals(O37e.ONE, x.foo);
+	}
+
+	public static class O38 {
+		private int foo;
+		public int bar;
+
+		public int getFoo() {
+			return foo;
+		}
+
+		public void setFoo(int foo) {
+			this.foo = foo;
+		}
+
+		public O38 init() {
+			this.foo = 1;
+			this.bar = 2;
+			return this;
+		}
+	}
+
+	@Test
+	public void o38_beanContext_useJavaIntrospector() throws Exception {
+		O38 x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.useJavaBeanIntrospector()
+			.build()
+			.post("/echoBody", new O38().init())
+			.run()
+			.cacheBody()
+			.assertBody().is("{foo:1}")
+			.getBody().as(O38.class)
+		;
+		assertEquals(1, x.foo);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4846,5 +5128,61 @@ public class RestClientTest {
 			.cacheBody()
 			.assertBody().is("{bar:2,baz:3,foo:1}")
 			.getBody().as(P7.class);
+	}
+
+	public static interface P14i {
+		void setFoo(int foo);
+		int getFoo();
+	}
+
+	public static class P14 implements P14i {
+		private int foo;
+		@Override
+		public int getFoo() {
+			return foo;
+		}
+		@Override
+		public void setFoo(int foo) {
+			this.foo = foo;
+		}
+	}
+
+	@Test
+	public void p14_context_putAllTo() throws Exception {
+		P14i x = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.putAllTo(BeanContext.BEAN_implClasses, AMap.of(P14i.class.getName(), P14.class))
+			.build()
+			.post("/echoBody", new StringReader("{foo:1}"))
+			.run()
+			.getBody().as(P14i.class)
+		;
+		assertEquals(1, x.getFoo());
+		assertTrue(x instanceof P14);
+	}
+
+
+	public static class P15 {
+		public int foo = 1;
+	}
+
+	@Test
+	public void p15_context_set() throws Exception {
+		MockRestClient
+			.create(null)
+			.set(
+				AMap.of(
+					JsonSerializer.JSON_simpleMode, true,
+					WriterSerializer.WSERIALIZER_quoteChar, "'",
+					MockRestClient.MOCKRESTCLIENT_restBean, A.class
+				)
+			)
+			.json()
+			.build()
+			.post("/echoBody", new P15())
+			.run()
+			.assertBody().is("{foo:1}")
+		;
 	}
 }

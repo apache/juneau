@@ -64,7 +64,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		} catch (RestServletException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestServletException("Exception occurred while initializing method ''{0}''", sig).initCause(e);
+			throw new RestServletException(e, "Exception occurred while initializing method ''{0}''", sig);
 		}
 	}
 

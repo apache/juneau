@@ -18,6 +18,8 @@ import java.text.*;
 
 import javax.servlet.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * General exception thrown from {@link RestServlet} during construction or initialization.
  */
@@ -36,14 +38,24 @@ public class RestServletException extends ServletException {
 	}
 
 	/**
-	 * Sets the inner cause for this exception.
-	 *
-	 * @param cause The inner cause.
-	 * @return This object (for method chaining).
+	 * Constructor.
+	 * 
+	 * @param cause The cause. 
+	 * @param message The detailed message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	@Override /* Throwable */
-	public synchronized RestServletException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
+	public RestServletException(Throwable cause, String message, Object...args) {
+		super(format(message, args), cause);
+	}
+
+	/**
+	 * Similar to {@link #getCause()} but searches until it finds the throwable of the specified type.
+	 *
+	 * @param <T> The throwable type.
+	 * @param c The throwable type.
+	 * @return The cause of the specified type, or <jk>null</jk> of not found.
+	 */
+	public <T extends Throwable> T getCause(Class<T> c) {
+		return ThrowableUtils.getCause(c, this);
 	}
 }

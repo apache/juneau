@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  */
@@ -59,5 +61,16 @@ public class BasicRuntimeException extends RuntimeException {
 		if (cause != null)
 			return cause.getMessage();
 		return def;
+	}
+
+	/**
+	 * Same as {@link #getCause()} but searches the throwable chain for an exception of the specified type.
+	 *
+	 * @param c The throwable type to search for.
+	 * @param <T> The throwable type to search for.
+	 * @return The exception, or <jk>null</jk> if not found.
+	 */
+	public <T extends Throwable> T getCause(Class<T> c) {
+		return ThrowableUtils.getCause(c, this);
 	}
 }

@@ -598,7 +598,7 @@ final class SwaggerGenerator {
 //			System.err.println(swaggerJson);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
-			throw new RestServletException("Error detected in swagger.").initCause(e);
+			throw new RestServletException(e, "Error detected in swagger.");
 		}
 	}
 

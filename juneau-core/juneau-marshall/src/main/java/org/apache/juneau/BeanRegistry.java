@@ -89,10 +89,13 @@ public class BeanRegistry {
 						addToMap(typeName, val);
 					}
 				} else {
-					Bean b = ci.getLastAnnotation(Bean.class, beanContext);
-					if (b == null || b.typeName().isEmpty())
+					String typeName = null;
+					for (Bean b : ci.getAnnotations(Bean.class, beanContext))
+						if (! b.typeName().isEmpty())
+							typeName = b.typeName();
+					if (typeName == null)
 						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", c.getName());
-					addToMap(b.typeName(), beanContext.getClassMeta(c));
+					addToMap(typeName, beanContext.getClassMeta(c));
 				}
 			}
 		} catch (BeanRuntimeException e) {

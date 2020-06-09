@@ -99,4 +99,22 @@ public class ThrowableUtils {
 		t.printStackTrace();
 		throw new BasicAssertionError(t, "Throwable did not contain the expected message.  Message=[{0}]", msg);
 	}
+
+	/**
+	 * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.
+	 *
+	 * @param c The throwable type to search for.
+	 * @param <T> The throwable type to search for.
+	 * @param t The throwable to search.
+	 * @return The exception, or <jk>null</jk> if not found.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Throwable> T getCause(Class<T> c, Throwable t) {
+		while (t != null) {
+			t = t.getCause();
+			if (c.isInstance(t))
+				return (T)t;
+		}
+		return null;
+	}
 }

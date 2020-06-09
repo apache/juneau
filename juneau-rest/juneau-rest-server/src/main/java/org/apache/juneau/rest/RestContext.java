@@ -3969,7 +3969,7 @@ public final class RestContext extends BeanContext {
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (Throwable e) {
-						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", rci.inner().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound)).initCause(e);
+						throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}, methods={1}", rci.inner().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound));
 					}
 				}
 			}
@@ -5244,7 +5244,7 @@ public final class RestContext extends BeanContext {
 			} else if (mpi.hasAnnotation(HasQuery.class)) {
 				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
 			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
-				rp[i] = new RestParamDefaults.MethodObject(mi, t);
+				rp[i] = new RestParamDefaults.MethodObject(mi, t, mpi);
 			}
 
 			if (rp[i] == null && ! isPreOrPost)

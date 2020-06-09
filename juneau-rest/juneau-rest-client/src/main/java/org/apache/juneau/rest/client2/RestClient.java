@@ -174,7 +174,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestClient#formPost(Object) formPost(Object url)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,NameValuePairs) formPost(Object url, NameValuePairs parameters)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,NameValuePair...) formPost(Object url, NameValuePair...parameters)}
- * 		<li class='jm'>{@link RestClient#formPost(Object,Object...) formPost(Object url, Object...parameters)}
+ * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPost(Object url, Object...parameters)}
  * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object url, Object body)}
  * 	</ul>
  * </ul>
@@ -1921,7 +1921,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (o instanceof Serializer) {
 				sgb.append((Serializer)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
+				Class<?> c = (Class<?>)o;
+				if (! Serializer.class.isAssignableFrom(c))
+					throw new ConfigException("RESTCLIENT_serializers property had invalid class of type ''{0}''", c.getName());
 				sgb.append(ContextCache.INSTANCE.create((Class<? extends Serializer>)o, ps));
+			} else {
+				throw new ConfigException("RESTCLIENT_serializers property had invalid object of type ''{0}''", o.getClass().getName());
 			}
 		}
 		this.serializers = sgb.build();
@@ -1931,7 +1936,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (o instanceof Parser) {
 				pgb.append((Parser)o);  // Don't apply PropertyStore.
 			} else if (o instanceof Class) {
+				Class<?> c = (Class<?>)o;
+				if (! Parser.class.isAssignableFrom(c))
+					throw new ConfigException("RESTCLIENT_parsers property had invalid class of type ''{0}''", c.getName());
 				pgb.append(ContextCache.INSTANCE.create((Class<? extends Parser>)o, ps));
+			} else {
+				throw new ConfigException("RESTCLIENT_parsers property had invalid object of type ''{0}''", o.getClass().getName());
 			}
 		}
 		this.parsers = pgb.build();
@@ -1996,7 +2006,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	@Override
 	public void close() throws IOException {
 		isClosed = true;
-		if (httpClient != null && ! keepHttpClientOpen)
+		if (! keepHttpClientOpen)
 			httpClient.close();
 		if (executorService != null && executorServiceShutdownOnClose)
 			executorService.shutdown();
@@ -2010,7 +2020,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public void closeQuietly() {
 		isClosed = true;
 		try {
-			if (httpClient != null && ! keepHttpClientOpen)
+			if (! keepHttpClientOpen)
 				httpClient.close();
 			if (executorService != null && executorServiceShutdownOnClose)
 				executorService.shutdown();
@@ -2509,7 +2519,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest formPost(Object url, Object...parameters) throws RestCallException {
+	public RestRequest formPostPairs(Object url, Object...parameters) throws RestCallException {
 		return formPost(url, new NameValuePairs(parameters));
 	}
 

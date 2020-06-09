@@ -217,7 +217,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private static final String PREFIX = "RestClient.";
 
-	static final String
+	@SuppressWarnings("javadoc")
+	public static final String
 		MOCKRESTCLIENT_restBean = PREFIX + "restBean.o",
 		MOCKRESTCLIENT_restBeanCtx = PREFIX + "restBeanCtx.o",
 		MOCKRESTCLIENT_servletPath = PREFIX + "servletPath.s",
@@ -450,8 +451,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest formPost(Object url, Object...parameters) throws RestCallException {
-		return (MockRestRequest)super.formPost(url, parameters);
+	public MockRestRequest formPostPairs(Object url, Object...parameters) throws RestCallException {
+		return (MockRestRequest)super.formPostPairs(url, parameters);
 	}
 
 	@Override /* RestClient */

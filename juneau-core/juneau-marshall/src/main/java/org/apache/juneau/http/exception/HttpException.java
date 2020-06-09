@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -30,7 +31,7 @@ import org.apache.juneau.internal.*;
  * REST methods on subclasses of <c>RestServlet</c> can throw this exception to trigger an HTTP status other than the
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
  */
-public class HttpException extends RuntimeException {
+public class HttpException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +47,7 @@ public class HttpException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public HttpException(Throwable cause, int status, String msg, Object...args) {
-		super(message(cause, msg, args), cause);
+		super(cause, message(cause, msg, args));
 		this.status = status;
 	}
 
@@ -56,7 +57,7 @@ public class HttpException extends RuntimeException {
 	 * @param msg The status message.
 	 */
 	public HttpException(String msg) {
-		super(msg, null);
+		super((Throwable)null, msg);
 	}
 
 	private static String message(Throwable cause, String msg, Object...args) {

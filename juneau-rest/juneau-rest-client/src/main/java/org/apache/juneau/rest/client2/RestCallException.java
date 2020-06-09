@@ -244,15 +244,8 @@ public final class RestCallException extends HttpException {
 	 * @param c The throwable type.
 	 * @return The cause of the specified type, or <jk>null</jk> of not found.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Throwable> T getCause(Class<T> c) {
-		Throwable t = this;
-		do {
-			if (c.isInstance(t))
-				return (T)t;
-			t = t.getCause();
-		} while (t != null);
-		return null;
+		return ThrowableUtils.getCause(c, this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

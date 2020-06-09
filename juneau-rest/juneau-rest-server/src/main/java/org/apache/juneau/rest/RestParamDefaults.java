@@ -421,8 +421,8 @@ class RestParamDefaults {
 
 	static final class MethodObject extends RestMethodParam {
 
-		protected MethodObject(MethodInfo m, ClassInfo t) throws ServletException {
-			super(OTHER, (ParamInfo)null);
+		protected MethodObject(MethodInfo m, ClassInfo t, ParamInfo mpi) throws ServletException {
+			super(OTHER, mpi);
 			if (! t.is(String.class))
 				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.inner());
 		}
