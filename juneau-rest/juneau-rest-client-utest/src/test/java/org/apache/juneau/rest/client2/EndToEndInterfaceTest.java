@@ -328,7 +328,7 @@ public class EndToEndInterfaceTest {
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
 		assertEquals("bar", r.getHeaders().get("ETag"));
-		assertEquals("text/foo", r.getMediaType().toString());
+		assertEquals("text/foo", r.getContentType().toString());
 	}
 
 	@Test
@@ -347,7 +347,7 @@ public class EndToEndInterfaceTest {
 		StreamResource r = id2.streamResource();
 		assertEquals("foo", IOUtils.read(r.getContents()));
 		assertEquals("foo", r.getHeaders().get("Foo"));
-		assertEquals("text/foo", r.getMediaType().toString());
+		assertEquals("text/foo", r.getContentType().toString());
 	}
 
 	@Test

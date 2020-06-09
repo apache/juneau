@@ -3710,7 +3710,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				}
 				else if (input instanceof StreamResource) {
 					StreamResource r = (StreamResource)input;
-					contentType(r.getMediaType());
+					contentType(r.getContentType());
 					headers(r.getHeaders());
 					entity = new InputStreamEntity(r.getContents(), getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				}

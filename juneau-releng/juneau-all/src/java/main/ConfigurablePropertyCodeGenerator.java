@@ -82,6 +82,7 @@ public class ConfigurablePropertyCodeGenerator {
 		RdfSerializerBuilder.class,
 		ReaderParserBuilder.class,
 		RestClientBuilder.class,
+		MockRestClientBuilder.class,
 		RestContextBuilder.class,
 		RestMethodContextBuilder.class,
 		SerializerBuilder.class,

@@ -456,8 +456,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest pathString(Object url, String body) throws RestCallException {
-		return (MockRestRequest)super.pathString(url, body);
+	public MockRestRequest patch(Object url, String body, String contentType) throws RestCallException {
+		return (MockRestRequest)super.patch(url, body, contentType);
 	}
 
 	@Override /* RestClient */

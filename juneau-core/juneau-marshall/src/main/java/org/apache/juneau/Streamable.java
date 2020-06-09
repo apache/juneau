@@ -20,7 +20,7 @@ import org.apache.juneau.http.*;
  * Interface that identifies that an object can be serialized directly to an output stream.
  *
  * <p>
- * Instances must identify the media type of the content by implementing the {@link #getMediaType()} method.
+ * Instances must identify the media type of the content by implementing the {@link #getContentType()} method.
  */
 public interface Streamable {
 
@@ -37,5 +37,5 @@ public interface Streamable {
 	 *
 	 * @return The media type, or <jk>null</jk> if the media type is not known.
 	 */
-	MediaType getMediaType();
+	MediaType getContentType();
 }

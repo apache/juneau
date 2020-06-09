@@ -237,7 +237,7 @@ public class StreamResource implements Streamable {
 
 	@ResponseHeader("Content-Type")
 	@Override /* Streamable */
-	public MediaType getMediaType() {
+	public MediaType getContentType() {
 		return mediaType;
 	}
 

@@ -2406,10 +2406,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @param body
 	 * 	The object to serialize and transmit to the URL as the body of the request.
 	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>{@link HttpEntity} - Serialized directly.
 	 * 		<li class='jc'>{@link NameValuePair} - URL-encoded as a single name-value pair.
 	 * 		<li class='jc'>{@link NameValuePair} array - URL-encoded as name value pairs.
 	 * 		<li class='jc'>{@link NameValuePairs} - URL-encoded as name value pairs.
+	 * 		<li class='jc'>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
+	 * 		<li class='jc'>{@link ReaderResource}/{@link StreamResource}/{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
 	 * 		<li class='jc'>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
 	 * 	</ul>
 	 * @return
@@ -2426,8 +2427,26 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
 			if (body instanceof NameValuePairs)
 				return req.body(new UrlEncodedFormEntity((NameValuePairs)body));
-			if (body instanceof HttpEntity)
-				return req.body(body);
+			if (body instanceof HttpEntity) {
+				HttpEntity e = (HttpEntity)body;
+				if (e.getContentType() == null)
+					req.contentType("application/x-www-form-urlencoded");
+				return req.body(e);
+			}
+			if (body instanceof Reader || body instanceof InputStream)
+				return req.contentType("application/x-www-form-urlencoded").body(body);
+			if (body instanceof ReaderResource) {
+				ReaderResource r = (ReaderResource)body;
+				if (r.getContentType() == null)
+					req.contentType("application/x-www-form-urlencoded");
+				return req.body(r);
+			}
+			if (body instanceof StreamResource) {
+				StreamResource r = (StreamResource)body;
+				if (r.getContentType() == null)
+					req.contentType("application/x-www-form-urlencoded");
+				return req.body(r);
+			}
 			return req.body(new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
 		} catch (UnsupportedEncodingException e) {
 			// Should never happen.
@@ -2566,13 +2585,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	</ul>
 	 * @param body
 	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * @param contentType
+	 * 	The content type of the request.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest pathString(Object url, String body) throws RestCallException {
-		return request("PATCH", url, true).stringBody(body);
+	public RestRequest patch(Object url, String body, String contentType) throws RestCallException {
+		return request("PATCH", url, true).stringBody(body).contentType(contentType);
 	}
 
 	/**

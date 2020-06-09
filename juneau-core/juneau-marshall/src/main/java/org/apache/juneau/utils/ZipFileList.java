@@ -40,7 +40,7 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements
 
 	@Header("Content-Type")
 	@Override /* Streamable */
-	public MediaType getMediaType() {
+	public MediaType getContentType() {
 		return MediaType.forString("application/zip");
 	}
 

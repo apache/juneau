@@ -18,6 +18,7 @@ import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -29,6 +30,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.*;
+import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.protocol.*;
@@ -42,6 +45,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
@@ -97,6 +101,10 @@ public class RestClientTest {
 		}
 		@RestMethod(path="/bean")
 		public Bean putBean(@Body Bean b) {
+			return b;
+		}
+		@RestMethod(path="/bean")
+		public Bean patchBean(@Body Bean b) {
 			return b;
 		}
 		@RestMethod(path="/bean")
@@ -249,6 +257,55 @@ public class RestClientTest {
 			.body(bean)
 			.run()
 			.assertBody().is("{f:1}");
+
+		// Different URL types.
+		for (Object url : AList.<Object>of(new URIBuilder("http://localhost/bean"), java.net.URI.create("http://localhost/bean"), new URL("http://localhost/bean"), "/bean", new StringBuilder("/bean"))) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.put(url, bean)
+				.run()
+				.assertBody().is("{f:1}");
+
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.put(url, "{f:1}", "application/json")
+				.run()
+				.assertBody().is("{f:1}");
+
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.put(url)
+				.body(bean)
+				.run()
+				.assertBody().is("{f:1}");
+		}
+
+		// Different body types.
+		List<Object> l = AList.<Object>of(
+			new StringReader("{f:1}"),
+			new ByteArrayInputStream("{f:1}".getBytes()),
+			ReaderResource.create().contents("{f:1}").build(),
+			StreamResource.create().contents("{f:1}").build(),
+			bean,
+			new StringEntity("{f:1}"),
+			NameValuePairs.of("f", 1)
+		);
+		for (Object body : l) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json")
+				.build()
+				.put("/bean", body)
+				.run()
+				.assertBody().is("{f:1}");
+		}
 	}
 
 	@Test
@@ -342,6 +399,30 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.build()
+			.formPost("/bean", (Object)new NameValuePair[]{BasicNameValuePair.of("f","1")})
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean", new NameValuePair[]{BasicNameValuePair.of("f","1")})
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
+			.formPost("/bean", new StringEntity("{f:1}", org.apache.http.entity.ContentType.APPLICATION_JSON))
+			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.build()
 			.formPost("/bean", BasicNameValuePair.of("f","1"))
 			.accept("application/json+simple")
 			.run()
@@ -352,6 +433,34 @@ public class RestClientTest {
 			.build()
 			.formPostPairs("/bean", "f", "1")
 			.accept("application/json+simple")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a12_basicCalls_patch() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.patch("/bean", bean)
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.patch("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.patch("/bean")
+			.body(bean)
 			.run()
 			.assertBody().is("{f:1}");
 	}
