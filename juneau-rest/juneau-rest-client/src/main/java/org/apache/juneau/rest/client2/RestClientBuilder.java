@@ -1220,6 +1220,39 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Sets a header on all requests.
 	 *
+	 * <p>
+	 * Unlike {@link #header(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.headerString(<js>"Foo"</js>, <js>"bar"</js>);
+	 * 		.build();
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
+	 * </ul>
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder headerString(String name, Object value) {
+		return header(BasicStringHeader.of(name, value));
+	}
+
+	/**
+	 * Sets a header on all requests.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
@@ -1983,6 +2016,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Adds a query parameter to the URI.
 	 *
+	 * <p>
+	 * Unlike {@link #query(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.queryString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder queryString(String name, Object value) {
+		return query(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
@@ -2248,6 +2310,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value) {
 		return formData(name, value, null, null);
+	}
+
+	/**
+	 * Adds a form-data parameter to all request bodies.
+	 *
+	 * <p>
+	 * Unlike {@link #formData(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.formDataString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	 @FluentSetter
+	public RestClientBuilder formDataString(String name, Object value) {
+		return formData(BasicNameValuePair.of(name, value));
 	}
 
 	/**

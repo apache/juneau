@@ -232,7 +232,28 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void a06_basicCalls_put() throws Exception {
+	public void a06_basicCalls_get_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get(url)
+			.run()
+			.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a07_basicCalls_put() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -245,21 +266,34 @@ public class RestClientTest {
 			.create(A.class)
 			.simpleJson()
 			.build()
-			.put("/bean", "{f:1}", "application/json")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.build()
 			.put("/bean")
 			.body(bean)
 			.run()
 			.assertBody().is("{f:1}");
+	}
 
-		// Different URL types.
-		for (Object url : AList.<Object>of(new URIBuilder("http://localhost/bean"), java.net.URI.create("http://localhost/bean"), new URL("http://localhost/bean"), "/bean", new StringBuilder("/bean"))) {
+	@Test
+	public void a08_basicCalls_put_fromString() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.put("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
+ 	}
+
+	@Test
+	public void a09_basicCalls_put_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
 			MockRestClient
 				.create(A.class)
 				.simpleJson()
@@ -285,9 +319,11 @@ public class RestClientTest {
 				.run()
 				.assertBody().is("{f:1}");
 		}
+	}
 
-		// Different body types.
-		List<Object> l = AList.<Object>of(
+	@Test
+	public void a10_basicCalls_put_exhaustiveBodyTypes() throws Exception {
+		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			ReaderResource.create().contents("{f:1}").build(),
@@ -296,7 +332,8 @@ public class RestClientTest {
 			new StringEntity("{f:1}"),
 			NameValuePairs.of("f", 1)
 		);
-		for (Object body : l) {
+
+		for (Object body : bodies) {
 			MockRestClient
 				.create(A.class)
 				.simpleJson()
@@ -309,20 +346,12 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void a07_basicCalls_post() throws Exception {
+	public void a11_basicCalls_post() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.build()
 			.post("/bean", bean)
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.build()
-			.post("/bean", "{f:1}", "application/json")
 			.run()
 			.assertBody().is("{f:1}");
 
@@ -337,29 +366,144 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void a08_basicCalls_delete() throws Exception {
+	public void a12_basicCalls_post_fromString() throws Exception {
 		MockRestClient
-		.create(A.class)
-		.simpleJson()
-		.build()
-		.delete("/bean")
-		.run()
-		.assertBody().is("{f:1}");
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.post("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
 	}
 
 	@Test
-	public void a09_basicCalls_options() throws Exception {
-		MockRestClient
-		.create(A.class)
-		.simpleJson()
-		.build()
-		.options("/bean")
-		.run()
-		.assertBody().is("{f:1}");
+	public void a13_basicCalls_post_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post(url, bean)
+				.run()
+				.assertBody().is("{f:1}");
+
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post(url, "{f:1}", "application/json")
+				.run()
+				.assertBody().is("{f:1}");
+
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.post(url)
+				.body(bean)
+				.run()
+				.assertBody().is("{f:1}");
+		}
 	}
 
 	@Test
-	public void a10_basicCalls_head() throws Exception {
+	public void a14_basicCalls_post_exhaustiveBodyTypes() throws Exception {
+		List<Object> bodies = AList.<Object>of(
+			new StringReader("{f:1}"),
+			new ByteArrayInputStream("{f:1}".getBytes()),
+			ReaderResource.create().contents("{f:1}").build(),
+			StreamResource.create().contents("{f:1}").build(),
+			bean,
+			new StringEntity("{f:1}"),
+			NameValuePairs.of("f", 1)
+		);
+
+		for (Object body : bodies) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json")
+				.build()
+				.post("/bean", body)
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a15_basicCalls_delete() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.delete("/bean")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a16_basicCalls_delete_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.delete(url)
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a17_basicCalls_options() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.options("/bean")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a18_basicCalls_options_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.options(url)
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a19_basicCalls_head() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -370,7 +514,28 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void a11_basicCalls_formPost() throws Exception {
+	public void a20_basicCalls_head_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.head(url)
+				.run()
+				.assertBody().is("");
+		}
+	}
+
+	@Test
+	public void a21_basicCalls_formPost() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.build()
@@ -378,67 +543,63 @@ public class RestClientTest {
 			.accept("application/json+simple")
 			.run()
 			.assertBody().is("{f:1}");
+	}
 
+	@Test
+	public void a22_basicCalls_formPost_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.build()
+				.formPost(url, bean)
+				.accept("application/json+simple")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a23_basicCalls_formPost_exhaustiveBodyTypes() throws Exception {
+		List<Object> bodies = AList.of(
+			bean,
+			 NameValuePairs.of("f","1"),
+			 new NameValuePair[]{BasicNameValuePair.of("f","1")},
+			 new StringEntity("{f:1}", org.apache.http.entity.ContentType.APPLICATION_JSON),
+			 BasicNameValuePair.of("f","1")
+		);
+
+		for (Object body : bodies) {
+			MockRestClient
+				.create(A.class)
+				.build()
+				.formPost("/bean", body)
+				.accept("application/json+simple")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a24_basicCalls_formPostPairs() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.build()
-			.formPost("/bean")
-			.body(bean)
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPost("/bean", NameValuePairs.of("f","1"))
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPost("/bean", (Object)new NameValuePair[]{BasicNameValuePair.of("f","1")})
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPost("/bean", new NameValuePair[]{BasicNameValuePair.of("f","1")})
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPost("/bean", new StringEntity("{f:1}", org.apache.http.entity.ContentType.APPLICATION_JSON))
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPost("/bean", BasicNameValuePair.of("f","1"))
-			.accept("application/json+simple")
-			.run()
-			.assertBody().is("{f:1}");
-
-		MockRestClient
-			.create(A.class)
-			.build()
-			.formPostPairs("/bean", "f", "1")
+			.formPostPairs("/bean", new StringBuilder("f"), new StringBuilder("1"))
 			.accept("application/json+simple")
 			.run()
 			.assertBody().is("{f:1}");
 	}
 
 	@Test
-	public void a12_basicCalls_patch() throws Exception {
+	public void a25_basicCalls_patch() throws Exception {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -451,7 +612,74 @@ public class RestClientTest {
 			.create(A.class)
 			.simpleJson()
 			.build()
+			.patch("/bean")
+			.body(bean)
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a26_basicCalls_patch_fromString() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
 			.patch("/bean", "{f:1}", "application/json")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a27_basicCalls_patch_exhaustiveBodyTypes() throws Exception {
+		List<Object> bodies = AList.<Object>of(
+			new StringReader("{f:1}"),
+			new ByteArrayInputStream("{f:1}".getBytes()),
+			ReaderResource.create().contents("{f:1}").build(),
+			StreamResource.create().contents("{f:1}").build(),
+			bean,
+			new StringEntity("{f:1}"),
+			NameValuePairs.of("f", 1)
+		);
+		for (Object body : bodies) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.patch("/bean", body)
+				.contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a28_basicCalls_patch_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.build()
+				.patch(url, bean)
+				.accept("application/json+simple")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a29_basicCalls_request_patch() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.request(HttpMethod.PATCH, "/bean", bean)
 			.run()
 			.assertBody().is("{f:1}");
 
@@ -459,10 +687,127 @@ public class RestClientTest {
 			.create(A.class)
 			.simpleJson()
 			.build()
-			.patch("/bean")
+			.request(HttpMethod.PATCH, "/bean")
 			.body(bean)
 			.run()
 			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a30_basicCalls_request_patch_exhaustiveBodyTypes() throws Exception {
+		List<Object> bodies = AList.<Object>of(
+			new StringReader("{f:1}"),
+			new ByteArrayInputStream("{f:1}".getBytes()),
+			ReaderResource.create().contents("{f:1}").build(),
+			StreamResource.create().contents("{f:1}").build(),
+			bean,
+			new StringEntity("{f:1}"),
+			NameValuePairs.of("f", 1)
+		);
+		for (Object body : bodies) {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.request(HttpMethod.PATCH, "/bean", body)
+				.contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a31_basicCalls_request_patch_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.build()
+				.request(HttpMethod.PATCH, url, bean)
+				.accept("application/json+simple")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a32_basicCalls_request_get() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.request(HttpMethod.GET, "/bean", null)
+			.run()
+			.assertBody().is("{f:1}");
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.request(HttpMethod.GET, "/bean")
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void a33_basicCalls_request_get_exhaustiveUrls() throws Exception {
+		List<Object> urls = AList.<Object>of(
+			new URIBuilder("http://localhost/bean"),
+			java.net.URI.create("http://localhost/bean"),
+			new URL("http://localhost/bean"),
+			"/bean",
+			new StringBuilder("/bean")
+		);
+
+		for (Object url : urls) {
+			MockRestClient
+				.create(A.class)
+				.build()
+				.request(HttpMethod.GET, url)
+				.accept("application/json+simple")
+				.run()
+				.assertBody().is("{f:1}");
+		}
+	}
+
+	@Test
+	public void a34_basicCalls_request_whenClosed() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.build();
+
+		rc.closeQuietly();
+
+		try {
+			rc.request(HttpMethod.GET, "/bean", null);
+			fail();
+		} catch (RestCallException e) {
+			assertTrue(e.getMessage().startsWith("RestClient.close() has already been called"));
+		}
+	}
+
+	@Test
+	public void a35_basicCalls_request_whenClosed_withStackCreation() throws Exception {
+		RestClient rc = MockRestClient
+			.create(A.class)
+			.debug()
+			.build();
+
+		rc.closeQuietly();
+
+		try {
+			rc.request(HttpMethod.GET, "/bean", null);
+			fail();
+		} catch (RestCallException e) {
+			assertTrue(e.getMessage().startsWith("RestClient.close() has already been called"));
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

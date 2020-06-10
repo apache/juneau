@@ -561,6 +561,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void close() throws IOException {
+		// Don't call super.close() because it will close the client.
 		rreq.remove();
 		rres.remove();
 		sreq.remove();

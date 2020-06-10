@@ -922,6 +922,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder formDataString(String name, Object value) {
+		super.formDataString(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder forwarded(Object value) {
 		super.forwarded(value);
 		return this;
@@ -978,6 +984,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder headerPairs(Object...pairs) {
 		super.headerPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder headerString(String name, Object value) {
+		super.headerString(name, value);
 		return this;
 	}
 
@@ -1370,6 +1382,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder queryPairs(Object...pairs) {
 		super.queryPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder queryString(String name, Object value) {
+		super.queryString(name, value);
 		return this;
 	}
 

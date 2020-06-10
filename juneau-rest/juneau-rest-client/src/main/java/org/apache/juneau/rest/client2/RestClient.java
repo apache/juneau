@@ -17,6 +17,8 @@ import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.client2.RestClientUtils.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.internal.StateMachineState.*;
+import static java.lang.Character.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -58,10 +60,10 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
@@ -2192,7 +2194,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest put(Object url, String body, String contentType) throws RestCallException {
-		return request("PUT", url, true).stringBody(body).contentType(contentType);
+		return request("PUT", url, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2290,7 +2292,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest post(Object url, String body, String contentType) throws RestCallException {
-		return request("POST", url, true).stringBody(body).contentType(contentType);
+		return request("POST", url, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2593,7 +2595,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest patch(Object url, String body, String contentType) throws RestCallException {
-		return request("PATCH", url, true).stringBody(body).contentType(contentType);
+		return request("PATCH", url, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2649,50 +2651,66 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException REST call failed.
 	 */
 	public RestRequest callback(String callString) throws RestCallException {
-		String s = callString;
-		try {
-			RestRequest rc = null;
-			String method = null, uri = null, content = null;
-			OMap h = null;
-			int i = s.indexOf(' ');
-			if (i != -1) {
-				method = s.substring(0, i).trim();
-				s = s.substring(i).trim();
-				if (s.length() > 0) {
-					if (s.charAt(0) == '{') {
-						i = s.indexOf('}');
-						if (i != -1) {
-							String json = s.substring(0, i+1);
-							h = JsonParser.DEFAULT.parse(json, OMap.class);
-							s = s.substring(i+1).trim();
-						}
-					}
-					if (s.length() > 0) {
-						i = s.indexOf(' ');
-						if (i == -1)
-							uri = s;
-						else {
-							uri = s.substring(0, i).trim();
-							s = s.substring(i).trim();
-							if (s.length() > 0)
-								content = s;
-						}
-					}
+		callString = emptyIfNull(callString);
+
+		// S01 - Looking for end of method.
+		// S02 - Found end of method, looking for beginning of URL or headers.
+		// S03 - Found beginning of headers, looking for end of headers.
+		// S04 - Found end of headers, looking for beginning of URL.
+		// S05 - Found beginning of URL, looking for end of URL.
+
+		StateMachineState state = S01;
+
+		int mark = 0;
+		String method = null, headers = null, uri = null, content = null;
+		for (int i = 0; i < callString.length(); i++) {
+			char c = callString.charAt(i);
+			if (state == S01) {
+				if (isWhitespace(c)) {
+					method = callString.substring(mark, i);
+					state = S02;
+				}
+			} else if (state == S02) {
+				if (! isWhitespace(c)) {
+					mark = i;
+					if (c == '{')
+						state = S03;
+					else
+						state = S05;
+				}
+			} else if (state == S03) {
+				if (c == '}') {
+					headers = callString.substring(mark, i+1);
+					state = S04;
+				}
+			} else if (state == S04) {
+				if (! isWhitespace(c)) {
+					mark = i;
+					state = S05;
+				}
+			} else /* (state == S05) */ {
+				if (isWhitespace(c)) {
+					uri = callString.substring(mark, i);
+					content = callString.substring(i).trim();
+					break;
 				}
 			}
-			if (method != null && uri != null) {
-				rc = request(method, uri, content != null);
-				if (content != null)
-					rc.body(new StringEntity(content));
-				if (h != null)
-					for (Map.Entry<String,Object> e : h.entrySet())
-						rc.header(e.getKey(), e.getValue());
-				return rc;
-			}
-		} catch (Exception e) {
-			throw new RestCallException(e);
 		}
-		throw new RestCallException("Invalid format for call string.");
+
+		if (state != S05)
+			throw new RestCallException("Invalid format for call string.  State=" + state);
+
+		try {
+			RestRequest req = request(method, uri, isNotEmpty(content));
+			if (headers != null)
+				for (Map.Entry<String,Object> e : OMap.ofJson(headers).entrySet())
+					req.headerString(e.getKey(), e.getValue());
+			if (isNotEmpty(content))
+				req.bodyString(content);
+			return req;
+		} catch (ParseException e) {
+			throw new RestCallException(e, "Invalid format for call string.");
+		}
 	}
 
 	/**
@@ -2801,26 +2819,21 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			throw new RestCallException("RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		try {
-			RestRequest req = createRequest(toURI(url), method.toUpperCase(Locale.ENGLISH), hasBody);
+		RestRequest req = createRequest(toURI(url), method.toUpperCase(Locale.ENGLISH), hasBody);
 
-			for (Object o : headers)
-				req.header(toHeader(o));
+		for (Object o : headers)
+			req.header(toHeader(o));
 
-			for (Object o : query)
-				req.query(toQuery(o));
+		for (Object o : query)
+			req.query(toQuery(o));
 
-			for (Object o : formData)
-				req.formData(toFormData(o));
+		for (Object o : formData)
+			req.formData(toFormData(o));
 
-			req.interceptors(this);
-			req.interceptors(interceptors);
+		req.interceptors(this);
+		req.interceptors(interceptors);
 
-			return req;
-
-		} catch (URISyntaxException e1) {
-			throw new RestCallException(e1);
-		}
+		return req;
 	}
 
 	/**
@@ -3599,27 +3612,31 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	URI toURI(Object url) throws URISyntaxException {
-		if (url instanceof URI)
-			return (URI)url;
-		if (url instanceof URL)
-			((URL)url).toURI();
-		if (url instanceof URIBuilder)
-			return ((URIBuilder)url).build();
-		String s = url == null ? "" : url.toString();
-		if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
-			if (s.isEmpty())
-				s = rootUrl;
-			else {
-				StringBuilder sb = new StringBuilder(rootUrl);
-				if (! s.startsWith("/"))
-					sb.append('/');
-				sb.append(s);
-				s = sb.toString();
+	URI toURI(Object url) throws RestCallException {
+		try {
+			if (url instanceof URI)
+				return (URI)url;
+			if (url instanceof URL)
+				((URL)url).toURI();
+			if (url instanceof URIBuilder)
+				return ((URIBuilder)url).build();
+			String s = url == null ? "" : url.toString();
+			if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
+				if (s.isEmpty())
+					s = rootUrl;
+				else {
+					StringBuilder sb = new StringBuilder(rootUrl);
+					if (! s.startsWith("/"))
+						sb.append('/');
+					sb.append(s);
+					s = sb.toString();
+				}
 			}
+			s = fixUrl(s);
+			return new URI(s);
+		} catch (URISyntaxException e) {
+			throw new RestCallException(e, "Invalid URL encountered:  " + url);  // Shouldn't happen.
 		}
-		s = fixUrl(s);
-		return new URI(s);
 	}
 
 	ExecutorService getExecutorService(boolean create) {

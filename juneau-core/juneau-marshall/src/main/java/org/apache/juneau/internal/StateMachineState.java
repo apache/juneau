@@ -18,4 +18,17 @@ package org.apache.juneau.internal;
 @SuppressWarnings("javadoc")
 public enum StateMachineState {
 	S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20;
+
+	/**
+	 * Returns <jk>true</jk> if the state is any one of the specified states.
+	 *
+	 * @param states The states to check.
+	 * @return <jk>true</jk> if the state is any one of the specified states.
+	 */
+	public boolean isAny(StateMachineState...states) {
+		for (StateMachineState s : states)
+			if (this == s)
+				return true;
+		return false;
+	}
 }

@@ -25,7 +25,6 @@ import org.junit.runners.Suite.*;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	CallbackStringsTest.class,
 	ClientFuturesTest.class,
 	ConfigTest.class,
 	FormDataTest.class,

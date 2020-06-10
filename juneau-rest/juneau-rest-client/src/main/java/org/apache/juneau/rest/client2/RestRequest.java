@@ -790,13 +790,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
 	public RestRequest uri(Object uri) throws RestCallException {
-		try {
-			if (uri != null)
-				uriBuilder = new URIBuilder(client.toURI(uri));
-			return this;
-		} catch (URISyntaxException e) {
-			throw new RestCallException(e);
-		}
+		if (uri != null)
+			uriBuilder = new URIBuilder(client.toURI(uri));
+		return this;
 	}
 
 	/**
@@ -893,6 +889,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest path(String name, Object value) throws RestCallException {
 		return path(name, value, null, null);
+	}
+
+	/**
+	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
+	 *
+	 * <p>
+	 * Unlike {@link #path(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.get(<js>"/{foo}"</js>)
+	 * 		.pathString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	@FluentSetter
+	public RestRequest pathString(String name, Object value) throws RestCallException {
+		return path(BasicNameValuePair.of(name, value));
 	}
 
 	/**
@@ -1332,6 +1358,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest query(String name, Object value) throws RestCallException {
 		return query(DEFAULT_FLAGS, name, value, null, partSerializer);
+	}
+
+	/**
+	 * Adds a query parameter to the URI.
+	 *
+	 * <p>
+	 * Unlike {@link #query(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.queryString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	@FluentSetter
+	public RestRequest queryString(String name, Object value) throws RestCallException {
+		return query(BasicNameValuePair.of(name, value));
 	}
 
 	/**
@@ -1975,6 +2031,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Adds a form-data parameter to the request body.
 	 *
+	 * <p>
+	 * Unlike {@link #formData(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formDataString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	@FluentSetter
+	public RestRequest formDataString(String name, Object value) throws RestCallException {
+		return formData(BasicNameValuePair.of(name, value));
+	}
+
+	/**
+	 * Adds a form-data parameter to the request body.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	client
@@ -2499,7 +2585,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 *
 	 * client.put(<js>"/foo"</js>)
-	 * 		.stringBody(<js>"foo"</js>)
+	 * 		.bodyString(<js>"foo"</js>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -2517,8 +2603,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
-	public RestRequest stringBody(String input) throws RestCallException {
-		return body(input == null ? null : new StringReader(input));
+	public RestRequest bodyString(Object input) throws RestCallException {
+		return body(input == null ? null : new StringReader(stringify(input)));
 	}
 
 	/**
@@ -2702,6 +2788,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest header(String name, Object value) throws RestCallException {
 		return header(DEFAULT_FLAGS, name, value, null, partSerializer);
+	}
+
+	/**
+	 * Appends a header on the request.
+	 *
+	 * <p>
+	 * Unlike {@link #header(String,Object)} which converts the value to a string using the part serializer, this
+	 * method converts the value to a string using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.headerString(<js>"Foo"</js>, <js>"bar"</js>)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using {@link Object#toString()}.
+	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	@FluentSetter
+	public RestRequest headerString(String name, Object value) throws RestCallException {
+		return header(BasicStringHeader.of(name, value));
 	}
 
 	/**

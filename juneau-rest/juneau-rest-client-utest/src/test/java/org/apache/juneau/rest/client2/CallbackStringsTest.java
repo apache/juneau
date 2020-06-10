@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test.client;
+package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.junit.Assert.*;
@@ -21,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -53,7 +52,7 @@ public class CallbackStringsTest {
 	static RestClient a = MockRestClient.build(A.class);
 
 	@Test
-	public void a01() throws Exception {
+	public void a01_basicTests() throws Exception {
 		String r;
 
 		r = a.callback("GET /testCallback").run().getBody().asString();
@@ -73,5 +72,17 @@ public class CallbackStringsTest {
 
 		r = a.callback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().getBody().asString();
 		assertEquals("{method:'PUT',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}", r);
+	}
+
+	@Test
+	public void a02_invalidStrings() throws Exception {
+		for (String s : AList.of("", "GET", "GET ", "GET {", "GET {xxx} /foo", null)) {
+			try {
+				a.callback(s).run().getBody().asString();
+				fail("'"+s+"' didn't fail");
+			} catch (RestCallException e) {
+				assertTrue(e.getMessage().startsWith("Invalid format for call string."));
+			}
+		}
 	}
 }
