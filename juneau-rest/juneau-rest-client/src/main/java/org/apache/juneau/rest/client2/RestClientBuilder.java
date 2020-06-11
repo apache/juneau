@@ -91,6 +91,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
+@FluentSetters(ignore={"beanMapPutReturnsOldValue","example","exampleJson"})
 public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
@@ -4793,15 +4794,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
-	/**
-	 * This method has no effect on this class.
-	 */
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
@@ -4937,24 +4929,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder dontUseInterfaceProxies() {
 		super.dontUseInterfaceProxies();
-		return this;
-	}
-
-	/**
-	 * This method has no effect on this class.
-	 */
-	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestClientBuilder example(Class<T> pojoClass, T o) {
-		super.example(pojoClass, o);
-		return this;
-	}
-
-	/**
-	 * This method has no effect on this class.
-	 */
-	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RestClientBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
 		return this;
 	}
 

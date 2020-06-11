@@ -89,6 +89,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-server.RestContext}
  * </ul>
  */
+@FluentSetters(ignore={"set"})
 public class RestContextBuilder extends BeanContextBuilder implements ServletConfig {
 
 	final ServletConfig inner;

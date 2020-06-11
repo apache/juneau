@@ -329,8 +329,8 @@ public class FluentLongAssertion<R> extends FluentAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - FluentAssertion */
-	public FluentLongAssertion<R> msg(String msg) {
-		super.msg(msg);
+	public FluentLongAssertion<R> msg(String msg, Object...args) {
+		super.msg(msg, args);
 		return this;
 	}
 

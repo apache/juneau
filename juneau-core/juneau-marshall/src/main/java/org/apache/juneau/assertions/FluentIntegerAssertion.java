@@ -329,8 +329,8 @@ public class FluentIntegerAssertion<R> extends FluentAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - FluentAssertion */
-	public FluentIntegerAssertion<R> msg(String msg) {
-		super.msg(msg);
+	public FluentIntegerAssertion<R> msg(String msg, Object...args) {
+		super.msg(msg, args);
 		return this;
 	}
 

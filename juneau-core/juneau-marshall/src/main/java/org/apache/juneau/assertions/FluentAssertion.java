@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
@@ -24,6 +26,7 @@ public abstract class FluentAssertion<R> {
 
 	private final R returns;
 	private String msg;
+	private Object[] msgArgs;
 	private boolean stdout, stderr;
 
 	/**
@@ -51,11 +54,13 @@ public abstract class FluentAssertion<R> {
 	 * String can contain <js>"{msg}"</js> to represent the original message.
 	 *
 	 * @param msg The assertion failure message.
+	 * @param args Optional message arguments.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public FluentAssertion<R> msg(String msg) {
+	public FluentAssertion<R> msg(String msg, Object...args) {
 		this.msg = msg;
+		this.msgArgs = args;
 		return this;
 	}
 
@@ -89,10 +94,10 @@ public abstract class FluentAssertion<R> {
 	 * @return A new {@link BasicAssertionError}.
 	 */
 	protected BasicAssertionError error(String msg, Object...args) {
-		msg = StringUtils.format(msg, args);
+		msg = format(msg, args);
 		if (this.msg != null) {
 			if (this.msg.contains("{msg}"))
-				msg = this.msg.replace("{msg}", msg);
+				msg = format(this.msg.replace("{msg}", msg), msgArgs);
 			else
 				msg = this.msg;
 		}

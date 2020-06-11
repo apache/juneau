@@ -589,9 +589,10 @@ public class RestClientTest {
 //				.header("Check", "Content-Type")
 //				.accept("application/json+simple")
 //				.build()
-//				.formPost("/checkHeader", body)
+//				.formPost("/checkHeader", bodies.get(i))
 //				.run()
-//				.assertBody().matchesSimple("['application/x-www-form-urlencoded*']");
+//				.assertBody()
+//					.msg("Body {0} failed", i).matchesSimple("['application/x-www-form-urlencoded*']");
 //
 //			MockRestClient
 //				.create(A.class)

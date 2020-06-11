@@ -292,12 +292,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beanMapPutReturnsOldValue() {
-		super.beanMapPutReturnsOldValue();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
@@ -432,18 +426,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder dontUseInterfaceProxies() {
 		super.dontUseInterfaceProxies();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public <T> MockRestClientBuilder example(Class<T> pojoClass, T o) {
-		super.example(pojoClass, o);
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public <T> MockRestClientBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
 		return this;
 	}
 

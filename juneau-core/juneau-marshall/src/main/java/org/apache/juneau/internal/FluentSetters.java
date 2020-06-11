@@ -29,4 +29,9 @@ public @interface FluentSetters {
 	 * Overrides the return type on the child methods.
 	 */
 	String returns() default "";
+
+	/**
+	 * Specifies method signatures to ignore.
+	 */
+	String[] ignore() default {};
 }

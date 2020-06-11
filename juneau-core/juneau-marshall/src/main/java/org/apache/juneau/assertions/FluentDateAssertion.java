@@ -207,8 +207,8 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - FluentAssertion */
-	public FluentDateAssertion<R> msg(String msg) {
-		super.msg(msg);
+	public FluentDateAssertion<R> msg(String msg, Object...args) {
+		super.msg(msg, args);
 		return this;
 	}
 
