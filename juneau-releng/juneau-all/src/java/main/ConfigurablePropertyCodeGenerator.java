@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.csv.*;
@@ -157,7 +158,12 @@ public class ConfigurablePropertyCodeGenerator {
 		SessionArgs.class,
 		BeanSessionArgs.class,
 		SerializerSessionArgs.class,
-		ParserSessionArgs.class
+		ParserSessionArgs.class,
+		FluentAssertion.class,
+		FluentDateAssertion.class,
+		FluentIntegerAssertion.class,
+		FluentLongAssertion.class,
+		FluentStringAssertion.class,
 	};
 
 	private static String[] SOURCE_PATHS = {
@@ -204,6 +210,12 @@ public class ConfigurablePropertyCodeGenerator {
 				.collect(Collectors.toMap(x -> ("\n\tpublic"+x[1].substring(0, x[1].indexOf("\n"))), x -> ("\t"+x[0]+"*/\n")));
 
 			StringBuilder sb = new StringBuilder();
+			ClassInfo ci = ClassInfo.of(c);
+			String cName = ci.getSimpleName();
+			for (FluentSetters fs : ci.getAnnotations(FluentSetters.class))
+				if (! fs.returns().isEmpty())
+					cName = fs.returns();
+
 			for (ClassInfo pc : ClassInfo.of(c).getParentsParentFirst()) {
 				Class<?> pcc = pc.inner();
 				if (pcc != c) {
@@ -219,7 +231,7 @@ public class ConfigurablePropertyCodeGenerator {
 							sigLine.append("\n\tpublic ");
 							if (m.getTypeParameters().length > 0)
 								sigLine.append("<").append(Arrays.asList(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
-							sigLine.append(c.getSimpleName()).append(" ").append(m.getName()).append("(").append(getArgs(m)).append(") ");
+							sigLine.append(cName).append(" ").append(m.getName()).append("(").append(getArgs(m)).append(") ");
 							if ( m.getExceptionTypes().length > 0)
 								sigLine.append("throws ").append(Arrays.asList(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
 							sigLine.append("{");

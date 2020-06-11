@@ -16,7 +16,7 @@ package org.apache.juneau.assertions;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Used for fluent assertion calls.
@@ -31,6 +31,7 @@ import org.apache.juneau.*;
  * </p>
  * @param <R> The return type.
  */
+@FluentSetters(returns="FluentDateAssertion<R>")
 public class FluentDateAssertion<R> extends FluentAssertion<R> {
 
 	private final Date value;
@@ -55,7 +56,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R equals(Date value) throws AssertionError {
 		if (! this.value.equals(value))
-			throw new BasicAssertionError("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -82,7 +83,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R doesNotEqual(Date value) throws AssertionError {
 		if (this.value.equals(value))
-			throw new BasicAssertionError("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -134,7 +135,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNull() throws AssertionError {
 		if (value != null)
-			throw new BasicAssertionError("Value was not null.");
+			throw error("Value was not null.");
 		return returns();
 	}
 
@@ -146,7 +147,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNotNull() throws AssertionError {
 		if (value == null)
-			throw new BasicAssertionError("Value was null.");
+			throw error("Value was null.");
 		return returns();
 	}
 
@@ -159,7 +160,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isAfter(Date value) throws AssertionError {
 		if (! (this.value.after(value)))
-				throw new BasicAssertionError("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -172,7 +173,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isBefore(Date value) throws AssertionError {
 		if (! (this.value.before(value)))
-				throw new BasicAssertionError("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -199,7 +200,29 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R passes(Predicate<Date> test) throws AssertionError {
 		if (! test.test(value))
-			throw new BasicAssertionError("Value did not pass predicate test.\n\tValue=[{0}]", value);
+			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentDateAssertion<R> msg(String msg) {
+		super.msg(msg);
+		return this;
+	}
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentDateAssertion<R> stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentDateAssertion<R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	// </FluentSetters>
 }

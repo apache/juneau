@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+
 /**
  * Parent class of all fluent assertion calls.
  *
@@ -20,6 +23,8 @@ package org.apache.juneau.assertions;
 public abstract class FluentAssertion<R> {
 
 	private final R returns;
+	private String msg;
+	private boolean stdout, stderr;
 
 	/**
 	 * Constructor.
@@ -37,5 +42,64 @@ public abstract class FluentAssertion<R> {
 	 */
 	protected R returns() {
 		return returns;
+	}
+
+	/**
+	 * Allows to to specify the assertion failure message.
+	 *
+	 * <p>
+	 * String can contain <js>"{msg}"</js> to represent the original message.
+	 *
+	 * @param msg The assertion failure message.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentAssertion<R> msg(String msg) {
+		this.msg = msg;
+		return this;
+	}
+
+	/**
+	 * If an error occurs, send the error message to STDOUT.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentAssertion<R> stdout() {
+		this.stdout = true;
+		return this;
+	}
+
+	/**
+	 * If an error occurs, send the error message to STDERR.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentAssertion<R> stderr() {
+		this.stderr = true;
+		return this;
+	}
+
+	/**
+	 * Creates a new {@link BasicAssertionError}.
+	 *
+	 * @param msg The message.
+	 * @param args The message arguments.
+	 * @return A new {@link BasicAssertionError}.
+	 */
+	protected BasicAssertionError error(String msg, Object...args) {
+		msg = StringUtils.format(msg, args);
+		if (this.msg != null) {
+			if (this.msg.contains("{msg}"))
+				msg = this.msg.replace("{msg}", msg);
+			else
+				msg = this.msg;
+		}
+		if (stdout)
+			System.out.println(msg);
+		if (stderr)
+			System.err.println(msg);
+		return new BasicAssertionError(msg);
 	}
 }

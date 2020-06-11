@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -33,9 +32,11 @@ import org.apache.juneau.internal.*;
  * </p>
  * @param <R> The return type.
  */
+@FluentSetters(returns="FluentStringAssertion<R>")
 public class FluentStringAssertion<R> extends FluentAssertion<R> {
 
 	private final String text;
+	private boolean javaStrings;
 
 	/**
 	 * Constructor.
@@ -49,6 +50,21 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * When enabled, text in the message is converted to valid Java strings.
+	 *
+	 * <p class='bcode w800'>
+	 * 	value.replaceAll(<js>"\\\\"</js>, <js>"\\\\\\\\"</js>).replaceAll(<js>"\n"</js>, <js>"\\\\n"</js>).replaceAll(<js>"\t"</js>, <js>"\\\\t"</js>);
+	 * </p>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentStringAssertion<R> javaStrings() {
+		this.javaStrings = true;
+		return this;
+	}
+
+	/**
 	 * Asserts that the text equals the specified value.
 	 *
 	 * @param value The value to check against.
@@ -56,16 +72,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R equals(String value) throws AssertionError {
-		if (! isEquals(value, text)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Text did not equal expected.");
-				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				sb.append("\nActual  : [").append(text == null ? null : text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb.toString());
-			}
-			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
-		}
+		if (! isEquals(value, text))
+			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
 		return returns();
 	}
 
@@ -92,16 +100,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R urlDecodedIs(String value) throws AssertionError {
 		String t = urlDecode(text);
-		if (! isEqualsIc(value, t)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Text did not equal expected.");
-				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				sb.append("\nActual  : [").append(t.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb.toString());
-			}
-			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, t);
-		}
+		if (! isEqualsIc(value, t))
+			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(t));
 		return returns();
 	}
 
@@ -113,16 +113,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R equalsIc(String value) throws AssertionError {
-		if (! isEqualsIc(value, text)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Text did not equal expected.");
-				sb.append("\nExpected: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				sb.append("\nActual  : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb.toString());
-			}
-			throw new BasicAssertionError("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, text);
-		}
+		if (! isEqualsIc(value, text))
+			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
 		return returns();
 	}
 
@@ -134,15 +126,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
-		if (isEquals(value, text)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Text equaled unexpected.");
-				sb.append("\nText: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb.toString());
-			}
-			throw new BasicAssertionError("Text equaled unexpected.\n\tText=[{1}]", value, text);
-		}
+		if (isEquals(value, text))
+			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value), fix(text));
 		return returns();
 	}
 
@@ -168,15 +153,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
-		if (isEqualsIc(value, text)) {
-			if (value != null && value.startsWith("x")) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Text equaled unexpected.");
-				sb.append("\nText: [").append(value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-				System.err.println(sb.toString());
-			}
-			throw new BasicAssertionError("Text equaled unexpected.\n\tText=[{1}]", value, text);
-		}
+		if (isEqualsIc(value, text))
+			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value));
 		return returns();
 	}
 
@@ -189,16 +167,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R contains(String...values) throws AssertionError {
 		for (String substring : values)
-			if (! StringUtils.contains(text, substring)) {
-				if (substring.startsWith("x")) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Text did not contain expected substring.");
-					sb.append("\nSubstring: [").append(substring.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					sb.append("\nText     : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					System.err.println(sb.toString());
-				}
-				throw new BasicAssertionError("Text did not contain expected substring.\n\tExpected=[{0}]\n\tActual=[{1}]", substring, text);
-			}
+			if (! StringUtils.contains(text, substring))
+				throw error("Text did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
 		return returns();
 	}
 
@@ -211,16 +181,8 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R doesNotContain(String...values) throws AssertionError {
 		for (String substring : values)
-			if (StringUtils.contains(text, substring)) {
-				if (substring.startsWith("x")) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Text contained unexpected substring.");
-					sb.append("\nSubstring: [").append(substring.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					sb.append("\nText     : [").append(text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")).append("]");
-					System.err.println(sb.toString());
-				}
-				throw new BasicAssertionError("Text contained unexpected substring.\n\tExpected=[{0}]\n\tActual=[{1}]", substring, text);
-			}
+			if (StringUtils.contains(text, substring))
+				throw error("Text contained unexpected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
 		return returns();
 	}
 
@@ -258,7 +220,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNull() throws AssertionError {
 		if (text != null)
-			throw new BasicAssertionError("Text was not null.  Text=["+text+"]");
+			throw error("Text was not null.  Text=[{0}]", fix(text));
 		return returns();
 	}
 
@@ -270,7 +232,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNotNull() throws AssertionError {
 		if (text == null)
-			throw new BasicAssertionError("Text was null.");
+			throw error("Text was null.");
 		return returns();
 	}
 
@@ -282,7 +244,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isEmpty() throws AssertionError {
 		if (! text.isEmpty())
-			throw new BasicAssertionError("Text was not empty.");
+			throw error("Text was not empty.");
 		return returns();
 	}
 
@@ -294,9 +256,9 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isNotEmpty() throws AssertionError {
 		if (text == null)
-			throw new BasicAssertionError("Text was null.");
+			throw error("Text was null.");
 		if (text.isEmpty())
-			throw new BasicAssertionError("Text was empty.");
+			throw error("Text was empty.");
 		return returns();
 	}
 
@@ -309,7 +271,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R passes(Predicate<String> test) throws AssertionError {
 		if (! test.test(text))
-			throw new BasicAssertionError("Text did not pass predicate test.\n\tText=[{0}]", text);
+			throw error("Text did not pass predicate test.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
 
@@ -322,6 +284,20 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R matches(String regex) throws AssertionError {
 		return matches(regex, 0);
+	}
+
+	/**
+	 * Asserts that the text matches the specified pattern containing <js>"*"</js> meta characters.
+	 *
+	 * <p>
+	 * The <js>"*"</js> meta character can be used to represent zero or more characters..
+	 *
+	 * @param searchPattern The search pattern.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R matchesSimple(String searchPattern) throws AssertionError {
+		return matches(getMatchPattern(searchPattern));
 	}
 
 	/**
@@ -346,7 +322,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	public R matches(String regex, int flags) throws AssertionError {
 		Pattern p = Pattern.compile(regex, flags);
 		if (! p.matcher(text).matches())
-			throw new BasicAssertionError("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", regex, text);
+			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(text));
 		return returns();
 	}
 
@@ -361,7 +337,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	public R doesNotMatch(String regex, int flags) throws AssertionError {
 		Pattern p = Pattern.compile(regex, flags);
 		if (p.matcher(text).matches())
-			throw new BasicAssertionError("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", regex, text);
+			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(text));
 		return returns();
 	}
 
@@ -374,7 +350,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R matches(Pattern pattern) throws AssertionError {
 		if (! pattern.matcher(text).matches())
-			throw new BasicAssertionError("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", pattern.pattern(), text);
+			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
 		return returns();
 	}
 
@@ -387,7 +363,39 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R doesNotMatch(Pattern pattern) throws AssertionError {
 		if (pattern.matcher(text).matches())
-			throw new BasicAssertionError("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", pattern.pattern(), text);
+			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
 		return returns();
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//------------------------------------------------------------------------------------------------------------------
+
+	private String fix(String text) {
+		if (javaStrings)
+			text = text.replaceAll("\\\\", "\\\\\\\\").replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t");
+		return text;
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentStringAssertion<R> msg(String msg) {
+		super.msg(msg);
+		return this;
+	}
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentStringAssertion<R> stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - FluentAssertion */
+	public FluentStringAssertion<R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	// </FluentSetters>
 }
