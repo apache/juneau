@@ -17,7 +17,9 @@ import org.apache.juneau.parser.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
+import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -573,6 +575,33 @@ public class RestResponse implements HttpResponse {
 		}
 	}
 
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param t The throwable cause.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse log(Level level, Throwable t, String msg, Object...args) {
+		client.log(level, t, msg, args);
+		return this;
+	}
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse log(Level level, String msg, Object...args) {
+		client.log(level, msg, args);
+		return this;
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// HttpResponse pass-through methods.
 	// -----------------------------------------------------------------------------------------------------------------
@@ -971,6 +1000,11 @@ public class RestResponse implements HttpResponse {
 			} catch (Exception e) {
 				throw RestCallException.create(e);
 			}
+		}
+		try {
+			client.onClose(request, this);
+		} catch (Exception e) {
+			throw RestCallException.create(e);
 		}
 	}
 

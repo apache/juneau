@@ -22,6 +22,7 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.http.*;
@@ -572,6 +573,9 @@ public class RestClientTest {
 
 	@Test
 	public void a23_basicCalls_formPost_exhaustiveBodyTypes() throws Exception {
+		Supplier<Object>
+			s1 = () -> new StringReader("f=1"),
+			s2 = () -> new ByteArrayInputStream("f=1".getBytes());
 
 		List<Object> bodies = AList.of(
 			/*[ 0]*/ bean,
@@ -587,7 +591,9 @@ public class RestClientTest {
 			/*[10]*/ StreamResource.create().contents("f=1").build(),
 			/*[11]*/ StreamResource.create().contents("f=1"),
 			/*[12]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
-			/*[13]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded")
+			/*[13]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded"),
+			/*[14]*/ s1,
+			/*[15]*/ s2
 		);
 
 		for (int i = 0; i < bodies.size(); i++) {
@@ -841,6 +847,7 @@ public class RestClientTest {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
+			.logRequests(DetailLevel.SIMPLE, Level.SEVERE)
 			.logToConsole()
 			.build()
 			.post("/bean", bean)
@@ -877,6 +884,56 @@ public class RestClientTest {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
+	}
+
+	public static class B02a extends BasicRestCallInterceptor {
+		@Override /* RestCallInterceptor */
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {
+			req.log(Level.WARNING, "Foo");
+			req.log(Level.WARNING, new RuntimeException(), "Foo");
+			res.log(Level.WARNING, "Foo");
+			res.log(Level.WARNING, new RuntimeException(), "Foo");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void b02a_loggingOther() throws Exception {
+		MockLogger ml = new MockLogger();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logger(ml)
+			.interceptors(B02a.class)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		ml.assertCount(4);
+	}
+
+	public static class B03 extends RestClient {
+		private static boolean METHOD_CALLED;
+		public B03(PropertyStore ps) {
+			super(ps);
+		}
+
+		@Override
+		protected RestRequest createRequest(java.net.URI uri, String method, boolean hasBody) throws RestCallException {
+			METHOD_CALLED = true;
+			return super.createRequest(uri, method, hasBody);
+		}
+	}
+
+	@Test
+	public void b03_overrideCreateRequest() throws Exception {
+		RestClient
+			.create()
+			.simpleJson()
+			.build(B03.class)
+			.get("foo");
+		assertTrue(B03.METHOD_CALLED);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -5707,4 +5764,12 @@ public class RestClientTest {
 			.assertBody().is("{foo:1}")
 		;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Remote proxies
+	//-----------------------------------------------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 }

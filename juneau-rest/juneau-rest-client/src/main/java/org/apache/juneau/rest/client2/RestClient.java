@@ -174,7 +174,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestClient#options(Object) options(Object url)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(Object url, Object body)}
  * 		<li class='jm'>{@link RestClient#formPost(Object) formPost(Object url)}
- * 		<li class='jm'>{@link RestClient#formPost(Object,NameValuePair...) formPost(Object url, NameValuePair...parameters)}
  * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPost(Object url, Object...parameters)}
  * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object url, Object body)}
  * 	</ul>
@@ -950,7 +949,7 @@ import org.apache.http.client.CookieStore;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
+public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -2162,6 +2161,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li class='jc'>
+	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request
@@ -2259,6 +2260,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li class='jc'>
+	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
@@ -2414,6 +2417,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
 	 * 		<li class='jc'>{@link ReaderResource}/{@link ReaderResourceBuilder}/{@link StreamResource}/{@link StreamResourceBuilder}/{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
 	 * 		<li class='jc'>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
+	 * 		<li class='jc'>{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
@@ -2423,6 +2427,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public RestRequest formPost(Object url, Object body) throws RestCallException {
 		RestRequest req = request("POST", url, true);
 		try {
+			if (body instanceof Supplier)
+				body = ((Supplier<?>)body).get();
 			if (body instanceof NameValuePair)
 				return req.body(new UrlEncodedFormEntity(AList.of((NameValuePair)body)));
 			if (body instanceof NameValuePair[])
@@ -2497,31 +2503,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	</ul>
 	 * @param parameters
 	 * 	The parameters of the form post.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest formPost(Object url, NameValuePair...parameters) throws RestCallException {
-		return formPost(url, new NameValuePairs(parameters));
-	}
-
-	/**
-	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URL.
-	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
-	 * 	Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>{@link URIBuilder}
-	 * 		<li class='jc'>{@link URI}
-	 * 		<li class='jc'>{@link URL}
-	 * 		<li class='jc'>{@link String}
-	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param parameters
-	 * 	The parameters of the form post.
 	 * 	<br>The parameters represent name/value pairs and must be an even number of arguments.
 	 * 	<br>Parameters are converted to {@link BasicNameValuePair} objects.
 	 * @return
@@ -2565,6 +2546,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li class='jc'>
+	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
@@ -2749,6 +2732,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li class='jc'>
+	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * 	This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
 	 * @return
@@ -2833,7 +2818,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : formData)
 			req.formData(toFormData(o));
 
-		req.interceptors(this);
 		req.interceptors(interceptors);
 
 		return req;
@@ -3287,42 +3271,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Interceptor method called before a request is sent to the server.
-	 *
-	 * <p>
-	 * Subclasses can override this method to intercept the request and perform special modifications.
-	 * The default behavior is a no-op.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
-	 * </ul>
-	 */
-	@Override /* HttpRequestInterceptor */
-	public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-		// Default is a no-op.
-	}
-
-	/**
-	 * Interceptor method called before the message body is evaluated.
-	 *
-	 * <p>
-	 * Subclasses can override this method to intercept the response and perform special modifications.
-	 * The default behavior is a no-op.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
-	 * </ul>
-	 */
-	@Override /* HttpRequestInterceptor */
-	public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
-		// Default is a no-op.
-	}
-
-	/**
 	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been copied from the client.
 	 *
 	 * <p>
@@ -3334,8 +3282,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * </ul>
+	 *
+	 * @param req The HTTP request.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	@Override /* RestCallInterceptor */
 	public void onInit(RestRequest req) throws Exception {
 		// Default is a no-op.
 	}
@@ -3352,8 +3302,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * </ul>
+	 *
+	 * @param req The HTTP request.
+	 * @param res The HTTP response.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	@Override /* RestCallInterceptor */
 	public void onConnect(RestRequest req, RestResponse res) throws Exception {
 		// Default is a no-op.
 	}
@@ -3370,8 +3323,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
 	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
 	 * </ul>
+	 *
+	 * @param req The HTTP request.
+	 * @param res The HTTP response.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	@Override /* RestCallInterceptor */
 	public void onClose(RestRequest req, RestResponse res) throws Exception {
 		// Default is a no-op.
 	}

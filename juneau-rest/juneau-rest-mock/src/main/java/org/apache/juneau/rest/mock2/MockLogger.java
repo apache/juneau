@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import java.util.*;
 import java.util.logging.*;
 
 /**
@@ -56,7 +57,7 @@ import java.util.logging.*;
  */
 public class MockLogger extends Logger {
 
-	private volatile LogRecord logRecord;
+	private volatile List<LogRecord> logRecords = new ArrayList<>();
 
 	/**
 	 * Constructor.
@@ -67,7 +68,7 @@ public class MockLogger extends Logger {
 
 	@Override /* Logger */
 	public synchronized void log(LogRecord record) {
-		this.logRecord = record;
+		logRecords.add(record);
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class MockLogger extends Logger {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized MockLogger reset() {
-		this.logRecord = null;
+		logRecords.clear();
 		return this;
 	}
 
@@ -86,7 +87,7 @@ public class MockLogger extends Logger {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized MockLogger assertLogged() {
-		if (logRecord == null)
+		if (logRecords.isEmpty())
 			throw new AssertionError("Message not logged");
 		return this;
 	}
@@ -99,8 +100,8 @@ public class MockLogger extends Logger {
 	 */
 	public synchronized MockLogger assertLevel(Level level) {
 		assertLogged();
-		if (logRecord.getLevel() != level)
-			throw new AssertionError("Message logged at [" + logRecord.getLevel() + "] instead of [" + level + "]");
+		if (last().getLevel() != level)
+			throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");
 		return this;
 	}
 
@@ -112,8 +113,8 @@ public class MockLogger extends Logger {
 	 */
 	public synchronized MockLogger assertMessage(String message) {
 		assertLogged();
-		if (! logRecord.getMessage().equals(message))
-			throw new AssertionError("Message was not [" + message + "].  Message=[" + logRecord.getMessage() + "]");
+		if (! last().getMessage().equals(message))
+			throw new AssertionError("Message was not [" + message + "].  Message=[" + last().getMessage() + "]");
 		return this;
 	}
 
@@ -126,8 +127,8 @@ public class MockLogger extends Logger {
 	public synchronized MockLogger assertMessageContains(String...messages) {
 		assertLogged();
 		for (String m : messages)
-			if (! logRecord.getMessage().contains(m))
-				throw new AssertionError("Message did not contain [" + m + "].  Message=[" + logRecord.getMessage() + "]");
+			if (! last().getMessage().contains(m))
+				throw new AssertionError("Message did not contain [" + m + "].  Message=[" + last().getMessage() + "]");
 		return this;
 	}
 
@@ -140,8 +141,27 @@ public class MockLogger extends Logger {
 	public synchronized MockLogger assertMessageNotContains(String...messages) {
 		assertLogged();
 		for (String m : messages)
-			if (logRecord.getMessage().contains(m))
-				throw new AssertionError("Message contained [" + m + "].  Message=[" + logRecord.getMessage() + "]");
+			if (last().getMessage().contains(m))
+				throw new AssertionError("Message contained [" + m + "].  Message=[" + last().getMessage() + "]");
 		return this;
+	}
+
+	/**
+	 * Asserts that the specified number of messages have been logged.
+	 *
+	 * @param count Expected number of messages logged.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized MockLogger assertCount(int count) {
+		assertLogged();
+		if (logRecords.size() != count)
+			throw new AssertionError("Wrong number of messages.  Expected=["+count+"], Actual=["+logRecords.size()+"]");
+		return this;
+	}
+
+	private LogRecord last() {
+		if (logRecords.isEmpty())
+			throw new AssertionError("Message not logged");
+		return logRecords.get(logRecords.size()-1);
 	}
 }

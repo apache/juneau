@@ -19,9 +19,11 @@ import static org.apache.juneau.rest.client2.RestClientUtils.*;
 
 import java.io.*;
 import java.net.*;
+import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.client.config.*;
@@ -691,6 +693,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				throw RestCallException.create(e);
 			}
 		}
+		try {
+			client.onInit(this);
+		} catch (Exception e) {
+			throw RestCallException.create(e);
+		}
+
 		return this;
 	}
 
@@ -3807,39 +3815,44 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (request2 == null)
 					throw new RestCallException(0, "Method does not support content entity.", getMethod(), getURI(), null);
 
+				Object input2 = input;
+
+				if (input2 instanceof Supplier)
+					input2 = ((Supplier<?>)input).get();
+
 				HttpEntity entity = null;
 				if (formData != null)
 					entity = new UrlEncodedFormEntity(formData);
-				else if (input instanceof NameValuePairs)
-					entity = new UrlEncodedFormEntity((NameValuePairs)input);
-				else if (input instanceof HttpEntity)
-					entity = (HttpEntity)input;
-				else if (input instanceof Reader)
-					entity = new StringEntity(IOUtils.read((Reader)input), getRequestContentType(TEXT_PLAIN));
-				else if (input instanceof InputStream)
-					entity = new InputStreamEntity((InputStream)input, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (input instanceof ReaderResource || input instanceof ReaderResourceBuilder) {
-					if (input instanceof ReaderResourceBuilder)
-						input = ((ReaderResourceBuilder)input).build();
-					ReaderResource r = (ReaderResource)input;
+				else if (input2 instanceof NameValuePairs)
+					entity = new UrlEncodedFormEntity((NameValuePairs)input2);
+				else if (input2 instanceof HttpEntity)
+					entity = (HttpEntity)input2;
+				else if (input2 instanceof Reader)
+					entity = new StringEntity(IOUtils.read((Reader)input2), getRequestContentType(TEXT_PLAIN));
+				else if (input2 instanceof InputStream)
+					entity = new InputStreamEntity((InputStream)input2, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+				else if (input2 instanceof ReaderResource || input2 instanceof ReaderResourceBuilder) {
+					if (input2 instanceof ReaderResourceBuilder)
+						input2 = ((ReaderResourceBuilder)input2).build();
+					ReaderResource r = (ReaderResource)input2;
 					contentType(r.getContentType());
 					headers(r.getHeaders());
 					entity = new StringEntity(IOUtils.read(r.getContents()), getRequestContentType(TEXT_PLAIN));
 				}
-				else if (input instanceof StreamResource || input instanceof StreamResourceBuilder) {
-					if (input instanceof StreamResourceBuilder)
-						input = ((StreamResourceBuilder)input).build();
-					StreamResource r = (StreamResource)input;
+				else if (input2 instanceof StreamResource || input2 instanceof StreamResourceBuilder) {
+					if (input2 instanceof StreamResourceBuilder)
+						input2 = ((StreamResourceBuilder)input2).build();
+					StreamResource r = (StreamResource)input2;
 					contentType(r.getContentType());
 					headers(r.getHeaders());
 					entity = new InputStreamEntity(r.getContents(), getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				}
 				else if (serializer != null)
-					entity = new SerializedHttpEntity(input, serializer, requestBodySchema, contentType);
+					entity = new SerializedHttpEntity(input2, serializer, requestBodySchema, contentType);
 				else {
-					if (input == null)
-						input = "";
-					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
+					if (input2 == null)
+						input2 = "";
+					entity = new StringEntity(getBeanContext().getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
 				}
 
 				request2.setEntity(entity);
@@ -3859,6 +3872,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);
+			client.onConnect(this, response);
 
 			if (response.getStatusCode() == 0)
 				throw new RestCallException("HttpClient returned a null response");
@@ -4004,6 +4018,33 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public HttpEntity getHttpEntity() {
 		return (request instanceof HttpEntityEnclosingRequestBase ? ((HttpEntityEnclosingRequestBase)request).getEntity() : null);
+	}
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param t The throwable cause.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest log(Level level, Throwable t, String msg, Object...args) {
+		client.log(level, t, msg, args);
+		return this;
+	}
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object (for method chaining).
+	 */
+	public RestRequest log(Level level, String msg, Object...args) {
+		client.log(level, msg, args);
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
