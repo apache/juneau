@@ -10,15 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.IOUtils.*;
 
-import org.apache.juneau.http.ReaderResource;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.svl.*;
 
@@ -35,8 +33,9 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * @param b Builder containing values to initialize this object with.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected ResolvingReaderResource(Builder b) throws IOException {
-		this(b.mediaType, b.headers, b.cached, b.varResolver, b.contents.toArray());
+	protected ResolvingReaderResource(ResolvingResourceReaderBuilder b) throws IOException {
+		super(b);
+		this.varSession = b.varResolver;
 	}
 
 	/**
@@ -70,81 +69,12 @@ public class ResolvingReaderResource extends ReaderResource {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new instance of a {@link Builder} for this class.
+	 * Creates a new instance of a {@link ResolvingResourceReaderBuilder} for this class.
 	 *
-	 * @return A new instance of a {@link Builder}.
+	 * @return A new instance of a {@link ResolvingResourceReaderBuilder}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Builder class for constructing {@link ResolvingReaderResource} objects.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
-	 * </ul>
-	 */
-	public static class Builder extends ReaderResource.Builder {
-		VarResolverSession varResolver;
-
-		/**
-		 * Specifies the variable resolver to use for this resource.
-		 *
-		 * @param varResolver The variable resolver.
-		 * @return This object (for method chaining).
-		 */
-		public Builder varResolver(VarResolverSession varResolver) {
-			this.varResolver = varResolver;
-			return this;
-		}
-
-		@Override
-		public Builder mediaType(String mediaType) {
-			super.mediaType(mediaType);
-			return this;
-		}
-
-		@Override
-		public Builder mediaType(MediaType mediaType) {
-			super.mediaType(mediaType);
-			return this;
-		}
-
-		@Override
-		public Builder contents(Object...contents) {
-			super.contents(contents);
-			return this;
-		}
-
-		@Override
-		public Builder header(String name, Object value) {
-			super.header(name, value);
-			return this;
-		}
-
-		@Override
-		public Builder headers(Map<String,Object> headers) {
-			super.headers(headers);
-			return this;
-		}
-
-		@Override
-		public Builder cached() {
-			super.cached();
-			return this;
-		}
-
-		/**
-		 * Create a new {@link ResolvingReaderResource} using values in this builder.
-		 *
-		 * @return A new immutable {@link ResolvingReaderResource} object.
-		 * @throws IOException Thrown by underlying stream.
-		 */
-		@Override
-		public ResolvingReaderResource build() throws IOException {
-			return new ResolvingReaderResource(this);
-		}
+	public static ResolvingResourceReaderBuilder create() {
+		return new ResolvingResourceReaderBuilder();
 	}
 
 	@ResponseBody

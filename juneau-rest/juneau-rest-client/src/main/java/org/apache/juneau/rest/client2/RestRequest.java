@@ -2467,9 +2467,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -2554,9 +2554,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -2619,9 +2619,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -3818,13 +3818,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = new StringEntity(IOUtils.read((Reader)input), getRequestContentType(TEXT_PLAIN));
 				else if (input instanceof InputStream)
 					entity = new InputStreamEntity((InputStream)input, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (input instanceof ReaderResource) {
+				else if (input instanceof ReaderResource || input instanceof ReaderResourceBuilder) {
+					if (input instanceof ReaderResourceBuilder)
+						input = ((ReaderResourceBuilder)input).build();
 					ReaderResource r = (ReaderResource)input;
 					contentType(r.getContentType());
 					headers(r.getHeaders());
 					entity = new StringEntity(IOUtils.read(r.getContents()), getRequestContentType(TEXT_PLAIN));
 				}
-				else if (input instanceof StreamResource) {
+				else if (input instanceof StreamResource || input instanceof StreamResourceBuilder) {
+					if (input instanceof StreamResourceBuilder)
+						input = ((StreamResourceBuilder)input).build();
 					StreamResource r = (StreamResource)input;
 					contentType(r.getContentType());
 					headers(r.getHeaders());

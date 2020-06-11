@@ -28,10 +28,12 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -1610,6 +1612,48 @@ public class RestResponseBody implements HttpEntity {
 	 */
 	public FluentStringAssertion<RestResponse> assertThat() throws RestCallException {
 		return new FluentStringAssertion<>(asString(), response);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertBody(Class)} method to instantiate a fluent assertions object.
+	 *
+	 * <p>
+	 * Combines the functionality of {@link #as(Class)} with {@link #assertThat()} by converting the body to the specified
+	 * bean and then serializing it to simplified JSON for easy string comparison.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body bean is the expected value.</jc>
+	 * 	client
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertBody(MyBean.<js>class</js>).equals(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} will be thrown.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @param type The object type to create.
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentStringAssertion<RestResponse> assertThat(Class<?> type) throws RestCallException {
+		try {
+			return new FluentStringAssertion<>(SimpleJson.DEFAULT.write(as(type)), response);
+		} catch (SerializeException e) {
+			throw new RestCallException(e);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

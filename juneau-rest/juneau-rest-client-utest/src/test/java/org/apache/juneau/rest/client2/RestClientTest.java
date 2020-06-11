@@ -570,57 +570,45 @@ public class RestClientTest {
 		}
 	}
 
-//	@Test
-//	public void a23_basicCalls_formPost_exhaustiveBodyTypes() throws Exception {
-//
-//
-//		List<Object> bodies = AList.of(
-//			bean,
-//			 NameValuePairs.of("f","1"),
-//			 new NameValuePair[]{BasicNameValuePair.of("f","1")},
-//			 new StringEntity("{f:1}", org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
-//			 new StringEntity("{f:1}", (org.apache.http.entity.ContentType)null),
-//			 BasicNameValuePair.of("f","1")
-//		);
-//
-//		for (int i = 0; i < bodies.size(); i++) {
-//			MockRestClient
-//				.create(A.class)
-//				.header("Check", "Content-Type")
-//				.accept("application/json+simple")
-//				.build()
-//				.formPost("/checkHeader", bodies.get(i))
-//				.run()
-//				.assertBody()
-//					.msg("Body {0} failed", i).matchesSimple("['application/x-www-form-urlencoded*']");
-//
-//			MockRestClient
-//				.create(A.class)
-//				.build()
-//				.formPost("/bean", body)
-//				.accept("application/json+simple")
-//				.run()
-//				.assertBody().is("{f:1}");
-//		}
-//
-//
-//		bodies = AList.of(
-//			bean,
-//			 NameValuePairs.of("f","1"),
-//			 new NameValuePair[]{BasicNameValuePair.of("f","1")},
-//			 new StringEntity("{f:1}", org.apache.http.entity.ContentType.APPLICATION_JSON),
-//			 BasicNameValuePair.of("f","1")
-//		);
-//
-//		for (Object body : bodies) {
-//			MockRestClient
-//				.create(A.class)
-//				.build()
-//				.formPost("/echoBody", body)
-//				.run()
-//				.assertBody().is("{f:1}");
-//		}
-//	}
+	@Test
+	public void a23_basicCalls_formPost_exhaustiveBodyTypes() throws Exception {
+
+		List<Object> bodies = AList.of(
+			/*[ 0]*/ bean,
+			/*[ 1]*/ NameValuePairs.of("f","1"),
+			/*[ 2]*/ new NameValuePair[]{BasicNameValuePair.of("f","1")},
+			/*[ 3]*/ new StringEntity("f=1", org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
+			/*[ 4]*/ new StringEntity("f=1", (org.apache.http.entity.ContentType)null),
+			/*[ 5]*/ BasicNameValuePair.of("f","1"),
+			/*[ 6]*/ ReaderResource.create().contents("f=1").build(),
+			/*[ 7]*/ ReaderResource.create().contents("f=1"),
+			/*[ 8]*/ ReaderResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
+			/*[ 9]*/ ReaderResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded"),
+			/*[10]*/ StreamResource.create().contents("f=1").build(),
+			/*[11]*/ StreamResource.create().contents("f=1"),
+			/*[12]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
+			/*[13]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded")
+		);
+
+		for (int i = 0; i < bodies.size(); i++) {
+			MockRestClient
+				.create(A.class)
+				.header("Check", "Content-Type")
+				.accept("application/json+simple")
+				.build()
+				.formPost("/checkHeader", bodies.get(i))
+				.run()
+				.assertBody().msg("Body {0} failed", i).matchesSimple("['application/x-www-form-urlencoded*']");
+
+			MockRestClient
+				.create(A.class)
+				.build()
+				.formPost("/bean", bodies.get(i))
+				.accept("application/json+simple")
+				.run()
+				.assertBody().msg("Body {0} failed", "#"+i).is("{f:1}");
+		}
+	}
 
 	@Test
 	public void a24_basicCalls_formPostPairs() throws Exception {

@@ -38,8 +38,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.ReaderResource;
-import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -1461,7 +1459,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ResolvingReaderResource.Builder b = ResolvingReaderResource.create().mediaType(mediaType).contents(s);
+		ResolvingResourceReaderBuilder b = ResolvingReaderResource.create().mediaType(mediaType).contents(s);
 		if (resolveVars)
 			b.varResolver(getVarResolverSession());
 		if (cached)
@@ -1516,7 +1514,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		InputStream is = context.getClasspathResource(name, getLocale());
 		if (is == null)
 			return null;
-		StreamResource.Builder b = StreamResource.create().mediaType(mediaType).contents(is);
+		StreamResourceBuilder b = StreamResource.create().mediaType(mediaType).contents(is);
 		if (cached)
 			b.cached();
 		return b.build();

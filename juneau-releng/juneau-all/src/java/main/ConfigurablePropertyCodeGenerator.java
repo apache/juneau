@@ -23,6 +23,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -165,6 +166,9 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentIntegerAssertion.class,
 		FluentLongAssertion.class,
 		FluentStringAssertion.class,
+		ReaderResourceBuilder.class,
+		StreamResourceBuilder.class,
+		ResolvingResourceReaderBuilder.class
 	};
 
 	private static String[] SOURCE_PATHS = {
@@ -237,7 +241,7 @@ public class ConfigurablePropertyCodeGenerator {
 							// Don't render ignored methods.
 							if (ignore.contains(m.getName()) || ignore.contains(mSig))
 								continue;
-							
+
 							StringBuilder sigLine = new StringBuilder();
 							sigLine.append("\n\tpublic ");
 							if (m.getTypeParameters().length > 0)

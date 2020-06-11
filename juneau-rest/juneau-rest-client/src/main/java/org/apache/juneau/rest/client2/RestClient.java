@@ -489,9 +489,9 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jc'>
  * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
  * 		<li class='jc'>
- * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+ * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
  * 		<li class='jc'>
- * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+ * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
  * 		<li class='jc'>
  * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 		<li class='jc'>
@@ -2152,9 +2152,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -2249,9 +2249,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -2412,7 +2412,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link NameValuePair} array - URL-encoded as name value pairs.
 	 * 		<li class='jc'>{@link NameValuePairs} - URL-encoded as name value pairs.
 	 * 		<li class='jc'>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
-	 * 		<li class='jc'>{@link ReaderResource}/{@link StreamResource}/{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
+	 * 		<li class='jc'>{@link ReaderResource}/{@link ReaderResourceBuilder}/{@link StreamResource}/{@link StreamResourceBuilder}/{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
 	 * 		<li class='jc'>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
 	 * 	</ul>
 	 * @return
@@ -2437,12 +2437,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.contentType("application/x-www-form-urlencoded").body(body);
+			if (body instanceof ReaderResourceBuilder)
+				body = ((ReaderResourceBuilder)body).build();
 			if (body instanceof ReaderResource) {
 				ReaderResource r = (ReaderResource)body;
 				if (r.getContentType() == null)
 					req.contentType("application/x-www-form-urlencoded");
 				return req.body(r);
 			}
+			if (body instanceof StreamResourceBuilder)
+				body = ((StreamResourceBuilder)body).build();
 			if (body instanceof StreamResource) {
 				StreamResource r = (StreamResource)body;
 				if (r.getContentType() == null)
@@ -2450,8 +2454,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return req.body(r);
 			}
 			return req.body(new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
-		} catch (UnsupportedEncodingException e) {
-			// Should never happen.
+		} catch (IOException e) {
 			throw new RestCallException(e);
 		}
 	}
@@ -2552,9 +2555,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -2736,9 +2739,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li class='jc'>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li class='jc'>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.

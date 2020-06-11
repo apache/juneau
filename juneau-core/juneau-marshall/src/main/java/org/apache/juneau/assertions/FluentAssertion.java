@@ -59,7 +59,7 @@ public abstract class FluentAssertion<R> {
 	 */
 	@FluentSetter
 	public FluentAssertion<R> msg(String msg, Object...args) {
-		this.msg = msg;
+		this.msg = msg.replace("{msg}", "<<<MSG>>>");
 		this.msgArgs = args;
 		return this;
 	}
@@ -95,16 +95,16 @@ public abstract class FluentAssertion<R> {
 	 */
 	protected BasicAssertionError error(String msg, Object...args) {
 		msg = format(msg, args);
-		if (this.msg != null) {
-			if (this.msg.contains("{msg}"))
-				msg = format(this.msg.replace("{msg}", msg), msgArgs);
-			else
-				msg = this.msg;
-		}
+		if (this.msg != null)
+			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (stdout)
 			System.out.println(msg);
 		if (stderr)
 			System.err.println(msg);
 		return new BasicAssertionError(msg);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

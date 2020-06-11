@@ -33,7 +33,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>The contents of the request passed into the constructor are immediately converted to read-only byte arrays.
  *
  * <p>
- * Instances of this class can be built using {@link Builder}.
+ * Instances of this class can be built using {@link StreamResourceBuilder}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
@@ -46,7 +46,7 @@ public class StreamResource implements Streamable {
 	private final Object[] contents;
 	private final Map<String,Object> headers;
 
-	StreamResource(Builder b) throws IOException {
+	StreamResource(StreamResourceBuilder b) throws IOException {
 		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
 	}
 
@@ -82,136 +82,12 @@ public class StreamResource implements Streamable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new instance of a {@link Builder} for this class.
+	 * Creates a new instance of a {@link StreamResourceBuilder} for this class.
 	 *
-	 * @return A new instance of a {@link Builder}.
+	 * @return A new instance of a {@link StreamResourceBuilder}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Builder class for constructing {@link StreamResource} objects.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
-	 * </ul>
-	 */
-	public static class Builder {
-		ArrayList<Object> contents = new ArrayList<>();
-		MediaType mediaType;
-		Map<String,Object> headers = new LinkedHashMap<>();
-		boolean cached;
-
-		/**
-		 * Specifies the resource media type string.
-		 *
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(String mediaType) {
-			this.mediaType = MediaType.forString(mediaType);
-			return this;
-		}
-
-		/**
-		 * Specifies the resource media type string.
-		 *
-		 * @param mediaType The resource media type string.
-		 * @return This object (for method chaining).
-		 */
-		public Builder mediaType(MediaType mediaType) {
-			this.mediaType = mediaType;
-			return this;
-		}
-
-		/**
-		 * Specifies the contents for this resource.
-		 *
-		 * <p>
-		 * This method can be called multiple times to add more content.
-		 *
-		 * @param contents
-		 * 	The resource contents.
-		 * 	<br>If multiple contents are specified, the results will be concatenated.
-		 * 	<br>Contents can be any of the following:
-		 * 	<ul>
-		 * 		<li><code><jk>byte</jk>[]</code>
-		 * 		<li><c>InputStream</c>
-		 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-		 * 		<li><c>File</c>
-		 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-		 * 	</ul>
-		 * @return This object (for method chaining).
-		 */
-		public Builder contents(Object...contents) {
-			Collections.addAll(this.contents, contents);
-			return this;
-		}
-
-		/**
-		 * Specifies an HTTP response header value.
-		 *
-		 * @param name The HTTP header name.
-		 * @param value
-		 * 	The HTTP header value.
-		 * 	<br>Will be converted to a <c>String</c> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder header(String name, Object value) {
-			this.headers.put(name, value);
-			return this;
-		}
-
-		/**
-		 * Specifies HTTP response header values.
-		 *
-		 * @param headers
-		 * 	The HTTP headers.
-		 * 	<br>Values will be converted to <c>Strings</c> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder headers(Map<String,Object> headers) {
-			this.headers.putAll(headers);
-			return this;
-		}
-
-		/**
-		 * Specifies HTTP response header values.
-		 *
-		 * @param headers
-		 * 	The HTTP headers.
-		 * 	<br>Values will be converted to <c>Strings</c> using {@link Object#toString()}.
-		 * @return This object (for method chaining).
-		 */
-		public Builder headers(org.apache.http.Header...headers) {
-			for (org.apache.http.Header h : headers)
-				this.headers.put(h.getName(), h.getValue());
-			return this;
-		}
-
-		/**
-		 * Specifies that this resource is intended to be cached.
-		 *
-		 * <p>
-		 * This will trigger the contents to be loaded into a byte array for fast serializing.
-		 *
-		 * @return This object (for method chaining).
-		 */
-		public Builder cached() {
-			this.cached = true;
-			return this;
-		}
-
-		/**
-		 * Create a new {@link StreamResource} using values in this builder.
-		 *
-		 * @return A new immutable {@link StreamResource} object.
-		 * @throws IOException Thrown by underlying stream.
-		 */
-		public StreamResource build() throws IOException {
-			return new StreamResource(this);
-		}
+	public static StreamResourceBuilder create() {
+		return new StreamResourceBuilder();
 	}
 
 	/**

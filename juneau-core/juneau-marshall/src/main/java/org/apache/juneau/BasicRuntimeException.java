@@ -73,4 +73,8 @@ public class BasicRuntimeException extends RuntimeException {
 	public <T extends Throwable> T getCause(Class<T> c) {
 		return ThrowableUtils.getCause(c, this);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }
