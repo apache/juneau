@@ -889,6 +889,7 @@ public class RestClientTest {
 	public static class B02a extends BasicRestCallInterceptor {
 		@Override /* RestCallInterceptor */
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
+			super.onConnect(req, res);
 			req.log(Level.WARNING, "Foo");
 			req.log(Level.WARNING, new RuntimeException(), "Foo");
 			res.log(Level.WARNING, "Foo");
@@ -896,7 +897,6 @@ public class RestClientTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void b02a_loggingOther() throws Exception {
 		MockLogger ml = new MockLogger();
@@ -935,6 +935,60 @@ public class RestClientTest {
 			.get("foo");
 		assertTrue(B03.METHOD_CALLED);
 	}
+
+	public static class B04a extends BasicRestCallInterceptor {
+		@Override /* HttpRequestInterceptor */
+		public void onInit(RestRequest req) throws Exception { throw new RuntimeException("foo"); }
+	}
+	public static class B04d extends BasicRestCallInterceptor {
+		@Override /* RestCallInterceptor */
+		public void onConnect(RestRequest req, RestResponse res) throws Exception { throw new RuntimeException("foo"); }
+	}
+	public static class B04e extends BasicRestCallInterceptor {
+		@Override /* RestCallInterceptor */
+		public void onClose(RestRequest req, RestResponse res) throws Exception { throw new RuntimeException("foo"); }
+	}
+
+	@Test
+	public void b04_restCallInterceptor_exceptionHandling() throws Exception {
+		try {
+			MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.interceptors(B04a.class)
+			.build()
+			.post("/bean", bean)
+			.complete();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+		try {
+			MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.interceptors(B04d.class)
+			.build()
+			.post("/bean", bean)
+			.complete();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+		try {
+			MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.interceptors(B04e.class)
+			.build()
+			.post("/bean", bean)
+			.complete();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+	}
+
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Passthrough methods for HttpClientBuilder.
@@ -2971,7 +3025,6 @@ public class RestClientTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void k07_restClient_interceptorsClasses() throws Exception {
 		MockRestClient

@@ -25,13 +25,7 @@ import org.junit.runners.Suite.*;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	ClientFuturesTest.class,
 	ConfigTest.class,
-	FormDataTest.class,
-	InterfaceProxyTest.class,
-	MockRestTest.class,
-	RequestBeanProxyTest.class,
-	RestClientTest.class,
 	ThirdPartyProxyTest.class,
 })
 public class _TestSuite {

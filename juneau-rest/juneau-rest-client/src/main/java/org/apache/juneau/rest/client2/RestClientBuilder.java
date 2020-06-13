@@ -2763,17 +2763,27 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * </ul>
 	 *
-	 * @param values The values to add to this setting.
+	 * @param values
+	 * 	The values to add to this setting.
+	 * 	<br>Can be implementations of any of the following:
+	 * 	<ul>
+	 * 		<li class='jic'>{@link RestCallInterceptor}
+	 * 		<li class='jic'>{@link HttpRequestInterceptor}
+	 * 		<li class='jic'>{@link HttpResponseInterceptor}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws Exception If one or more interceptors could not be created.
 	 */
-	@SuppressWarnings("unchecked")
 	@FluentSetter
-	public RestClientBuilder interceptors(Class<? extends RestCallInterceptor>...values) throws Exception {
-		RestCallInterceptor[] x = new RestCallInterceptor[values.length];
-		for (int i = 0; i < values.length; i++)
-			x[i] = values[i].newInstance();
-		return interceptors(x);
+	public RestClientBuilder interceptors(Class<?>...values) throws Exception {
+		for (Class<?> c : values) {
+			ClassInfo ci = ClassInfo.of(c);
+			if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
+				interceptors(ci.newInstance());
+			else
+				throw new ConfigException("Invalid class of type ''{0}'' passed to RestClientBuilder.interceptors.", ci.getSimpleName());
+		}
+		return this;
 	}
 
 	/**
@@ -2824,16 +2834,31 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
 	 * </ul>
 	 *
-	 * @param value The values to add to this setting.
+	 * @param value
+	 * 	The values to add to this setting.
+	 * 	<br>Can be implementations of any of the following:
+	 * 	<ul>
+	 * 		<li class='jic'>{@link RestCallInterceptor}
+	 * 		<li class='jic'>{@link HttpRequestInterceptor}
+	 * 		<li class='jic'>{@link HttpResponseInterceptor}
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder interceptors(RestCallInterceptor...value) {
-		for (RestCallInterceptor r : value) {
-			addInterceptorLast((HttpRequestInterceptor)r);
-			addInterceptorLast((HttpResponseInterceptor)r);
+	public RestClientBuilder interceptors(Object...value) {
+		List<RestCallInterceptor> l = new ArrayList<>();
+		for (Object o : value) {
+			ClassInfo ci = ClassInfo.of(o);
+			if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
+				throw new ConfigException("Invalid object of type ''{0}'' passed to RestClientBuilder.interceptors.", ci.getSimpleName());
+			if (o instanceof HttpRequestInterceptor)
+				addInterceptorLast((HttpRequestInterceptor)o);
+			if (o instanceof HttpResponseInterceptor)
+				addInterceptorLast((HttpResponseInterceptor)o);
+			if (o instanceof RestCallInterceptor)
+				l.add((RestCallInterceptor)o);
 		}
-		return prependTo(RESTCLIENT_interceptors, value);
+		return prependTo(RESTCLIENT_interceptors, l);
 	}
 
 	/**

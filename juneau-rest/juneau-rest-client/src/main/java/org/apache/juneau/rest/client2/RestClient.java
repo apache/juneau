@@ -949,7 +949,7 @@ import org.apache.http.client.CookieStore;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler {
+public class RestClient extends BeanContext implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -2818,7 +2818,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		for (Object o : formData)
 			req.formData(toFormData(o));
 
-		req.interceptors(interceptors);
+		onInit(req);
 
 		return req;
 	}
@@ -3275,7 +3275,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <p>
 	 * Subclasses can override this method to intercept the request and perform special modifications.
-	 * The default behavior is a no-op.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -3284,10 +3283,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * @param req The HTTP request.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	public void onInit(RestRequest req) throws Exception {
-		// Default is a no-op.
+	@Override
+	public void onInit(RestRequest req) throws RestCallException {
+		try {
+			for (RestCallInterceptor rci : interceptors)
+				rci.onInit(req);
+		} catch (Exception e) {
+			throw RestCallException.create(e);
+		}
 	}
 
 	/**
@@ -3295,7 +3300,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <p>
 	 * Subclasses can override this method to intercept the response and perform special modifications.
-	 * The default behavior is a no-op.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -3305,10 +3309,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	public void onConnect(RestRequest req, RestResponse res) throws Exception {
-		// Default is a no-op.
+	@Override
+	public void onConnect(RestRequest req, RestResponse res) throws RestCallException {
+		try {
+			for (RestCallInterceptor rci : interceptors)
+				rci.onConnect(req, res);
+		} catch (Exception e) {
+			throw RestCallException.create(e);
+		}
 	}
 
 	/**
@@ -3316,7 +3326,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <p>
 	 * Subclasses can override this method to handle any cleanup operations.
-	 * The default behavior is a no-op.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -3326,10 +3335,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	public void onClose(RestRequest req, RestResponse res) throws Exception {
-		// Default is a no-op.
+	@Override
+	public void onClose(RestRequest req, RestResponse res) throws RestCallException {
+		try {
+			for (RestCallInterceptor rci : interceptors)
+				rci.onClose(req, res);
+		} catch (Exception e) {
+			throw RestCallException.create(e);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------

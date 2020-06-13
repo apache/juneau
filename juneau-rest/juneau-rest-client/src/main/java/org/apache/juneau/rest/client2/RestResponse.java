@@ -1001,11 +1001,7 @@ public class RestResponse implements HttpResponse {
 				throw RestCallException.create(e);
 			}
 		}
-		try {
-			client.onClose(request, this);
-		} catch (Exception e) {
-			throw RestCallException.create(e);
-		}
+		client.onClose(request, this);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

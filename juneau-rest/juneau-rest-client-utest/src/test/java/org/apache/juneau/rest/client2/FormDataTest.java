@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test.client;
+package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
@@ -23,13 +23,11 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.rest.test.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class FormDataTest extends RestTestcase {
+public class FormDataTest {
 
 	//=================================================================================================================
 	// Basic tests

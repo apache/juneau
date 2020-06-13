@@ -1078,14 +1078,13 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	@SuppressWarnings("unchecked")
-	public MockRestClientBuilder interceptors(java.lang.Class<? extends org.apache.juneau.rest.client2.RestCallInterceptor>...values) throws Exception{
+	public MockRestClientBuilder interceptors(java.lang.Class<?>...values) throws Exception{
 		super.interceptors(values);
 		return this;
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder interceptors(RestCallInterceptor...value) {
+	public MockRestClientBuilder interceptors(Object...value) {
 		super.interceptors(value);
 		return this;
 	}
