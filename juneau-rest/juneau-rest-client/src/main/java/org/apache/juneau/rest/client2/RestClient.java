@@ -2960,9 +2960,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						RemoteMethodMeta rmm = rm.getMethodMeta(method);
 
-						if (rmm == null)
-							throw new RuntimeException("Method is not exposed as a remote method.");
-
 						String url = rmm.getFullPath();
 						if (url.indexOf("://") == -1)
 							url = restUrl2 + '/' + url;
@@ -3015,20 +3012,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 													rc.formData(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, schema, ps);
 												else if (pt == HEADER)
 													rc.header(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, schema, ps);
-												else if (pt == HttpPartType.BODY)
+												else /* (pt == HttpPartType.BODY) */
 													rc.body(val, schema);
 											}
 										}
 									}
 								}
-							}
-
-							if (rmm.getOtherArgs().length > 0) {
-								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
-								int i = 0;
-								for (RemoteMethodArg a : rmm.getOtherArgs())
-									otherArgs[i++] = args[a.getIndex()];
-								rc.body(otherArgs);
 							}
 
 							RemoteMethodReturn rmr = rmm.getReturns();

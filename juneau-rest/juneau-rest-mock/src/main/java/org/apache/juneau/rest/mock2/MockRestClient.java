@@ -300,7 +300,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			psb.set(RESTCLIENT_rootUri, rootUrl);
 			return psb.build();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ConfigException(e, "Could not initialize MockRestClient");
 		}
 	}

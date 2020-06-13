@@ -102,11 +102,7 @@ public class RequestBeanMeta {
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
 					String n = m.getSimpleName();
-					if (m.hasAnnotation(Body.class)) {
-						assertNoArgs(m, Body.class);
-						assertReturnNotVoid(m, Body.class);
-						properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
-					} else if (m.hasAnnotation(Header.class)) {
+					if (m.hasAnnotation(Header.class)) {
 						assertNoArgs(m, Header.class);
 						assertReturnNotVoid(m, Header.class);
 						properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, m));
@@ -122,6 +118,10 @@ public class RequestBeanMeta {
 						assertNoArgs(m, Path.class);
 						assertReturnNotVoid(m, Path.class);
 						properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, m));
+					} else if (m.hasAnnotation(Body.class)) {
+						assertNoArgs(m, Body.class);
+						assertReturnNotVoid(m, Body.class);
+						properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
 					}
 				}
 			}

@@ -13,7 +13,8 @@
  ***************************************************************************************************************************/
  -->
 
-REST Proxies
+{8.1.4-updated} 
+Remote REST Proxies
 
 <p>
 	The <c>juneau-rest-client</c> library can also be used to define interface proxies against 3rd-party REST interfaces.
@@ -38,8 +39,8 @@ REST Proxies
 <ul class='javatree'>
 	<li class='jp'>{@link oaj.http.remote}
 	<ul>
-		<li class='ja'>{@link oaj.http.remote.Remote}
-		<li class='ja'>{@link oaj.http.remote.RemoteMethod}
+		<li class='ja'>{@link oaj.http.remote.Remote} - Applied to interface class.
+		<li class='ja'>{@link oaj.http.remote.RemoteMethod} - Applied to interface methods.
 	</ul>
 	<li class='jp'>{@link oaj.http.annotation}
 	<ul>
@@ -58,7 +59,7 @@ REST Proxies
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 		
-		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		<ja>@RemoteMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		String addPet(
 			<ja>@Body</ja> CreatePet pet, 
 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
@@ -86,5 +87,20 @@ REST Proxies
 	{
 		name: 'Fluffy',
 		price: 9.99 
+	}
+</p>
+
+<p>
+	The <ja>@RemoteMethod</ja> annotations can be eliminated if you use specific naming conventions on your 
+	method names to identify the HTTP method and path. 
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// @RemoteMethod optional since method and path is inferred from method name.</jc> 
+		String postPets(<ja>@Body</ja> CreatePet pet);
 	}
 </p>

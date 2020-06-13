@@ -21,7 +21,10 @@ import java.lang.annotation.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Annotation applied to Java methods on REST proxy.
+ * Annotation applied to Java methods on REST proxy interface classes.
+ *
+ * <p>
+ * Note that this annotation is optional if you do not need to override any of the values.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}

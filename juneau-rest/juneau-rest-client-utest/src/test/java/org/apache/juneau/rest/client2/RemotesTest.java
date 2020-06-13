@@ -16,8 +16,10 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.http.remote.RemoteMethod;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -286,12 +288,26 @@ public class RemotesTest {
 		public String c01() {
 			return "foo";
 		}
+
+		@RestMethod(path="c02")
+		public String c02() {
+			return "bar";
+		}
+
+		@RestMethod(path="c03")
+		public String c03() {
+			return "baz";
+		}
 	}
 
 	@Remote(path="/")
 	public static interface C01i {
 		@RemoteMethod
 		public String c01();
+
+		public String c02();
+
+		public String getC03();
 	}
 
 	@Test
@@ -305,4 +321,32 @@ public class RemotesTest {
 		assertEquals("foo", x.c01());
 	}
 
+	@Test
+	public void c02_methodNotAnnotated() throws Exception {
+		C01i x = MockRestClient
+			.create(C01.class)
+			.json()
+			.build()
+			.getRemote(C01i.class, "http://localhost/C01");
+
+		assertEquals("bar", x.c02());
+		assertEquals("baz", x.getC03());
+	}
+
+	@Test
+	public void c03_rootUriNotSpecified() throws Exception {
+		C01i x = MockRestClient
+			.create(C01.class)
+			.json()
+			.rootUrl("")
+			.build()
+			.getRemote(C01i.class);
+
+		try {
+			x.c01();
+			fail();
+		} catch (RemoteMetadataException e) {
+			assertEquals("Invalid remote definition found on class org.apache.juneau.rest.client2.RemotesTest$C01i. Root URI has not been specified.  Cannot construct absolute path to remote resource.", e.getLocalizedMessage());
+		}
+	}
 }

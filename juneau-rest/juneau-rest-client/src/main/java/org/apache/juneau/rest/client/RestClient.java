@@ -1257,20 +1257,12 @@ public class RestClient extends BeanContext implements Closeable {
 													rc.formData(pn, val, sie, ps, schema);
 												else if (pt == HEADER)
 													rc.header(pn, val, sie, ps, schema);
-												else if (pt == HttpPartType.BODY)
+												else
 													rc.requestBodySchema(schema).body(val);
 											}
 										}
 									}
 								}
-							}
-
-							if (rmm.getOtherArgs().length > 0) {
-								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
-								int i = 0;
-								for (RemoteMethodArg a : rmm.getOtherArgs())
-									otherArgs[i++] = args[a.getIndex()];
-								rc.body(otherArgs);
 							}
 
 							RemoteMethodReturn rmr = rmm.getReturns();

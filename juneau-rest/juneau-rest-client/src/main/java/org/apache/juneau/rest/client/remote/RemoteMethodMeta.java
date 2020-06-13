@@ -40,7 +40,7 @@ public class RemoteMethodMeta {
 
 	private final String httpMethod;
 	private final String fullPath, path;
-	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;
+	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
 	private final RemoteMethodBeanArg[] requestArgs;
 	private final RemoteMethodArg bodyArg;
 	private final RemoteMethodReturn methodReturn;
@@ -66,7 +66,6 @@ public class RemoteMethodMeta {
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
 		this.requestArgs = b.requestArgs.toArray(new RemoteMethodBeanArg[b.requestArgs.size()]);
-		this.otherArgs = b.otherArgs.toArray(new RemoteMethodArg[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
 		this.methodReturn = b.methodReturn;
 		this.exceptions = m.getExceptionTypes();
@@ -78,8 +77,7 @@ public class RemoteMethodMeta {
 			pathArgs = new LinkedList<>(),
 			queryArgs = new LinkedList<>(),
 			headerArgs = new LinkedList<>(),
-			formDataArgs = new LinkedList<>(),
-			otherArgs = new LinkedList<>();
+			formDataArgs = new LinkedList<>();
 		List<RemoteMethodBeanArg>
 			requestArgs = new LinkedList<>();
 		RemoteMethodArg bodyArg;
@@ -120,9 +118,7 @@ public class RemoteMethodMeta {
 
 			for (ParamInfo mpi : mi.getParams()) {
 				RemoteMethodArg rma = RemoteMethodArg.create(mpi);
-				boolean annotated = false;
 				if (rma != null) {
-					annotated = true;
 					HttpPartType pt = rma.getPartType();
 					if (pt == HEADER)
 						headerArgs.add(rma);
@@ -132,18 +128,12 @@ public class RemoteMethodMeta {
 						formDataArgs.add(rma);
 					else if (pt == PATH)
 						pathArgs.add(rma);
-					else if (pt == BODY)
-						bodyArg = rma;
 					else
-						annotated = false;
+						bodyArg = rma;
 				}
 				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, PropertyStore.DEFAULT);
 				if (rmba != null) {
-					annotated = true;
 					requestArgs.add(new RemoteMethodBeanArg(mpi.getIndex(), null, rmba));
-				}
-				if (! annotated) {
-					otherArgs.add(new RemoteMethodArg(mpi.getIndex(), BODY, null));
 				}
 			}
 		}
@@ -210,15 +200,6 @@ public class RemoteMethodMeta {
 	 */
 	public RemoteMethodBeanArg[] getRequestArgs() {
 		return requestArgs;
-	}
-
-	/**
-	 * Returns the remaining non-annotated arguments on this Java method.
-	 *
-	 * @return A list of zero-indexed argument indices.
-	 */
-	public RemoteMethodArg[] getOtherArgs() {
-		return otherArgs;
 	}
 
 	/**
