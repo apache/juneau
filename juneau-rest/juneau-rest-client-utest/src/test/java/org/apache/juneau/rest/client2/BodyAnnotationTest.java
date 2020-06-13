@@ -27,8 +27,8 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.utils.*;
@@ -184,8 +184,8 @@ public class BodyAnnotationTest {
 	// Basic tests - OpenAPI
 	//=================================================================================================================
 
-	@Rest(serializers=OpenApiSerializer.class,parsers=OpenApiParser.class,defaultAccept="text/openapi")
-	public static class B {
+	@Rest
+	public static class B implements BasicOpenApiRest {
 		@RestMethod
 		public Object postB01(@Body int b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi", ct);

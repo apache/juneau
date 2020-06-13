@@ -16,12 +16,13 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RemoteResourceAnnotationTest {
+public class RemotesTest {
 
 	//=================================================================================================================
 	// @RemoteResource(path), relative paths
@@ -273,4 +274,35 @@ public class RemoteResourceAnnotationTest {
 		assertEquals("foo", t.b01a());
 		assertEquals("foo", t.b01b());
 	}
+
+	//=================================================================================================================
+	// Other tests
+	//=================================================================================================================
+
+	@Rest(path="/C01")
+	public static class C01 implements BasicSimpleJsonRest {
+
+		@RestMethod(path="c01")
+		public String c01() {
+			return "foo";
+		}
+	}
+
+	@Remote(path="/")
+	public static interface C01i {
+		@RemoteMethod
+		public String c01();
+	}
+
+	@Test
+	public void c01_overriddenRootUrl() throws Exception {
+		C01i x = MockRestClient
+			.create(C01.class)
+			.json()
+			.build()
+			.getRemote(C01i.class, "http://localhost/C01");
+
+		assertEquals("foo", x.c01());
+	}
+
 }

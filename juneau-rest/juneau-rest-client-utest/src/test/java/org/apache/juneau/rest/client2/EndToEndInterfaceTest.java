@@ -23,8 +23,8 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.http.exception.*;
@@ -54,8 +54,8 @@ public class EndToEndInterfaceTest {
 		public String a03(@Header("foo") String b);
 	}
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static class A implements IA {
+	@Rest
+	public static class A implements IA, BasicSimpleJsonRest {
 
 		@Override
 		@RestMethod(name=PUT, path="/a01")
@@ -96,8 +96,8 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IB {
+	@Rest
+	public static interface IB extends BasicSimpleJsonRest {
 
 		@RemoteMethod(method="PUT", path="/a01")
 		@RestMethod(name=PUT, path="/a01")
@@ -150,8 +150,8 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IC {
+	@Rest
+	public static interface IC extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod Ok ok();
 		@RemoteMethod @RestMethod Accepted accepted();
 		@RemoteMethod @RestMethod AlreadyReported alreadyReported();
@@ -301,8 +301,8 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface ID {
+	@Rest
+	public static interface ID extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod StreamResource streamResource() throws IOException ;
 		@RemoteMethod @RestMethod ReaderResource readerResource() throws IOException ;
 	}
@@ -363,8 +363,8 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IE {
+	@Rest
+	public static interface IE extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod void badRequest() throws BadRequest;
 		@RemoteMethod @RestMethod void conflict() throws Conflict;
 		@RemoteMethod @RestMethod void expectationFailed() throws ExpectationFailed;
@@ -1275,8 +1275,8 @@ public class EndToEndInterfaceTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IF {
+	@Rest
+	public static interface IF extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod BadRequest badRequest();
 		@RemoteMethod @RestMethod Conflict conflict();
 		@RemoteMethod @RestMethod ExpectationFailed expectationFailed();
@@ -1586,8 +1586,8 @@ public class EndToEndInterfaceTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IG {
+	@Rest
+	public static interface IG extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod Reader reader();
 		@RemoteMethod @RestMethod InputStream inputStream();
 	}
@@ -1619,8 +1619,8 @@ public class EndToEndInterfaceTest {
 	//=================================================================================================================
 
 	@Remote
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-	public static interface IH {
+	@Rest
+	public static interface IH extends BasicSimpleJsonRest {
 		@RemoteMethod @RestMethod SeeOtherRoot seeOtherRoot();
 	}
 

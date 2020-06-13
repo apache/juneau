@@ -21,6 +21,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -81,7 +82,7 @@ public class DebugModeTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureCallLogger.class)
-	public static class A1 implements BasicRestConfig {
+	public static class A1 implements BasicUniversalRest {
 		@RestMethod
 		public boolean getA01(RestRequest req) {
 			return req.isDebug();
@@ -235,7 +236,7 @@ public class DebugModeTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureCallLogger.class, debug="true")
-	public static class A2 implements BasicRestConfig {
+	public static class A2 implements BasicUniversalRest {
 		@RestMethod
 		public boolean getA01(RestRequest req) {
 			return req.isDebug();
@@ -314,7 +315,7 @@ public class DebugModeTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureCallLogger.class,debug="false")
-	public static class A3 implements BasicRestConfig {
+	public static class A3 implements BasicUniversalRest {
 		@RestMethod
 		public boolean getA01(RestRequest req) {
 			return req.isDebug();
@@ -393,7 +394,7 @@ public class DebugModeTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureCallLogger.class,debug="per-request")
-	public static class A4 implements BasicRestConfig {
+	public static class A4 implements BasicUniversalRest {
 		@RestMethod
 		public boolean getA01(RestRequest req) {
 			return req.isDebug();
@@ -472,7 +473,7 @@ public class DebugModeTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class B1 implements BasicRestConfig, RestCallLogger {
+	public static class B1 implements BasicUniversalRest, RestCallLogger {
 		@RestMethod
 		public boolean getB01(RestRequest req) {
 			return req.isDebug();
@@ -535,7 +536,7 @@ public class DebugModeTest {
 			+ "C1.getC04a=per-request,C1.getC04b=per-request,C1.getC04c=PER-REQUEST,C1.getC04d=PER-REQUEST,C1.getC04e=PER-REQUEST,C1.getC04f=PER-REQUEST,"
 			+ "C1.getC05a=foo,C1.getC05b=,C1.getC05c=foo,C1.getC05d=foo,C1.getC05e=foo,C1.getC05f=foo,"
 	)
-	public static class C1 implements BasicRestConfig {
+	public static class C1 implements BasicUniversalRest {
 
 		@RestMethod
 		public boolean getC01a(RestRequest req) {
@@ -869,7 +870,7 @@ public class DebugModeTest {
 			+ "C2.getC04a=per-request,C2.getC04b=per-request,C2.getC04c=PER-REQUEST,C2.getC04d=PER-REQUEST,C2.getC04e=PER-REQUEST,C2.getC04f=PER-REQUEST,"
 			+ "C2.getC05a=foo,C2.getC05b=,C2.getC05c=foo,C2.getC05d=foo,C2.getC05e=foo,C2.getC05f=foo,"
 	)
-	public static class C2 implements BasicRestConfig {
+	public static class C2 implements BasicUniversalRest {
 
 		@RestMethod
 		public boolean getC01a(RestRequest req) {

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
@@ -19,14 +19,13 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * Basic configuration for a REST resource that supports all languages.
@@ -34,8 +33,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
  * <p>
  * Classes that don't extend from {@link BasicRestServlet} can implement this interface to
  * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
- *
- * @deprecated Use {@link BasicUniversalRest}.
  */
 @Rest(
 
@@ -48,7 +45,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		SimpleJsonSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
-		XmlSchemaDocSerializer.class,
 		UonSerializer.class,
 		UrlEncodingSerializer.class,
 		OpenApiSerializer.class,
@@ -124,5 +120,4 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
 	ignoreUnknownBeanProperties="true"
 )
-@Deprecated
-public interface BasicRestConfig {}
+public interface BasicUniversalRest {}

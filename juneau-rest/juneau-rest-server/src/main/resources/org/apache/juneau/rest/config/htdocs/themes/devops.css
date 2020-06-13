@@ -1,0 +1,275 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+ 
+/** DevOps look-and-feel */ 
+ 
+/**********************************************************************************************************************/
+/**  Body                                                                                                            **/
+/**********************************************************************************************************************/
+
+body {
+	background-color: #3B4B54;
+	margin: 0px;
+	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	color: #B3B3B3;
+	height: 100%;	
+}
+
+body {
+	font-size: 14px;
+}
+
+body textarea, body pre {
+	-moz-tab-size: 3; 
+	-o-tab-size: 3; 
+	-webkit-tab-size: 3; 
+	tab-size: 3; 
+}
+
+/**********************************************************************************************************************/
+/**  Header                                                                                                        **/
+/**********************************************************************************************************************/
+
+header {
+	background-color: #26343F;
+}
+
+header * {
+    font-size: 14px;
+	color: #B3B3B3;
+	margin: 0px;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+header h1 {
+	padding: 10px 20px;
+	font-size: 16px;
+	border-bottom: 2px solid #34534B;
+	color: white;
+}
+
+header h2 {
+	padding: 10px 20px;
+	font-size: 14px;
+	border-bottom: 2px solid #34534B;
+}
+
+/**********************************************************************************************************************/
+/**  Nav                                                                                                             **/
+/**********************************************************************************************************************/
+
+nav {
+	margin: 10px 20px 10px 20px;
+	color: #94A3AB;
+}
+
+nav>ol {
+	list-style-type: none;
+	margin: 0px 10px;
+	padding: 0px;
+}
+
+nav>ol>li {
+	display: inline;
+}
+
+nav li:not(:first-child):before {
+	content: " - ";
+}
+
+nav a {
+	font-size: 10pt;
+	color: #94A3AB;
+	text-decoration: none;
+	margin: 0px 15px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+nav a:active, nav a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+/**********************************************************************************************************************/
+/**  Content                                                                                                        **/
+/**********************************************************************************************************************/
+
+section {
+	display: table;
+	width: 100%;
+}
+
+article {
+	display: table-cell;
+}
+
+article * {
+	font-size: 9pt;
+	color: #26343F;
+}
+
+article div.data {
+	padding: 10px;
+	background-color: white;
+	border-radius: 4px;
+	margin: 20px;
+	display: inline-block;
+	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	font-family: sans-serif;
+	color: #26343F;
+}
+
+article table {
+	border: none;
+	width: 100%;
+}
+
+article th {
+	border-top: 1px solid #D9DCDE;
+	padding: 4px 8px;
+	font-weight: bold;
+	text-align: center;
+	background-color: #F4F6F9;
+}
+
+article td {
+	vertical-align: top;
+	border-bottom: 1px solid #d9dcde;
+	border-right: 1px solid #d9dcde;
+	padding: 2px 5px;
+}
+
+article td:last-child {
+    width: 100%;
+}
+
+article ul {
+	margin: 0px;
+	padding-left: 20px;
+}
+
+article a {
+	color: #116998;
+	text-decoration: none;
+}
+
+article a:hover {
+	text-decoration: underline;
+}
+
+article iframe {
+	background-color: #F6F7F9;
+	border: 1px solid gray;
+	padding: 0px;
+	overflow: hidden;
+	width: 100%;
+	min-height: 400px;
+}
+
+aside {
+	display: table-cell;
+	vertical-align: top;
+	padding: 20px 20px;
+}
+
+/**********************************************************************************************************************/
+/**  Footer                                                                                                          **/
+/**********************************************************************************************************************/
+
+footer { 
+	padding: 10px;
+	width: 100%;
+	bottom: 0;
+	position: fixed;
+	background-color: #26343F;
+}
+
+/**********************************************************************************************************************/
+/**  Popup windows                                                                                                   **/
+/**********************************************************************************************************************/
+
+.popup-content {
+	display: none;
+	position: absolute;
+	background-color: #f4f6f9;
+	white-space: nowrap;
+	padding: 5px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	margin-top: 10px;
+	border-radius: 4px;
+}
+
+.popup-content * {
+	color: black;
+	font-size: 11px;
+}
+
+.popup-content a:hover {
+	color: #94A3AB;
+}
+
+.popup-show {
+	display:block;
+}
+
+/**********************************************************************************************************************/
+/**  Tooltips                                                                                                        **/
+/**********************************************************************************************************************/
+
+.tooltip {
+	position: relative;
+	display: inline-block;	    
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	background-color: #FEF9E7;
+	color: black;
+	padding: 5px;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	margin-left: 30px;
+	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 0.5s;
+	font-weight: normal;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}	
+
+.tooltiptext {
+	white-space: nowrap;
+	float: left;
+	border: 1px solid black;
+}
+
+/**********************************************************************************************************************/
+/**  Other classes                                                                                                   **/
+/**********************************************************************************************************************/
+
+.table {display:table;}
+.row {display:table-row;}
+.cell {display:table-cell;}
+.monospace {font-family:monospace;}
+.link { color: #94A3AB; text-decoration: none; cursor: pointer;}
+.link:hover { text-decoration: underline; }
+

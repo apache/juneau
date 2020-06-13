@@ -2908,7 +2908,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
-	public <T> T getRemote(final Class<T> interfaceClass) {
+	public <T> T getRemote(Class<T> interfaceClass) {
 		return getRemote(interfaceClass, null);
 	}
 
@@ -2920,11 +2920,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param restUrl The URL of the REST interface.
+	 * @param rootUrl The URL of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemote(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemote(interfaceClass, restUrl, null, null);
+	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl) {
+		return getRemote(interfaceClass, rootUrl, null, null);
 	}
 
 	/**
@@ -2935,18 +2935,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param restUrl The URL of the REST interface.
+	 * @param rootUrl The URL of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemote(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(final Class<T> interfaceClass, Object rootUrl, final Serializer serializer, final Parser parser) {
 
-		if (restUrl == null)
-			restUrl = rootUrl;
+		if (rootUrl == null)
+			rootUrl = this.rootUrl;
 
-		final String restUrl2 = trimSlashes(emptyIfNull(restUrl));
+		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
 		try {
 			return (T)Proxy.newProxyInstance(

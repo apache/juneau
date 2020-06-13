@@ -19,6 +19,7 @@ import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -164,7 +165,7 @@ import org.apache.juneau.xml.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig, BasicRestMethods {
+public abstract class BasicRestServlet extends RestServlet implements BasicUniversalRest, BasicRestMethods {
 	private static final long serialVersionUID = 1L;
 
 	/**

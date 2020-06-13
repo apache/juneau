@@ -120,6 +120,15 @@ import org.apache.juneau.xml.*;
 @ConfigurableContext
 public abstract class Parser extends BeanContext {
 
+	/**
+	 * Represents no Parser.
+	 */
+	public abstract class Null extends Parser {
+		private Null(PropertyStore ps, String[] consumes) {
+			super(ps, consumes);
+		}
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------

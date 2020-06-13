@@ -22,9 +22,8 @@ import org.apache.http.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
@@ -206,8 +205,8 @@ public class RemoteMethodAnnotationTest {
 	// Return types, JSON
 	//=================================================================================================================
 
-	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
-	public static class C {
+	@Rest
+	public static class C implements BasicSimpleJsonRest {
 
 		@RestMethod(name="POST")
 		public String c01(@Body String body) {
@@ -294,8 +293,8 @@ public class RemoteMethodAnnotationTest {
 	// Return types, part serialization
 	//=================================================================================================================
 
-	@Rest(serializers=OpenApiSerializer.class, parsers=OpenApiParser.class, defaultAccept="text/openapi")
-	public static class D {
+	@Rest
+	public static class D implements BasicOpenApiRest {
 
 		@RestMethod(name="POST")
 		@Response

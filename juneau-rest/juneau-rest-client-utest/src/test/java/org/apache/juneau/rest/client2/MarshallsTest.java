@@ -24,7 +24,7 @@ import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RestClientMarshallsTest {
+public class MarshallsTest {
 
 	public static class Bean {
 		public int f;

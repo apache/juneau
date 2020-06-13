@@ -28,6 +28,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.http.exception.*;
 
@@ -50,7 +51,7 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicRestConfig, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
+public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
