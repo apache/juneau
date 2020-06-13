@@ -317,6 +317,21 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
+	 * Creates a new {@link RestClientBuilder} configured with the specified REST implementation bean or bean class.
+	 *
+	 * <p>
+	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClientBuilder createLax(Object impl) {
+		return new MockRestClientBuilder().restBean(impl).ignoreErrors();
+	}
+
+	/**
 	 * Creates a new {@link RestClient} with no registered serializer or parser.
 	 *
 	 * <p>
@@ -335,6 +350,27 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
+	 * Creates a new {@link RestClient} with no registered serializer or parser.
+	 *
+	 * <p>
+	 * Same as {@link #build(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bcode w800'>
+	 * 	MockRestClient.create(impl).ignoreErrors().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildLax(Object impl) {
+		return create(impl).ignoreErrors().build();
+	}
+
+	/**
 	 * Creates a new {@link RestClient} with JSON marshalling support.
 	 *
 	 * <p>
@@ -349,7 +385,28 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildJson(Object impl) {
-		return create(impl).json().build(MockRestClient.class);
+		return create(impl).json().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with JSON marshalling support.
+	 *
+	 * <p>
+	 * Same as {@link #buildJson(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bcode w800'>
+	 * 	MockRestClient.create(impl).json().ignoreErrors().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildJsonLax(Object impl) {
+		return create(impl).json().ignoreErrors().build();
 	}
 
 	/**
@@ -367,7 +424,28 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @return A new builder.
 	 */
 	public static MockRestClient buildSimpleJson(Object impl) {
-		return create(impl).simpleJson().build(MockRestClient.class);
+		return create(impl).simpleJson().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
+	 *
+	 * <p>
+	 * Same as {@link #buildSimpleJson(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bcode w800'>
+	 * 	MockRestClient.create(impl).json().ignoreErrors().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildSimpleJsonLax(Object impl) {
+		return create(impl).simpleJson().ignoreErrors().build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

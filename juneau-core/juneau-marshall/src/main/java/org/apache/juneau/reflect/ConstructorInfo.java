@@ -175,4 +175,14 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 		}
 		return i;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - ExecutableInfo */
+	public ConstructorInfo accessible() {
+		super.accessible();
+		return this;
+	}
+
+	// </FluentSetters>
 }

@@ -124,7 +124,7 @@ public class RestResourceParsersTest {
 			return in;
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_parserOnClass() throws Exception {

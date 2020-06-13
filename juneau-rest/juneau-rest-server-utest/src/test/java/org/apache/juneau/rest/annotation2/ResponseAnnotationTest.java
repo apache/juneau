@@ -67,7 +67,7 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_codeOnClass() throws Exception {
@@ -125,7 +125,7 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRestClient b = MockRestClient.build(B.class);
+	static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01_useOnMethod() throws Exception {
@@ -228,7 +228,7 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRestClient d = MockRestClient.build(D.class);
+	static MockRestClient d = MockRestClient.buildLax(D.class);
 
 	@Test
 	public void d01_useOnMethod() throws Exception {

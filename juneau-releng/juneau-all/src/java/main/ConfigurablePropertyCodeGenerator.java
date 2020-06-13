@@ -168,7 +168,10 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentStringAssertion.class,
 		ReaderResourceBuilder.class,
 		StreamResourceBuilder.class,
-		ResolvingResourceReaderBuilder.class
+		ResolvingResourceReaderBuilder.class,
+		ExecutableInfo.class,
+		ConstructorInfo.class,
+		MethodInfo.class
 	};
 
 	private static String[] SOURCE_PATHS = {

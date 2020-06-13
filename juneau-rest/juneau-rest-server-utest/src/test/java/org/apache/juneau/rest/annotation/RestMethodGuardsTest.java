@@ -48,7 +48,7 @@ public class RestMethodGuardsTest {
 			}
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_overlappingOneGuard() throws Exception {

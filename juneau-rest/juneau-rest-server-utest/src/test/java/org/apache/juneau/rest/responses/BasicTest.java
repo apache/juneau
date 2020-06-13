@@ -59,7 +59,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy(); }
 	}
 
-	static MockRestClient a = MockRestClient.create(A.class).disableRedirectHandling().build();
+	static MockRestClient a = MockRestClient.createLax(A.class).disableRedirectHandling().build();
 
 	@Test
 	public void a01_accepted() throws Exception {
@@ -286,7 +286,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy("foo"); }
 	}
 
-	static MockRestClient c = MockRestClient.create(C.class).disableRedirectHandling().build();
+	static MockRestClient c = MockRestClient.createLax(C.class).disableRedirectHandling().build();
 
 	@Test
 	public void c01_accepted() throws Exception {

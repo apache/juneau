@@ -117,7 +117,7 @@ public class RestResourceSerializersTest {
 			return "test406";
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_serializerOnClass() throws Exception {

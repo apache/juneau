@@ -106,7 +106,7 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRestClient b = MockRestClient.build(B.class);
+	private static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01a_nonExistentBeanProperties() throws Exception {
@@ -211,7 +211,7 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRestClient c = MockRestClient.build(C.class);
+	private static MockRestClient c = MockRestClient.buildLax(C.class);
 
 	@Test
 	public void c01_badPath() throws Exception {
@@ -248,7 +248,7 @@ public class StatusCodesTest {
 			}
 		}
 	}
-	private static MockRestClient d = MockRestClient.build(D.class);
+	private static MockRestClient d = MockRestClient.buildLax(D.class);
 
 	@Test
 	public void d01() throws Exception {

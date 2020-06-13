@@ -47,7 +47,7 @@ public class ContentEncodingTest {
 			return in;
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_noCompression() throws Exception {

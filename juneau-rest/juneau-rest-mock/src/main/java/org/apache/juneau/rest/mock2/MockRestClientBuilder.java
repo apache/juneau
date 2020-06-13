@@ -81,7 +81,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 */
 	protected MockRestClientBuilder() {
 		super(null);
-		ignoreErrors();
 	}
 
 	/**

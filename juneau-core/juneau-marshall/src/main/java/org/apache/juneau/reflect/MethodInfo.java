@@ -580,4 +580,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		}
 		return i;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - ExecutableInfo */
+	public MethodInfo accessible() {
+		super.accessible();
+		return this;
+	}
+
+	// </FluentSetters>
 }

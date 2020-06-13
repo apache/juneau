@@ -60,7 +60,7 @@ public class PathAnnotationTest {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a00_nonExistentPath() throws Exception {
@@ -154,7 +154,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRestClient b = MockRestClient.build(B.class);
+	static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01_int() throws Exception {
@@ -268,7 +268,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRestClient c = MockRestClient.build(C.class);
+	static MockRestClient c = MockRestClient.buildLax(C.class);
 
 	@Test
 	public void c01_Integer() throws Exception {
@@ -459,7 +459,7 @@ public class PathAnnotationTest {
 			return SimpleJson.DEFAULT.format(msg, args);
 		}
 	}
-	static MockRestClient f = MockRestClient.create(F.class).servletPath("/f").build();
+	static MockRestClient f = MockRestClient.createLax(F.class).servletPath("/f").build();
 
 	@Test
 	public void f01a_noPath() throws Exception {
@@ -592,7 +592,7 @@ public class PathAnnotationTest {
 	@Rest(children={F.class})
 	public static class G {}
 
-	static MockRestClient g = MockRestClient.create(G.class).build();
+	static MockRestClient g = MockRestClient.buildLax(G.class);
 
 	@Test
 	public void g01a_noPath() throws Exception {
@@ -705,7 +705,7 @@ public class PathAnnotationTest {
 	@Rest(path="/h/{ha}/{hb}", children={F.class})
 	public static class H {}
 
-	static MockRestClient h = MockRestClient.create(H.class).servletPath("/h").build();
+	static MockRestClient h = MockRestClient.createLax(H.class).servletPath("/h").build();
 
 	@Test
 	public void h01a_noPath() throws Exception {
@@ -847,7 +847,7 @@ public class PathAnnotationTest {
 	@Rest(path="/i/{ia}/{ib}", children={H.class})
 	public static class I {}
 
-	static MockRestClient i = MockRestClient.create(I.class).servletPath("/i").build();
+	static MockRestClient i = MockRestClient.createLax(I.class).servletPath("/i").build();
 
 	@Test
 	public void i01a_noPath() throws Exception {

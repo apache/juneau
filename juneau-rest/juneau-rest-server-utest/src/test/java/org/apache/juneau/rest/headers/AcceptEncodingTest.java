@@ -49,7 +49,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_noCompression() throws Exception {
@@ -120,7 +120,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRestClient b = MockRestClient.build(B.class);
+	static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {

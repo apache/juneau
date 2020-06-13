@@ -3002,16 +3002,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 											HttpPartSerializerSession ps = p.getSerializer(s);
 											String pn = p.getPartName();
 											HttpPartSchema schema = p.getSchema();
-											boolean sie = schema.isSkipIfEmpty();
+											EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
 											if (pt == PATH)
 												rc.path(pn, val, schema, p.getSerializer(s));
 											else if (val != null) {
 												if (pt == QUERY)
-													rc.query(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, schema, ps);
+													rc.query(flags, pn, val, schema, ps);
 												else if (pt == FORMDATA)
-													rc.formData(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, schema, ps);
+													rc.formData(flags, pn, val, schema, ps);
 												else if (pt == HEADER)
-													rc.header(sie ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, pn, val, schema, ps);
+													rc.header(flags, pn, val, schema, ps);
 												else /* (pt == HttpPartType.BODY) */
 													rc.body(val, schema);
 											}

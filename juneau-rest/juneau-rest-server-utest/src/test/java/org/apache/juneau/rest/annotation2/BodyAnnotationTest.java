@@ -127,7 +127,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRestClient a = MockRestClient.build(A.class);
+	private static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01a_onParameter_String() throws Exception {
@@ -383,7 +383,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRestClient b = MockRestClient.build(B.class);
+	private static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01a_onPojo_StringTransform() throws Exception {
@@ -730,7 +730,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRestClient d = MockRestClient.build(D.class);
+	private static MockRestClient d = MockRestClient.buildLax(D.class);
 
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
@@ -1113,7 +1113,7 @@ public class BodyAnnotationTest {
 			return content;
 		}
 	}
-	static MockRestClient i = MockRestClient.build(I.class);
+	static MockRestClient i = MockRestClient.buildLax(I.class);
 
 	@Test
 	public void i01() throws Exception {
@@ -1135,7 +1135,7 @@ public class BodyAnnotationTest {
 			return content;
 		}
 	}
-	static MockRestClient i2 = MockRestClient.build(I2.class);
+	static MockRestClient i2 = MockRestClient.buildLax(I2.class);
 
 	@Test
 	public void i02() throws Exception {

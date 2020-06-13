@@ -284,19 +284,29 @@ public class RemotesTest {
 	@Rest(path="/C01")
 	public static class C01 implements BasicSimpleJsonRest {
 
-		@RestMethod(path="c01")
+		@RestMethod
 		public String c01() {
 			return "foo";
 		}
 
-		@RestMethod(path="c02")
+		@RestMethod
 		public String c02() {
 			return "bar";
 		}
 
-		@RestMethod(path="c03")
+		@RestMethod
 		public String c03() {
 			return "baz";
+		}
+
+		@RestMethod
+		public String c04() throws C01Exception {
+			throw new C01Exception("foo");
+		}
+
+		@RestMethod
+		public String c05() throws C02Exception {
+			throw new C02Exception("foo");
 		}
 	}
 
@@ -304,10 +314,24 @@ public class RemotesTest {
 	public static interface C01i {
 		@RemoteMethod
 		public String c01();
-
 		public String c02();
-
 		public String getC03();
+		public String c04() throws C01Exception;
+		public String c05();
+	}
+
+	@SuppressWarnings("serial")
+	public static class C01Exception extends Exception {
+		public C01Exception(String msg) {
+			super(msg);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	public static class C02Exception extends Exception {
+		public C02Exception(String msg) {
+			super(msg);
+		}
 	}
 
 	@Test
@@ -349,4 +373,37 @@ public class RemotesTest {
 			assertEquals("Invalid remote definition found on class org.apache.juneau.rest.client2.RemotesTest$C01i. Root URI has not been specified.  Cannot construct absolute path to remote resource.", e.getLocalizedMessage());
 		}
 	}
+
+//	@Test
+//	public void c04_rethrownException() throws Exception {
+//		C01i x = MockRestClient
+//			.create(C01.class)
+//			.json()
+//			.build()
+//			.getRemote(C01i.class);
+//
+//		try {
+//			x.c04();
+//			fail();
+//		} catch (C01Exception e) {
+//			assertEquals("foo", e.getLocalizedMessage());
+//		}
+//	}
+//
+//
+//	@Test
+//	public void c05_rethrownUndefinedException() throws Exception {
+//		C01i x = MockRestClient
+//			.create(C01.class)
+//			.json()
+//			.build()
+//			.getRemote(C01i.class);
+//
+//		try {
+//			x.c05();
+//			fail();
+//		} catch (RuntimeException e) {
+//			assertEquals("foo", e.getLocalizedMessage());
+//		}
+//	}
 }

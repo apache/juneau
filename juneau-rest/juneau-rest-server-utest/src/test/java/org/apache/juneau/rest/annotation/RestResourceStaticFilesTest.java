@@ -31,7 +31,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRestClient a1 = MockRestClient.build(A1.class);
+	static MockRestClient a1 = MockRestClient.buildLax(A1.class);
 
 	@Test
 	public void a01a() throws Exception {

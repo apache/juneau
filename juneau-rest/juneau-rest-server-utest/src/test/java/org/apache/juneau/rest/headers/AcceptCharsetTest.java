@@ -103,7 +103,7 @@ public class AcceptCharsetTest {
 			}
 		}
 	}
-	static MockRestClient b = MockRestClient.build(B.class);
+	static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01_testCharsetOnResponse() throws Exception {

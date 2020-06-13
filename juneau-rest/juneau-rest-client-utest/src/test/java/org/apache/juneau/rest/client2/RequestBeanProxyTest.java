@@ -75,6 +75,9 @@ public class RequestBeanProxyTest {
 		@Query("f") String getX5();
 		@Query("g") String getX6();
 		@Query("h") String getX7();
+		@Query(n="i1",sie=true) String getX8();
+		@Query(n="i2",sie=true) String getX9();
+		@Query(n="i3",sie=true) String getX10();
 	}
 
 	public static class A01_BeanImpl implements A01_BeanInterface {
@@ -85,6 +88,9 @@ public class RequestBeanProxyTest {
 		@Override public String getX5() { return null; }
 		@Override public String getX6() { return "true"; }
 		@Override public String getX7() { return "123"; }
+		@Override public String getX8() { return "foo"; }
+		@Override public String getX9() { return ""; }
+		@Override public String getX10() { return null; }
 	}
 
 	static A01_RemoteResource a01a = MockRestClient.build(A.class).getRemote(A01_RemoteResource.class);
@@ -92,15 +98,15 @@ public class RequestBeanProxyTest {
 
 	@Test
 	public void a01a_query_simpleVals_plainText() throws Exception {
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", a01a.normal(new A01_BeanImpl()));
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}", a01a.normal(new A01_BeanImpl()));
 	}
 	@Test
 	public void a01b_query_simpleVals_uon() throws Exception {
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", a01b.normal(new A01_BeanImpl()));
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\'',i1:'foo'}", a01b.normal(new A01_BeanImpl()));
 	}
 	@Test
 	public void a01c_query_simpleVals_x() throws Exception {
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", a01b.serialized(new A01_BeanImpl()));
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}", a01b.serialized(new A01_BeanImpl()));
 	}
 
 	//=================================================================================================================
@@ -384,6 +390,18 @@ public class RequestBeanProxyTest {
 		public String getX7() {
 			return "123";
 		}
+		@FormData(n="i1",sie=true)
+		public String getX8() {
+			return "foo";
+		}
+		@FormData(n="i2",sie=true)
+		public String getX9() {
+			return "";
+		}
+		@FormData(n="i3",sie=true)
+		public String getX10() {
+			return null;
+		}
 	}
 
 	static C01_RemoteResource c01a = MockRestClient.build(C.class).getRemote(C01_RemoteResource.class);
@@ -392,17 +410,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void c01a_formData_simpleVals_plainText() throws Exception {
 		String r = c01a.normal(new C01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}", r);
 	}
 	@Test
 	public void c01b_formData_simpleVals_uon() throws Exception {
 		String r = c01b.normal(new C01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\'',i1:'foo'}", r);
 	}
 	@Test
 	public void c01c_formData_simpleVals_x() throws Exception {
 		String r = c01b.serialized(new C01_Bean());
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", r);
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}", r);
 	}
 
 	//=================================================================================================================
@@ -640,7 +658,7 @@ public class RequestBeanProxyTest {
 	public static class E {
 		@RestMethod(name=GET)
 		public String echoHeaders(RestRequest req) throws Exception {
-			return req.getHeaders().subset("a,b,c,d,e,f,g,h,i,a1,a2,a3,a4,b1,b2,b3,b4,c1,c2,c3,c4").toString(true);
+			return req.getHeaders().subset("a,b,c,d,e,f,g,h,i,i1,i2,i3,a1,a2,a3,a4,b1,b2,b3,b4,c1,c2,c3,c4").toString(true);
 		}
 	}
 
@@ -687,6 +705,18 @@ public class RequestBeanProxyTest {
 		public String getX7() {
 			return "123";
 		}
+		@Header(n="i1",sie=true)
+		public String getX8() {
+			return "foo";
+		}
+		@Header(n="i2",sie=true)
+		public String getX9() {
+			return "";
+		}
+		@Header(n="i3",sie=true)
+		public String getX10() {
+			return null;
+		}
 	}
 
 	static E01_RemoteResource e01a = MockRestClient.build(E.class).getRemote(E01_RemoteResource.class);
@@ -695,17 +725,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e01a_headerSimpleValsPlainText() throws Exception {
 		String r = e01a.normal(new E01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}", r);
 	}
 	@Test
 	public void e01b_headerSimpleValsUon() throws Exception {
 		String r = e01b.normal(new E01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\'',i1:'foo'}", r);
 	}
 	@Test
 	public void e01c_headerSimpleValsX() throws Exception {
 		String r = e01b.serialized(new E01_Bean());
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", r);
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}", r);
 	}
 
 	//=================================================================================================================

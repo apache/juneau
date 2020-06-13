@@ -669,7 +669,7 @@ public class RestResourceLoggingTest {
 		}
 	}
 
-	static MockRestClient MY_REST = MockRestClient.build(MyRestClass.class);
+	static MockRestClient MY_REST = MockRestClient.buildLax(MyRestClass.class);
 
 	@Test
 	public void test() throws Exception {

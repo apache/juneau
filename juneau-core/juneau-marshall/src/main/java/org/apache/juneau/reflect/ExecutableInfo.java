@@ -688,6 +688,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@FluentSetter
 	public ExecutableInfo accessible() {
 		setAccessible();
 		return this;
@@ -827,4 +828,8 @@ public abstract class ExecutableInfo {
 	public String toString() {
 		return getShortName();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

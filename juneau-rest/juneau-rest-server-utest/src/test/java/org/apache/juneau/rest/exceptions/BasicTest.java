@@ -69,7 +69,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(); }
 	}
 
-	static MockRestClient a = MockRestClient.build(A.class);
+	static MockRestClient a = MockRestClient.buildLax(A.class);
 
 	@Test
 	public void a01_badRequest() throws Exception {
@@ -344,7 +344,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates("foo {0}", "bar"); }
 	}
 
-	static MockRestClient b = MockRestClient.build(B.class);
+	static MockRestClient b = MockRestClient.buildLax(B.class);
 
 	@Test
 	public void b01_badRequest() throws Exception {
@@ -621,7 +621,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t); }
 	}
 
-	static MockRestClient c = MockRestClient.build(C.class);
+	static MockRestClient c = MockRestClient.buildLax(C.class);
 
 	@Test
 	public void c01_badRequest() throws Exception {
@@ -896,7 +896,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t, "foo {0}", "bar"); }
 	}
 
-	static MockRestClient d = MockRestClient.build(D.class);
+	static MockRestClient d = MockRestClient.buildLax(D.class);
 
 	@Test
 	public void d01_badRequest() throws Exception {
@@ -1139,7 +1139,7 @@ public class BasicTest {
 		@RestMethod public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
 	}
 
-	static MockRestClient e = MockRestClient.build(E.class);
+	static MockRestClient e = MockRestClient.buildLax(E.class);
 
 	@Test
 	public void e01_badRequest() throws Exception {
@@ -1369,7 +1369,7 @@ public class BasicTest {
 		public SeeOtherRoot thrownObjectDoesntMatchReturnType() throws Exception { throw new NotFound(); }
 	}
 
-	static MockRestClient g = MockRestClient.create(G.class).build();
+	static MockRestClient g = MockRestClient.buildLax(G.class);
 
 	@Test
 	public void g01_thrownObjectDoesntMatchReturnType() throws Exception {
@@ -1390,7 +1390,7 @@ public class BasicTest {
 		}
 	}
 
-	static MockRestClient h = MockRestClient.create(H.class).build();
+	static MockRestClient h = MockRestClient.buildLax(H.class);
 
 	@Test
 	public void h01_parseExceptionCausesBadRequest() throws Exception {

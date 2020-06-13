@@ -219,14 +219,14 @@ public class InterfaceProxyTest {
 		//-------------------------------------------------------------------------------------------------------------
 
 		@SuppressWarnings("serial")
-		public static class InterfaceProxyException1 extends Throwable {
+		public static class InterfaceProxyException1 extends Exception {
 			public InterfaceProxyException1(String msg) {
 				super(msg);
 			}
 		}
 
 		@SuppressWarnings("serial")
-		public static class InterfaceProxyException2 extends Throwable {
+		public static class InterfaceProxyException2 extends Exception {
 		}
 	}
 
