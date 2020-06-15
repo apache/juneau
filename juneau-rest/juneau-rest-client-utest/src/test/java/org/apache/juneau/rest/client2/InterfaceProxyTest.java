@@ -142,13 +142,13 @@ public class InterfaceProxyTest {
 
 		// Various primitives
 		void setNothing();
-		void setInt(int x);
+		void setInt(int x) throws AssertionError;
 		void setInteger(Integer x);
 		void setBoolean(boolean x);
 		void setFloat(float x);
 		void setFloatObject(Float x);
 		void setString(String x);
-		void setNullString(String x);
+		void setNullString(String x) throws AssertionError;
 		void setInt3dArray(int[][][] x);
 		void setInteger3dArray(Integer[][][] x);
 		void setString3dArray(String[][][] x);

@@ -2969,86 +2969,89 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 						String httpMethod = rmm.getHttpMethod();
 						HttpPartSerializerSession s = getPartSerializerSession();
 
-						try {
-							RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
+						RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
 
-							rc.serializer(serializer);
-							rc.parser(parser);
+						rc.serializer(serializer);
+						rc.parser(parser);
 
-							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						for (RemoteMethodArg a : rmm.getPathArgs())
+							rc.path(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						for (RemoteMethodArg a : rmm.getQueryArgs())
+							rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						for (RemoteMethodArg a : rmm.getFormDataArgs())
+							rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						for (RemoteMethodArg a : rmm.getHeaderArgs())
+							rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-							RemoteMethodArg ba = rmm.getBodyArg();
-							if (ba != null)
-								rc.body(args[ba.getIndex()], ba.getSchema());
+						RemoteMethodArg ba = rmm.getBodyArg();
+						if (ba != null)
+							rc.body(args[ba.getIndex()], ba.getSchema());
 
-							if (rmm.getRequestArgs().length > 0) {
-								for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
-									RequestBeanMeta rbm = rmba.getMeta();
-									Object bean = args[rmba.getIndex()];
-									if (bean != null) {
-										for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-											Object val = p.getGetter().invoke(bean);
-											HttpPartType pt = p.getPartType();
-											HttpPartSerializerSession ps = p.getSerializer(s);
-											String pn = p.getPartName();
-											HttpPartSchema schema = p.getSchema();
-											EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
-											if (pt == PATH)
-												rc.path(pn, val, schema, p.getSerializer(s));
-											else if (val != null) {
-												if (pt == QUERY)
-													rc.query(flags, pn, val, schema, ps);
-												else if (pt == FORMDATA)
-													rc.formData(flags, pn, val, schema, ps);
-												else if (pt == HEADER)
-													rc.header(flags, pn, val, schema, ps);
-												else /* (pt == HttpPartType.BODY) */
-													rc.body(val, schema);
-											}
+						if (rmm.getRequestArgs().length > 0) {
+							for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
+								RequestBeanMeta rbm = rmba.getMeta();
+								Object bean = args[rmba.getIndex()];
+								if (bean != null) {
+									for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+										Object val = p.getGetter().invoke(bean);
+										HttpPartType pt = p.getPartType();
+										HttpPartSerializerSession ps = p.getSerializer(s);
+										String pn = p.getPartName();
+										HttpPartSchema schema = p.getSchema();
+										EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
+										if (pt == PATH)
+											rc.path(pn, val, schema, p.getSerializer(s));
+										else if (val != null) {
+											if (pt == QUERY)
+												rc.query(flags, pn, val, schema, ps);
+											else if (pt == FORMDATA)
+												rc.formData(flags, pn, val, schema, ps);
+											else if (pt == HEADER)
+												rc.header(flags, pn, val, schema, ps);
+											else /* (pt == HttpPartType.BODY) */
+												rc.body(val, schema);
 										}
 									}
 								}
 							}
-
-							RemoteMethodReturn rmr = rmm.getReturns();
-							if (rmr.isFuture()) {
-								return getExecutorService(true).submit(new Callable<Object>() {
-									@Override
-									public Object call() throws Exception {
-										return executeRemote(rc, method, rmr);
-									}
-								});
-							} else if (rmr.isCompletableFuture()) {
-								CompletableFuture<Object> cf = new CompletableFuture<>();
-								getExecutorService(true).submit(new Callable<Object>() {
-									@Override
-									public Object call() throws Exception {
-										cf.complete(executeRemote(rc, method, rmr));
-										return null;
-									}
-								});
-								return cf;
-							}
-
-							return executeRemote(rc, method, rmr);
-
-						} catch (RestCallException e) {
-							// Try to throw original exception if possible.
-							e.throwServerException(interfaceClass.getClassLoader(), rmm.getExceptions());
-							throw new RuntimeException(e);
-						} catch (Exception e) {
-							throw new RuntimeException(e);
 						}
+
+						RemoteMethodReturn rmr = rmm.getReturns();
+						if (rmr.isFuture()) {
+							return getExecutorService(true).submit(new Callable<Object>() {
+								@Override
+								public Object call() throws Exception {
+									try {
+										return executeRemote(interfaceClass, rc, method, rmm);
+									} catch (Exception e) {
+										throw e;
+									} catch (Throwable e) {
+										throw new RuntimeException(e);
+									}
+								}
+							});
+						} else if (rmr.isCompletableFuture()) {
+							CompletableFuture<Object> cf = new CompletableFuture<>();
+							getExecutorService(true).submit(new Callable<Object>() {
+								@Override
+								public Object call() throws Exception {
+									try {
+										cf.complete(executeRemote(interfaceClass, rc, method, rmm));
+										return null;
+									} catch (Exception e) {
+										throw e;
+									} catch (Throwable e) {
+										throw new RuntimeException(e);
+									}
+								}
+							});
+							return cf;
+						}
+
+						return executeRemote(interfaceClass, rc, method, rmm);
 					}
 			});
 		} catch (Exception e) {
@@ -3056,28 +3059,46 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 	}
 
-	Object executeRemote(RestRequest rc, Method method, RemoteMethodReturn rmr) throws RestCallException {
-		if (rmr.getReturnValue() == RemoteReturn.NONE) {
-			rc.complete();
-			return null;
-		} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
-			rc.ignoreErrors();
-			int returnCode = rc.complete().getStatusCode();
-			Class<?> rt = method.getReturnType();
-			if (rt == Integer.class || rt == int.class)
-				return returnCode;
-			if (rt == Boolean.class || rt == boolean.class)
-				return returnCode < 400;
-			throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
-		} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
-			rc.ignoreErrors();
-			return rc.run().as(rmr.getResponseBeanMeta());
-		} else {
-			rc.ignoreErrors();
-			Object v = rc.run().getBody().as(rmr.getReturnType());
-			if (v == null && method.getReturnType().isPrimitive())
-				v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
-			return v;
+	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteMethodMeta rmm) throws Throwable {
+		RemoteMethodReturn rmr = rmm.getReturns();
+
+		try {
+			Object ret = null;
+			RestResponse res = null;
+			if (rmr.getReturnValue() == RemoteReturn.NONE) {
+				res = rc.complete();
+			} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
+				res = rc.complete();
+				int returnCode = res.getStatusCode();
+				Class<?> rt = method.getReturnType();
+				if (rt == Integer.class || rt == int.class)
+					ret = returnCode;
+				else if (rt == Boolean.class || rt == boolean.class)
+					ret = returnCode < 400;
+				else
+					throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+			} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
+				rc.ignoreErrors();
+				res = rc.run();
+				ret = res.as(rmr.getResponseBeanMeta());
+			} else {
+				Class<?> rt = method.getReturnType();
+				if (Throwable.class.isAssignableFrom(rt))
+					rc.ignoreErrors();
+				res = rc.run();
+				Object v = res.getBody().as(rmr.getReturnType());
+				if (v == null && rt.isPrimitive())
+					v = ClassInfo.of(rt).getPrimitiveDefault();
+				if (rt.getName().equals(res.getStringHeader("Exception-Name")))
+					res.removeHeaders("Exception-Name");
+				ret = v;
+			}
+
+			ThrowableUtils.throwException(res.getStringHeader("Exception-Name"), res.getStringHeader("Exception-Message"), rmm.getExceptions());
+			return ret;
+		} catch (RestCallException e) {
+			ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), rmm.getExceptions());
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -3196,7 +3217,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
-							e.throwServerException(interfaceClass.getClassLoader(), method.getExceptionTypes());
+							ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), method.getExceptionTypes());
 							throw new RuntimeException(e);
 						} catch (Exception e) {
 							throw new RuntimeException(e);

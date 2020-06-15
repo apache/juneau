@@ -23,7 +23,6 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
@@ -37,7 +36,6 @@ public final class RestCallException extends HttpException {
 	HttpResponseException e;
 	private RestResponse restResponse;
 
-	@SuppressWarnings("unused")
 	private String serverExceptionName, serverExceptionMessage, serverExceptionTrace;
 
 	/**
@@ -138,54 +136,30 @@ public final class RestCallException extends HttpException {
 	}
 
 	/**
-	 * Tries to reconstruct and re-throw the server-side exception.
+	 * Returns the value of the <js>"Exception-Name"</js> header on the response.
 	 *
-	 * <p>
-	 * The exception is based on the following HTTP response headers:
-	 * <ul>
-	 * 	<li><c>Exception-Name:</c> - The full class name of the exception.
-	 * 	<li><c>Exception-Message:</c> - The message returned by {@link Throwable#getMessage()}.
-	 * 	<li><c>Exception-Trace:</c> - The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
-	 * </ul>
-	 *
-	 * <p>
-	 * Does nothing if the server-side exception could not be reconstructed.
-	 *
-	 * <p>
-	 * Currently only supports <c>Throwables</c> with either a public no-arg constructor
-	 * or a public constructor that takes in a simple string message.
-	 *
-	 * @param cl The classloader to use to resolve the throwable class name.
-	 * @param throwables The possible throwables.
-	 * @throws Throwable If the throwable could be reconstructed.
+	 * @return The value of the <js>"Exception-Name"</js> header on the response, or <jk>null</jk> if not found.
 	 */
-	protected void throwServerException(ClassLoader cl, Class<?>...throwables) throws Throwable {
-		if (serverExceptionName != null) {
-			for (Class<?> t : throwables)
-				if (t.getName().endsWith(serverExceptionName))
-					doThrow(t, serverExceptionMessage);
-			try {
-				ClassInfo t = ClassInfo.of(cl.loadClass(serverExceptionName));
-				if (t.isChildOf(RuntimeException.class) || t.isChildOf(Error.class))
-					doThrow(t.inner(), serverExceptionMessage);
-			} catch (ClassNotFoundException e2) { /* Ignore */ }
-		}
+	public String getServerExceptionName() {
+		return serverExceptionName;
 	}
 
-	private void doThrow(Class<?> t, String msg) throws Throwable {
-		ConstructorInfo c = null;
-		ClassInfo ci = ClassInfo.of(t);
-		if (msg != null) {
-			c = ci.getPublicConstructor(String.class);
-			if (c != null)
-				throw c.<Throwable>invoke(msg);
-			c = ci.getPublicConstructor(Object.class);
-			if (c != null)
-				throw c.<Throwable>invoke(msg);
-		}
-		c = ci.getPublicConstructor();
-		if (c != null)
-			throw c.<Throwable>invoke();
+	/**
+	 * Returns the value of the <js>"Exception-Message"</js> header on the response.
+	 *
+	 * @return The value of the <js>"Exception-Message"</js> header on the response, or <jk>null</jk> if not found.
+	 */
+	public String getServerExceptionMessage() {
+		return serverExceptionMessage;
+	}
+
+	/**
+	 * Returns the value of the <js>"Exception-Trace"</js> header on the response.
+	 *
+	 * @return The value of the <js>"Exception-Trace"</js> header on the response, or <jk>null</jk> if not found.
+	 */
+	public String getServerExceptionTrace() {
+		return serverExceptionTrace;
 	}
 
 	/**

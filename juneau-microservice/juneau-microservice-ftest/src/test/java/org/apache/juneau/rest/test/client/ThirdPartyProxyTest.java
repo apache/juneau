@@ -66,7 +66,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
+			this.proxy = getClient(label, serializer, parser).builder().ignoreErrors().partSerializer(UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}
@@ -2352,7 +2352,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Various primitives
 
 		@RemoteMethod(method="POST", path="/setInt")
-		void setInt(@Body int x);
+		void setInt(@Body int x) throws AssertionError;
 
 		@RemoteMethod(method="POST", path="/setInteger")
 		void setInteger(@Body Integer x);
@@ -2370,7 +2370,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		void setString(@Body String x);
 
 		@RemoteMethod(method="POST", path="/setNullString")
-		void setNullString(@Body String x);
+		void setNullString(@Body String x) throws AssertionError;
 
 		@RemoteMethod(method="POST", path="/setInt3dArray")
 		String setInt3dArray(@Body int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);

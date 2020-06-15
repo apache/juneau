@@ -374,36 +374,36 @@ public class RemotesTest {
 		}
 	}
 
-//	@Test
-//	public void c04_rethrownException() throws Exception {
-//		C01i x = MockRestClient
-//			.create(C01.class)
-//			.json()
-//			.build()
-//			.getRemote(C01i.class);
-//
-//		try {
-//			x.c04();
-//			fail();
-//		} catch (C01Exception e) {
-//			assertEquals("foo", e.getLocalizedMessage());
-//		}
-//	}
-//
-//
-//	@Test
-//	public void c05_rethrownUndefinedException() throws Exception {
-//		C01i x = MockRestClient
-//			.create(C01.class)
-//			.json()
-//			.build()
-//			.getRemote(C01i.class);
-//
-//		try {
-//			x.c05();
-//			fail();
-//		} catch (RuntimeException e) {
-//			assertEquals("foo", e.getLocalizedMessage());
-//		}
-//	}
+	@Test
+	public void c04_rethrownException() throws Exception {
+		C01i x = MockRestClient
+			.create(C01.class)
+			.json()
+			.build()
+			.getRemote(C01i.class);
+
+		try {
+			x.c04();
+			fail();
+		} catch (C01Exception e) {
+			assertEquals("foo", e.getLocalizedMessage());
+		}
+	}
+
+
+	@Test
+	public void c05_rethrownUndefinedException() throws Exception {
+		C01i x = MockRestClient
+			.create(C01.class)
+			.json()
+			.build()
+			.getRemote(C01i.class);
+
+		try {
+			x.c05();
+			fail();
+		} catch (RuntimeException e) {
+			assertTrue(e.getLocalizedMessage().contains("foo"));
+		}
+	}
 }

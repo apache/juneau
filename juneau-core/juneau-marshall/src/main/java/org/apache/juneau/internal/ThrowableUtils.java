@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import java.text.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Various utility methods for creating and working with throwables.
@@ -116,5 +117,36 @@ public class ThrowableUtils {
 				return (T)t;
 		}
 		return null;
+	}
+
+	/**
+	 * Given a list of available throwable types, attempts to create and throw the exception based on name.
+	 *
+	 * @param name The exception name.  Can be a simple name or fully-qualified.
+	 * @param message The exception message passed to the exception constructor.
+	 * @param throwables The list of available throwable classes to choose from.
+	 * @throws Throwable The thrown exception if it was possible to create.
+	 */
+	public static void throwException(String name, String message, Class<?>...throwables) throws Throwable {
+		if (name != null)
+			for (Class<?> t : throwables)
+				if (t.getName().endsWith(name))
+					doThrow(t, message);
+	}
+
+	private static void doThrow(Class<?> t, String msg) throws Throwable {
+		ConstructorInfo c = null;
+		ClassInfo ci = ClassInfo.of(t);
+		if (msg != null) {
+			c = ci.getPublicConstructor(String.class);
+			if (c != null)
+				throw c.<Throwable>invoke(msg);
+			c = ci.getPublicConstructor(Object.class);
+			if (c != null)
+				throw c.<Throwable>invoke(msg);
+		}
+		c = ci.getPublicConstructor();
+		if (c != null)
+			throw c.<Throwable>invoke();
 	}
 }
