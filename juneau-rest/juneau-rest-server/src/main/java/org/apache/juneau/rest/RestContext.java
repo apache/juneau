@@ -60,10 +60,10 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
@@ -3908,11 +3908,12 @@ public final class RestContext extends BeanContext {
 						if ("RRPC".equals(httpMethod)) {
 
 							final ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
-							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
+							final RrpcInterfaceMeta rim = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
 							RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
+							smb.dotAll();
 							sm = new RestMethodContext(smb) {
 
 								@Override
@@ -3933,7 +3934,7 @@ public final class RestContext extends BeanContext {
 										if (pip.indexOf('/') != -1)
 											pip = pip.substring(pip.lastIndexOf('/')+1);
 										pip = urlDecode(pip);
-										RemoteInterfaceMethod rmm = rim.getMethodMetaByPath(pip);
+										RrpcInterfaceMethodMeta rmm = rim.getMethodMetaByPath(pip);
 										if (rmm != null) {
 											Method m = rmm.getJavaMethod();
 											try {

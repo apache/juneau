@@ -31,6 +31,8 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	RestContext context;
 	java.lang.reflect.Method method;
 
+	boolean dotAll;
+
 	RestMethodProperties properties;
 
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
@@ -66,6 +68,16 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		} catch (Exception e) {
 			throw new RestServletException(e, "Exception occurred while initializing method ''{0}''", sig);
 		}
+	}
+
+	/**
+	 * When enabled, append <js>"/*"</js> to path patterns if not already present.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestMethodContextBuilder dotAll() {
+		this.dotAll = true;
+		return this;
 	}
 
 	// <FluentSetters>

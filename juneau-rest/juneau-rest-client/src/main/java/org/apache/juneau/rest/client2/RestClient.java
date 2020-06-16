@@ -65,7 +65,6 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -2948,115 +2947,109 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
-		try {
-			return (T)Proxy.newProxyInstance(
-				interfaceClass.getClassLoader(),
-				new Class[] { interfaceClass },
-				new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(
+			interfaceClass.getClassLoader(),
+			new Class[] { interfaceClass },
+			new InvocationHandler() {
 
-					final RemoteMeta rm = new RemoteMeta(interfaceClass);
+				final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
-					@Override /* InvocationHandler */
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RemoteMethodMeta rmm = rm.getMethodMeta(method);
+				@Override /* InvocationHandler */
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					RemoteMethodMeta rmm = rm.getMethodMeta(method);
 
-						String url = rmm.getFullPath();
-						if (url.indexOf("://") == -1)
-							url = restUrl2 + '/' + url;
-						if (url.indexOf("://") == -1)
-							throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
+					String url = rmm.getFullPath();
+					if (url.indexOf("://") == -1)
+						url = restUrl2 + '/' + url;
+					if (url.indexOf("://") == -1)
+						throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
-						String httpMethod = rmm.getHttpMethod();
-						HttpPartSerializerSession s = getPartSerializerSession();
+					String httpMethod = rmm.getHttpMethod();
+					HttpPartSerializerSession s = getPartSerializerSession();
 
-						RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
+					RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
 
-						rc.serializer(serializer);
-						rc.parser(parser);
+					rc.serializer(serializer);
+					rc.parser(parser);
 
-						for (RemoteMethodArg a : rmm.getPathArgs())
-							rc.path(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+					for (RemoteMethodArg a : rmm.getPathArgs())
+						rc.path(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-						for (RemoteMethodArg a : rmm.getQueryArgs())
-							rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+					for (RemoteMethodArg a : rmm.getQueryArgs())
+						rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-						for (RemoteMethodArg a : rmm.getFormDataArgs())
-							rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+					for (RemoteMethodArg a : rmm.getFormDataArgs())
+						rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-						for (RemoteMethodArg a : rmm.getHeaderArgs())
-							rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+					for (RemoteMethodArg a : rmm.getHeaderArgs())
+						rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
-						RemoteMethodArg ba = rmm.getBodyArg();
-						if (ba != null)
-							rc.body(args[ba.getIndex()], ba.getSchema());
+					RemoteMethodArg ba = rmm.getBodyArg();
+					if (ba != null)
+						rc.body(args[ba.getIndex()], ba.getSchema());
 
-						if (rmm.getRequestArgs().length > 0) {
-							for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
-								RequestBeanMeta rbm = rmba.getMeta();
-								Object bean = args[rmba.getIndex()];
-								if (bean != null) {
-									for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-										Object val = p.getGetter().invoke(bean);
-										HttpPartType pt = p.getPartType();
-										HttpPartSerializerSession ps = p.getSerializer(s);
-										String pn = p.getPartName();
-										HttpPartSchema schema = p.getSchema();
-										EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
-										if (pt == PATH)
-											rc.path(pn, val, schema, p.getSerializer(s));
-										else if (val != null) {
-											if (pt == QUERY)
-												rc.query(flags, pn, val, schema, ps);
-											else if (pt == FORMDATA)
-												rc.formData(flags, pn, val, schema, ps);
-											else if (pt == HEADER)
-												rc.header(flags, pn, val, schema, ps);
-											else /* (pt == HttpPartType.BODY) */
-												rc.body(val, schema);
-										}
+					if (rmm.getRequestArgs().length > 0) {
+						for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
+							RequestBeanMeta rbm = rmba.getMeta();
+							Object bean = args[rmba.getIndex()];
+							if (bean != null) {
+								for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+									Object val = p.getGetter().invoke(bean);
+									HttpPartType pt = p.getPartType();
+									HttpPartSerializerSession ps = p.getSerializer(s);
+									String pn = p.getPartName();
+									HttpPartSchema schema = p.getSchema();
+									EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
+									if (pt == PATH)
+										rc.path(pn, val, schema, p.getSerializer(s));
+									else if (val != null) {
+										if (pt == QUERY)
+											rc.query(flags, pn, val, schema, ps);
+										else if (pt == FORMDATA)
+											rc.formData(flags, pn, val, schema, ps);
+										else if (pt == HEADER)
+											rc.header(flags, pn, val, schema, ps);
+										else /* (pt == HttpPartType.BODY) */
+											rc.body(val, schema);
 									}
 								}
 							}
 						}
-
-						RemoteMethodReturn rmr = rmm.getReturns();
-						if (rmr.isFuture()) {
-							return getExecutorService(true).submit(new Callable<Object>() {
-								@Override
-								public Object call() throws Exception {
-									try {
-										return executeRemote(interfaceClass, rc, method, rmm);
-									} catch (Exception e) {
-										throw e;
-									} catch (Throwable e) {
-										throw new RuntimeException(e);
-									}
-								}
-							});
-						} else if (rmr.isCompletableFuture()) {
-							CompletableFuture<Object> cf = new CompletableFuture<>();
-							getExecutorService(true).submit(new Callable<Object>() {
-								@Override
-								public Object call() throws Exception {
-									try {
-										cf.complete(executeRemote(interfaceClass, rc, method, rmm));
-										return null;
-									} catch (Exception e) {
-										throw e;
-									} catch (Throwable e) {
-										throw new RuntimeException(e);
-									}
-								}
-							});
-							return cf;
-						}
-
-						return executeRemote(interfaceClass, rc, method, rmm);
 					}
-			});
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+
+					RemoteMethodReturn rmr = rmm.getReturns();
+					if (rmr.isFuture()) {
+						return getExecutorService(true).submit(new Callable<Object>() {
+							@Override
+							public Object call() throws Exception {
+								try {
+									return executeRemote(interfaceClass, rc, method, rmm);
+								} catch (Exception e) {
+									throw e;
+								} catch (Throwable e) {
+									throw new RuntimeException(e);
+								}
+							}
+						});
+					} else if (rmr.isCompletableFuture()) {
+						CompletableFuture<Object> cf = new CompletableFuture<>();
+						getExecutorService(true).submit(new Callable<Object>() {
+							@Override
+							public Object call() throws Exception {
+								try {
+									cf.complete(executeRemote(interfaceClass, rc, method, rmm));
+								} catch (Throwable e) {
+									cf.completeExceptionally(e);
+								}
+								return null;
+							}
+						});
+						return cf;
+					}
+
+					return executeRemote(interfaceClass, rc, method, rmm);
+				}
+		});
 	}
 
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteMethodMeta rmm) throws Throwable {
@@ -3076,7 +3069,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				else if (rt == Boolean.class || rt == boolean.class)
 					ret = returnCode < 400;
 				else
-					throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+					throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
 			} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
 				rc.ignoreErrors();
 				res = rc.run();
@@ -3103,7 +3096,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Create a new Remote Interface against a {@link RemoteInterface @RemoteInterface}-annotated class.
+	 * Create a new proxy interface against an RRPC-style service.
 	 *
 	 * <p>
 	 * Remote interfaces are interfaces exposed on the server side using either the <c>RrpcServlet</c>
@@ -3178,10 +3171,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, stringify(restUrl));
+			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (rootUrl == null)
+				if (isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
 				path = trimSlashes(rootUrl) + '/' + path;
 			}
@@ -3190,43 +3183,34 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		final String restUrl2 = stringify(restUrl);
 
-		try {
-			return (T)Proxy.newProxyInstance(
-				interfaceClass.getClassLoader(),
-				new Class[] { interfaceClass },
-				new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(
+			interfaceClass.getClassLoader(),
+			new Class[] { interfaceClass },
+			new InvocationHandler() {
 
-					final RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, restUrl2);
+				final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
 
-					@Override /* InvocationHandler */
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RemoteInterfaceMethod rim = rm.getMethodMeta(method);
+				@Override /* InvocationHandler */
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
-						if (rim == null)
-							throw new RuntimeException("Method is not exposed as a remote method.");
+					String url = rim.getUrl();
 
-						String url = rim.getUrl();
+					try {
+						RestRequest rc = request("POST", url, true).serializer(serializer).body(args);
 
-						try {
-							RestRequest rc = request("POST", url, true).serializer(serializer).body(args);
+						Object v = rc.run().getBody().as(method.getGenericReturnType());
+						if (v == null && method.getReturnType().isPrimitive())
+							v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
+						return v;
 
-							Object v = rc.run().getBody().as(method.getGenericReturnType());
-							if (v == null && method.getReturnType().isPrimitive())
-								v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
-							return v;
-
-						} catch (RestCallException e) {
-							// Try to throw original exception if possible.
-							ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), method.getExceptionTypes());
-							throw new RuntimeException(e);
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
+					} catch (RestCallException e) {
+						// Try to throw original exception if possible.
+						ThrowableUtils.throwException(e.getServerExceptionName(), e.getServerExceptionMessage(), method.getExceptionTypes());
+						throw new RuntimeException(e);
 					}
-			});
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+				}
+		});
 	}
 
 	@Override
@@ -3254,7 +3238,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		logger.log(level, t, msg(msg, args));
 		if (logToConsole) {
 			System.err.println(msg(msg, args).get());
-			t.printStackTrace();
+			if (t != null)
+				t.printStackTrace();
 		}
 	}
 

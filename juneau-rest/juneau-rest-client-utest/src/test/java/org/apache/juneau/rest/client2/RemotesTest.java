@@ -15,11 +15,15 @@ package org.apache.juneau.rest.client2;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.concurrent.*;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.remote.RemoteMethod;
+import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -281,57 +285,25 @@ public class RemotesTest {
 	// Other tests
 	//=================================================================================================================
 
+	@SuppressWarnings("serial")
+	public static class CException extends Exception {
+		public CException(String msg) {
+			super(msg);
+		}
+	}
+
 	@Rest(path="/C01")
 	public static class C01 implements BasicSimpleJsonRest {
-
 		@RestMethod
-		public String c01() {
+		public String a() {
 			return "foo";
-		}
-
-		@RestMethod
-		public String c02() {
-			return "bar";
-		}
-
-		@RestMethod
-		public String c03() {
-			return "baz";
-		}
-
-		@RestMethod
-		public String c04() throws C01Exception {
-			throw new C01Exception("foo");
-		}
-
-		@RestMethod
-		public String c05() throws C02Exception {
-			throw new C02Exception("foo");
 		}
 	}
 
 	@Remote(path="/")
 	public static interface C01i {
 		@RemoteMethod
-		public String c01();
-		public String c02();
-		public String getC03();
-		public String c04() throws C01Exception;
-		public String c05();
-	}
-
-	@SuppressWarnings("serial")
-	public static class C01Exception extends Exception {
-		public C01Exception(String msg) {
-			super(msg);
-		}
-	}
-
-	@SuppressWarnings("serial")
-	public static class C02Exception extends Exception {
-		public C02Exception(String msg) {
-			super(msg);
-		}
+		public String a();
 	}
 
 	@Test
@@ -342,23 +314,11 @@ public class RemotesTest {
 			.build()
 			.getRemote(C01i.class, "http://localhost/C01");
 
-		assertEquals("foo", x.c01());
+		assertEquals("foo", x.a());
 	}
 
 	@Test
-	public void c02_methodNotAnnotated() throws Exception {
-		C01i x = MockRestClient
-			.create(C01.class)
-			.json()
-			.build()
-			.getRemote(C01i.class, "http://localhost/C01");
-
-		assertEquals("bar", x.c02());
-		assertEquals("baz", x.getC03());
-	}
-
-	@Test
-	public void c03_rootUriNotSpecified() throws Exception {
+	public void c02_rootUriNotSpecified() throws Exception {
 		C01i x = MockRestClient
 			.create(C01.class)
 			.json()
@@ -367,43 +327,479 @@ public class RemotesTest {
 			.getRemote(C01i.class);
 
 		try {
-			x.c01();
+			x.a();
 			fail();
 		} catch (RemoteMetadataException e) {
 			assertEquals("Invalid remote definition found on class org.apache.juneau.rest.client2.RemotesTest$C01i. Root URI has not been specified.  Cannot construct absolute path to remote resource.", e.getLocalizedMessage());
 		}
 	}
 
+
+	@Rest(path="/C03")
+	public static class C03 implements BasicSimpleJsonRest {
+		@RestMethod
+		public String a() {
+			return "bar";
+		}
+		@RestMethod
+		public String getB() {
+			return "baz";
+		}
+	}
+
+	@Remote(path="/")
+	public static interface C03i {
+		public String a();
+		public String getB();
+	}
+
 	@Test
-	public void c04_rethrownException() throws Exception {
-		C01i x = MockRestClient
-			.create(C01.class)
+	public void c03_methodNotAnnotated() throws Exception {
+		C03i x = MockRestClient
+			.create(C03.class)
 			.json()
 			.build()
-			.getRemote(C01i.class);
+			.getRemote(C03i.class);
+
+		assertEquals("bar", x.a());
+		assertEquals("baz", x.getB());
+	}
+
+	@Rest(path="/C04")
+	public static class C04 implements BasicSimpleJsonRest {
+		@RestMethod
+		public String a() throws CException {
+			throw new CException("foo");
+		}
+	}
+
+	@Remote
+	public static interface C04i {
+		public String a() throws CException;
+	}
+
+	@Test
+	public void c04_rethrownException() throws Exception {
+		C04i x = MockRestClient
+			.create(C04.class)
+			.json()
+			.build()
+			.getRemote(C04i.class);
 
 		try {
-			x.c04();
+			x.a();
 			fail();
-		} catch (C01Exception e) {
+		} catch (CException e) {
 			assertEquals("foo", e.getLocalizedMessage());
 		}
 	}
 
+	@Rest
+	public static class C05 implements BasicSimpleJsonRest {
+		@RestMethod
+		public String a() throws CException {
+			throw new RuntimeException("foo");
+		}
+	}
+
+	@Remote
+	public static interface C05i {
+		public String a() throws CException;
+	}
 
 	@Test
 	public void c05_rethrownUndefinedException() throws Exception {
-		C01i x = MockRestClient
-			.create(C01.class)
+		C05i x = MockRestClient
+			.create(C05.class)
 			.json()
 			.build()
-			.getRemote(C01i.class);
+			.getRemote(C05i.class);
 
 		try {
-			x.c05();
+			x.a();
 			fail();
 		} catch (RuntimeException e) {
 			assertTrue(e.getLocalizedMessage().contains("foo"));
 		}
 	}
+
+	public static class C06 implements BasicSimpleJsonRest {
+		@RestMethod
+		public String a() throws CException {
+			throw new CException("foo");
+		}
+	}
+
+	@Remote
+	public static interface C06i {
+		public Future<String> a() throws CException;
+	}
+
+	@Test
+	public void c06_rethrownExceptionOnFuture() throws Exception {
+		C06i x = MockRestClient
+			.create(C06.class)
+			.json()
+			.build()
+			.getRemote(C06i.class);
+
+		try {
+			x.a().get();
+			fail();
+		} catch (ExecutionException e) {
+			assertEquals("foo", e.getCause().getLocalizedMessage());
+		}
+	}
+
+	@Remote
+	public static interface C07i {
+		public CompletableFuture<String> a() throws CException;
+	}
+
+	@Test
+	public void c07_rethrownExceptionOnCompletableFuture() throws Exception {
+		C07i x = MockRestClient
+			.create(C06.class)
+			.json()
+			.build()
+			.getRemote(C07i.class);
+
+		try {
+			x.a().get();
+			fail();
+		} catch (ExecutionException e) {
+			assertEquals("foo", e.getCause().getLocalizedMessage());
+		}
+	}
+
+	@Rest
+	public static class C08 implements BasicSimpleJsonRest {
+		@RestMethod
+		public String a() {
+			throw new AssertionError("foo");
+		}
+	}
+
+	@Remote
+	public static interface C08i {
+		public Future<String> a() throws AssertionError;
+	}
+
+	@Test
+	public void c08_rethrownThrowableOnFuture() throws Exception {
+		C08i x = MockRestClient
+			.create(C08.class)
+			.json()
+			.build()
+			.getRemote(C08i.class);
+
+		try {
+			x.a().get();
+			fail();
+		} catch (ExecutionException e) {
+			assertEquals("foo", e.getCause().getCause().getLocalizedMessage());
+		}
+	}
+
+	//=================================================================================================================
+	// Status return type
+	//=================================================================================================================
+
+	@Rest
+	public static class DA implements BasicSimpleJsonRest {
+		@RestMethod
+		public void getR202(org.apache.juneau.rest.RestResponse res) {
+			res.setStatus(202);
+		}
+		@RestMethod
+		public void getR400(org.apache.juneau.rest.RestResponse res) {
+			res.setStatus(400);
+		}
+	}
+
+	@Remote
+	public static interface DAi {
+		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS)
+		public int a() throws AssertionError;
+		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS)
+		public Integer b() throws AssertionError;
+		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS)
+		public boolean c() throws AssertionError;
+		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS)
+		public Boolean d() throws AssertionError;
+		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS)
+		public String e() throws AssertionError;
+
+		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS)
+		public int f() throws AssertionError;
+		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS)
+		public Integer g() throws AssertionError;
+		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS)
+		public boolean h() throws AssertionError;
+		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS)
+		public Boolean i() throws AssertionError;
+		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS)
+		public String j() throws AssertionError;
+	}
+
+	@Test
+	public void d01_statusReturnType() throws Exception {
+		DAi x = MockRestClient
+			.create(DA.class)
+			.json()
+			.ignoreErrors()
+			.build()
+			.getRemote(DAi.class);
+
+		assertEquals(202, x.a());
+		assertEquals(202, x.b().intValue());
+		assertEquals(true, x.c());
+		assertEquals(true, x.d());
+		assertEquals(400, x.f());
+		assertEquals(400, x.g().intValue());
+		assertEquals(false, x.h());
+		assertEquals(false, x.i());
+
+		try {
+			x.e();
+			fail();
+		} catch (Exception e) {
+			assertEquals("Invalid return type on method annotated with @RemoteMethod(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.", e.getCause().getLocalizedMessage());
+		}
+
+		try {
+			x.j();
+			fail();
+		} catch (Exception e) {
+			assertEquals("Invalid return type on method annotated with @RemoteMethod(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.", e.getCause().getLocalizedMessage());
+		}
+	}
+
+	@Rest
+	public static class DB implements BasicSimpleJsonRest {
+		@RestMethod
+		public Integer getA() {
+			return null;
+		}
+	}
+
+	@Remote
+	public static interface DBi {
+		@RemoteMethod
+		public int a() throws AssertionError;
+	}
+
+	@Test
+	public void d02_nullPrimitiveReturn() throws Exception {
+		DBi x = MockRestClient
+			.create(DB.class)
+			.json()
+			.ignoreErrors()
+			.build()
+			.getRemote(DBi.class);
+
+		assertEquals(0, x.a());
+	}
+
+	@Rest
+	public static class DC implements BasicSimpleJsonRest {
+		@RestMethod
+		public Integer getA() {
+			return 1;
+		}
+	}
+
+	@Remote
+	public static interface DCi {
+		@RemoteMethod
+		public int a() throws AssertionError;
+	}
+
+	@Test
+	public void d03_primitiveReturn() throws Exception {
+		DCi x = MockRestClient
+			.create(DC.class)
+			.json()
+			.ignoreErrors()
+			.build()
+			.getRemote(DCi.class);
+
+		assertEquals(1, x.a());
+	}
+
+	@Rest
+	public static class DD implements BasicSimpleJsonRest {
+		@RestMethod
+		public Integer getA() {
+			return null;
+		}
+	}
+
+	@Remote
+	public static interface DDi {
+		@RemoteMethod
+		public Integer a() throws AssertionError;
+	}
+
+	@Test
+	public void d04_nullNonPrimitive() throws Exception {
+		DDi x = MockRestClient
+			.create(DD.class)
+			.json()
+			.ignoreErrors()
+			.build()
+			.getRemote(DDi.class);
+
+		assertNull(x.a());
+	}
+
+	//=================================================================================================================
+	// RRPC interfaces
+	//=================================================================================================================
+
+	public interface E1i {
+		String echo(String body);
+	}
+
+	@Rest
+	public static class E1 implements BasicSimpleJsonRest {
+		@RestMethod(name=HttpMethodName.RRPC)
+		public E1i getProxy() {
+			return new E1i() {
+				@Override
+				public String echo(String body) {
+					return body;
+				}
+			};
+		}
+	}
+
+	@Test
+	public void e01_rrpcBasic() throws Exception {
+		E1i x = MockRestClient
+			.create(E1.class)
+			.rootUrl("http://localhost/proxy")
+			.json()
+			.build()
+			.getRrpcInterface(E1i.class);
+
+		assertEquals("foo", x.echo("foo"));
+	}
+
+	@Test
+	public void e02_rrpc_noRootPath() throws Exception {
+		try {
+			MockRestClient
+				.create(E1.class)
+				.rootUrl("")
+				.json()
+				.build()
+				.getRrpcInterface(E1i.class);
+		} catch (RemoteMetadataException e) {
+			assertEquals("Invalid remote definition found on class org.apache.juneau.rest.client2.RemotesTest$E1i. Root URI has not been specified.  Cannot construct absolute path to remote interface.", e.getMessage());
+		}
+	}
+
+	@Remote(path="/proxy")
+	public interface E3i {
+		String echo(String body);
+	}
+
+	@Test
+	public void e03_rrpc_noRestUrl() throws Exception {
+		E3i x = MockRestClient
+			.create(E1.class)
+			.rootUrl("http://localhost")
+			.json()
+			.build()
+			.getRrpcInterface(E3i.class);
+
+		assertEquals("foo", x.echo("foo"));
+	}
+
+	@Remote(path="http://localhost/proxy")
+	public interface E4i {
+		String echo(String body);
+	}
+
+	@Test
+	public void e04_rrpc_fullPathOnRemotePath() throws Exception {
+		E4i x = MockRestClient
+			.create(E1.class)
+			.rootUrl("")
+			.json()
+			.build()
+			.getRrpcInterface(E4i.class);
+
+		assertEquals("foo", x.echo("foo"));
+	}
+
+	public interface E5i {
+		String echo(String body) throws EException;
+	}
+
+	@SuppressWarnings("serial")
+	public static class EException extends Exception {
+		public EException(String msg) {
+			super(msg);
+		}
+	}
+
+	@Rest
+	public static class E5 implements BasicSimpleJsonRest {
+		@RestMethod(name=HttpMethodName.RRPC)
+		public E5i getProxy() {
+			return new E5i() {
+				@Override
+				public String echo(String body) throws EException {
+					throw new EException("foobar");
+				}
+			};
+		}
+	}
+
+	@Test
+	public void e05_rrpc_rethrownCheckedException() throws Exception {
+		try {
+			E5i x = MockRestClient
+				.create(E5.class)
+				.json()
+				.build()
+				.getRrpcInterface(E5i.class, "/proxy");
+
+			x.echo("foo");
+		} catch (EException e) {
+			assertEquals("foobar", e.getMessage());
+		}
+	}
+
+	@Rest
+	public static class E6 implements BasicSimpleJsonRest {
+		@RestMethod(name=HttpMethodName.RRPC)
+		public E5i getProxy() {
+			return new E5i() {
+				@Override
+				public String echo(String body) throws EException {
+					throw new AssertionError("foobar");
+				}
+			};
+		}
+	}
+
+	@Test
+	public void e06_rrpc_rethrownUncheckedException() throws Exception {
+		try {
+			E5i x = MockRestClient
+				.create(E6.class)
+				.json()
+				.build()
+				.getRrpcInterface(E5i.class, "/proxy");
+
+			x.echo("foo");
+		} catch (RuntimeException e) {
+			assertEquals(RestCallException.class, e.getCause().getClass());
+			assertTrue(e.getCause().getMessage().contains("foobar"));
+		}
+	}
+
 }

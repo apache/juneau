@@ -28,7 +28,6 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -44,7 +43,7 @@ import org.junit.runners.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class InterfaceProxyTest {
+public class RrpcInterfaceTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
@@ -60,7 +59,6 @@ public class InterfaceProxyTest {
 		});
 	}
 
-	@RemoteInterface
 	public interface InterfaceProxy {
 
 		public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
@@ -927,7 +925,7 @@ public class InterfaceProxyTest {
 
 	private InterfaceProxy proxy;
 
-	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
+	public RrpcInterfaceTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
 			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).build().getRrpcInterface(InterfaceProxy.class, "/proxy");

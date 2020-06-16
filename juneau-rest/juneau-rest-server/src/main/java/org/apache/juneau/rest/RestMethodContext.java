@@ -45,10 +45,10 @@ import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Method;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
@@ -318,7 +318,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 		<js>"RRPC"</js>
 	 * 		- Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
-	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using
+	 * 		{@link Remote @Remote} annotation) to be used as a remote proxy using
 	 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
 	 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
@@ -692,11 +692,19 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		this.responseMeta = ResponseBeanMeta.create(mi, ps);
 
+		boolean dotAll = b.dotAll;
 		List<UrlPathPattern> pathPatterns = new ArrayList<>();
-		for (String p : getArrayProperty(RESTMETHOD_paths, String.class))
+		for (String p : getArrayProperty(RESTMETHOD_paths, String.class)) {
+			if (dotAll && ! p.endsWith("/*"))
+				p += "/*";
 			pathPatterns.add(new UrlPathPattern(p));
-		if (pathPatterns.isEmpty())
-			pathPatterns.add(new UrlPathPattern(HttpUtils.detectHttpPath(method, true)));
+		}
+		if (pathPatterns.isEmpty()) {
+			String p = HttpUtils.detectHttpPath(method, true);
+			if (dotAll && ! p.endsWith("/*"))
+				p += "/*";
+			pathPatterns.add(new UrlPathPattern(p));
+		}
 
 		this.pathPatterns = pathPatterns.toArray(new UrlPathPattern[pathPatterns.size()]);
 

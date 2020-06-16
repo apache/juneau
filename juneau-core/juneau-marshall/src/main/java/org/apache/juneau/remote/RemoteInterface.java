@@ -17,17 +17,22 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.http.remote.*;
+
 /**
  * Identifies a remote proxy REST interface.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.restRPC}
  * </ul>
+ *
+ * @deprecated Use {@link Remote}
  */
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Deprecated
 public @interface RemoteInterface {
 
 	/**

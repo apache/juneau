@@ -1383,7 +1383,7 @@ public class RestClient extends BeanContext implements Closeable {
 	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, stringify(restUrl));
+			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, stringify(restUrl));
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
 				if (rootUrl == null)
@@ -1401,11 +1401,11 @@ public class RestClient extends BeanContext implements Closeable {
 				new Class[] { interfaceClass },
 				new InvocationHandler() {
 
-					final RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, restUrl2);
+					final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RemoteInterfaceMethod rim = rm.getMethodMeta(method);
+						RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
 						if (rim == null)
 							throw new RuntimeException("Method is not exposed as a remote method.");

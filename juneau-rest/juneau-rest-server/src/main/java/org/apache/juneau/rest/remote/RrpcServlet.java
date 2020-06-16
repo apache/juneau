@@ -29,11 +29,11 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.remote.*;
 
 /**
  * Abstract class for defining Remote Interface Services.
@@ -52,7 +52,7 @@ import org.apache.juneau.http.header.*;
 @SuppressWarnings({"serial","javadoc"})
 public abstract class RrpcServlet extends BasicRestServlet {
 
-	private final Map<String,RemoteInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
+	private final Map<String,RrpcInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
@@ -123,7 +123,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		) throws NotFound, Exception {
 
 		// Find the method.
-		RemoteInterfaceMethod rmm = getMethods(javaInterface).get(javaMethod);
+		RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
 		if (rmm == null)
 			throw new NotFound("Method not found");
 
@@ -193,7 +193,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		// Find the parser.
 		if (p == null)
 			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
-		RemoteInterfaceMeta rim = getInterfaceClass(javaInterface);
+		RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);
 
 		// Find the service.
 		Object service = getServiceMap().get(rim.getJavaClass());
@@ -201,7 +201,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 			throw new NotFound("Service not found");
 
 		// Find the method.
-		RemoteInterfaceMethod rmm = getMethods(javaInterface).get(javaMethod);
+		RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
 		if (rmm == null)
 			throw new NotFound("Method not found");
 
@@ -216,19 +216,19 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private Map<String,RemoteInterfaceMethod> getMethods(String javaInterface) throws Exception {
+	private Map<String,RrpcInterfaceMethodMeta> getMethods(String javaInterface) throws Exception {
 		return getInterfaceClass(javaInterface).getMethodsByPath();
 	}
 
 	/**
 	 * Return the <c>Class</c> given it's name if it exists in the services map.
 	 */
-	private RemoteInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {
-		RemoteInterfaceMeta rm = serviceMap.get(javaInterface);
+	private RrpcInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {
+		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
 		if (rm == null) {
 			for (Class<?> c : getServiceMap().keySet()) {
 				if (c.getName().equals(javaInterface)) {
-					rm = new RemoteInterfaceMeta(c, null);
+					rm = new RrpcInterfaceMeta(c, null);
 					serviceMap.put(javaInterface, rm);
 					return rm;
 				}

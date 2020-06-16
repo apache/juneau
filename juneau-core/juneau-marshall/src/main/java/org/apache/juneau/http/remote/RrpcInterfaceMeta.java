@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
@@ -18,21 +18,22 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.remote.*;
 
 /**
  * Contains the meta-data about a remote proxy REST interface.
  *
  * <p>
- * Captures the information in {@link RemoteInterface @RemoteInterface} annotations for caching and reuse.
+ * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.restRPC}
  * </ul>
  */
-public class RemoteInterfaceMeta {
+public class RrpcInterfaceMeta {
 
-	private final Map<Method,RemoteInterfaceMethod> methods;
-	private final Map<String,RemoteInterfaceMethod> methodsByPath;
+	private final Map<Method,RrpcInterfaceMethodMeta> methods;
+	private final Map<String,RrpcInterfaceMethodMeta> methodsByPath;
 	private final String path;
 	private final Class<?> c;
 
@@ -40,28 +41,33 @@ public class RemoteInterfaceMeta {
 	 * Constructor.
 	 *
 	 * @param c
-	 * 	The interface class annotated with a {@link RemoteInterface @RemoteInterface} annotation.
+	 * 	The interface class annotated with a {@link Remote @Remote} annotation.
 	 * 	<br>Note that the annotations are optional.
 	 * @param uri
 	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
 	 * 	<br>This is only used on the client side.
 	 */
-	public RemoteInterfaceMeta(Class<?> c, String uri) {
+	@SuppressWarnings("deprecation")
+	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		String path = "";
 		ClassInfo ci = ClassInfo.of(c);
-		List<RemoteInterface> rr = ci.getAnnotations(RemoteInterface.class);
-		for (RemoteInterface r : rr)
+
+		for (RemoteInterface r : ci.getAnnotations(RemoteInterface.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
-		AMap<Method,RemoteInterfaceMethod> methods = AMap.of();
+		for (Remote r : ci.getAnnotations(Remote.class))
+			if (! r.path().isEmpty())
+				path = trimSlashes(r.path());
+
+		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
-				methods.put(m.inner(), new RemoteInterfaceMethod(uri, m.inner()));
+				methods.put(m.inner(), new RrpcInterfaceMethodMeta(uri, m.inner()));
 
-		AMap<String,RemoteInterfaceMethod> methodsByPath = AMap.of();
-		for (RemoteInterfaceMethod rmm : methods.values())
+		AMap<String,RrpcInterfaceMethodMeta> methodsByPath = AMap.of();
+		for (RrpcInterfaceMethodMeta rmm : methods.values())
 			methodsByPath.put(rmm.getPath(), rmm);
 
 		this.methods = methods.unmodifiable();
@@ -77,7 +83,7 @@ public class RemoteInterfaceMeta {
 	 * 	<br>The keys never have leading slashes.
 	 * 	<br>The map is never <jk>null</jk>.
 	 */
-	public Map<String,RemoteInterfaceMethod> getMethodsByPath() {
+	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() {
 		return methodsByPath;
 	}
 
@@ -87,7 +93,7 @@ public class RemoteInterfaceMeta {
 	 * @param m The method to look up.
 	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public RemoteInterfaceMethod getMethodMeta(Method m) {
+	public RrpcInterfaceMethodMeta getMethodMeta(Method m) {
 		return methods.get(m);
 	}
 
@@ -97,7 +103,7 @@ public class RemoteInterfaceMeta {
 	 * @param p The HTTP path to look for.
 	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public RemoteInterfaceMethod getMethodMetaByPath(String p) {
+	public RrpcInterfaceMethodMeta getMethodMetaByPath(String p) {
 		return methodsByPath.get(p);
 	}
 

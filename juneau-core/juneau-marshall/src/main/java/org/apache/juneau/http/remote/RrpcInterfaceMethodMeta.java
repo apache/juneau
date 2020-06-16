@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -22,13 +22,13 @@ import org.apache.juneau.internal.*;
  * Contains the meta-data about a Java method on a remote class.
  *
  * <p>
- * Captures the information in {@link RemoteInterface @RemoteInterface} annotations for caching and reuse.
+ * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.restRPC}
  * </ul>
  */
-public class RemoteInterfaceMethod {
+public class RrpcInterfaceMethodMeta {
 
 	private final String url, path;
 	private final Method method;
@@ -39,7 +39,7 @@ public class RemoteInterfaceMethod {
 	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
 	 * @param m The Java method.
 	 */
-	public RemoteInterfaceMethod(final String restUrl, Method m) {
+	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
 		this.method = m;
 		this.path =  m.getName() + '/' + HttpUtils.getMethodArgsSignature(m, true);
 		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
