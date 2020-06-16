@@ -434,6 +434,8 @@ public final class StringUtils {
 	public static String join(Object[] tokens, char d) {
 		if (tokens == null)
 			return null;
+		if (tokens.length == 1)
+			return emptyIfNull(stringify(tokens[0]));
 		return join(tokens, d, new StringBuilder()).toString();
 	}
 
@@ -1158,6 +1160,52 @@ public final class StringUtils {
 		if (s2 == null)
 			return false;
 		return s1.equals(s2);
+	}
+
+	/**
+	 * Finds the position where the two strings differ.
+	 * 
+	 * @param s1 The first string.
+	 * @param s2 The second string.
+	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.
+	 */
+	public static int diffPosition(String s1, String s2) {
+		s1 = emptyIfNull(s1);
+		s2 = emptyIfNull(s2);
+		int i = 0;
+		int len = Math.min(s1.length(), s2.length());
+		while (i < len) {
+			int j = s1.charAt(i) - s2.charAt(i);
+			if (j != 0)
+				return i;
+			i++;
+		}
+		if (i == len && s1.length() == s2.length())
+			return -1;
+		return i;
+	}
+
+	/**
+	 * Finds the position where the two strings differ ignoring case.
+	 * 
+	 * @param s1 The first string.
+	 * @param s2 The second string.
+	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.
+	 */
+	public static int diffPositionIc(String s1, String s2) {
+		s1 = emptyIfNull(s1);
+		s2 = emptyIfNull(s2);
+		int i = 0;
+		int len = Math.min(s1.length(), s2.length());
+		while (i < len) {
+			int j = Character.toLowerCase(s1.charAt(i)) - Character.toLowerCase(s2.charAt(i));
+			if (j != 0)
+				return i;
+			i++;
+		}
+		if (i == len && s1.length() == s2.length())
+			return -1;
+		return i;
 	}
 
 	/**

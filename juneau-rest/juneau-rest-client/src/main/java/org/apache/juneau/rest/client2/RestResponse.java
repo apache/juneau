@@ -972,9 +972,9 @@ public class RestResponse implements HttpResponse {
 						sb.append("\nEntity is null");
 					else {
 						if (e.getContentType() != null)
-							sb.append("\n").append(e.getContentType());
+							sb.append("\n\t").append(e.getContentType());
 						if (e.getContentEncoding() != null)
-							sb.append("\n").append(e.getContentEncoding());
+							sb.append("\n\t").append(e.getContentEncoding());
 						if (e.isRepeatable()) {
 							try {
 								sb.append("\n---request content---\n").append(EntityUtils.toString(e));

@@ -1004,6 +1004,32 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
 
 	/**
+	 * Configuration property:  Console print stream
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_console RESTCLIENT_console}
+	 * 	<li><b>Name:</b>  <js>"RestClient.console.o"</js>
+	 * 	<li><b>System property:</b>  <c>RestClient.console</c>
+	 * 	<li><b>Data type:</b>
+	 * 	<ul>
+	 * 		<li><b>Data type:</b>  <c>Class&lt;? <jk>extends</jk> {@link java.io.PrintStream}&gt; | {@link java.io.PrintStream}</c>
+	 * 	</ul>
+	 * 	<li><b>Default:</b>  <c>System.<jsf>out</jsf></c>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#console(PrintStream)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#console(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to redirect the console output to a different print stream.
+	 */
+	public static final String RESTCLIENT_console = PREFIX + "console.o";
+
+	/**
 	 * Configuration property:  Error codes predicate.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1860,6 +1886,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	final Level logRequestsLevel;
 	final boolean ignoreErrors;
 	private final boolean logToConsole;
+	private final PrintStream console;
 	private StackTraceElement[] closedStack;
 	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
 
@@ -1913,6 +1940,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.logRequests = getInstanceProperty(RESTCLIENT_logRequests, DetailLevel.class, isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = getInstanceProperty(RESTCLIENT_logRequestsLevel, Level.class, isDebug() ? Level.WARNING : Level.OFF);
 		this.logToConsole = getBooleanProperty(RESTCLIENT_logToConsole, isDebug());
+		this.console = getInstanceProperty(RESTCLIENT_console, PrintStream.class, System.err);
 		this.logRequestsPredicate = getInstanceProperty(RESTCLIENT_logRequestsPredicate, BiPredicate.class, LOG_REQUESTS_PREDICATE_DEFAULT);
 
 		SerializerGroupBuilder sgb = SerializerGroup.create();
@@ -3237,9 +3265,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	protected void log(Level level, Throwable t, String msg, Object...args) {
 		logger.log(level, t, msg(msg, args));
 		if (logToConsole) {
-			System.err.println(msg(msg, args).get());
+			console.println(msg(msg, args).get());
 			if (t != null)
-				t.printStackTrace();
+				t.printStackTrace(console);
 		}
 	}
 
@@ -3253,7 +3281,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	protected void log(Level level, String msg, Object...args) {
 		logger.log(level, msg(msg, args));
 		if (logToConsole)
-			System.err.println(msg(msg, args).get());
+			console.println(msg(msg, args).get());
 	}
 
 	private Supplier<String> msg(String msg, Object...args) {

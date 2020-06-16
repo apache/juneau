@@ -1034,4 +1034,35 @@ public class StringUtilsTest {
 		assertEquals("foo%7Bbar%7Dbaz", fixUrl("foo{bar}baz"));
 		assertEquals("%7Dfoo%7Bbar%7Dbaz%7B", fixUrl("}foo{bar}baz{"));
 	}
+
+	//====================================================================================================
+	// diffPosition(String,String)
+	//====================================================================================================
+	@Test
+	public void testDiffPosition() throws Exception {
+		assertEquals(-1, diffPosition("a", "a"));
+		assertEquals(-1, diffPosition(null, null));
+		assertEquals(0, diffPosition("a", "b"));
+		assertEquals(1, diffPosition("aa", "ab"));
+		assertEquals(1, diffPosition("aaa", "ab"));
+		assertEquals(1, diffPosition("aa", "abb"));
+		assertEquals(0, diffPosition("a", null));
+		assertEquals(0, diffPosition(null, "b"));
+	}
+
+	//====================================================================================================
+	// diffPositionIc(String,String)
+	//====================================================================================================
+	@Test
+	public void testDiffPositionIc() throws Exception {
+		assertEquals(-1, diffPositionIc("a", "a"));
+		assertEquals(-1, diffPositionIc("a", "A"));
+		assertEquals(-1, diffPositionIc(null, null));
+		assertEquals(0, diffPositionIc("a", "b"));
+		assertEquals(1, diffPositionIc("aa", "Ab"));
+		assertEquals(1, diffPositionIc("aaa", "Ab"));
+		assertEquals(1, diffPositionIc("aa", "Abb"));
+		assertEquals(0, diffPositionIc("a", null));
+		assertEquals(0, diffPositionIc(null, "b"));
+	}
 }

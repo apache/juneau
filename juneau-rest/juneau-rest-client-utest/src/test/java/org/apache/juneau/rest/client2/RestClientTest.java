@@ -842,38 +842,128 @@ public class RestClientTest {
 	//------------------------------------------------------------------------------------------------------------------
 	// Logging
 	//------------------------------------------------------------------------------------------------------------------
+
 	@Test
 	public void b01_logToConsole() throws Exception {
+		MockConsole c = MockConsole.create();
+		MockLogger l = MockLogger.create();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logRequests(DetailLevel.NONE, Level.SEVERE)
+			.logToConsole()
+			.logger(l)
+			.console(c)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		c.assertContents().is("");
+
+		c.reset();
+
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.logRequests(DetailLevel.SIMPLE, Level.SEVERE)
 			.logToConsole()
+			.logger(l)
+			.console(c)
 			.build()
 			.post("/bean", bean)
 			.complete();
-	}
 
-	@Test
-	public void b02_logTo() throws Exception {
-		MockLogger ml = new MockLogger();
+		c.assertContents().is("HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
+
+		c.reset();
+
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
-			.logger(ml)
 			.logRequests(DetailLevel.FULL, Level.SEVERE)
+			.logToConsole()
+			.logger(l)
+			.console(c)
 			.build()
 			.post("/bean", bean)
 			.complete();
-		ml.assertLevel(Level.SEVERE);
-		ml.assertMessageContains(
+
+		c.assertContents().is(
+			"",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
 			"	Accept: application/json+simple",
 			"---request entity---",
-			"application/json+simple",
+			"	Content-Type: application/json+simple",
+			"---request content---",
+			"{f:1}",
+			"=== RESPONSE ===",
+			"HTTP/1.1 200 ",
+			"---response headers---",
+			"	Content-Type: application/json",
+			"---response content---",
+			"{f:1}",
+			"=== END =======================================================================",
+			""
+		);
+	}
+
+	@Test
+	public void b02_logTo() throws Exception {
+		MockLogger l = MockLogger.create();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logRequests(DetailLevel.NONE, Level.SEVERE)
+			.logToConsole()
+			.logger(l)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		l.assertContents().is("");
+		l.assertRecordCount().is(0);
+
+		l.reset();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logger(l)
+			.logRequests(DetailLevel.SIMPLE, Level.WARNING)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		l.assertLastLevel(Level.WARNING);
+		l.assertLastMessage().stderr().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
+		l.assertContents().is("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
+
+		l.reset();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logger(l)
+			.logRequests(DetailLevel.FULL, Level.WARNING)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		l.assertLastLevel(Level.WARNING);
+		l.assertLastMessage().is(
+			"",
+			"=== HTTP Call (outgoing) ======================================================",
+			"=== REQUEST ===",
+			"POST http://localhost/bean",
+			"---request headers---",
+			"	Accept: application/json+simple",
+			"---request entity---",
+			"	Content-Type: application/json+simple",
 			"---request content---",
 			"{f:1}",
 			"=== RESPONSE ===",
@@ -884,6 +974,26 @@ public class RestClientTest {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
+		l.assertContents().stderr().javaStrings().is(
+			"WARNING: ",
+			"=== HTTP Call (outgoing) ======================================================",
+			"=== REQUEST ===",
+			"POST http://localhost/bean",
+			"---request headers---",
+			"	Accept: application/json+simple",
+			"---request entity---",
+			"	Content-Type: application/json+simple",
+			"---request content---",
+			"{f:1}",
+			"=== RESPONSE ===",
+			"HTTP/1.1 200 ",
+			"---response headers---",
+			"	Content-Type: application/json",
+			"---response content---",
+			"{f:1}",
+			"=== END =======================================================================",
+			""
+		);
 	}
 
 	public static class B02a extends BasicRestCallInterceptor {
@@ -891,15 +1001,17 @@ public class RestClientTest {
 		public void onConnect(RestRequest req, RestResponse res) throws Exception {
 			super.onConnect(req, res);
 			req.log(Level.WARNING, "Foo");
-			req.log(Level.WARNING, new RuntimeException(), "Foo");
-			res.log(Level.WARNING, "Foo");
-			res.log(Level.WARNING, new RuntimeException(), "Foo");
+			req.log(Level.WARNING, new RuntimeException(), "Bar");
+			res.log(Level.WARNING, "Baz");
+			res.log(Level.WARNING, new RuntimeException(), "Qux");
+			req.log(Level.WARNING, (Throwable)null, "Quux");
 		}
 	}
 
 	@Test
 	public void b02a_loggingOther() throws Exception {
-		MockLogger ml = new MockLogger();
+		MockLogger ml = MockLogger.create();
+		MockConsole mc = MockConsole.create();
 
 		MockRestClient
 			.create(A.class)
@@ -910,7 +1022,31 @@ public class RestClientTest {
 			.post("/bean", bean)
 			.complete();
 
-		ml.assertCount(4);
+		ml.assertRecordCount().is(5);
+
+		ml.reset();
+
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.logger(ml)
+			.logToConsole()
+			.console(mc)
+			.interceptors(B02a.class)
+			.build()
+			.post("/bean", bean)
+			.complete();
+
+		ml.assertRecordCount().is(5);
+
+		ml.assertContents().contains(
+			"WARNING: Foo",
+			"WARNING: Bar",
+			"WARNING: Baz",
+			"WARNING: Qux",
+			"WARNING: Quux",
+			"at org.apache.juneau"
+		);
 	}
 
 	public static class B03 extends RestClient {

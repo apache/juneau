@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * 	client
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
- * 		.assertBody().equals(<js>"OK"</js>);
+ * 		.assertBody().is(<js>"OK"</js>);
  * </p>
  * @param <R> The return type.
  */
@@ -67,13 +67,40 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	/**
 	 * Asserts that the text equals the specified value.
 	 *
-	 * @param value The value to check against.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equals(<js>"OK"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * Multiple values can be passed in to represent multiple lines of output like so:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equals(
+	 * 			<js>"Line 1"</js>,
+	 * 			<js>"Line 2"</js>,
+	 * 			<js>"Line 3"</js>
+	 * 		);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The value to check against.
+	 * 	<br>If multiple values are specified, they are concatenated with newlines.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(String value) throws AssertionError {
-		if (! isEquals(value, text))
-			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
+	public R equals(String...value) throws AssertionError {
+		String v = join(value, '\n');
+		if (! isEquals(v, text))
+			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
 		return returns();
 	}
 
@@ -81,13 +108,39 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * Asserts that the text equals the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #equals(String)}.
+	 * Equivalent to {@link #equals(String...)}.
 	 *
-	 * @param value The value to check against.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().is(<js>"OK"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * Multiple values can be passed in to represent multiple lines of output like so:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().is(
+	 * 			<js>"Line 1"</js>,
+	 * 			<js>"Line 2"</js>,
+	 * 			<js>"Line 3"</js>
+	 * 		);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The value to check against.
+	 * 	<br>If multiple values are specified, they are concatenated with newlines.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R is(String value) throws AssertionError {
+	public R is(String...value) throws AssertionError {
 		return equals(value);
 	}
 
@@ -101,7 +154,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	public R urlDecodedIs(String value) throws AssertionError {
 		String t = urlDecode(text);
 		if (! isEqualsIc(value, t))
-			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(t));
+			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(t));
 		return returns();
 	}
 
@@ -114,7 +167,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R equalsIc(String value) throws AssertionError {
 		if (! isEqualsIc(value, text))
-			throw error("Text did not equal expected.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
+			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
 		return returns();
 	}
 

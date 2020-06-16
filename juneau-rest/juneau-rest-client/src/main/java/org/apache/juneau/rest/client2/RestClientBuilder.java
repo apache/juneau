@@ -22,6 +22,7 @@ import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
 import static org.apache.juneau.uon.UonSerializer.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -2533,6 +2534,44 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder callHandler(RestCallHandler value) {
 		return set(RESTCLIENT_callHandler, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:  Console print stream
+	 *
+	 * <p>
+	 * Allows you to redirect the console output to a different print stream.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_console}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder console(Class<? extends PrintStream> value) {
+		return set(RESTCLIENT_console, value);
+	}
+
+	/**
+	 * <i><l>RestClient</l> configuration property:  Console print stream
+	 *
+	 * <p>
+	 * Allows you to redirect the console output to a different print stream.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_console}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder console(PrintStream value) {
+		return set(RESTCLIENT_console, value);
 	}
 
 	/**

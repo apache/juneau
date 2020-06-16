@@ -12,8 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
+import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.logging.Formatter;
+
+import org.apache.juneau.assertions.*;
 
 /**
  * Simplified logger for intercepting and asserting logging messages.
@@ -21,28 +25,28 @@ import java.util.logging.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Instantiate a mock logger.</jc>
- * 	MockLogger ml = <jk>new</jk> MockLogger();
+ * 	MockLogger logger = <jk>new</jk> MockLogger();
  *
  * 	<jc>// Associate it with a MockRestClient.</jc>
  * 	MockRestClient
  * 		.<jsm>create</jsm>(MyRestResource.<jk>class</jk>)
  * 		.simpleJson()
- * 		.logger(ml)
+ * 		.logger(logger)
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
  * 		.build()
  * 		.post(<js>"/bean"</js>, bean)
  * 		.complete();
  *
  * 	<jc>// Assert that logging occurred.</jc>
- * 	ml.assertLevel(Level.<jsf>SEVERE</jsf>);
- * 	ml.assertMessageContains(
+ * 	logger.assertLastLevel(Level.<jsf>SEVERE</jsf>);
+ * 	logger.assertLastMessage().is(
  * 		<js>"=== HTTP Call (outgoing) ======================================================"</js>,
  * 		<js>"=== REQUEST ==="</js>,
  * 		<js>"POST http://localhost/bean"</js>,
  * 		<js>"---request headers---"</js>,
  * 		<js>"	Accept: application/json+simple"</js>,
  * 		<js>"---request entity---"</js>,
- * 		<js>"application/json+simple"</js>,
+ * 		<js>"	Content-Type: application/json+simple"</js>,
  * 		<js>"---request content---"</js>,
  * 		<js>"{f:1}"</js>,
  * 		<js>"=== RESPONSE ==="</js>,
@@ -51,13 +55,19 @@ import java.util.logging.*;
  * 		<js>"	Content-Type: application/json"</js>,
  * 		<js>"---response content---"</js>,
  * 		<js>"{f:1}"</js>,
- * 		<js>"=== END ======================================================================="</js>
+ * 		<js>"=== END ======================================================================="</js>,
+ * 		<js>""</js>
  * 	);
  * </p>
  */
 public class MockLogger extends Logger {
 
-	private volatile List<LogRecord> logRecords = new ArrayList<>();
+	private static final String FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
+
+	private final List<LogRecord> logRecords = new ArrayList<>();
+	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	private volatile Formatter formatter;
+	private volatile String format = "%4$s: %5$s%6$s%n";
 
 	/**
 	 * Constructor.
@@ -66,9 +76,77 @@ public class MockLogger extends Logger {
 		super("Mock", null);
 	}
 
+	/**
+	 * Creator.
+	 *
+	 * @return A new {@link MockLogger} object.
+	 */
+	public static MockLogger create() {
+		return new MockLogger();
+	}
+
 	@Override /* Logger */
 	public synchronized void log(LogRecord record) {
 		logRecords.add(record);
+		try {
+			baos.write(getFormatter().format(record).getBytes("UTF-8"));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Formatter getFormatter() {
+		if (formatter == null) {
+			synchronized(this) {
+				String oldFormat = System.getProperty(FORMAT_PROPERTY);
+				System.setProperty(FORMAT_PROPERTY, format);
+				formatter = new SimpleFormatter();
+				if (oldFormat == null)
+					System.clearProperty(FORMAT_PROPERTY);
+				else
+					System.setProperty(FORMAT_PROPERTY, oldFormat);
+			}
+		}
+		return formatter;
+	}
+
+	/**
+	 * Sets the level for this logger.
+	 *
+	 * @param level The new level for this logger.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized MockLogger level(Level level) {
+		super.setLevel(level);
+		return this;
+	}
+
+	/**
+	 * Specifies the format for messages sent to the log file.
+	 *
+	 * <p>
+	 * See {@link SimpleFormatter#format(LogRecord)} for the syntax of this string.
+	 *
+	 * @param format The format string.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized MockLogger format(String format) {
+		this.format = format;
+		return this;
+	}
+
+	/**
+	 * Overrides the formatter to use for formatting messages.
+	 *
+	 * <p>
+	 * The default uses {@link SimpleFormatter}.
+	 *
+	 * @param formatter The log record formatter.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized MockLogger formatter(Formatter formatter) {
+		this.formatter = formatter;
+		return this;
 	}
 
 	/**
@@ -78,6 +156,7 @@ public class MockLogger extends Logger {
 	 */
 	public synchronized MockLogger reset() {
 		logRecords.clear();
+		baos.reset();
 		return this;
 	}
 
@@ -98,7 +177,7 @@ public class MockLogger extends Logger {
 	 * @param level The level to match against.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized MockLogger assertLevel(Level level) {
+	public synchronized MockLogger assertLastLevel(Level level) {
 		assertLogged();
 		if (last().getLevel() != level)
 			throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");
@@ -108,60 +187,42 @@ public class MockLogger extends Logger {
 	/**
 	 * Asserts that the last message matched the specified message.
 	 *
-	 * @param message The message to search for.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized MockLogger assertMessage(String message) {
+	public synchronized FluentStringAssertion<MockLogger> assertLastMessage() {
 		assertLogged();
-		if (! last().getMessage().equals(message))
-			throw new AssertionError("Message was not [" + message + "].  Message=[" + last().getMessage() + "]");
-		return this;
-	}
-
-	/**
-	 * Asserts that the last message contained the specified text.
-	 *
-	 * @param messages The messages to search for.
-	 * @return This object (for method chaining).
-	 */
-	public synchronized MockLogger assertMessageContains(String...messages) {
-		assertLogged();
-		for (String m : messages)
-			if (! last().getMessage().contains(m))
-				throw new AssertionError("Message did not contain [" + m + "].  Message=[" + last().getMessage() + "]");
-		return this;
-	}
-
-	/**
-	 * Asserts that the last message doesn't contained the specified text.
-	 *
-	 * @param messages The messages to search for.
-	 * @return This object (for method chaining).
-	 */
-	public synchronized MockLogger assertMessageNotContains(String...messages) {
-		assertLogged();
-		for (String m : messages)
-			if (last().getMessage().contains(m))
-				throw new AssertionError("Message contained [" + m + "].  Message=[" + last().getMessage() + "]");
-		return this;
+		return new FluentStringAssertion<>(last().getMessage(), this);
 	}
 
 	/**
 	 * Asserts that the specified number of messages have been logged.
 	 *
-	 * @param count Expected number of messages logged.
 	 * @return This object (for method chaining).
 	 */
-	public synchronized MockLogger assertCount(int count) {
-		assertLogged();
-		if (logRecords.size() != count)
-			throw new AssertionError("Wrong number of messages.  Expected=["+count+"], Actual=["+logRecords.size()+"]");
-		return this;
+	public synchronized FluentIntegerAssertion<MockLogger> assertRecordCount() {
+		return new FluentIntegerAssertion<>(logRecords.size(), this);
+	}
+
+	/**
+	 * Allows you to perform fluent-style assertions on the contents of the log file.
+	 *
+	 * @return A new fluent-style assertion object.
+	 */
+	public synchronized FluentStringAssertion<MockLogger> assertContents() {
+		return new FluentStringAssertion<>(baos.toString(), this);
 	}
 
 	private LogRecord last() {
 		if (logRecords.isEmpty())
 			throw new AssertionError("Message not logged");
 		return logRecords.get(logRecords.size()-1);
+	}
+
+	/**
+	 * Returns the contents of this log file as a string.
+	 */
+	@Override
+	public String toString() {
+		return baos.toString();
 	}
 }
