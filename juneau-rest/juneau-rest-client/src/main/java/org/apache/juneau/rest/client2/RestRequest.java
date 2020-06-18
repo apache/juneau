@@ -99,53 +99,30 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
 		super(client, BeanSessionArgs.DEFAULT);
 		this.client = client;
-		if (hasBody) {
-			this.request = new EntityRequest(method);
-		} else {
-			this.request = new Request(method);
-		}
-		this.request.setURI(uri);
+		this.request = createInnerRequest(method, uri, hasBody);
 		this.errorCodes = client.errorCodes;
 		this.partSerializer = client.getPartSerializerSession();
 		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
 	}
 
-	private class Request extends HttpRequestBase implements RestRequestCreated {
-		private final String method;
-
-		Request(String method) {
-			this.method = method;
-		}
-
-		@Override /* RestRequestCreated */
-		public RestRequest getRestRequest() {
-			return RestRequest.this;
-		}
-
-		@Override /* HttpRequestBase */
-		public String getMethod() {
-			return method;
-		}
+	/**
+	 * Constructs the {@link HttpRequestBase} object that ends up being passed to the client execute method.
+	 *
+	 * <p>
+	 * Subclasses can override this method to create their own request base objects.
+	 *
+	 * @param method The HTTP method.
+	 * @param uri The HTTP URI.
+	 * @param hasBody Whether the HTTP request has a body.
+	 * @return A new {@link HttpRequestBase} object.
+	 */
+	protected HttpRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {
+		HttpRequestBase req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);
+		req.setURI(uri);
+		return req;
 	}
 
-	private class EntityRequest extends HttpEntityEnclosingRequestBase implements RestRequestCreated {
-		private final String method;
-
-		EntityRequest(String method) {
-			this.method = method;
-		}
-
-		@Override /* RestRequestCreated */
-		public RestRequest getRestRequest() {
-			return RestRequest.this;
-		}
-
-		@Override /* HttpRequestBase */
-		public String getMethod() {
-			return method;
-		}
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Configuration
@@ -793,8 +770,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
 	public RestRequest uri(Object uri) throws RestCallException {
-		if (uri != null)
-			uriBuilder = new URIBuilder(client.toURI(uri));
+		uriBuilder = new URIBuilder(client.toURI(uri));
 		return this;
 	}
 

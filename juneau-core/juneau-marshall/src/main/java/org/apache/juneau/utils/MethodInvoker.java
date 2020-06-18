@@ -14,6 +14,8 @@ package org.apache.juneau.utils;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.mstat.*;
+
 /**
  * A wrapper around a {@link Method#invoke(Object, Object...)} method that allows for basic instrumentation.
  */

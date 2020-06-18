@@ -56,6 +56,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.mstat.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;

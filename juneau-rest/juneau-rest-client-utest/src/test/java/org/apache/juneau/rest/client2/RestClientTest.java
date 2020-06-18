@@ -30,6 +30,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.client.*;
+import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
@@ -1366,6 +1367,70 @@ public class RestClientTest {
 		assertEquals("{f:1}", res);
 	}
 
+	@Test
+	public void c14_miscellaneous_requestConfig() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/bean")
+			.requestConfig(RequestConfig.custom().setMaxRedirects(1).build())
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void c15_miscellaneous_RestClient_toString() throws Exception {
+		String s = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.rootUrl("foo")
+			.build()
+			.toString();
+		assertTrue(s.contains("rootUri: 'foo'"));
+	}
+
+	@Test
+	public void c15_miscellaneous_request_target() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/bean")
+			.target(new HttpHost("localhost"))
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void c16_miscellaneous_request_context() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/bean")
+			.context(new BasicHttpContext())
+			.run()
+			.assertBody().is("{f:1}");
+	}
+
+	@Test
+	public void c18_miscellaneous_request_scheme() throws Exception {
+		java.net.URI uri = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/bean")
+			.scheme("http")
+			.host("localhost")
+			.port(8080)
+			.userInfo("foo:bar")
+			.run()
+			.assertBody().is("{f:1}")
+			.getRequest().getURI();
+		assertEquals("http://foo:bar@localhost:8080/bean", uri.toString());
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Pooled connections
 	//------------------------------------------------------------------------------------------------------------------
@@ -2065,6 +2130,19 @@ public class RestClientTest {
 			.get("/checkHeader")
 			.run()
 			.assertBody().is("['foo']");
+	}
+
+	@Test
+	public void f48_headers_onRequest_debug() throws Exception {
+		MockRestClient
+		.create(A.class)
+		.simpleJson()
+		.header("Check", "Debug")
+		.build()
+		.get("/checkHeader")
+		.debug()
+		.run()
+		.assertBody().is("['true']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -3179,6 +3257,23 @@ public class RestClientTest {
 	}
 
 	@Test
+	public void k03a_restClient_errorCodes_perRequest() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.ignoreErrors(false)
+				.build()
+				.get("/echo")
+				.errorCodes(x -> x == 200)
+				.run();
+			fail("Exception expected.");
+		} catch (RestCallException e) {
+			assertEquals(200, e.getResponseCode());
+		}
+	}
+
+	@Test
 	public void k04_restClient_executorService() throws Exception {
 		ExecutorService es = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
 		RestClient rc = MockRestClient
@@ -3301,6 +3396,225 @@ public class RestClientTest {
 			.assertBody().is("['f1','f2','f3']")
 			.assertHeader("Bar").is("b1");
 		assertEquals(111, XRestCallInterceptor.x);
+	}
+
+
+	@Test
+	public void k08a_restClient_interceptorsObjects_perRequest() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.header("Foo","f1")
+			.build()
+			.get("/checkHeader")
+			.interceptors(new XRestCallInterceptor())
+			.header("Check","foo")
+			.header("Foo","f3")
+			.run()
+			.assertBody().is("['f1','f2','f3']")
+			.assertHeader("Bar").is("b1");
+		assertEquals(111, XRestCallInterceptor.x);
+	}
+
+	public static class K08a extends BasicRestCallInterceptor {
+		@Override
+		public void onInit(RestRequest req) throws Exception {
+			throw new RuntimeException("foo");
+		}
+
+		@Override
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {
+		}
+
+		@Override
+		public void onClose(RestRequest req, RestResponse res) throws Exception {
+		}
+	}
+
+	public static class K08b extends BasicRestCallInterceptor {
+		@Override
+		public void onInit(RestRequest req) throws Exception {
+		}
+
+		@Override
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {
+			throw new RuntimeException("foo");
+		}
+
+		@Override
+		public void onClose(RestRequest req, RestResponse res) throws Exception {
+		}
+	}
+
+	public static class K08c extends BasicRestCallInterceptor {
+		@Override
+		public void onInit(RestRequest req) throws Exception {
+		}
+
+		@Override
+		public void onConnect(RestRequest req, RestResponse res) throws Exception {
+		}
+
+		@Override
+		public void onClose(RestRequest req, RestResponse res) throws Exception {
+			throw new RuntimeException("foo");
+		}
+	}
+
+	@Test
+	public void k08_restClient_interceptorsClasses_exceptions() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(K08a.class)
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(K08b.class)
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(K08c.class)
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run()
+				.close();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+	}
+
+	@Test
+	public void k08_restClient_interceptorsObjects_exceptions() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(new K08a())
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(new K08b())
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.interceptors(new K08c())
+				.build()
+				.get("/checkHeader")
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run()
+				.close();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+	}
+
+	@Test
+	public void k08_restClient_interceptorsObjects_perRequest_exceptions() throws Exception {
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.build()
+				.get("/checkHeader")
+				.interceptors(new K08a())
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.build()
+				.get("/checkHeader")
+				.interceptors(new K08b())
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
+
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.header("Foo","f1")
+				.build()
+				.get("/checkHeader")
+				.interceptors(new K08c())
+				.header("Check","foo")
+				.header("Foo","f3")
+				.run()
+				.close();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("foo", e.getCause(RuntimeException.class).getMessage());
+		}
 	}
 
 	public static class K09RestClient extends RestClient {

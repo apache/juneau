@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.mstat.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -62,7 +63,7 @@ public class MethodInvokerTest {
 			mi.invoke(a);
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{exception:'RuntimeException',hash:'*',count:3}]}", mes);
+		assertObjectMatches("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}", mes);
 	}
 
 	@Test
@@ -83,7 +84,7 @@ public class MethodInvokerTest {
 			mi.invoke(a, 1, "x");
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{exception:'IllegalArgumentException',hash:'*',count:3}]}", mes);
+		assertObjectMatches("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}", mes);
 	}
 
 	@Test

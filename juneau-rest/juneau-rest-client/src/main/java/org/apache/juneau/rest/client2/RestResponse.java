@@ -70,6 +70,15 @@ public class RestResponse implements HttpResponse {
 		this.partParser = client.getPartParserSession();
 	}
 
+	/**
+	 * Returns the request object that created this response object.
+	 *
+	 * @return The request object that created this response object.
+	 */
+	public RestRequest getRequest() {
+		return request;
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Setters
 	//------------------------------------------------------------------------------------------------------------------

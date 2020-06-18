@@ -10,54 +10,30 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.client2;
 
-import java.time.*;
-import java.util.*;
-
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.mstat.*;
-import org.apache.juneau.transforms.*;
+import org.apache.http.client.methods.*;
 
 /**
- * A snapshot of execution statistics for REST resource classes.
+ * Inner request class of {@link RestRequest} for requests with bodies.
  */
-@Bean(bpi="startTime,upTime,methodStats")
-public class RestContextStats {
-	private final Instant startTime;
-	private final List<MethodExecStats> methodStats;
+class BasicHttpEntityRequestBase extends HttpEntityEnclosingRequestBase implements RestRequestCreated {
 
-	RestContextStats(Instant startTime, List<MethodExecStats> methodStats) {
-		this.startTime = startTime;
-		this.methodStats = methodStats;
+	final String method;
+	final RestRequest restRequest;
+
+	BasicHttpEntityRequestBase(RestRequest restRequest, String method) {
+		this.restRequest = restRequest;
+		this.method = method;
 	}
 
-	/**
-	 * Returns the time this REST resource class was started.
-	 *
-	 * @return The time this REST resource class was started.
-	 */
-	@Swap(TemporalSwap.IsoInstant.class)
-	public Instant getStartTime() {
-		return startTime;
+	@Override /* RestRequestCreated */
+	public RestRequest getRestRequest() {
+		return this.restRequest;
 	}
 
-	/**
-	 * Returns the time in milliseconds that this REST resource class has been running.
-	 *
-	 * @return The time in milliseconds that this REST resource class has been running.
-	 */
-	public String getUpTime() {
-		long s = Duration.between(startTime, Instant.now()).getSeconds();
-		return String.format("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));
-	}
-
-	/**
-	 * Returns statistics on all method executions.
-	 *
-	 * @return Statistics on all method executions.
-	 */
-	public Collection<MethodExecStats> getMethodStats() {
-		return methodStats;
+	@Override /* HttpRequestBase */
+	public String getMethod() {
+		return method;
 	}
 }

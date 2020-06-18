@@ -264,7 +264,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 		if (! isIgnoreInvocationExceptionsOnGetters())
 			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
-				p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+				p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()).initCause(t);
 	}
 
 	/**

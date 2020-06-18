@@ -149,7 +149,8 @@ public class MethodExecStats implements Comparable<MethodExecStats> {
 	 * @return The average execution time in milliseconds.
 	 */
 	public int getAvgTime() {
-		return (int)(getTotalTime() / getRuns());
+		int runs = getRuns();
+		return runs == 0 ? 0 : (int)(getTotalTime() / runs);
 	}
 
 	/**

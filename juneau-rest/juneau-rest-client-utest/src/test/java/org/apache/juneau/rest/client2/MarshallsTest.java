@@ -66,6 +66,8 @@ public class MarshallsTest {
 	// Basic tests - Single language support
 	//------------------------------------------------------------------------------------------------------------------
 
+	private static RestClient a1 = MockRestClient.create(A.class).build();
+
 	private static RestClient a1a = MockRestClient.create(A.class).simpleJson().build();
 	private static RestClient a1b = MockRestClient.create(A.class).json().build();
 	private static RestClient a1c = MockRestClient.create(A.class).xml().build();
@@ -143,6 +145,87 @@ public class MarshallsTest {
 		a1k.post("/a01", bean)
 			.header("X-Accept", "text/html")
 			.header("X-Content-Type", "text/html+stripped")
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+	}
+
+	@Test
+	public void a01a_singleLanguages_perRequest() throws Exception {
+		a1.post("/a01", bean)
+			.header("X-Accept", "application/json+simple")
+			.header("X-Content-Type", "application/json+simple")
+			.simpleJson()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "application/json")
+			.header("X-Content-Type", "application/json")
+			.json()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/xml")
+			.header("X-Content-Type", "text/xml")
+			.xml()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/html")
+			.header("X-Content-Type", "text/html")
+			.html()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/plain")
+			.header("X-Content-Type", "text/plain")
+			.plainText()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "octal/msgpack")
+			.header("X-Content-Type", "octal/msgpack")
+			.msgPack()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/uon")
+			.header("X-Content-Type", "text/uon")
+			.uon()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "application/x-www-form-urlencoded")
+			.header("X-Content-Type", "application/x-www-form-urlencoded")
+			.urlEnc()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/openapi")
+			.header("X-Content-Type", "text/openapi")
+			.openApi()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/html")
+			.header("X-Content-Type", "text/html")
+			.htmlDoc()
+			.run()
+			.assertStatus().is(200)
+			.getBody().as(Bean.class).check();
+		a1.post("/a01", bean)
+			.header("X-Accept", "text/html")
+			.header("X-Content-Type", "text/html+stripped")
+			.htmlStrippedDoc()
 			.run()
 			.assertStatus().is(200)
 			.getBody().as(Bean.class).check();
