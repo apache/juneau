@@ -331,7 +331,7 @@ public abstract class Session {
 	 * @see Context#CONTEXT_locale
 	 * @return The session locale.
 	 */
-	public final Locale getLocale() {
+	public Locale getLocale() {
 		return locale;
 	}
 

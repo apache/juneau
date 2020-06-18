@@ -237,7 +237,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	private final RestContext restBeanCtx;
 	private final String contextPath, servletPath;
 
-	private final ThreadLocal<MockRestRequest> rreq = new ThreadLocal<>();
+	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
 	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
 	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
 	private final ThreadLocal<MockServletResponse> sres = new ThreadLocal<>();
@@ -570,7 +570,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * @return The current client-side REST request, or <jk>null</jk> if not set.
 	 */
-	public MockRestRequest getCurrentClientRequest() {
+	public HttpRequest getCurrentClientRequest() {
 		return rreq.get();
 	}
 
@@ -678,8 +678,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			String path = rl.getUri();
 			String target = findTarget(request);
 
-			MockRestRequest mrr = findRestRequest(request);
-			rreq.set(mrr);
+			HttpRequest req = findRestRequest(request);
+			rreq.set(req);
 			rres.remove();
 			sreq.remove();
 			sres.remove();
@@ -700,19 +700,22 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				r.header(h.getName(), h.getValue());
 
 			sreq.set(r);
-
-			rreq.get().applyOverrides(sreq.get());
+			sreq.get().applyOverrides(req);
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);
 		}
 	}
 
-	private MockRestRequest findRestRequest(HttpRequest req) {
+	/** 
+	 * Attempts to unwrap the request to find the underlying RestRequest object.
+	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).
+	 */
+	private HttpRequest findRestRequest(HttpRequest req) {
 		if (req instanceof RestRequestCreated)
-			return (MockRestRequest)((RestRequestCreated)req).getRestRequest();
+			return ((RestRequestCreated)req).getRestRequest();
 		if (req instanceof HttpRequestWrapper)
 			return findRestRequest(((HttpRequestWrapper) req).getOriginal());
-		throw new RuntimeException("HttpRequest not an instance of RestRequestCreated");
+		return req;
 	}
 
 	private String findTarget(HttpRequest req) {

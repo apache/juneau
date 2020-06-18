@@ -21,6 +21,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
@@ -946,6 +947,79 @@ public class MockServletRequest implements HttpServletRequest {
 	public MockServletRequest noTrace(boolean value) {
 		if (value)
 			header("X-NoTrace", true);
+		return this;
+	}
+
+	/**
+	 * If the specified request is a {@link MockRestRequest}, applies any of the override values to this servlet request.
+	 *
+	 * @param req The request to copy overrides from.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest applyOverrides(HttpRequest req) {
+
+		if (req instanceof MockRestRequest) {
+			MockRestRequest mreq = (MockRestRequest)req;
+			for (Map.Entry<String,Object> a : mreq.getAttributeMap().entrySet())
+				attribute(a.getKey(), a.getValue());
+			for (Map.Entry<String,RequestDispatcher> a : mreq.getRequestDispatcherMap().entrySet())
+				requestDispatcher(a.getKey(), a.getValue());
+			if (mreq.getCharacterEncoding() != null)
+				characterEncoding(mreq.getCharacterEncoding());
+			if (mreq.getProtocol() != null)
+				protocol(mreq.getProtocol());
+			if (mreq.getScheme() != null)
+				scheme(mreq.getScheme());
+			if (mreq.getServerName() != null)
+				serverName(mreq.getServerName());
+			if (mreq.getRemoteAddr() != null)
+				remoteAddr(mreq.getRemoteAddr());
+			if (mreq.getRemoteHost() != null)
+				remoteHost(mreq.getRemoteHost());
+			if (mreq.getLocalName() != null)
+				localName(mreq.getLocalName());
+			if (mreq.getLocalAddr() != null)
+				localAddr(mreq.getLocalAddr());
+			if (mreq.getPathInfo() != null)
+				pathInfo(mreq.getPathInfo());
+			if (mreq.getPathTranslated() != null)
+				pathTranslated(mreq.getPathTranslated());
+			if (mreq.getContextPath() != null)
+				contextPath(mreq.getContextPath());
+			if (mreq.getQueryString() != null)
+				queryString(mreq.getQueryString());
+			if (mreq.getRemoteUser() != null)
+				remoteUser(mreq.getRemoteUser());
+			if (mreq.getRequestedSessionId() != null)
+				requestedSessionId(mreq.getRequestedSessionId());
+			if (mreq.getRequestURI() != null)
+				requestURI(mreq.getRequestURI());
+			if (mreq.getServletPath() != null)
+				servletPath(mreq.getServletPath());
+			if (mreq.getAuthType() != null)
+				authType(mreq.getAuthType());
+			if (mreq.getServerPort() != null)
+				serverPort(mreq.getServerPort());
+			if (mreq.getRemotePort() != null)
+				remotePort(mreq.getRemotePort());
+			if (mreq.getLocalPort() != null)
+				localPort(mreq.getLocalPort());
+			if (mreq.getLocale() != null)
+				locale(mreq.getLocale());
+			if (mreq.getServletContext() != null)
+				servletContext(mreq.getServletContext());
+			if (mreq.getDispatcherType() != null)
+				dispatcherType(mreq.getDispatcherType());
+			if (mreq.getCookies() != null)
+				cookies(mreq.getCookies());
+			if (mreq.getUserPrincipal() != null)
+				userPrincipal(mreq.getUserPrincipal());
+			if (mreq.getHttpSession() != null)
+				httpSession(mreq.getHttpSession());
+			if (mreq.getRoles() != null)
+				roles(mreq.getRoles());
+		}
+
 		return this;
 	}
 }

@@ -74,74 +74,6 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies any HTTP servlet request overrides to the specified servlet request.
-	 *
-	 * @param req The servlet request.
-	 * @return This object (for method chaining).
-	 */
-	protected MockRestRequest applyOverrides(MockServletRequest req) {
-		for (Map.Entry<String,Object> a : attributeMap.entrySet())
-			req.attribute(a.getKey(), a.getValue());
-		for (Map.Entry<String,RequestDispatcher> a : requestDispatcherMap.entrySet())
-			req.requestDispatcher(a.getKey(), a.getValue());
-		if (characterEncoding != null)
-			req.characterEncoding(characterEncoding);
-		if (protocol != null)
-			req.protocol(protocol);
-		if (scheme != null)
-			req.scheme(scheme);
-		if (serverName != null)
-			req.serverName(serverName);
-		if (remoteAddr != null)
-			req.remoteAddr(remoteAddr);
-		if (remoteHost != null)
-			req.remoteHost(remoteHost);
-		if (localName != null)
-			req.localName(localName);
-		if (localAddr != null)
-			req.localAddr(localAddr);
-		if (pathInfo != null)
-			req.pathInfo(pathInfo);
-		if (pathTranslated != null)
-			req.pathTranslated(pathTranslated);
-		if (contextPath != null)
-			req.contextPath(contextPath);
-		if (queryString != null)
-			req.queryString(queryString);
-		if (remoteUser != null)
-			req.remoteUser(remoteUser);
-		if (requestedSessionId != null)
-			req.requestedSessionId(requestedSessionId);
-		if (requestURI != null)
-			req.requestURI(requestURI);
-		if (servletPath != null)
-			req.servletPath(servletPath);
-		if (authType != null)
-			req.authType(authType);
-		if (serverPort != null)
-			req.serverPort(serverPort);
-		if (remotePort != null)
-			req.remotePort(remotePort);
-		if (localPort != null)
-			req.localPort(localPort);
-		if (locale != null)
-			req.locale(locale);
-		if (servletContext != null)
-			req.servletContext(servletContext);
-		if (dispatcherType != null)
-			req.dispatcherType(dispatcherType);
-		if (cookies != null)
-			req.cookies(cookies);
-		if (userPrincipal != null)
-			req.userPrincipal(userPrincipal);
-		if (httpSession != null)
-			req.httpSession(httpSession);
-		if (roles != null)
-			req.roles(roles);
-		return this;
-	}
-
-	/**
 	 * Adds an attribute to the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -174,6 +106,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the attributes to add to the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The attributes to add to the underlying {@link HttpServletRequest} object.
+	 */
+	public Map<String,Object> getAttributeMap() {
+		return attributeMap;
+	}
+
+	/**
 	 * Specifies the user roles on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -189,6 +130,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest roles(String...roles) {
 		this.roles = roles;
 		return this;
+	}
+
+	/**
+	 * Returns the user roles to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The user roles to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String[] getRoles() {
+		return roles;
 	}
 
 	/**
@@ -228,6 +178,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the value to set for the return value on the underlying {@link HttpServletRequest#getCharacterEncoding()} method.
+	 *
+	 * @return The value to set for the return value on the underlying {@link HttpServletRequest#getCharacterEncoding()} method.
+	 */
+	public String getCharacterEncoding() {
+		return characterEncoding;
+	}
+
+	/**
 	 * Overrides the HTTP protocol value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -243,6 +202,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest protocol(String value) {
 		this.protocol = value;
 		return this;
+	}
+
+	/**
+	 * Returns the HTTP protocol value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP protocol value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getProtocol() {
+		return protocol;
 	}
 
 	/**
@@ -265,6 +233,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the HTTP schema value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP schema value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getScheme() {
+		return scheme;
+	}
+
+	/**
 	 * Overrides the server name value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -280,6 +257,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest serverName(String value) {
 		this.serverName = value;
 		return this;
+	}
+
+	/**
+	 * Returns the server name value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The server name value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getServerName() {
+		return serverName;
 	}
 
 	/**
@@ -301,6 +287,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the server port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The server port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getServerPort() {
+		return serverPort;
+	}
+
+	/**
 	 * Overrides the remote address value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -316,6 +311,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest remoteAddr(String value) {
 		this.remoteAddr = value;
 		return this;
+	}
+
+	/**
+	 * Returns the remote address value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote address value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteAddr() {
+		return remoteAddr;
 	}
 
 	/**
@@ -337,6 +341,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the remote host value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote host value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteHost() {
+		return remoteHost;
+	}
+
+	/**
 	 * Overrides the locale on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -352,6 +365,16 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest locale(Locale value) {
 		this.locale = value;
 		return this;
+	}
+
+	/**
+	 * Returns the locale to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The locale to set on the underlying {@link HttpServletRequest} object.
+	 */
+	@Override
+	public Locale getLocale() {
+		return locale;
 	}
 
 	/**
@@ -373,6 +396,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the remote port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getRemotePort() {
+		return remotePort;
+	}
+
+	/**
 	 * Overrides the local name value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -388,6 +420,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest localName(String value) {
 		this.localName = value;
 		return this;
+	}
+
+	/**
+	 * Returns the local name value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local name value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getLocalName() {
+		return localName;
 	}
 
 	/**
@@ -409,6 +450,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the local address value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local address value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getLocalAddr() {
+		return localAddr;
+	}
+
+	/**
 	 * Overrides the local port value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -424,6 +474,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest localPort(int value) {
 		this.localPort = value;
 		return this;
+	}
+
+	/**
+	 * Returns the local port value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The local port value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Integer getLocalPort() {
+		return localPort;
 	}
 
 	/**
@@ -446,6 +505,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the request dispatcher to set on the underlying {@link HttpServletRequest} obhject.
+	 *
+	 * @return The value of the <property>requestDispatcherMap</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,RequestDispatcher> getRequestDispatcherMap() {
+		return requestDispatcherMap;
+	}
+
+	/**
 	 * Overrides the servlet context on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -461,6 +529,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest servletContext(ServletContext value) {
 		this.servletContext = value;
 		return this;
+	}
+
+	/**
+	 * Returns the servlet context to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The servlet context to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public ServletContext getServletContext() {
+		return servletContext;
 	}
 
 	/**
@@ -482,6 +559,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the dispatcher type value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The dispatcher type value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public DispatcherType getDispatcherType() {
+		return dispatcherType;
+	}
+
+	/**
 	 * Overrides the authorization type value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -497,6 +583,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest authType(String value) {
 		this.authType = value;
 		return this;
+	}
+
+	/**
+	 * Returns the authorization type value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The authorization type value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getAuthType() {
+		return authType;
 	}
 
 	/**
@@ -518,6 +613,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the cookies to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The cookies to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Cookie[] getCookies() {
+		return cookies;
+	}
+
+	/**
 	 * Overrides the path-info value on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -533,6 +637,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest pathInfo(String value) {
 		this.pathInfo = value;
 		return this;
+	}
+
+	/**
+	 * Returns the path-info value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The path-info value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getPathInfo() {
+		return pathInfo;
 	}
 
 	/**
@@ -554,6 +667,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the path-translated value to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The path-translated value to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getPathTranslated() {
+		return pathTranslated;
+	}
+
+	/**
 	 * Overrides the context path on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -569,6 +691,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest contextPath(String value) {
 		this.contextPath = value;
 		return this;
+	}
+
+	/**
+	 * Returns the context path to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The context path to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getContextPath() {
+		return contextPath;
 	}
 
 	/**
@@ -590,6 +721,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the query string to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The query string to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getQueryString() {
+		return queryString;
+	}
+
+	/**
 	 * Overrides the remote user on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -605,6 +745,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest remoteUser(String value) {
 		this.remoteUser = value;
 		return this;
+	}
+
+	/**
+	 * Returns the remote user to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The remote user to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRemoteUser() {
+		return remoteUser;
 	}
 
 	/**
@@ -626,6 +775,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the user principal to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The user principal to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public Principal getUserPrincipal() {
+		return userPrincipal;
+	}
+
+	/**
 	 * Overrides the requested session ID on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -641,6 +799,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest requestedSessionId(String value) {
 		this.requestedSessionId = value;
 		return this;
+	}
+
+	/**
+	 * Returns the requested session ID to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The requested session ID to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRequestedSessionId() {
+		return requestedSessionId;
 	}
 
 	/**
@@ -662,6 +829,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the request URI to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The request URI to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getRequestURI() {
+		return requestURI;
+	}
+
+	/**
 	 * Overrides the servlet path on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -680,6 +856,15 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	}
 
 	/**
+	 * Returns the servlet path to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The servlet path to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public String getServletPath() {
+		return servletPath;
+	}
+
+	/**
 	 * Overrides the HTTP session on the underlying {@link HttpServletRequest} object.
 	 *
 	 * <p>
@@ -695,5 +880,14 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	public MockRestRequest httpSession(HttpSession value) {
 		this.httpSession = value;
 		return this;
+	}
+
+	/**
+	 * Returns the HTTP session to set on the underlying {@link HttpServletRequest} object.
+	 *
+	 * @return The HTTP session to set on the underlying {@link HttpServletRequest} object.
+	 */
+	public HttpSession getHttpSession() {
+		return httpSession;
 	}
 }

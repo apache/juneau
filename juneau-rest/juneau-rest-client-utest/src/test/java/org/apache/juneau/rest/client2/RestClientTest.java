@@ -49,6 +49,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
@@ -1131,7 +1132,7 @@ public class RestClientTest {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void c01_interceptors() throws RestCallException {
+	public void c01_miscellaneous_interceptors() throws RestCallException {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1173,7 +1174,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void c02_httpProcessor() throws RestCallException {
+	public void c02_miscellaneous_httpProcessor() throws RestCallException {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1196,7 +1197,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void c03_requestExecutor() throws RestCallException {
+	public void c03_miscellaneous_requestExecutor() throws RestCallException {
 		AtomicBoolean b1 = new AtomicBoolean();
 		MockRestClient
 			.create(A.class)
@@ -1216,7 +1217,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void c04_defaultHeaders() throws RestCallException {
+	public void c04_miscellaneous_defaultHeaders() throws RestCallException {
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
@@ -1228,7 +1229,7 @@ public class RestClientTest {
 	}
 
 	@Test
-	public void c05_miscellaneous() {
+	public void c05_miscellaneous_httpClientBuilderMethods() {
 		RestClient.create()
 			.disableRedirectHandling()
 			.redirectStrategy(DefaultRedirectStrategy.INSTANCE)
@@ -1270,6 +1271,30 @@ public class RestClientTest {
 			.useSystemProperties()
 			.evictExpiredConnections()
 			.evictIdleConnections(1, TimeUnit.DAYS);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void c06_miscellaneous_unusedHttpClientMethods() {
+		RestClient rc = RestClient
+			.create()
+			.build();
+
+		try {
+			assertNotNull(rc.getParams());
+		} catch (UnsupportedOperationException e) {}
+		assertNotNull(rc.getConnectionManager());
+	}
+
+	@Test
+	public void c07_miscellaneous_executeHttpUriRequest() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		x.addHeader("Accept", "text/json+simple");
+		HttpResponse res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(x);
+		assertEquals("{f:1}", IOUtils.read(res.getEntity().getContent()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
