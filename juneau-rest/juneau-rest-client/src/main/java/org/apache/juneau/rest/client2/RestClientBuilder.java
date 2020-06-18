@@ -1222,39 +1222,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Sets a header on all requests.
 	 *
-	 * <p>
-	 * Unlike {@link #header(String,Object)} which converts the value to a string using the part serializer, this
-	 * method converts the value to a string using {@link Object#toString()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.headerString(<js>"Foo"</js>, <js>"bar"</js>);
-	 * 		.build();
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_headers}
-	 * </ul>
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using {@link Object#toString()}.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder headerString(String name, Object value) {
-		return header(BasicStringHeader.of(name, value));
-	}
-
-	/**
-	 * Sets a header on all requests.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
@@ -1288,23 +1255,35 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
-	 *
-	 * <p>
-	 * Can be any of the following types:
-	 * <ul>
-	 * 	<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 	<li>{@link NameValuePair}
-	 * </ul>
 	 *
 	 * @param header The header to set.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder header(Object header) {
+	public RestClientBuilder header(Header header) {
 		return appendTo(RESTCLIENT_headers, header);
+	}
+
+	/**
+	 * Sets a header on all requests.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	RestClient c = RestClient
+	 * 		.<jsm>create</jsm>()
+	 * 		.header(BasicNameValuePair.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param pair The header to set.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestClientBuilder header(NameValuePair pair) {
+		return appendTo(RESTCLIENT_headers, pair);
 	}
 
 	/**
@@ -1314,7 +1293,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.headers(<jk>new</jk> BasicHeader(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.headers(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
@@ -1344,8 +1323,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (h instanceof Header || h instanceof NameValuePair)
-				header(h);
+			if (h instanceof Header)
+				header((Header)h);
+			else if (h instanceof NameValuePair)
+				header((NameValuePair)h);
 			else if (h instanceof Map) {
 				Map m = (Map)h;
 				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
@@ -2018,30 +1999,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Adds a query parameter to the URI.
 	 *
-	 * <p>
-	 * Unlike {@link #query(String,Object)} which converts the value to a string using the part serializer, this
-	 * method converts the value to a string using {@link Object#toString()}.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.queryString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using {@link Object#toString()}.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
+	 * @param pair The query parameter.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder queryString(String name, Object value) {
-		return query(BasicNameValuePair.of(name, value));
+	public RestClientBuilder query(NameValuePair pair) {
+		return queries(pair);
 	}
 
 	/**
@@ -2076,7 +2047,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.queries(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
@@ -2103,7 +2074,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("rawtypes")
 	@FluentSetter
-	public RestClientBuilder query(Object...params) {
+	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
 				appendTo(RESTCLIENT_query, p);
@@ -2113,7 +2084,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 					query(stringify(e.getKey()), e.getValue(), null, null);
 			} else if (p instanceof NameValuePairs) {
 				for (NameValuePair nvp : (NameValuePairs)p)
-					query(nvp);
+					queries(nvp);
 			} else if (p != null) {
 				throw new RuntimeException("Invalid type passed to query(Object...):  " + p.getClass().getName());
 			}
@@ -2317,30 +2288,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Adds a form-data parameter to all request bodies.
 	 *
-	 * <p>
-	 * Unlike {@link #formData(String,Object)} which converts the value to a string using the part serializer, this
-	 * method converts the value to a string using {@link Object#toString()}.
-
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formDataString(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using {@link Object#toString()}.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
+	 * @param pair The form data parameter.
 	 * @return This object (for method chaining).
 	 */
-	 @FluentSetter
-	public RestClientBuilder formDataString(String name, Object value) {
-		return formData(BasicNameValuePair.of(name, value));
+	@FluentSetter
+	public RestClientBuilder formData(NameValuePair pair) {
+		return formDatas(pair);
 	}
 
 	/**
@@ -2375,7 +2336,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<jk>new</jk> BasicNameValuePair(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
 	 *
@@ -2402,7 +2363,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@SuppressWarnings("rawtypes")
 	@FluentSetter
-	public RestClientBuilder formData(Object...params) {
+	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
 			if (p instanceof NameValuePair) {
 				appendTo(RESTCLIENT_formData, p);
@@ -2412,7 +2373,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 					formData(stringify(e.getKey()), e.getValue(), null, null);
 			} else if (p instanceof NameValuePairs) {
 				for (NameValuePair nvp : (NameValuePairs)p)
-					formData(nvp);
+					formDatas(nvp);
 			} else if (p != null) {
 				throw new RuntimeException("Invalid type passed to formData(Object...):  " + p.getClass().getName());
 			}

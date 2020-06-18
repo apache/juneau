@@ -21,6 +21,7 @@ import java.util.logging.*;
 
 import static org.apache.juneau.rest.util.RestUtils.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
@@ -699,6 +700,18 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder console(PrintStream value) {
+		super.console(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder console(Class<? extends java.io.PrintStream> value) {
+		super.console(value);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 		super.contentDecoderRegistry(contentDecoderMap);
 		return this;
@@ -855,8 +868,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formData(Object...params) {
-		super.formData(params);
+	public MockRestClientBuilder formData(NameValuePair pair) {
+		super.formData(pair);
 		return this;
 	}
 
@@ -903,8 +916,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder formDataString(String name, Object value) {
-		super.formDataString(name, value);
+	public MockRestClientBuilder formDatas(Object...params) {
+		super.formDatas(params);
 		return this;
 	}
 
@@ -921,7 +934,13 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder header(Object header) {
+	public MockRestClientBuilder header(Header header) {
+		super.header(header);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder header(NameValuePair header) {
 		super.header(header);
 		return this;
 	}
@@ -965,12 +984,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder headerPairs(Object...pairs) {
 		super.headerPairs(pairs);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder headerString(String name, Object value) {
-		super.headerString(name, value);
 		return this;
 	}
 
@@ -1318,8 +1331,14 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder query(Object...params) {
-		super.query(params);
+	public MockRestClientBuilder queries(Object...params) {
+		super.queries(params);
+		return this;
+	}
+
+	@Override /* GENERATED - RestClientBuilder */
+	public MockRestClientBuilder query(NameValuePair pair) {
+		super.query(pair);
 		return this;
 	}
 
@@ -1362,12 +1381,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - RestClientBuilder */
 	public MockRestClientBuilder queryPairs(Object...pairs) {
 		super.queryPairs(pairs);
-		return this;
-	}
-
-	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder queryString(String name, Object value) {
-		super.queryString(name, value);
 		return this;
 	}
 
