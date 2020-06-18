@@ -914,7 +914,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final Class<T> type) throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
@@ -973,7 +973,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final ClassMeta<T> type) throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
@@ -1040,7 +1040,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	{@link Future Futures}.
 	 */
 	public <T> Future<T> asFuture(final Type type, final Type...args) throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
@@ -1161,7 +1161,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	{@link Future Futures}.
 	 */
 	public Future<String> asStringFuture() throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<String>() {
 				@Override /* Callable */
 				public String call() throws Exception {

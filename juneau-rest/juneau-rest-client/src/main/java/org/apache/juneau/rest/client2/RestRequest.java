@@ -3931,7 +3931,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If the executor service was not defined.
 	 */
 	public Future<RestResponse> runFuture() throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<RestResponse>() {
 				@Override /* Callable */
 				public RestResponse call() throws Exception {
@@ -3987,7 +3987,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If the executor service was not defined.
 	 */
 	public Future<RestResponse> completeFuture() throws RestCallException {
-		return client.getExecutorService(true).submit(
+		return client.getExecutorService().submit(
 			new Callable<RestResponse>() {
 				@Override /* Callable */
 				public RestResponse call() throws Exception {

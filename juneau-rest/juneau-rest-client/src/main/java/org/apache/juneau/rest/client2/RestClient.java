@@ -3047,7 +3047,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 					RemoteMethodReturn rmr = rmm.getReturns();
 					if (rmr.isFuture()) {
-						return getExecutorService(true).submit(new Callable<Object>() {
+						return getExecutorService().submit(new Callable<Object>() {
 							@Override
 							public Object call() throws Exception {
 								try {
@@ -3061,7 +3061,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 						});
 					} else if (rmr.isCompletableFuture()) {
 						CompletableFuture<Object> cf = new CompletableFuture<>();
-						getExecutorService(true).submit(new Callable<Object>() {
+						getExecutorService().submit(new Callable<Object>() {
 							@Override
 							public Object call() throws Exception {
 								try {
@@ -3600,11 +3600,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	//-----------------------------------------------------------------------------------------------------------------
 
 	HttpPartSerializerSession getPartSerializerSession() {
-		return partSerializer == null ? null : partSerializer.createPartSession(null);
+		return partSerializer.createPartSession(null);
 	}
 
 	HttpPartParserSession getPartParserSession() {
-		return partParser == null ? null : partParser.createPartSession(null);
+		return partParser.createPartSession(null);
 	}
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
@@ -3636,12 +3636,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 	}
 
-	ExecutorService getExecutorService(boolean create) {
-		if (executorService != null || ! create)
+	ExecutorService getExecutorService() {
+		if (executorService != null)
 			return executorService;
 		synchronized(this) {
-			if (executorService == null)
-				executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
+			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
 			return executorService;
 		}
 	}

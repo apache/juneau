@@ -1297,6 +1297,75 @@ public class RestClientTest {
 		assertEquals("{f:1}", IOUtils.read(res.getEntity().getContent()));
 	}
 
+	@Test
+	public void c08_miscellaneous_executeHttpHostHttpRequest() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		HttpHost target = new HttpHost("localhost");
+		x.addHeader("Accept", "text/json+simple");
+		HttpResponse res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(target, x);
+		assertEquals("{f:1}", IOUtils.read(res.getEntity().getContent()));
+	}
+
+	@Test
+	public void c09_miscellaneous_executeHttpHostHttpRequestHttpContext() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		HttpHost target = new HttpHost("localhost");
+		HttpContext context = new BasicHttpContext();
+		x.addHeader("Accept", "text/json+simple");
+		HttpResponse res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(target, x, context);
+		assertEquals("{f:1}", IOUtils.read(res.getEntity().getContent()));
+	}
+
+	@Test
+	public void c10_miscellaneous_executeResponseHandler() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		x.addHeader("Accept", "text/json+simple");
+		String res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(x, new BasicResponseHandler());
+		assertEquals("{f:1}", res);
+	}
+
+	@Test
+	public void c11_miscellaneous_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		x.addHeader("Accept", "text/json+simple");
+		String res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(x, new BasicResponseHandler(), new BasicHttpContext());
+		assertEquals("{f:1}", res);
+	}
+
+	@Test
+	public void c12_miscellaneous_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		x.addHeader("Accept", "text/json+simple");
+		String res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(new HttpHost("localhost"), x, new BasicResponseHandler(), new BasicHttpContext());
+		assertEquals("{f:1}", res);
+	}
+
+	@Test
+	public void c13_miscellaneous_executeHttpHostHttpRequestResponseHandler() throws Exception {
+		HttpGet x = new HttpGet("http://localhost/bean");
+		x.addHeader("Accept", "text/json+simple");
+		String res = MockRestClient
+			.create(A.class)
+			.build()
+			.execute(new HttpHost("localhost"), x, new BasicResponseHandler());
+		assertEquals("{f:1}", res);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Pooled connections
 	//------------------------------------------------------------------------------------------------------------------
@@ -3117,7 +3186,21 @@ public class RestClientTest {
 			.simpleJson()
 			.executorService(es, true)
 			.build();
-		assertEquals(es, rc.getExecutorService(false));
+		assertEquals(es, rc.getExecutorService());
+		rc
+			.get("/echo")
+			.runFuture()
+			.get()
+			.assertStatus().is(200)
+			.assertBody().contains("HTTP GET /echo");
+
+		es = null;
+		rc = MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.executorService(es, true)
+			.build();
+		assertNotNull(rc.getExecutorService());
 		rc
 			.get("/echo")
 			.runFuture()
