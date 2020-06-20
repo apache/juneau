@@ -133,6 +133,18 @@ public class SerializedHeader extends BasicStringHeader {
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
+		public Builder serializer(HttpPartSerializer value) {
+			if (value != null)
+				return serializer(value.createPartSession(null));
+			return this;
+		}
+
+		/**
+		 * Sets the serializer to use for serializing the value to a string value.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
 		public Builder serializer(HttpPartSerializerSession value) {
 			return serializer(value, true);
 		}

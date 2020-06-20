@@ -35,7 +35,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public class SerializedNameValuePair implements NameValuePair {
+public class SerializedNameValuePair implements NameValuePair, Headerable {
 	private String name;
 	private Object value;
 	private HttpPartType type;
@@ -74,6 +74,11 @@ public class SerializedNameValuePair implements NameValuePair {
 		this.serializer = serializer;
 		this.schema = schema == null ? HttpPartSchema.DEFAULT : schema;
 		this.skipIfEmpty = skipIfEmpty;
+	}
+
+	@Override /* Headerable */
+	public SerializedHeader asHeader() {
+		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
 	SerializedNameValuePair(Builder b) {
@@ -207,6 +212,8 @@ public class SerializedNameValuePair implements NameValuePair {
 				if (schema == null)
 					return null;
 				if (schema.getDefault() == null && ! schema.isRequired())
+					return null;
+				if (schema.isAllowEmptyValue() && schema.getDefault() == null)
 					return null;
 			}
 			if (isEmpty(v) && skipIfEmpty && schema.getDefault() == null)

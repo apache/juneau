@@ -2824,7 +2824,7 @@ public class RestClientTest {
 				.headers("Foo");
 			fail("Exception expected");
 		} catch (RuntimeException e) {
-			assertEquals("Invalid type passed to headers(Object...):  java.lang.String", e.getLocalizedMessage());
+			assertEquals("Invalid type passed to headers():  java.lang.String", e.getLocalizedMessage());
 		}
 	}
 
@@ -2837,7 +2837,7 @@ public class RestClientTest {
 				.headerPairs("Foo");
 			fail("Exception expected");
 		} catch (RuntimeException e) {
-			assertEquals("Odd number of parameters passed into headerPairs(Object...)", e.getLocalizedMessage());
+			assertEquals("Odd number of parameters passed into headerPairs()", e.getLocalizedMessage());
 		}
 	}
 
@@ -2992,7 +2992,7 @@ public class RestClientTest {
 				.queries(BasicNameValuePair.of("Foo","bar"), "Baz");
 			fail();
 		} catch (Exception e) {
-			assertEquals("Invalid type passed to query(Object...):  java.lang.String", e.getMessage());
+			assertEquals("Invalid type passed to query():  java.lang.String", e.getMessage());
 		}
 	}
 
@@ -3030,6 +3030,83 @@ public class RestClientTest {
 			fail();
 		} catch (Exception e) {
 			assertEquals("Odd number of parameters passed into queryPairs(Object...)", e.getMessage());
+		}
+	}
+
+	public static class I11 {
+		public String foo;
+
+		I11 init() {
+			this.foo = "baz";
+			return this;
+		}
+	}
+
+	@Test
+	public void i11_query_request() throws Exception {
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo")
+			.query("foo", "bar")
+			.run()
+			.assertBody().contains("GET /echo?foo=bar");
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo")
+			.query("foo", AList.of("bar","baz"), HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().contains("GET /echo?foo=bar%7Cbaz");
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("foo","bar")
+			.build()
+			.get("/echo")
+			.query(EnumSet.of(AddFlag.PREPEND), "foo", "baz")
+			.run()
+			.assertBody().contains("GET /echo?foo=baz&foo=bar");
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("foo","bar")
+			.build()
+			.get("/echo")
+			.query(EnumSet.of(AddFlag.PREPEND), "foo", AList.of("baz","qux"), HttpPartSchema.T_ARRAY_PIPES)
+			.run()
+			.assertBody().contains("GET /echo?foo=baz%7Cqux&foo=bar");
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("foo","bar")
+			.build()
+			.get("/echo")
+			.queries(BasicNameValuePair.of("foo","baz"), NameValuePairs.of("foo","qux"), OMap.of("foo","quux"))
+			.run()
+			.assertBody().contains("GET /echo?foo=bar&foo=baz&foo=qux&foo=quux");
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.query("foo","bar")
+			.build()
+			.get("/echo")
+			.queries(new I11().init())
+			.run()
+			.assertBody().contains("GET /echo?foo=bar&foo=baz");
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.get("/echo")
+				.queries("foo=baz")
+				.run();
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("Invalid type passed to queries(): java.lang.String", e.getMessage());
 		}
 	}
 
@@ -3181,7 +3258,7 @@ public class RestClientTest {
 				.formDatas(BasicNameValuePair.of("Foo","bar"), "Baz");
 			fail();
 		} catch (Exception e) {
-			assertEquals("Invalid type passed to formData(Object...):  java.lang.String", e.getMessage());
+			assertEquals("Invalid type passed to formData():  java.lang.String", e.getMessage());
 		}
 	}
 
@@ -6423,9 +6500,9 @@ public class RestClientTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class Q01 {
-		public int foo;
+		public int x;
 		public Q01 init() {
-			foo = 1;
+			x = 1;
 			return this;
 		}
 
@@ -6444,16 +6521,61 @@ public class RestClientTest {
 			.get("/echo/{x}")
 			.path("x", new Q01().init())
 			.run()
-			.assertBody().contains("HTTP GET /echo/foo=1")
+			.assertBody().contains("HTTP GET /echo/x=1")
 		;
 		MockRestClient
 			.create(A.class)
 			.simpleJson()
 			.build()
 			.get("/echo/{x}")
-			.path("x", ()->new Q01().init())
+			.path(BasicNameValuePair.of("x","foo"))
 			.run()
-			.assertBody().contains("HTTP GET /echo/foo=1")
+			.assertBody().contains("HTTP GET /echo/foo")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo/{x}")
+			.paths(BasicNameValuePair.of("x","foo"))
+			.run()
+			.assertBody().contains("HTTP GET /echo/foo")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo/{x}")
+			.paths(NameValuePairs.of("x","foo"))
+			.run()
+			.assertBody().contains("HTTP GET /echo/foo")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo/{x}")
+			.paths(OMap.of("x","foo"))
+			.run()
+			.assertBody().contains("HTTP GET /echo/foo")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo/{x}")
+			.paths(new Q01().init())
+			.run()
+			.assertBody().contains("HTTP GET /echo/1")
+		;
+		MockRestClient
+			.create(A.class)
+			.simpleJson()
+			.build()
+			.get("/echo/{x}")
+			.pathPairs("x", 1)
+			.run()
+			.assertBody().contains("HTTP GET /echo/1")
 		;
 		MockRestClient
 			.create(A.class)
@@ -6462,17 +6584,34 @@ public class RestClientTest {
 			.get("/echo/*")
 			.path("/*", new Q01().init())
 			.run()
-			.assertBody().contains("HTTP GET /echo/foo=1")
+			.assertBody().contains("HTTP GET /echo/x=1")
 		;
-		MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.build()
-			.get("/echo/*")
-			.path("/*", ()->new Q01().init())
-			.run()
-			.assertBody().contains("HTTP GET /echo/foo=1")
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.get("/echo/{x}")
+				.paths("x")
+				.run()
 			;
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("Invalid type passed to path(): java.lang.String", e.getMessage());
+		}
+		try {
+			MockRestClient
+				.create(A.class)
+				.simpleJson()
+				.build()
+				.get("/echo/{x}")
+				.pathPairs("x")
+				.run()
+			;
+			fail();
+		} catch (RestCallException e) {
+			assertEquals("Odd number of parameters passed into pathPairs()", e.getMessage());
+		}
 	}
 
 	@Test
@@ -6488,38 +6627,10 @@ public class RestClientTest {
 			.run()
 			.assertBody().contains("HTTP GET /echo/foo%7Cbar")
 		;
-		MockRestClient
-			.create(A.class)
-			.simpleJson()
-			.build()
-			.get("/echo/{x}")
-			.path("x", ()->a, HttpPartSchema.T_ARRAY_PIPES)
-			.run()
-			.assertBody().contains("HTTP GET /echo/foo%7Cbar")
-		;
 	}
 
 	@Test
 	public void q04_request_path_invalid() throws Exception {
-		try {
-			MockRestClient
-				.create(A.class)
-				.simpleJson()
-				.build()
-				.get("/echo/{x}")
-				.path("y", "foo")
-				.run()
-				.assertBody().contains("HTTP GET /echo/foo%7Cbar")
-			;
-			fail();
-		} catch (RestCallException e) {
-			assertEquals("Path variable {y} was not found in path.", e.getMessage());
-		}
-	}
-
-
-	@Test
-	public void q05_request_path_invalid() throws Exception {
 		try {
 			MockRestClient
 				.create(A.class)

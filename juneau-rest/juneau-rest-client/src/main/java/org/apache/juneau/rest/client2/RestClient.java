@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client2;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.client2.RestClientUtils.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -56,6 +55,8 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.BasicNameValuePair;
+import org.apache.juneau.http.header.BasicHeader;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -323,7 +324,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestRequest#header(NameValuePair) header(NameValuePair)}
- * 		<li class='jm'>{@link RestRequest#header(EnumSet,Object) header(EnumSet&gt;AddFlag&gt;,Object)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
  * 		<li class='jm'>{@link RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
@@ -413,7 +413,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
  * 		<li class='jm'>{@link RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#queries(Object...) queries(Object...)}
- * 		<li class='jm'>{@link RestRequest#query(EnumSet,Object...) query(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queries(EnumSet,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
  * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
@@ -452,7 +452,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
  * 		<li class='jm'>{@link RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#formDatas(Object...) formDatas(Object...)}
- * 		<li class='jm'>{@link RestRequest#formData(EnumSet,Object...) formData(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDatas(EnumSet,Object...) formDatas(EnumSet&lt;AddFlag&gt;,Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
@@ -1168,7 +1168,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(String,Object) formData(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(Object...) formDatas(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,Object...) formData(EnumSet&lt;AddFlag&gt;Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(EnumSet,Object...) formDatas(EnumSet&lt;AddFlag&gt;Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataCustom(Object) formDataCustom(Object)}
 	 * 			</ul>
@@ -1238,7 +1238,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header) header(Header)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(NameValuePair) header(NameValuePair)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,Object) header(EnumSet&gt;AddFlag&gt;,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object...) headers(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headerPairs(Object...) headerPairs(Object...)}
@@ -1772,7 +1771,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String,Object) query(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(Object...) queries(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,Object...) query(EnumSet&lt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(EnumSet,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
 	 * 			</ul>
@@ -1984,7 +1983,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
-		Function<Object,Object> f = x -> x instanceof SerializedNameValuePair.Builder ? ((SerializedNameValuePair.Builder)x).serializer(partSerializerSession, false).build() : x;
+		Function<Object,Object> f = new Function<Object,Object>() {
+			@Override
+			public Object apply(Object x) {
+				if (x instanceof SerializedNameValuePair.Builder)
+					return ((SerializedNameValuePair.Builder)x).serializer(partSerializerSession, false).build();
+				if (x instanceof SerializedHeader.Builder)
+					return ((SerializedHeader.Builder)x).serializer(partSerializerSession, false).build();
+				return x;
+			}
+		};
 
 		this.headers = Collections.unmodifiableList(
 			getListProperty(RESTCLIENT_headers, Object.class)
@@ -2844,10 +2852,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			req.header(toHeader(o));
 
 		for (Object o : query)
-			req.query(toQuery(o));
+			req.query(toNameValuePair(o));
 
 		for (Object o : formData)
-			req.formData(toFormData(o));
+			req.formData(toNameValuePair(o));
 
 		onInit(req);
 
@@ -3005,16 +3013,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 					rc.parser(parser);
 
 					for (RemoteMethodArg a : rmm.getPathArgs())
-						rc.path(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
 					for (RemoteMethodArg a : rmm.getQueryArgs())
-						rc.query(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.queryArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
 					for (RemoteMethodArg a : rmm.getFormDataArgs())
-						rc.formData(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.formDataArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
 					for (RemoteMethodArg a : rmm.getHeaderArgs())
-						rc.header(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
+						rc.headerArg(a.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS, a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
 
 					RemoteMethodArg ba = rmm.getBodyArg();
 					if (ba != null)
@@ -3033,14 +3041,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 									HttpPartSchema schema = p.getSchema();
 									EnumSet<AddFlag> flags = schema.isSkipIfEmpty() ? SKIP_IF_EMPTY_FLAGS : DEFAULT_FLAGS;
 									if (pt == PATH)
-										rc.path(pn, val, schema, p.getSerializer(s));
+										rc.pathArg(pn, val, schema, p.getSerializer(s));
 									else if (val != null) {
 										if (pt == QUERY)
-											rc.query(flags, pn, val, schema, ps);
+											rc.queryArg(flags, pn, val, schema, ps);
 										else if (pt == FORMDATA)
-											rc.formData(flags, pn, val, schema, ps);
+											rc.formDataArg(flags, pn, val, schema, ps);
 										else if (pt == HEADER)
-											rc.header(flags, pn, val, schema, ps);
+											rc.headerArg(flags, pn, val, schema, ps);
 										else /* (pt == HttpPartType.BODY) */
 											rc.body(val, schema);
 									}
@@ -3691,6 +3699,22 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			requestContexts.put(c, o);
 		}
 		return (T)o;
+	}
+
+	private static Header toHeader(Object o) {
+		if (o instanceof Header)
+			return (Header)o;
+		if (o instanceof Headerable)
+			return ((Headerable)o).asHeader();
+		if (o instanceof NameValuePair)
+			return BasicHeader.of((NameValuePair)o);
+		return null;
+	}
+
+	private static NameValuePair toNameValuePair(Object o) {
+		if (o instanceof NameValuePair)
+			return (NameValuePair)o;
+		return null;
 	}
 
 	@Override /* Context */

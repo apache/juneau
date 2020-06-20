@@ -41,8 +41,8 @@ public class HttpPartSchemaBuilder {
 	Pattern pattern;
 	Number maximum, minimum, multipleOf;
 	Long maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
-	Map<String,HttpPartSchemaBuilder> properties;
-	HttpPartSchemaBuilder items, additionalProperties;
+	Map<String,Object> properties;
+	Object items, additionalProperties;
 	boolean noValidate;
 	Class<? extends HttpPartParser> parser;
 	Class<? extends HttpPartSerializer> serializer;
@@ -1068,6 +1068,35 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
+	/**
+	 * <mk>items</mk> field.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 * <p>
+	 * Required if <c>type</c> is <js>"array"</js>.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder items(HttpPartSchema value) {
+		if (value != null)
+			this.items = value;
+		return this;
+	}
+
 	HttpPartSchemaBuilder items(OMap value) {
 		if (value != null && ! value.isEmpty())
 			items = HttpPartSchema.create().apply(value);
@@ -1926,6 +1955,31 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * <mk>properties</mk> field.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param key
+	 *	The property name.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder property(String key, HttpPartSchema value) {
+		if ( key != null && value != null) {
+			if (properties == null)
+				properties = new LinkedHashMap<>();
+			properties.put(key, value);
+		}
+		return this;
+	}
+
+	/**
 	 * Shortcut for <c>property(key, value)</c>.
 	 *
 	 * <p>
@@ -1942,6 +1996,26 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder p(String key, HttpPartSchemaBuilder value) {
+		return property(key, value);
+	}
+
+	/**
+	 * Shortcut for <c>property(key, value)</c>.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param key
+	 *	The property name.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder p(String key, HttpPartSchema value) {
 		return property(key, value);
 	}
 
@@ -1973,6 +2047,26 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * <mk>additionalProperties</mk> field.
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder additionalProperties(HttpPartSchema value) {
+		if (value != null)
+			additionalProperties = value;
+		return this;
+	}
+
+	/**
 	 * Shortcut for <c>additionalProperties(value)</c>
 	 *
 	 * <p>
@@ -1987,6 +2081,24 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder ap(HttpPartSchemaBuilder value) {
+		return additionalProperties(value);
+	}
+
+	/**
+	 * Shortcut for <c>additionalProperties(value)</c>
+	 *
+	 * <p>
+	 * Applicable to the following Swagger schema objects:
+	 * <ul>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder ap(HttpPartSchema value) {
 		return additionalProperties(value);
 	}
 

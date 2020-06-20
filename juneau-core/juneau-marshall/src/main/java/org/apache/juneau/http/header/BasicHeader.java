@@ -47,6 +47,18 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
+	 * Convenience creator.
+	 *
+	 * @param o The name value pair that makes up the header name and value.
+	 * 	The parameter value.
+	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
+	 * @return A new {@link BasicHeader} object.
+	 */
+	public static Header of(NameValuePair o) {
+		return new BasicHeader(o.getName(), o.getValue());
+	}
+
+	/**
 	 * Convenience creator using supplier.
 	 *
 	 * <p>

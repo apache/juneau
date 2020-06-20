@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client2;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.client2.RestClientUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -33,13 +32,13 @@ import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
+import org.apache.juneau.http.header.BasicHeader;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -47,7 +46,6 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -863,6 +861,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Sets path to "/bar".</jc>
 	 * 	client
 	 * 		.get(<js>"/{foo}"</js>)
 	 * 		.path(<js>"foo"</js>, <js>"bar"</js>)
@@ -872,15 +871,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest path(String name, Object value) throws RestCallException {
-		return path(name, value, null, partSerializer);
+		return paths(serializedNameValuePair(name, value, PATH, partSerializer, null, null));
 	}
 
 	/**
@@ -888,6 +886,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Sets path to "/bar".</jc>
 	 * 	client
 	 * 		.get(<js>"/{foo}"</js>)
 	 * 		.path(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
@@ -899,7 +898,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest path(NameValuePair pair) throws RestCallException {
-		return innerPath(pair);
+		return paths(pair);
 	}
 
 	/**
@@ -907,90 +906,28 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Sets path to "/bar|baz".</jc>
 	 * 	client
 	 * 		.get(<js>"/{foo}"</js>)
-	 * 		.path(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+	 * 		.path(
+	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param name
-	 * 	The parameter name.
-	 * 	<br>Can also be <js>"/*"</js> to replace the remainder in a path of the form <js>"/foo/*"</js>.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest path(String name, Supplier<?> value) throws RestCallException {
-		return path(name, value, null, partSerializer);
-	}
-
-	/**
-	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
-	 *
-	 * <p>
-	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * <jc>// Creates path "/bar|baz"</jc>
-	 * 	client
-	 * 		.get(<js>"/{foo}"</js>)
-	 * 		.path(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name
-	 * 	The parameter name.
-	 * 	<br>Can also be <js>"/*"</js> to replace the remainder in a path of the form <js>"/foo/*"</js>.
+	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The part schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest path(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return path(name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
-	 *
-	 * <p>
-	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * <jc>// Creates path "/bar|baz"</jc>
-	 * 	client
-	 * 		.get(<js>"/{foo}"</js>)
-	 * 		.path(<js>"foo"</js>, ()-&gt;AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name
-	 * 	The parameter name.
-	 * 	<br>Can also be <js>"/*"</js> to replace the remainder in a path of the form <js>"/foo/*"</js>.
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 	</ul>
-	 * @param schema The part schema.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest path(String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return path(name, value, schema, partSerializer);
+		return paths(serializedNameValuePair(name, value, PATH, partSerializer, schema, null));
 	}
 
 	/**
@@ -998,27 +935,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Sets path to "/baz/qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.path(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.get(<js>"/{foo}/{bar}")
+	 * 		.paths(
+	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"baz"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"bar"</js>, <js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param params The parameters to set.
+	 * @param params The path parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
@@ -1032,12 +963,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (NameValuePair p : (NameValuePairs)o)
 					innerPath(p);
 			} else if (o instanceof Map) {
-				Map m = (Map)o;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					innerPath(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), PATH, partSerializer, null, false));
+				for (Map.Entry e : toMap(o).entrySet())
+					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					innerPath(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), PATH, partSerializer, null, false));
+					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else {
 				throw new RestCallException("Invalid type passed to path(): " + o.getClass().getName());
 			}
@@ -1050,9 +980,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Sets path to "/baz/qux".</jc>
 	 * 	client
 	 * 		.get(<js>"/{foo}/{bar}"</js>)
-	 * 		.path(<js>"foo"</js>,<js>"val1"</js>,<js>"bar"</js>,<js>"val2"</js>)
+	 * 		.pathPairs(
+	 * 			<js>"foo"</js>,<js>"baz"</js>,
+	 * 			<js>"bar"</js>,<js>"qux"</js>
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1060,37 +994,34 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest pathPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into path(Object...)");
+			throw new RestCallException("Odd number of parameters passed into pathPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			paths(new SerializedNameValuePair(stringify(pairs[i]), pairs[i+1], PATH, partSerializer, null, false));
+			paths(serializedNameValuePair(pairs[i], pairs[i+1], PATH, partSerializer, null, null));
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	RestRequest path(String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
-		if (! isMulti) {
-			innerPath(new SerializedNameValuePair(name, value, PATH, serializer, schema, false));
-		} else if (value instanceof NameValuePairs) {
+
+		if (! isMulti)
+			return innerPath(serializedNameValuePair(name, value, PATH, serializer, schema, null));
+
+		if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				innerPath(p);
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet()) {
-				String n = p.getKey();
-				Object v = p.getValue();
-				HttpPartSchema s = schema == null ? null : schema.getProperty(n);
-				innerPath(new SerializedNameValuePair(n, v, PATH, serializer, s, false));
-			}
+			for (Map.Entry<Object,Object> p : toMap(value).entrySet())
+				innerPath(serializedNameValuePair(p.getKey(), p.getValue(), PATH, serializer, schema, null));
 		} else if (isBean(value)) {
-			return path(name, toBeanMap(value), schema, serializer);
+			for (Map.Entry<String,Object> p : toBeanMap(value).entrySet())
+				innerPath(serializedNameValuePair(p.getKey(), p.getValue(), PATH, serializer, schema, null));
 		} else if (value != null) {
 			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, className(value));
 		}
@@ -1119,6 +1050,19 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Sets a query parameter on the URI.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameter "foo=bar|baz".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.query(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 *		)
+	 * 		.run();
+	 * </p>
+	 *
 	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
@@ -1127,34 +1071,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1165,59 +1085,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return query(flags, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Sets a query parameter on the URI.
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(EnumSet<AddFlag> flags, String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return query(flags, name, value, schema, partSerializer);
+		return queries(flags, serializedNameValuePair(name, value, QUERY, partSerializer, schema, null));
 	}
 
 	/**
@@ -1225,6 +1093,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
@@ -1232,40 +1101,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(String name, Object value) throws RestCallException {
-		return query(DEFAULT_FLAGS, name, value, null, partSerializer);
+		return queries(serializedNameValuePair(name, value, QUERY, partSerializer, null, null));
 	}
 
 	/**
@@ -1273,6 +1118,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
@@ -1290,54 +1136,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Adds a query parameter to the URI.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(String name, Supplier<?> value) throws RestCallException {
-		return query(DEFAULT_FLAGS, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
 	 * <p>
 	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
 	 *
@@ -1346,99 +1144,25 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jc>// Creates query parameter "foo=bar|baz"</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.query(
+	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return query(DEFAULT_FLAGS, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <p>
-	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Creates query parameter "foo=bar|baz"</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo"</js>, ()-&gt;AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return query(DEFAULT_FLAGS, name, value, schema, partSerializer);
+		return queries(serializedNameValuePair(name, value, QUERY, partSerializer, schema, null));
 	}
 
 	/**
@@ -1446,9 +1170,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
+	 * 		.query(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"foo"</js>, <js>"bar"</js>
+	 *		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1460,95 +1188,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return query(flags, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Adds a query parameter to the URI.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest query(EnumSet<AddFlag> flags, String name, Supplier<?> value) throws RestCallException {
-		return query(flags, name, value, null, partSerializer);
+		return queries(flags, serializedNameValuePair(name, value, QUERY, partSerializer, null, null));
 	}
 
 	/**
@@ -1556,33 +1205,27 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.queries(
+	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param params The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest queries(Object...params) throws RestCallException {
-		return query(DEFAULT_FLAGS, params);
+		return queries(DEFAULT_FLAGS, params);
 	}
 
 	/**
@@ -1590,9 +1233,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.query(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),BasicNameValuePair.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.queries(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1606,42 +1254,27 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param params The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	@SuppressWarnings("rawtypes")
-	public RestRequest query(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+	public RestRequest queries(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
-		boolean skipIfEmpty = flags.contains(SKIP_IF_EMPTY);
 		for (Object o : params) {
 			if (o instanceof NameValuePair) {
 				l.add((NameValuePair)o);
 			} else if (o instanceof NameValuePairs) {
 				l.addAll((NameValuePairs)o);
 			} else if (o instanceof Map) {
-				Map m = (Map)o;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), QUERY, partSerializer, null, skipIfEmpty));
+				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), QUERY, partSerializer, null, skipIfEmpty));
-			} else if (o instanceof Reader || o instanceof InputStream  || o instanceof CharSequence) {
-				queryCustom(o);
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
 			} else {
-				throw new RestCallException("Invalid type passed to query(): " + o.getClass().getName());
+				throw new RestCallException("Invalid type passed to queries(): " + o.getClass().getName());
 			}
 		}
 		return innerQuery(flags, l);
@@ -1652,37 +1285,38 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
+	 * 		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param pairs The query key/value pairs.
+ 	 * @param pairs The query key/value pairs.
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest queryPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into query(Object...)");
+			throw new RestCallException("Odd number of parameters passed into queryPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			queries(new SerializedNameValuePair(stringify(pairs[i]), pairs[i+1], QUERY, partSerializer, null, false));
+			queries(serializedNameValuePair(pairs[i], pairs[i+1], QUERY, partSerializer, null, null));
 		return this;
 	}
 
 	/**
-	 * Adds form-data parameters as the entire body of the request.
+	 * Adds a free-form custom query.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds query parameter "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.customQuery(<js>"key1=val1&key2=val2"</js>)
+	 * 		.queryCustom(<js>"foo=bar&baz=qux"</js>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1717,25 +1351,31 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	RestRequest queryArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
-		if (! isMulti) {
-			innerQuery(flags, AList.of(toQuery(flags, name, value, serializer, schema)));
-		} else if (value instanceof NameValuePairs) {
-			innerQuery(flags, AList.of((NameValuePairs)value));
+
+		if (! isMulti)
+			return innerQuery(flags, AList.of(serializedNameValuePair(name, value, QUERY, serializer, schema, flags)));
+
+		List<NameValuePair> l = AList.of();
+
+		if (value instanceof NameValuePairs) {
+			l.addAll((NameValuePairs)value);
 		} else if (value instanceof Map) {
-			innerQuery(flags, toQuery(flags, (Map<String,Object>)value, serializer, schema));
+			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
+				l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, serializer, schema, flags));
 		} else if (isBean(value)) {
-			query(flags, name, toBeanMap(value), schema, serializer);
+			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
+				l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, serializer, schema, flags));
 		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
-			queryCustom(value);
+			return queryCustom(value);
 		} else {
 			throw new RestCallException("Invalid name ''{0}'' passed to query() for data type ''{1}''", name, className(value));
 		}
-		return this;
+
+		return innerQuery(flags, l);
 	}
 
 	private RestRequest innerQuery(EnumSet<AddFlag> flags, List<NameValuePair> params) {
@@ -1772,6 +1412,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Adds a form-data parameter to the request body.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formData(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 * 		.run();
+	 * </p>
+	 *
 	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
@@ -1780,34 +1432,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence} / {@link HttpEntity}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1818,59 +1446,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return formData(flags, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Adds a form-data parameter to the request body.
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence} / {@link HttpEntity}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(EnumSet<AddFlag> flags, String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return formData(flags, name, value, schema, partSerializer);
+		return formDatas(flags, serializedNameValuePair(name, value, FORMDATA, partSerializer, schema, flags));
 	}
 
 	/**
@@ -1878,6 +1454,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
@@ -1885,40 +1462,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(String name, Object value) throws RestCallException {
-		return formData(DEFAULT_FLAGS, name, value, null, partSerializer);
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, partSerializer, null, null));
 	}
 
 	/**
@@ -1926,6 +1479,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
@@ -1943,155 +1497,33 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Adds a form-data parameter to the request body.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(String name, Supplier<?> value) throws RestCallException {
-		return formData(DEFAULT_FLAGS, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Adds a form-data parameter to the request body.
-	 *
 	 * <p>
 	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Creates form-data parameter "foo=bar|baz"</jc>
+	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.formData(
+	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 *		)
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return formData(DEFAULT_FLAGS, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Adds a form-data parameter to the request body.
-	 *
-	 * <p>
-	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Creates form-data parameter "foo=bar|baz"</jc>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(<js>"foo"</js>, ()-&gt;AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return formData(DEFAULT_FLAGS, name, value, schema, partSerializer);
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, partSerializer, schema, null));
 	}
 
 	/**
@@ -2099,13 +1531,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>), <js>"foo"</js>, <js>"bar"</js>)
+	 * 		.formData(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"foo"</js>, <js>"bar"</js>
+	 *		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flags
+	 * 	Instructions on how to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
@@ -2113,40 +1550,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return formData(flags, name, value, null, partSerializer);
+		return formDatas(flags, serializedNameValuePair(name, value, FORMDATA, partSerializer, null, flags));
 	}
 
 	/**
@@ -2154,98 +1567,42 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>), <js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The parameter name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of parameters.
-	 * 	</ul>
-	 * @param value The parameter value supplier.
-	 * 	<ul>
-	 * 		<li>For single value parameters:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value parameters:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 			<li>{@link Reader} / {@link InputStream} / {@link CharSequence}
-	 * 			<ul>
-	 * 				<li>Sets the entire query string to the contents of the input.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest formData(EnumSet<AddFlag> flags, String name, Supplier<?> value) throws RestCallException {
-		return formData(flags, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Adds a form-data parameter to the request body.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.formDatas(
+	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param params The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formDatas(Object...params) throws RestCallException {
-		return formData(DEFAULT_FLAGS, params);
+		return formDatas(DEFAULT_FLAGS, params);
 	}
 
 	/**
-	 * Adds a form-data parameter to the request body.
+	 * Adds multiple form-data parameters to the request body.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.formData(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>), BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
+	 * 		.formDatas(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -2259,42 +1616,27 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param params The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	@SuppressWarnings("rawtypes")
-	public RestRequest formData(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+	public RestRequest formDatas(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
-		boolean skipIfEmpty = flags.contains(SKIP_IF_EMPTY);
 		for (Object o : params) {
 			if (o instanceof NameValuePair) {
 				l.add((NameValuePair)o);
 			} else if (o instanceof NameValuePairs) {
 				l.addAll((NameValuePairs)o);
 			} else if (o instanceof Map) {
-				Map m = (Map)o;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), FORMDATA, partSerializer, null, skipIfEmpty));
+				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(new SerializedNameValuePair(stringify(e.getKey()), e.getValue(), FORMDATA, partSerializer, null, skipIfEmpty));
-			} else if (o instanceof Reader || o instanceof InputStream  || o instanceof CharSequence || o instanceof HttpEntity) {
-				formDataCustom(o);
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
 			} else {
-				throw new RestCallException("Invalid type passed to formData(): " + o.getClass().getName());
+				throw new RestCallException("Invalid type passed to formDatas(): " + o.getClass().getName());
 			}
 		}
 		return innerFormData(flags, l);
@@ -2305,6 +1647,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Creates form data "key1=val1&key2=val2".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
@@ -2315,16 +1658,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formDataPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into formData(Object...)");
+			throw new RestCallException("Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			formDatas(new SerializedNameValuePair(stringify(pairs[i]), pairs[i+1], FORMDATA, partSerializer, null, false));
+			formDatas(serializedNameValuePair(pairs[i], pairs[i+1], FORMDATA, partSerializer, null, null));
 		return this;
 	}
 
@@ -2333,9 +1675,22 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Creates form data "foo=bar&baz=qux".</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
-	 * 		.customFormData(<js>"key1=val1&key2=val2"</js>)
+	 * 		.formDataCustom(<js>"foo=bar&baz=qux"</js>)
+	 * 		.run();
+	 *
+	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity.</jc>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formDataCustom(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.run();
+	 *
+	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity and body().</jc>
+	 * 	client
+	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.body(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 * </p>
 	 *
@@ -2369,29 +1724,31 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	RestRequest formDataArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
-		if (! isMulti) {
-			innerFormData(flags, toQuery(flags, name, value, serializer, schema));
-		} else if (value instanceof NameValuePairs) {
-			innerFormData(flags, AList.of((NameValuePairs)value));
+
+		if (! isMulti)
+			return innerFormData(flags, AList.of(serializedNameValuePair(name, value, FORMDATA, serializer, schema, flags)));
+
+		List<NameValuePair> l = AList.of();
+
+		if (value instanceof NameValuePairs) {
+			l.addAll((NameValuePairs)value);
 		} else if (value instanceof Map) {
-			innerFormData(flags, toQuery(flags, (Map<String,Object>)value, serializer, schema));
+			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
+				l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, serializer, schema, flags));
 		} else if (isBean(value)) {
-			formData(flags, name, toBeanMap(value), schema, serializer);
-		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence || value instanceof HttpEntity) {
-			formDataCustom(value);
+			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
+				l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, serializer, schema, flags));
+		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
+			return formDataCustom(value);
 		} else {
 			throw new RestCallException("Invalid name ''{0}'' passed to formData() for data type ''{1}''", name, className(value));
 		}
-		return this;
-	}
 
-	private RestRequest innerFormData(EnumSet<AddFlag> flags, NameValuePair param) {
-		return innerFormData(flags, AList.of(param));
+		return innerFormData(flags, l);
 	}
 
 	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
@@ -2533,7 +1890,20 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets a header on the request.
+	 * Adds a header on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.header(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>)),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 * 		)
+	 * 		.run();
+	 * </p>
 	 *
 	 * @param flags Instructions on how to add this parameter.
 	 * 	<ul>
@@ -2543,32 +1913,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
+ 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
 	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
@@ -2577,55 +1927,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return header(flags, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
-	 * @param value The header value supplier.
-	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The schema object that defines the format of the output.
-	 * 	<ul>
-	 * 		<li>If <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest header(EnumSet<AddFlag> flags, String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return header(flags, name, value, schema, partSerializer);
+		return headers(flags, serializedHeader(name, value, partSerializer, schema, flags));
 	}
 
 	/**
@@ -2633,6 +1935,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>)
@@ -2640,80 +1943,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(String name, Object value) throws RestCallException {
-		return header(DEFAULT_FLAGS, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Appends a header on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest header(String name, Supplier<?> value) throws RestCallException {
-		return header(DEFAULT_FLAGS, name, value, null, partSerializer);
+		return headers(serializedHeader(name, value, partSerializer, null, null));
 	}
 
 	/**
@@ -2724,104 +1963,42 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Creates header "Foo=bar|baz"</jc>
+	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
+	 * 		.header(
+	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
+	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return header(DEFAULT_FLAGS, name, value, schema, partSerializer);
+		return headers(serializedHeader(name, value, partSerializer, schema, null));
 	}
 
 	/**
-	 * Appends a header on the request.
-	 *
-	 * <p>
-	 * The optional schema allows for specifying how part should be serialized (as a pipe-delimited list for example).
+	 * Adds a header to the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Creates header "Foo=bar|baz"</jc>
+	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(<js>"Foo"</js>, ()-&gt;AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest header(String name, Supplier<?> value, HttpPartSchema schema) throws RestCallException {
-		return header(DEFAULT_FLAGS, name, value, schema, partSerializer);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<js>"Foo"</js>, <js>"bar"</js>)
+	 * 		.header(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<js>"Foo"</js>, <js>"bar"</js>
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -2833,87 +2010,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
+	 * 		<li>Value can be any POJO.
+	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return header(flags, name, value, null, partSerializer);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),<js>"Foo"</js>, ()-&gt;<js>"bar"</js>)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 *	 	<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param name The header name.
-	 * 	<ul>
-	 * 		<li>If the name is <js>"*"</js>, the value is assumed to be a collection of headers.
-	 * 	</ul>
-	 * @param value The header value supplier.
-	 * 	<ul>
-	 * 		<li>For single value headers:
-	 * 		<ul>
-	 * 			<li>Can be any POJO.
-	 * 			<li>Converted to a string using the specified part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>For multi-value headers:
-	 * 		<ul>
-	 * 			<li>{@link Map} / {@link OMap} / bean
-	 * 			<ul>
-	 * 				<li>Values can be any POJO.
-	 * 				<li>Values converted to a string using the configured part serializer.
-	 * 				<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 			</ul>
-	 * 			<li>{@link NameValuePairs}
-	 * 			<ul>
-	 * 				<li>Values converted directly to strings.
-	 * 			</ul>
-	 * 		</ul>
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest header(EnumSet<AddFlag> flags, String name, Supplier<?> value) throws RestCallException {
-		return header(flags, name, value, null, partSerializer);
+		return headers(flags, serializedHeader(name, value, partSerializer, null, flags));
 	}
 
 	/**
@@ -2921,6 +2027,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
@@ -2932,17 +2039,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(Header header) throws RestCallException {
-		return header(DEFAULT_FLAGS, header);
+		return headers(header);
 	}
 
 	/**
 	 * Appends a header on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
+	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * <p class='bcode w800'>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(BasicNameValuePair.<jsm>of</jsm>(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>)))
+	 * 		.header(BasicNameValuePair.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
 	 *
@@ -2951,44 +2059,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest header(NameValuePair header) throws RestCallException {
-		return header(DEFAULT_FLAGS, header);
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.header(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flags Instructions on how to add this parameter.
-	 * 	<ul>
-	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
-	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
-	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
-	 * 	</ul>
-	 * @param header The header to set.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link NameValuePair}
-	 * 		<li><jk>null</jk> - Will be a no-op.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest header(EnumSet<AddFlag> flags, Object header) throws RestCallException {
-		if (header == null)
-			return this;
-		Header h = toHeader(header);
-		if (h == null)
-			throw new RestCallException("Invalid type passed to header(): " + header.getClass().getName());
-		return innerHeader(flags, h);
+		return headers(header);
 	}
 
 	/**
@@ -2996,28 +2067,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.headers(
+	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"Baz"</js>, <js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param headers The header to set.
+	 * @param headers The headers to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link Header} / {@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
@@ -3031,9 +2095,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(EnumSet.<jsm>of</jsm>(<jsf>REPLACE</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
+	 * 		.headers(
+	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
+	 * 			AMap.<jsm>of</jsm>(<js>"Baz"</js>, <js>"qux"</js>)
+	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3044,27 +2113,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
-	 * @param headers The header to set.
+	 * @param headers The headers to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link NameValuePair}
-	 * 		<li>{@link Map} / {@link OMap} / bean
-	 * 		<ul>
-	 * 			<li>Values can be any POJO.
-	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
-	 * 		</ul>
-	 * 		<li>{@link NameValuePairs}
-	 * 		<ul>
-	 * 			<li>Values converted directly to strings.
-	 * 		</ul>
-	 * 		<li><jk>null</jk> - Will be a no-op.
+	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
+	 * 		<li>{@link Header} / {@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	@SuppressWarnings("rawtypes")
 	public RestRequest headers(EnumSet<AddFlag> flags, Object...headers) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
@@ -3074,14 +2131,13 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (NameValuePair p : (NameValuePairs)o)
 					l.add(toHeader(p));
 			} else if (o instanceof Map) {
-				Map m = (Map)o;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					l.add(new SerializedHeader(stringify(e.getKey()), e.getValue(), partSerializer, null, flags.contains(SKIP_IF_EMPTY)));
+				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(new SerializedHeader(stringify(e.getKey()), e.getValue(), partSerializer, null, flags.contains(SKIP_IF_EMPTY)));
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
 			} else {
-				throw new RestCallException("Invalid type passed to header(): " + headers.getClass().getName());
+				throw new RestCallException("Invalid type passed to headers(): " + className(o));
 			}
 		}
 		return innerHeaders(flags, l);
@@ -3092,17 +2148,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
-	 * 		.headers(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
+	 * 		.headers(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param pairs The header key/value pairs.
+	 * @param pairs The form-data key/value pairs.
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
@@ -3110,33 +2166,39 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(Object...pairs) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into headerPairs(Object...)");
+			throw new RestCallException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			l.add(new SerializedHeader(stringify(pairs[i]), pairs[i+1], partSerializer, null, false));
+			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
 		return innerHeaders(DEFAULT_FLAGS, l);
 	}
 
-	@SuppressWarnings("unchecked")
-	RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
+	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
 		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
-		if (! isMulti) {
-			innerHeader(flags, toHeader(flags, name, value, serializer, schema));
-		} else if (value instanceof NameValuePairs) {
-			innerHeaders(flags, toHeaders((NameValuePairs)value));
-		} else if (value instanceof Map) {
-			innerHeaders(flags, toHeaders(flags, (Map<String,Object>)value, serializer, schema));
-		} else if (isBean(value)) {
-			return header(flags, name, toBeanMap(value), schema, serializer);
-		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
-		}
-		return this;
-	}
 
-	private RestRequest innerHeader(EnumSet<AddFlag> flags, Header header) {
-		return innerHeaders(flags, AList.of(header));
+
+		if (! isMulti)
+			return innerHeaders(flags, AList.of(serializedHeader(name, value, serializer, schema, flags)));
+
+		List<Header> l = AList.of();
+
+		if (value instanceof Headerable) {
+			l.add(((Headerable)value).asHeader());
+		} else if (value instanceof NameValuePairs) {
+			for (NameValuePair p : (NameValuePairs)value)
+				l.add(toHeader(p));
+		} else if (value instanceof Map) {
+			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
+				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
+		} else if (isBean(value)) {
+			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
+				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
+		} else {
+			throw new RestCallException("Invalid name ''{0}'' passed to header() for data type ''{1}''", name, className(value));
+		}
+
+		return innerHeaders(flags, l);
 	}
 
 	private RestRequest innerHeaders(EnumSet<AddFlag> flags, Collection<Header> headers) {
@@ -4248,8 +3310,31 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return super.getProperties();
 	}
 
-	private static String className(Object o) {
-		return ClassInfo.of(o).getFullName();
+	@SuppressWarnings("unchecked")
+	private static Map<Object,Object> toMap(Object o) {
+		return (Map<Object,Object>)o;
+	}
+
+	private static SerializedNameValuePair serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
+		return new SerializedNameValuePair(stringify(key), value, type, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
+	}
+
+	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
+		return new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
+	}
+
+	private static Header toHeader(Object o) {
+		if (o instanceof Header)
+			return (Header)o;
+		if (o instanceof Headerable)
+			return ((Headerable)o).asHeader();
+		if (o instanceof NameValuePair)
+			return BasicHeader.of((NameValuePair)o);
+		throw new BasicRuntimeException("Object cannot be converted to a header: {0}", o == null ? null : o.getClass().getName());
+	}
+
+	private static String className(Object value) {
+		return value == null ? null : value.getClass().getName();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -75,7 +75,7 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="a") String getA06b(@Query("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06c(@Query Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06d(@Query(n="x",cf="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getA06e(@Query(cf="uon") Map<String,Bean> b);
+		@RemoteMethod(path="a") String getA06e(@Query(f="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA07a(@Query("*") Reader b);
 		@RemoteMethod(path="a") String getA07b(@Query Reader b);
 		@RemoteMethod(path="a") String getA08a(@Query("*") InputStream b);

@@ -48,6 +48,7 @@ import org.apache.http.conn.util.*;
 import org.apache.http.cookie.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
+import org.apache.juneau.http.header.BasicHeader;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -1087,7 +1088,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
+		return headers(serializedHeader(name, value, serializer, schema));
 	}
 
 	/**
@@ -1123,7 +1124,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).serializer(serializer).schema(schema));
+		return headers(serializedHeader(name, value, serializer, schema));
 	}
 
 	/**
@@ -1155,7 +1156,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Object value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).schema(schema));
+		return headers(serializedHeader(name, value, null, schema));
 	}
 
 	/**
@@ -1187,7 +1188,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Supplier<?> value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_headers, SerializedNameValuePair.create().name(name).value(value).type(HEADER).schema(schema));
+		return headers(serializedHeader(name, value, null, schema));
 	}
 
 	/**
@@ -1216,7 +1217,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Object value) {
-		return header(name, value, null, null);
+		return headers(serializedHeader(name, value, null, null));
 	}
 
 	/**
@@ -1245,7 +1246,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(String name, Supplier<?> value) {
-		return header(name, value, (HttpPartSchema)null, null);
+		return headers(serializedHeader(name, value, null, null));
 	}
 
 	/**
@@ -1264,7 +1265,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(Header header) {
-		return appendTo(RESTCLIENT_headers, header);
+		return headers(header);
 	}
 
 	/**
@@ -1283,7 +1284,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder header(NameValuePair pair) {
-		return appendTo(RESTCLIENT_headers, pair);
+		return headers(pair);
 	}
 
 	/**
@@ -1323,19 +1324,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (h instanceof Header)
-				header((Header)h);
-			else if (h instanceof NameValuePair)
-				header((NameValuePair)h);
-			else if (h instanceof Map) {
-				Map m = (Map)h;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					header(stringify(e.getKey()), e.getValue(), null, null);
+			if (h instanceof Header || h instanceof SerializedHeader.Builder || h instanceof SerializedNameValuePair.Builder)
+				appendTo(RESTCLIENT_headers, h);
+			else if (h instanceof Headerable)
+				appendTo(RESTCLIENT_headers, ((Headerable)h).asHeader());
+			else if (h instanceof NameValuePair) {
+				NameValuePair p = (NameValuePair)h;
+				appendTo(RESTCLIENT_headers, new BasicHeader(p.getName(), p.getValue()));
+			} else if (h instanceof Map) {
+				for (Map.Entry e : toMap(h).entrySet())
+					appendTo(RESTCLIENT_headers, serializedHeader(e.getKey(), e.getValue(), null, null));
 			} else if (h instanceof NameValuePairs) {
 				for (NameValuePair p : (NameValuePairs)h)
-					header(p);
+					headers(p);
 			} else if (h != null) {
-				throw new RuntimeException("Invalid type passed to headers(Object...):  " + h.getClass().getName());
+				throw new RuntimeException("Invalid type passed to headers():  " + h.getClass().getName());
 			}
 		}
 		return this;
@@ -1363,9 +1366,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headerPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into headerPairs(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
-			header(stringify(pairs[i]), pairs[i+1]);
+			headers(serializedHeader(pairs[i], pairs[i+1], null, null));
 		return this;
 	}
 
@@ -1868,7 +1871,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
+		return queries(serializedNameValuePair(name, value, QUERY, serializer, schema));
 	}
 
 	/**
@@ -1904,7 +1907,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).serializer(serializer).schema(schema));
+		return queries(serializedNameValuePair(name, value, QUERY, serializer, schema));
 	}
 
 	/**
@@ -1936,7 +1939,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).schema(schema));
+		return queries(serializedNameValuePair(name, value, QUERY, null, schema));
 	}
 
 	/**
@@ -1968,7 +1971,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_query, SerializedNameValuePair.create().name(name).value(value).type(QUERY).schema(schema));
+		return queries(serializedNameValuePair(name, value, QUERY, null, schema));
 	}
 
 	/**
@@ -1993,7 +1996,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Object value) {
-		return query(name, value, null, null);
+		return queries(serializedNameValuePair(name, value, QUERY, null, null));
 	}
 
 	/**
@@ -2037,7 +2040,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder query(String name, Supplier<?> value) {
-		return query(name, value, (HttpPartSchema)null, null);
+		return queries(serializedNameValuePair(name, value, QUERY, null, null));
 	}
 
 	/**
@@ -2076,17 +2079,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
-			if (p instanceof NameValuePair) {
+			if (p instanceof NameValuePair || p instanceof SerializedNameValuePair.Builder) {
 				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
-				Map m = (Map)p;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					query(stringify(e.getKey()), e.getValue(), null, null);
+				for (Map.Entry e : toMap(p).entrySet())
+					appendTo(RESTCLIENT_query, serializedNameValuePair(e.getKey(), e.getValue(), QUERY, null, null));
 			} else if (p instanceof NameValuePairs) {
 				for (NameValuePair nvp : (NameValuePairs)p)
-					queries(nvp);
+					appendTo(RESTCLIENT_query, nvp);
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to query(Object...):  " + p.getClass().getName());
+				throw new RuntimeException("Invalid type passed to query():  " + p.getClass().getName());
 			}
 		}
 		return this;
@@ -2116,7 +2118,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
-			query(stringify(pairs[i]), pairs[i+1]);
+			queries(serializedNameValuePair(pairs[i], pairs[i+1], QUERY, null, null));
 		return this;
 	}
 
@@ -2157,7 +2159,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, serializer, schema));
 	}
 
 	/**
@@ -2193,7 +2195,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).serializer(serializer).schema(schema));
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, serializer, schema));
 	}
 
 	/**
@@ -2225,7 +2227,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).schema(schema));
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, schema));
 	}
 
 	/**
@@ -2257,7 +2259,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value, HttpPartSchema schema) {
-		return appendTo(RESTCLIENT_formData, SerializedNameValuePair.create().name(name).value(value).type(FORMDATA).schema(schema));
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, schema));
 	}
 
 	/**
@@ -2282,7 +2284,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Object value) {
-		return formData(name, value, null, null);
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, null));
 	}
 
 	/**
@@ -2326,7 +2328,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder formData(String name, Supplier<?> value) {
-		return formData(name, value, (HttpPartSchema)null, null);
+		return formDatas(serializedNameValuePair(name, value, FORMDATA, null, null));
 	}
 
 	/**
@@ -2361,21 +2363,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param params The form-data parameter.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("rawtypes")
 	@FluentSetter
 	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
-			if (p instanceof NameValuePair) {
+			if (p instanceof NameValuePair || p instanceof SerializedNameValuePair.Builder) {
 				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
-				Map m = (Map)p;
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					formData(stringify(e.getKey()), e.getValue(), null, null);
+				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
+					appendTo(RESTCLIENT_formData, serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, null, null));
 			} else if (p instanceof NameValuePairs) {
 				for (NameValuePair nvp : (NameValuePairs)p)
-					formDatas(nvp);
+					appendTo(RESTCLIENT_formData, nvp);
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to formData(Object...):  " + p.getClass().getName());
+				throw new RuntimeException("Invalid type passed to formData():  " + p.getClass().getName());
 			}
 		}
 		return this;
@@ -2405,7 +2405,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(Object...)");
 		for (int i = 0; i < pairs.length; i+=2)
-			formData(stringify(pairs[i]), pairs[i+1]);
+			formDatas(serializedNameValuePair(pairs[i], pairs[i+1], FORMDATA, null, null));
 		return this;
 	}
 
@@ -5807,5 +5807,22 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 		httpClientBuilder.evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 		return this;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Utility methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	private static Map<Object,Object> toMap(Object o) {
+		return (Map<Object,Object>)o;
+	}
+
+	private static SerializedNameValuePair.Builder serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
+		return SerializedNameValuePair.create().name(stringify(key)).value(value).type(type).serializer(serializer).schema(schema);
+	}
+
+	private static SerializedHeader.Builder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+		return SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
 	}
 }

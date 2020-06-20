@@ -17,15 +17,16 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
- *
+ * 
  * <p>
  * The value is serialized using {@link Object#toString()} at the point of reading.  This allows the value to be modified
  * periodically by overriding the method to return different values.
  */
-public class BasicNameValuePair implements NameValuePair {
+public class BasicNameValuePair implements NameValuePair, Headerable {
 	private String name;
 	private Object value;
 
@@ -63,6 +64,11 @@ public class BasicNameValuePair implements NameValuePair {
 	public BasicNameValuePair(String name, Object value) {
 		this.name = name;
 		this.value = value;
+	}
+
+	@Override /* Headerable */
+	public BasicHeader asHeader() {
+		return BasicHeader.of(name, value);
 	}
 
 	@Override /* NameValuePair */

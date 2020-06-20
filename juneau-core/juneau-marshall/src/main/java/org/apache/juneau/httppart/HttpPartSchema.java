@@ -1471,19 +1471,24 @@ public class HttpPartSchema {
 		return in == null ? Collections.emptySet() : unmodifiableSet(new LinkedHashSet<>(in));
 	}
 
-	private static Map<String,HttpPartSchema> build(Map<String,HttpPartSchemaBuilder> in, boolean noValidate) {
+	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
 		Map<String,HttpPartSchema> m = new LinkedHashMap<>();
-		for (Map.Entry<String,HttpPartSchemaBuilder> e : in.entrySet())
-			m.put(e.getKey(), e.getValue().noValidate(noValidate).build());
+		for (Map.Entry<String,Object> e : in.entrySet()) {
+			Object v = e.getValue();
+			m.put(e.getKey(), build(v, noValidate));
+		}
 		return unmodifiableMap(m);
 	}
 
-	private static HttpPartSchema build(HttpPartSchemaBuilder in, boolean noValidate) {
-		return in == null ? null : in.noValidate(noValidate).build();
+	private static HttpPartSchema build(Object in, boolean noValidate) {
+		if (in == null)
+			return null;
+		if (in instanceof HttpPartSchema)
+			return (HttpPartSchema)in;
+		return ((HttpPartSchemaBuilder)in).noValidate(noValidate).build();
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods.
