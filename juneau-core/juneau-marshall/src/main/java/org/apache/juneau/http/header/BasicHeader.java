@@ -15,11 +15,16 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.BasicHeader;
+import org.apache.juneau.reflect.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -72,6 +77,41 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	public static BasicHeader of(String name, Supplier<?> value) {
 		return new BasicHeader(name, value);
+	}
+
+	/**
+	 * Utility method for converting an arbitrary object to a {@link Header}.
+	 *
+	 * @param o
+	 * 	The object to cast or convert to a {@link Header}.
+	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Header cast(Object o) {
+		if (o instanceof Header)
+			return (Header)o;
+		if (o instanceof Headerable)
+			return ((Headerable)o).asHeader();
+		if (o instanceof NameValuePair)
+			return BasicHeader.of((NameValuePair)o);
+		if (o instanceof NameValuePairable)
+			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
+		if (o instanceof Map.Entry) {
+			Map.Entry e = (Map.Entry)o;
+			return BasicHeader.of(stringify(e.getKey()), e.getValue());
+		}
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", o == null ? null : o.getClass().getName());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 */
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

@@ -14,14 +14,17 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
- * 
+ *
  * <p>
  * The value is serialized using {@link Object#toString()} at the point of reading.  This allows the value to be modified
  * periodically by overriding the method to return different values.
@@ -53,6 +56,39 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 */
 	public static BasicNameValuePair of(String name, Supplier<?> value) {
 		return new BasicNameValuePair(name, value);
+	}
+
+	/**
+	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
+	 *
+	 * @param o
+	 * 	The object to cast or convert to a {@link NameValuePair}.
+	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static NameValuePair cast(Object o) {
+		if (o instanceof NameValuePair)
+			return (NameValuePair)o;
+		if (o instanceof NameValuePairable)
+			return ((NameValuePairable)o).asNameValuePair();
+		if (o instanceof Headerable)
+			return ((Headerable)o).asHeader();
+		if (o instanceof Map.Entry) {
+			Map.Entry e = (Map.Entry)o;
+			return BasicNameValuePair.of(stringify(e.getKey()), e.getValue());
+		}
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a NameValuePair.", o == null ? null : o.getClass().getName());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 */
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

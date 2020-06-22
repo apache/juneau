@@ -48,11 +48,9 @@ import org.apache.http.conn.util.*;
 import org.apache.http.cookie.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
-import org.apache.juneau.http.header.BasicHeader;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
@@ -1298,47 +1296,42 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <p>
-	 * Can be any of the following singleton types:
-	 * <ul>
-	 * 	<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 	<li>{@link NameValuePair}
-	 * </ul>
-	 *
-	 * <p>
-	 * Can also be any of the following collection types:
-	 * <ul>
-	 * 	<li>{@link Map} / {@link OMap}
+	 * @param headers 
+	 * 	The header to set.
+	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Headerable}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
-	 * 	<li>{@link NameValuePairs}
-	 * </ul>
-	 *
-	 * @param headers The header to set.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("rawtypes")
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (h instanceof Header || h instanceof SerializedHeader.Builder || h instanceof SerializedNameValuePair.Builder)
+			if (BasicHeader.canCast(h)) {
 				appendTo(RESTCLIENT_headers, h);
-			else if (h instanceof Headerable)
-				appendTo(RESTCLIENT_headers, ((Headerable)h).asHeader());
-			else if (h instanceof NameValuePair) {
-				NameValuePair p = (NameValuePair)h;
-				appendTo(RESTCLIENT_headers, new BasicHeader(p.getName(), p.getValue()));
 			} else if (h instanceof Map) {
-				for (Map.Entry e : toMap(h).entrySet())
+				for (Map.Entry<Object,Object> e : toMap(h).entrySet())
 					appendTo(RESTCLIENT_headers, serializedHeader(e.getKey(), e.getValue(), null, null));
-			} else if (h instanceof NameValuePairs) {
-				for (NameValuePair p : (NameValuePairs)h)
-					headers(p);
+			} else if (h instanceof Collection) {
+				for (Object o : (Collection<?>)h)
+					headers(o);
+			} else if (h != null && h.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(h); i++)
+					headers(Array.get(h, i));
 			} else if (h != null) {
-				throw new RuntimeException("Invalid type passed to headers():  " + h.getClass().getName());
+				throw new RuntimeException("Invalid type passed to headers():  " + className(h));
 			}
 		}
 		return this;
@@ -2053,42 +2046,41 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.queries(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
-	 *
-	 * <p>
-	 * Can be any of the following singleton types:
-	 * <ul>
-	 * 	<li>{@link NameValuePair}
-	 * </ul>
-	 *
-	 * <p>
-	 * Can be any of the following collection types:
-	 * <ul>
-	 * 	<li>{@link Map} / {@link OMap}
+	 * 
+	 * @param params 
+	 * 	The query parameters.
+	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
-	 * 	<li>{@link NameValuePairs}
-	 * </ul>
-
-	 * @param params The query parameters.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("rawtypes")
 	@FluentSetter
 	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
-			if (p instanceof NameValuePair || p instanceof SerializedNameValuePair.Builder) {
+			if (BasicNameValuePair.canCast(p)) {
 				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
-				for (Map.Entry e : toMap(p).entrySet())
+				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
 					appendTo(RESTCLIENT_query, serializedNameValuePair(e.getKey(), e.getValue(), QUERY, null, null));
-			} else if (p instanceof NameValuePairs) {
-				for (NameValuePair nvp : (NameValuePairs)p)
-					appendTo(RESTCLIENT_query, nvp);
+			} else if (p instanceof Collection) {
+				for (Object o : (Collection<?>)p)
+					queries(o);
+			} else if (p != null && p.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(p); i++)
+					queries(Array.get(p, i));
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to query():  " + p.getClass().getName());
+				throw new RuntimeException("Invalid type passed to query():  " + className(p));
 			}
 		}
 		return this;
@@ -2342,40 +2334,40 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <p>
-	 * Can be any of the following singleton types:
-	 * <ul>
-	 * 	<li>{@link NameValuePair}
-	 * </ul>
-	 *
-	 * <p>
-	 * Can be any of the following collection types:
-	 * <ul>
-	 * 	<li>{@link Map} / {@link OMap}
+	 * @param params 
+	 * 	The form-data parameters.
+	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>Values can be any POJO.
-	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
-	 * 	<li>{@link NameValuePairs}
-	 * </ul>
-	 *
-	 * @param params The form-data parameter.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
-			if (p instanceof NameValuePair || p instanceof SerializedNameValuePair.Builder) {
+			if (BasicNameValuePair.canCast(p)) {
 				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
 					appendTo(RESTCLIENT_formData, serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, null, null));
-			} else if (p instanceof NameValuePairs) {
-				for (NameValuePair nvp : (NameValuePairs)p)
-					appendTo(RESTCLIENT_formData, nvp);
+			} else if (p instanceof Collection) {
+				for (Object o : (Collection<?>)p)
+					formDatas(o);
+			} else if (p != null && p.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(p); i++)
+					formDatas(Array.get(p, i));
 			} else if (p != null) {
-				throw new RuntimeException("Invalid type passed to formData():  " + p.getClass().getName());
+				throw new RuntimeException("Invalid type passed to formData():  " + className(p));
 			}
 		}
 		return this;
@@ -5818,11 +5810,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return (Map<Object,Object>)o;
 	}
 
-	private static SerializedNameValuePair.Builder serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
+	private static SerializedNameValuePairBuilder serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return SerializedNameValuePair.create().name(stringify(key)).value(value).type(type).serializer(serializer).schema(schema);
 	}
 
-	private static SerializedHeader.Builder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+	private static SerializedHeaderBuilder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
+	}
+	private static String className(Object value) {
+		return value == null ? null : value.getClass().getName();
 	}
 }

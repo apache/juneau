@@ -17,6 +17,7 @@ import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
@@ -32,13 +33,13 @@ import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
-import org.apache.juneau.http.header.BasicHeader;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -945,23 +946,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param params The path parameters to set.
+	 * @param params
+	 * 	The path parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	@SuppressWarnings("rawtypes")
 	public RestRequest paths(Object...params) throws RestCallException {
 		for (Object o : params) {
-			if (o instanceof NameValuePair) {
-				innerPath((NameValuePair)o);
-			} else if (o instanceof NameValuePairs) {
-				for (NameValuePair p : (NameValuePairs)o)
-					innerPath(p);
+			if (BasicNameValuePair.canCast(o)) {
+				innerPath(BasicNameValuePair.cast(o));
+			} else if (o instanceof Collection) {
+				for (Object o2 : (Collection<?>)o)
+					innerPath(BasicNameValuePair.cast(o2));
+			} else if (o != null && o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					innerPath(BasicNameValuePair.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry e : toMap(o).entrySet())
 					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
@@ -969,7 +983,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else {
-				throw new RestCallException("Invalid type passed to path(): " + o.getClass().getName());
+				throw new RestCallException("Invalid type passed to paths(): " + className(o));
 			}
 		}
 		return this;
@@ -1013,9 +1027,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return innerPath(serializedNameValuePair(name, value, PATH, serializer, schema, null));
 
-		if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				innerPath(p);
+		if (BasicNameValuePair.canCast(value)) {
+			innerPath(BasicNameValuePair.cast(value));
+		} else if (value instanceof Collection) {
+			for (Object o : (Collection<?>)value)
+				innerPath(BasicNameValuePair.cast(o));
+		} else if (value != null && value.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(value); i++)
+				innerPath(BasicNameValuePair.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
 			for (Map.Entry<Object,Object> p : toMap(value).entrySet())
 				innerPath(serializedNameValuePair(p.getKey(), p.getValue(), PATH, serializer, schema, null));
@@ -1215,12 +1234,22 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param params The parameters to set.
+	 * @param params
+	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
@@ -1251,22 +1280,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
-	 * @param params The parameters to set.
+	 * @param params
+	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest queries(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
-			if (o instanceof NameValuePair) {
-				l.add((NameValuePair)o);
-			} else if (o instanceof NameValuePairs) {
-				l.addAll((NameValuePairs)o);
+			if (BasicNameValuePair.canCast(o)) {
+				l.add(BasicNameValuePair.cast(o));
+			} else if (o instanceof Collection) {
+				for (Object o2 : (Collection<?>)o)
+					l.add(BasicNameValuePair.cast(o2));
+			} else if (o != null && o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					l.add(BasicNameValuePair.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
@@ -1274,7 +1317,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
 			} else {
-				throw new RestCallException("Invalid type passed to queries(): " + o.getClass().getName());
+				throw new RestCallException("Invalid type passed to queries(): " + className(o));
 			}
 		}
 		return innerQuery(flags, l);
@@ -1361,8 +1404,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		List<NameValuePair> l = AList.of();
 
-		if (value instanceof NameValuePairs) {
-			l.addAll((NameValuePairs)value);
+		if (BasicNameValuePair.canCast(value)) {
+			l.add(BasicNameValuePair.cast(value));
+		} else if (value instanceof Collection) {
+			for (Object o : (Collection<?>)value)
+				l.add(BasicNameValuePair.cast(o));
+		} else if (value != null && value.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(value); i++)
+				l.add(BasicNameValuePair.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
 			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
 				l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, serializer, schema, flags));
@@ -1577,12 +1626,22 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param params The parameters to set.
+	 * @param params
+	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
@@ -1613,22 +1672,36 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
-	 * @param params The parameters to set.
+	 * @param params
+	 * 	The parameters to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formDatas(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
-			if (o instanceof NameValuePair) {
-				l.add((NameValuePair)o);
-			} else if (o instanceof NameValuePairs) {
-				l.addAll((NameValuePairs)o);
+			if (BasicNameValuePair.canCast(o)) {
+				l.add(BasicNameValuePair.cast(o));
+			} else if (o instanceof Collection) {
+				for (Object o2 : (Collection<?>)o)
+					l.add(BasicNameValuePair.cast(o2));
+			} else if (o != null && o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					l.add(BasicNameValuePair.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
@@ -1636,7 +1709,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
 			} else {
-				throw new RestCallException("Invalid type passed to formDatas(): " + o.getClass().getName());
+				throw new RestCallException("Invalid type passed to formDatas(): " + className(o));
 			}
 		}
 		return innerFormData(flags, l);
@@ -1734,8 +1807,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		List<NameValuePair> l = AList.of();
 
-		if (value instanceof NameValuePairs) {
-			l.addAll((NameValuePairs)value);
+		if (BasicNameValuePair.canCast(value)) {
+			l.add(BasicNameValuePair.cast(value));
+		} else if (value instanceof Collection) {
+			for (Object o : (Collection<?>)value)
+				l.add(BasicNameValuePair.cast(o));
+		} else if (value != null && value.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(value); i++)
+				l.add(BasicNameValuePair.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
 			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
 				l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, serializer, schema, flags));
@@ -2077,12 +2156,24 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param headers The headers to set.
+	 * @param headers
+	 * 	The headers to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link Header} / {@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Headerable}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
@@ -2113,23 +2204,38 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
 	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
-	 * @param headers The headers to set.
+	 * @param headers
+	 * 	The headers to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
-	 * 		<li>{@link Map} / {@link OMap} / bean - Converted to key/value pairs using part serializer.
-	 * 		<li>{@link Header} / {@link NameValuePair} / {@link NameValuePairs} - Converted to key/value pairs directly.
-	 * 	</ul>
+	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
+	 * 		<li>{@link NameValuePair}
+	 * 		<li>{@link Headerable}
+	 * 		<li>{@link NameValuePairable}
+	 * 		<li>{@link java.util.Map.Entry}
+	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link Map}
+	 * 		<ul>
+	 * 			<li>Values can be any POJO.
+	 * 			<li>Values converted to a string using the configured part serializer.
+	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
+	 * 		</ul>
+	 * 		<li>A collection or array of anything on this list.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest headers(EnumSet<AddFlag> flags, Object...headers) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
-			if (o instanceof Header || o instanceof NameValuePair) {
-				l.add(toHeader(o));
-			} else if (o instanceof NameValuePairs) {
-				for (NameValuePair p : (NameValuePairs)o)
-					l.add(toHeader(p));
+			if (BasicHeader.canCast(o)) {
+				l.add(BasicHeader.cast(o));
+			} else if (o instanceof Collection) {
+				for (Object o2 : (Collection<?>)o)
+					l.add(BasicHeader.cast(o2));
+			} else if (o != null && o.getClass().isArray()) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					l.add(BasicHeader.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
@@ -2183,11 +2289,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		List<Header> l = AList.of();
 
-		if (value instanceof Headerable) {
-			l.add(((Headerable)value).asHeader());
-		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				l.add(toHeader(p));
+		if (BasicHeader.canCast(value)) {
+			l.add(BasicHeader.cast(value));
+		} else if (value instanceof Collection) {
+			for (Object o : (Collection<?>)value)
+				l.add(BasicHeader.cast(o));
+		} else if (value != null && value.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(value); i++)
+				l.add(BasicHeader.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
 			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
 				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
@@ -3321,16 +3430,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
 		return new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
-	}
-
-	private static Header toHeader(Object o) {
-		if (o instanceof Header)
-			return (Header)o;
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
-		if (o instanceof NameValuePair)
-			return BasicHeader.of((NameValuePair)o);
-		throw new BasicRuntimeException("Object cannot be converted to a header: {0}", o == null ? null : o.getClass().getName());
 	}
 
 	private static String className(Object value) {

@@ -48,8 +48,8 @@ public class SerializedNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static SerializedNameValuePairBuilder create() {
+		return new SerializedNameValuePairBuilder();
 	}
 
 	/**
@@ -81,122 +81,12 @@ public class SerializedNameValuePair implements NameValuePair, Headerable {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
-	SerializedNameValuePair(Builder b) {
+	SerializedNameValuePair(SerializedNameValuePairBuilder b) {
 		this.name = b.name;
 		this.value = b.value;
 		this.type = b.type;
 		this.serializer = b.serializer;
 		this.schema = b.schema == null ? HttpPartSchema.DEFAULT : b.schema;
-	}
-
-	/**
-	 * Builder for {@link SerializedNameValuePair} objects.
-	 */
-	public static class Builder {
-		String name;
-		Object value;
-		HttpPartType type;
-		HttpPartSerializerSession serializer;
-		HttpPartSchema schema;
-
-		/**
-		 * Sets the parameter name.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder name(String value) {
-			this.name = value;
-			return this;
-		}
-
-		/**
-		 * Sets the POJO to serialize to the parameter value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder value(Object value) {
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Sets the POJO to serialize to the parameter value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder value(Supplier<Object> value) {
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Sets the HTTP part type.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder type(HttpPartType value) {
-			this.type = value;
-			return this;
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializer value) {
-			if (value != null)
-				return serializer(value.createPartSession(null));
-			return this;
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializerSession value) {
-			return serializer(value, true);
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializerSession value, boolean overwrite) {
-			if (overwrite || serializer == null)
-				this.serializer = value;
-			return this;
-		}
-
-		/**
-		 * Sets the schema object that defines the format of the output.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder schema(HttpPartSchema value) {
-			this.schema = value;
-			return this;
-		}
-
-		/**
-		 * Creates the new {@link SerializedNameValuePair}
-		 *
-		 * @return The new {@link SerializedNameValuePair}
-		 */
-		public SerializedNameValuePair build() {
-			return new SerializedNameValuePair(this);
-		}
 	}
 
 	@Override /* NameValuePair */

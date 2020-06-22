@@ -36,7 +36,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public class SerializedHeader extends BasicStringHeader {
+public class SerializedHeader extends BasicStringHeader implements NameValuePairable {
 	private static final long serialVersionUID = 1L;
 
 	private Object value;
@@ -49,8 +49,8 @@ public class SerializedHeader extends BasicStringHeader {
 	 *
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static SerializedHeaderBuilder create() {
+		return new SerializedHeaderBuilder();
 	}
 
 	/**
@@ -76,111 +76,11 @@ public class SerializedHeader extends BasicStringHeader {
 		this.skipIfEmpty = skipIfEmpty;
 	}
 
-	SerializedHeader(Builder b) {
+	SerializedHeader(SerializedHeaderBuilder b) {
 		super(b.name, null);
 		this.value = b.value;
 		this.serializer = b.serializer;
 		this.schema = b.schema == null ? HttpPartSchema.DEFAULT : b.schema;
-	}
-
-	/**
-	 * Builder for {@link SerializedHeader} objects.
-	 */
-	public static class Builder {
-		String name;
-		Object value;
-		HttpPartSerializerSession serializer;
-		HttpPartSchema schema;
-
-		/**
-		 * Sets the parameter name.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder name(String value) {
-			this.name = value;
-			return this;
-		}
-
-		/**
-		 * Sets the POJO to serialize to the parameter value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder value(Object value) {
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Sets the POJO supplier to serialize to the parameter value.
-		 * <p>
-		 * Value is re-evaluated on each call to {@link #getValue()}.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder value(Supplier<?> value) {
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializer value) {
-			if (value != null)
-				return serializer(value.createPartSession(null));
-			return this;
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializerSession value) {
-			return serializer(value, true);
-		}
-
-		/**
-		 * Sets the serializer to use for serializing the value to a string value.
-		 *
-		 * @param value The new value for this property.
-		 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
-		 * @return This object (for method chaining).
-		 */
-		public Builder serializer(HttpPartSerializerSession value, boolean overwrite) {
-			if (overwrite || serializer == null)
-				this.serializer = value;
-			return this;
-		}
-
-		/**
-		 * Sets the schema object that defines the format of the output.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder schema(HttpPartSchema value) {
-			this.schema = value;
-			return this;
-		}
-
-		/**
-		 * Creates the new {@link SerializedHeader}
-		 *
-		 * @return The new {@link SerializedHeader}
-		 */
-		public SerializedHeader build() {
-			return new SerializedHeader(this);
-		}
 	}
 
 	@Override /* NameValuePair */
@@ -201,5 +101,10 @@ public class SerializedHeader extends BasicStringHeader {
 		} catch (SerializeException e) {
 			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
+	}
+
+	@Override /* NameValuePairable */
+	public NameValuePair asNameValuePair() {
+		return new SerializedNameValuePair(getName(), value, HttpPartType.HEADER, serializer, schema, skipIfEmpty);
 	}
 }

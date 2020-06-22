@@ -6597,7 +6597,7 @@ public class RestClientTest {
 			;
 			fail();
 		} catch (RestCallException e) {
-			assertEquals("Invalid type passed to path(): java.lang.String", e.getMessage());
+			assertEquals("Invalid type passed to paths(): java.lang.String", e.getMessage());
 		}
 		try {
 			MockRestClient

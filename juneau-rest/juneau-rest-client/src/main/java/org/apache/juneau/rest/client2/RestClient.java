@@ -55,8 +55,7 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.BasicNameValuePair;
-import org.apache.juneau.http.header.BasicHeader;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -1983,35 +1982,46 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
-		Function<Object,Object> f = new Function<Object,Object>() {
+		Function<Object,Object> headerFunction = new Function<Object,Object>() {
 			@Override
 			public Object apply(Object x) {
-				if (x instanceof SerializedNameValuePair.Builder)
-					return ((SerializedNameValuePair.Builder)x).serializer(partSerializerSession, false).build();
-				if (x instanceof SerializedHeader.Builder)
-					return ((SerializedHeader.Builder)x).serializer(partSerializerSession, false).build();
-				return x;
+				if (x instanceof SerializedHeaderBuilder)
+					x = ((SerializedHeaderBuilder)x).serializer(partSerializerSession, false).build();
+				else if (x instanceof SerializedNameValuePairBuilder)
+					x = ((SerializedNameValuePairBuilder)x).serializer(partSerializerSession, false).build();
+				return BasicHeader.cast(x);
+			}
+		};
+
+		Function<Object,Object> nameValuePairFunction = new Function<Object,Object>() {
+			@Override
+			public Object apply(Object x) {
+				if (x instanceof SerializedNameValuePairBuilder)
+					x = ((SerializedNameValuePairBuilder)x).serializer(partSerializerSession, false).build();
+				if (x instanceof SerializedHeaderBuilder)
+					x = ((SerializedHeaderBuilder)x).serializer(partSerializerSession, false).build();
+				return BasicNameValuePair.cast(x);
 			}
 		};
 
 		this.headers = Collections.unmodifiableList(
 			getListProperty(RESTCLIENT_headers, Object.class)
 				.stream()
-				.map(f)
+				.map(headerFunction)
 				.collect(Collectors.toList())
 		);
 
 		this.query = Collections.unmodifiableList(
 			getListProperty(RESTCLIENT_query, Object.class)
 				.stream()
-				.map(f)
+				.map(nameValuePairFunction)
 				.collect(Collectors.toList())
 		);
 
 		this.formData = Collections.unmodifiableList(
 			getListProperty(RESTCLIENT_formData, Object.class)
 				.stream()
-				.map(f)
+				.map(nameValuePairFunction)
 				.collect(Collectors.toList())
 		);
 
@@ -2849,13 +2859,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		RestRequest req = createRequest(toURI(url, rootUrl), method.toUpperCase(Locale.ENGLISH), hasBody);
 
 		for (Object o : headers)
-			req.header(toHeader(o));
+			req.header(BasicHeader.cast(o));
 
 		for (Object o : query)
-			req.query(toNameValuePair(o));
+			req.query(BasicNameValuePair.cast(o));
 
 		for (Object o : formData)
-			req.formData(toNameValuePair(o));
+			req.formData(BasicNameValuePair.cast(o));
 
 		onInit(req);
 
@@ -3699,22 +3709,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			requestContexts.put(c, o);
 		}
 		return (T)o;
-	}
-
-	private static Header toHeader(Object o) {
-		if (o instanceof Header)
-			return (Header)o;
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
-		if (o instanceof NameValuePair)
-			return BasicHeader.of((NameValuePair)o);
-		return null;
-	}
-
-	private static NameValuePair toNameValuePair(Object o) {
-		if (o instanceof NameValuePair)
-			return (NameValuePair)o;
-		return null;
 	}
 
 	@Override /* Context */
