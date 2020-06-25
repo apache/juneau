@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -38,7 +37,7 @@ public class XmlTest {
 
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertInstanceOf(String.class, t.getName());
+		assertObject(t.getName()).isType(String.class);
 
 		t.name(null);
 		assertNull(t.getName());
@@ -56,7 +55,7 @@ public class XmlTest {
 
 		t.namespace(new StringBuilder("foo"));
 		assertEquals("foo", t.getNamespace());
-		assertInstanceOf(String.class, t.getNamespace());
+		assertObject(t.getNamespace()).isType(String.class);
 
 		t.namespace(null);
 		assertNull(t.getNamespace());
@@ -74,7 +73,7 @@ public class XmlTest {
 
 		t.prefix(new StringBuilder("foo"));
 		assertEquals("foo", t.getPrefix());
-		assertInstanceOf(String.class, t.getPrefix());
+		assertObject(t.getPrefix()).isType(String.class);
 
 		t.prefix(null);
 		assertNull(t.getPrefix());
@@ -89,15 +88,15 @@ public class XmlTest {
 
 		t.attribute(true);
 		assertEquals(true, t.getAttribute());
-		assertInstanceOf(Boolean.class, t.getAttribute());
+		assertObject(t.getAttribute()).isType(Boolean.class);
 
 		t.attribute("true");
 		assertEquals(true, t.getAttribute());
-		assertInstanceOf(Boolean.class, t.getAttribute());
+		assertObject(t.getAttribute()).isType(Boolean.class);
 
 		t.attribute(new StringBuilder("true"));
 		assertEquals(true, t.getAttribute());
-		assertInstanceOf(Boolean.class, t.getAttribute());
+		assertObject(t.getAttribute()).isType(Boolean.class);
 
 		t.attribute(null);
 		assertNull(t.getAttribute());
@@ -112,15 +111,15 @@ public class XmlTest {
 
 		t.wrapped(true);
 		assertEquals(true, t.getWrapped());
-		assertInstanceOf(Boolean.class, t.getWrapped());
+		assertObject(t.getWrapped()).isType(Boolean.class);
 
 		t.wrapped("true");
 		assertEquals(true, t.getWrapped());
-		assertInstanceOf(Boolean.class, t.getWrapped());
+		assertObject(t.getWrapped()).isType(Boolean.class);
 
 		t.wrapped(new StringBuilder("true"));
 		assertEquals(true, t.getWrapped());
-		assertInstanceOf(Boolean.class, t.getWrapped());
+		assertObject(t.getWrapped()).isType(Boolean.class);
 
 		t.wrapped(null);
 		assertNull(t.getWrapped());
@@ -170,12 +169,12 @@ public class XmlTest {
 		assertEquals("true", t.get("wrapped", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(Boolean.class, t.get("attribute", Object.class));
-		assertInstanceOf(String.class, t.get("name", Object.class));
-		assertInstanceOf(String.class, t.get("namespace", Object.class));
-		assertInstanceOf(String.class, t.get("prefix", Object.class));
-		assertInstanceOf(Boolean.class, t.get("wrapped", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
+		assertObject(t.get("attribute", Object.class)).isType(Boolean.class);
+		assertObject(t.get("name", Object.class)).isType(String.class);
+		assertObject(t.get("namespace", Object.class)).isType(String.class);
+		assertObject(t.get("prefix", Object.class)).isType(String.class);
+		assertObject(t.get("wrapped", Object.class)).isType(Boolean.class);
+		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

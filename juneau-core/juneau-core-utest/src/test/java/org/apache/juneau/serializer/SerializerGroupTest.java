@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
@@ -30,25 +29,25 @@ public class SerializerGroupTest {
 	public void testSerializerGroupMatching() throws Exception {
 
 		SerializerGroup sg = SerializerGroup.create().append(SA1.class, SA2.class, SA3.class).build();
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/xxx+foo_a"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a+xxx"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar_a"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo+xxx"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo+xxx"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz+yyy"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a+yyy"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz_a"));
+		assertObject(sg.getSerializer("text/foo")).isType(SA1.class);
+		assertObject(sg.getSerializer("text/foo_a")).isType(SA1.class);
+		assertObject(sg.getSerializer("text/xxx+foo_a")).isType(SA1.class);
+		assertObject(sg.getSerializer("text/foo_a+xxx")).isType(SA1.class);
+		assertObject(sg.getSerializer("text/foo+bar")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/foo+bar_a")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/bar+foo")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/bar_a+foo")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/bar+foo+xxx")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/bar_a+foo+xxx")).isType(SA2.class);
+		assertObject(sg.getSerializer("text/baz")).isType(SA3.class);
+		assertObject(sg.getSerializer("text/baz_a")).isType(SA3.class);
+		assertObject(sg.getSerializer("text/baz+yyy")).isType(SA3.class);
+		assertObject(sg.getSerializer("text/baz_a+yyy")).isType(SA3.class);
+		assertObject(sg.getSerializer("text/yyy+baz")).isType(SA3.class);
+		assertObject(sg.getSerializer("text/yyy+baz_a")).isType(SA3.class);
 
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
+		assertObject(sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8")).isType(SA1.class);
+		assertObject(sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9")).isType(SA2.class);
 	}
 
 
@@ -131,9 +130,9 @@ public class SerializerGroupTest {
 
 		gb = SerializerGroup.create().append(SC1.class, SC2.class, SC3.class);
 		g = gb.build();
-		assertInstanceOf(SC1.class, g.getSerializer("text/foo"));
-		assertInstanceOf(SC2.class, g.getSerializer("foo/json"));
-		assertInstanceOf(SC3.class, g.getSerializer("foo/foo"));
+		assertObject(g.getSerializer("text/foo")).isType(SC1.class);
+		assertObject(g.getSerializer("foo/json")).isType(SC2.class);
+		assertObject(g.getSerializer("foo/foo")).isType(SC3.class);
 	}
 
 	public static class SC1 extends JsonSerializer {

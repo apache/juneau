@@ -373,7 +373,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "foo,bar", List.class, Object.class)).json().is("['foo','bar']");
 		Object o = parse(s, "foo,bar", Object.class);
 		assertObject(o).json().is("['foo','bar']");
-		assertObject(o).instanceOf(OList.class);
+		assertObject(o).isType(OList.class);
 		assertObject(parse(s, "foo,bar", C2[].class)).json().is("['C2-foo','C2-bar']");
 		assertObject(parse(s, "foo,bar", List.class, C2.class)).json().is("['C2-foo','C2-bar']");
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
@@ -390,7 +390,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "foo,bar|baz", List.class, List.class, Object.class)).json().is("[['foo','bar'],['baz']]");
 		Object o = parse(s, "foo,bar|baz", Object.class);
 		assertObject(o).json().is("[['foo','bar'],['baz']]");
-		assertObject(o).instanceOf(OList.class);
+		assertObject(o).isType(OList.class);
 		assertObject(parse(s, "foo,bar|baz", C2[][].class)).json().is("[['C2-foo','C2-bar'],['C2-baz']]");
 		assertObject(parse(s, "foo,bar|baz", List.class, C2[].class)).json().is("[['C2-foo','C2-bar'],['C2-baz']]");
 		assertObject(parse(s, "foo,bar|baz", List.class, List.class, C2.class)).json().is("[['C2-foo','C2-bar'],['C2-baz']]");
@@ -733,7 +733,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "1", String.class)).json().is("'1'");
 		Object o = parse(s, "1", Object.class);
 		assertObject(o).json().is("1");
-		assertObject(o).instanceOf(Integer.class);
+		assertObject(o).isType(Integer.class);
 		assertObject(parse(s,  "1", F1.class)).json().is("'F1-1'");
 	}
 
@@ -801,7 +801,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "1", String.class)).json().is("'1'");
 		Object o = parse(s, "1", Object.class);
 		assertObject(o).json().is("1");
-		assertObject(o).instanceOf(Long.class);
+		assertObject(o).isType(Long.class);
 		assertObject(parse(s,  "1", F3.class)).json().is("1");
 	}
 
@@ -914,7 +914,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "1", String.class)).json().is("'1.0'");
 		Object o =  parse(s, "1", Object.class);
 		assertObject(o).json().is("1.0");
-		assertObject(o).instanceOf(Float.class);
+		assertObject(o).isType(Float.class);
 		assertObject(parse(s,  "1", G1.class)).json().is("1.0");
 	}
 
@@ -972,7 +972,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "1", String.class)).json().is("'1.0'");
 		Object o = parse(s, "1", Object.class);
 		assertObject(o).json().is("1.0");
-		assertObject(o).instanceOf(Double.class);
+		assertObject(o).isType(Double.class);
 		assertObject(parse(s,  "1", G3.class)).json().is("1.0");
 	}
 
@@ -1036,7 +1036,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "f=1", OMap.class)).json().is("{f:'1'}");
 		Object o = parse(s, "f=1", Object.class);
 		assertObject(o).json().is("{f:'1'}");
-		assertObject(o).instanceOf(OMap.class);
+		assertObject(o).isType(OMap.class);
 	}
 
 	@Test
@@ -1050,7 +1050,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "@((f=1),(f=2))", List.class, Object.class)).json().is("[{f:1},{f:2}]");
 		Object o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertObject(o).json().is("[{f:1},{f:2}]");
-		assertObject(o).instanceOf(OList.class);
+		assertObject(o).isType(OList.class);
 	}
 
 	@Test
@@ -1067,7 +1067,7 @@ public class OpenApiPartParserTest {
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class)).json().is("[[{f:1},{f:2}],[{f:3}]]");
 		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertObject(o).json().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(o).instanceOf(OList.class);
+		assertObject(o).isType(OList.class);
 	}
 
 	public static class H2 {
@@ -1096,48 +1096,48 @@ public class OpenApiPartParserTest {
 
 		H2 h2 = parse(s, in, H2.class);
 		assertObject(h2).json().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(h2.f01).instanceOf(String.class);
-		assertObject(h2.f02).instanceOf(byte[].class);
-		assertObject(h2.f04).instanceOf(GregorianCalendar.class);
-		assertObject(h2.f05).instanceOf(byte[].class);
-		assertObject(h2.f06).instanceOf(byte[].class);
-		assertObject(h2.f07).instanceOf(String.class);
-		assertObject(h2.f08).instanceOf(Integer.class);
-		assertObject(h2.f09).instanceOf(Long.class);
-		assertObject(h2.f10).instanceOf(Float.class);
-		assertObject(h2.f11).instanceOf(Double.class);
-		assertObject(h2.f12).instanceOf(Boolean.class);
-		assertObject(h2.f99).instanceOf(Integer.class);
+		assertObject(h2.f01).isType(String.class);
+		assertObject(h2.f02).isType(byte[].class);
+		assertObject(h2.f04).isType(GregorianCalendar.class);
+		assertObject(h2.f05).isType(byte[].class);
+		assertObject(h2.f06).isType(byte[].class);
+		assertObject(h2.f07).isType(String.class);
+		assertObject(h2.f08).isType(Integer.class);
+		assertObject(h2.f09).isType(Long.class);
+		assertObject(h2.f10).isType(Float.class);
+		assertObject(h2.f11).isType(Double.class);
+		assertObject(h2.f12).isType(Boolean.class);
+		assertObject(h2.f99).isType(Integer.class);
 
 		OMap om = parse(s, in, OMap.class);
 		assertObject(om).json().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(om.get("f01")).instanceOf(String.class);
-		assertObject(om.get("f02")).instanceOf(byte[].class);
-		assertObject(om.get("f04")).instanceOf(GregorianCalendar.class);
-		assertObject(om.get("f05")).instanceOf(byte[].class);
-		assertObject(om.get("f06")).instanceOf(byte[].class);
-		assertObject(om.get("f07")).instanceOf(String.class);
-		assertObject(om.get("f08")).instanceOf(Integer.class);
-		assertObject(om.get("f09")).instanceOf(Long.class);
-		assertObject(om.get("f10")).instanceOf(Float.class);
-		assertObject(om.get("f11")).instanceOf(Double.class);
-		assertObject(om.get("f12")).instanceOf(Boolean.class);
-		assertObject(om.get("f99")).instanceOf(Integer.class);
+		assertObject(om.get("f01")).isType(String.class);
+		assertObject(om.get("f02")).isType(byte[].class);
+		assertObject(om.get("f04")).isType(GregorianCalendar.class);
+		assertObject(om.get("f05")).isType(byte[].class);
+		assertObject(om.get("f06")).isType(byte[].class);
+		assertObject(om.get("f07")).isType(String.class);
+		assertObject(om.get("f08")).isType(Integer.class);
+		assertObject(om.get("f09")).isType(Long.class);
+		assertObject(om.get("f10")).isType(Float.class);
+		assertObject(om.get("f11")).isType(Double.class);
+		assertObject(om.get("f12")).isType(Boolean.class);
+		assertObject(om.get("f99")).isType(Integer.class);
 
 		om = (OMap)parse(s, in, Object.class);
 		assertObject(om).json().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
-		assertObject(om.get("f01")).instanceOf(String.class);
-		assertObject(om.get("f02")).instanceOf(byte[].class);
-		assertObject(om.get("f04")).instanceOf(GregorianCalendar.class);
-		assertObject(om.get("f05")).instanceOf(byte[].class);
-		assertObject(om.get("f06")).instanceOf(byte[].class);
-		assertObject(om.get("f07")).instanceOf(String.class);
-		assertObject(om.get("f08")).instanceOf(Integer.class);
-		assertObject(om.get("f09")).instanceOf(Long.class);
-		assertObject(om.get("f10")).instanceOf(Float.class);
-		assertObject(om.get("f11")).instanceOf(Double.class);
-		assertObject(om.get("f12")).instanceOf(Boolean.class);
-		assertObject(om.get("f99")).instanceOf(Integer.class);
+		assertObject(om.get("f01")).isType(String.class);
+		assertObject(om.get("f02")).isType(byte[].class);
+		assertObject(om.get("f04")).isType(GregorianCalendar.class);
+		assertObject(om.get("f05")).isType(byte[].class);
+		assertObject(om.get("f06")).isType(byte[].class);
+		assertObject(om.get("f07")).isType(String.class);
+		assertObject(om.get("f08")).isType(Integer.class);
+		assertObject(om.get("f09")).isType(Long.class);
+		assertObject(om.get("f10")).isType(Float.class);
+		assertObject(om.get("f11")).isType(Double.class);
+		assertObject(om.get("f12")).isType(Boolean.class);
+		assertObject(om.get("f99")).isType(Integer.class);
 	}
 
 	@Test

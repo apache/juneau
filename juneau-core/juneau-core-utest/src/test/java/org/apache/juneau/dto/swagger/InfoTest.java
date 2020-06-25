@@ -14,7 +14,6 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -39,7 +38,7 @@ public class InfoTest {
 
 		t.title(new StringBuilder("foo"));
 		assertEquals("foo", t.getTitle());
-		assertInstanceOf(String.class, t.getTitle());
+		assertObject(t.getTitle()).isType(String.class);
 
 		t.title(null);
 		assertNull(t.getTitle());
@@ -57,7 +56,7 @@ public class InfoTest {
 
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertInstanceOf(String.class, t.getDescription());
+		assertObject(t.getDescription()).isType(String.class);
 
 		t.description(null);
 		assertNull(t.getDescription());
@@ -75,7 +74,7 @@ public class InfoTest {
 
 		t.termsOfService(new StringBuilder("foo"));
 		assertEquals("foo", t.getTermsOfService());
-		assertInstanceOf(String.class, t.getTermsOfService());
+		assertObject(t.getTermsOfService()).isType(String.class);
 
 		t.termsOfService(null);
 		assertNull(t.getTermsOfService());
@@ -93,7 +92,7 @@ public class InfoTest {
 
 		t.contact("{name:'foo'}");
 		assertObject(t.getContact()).json().is("{name:'foo'}");
-		assertInstanceOf(Contact.class, t.getContact());
+		assertObject(t.getContact()).isType(Contact.class);
 
 		t.contact(null);
 		assertNull(t.getContact());
@@ -111,7 +110,7 @@ public class InfoTest {
 
 		t.license("{name:'foo'}");
 		assertObject(t.getLicense()).json().is("{name:'foo'}");
-		assertInstanceOf(License.class, t.getLicense());
+		assertObject(t.getLicense()).isType(License.class);
 
 		t.license(null);
 		assertNull(t.getLicense());
@@ -129,7 +128,7 @@ public class InfoTest {
 
 		t.version(new StringBuilder("foo"));
 		assertEquals("foo", t.getVersion());
-		assertInstanceOf(String.class, t.getVersion());
+		assertObject(t.getVersion()).isType(String.class);
 
 		t.version(null);
 		assertNull(t.getVersion());
@@ -183,13 +182,13 @@ public class InfoTest {
 		assertEquals("f", t.get("version", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(Contact.class, t.get("contact", Object.class));
-		assertInstanceOf(String.class, t.get("description", Object.class));
-		assertInstanceOf(License.class, t.get("license", Object.class));
-		assertInstanceOf(String.class, t.get("termsOfService", Object.class));
-		assertInstanceOf(String.class, t.get("title", Object.class));
-		assertInstanceOf(String.class, t.get("version", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
+		assertObject(t.get("contact", Object.class)).isType(Contact.class);
+		assertObject(t.get("description", Object.class)).isType(String.class);
+		assertObject(t.get("license", Object.class)).isType(License.class);
+		assertObject(t.get("termsOfService", Object.class)).isType(String.class);
+		assertObject(t.get("title", Object.class)).isType(String.class);
+		assertObject(t.get("version", Object.class)).isType(String.class);
+		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

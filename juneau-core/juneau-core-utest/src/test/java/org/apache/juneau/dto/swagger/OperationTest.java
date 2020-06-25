@@ -14,7 +14,6 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,11 +39,11 @@ public class OperationTest {
 
 		t.setTags(ASet.of("foo","bar"));
 		assertObject(t.getTags()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getTags());
+		assertObject(t.getTags()).isType(List.class);
 
 		t.setTags(ASet.of());
 		assertObject(t.getTags()).json().is("[]");
-		assertInstanceOf(List.class, t.getTags());
+		assertObject(t.getTags()).isType(List.class);
 
 		t.setTags(null);
 		assertNull(t.getTags());
@@ -59,15 +58,15 @@ public class OperationTest {
 
 		t.addTags(ASet.of("foo","bar"));
 		assertObject(t.getTags()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getTags());
+		assertObject(t.getTags()).isType(List.class);
 
 		t.addTags(ASet.of());
 		assertObject(t.getTags()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getTags());
+		assertObject(t.getTags()).isType(List.class);
 
 		t.addTags(null);
 		assertObject(t.getTags()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getTags());
+		assertObject(t.getTags()).isType(List.class);
 	}
 
 	/**
@@ -87,7 +86,7 @@ public class OperationTest {
 		t.tags((Object)null);
 		assertObject(t.getTags()).json().is("['a','b','c','d','e','f']");
 		for (String s : t.getTags())
-			assertInstanceOf(String.class, s);
+			assertObject(s).isType(String.class);
 	}
 
 	/**
@@ -102,7 +101,7 @@ public class OperationTest {
 
 		t.summary(new StringBuilder("foo"));
 		assertEquals("foo", t.getSummary());
-		assertInstanceOf(String.class, t.getSummary());
+		assertObject(t.getSummary()).isType(String.class);
 
 		t.summary(null);
 		assertNull(t.getSummary());
@@ -120,7 +119,7 @@ public class OperationTest {
 
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertInstanceOf(String.class, t.getDescription());
+		assertObject(t.getDescription()).isType(String.class);
 
 		t.description(null);
 		assertNull(t.getDescription());
@@ -138,7 +137,7 @@ public class OperationTest {
 
 		t.externalDocs("{url:'foo'}");
 		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
-		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
+		assertObject(t.getExternalDocs()).isType(ExternalDocumentation.class);
 
 		t.externalDocs(null);
 		assertNull(t.getExternalDocs());
@@ -156,7 +155,7 @@ public class OperationTest {
 
 		t.operationId(new StringBuilder("foo"));
 		assertEquals("foo", t.getOperationId());
-		assertInstanceOf(String.class, t.getOperationId());
+		assertObject(t.getOperationId()).isType(String.class);
 
 		t.operationId(null);
 		assertNull(t.getOperationId());
@@ -171,11 +170,11 @@ public class OperationTest {
 
 		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 
 		t.setConsumes(ASet.of());
 		assertObject(t.getConsumes()).json().is("[]");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 
 		t.setConsumes(null);
 		assertNull(t.getConsumes());
@@ -190,15 +189,15 @@ public class OperationTest {
 
 		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 
 		t.addConsumes(ASet.of());
 		assertObject(t.getConsumes()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 
 		t.addConsumes(null);
 		assertObject(t.getConsumes()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 	}
 
 	/**
@@ -218,9 +217,9 @@ public class OperationTest {
 		t.consumes("[]");
 		t.consumes((Object)null);
 		assertObject(t.getConsumes()).json().is("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']");
-		assertInstanceOf(List.class, t.getConsumes());
+		assertObject(t.getConsumes()).isType(List.class);
 		for (MediaType mt : t.getConsumes())
-			assertInstanceOf(MediaType.class, mt);
+			assertObject(mt).isType(MediaType.class);
 	}
 
 	/**
@@ -232,11 +231,11 @@ public class OperationTest {
 
 		t.setProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 
 		t.setProduces(ASet.of());
 		assertObject(t.getProduces()).json().is("[]");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 
 		t.setProduces(null);
 		assertNull(t.getProduces());
@@ -251,15 +250,15 @@ public class OperationTest {
 
 		t.addProduces(ASet.of(MediaType.forString("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 
 		t.addProduces(ASet.of());
 		assertObject(t.getProduces()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 
 		t.addProduces(null);
 		assertObject(t.getProduces()).json().is("['text/foo']");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 	}
 
 	/**
@@ -279,9 +278,9 @@ public class OperationTest {
 		t.produces("[]");
 		t.produces((Object)null);
 		assertObject(t.getProduces()).json().is("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']");
-		assertInstanceOf(List.class, t.getProduces());
+		assertObject(t.getProduces()).isType(List.class);
 		for (MediaType mt : t.getProduces())
-			assertInstanceOf(MediaType.class, mt);
+			assertObject(mt).isType(MediaType.class);
 	}
 
 	/**
@@ -293,11 +292,11 @@ public class OperationTest {
 
 		t.setParameters(ASet.of(parameterInfo("foo","bar")));
 		assertObject(t.getParameters()).json().is("[{'in':'foo',name:'bar'}]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 
 		t.setParameters(ASet.of());
 		assertObject(t.getParameters()).json().is("[]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 
 		t.setParameters(null);
 		assertNull(t.getParameters());
@@ -312,15 +311,15 @@ public class OperationTest {
 
 		t.addParameters(ASet.of(parameterInfo("foo","bar")));
 		assertObject(t.getParameters()).json().is("[{'in':'foo',name:'bar'}]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 
 		t.addParameters(ASet.of());
 		assertObject(t.getParameters()).json().is("[{'in':'foo',name:'bar'}]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 
 		t.addParameters(null);
 		assertObject(t.getParameters()).json().is("[{'in':'foo',name:'bar'}]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 	}
 
 	/**
@@ -340,9 +339,9 @@ public class OperationTest {
 		t.parameters("[]");
 		t.parameters((Object)null);
 		assertObject(t.getParameters()).json().is("[{'in':'a1',name:'a2'},{'in':'b1',name:'b2'},{'in':'c1',name:'c2'},{'in':'d1',name:'d2'},{'in':'e1',name:'e2'},{'in':'f1',name:'f2'},{'in':'g1',name:'g2'}]");
-		assertInstanceOf(List.class, t.getParameters());
+		assertObject(t.getParameters()).isType(List.class);
 		for (ParameterInfo pi : t.getParameters())
-			assertInstanceOf(ParameterInfo.class, pi);
+			assertObject(pi).isType(ParameterInfo.class);
 	}
 
 	/**
@@ -354,11 +353,11 @@ public class OperationTest {
 
 		t.setResponses(AMap.of("123",responseInfo("bar")));
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
-		assertInstanceOf(Map.class, t.getResponses());
+		assertObject(t.getResponses()).isType(Map.class);
 
 		t.setResponses(AMap.of());
 		assertObject(t.getResponses()).json().is("{}");
-		assertInstanceOf(Map.class, t.getResponses());
+		assertObject(t.getResponses()).isType(Map.class);
 
 		t.setResponses(null);
 		assertNull(t.getResponses());
@@ -373,15 +372,15 @@ public class OperationTest {
 
 		t.addResponses(AMap.of("123",responseInfo("bar")));
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
-		assertInstanceOf(Map.class, t.getResponses());
+		assertObject(t.getResponses()).isType(Map.class);
 
 		t.addResponses(AMap.of());
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
-		assertInstanceOf(Map.class, t.getResponses());
+		assertObject(t.getResponses()).isType(Map.class);
 
 		t.addResponses(null);
 		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
-		assertInstanceOf(Map.class, t.getResponses());
+		assertObject(t.getResponses()).isType(Map.class);
 	}
 
 	/**
@@ -412,8 +411,8 @@ public class OperationTest {
 
 		assertObject(t.getResponses()).json().is("{'1':{description:'a'},'2':{description:'b'},'3':{description:'c'}}");
 		for (Map.Entry<String,ResponseInfo> e : t.getResponses().entrySet()) {
-			assertInstanceOf(String.class, e.getKey());
-			assertInstanceOf(ResponseInfo.class, e.getValue());
+			assertObject(e.getKey()).isType(String.class);
+			assertObject(e.getValue()).isType(ResponseInfo.class);
 		}
 	}
 
@@ -426,11 +425,11 @@ public class OperationTest {
 
 		t.setSchemes(ASet.of("foo"));
 		assertObject(t.getSchemes()).json().is("['foo']");
-		assertInstanceOf(List.class, t.getSchemes());
+		assertObject(t.getSchemes()).isType(List.class);
 
 		t.setSchemes(ASet.of());
 		assertObject(t.getSchemes()).json().is("[]");
-		assertInstanceOf(List.class, t.getSchemes());
+		assertObject(t.getSchemes()).isType(List.class);
 
 		t.setSchemes(null);
 		assertNull(t.getSchemes());
@@ -445,11 +444,11 @@ public class OperationTest {
 
 		t.setSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 
 		t.setSecurity(ASet.of());
 		assertObject(t.getSecurity()).json().is("[]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 
 		t.setSecurity(null);
 		assertNull(t.getSecurity());
@@ -464,15 +463,15 @@ public class OperationTest {
 
 		t.addSchemes(ASet.of("foo"));
 		assertObject(t.getSchemes()).json().is("['foo']");
-		assertInstanceOf(List.class, t.getSchemes());
+		assertObject(t.getSchemes()).isType(List.class);
 
 		t.addSchemes(ASet.of());
 		assertObject(t.getSchemes()).json().is("['foo']");
-		assertInstanceOf(List.class, t.getSchemes());
+		assertObject(t.getSchemes()).isType(List.class);
 
 		t.addSchemes(null);
 		assertObject(t.getSchemes()).json().is("['foo']");
-		assertInstanceOf(List.class, t.getSchemes());
+		assertObject(t.getSchemes()).isType(List.class);
 	}
 
 	/**
@@ -492,7 +491,7 @@ public class OperationTest {
 		t.schemes((Object)null);
 		assertObject(t.getSchemes()).json().is("['a','b','c','d','e','f']");
 		for (String s : t.getSchemes())
-			assertInstanceOf(String.class, s);
+			assertObject(s).isType(String.class);
 	}
 
 	/**
@@ -504,15 +503,15 @@ public class OperationTest {
 
 		t.deprecated(true);
 		assertEquals(true, t.getDeprecated());
-		assertInstanceOf(Boolean.class, t.getDeprecated());
+		assertObject(t.getDeprecated()).isType(Boolean.class);
 
 		t.deprecated("true");
 		assertEquals(true, t.getDeprecated());
-		assertInstanceOf(Boolean.class, t.getDeprecated());
+		assertObject(t.getDeprecated()).isType(Boolean.class);
 
 		t.deprecated(new StringBuilder("true"));
 		assertEquals(true, t.getDeprecated());
-		assertInstanceOf(Boolean.class, t.getDeprecated());
+		assertObject(t.getDeprecated()).isType(Boolean.class);
 
 		t.deprecated(null);
 		assertNull(t.getDeprecated());
@@ -527,15 +526,15 @@ public class OperationTest {
 
 		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
 		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 
 		t.addSecurity(ASet.of());
 		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 
 		t.addSecurity(null);
 		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 	}
 
 	/**
@@ -570,7 +569,7 @@ public class OperationTest {
 		t.securities("[]");
 		t.securities((Object)null);
 		assertObject(t.getSecurity()).json().is("[{a1:['a2']},{b1:['b2']},{c1:['c2']},{d1:['d2']},{e1:['e2']},{f1:['f2']},{g1:['g2']}]");
-		assertInstanceOf(List.class, t.getSecurity());
+		assertObject(t.getSecurity()).isType(List.class);
 	}
 
 	/**
@@ -645,24 +644,24 @@ public class OperationTest {
 		assertEquals("['k']", t.get("tags", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(List.class, t.get("consumes", Object.class));
-		assertInstanceOf(MediaType.class, t.get("consumes", List.class).get(0));
-		assertInstanceOf(Boolean.class, t.get("deprecated", Object.class));
-		assertInstanceOf(String.class, t.get("description", Object.class));
-		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertInstanceOf(String.class, t.get("operationId", Object.class));
-		assertInstanceOf(List.class, t.get("parameters", Object.class));
-		assertInstanceOf(ParameterInfo.class, t.get("parameters", List.class).get(0));
-		assertInstanceOf(List.class, t.get("produces", Object.class));
-		assertInstanceOf(MediaType.class, t.get("produces", List.class).get(0));
-		assertInstanceOf(Map.class, t.get("responses", Object.class));
-		assertInstanceOf(String.class, t.get("responses", Map.class).keySet().iterator().next());
-		assertInstanceOf(ResponseInfo.class, t.get("responses", Map.class).values().iterator().next());
-		assertInstanceOf(List.class, t.get("schemes", Object.class));
-		assertInstanceOf(List.class, t.get("security", Object.class));
-		assertInstanceOf(String.class, t.get("summary", Object.class));
-		assertInstanceOf(List.class, t.get("tags", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
+		assertObject(t.get("consumes", Object.class)).isType(List.class);
+		assertObject(t.get("consumes", List.class).get(0)).isType(MediaType.class);
+		assertObject(t.get("deprecated", Object.class)).isType(Boolean.class);
+		assertObject(t.get("description", Object.class)).isType(String.class);
+		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
+		assertObject(t.get("operationId", Object.class)).isType(String.class);
+		assertObject(t.get("parameters", Object.class)).isType(List.class);
+		assertObject(t.get("parameters", List.class).get(0)).isType(ParameterInfo.class);
+		assertObject(t.get("produces", Object.class)).isType(List.class);
+		assertObject(t.get("produces", List.class).get(0)).isType(MediaType.class);
+		assertObject(t.get("responses", Object.class)).isType(Map.class);
+		assertObject(t.get("responses", Map.class).keySet().iterator().next()).isType(String.class);
+		assertObject(t.get("responses", Map.class).values().iterator().next()).isType(ResponseInfo.class);
+		assertObject(t.get("schemes", Object.class)).isType(List.class);
+		assertObject(t.get("security", Object.class)).isType(List.class);
+		assertObject(t.get("summary", Object.class)).isType(String.class);
+		assertObject(t.get("tags", Object.class)).isType(List.class);
+		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,7 +39,7 @@ public class ExternalDocumentationTest {
 
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertInstanceOf(String.class, t.getDescription());
+		assertObject(t.getDescription()).isType(String.class);
 
 		t.description(null);
 		assertNull(t.getDescription());
@@ -58,7 +57,7 @@ public class ExternalDocumentationTest {
 
 		t.url(new StringBuilder("foo"));
 		assertEquals("foo", t.getUrl().toString());
-		assertInstanceOf(URI.class, t.getUrl());
+		assertObject(t.getUrl()).isType(URI.class);
 
 		t.url(null);
 		assertNull(t.getUrl());
@@ -89,9 +88,9 @@ public class ExternalDocumentationTest {
 		assertEquals("bar", t.get("url", URI.class).toString());
 		assertEquals("baz", t.get("$ref", String.class));
 
-		assertInstanceOf(String.class, t.get("description", String.class));
-		assertInstanceOf(URI.class, t.get("url", URI.class));
-		assertInstanceOf(String.class, t.get("$ref", String.class));
+		assertObject(t.get("description", String.class)).isType(String.class);
+		assertObject(t.get("url", URI.class)).isType(URI.class);
+		assertObject(t.get("$ref", String.class)).isType(String.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

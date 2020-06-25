@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -300,15 +299,6 @@ public class TestUtils {
 		return beanSession.getClassMeta(type, args);
 	}
 
-	/**
-	 * Throws an AssertionError if the object isn't of the specified type.
-	 */
-	public static final <T> T assertInstanceOf(Class<?> type, T o) {
-		if (type.isInstance(o))
-			return o;
-		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
-	}
-
 	public static final String verifyInstanceOf(Class<?> type, Object o) {
 		if (type.isInstance(o))
 			return null;
@@ -327,21 +317,5 @@ public class TestUtils {
 
 	public static final String verifyTrue(boolean b) {
 		return verifyEquals(true, b);
-	}
-
-	public static final String verifyFalse(boolean b) {
-		return verifyEquals(false, b);
-	}
-
-	public static final String verifyNull(Object o) {
-		if (o == null)
-			return null;
-		return StringUtils.format("Expected {0} but was {1}", null, o);
-	}
-
-	public static final String verifyNotNull(Object o) {
-		if (o != null)
-			return null;
-		return StringUtils.format("Expected non null value but was null");
 	}
 }

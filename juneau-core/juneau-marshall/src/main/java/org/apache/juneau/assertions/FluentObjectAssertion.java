@@ -76,7 +76,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R instanceOf(Class<?> parent) throws AssertionError {
+	public R isType(Class<?> parent) throws AssertionError {
 		if (o == null && parent == null)
 			return returns();
 		if (o == null && parent != null || o != null && parent == null || ! ClassInfo.of(o).isChildOf(parent))

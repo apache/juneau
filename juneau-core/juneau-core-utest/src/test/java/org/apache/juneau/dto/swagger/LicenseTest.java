@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,7 +39,7 @@ public class LicenseTest {
 
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertInstanceOf(String.class, t.getName());
+		assertObject(t.getName()).isType(String.class);
 
 		t.name(null);
 		assertNull(t.getName());
@@ -58,7 +57,7 @@ public class LicenseTest {
 
 		t.url("foo");
 		assertEquals("foo", t.getUrl().toString());
-		assertInstanceOf(URI.class, t.getUrl());
+		assertObject(t.getUrl()).isType(URI.class);
 
 		t.url(null);
 		assertNull(t.getUrl());
@@ -96,9 +95,9 @@ public class LicenseTest {
 		assertEquals("b", t.get("url", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(String.class, t.get("name", Object.class));
-		assertInstanceOf(URI.class, t.get("url", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
+		assertObject(t.get("name", Object.class)).isType(String.class);
+		assertObject(t.get("url", Object.class)).isType(URI.class);
+		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

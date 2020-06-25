@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
@@ -30,20 +29,20 @@ public class ParserGroupTest {
 	public void testParserGroupMatching() throws Exception {
 
 		ParserGroup g = ParserGroup.create().append(Parser1.class, Parser2.class, Parser3.class).build();
-		assertInstanceOf(Parser1.class, g.getParser("text/foo"));
-		assertInstanceOf(Parser1.class, g.getParser("text/foo_a"));
-		assertInstanceOf(Parser1.class, g.getParser("text/foo_a+xxx"));
-		assertInstanceOf(Parser1.class, g.getParser("text/xxx+foo_a"));
-		assertInstanceOf(Parser2.class, g.getParser("text/foo+bar"));
-		assertInstanceOf(Parser2.class, g.getParser("text/foo+bar_a"));
-		assertInstanceOf(Parser2.class, g.getParser("text/bar+foo"));
-		assertInstanceOf(Parser2.class, g.getParser("text/bar+foo+xxx"));
-		assertInstanceOf(Parser3.class, g.getParser("text/baz"));
-		assertInstanceOf(Parser3.class, g.getParser("text/baz_a"));
-		assertInstanceOf(Parser3.class, g.getParser("text/baz+yyy"));
-		assertInstanceOf(Parser3.class, g.getParser("text/baz_a+yyy"));
-		assertInstanceOf(Parser3.class, g.getParser("text/yyy+baz"));
-		assertInstanceOf(Parser3.class, g.getParser("text/yyy+baz_a"));
+		assertObject(g.getParser("text/foo")).isType(Parser1.class);
+		assertObject(g.getParser("text/foo_a")).isType(Parser1.class);
+		assertObject(g.getParser("text/foo_a+xxx")).isType(Parser1.class);
+		assertObject(g.getParser("text/xxx+foo_a")).isType(Parser1.class);
+		assertObject(g.getParser("text/foo+bar")).isType(Parser2.class);
+		assertObject(g.getParser("text/foo+bar_a")).isType(Parser2.class);
+		assertObject(g.getParser("text/bar+foo")).isType(Parser2.class);
+		assertObject(g.getParser("text/bar+foo+xxx")).isType(Parser2.class);
+		assertObject(g.getParser("text/baz")).isType(Parser3.class);
+		assertObject(g.getParser("text/baz_a")).isType(Parser3.class);
+		assertObject(g.getParser("text/baz+yyy")).isType(Parser3.class);
+		assertObject(g.getParser("text/baz_a+yyy")).isType(Parser3.class);
+		assertObject(g.getParser("text/yyy+baz")).isType(Parser3.class);
+		assertObject(g.getParser("text/yyy+baz_a")).isType(Parser3.class);
 	}
 
 

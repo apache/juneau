@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,7 +39,7 @@ public class ContactTest {
 
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertInstanceOf(String.class, t.getName());
+		assertObject(t.getName()).isType(String.class);
 
 		t.name(null);
 		assertNull(t.getName());
@@ -58,7 +57,7 @@ public class ContactTest {
 
 		t.url(new StringBuilder("foo"));
 		assertEquals("foo", t.getUrl().toString());
-		assertInstanceOf(URI.class, t.getUrl());
+		assertObject(t.getUrl()).isType(URI.class);
 
 		t.url(null);
 		assertNull(t.getUrl());
@@ -76,7 +75,7 @@ public class ContactTest {
 
 		t.email(new StringBuilder("foo"));
 		assertEquals("foo", t.getEmail());
-		assertInstanceOf(String.class, t.getEmail());
+		assertObject(t.getEmail()).isType(String.class);
 
 		t.email(null);
 		assertNull(t.getEmail());
@@ -110,10 +109,10 @@ public class ContactTest {
 		assertEquals("baz", t.get("email", String.class));
 		assertEquals("qux", t.get("$ref", String.class));
 
-		assertInstanceOf(String.class, t.get("name", String.class));
-		assertInstanceOf(URI.class, t.get("url", URI.class));
-		assertInstanceOf(String.class, t.get("email", String.class));
-		assertInstanceOf(String.class, t.get("$ref", String.class));
+		assertObject(t.get("name", String.class)).isType(String.class);
+		assertObject(t.get("url", URI.class)).isType(URI.class);
+		assertObject(t.get("email", String.class)).isType(String.class);
+		assertObject(t.get("$ref", String.class)).isType(String.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

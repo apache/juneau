@@ -14,7 +14,6 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -42,7 +41,7 @@ public class SchemaInfoTest {
 
 		t.format(new StringBuilder("foo"));
 		assertEquals("foo", t.getFormat());
-		assertInstanceOf(String.class, t.getFormat());
+		assertObject(t.getFormat()).isType(String.class);
 
 		t.format(null);
 		assertNull(t.getFormat());
@@ -60,7 +59,7 @@ public class SchemaInfoTest {
 
 		t.title(new StringBuilder("foo"));
 		assertEquals("foo", t.getTitle());
-		assertInstanceOf(String.class, t.getTitle());
+		assertObject(t.getTitle()).isType(String.class);
 
 		t.title(null);
 		assertNull(t.getTitle());
@@ -78,7 +77,7 @@ public class SchemaInfoTest {
 
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertInstanceOf(String.class, t.getDescription());
+		assertObject(t.getDescription()).isType(String.class);
 
 		t.description(null);
 		assertNull(t.getDescription());
@@ -96,7 +95,7 @@ public class SchemaInfoTest {
 
 		t._default(new StringBuilder("foo"));
 		assertEquals("foo", t.getDefault().toString());
-		assertInstanceOf(StringBuilder.class, t.getDefault());
+		assertObject(t.getDefault()).isType(StringBuilder.class);
 
 		t._default(null);
 		assertNull(t.getDefault());
@@ -111,19 +110,19 @@ public class SchemaInfoTest {
 
 		t.multipleOf(123);
 		assertEquals(123, t.getMultipleOf());
-		assertInstanceOf(Integer.class, t.getMultipleOf());
+		assertObject(t.getMultipleOf()).isType(Integer.class);
 
 		t.multipleOf(123f);
 		assertEquals(123f, t.getMultipleOf());
-		assertInstanceOf(Float.class, t.getMultipleOf());
+		assertObject(t.getMultipleOf()).isType(Float.class);
 
 		t.multipleOf("123");
 		assertEquals(123, t.getMultipleOf());
-		assertInstanceOf(Integer.class, t.getMultipleOf());
+		assertObject(t.getMultipleOf()).isType(Integer.class);
 
 		t.multipleOf(new StringBuilder("123"));
 		assertEquals(123, t.getMultipleOf());
-		assertInstanceOf(Integer.class, t.getMultipleOf());
+		assertObject(t.getMultipleOf()).isType(Integer.class);
 
 		t.multipleOf(null);
 		assertNull(t.getMultipleOf());
@@ -138,19 +137,19 @@ public class SchemaInfoTest {
 
 		t.maximum(123);
 		assertEquals(123, t.getMaximum());
-		assertInstanceOf(Integer.class, t.getMaximum());
+		assertObject(t.getMaximum()).isType(Integer.class);
 
 		t.maximum(123f);
 		assertEquals(123f, t.getMaximum());
-		assertInstanceOf(Float.class, t.getMaximum());
+		assertObject(t.getMaximum()).isType(Float.class);
 
 		t.maximum("123");
 		assertEquals(123, t.getMaximum());
-		assertInstanceOf(Integer.class, t.getMaximum());
+		assertObject(t.getMaximum()).isType(Integer.class);
 
 		t.maximum(new StringBuilder("123"));
 		assertEquals(123, t.getMaximum());
-		assertInstanceOf(Integer.class, t.getMaximum());
+		assertObject(t.getMaximum()).isType(Integer.class);
 
 		t.maximum(null);
 		assertNull(t.getMaximum());
@@ -165,15 +164,15 @@ public class SchemaInfoTest {
 
 		t.exclusiveMaximum(true);
 		assertEquals(true, t.getExclusiveMaximum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
+		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
 
 		t.exclusiveMaximum("true");
 		assertEquals(true, t.getExclusiveMaximum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
+		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
 
 		t.exclusiveMaximum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMaximum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMaximum());
+		assertObject(t.getExclusiveMaximum()).isType(Boolean.class);
 
 		t.exclusiveMaximum(null);
 		assertNull(t.getExclusiveMaximum());
@@ -188,19 +187,19 @@ public class SchemaInfoTest {
 
 		t.minimum(123);
 		assertEquals(123, t.getMinimum());
-		assertInstanceOf(Integer.class, t.getMinimum());
+		assertObject(t.getMinimum()).isType(Integer.class);
 
 		t.minimum(123f);
 		assertEquals(123f, t.getMinimum());
-		assertInstanceOf(Float.class, t.getMinimum());
+		assertObject(t.getMinimum()).isType(Float.class);
 
 		t.minimum("123");
 		assertEquals(123, t.getMinimum());
-		assertInstanceOf(Integer.class, t.getMinimum());
+		assertObject(t.getMinimum()).isType(Integer.class);
 
 		t.minimum(new StringBuilder("123"));
 		assertEquals(123, t.getMinimum());
-		assertInstanceOf(Integer.class, t.getMinimum());
+		assertObject(t.getMinimum()).isType(Integer.class);
 
 		t.minimum(null);
 		assertNull(t.getMinimum());
@@ -215,15 +214,15 @@ public class SchemaInfoTest {
 
 		t.exclusiveMinimum(true);
 		assertEquals(true, t.getExclusiveMinimum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
+		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
 
 		t.exclusiveMinimum("true");
 		assertEquals(true, t.getExclusiveMinimum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
+		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
 
 		t.exclusiveMinimum(new StringBuilder("true"));
 		assertEquals(true, t.getExclusiveMinimum());
-		assertInstanceOf(Boolean.class, t.getExclusiveMinimum());
+		assertObject(t.getExclusiveMinimum()).isType(Boolean.class);
 
 		t.exclusiveMinimum(null);
 		assertNull(t.getExclusiveMinimum());
@@ -238,19 +237,19 @@ public class SchemaInfoTest {
 
 		t.maxLength(123);
 		assertEquals(123, t.getMaxLength().intValue());
-		assertInstanceOf(Integer.class, t.getMaxLength());
+		assertObject(t.getMaxLength()).isType(Integer.class);
 
 		t.maxLength(123f);
 		assertEquals(123, t.getMaxLength().intValue());
-		assertInstanceOf(Integer.class, t.getMaxLength());
+		assertObject(t.getMaxLength()).isType(Integer.class);
 
 		t.maxLength("123");
 		assertEquals(123, t.getMaxLength().intValue());
-		assertInstanceOf(Integer.class, t.getMaxLength());
+		assertObject(t.getMaxLength()).isType(Integer.class);
 
 		t.maxLength(new StringBuilder("123"));
 		assertEquals(123, t.getMaxLength().intValue());
-		assertInstanceOf(Integer.class, t.getMaxLength());
+		assertObject(t.getMaxLength()).isType(Integer.class);
 
 		t.maxLength(null);
 		assertNull(t.getMaxLength());
@@ -265,19 +264,19 @@ public class SchemaInfoTest {
 
 		t.minLength(123);
 		assertEquals(123, t.getMinLength().intValue());
-		assertInstanceOf(Integer.class, t.getMinLength());
+		assertObject(t.getMinLength()).isType(Integer.class);
 
 		t.minLength(123f);
 		assertEquals(123, t.getMinLength().intValue());
-		assertInstanceOf(Integer.class, t.getMinLength());
+		assertObject(t.getMinLength()).isType(Integer.class);
 
 		t.minLength("123");
 		assertEquals(123, t.getMinLength().intValue());
-		assertInstanceOf(Integer.class, t.getMinLength());
+		assertObject(t.getMinLength()).isType(Integer.class);
 
 		t.minLength(new StringBuilder("123"));
 		assertEquals(123, t.getMinLength().intValue());
-		assertInstanceOf(Integer.class, t.getMinLength());
+		assertObject(t.getMinLength()).isType(Integer.class);
 
 		t.minLength(null);
 		assertNull(t.getMinLength());
@@ -295,7 +294,7 @@ public class SchemaInfoTest {
 
 		t.pattern(new StringBuilder("foo"));
 		assertEquals("foo", t.getPattern());
-		assertInstanceOf(String.class, t.getPattern());
+		assertObject(t.getPattern()).isType(String.class);
 
 		t.pattern(null);
 		assertNull(t.getPattern());
@@ -310,19 +309,19 @@ public class SchemaInfoTest {
 
 		t.maxItems(123);
 		assertEquals(123, t.getMaxItems().intValue());
-		assertInstanceOf(Integer.class, t.getMaxItems());
+		assertObject(t.getMaxItems()).isType(Integer.class);
 
 		t.maxItems(123f);
 		assertEquals(123, t.getMaxItems().intValue());
-		assertInstanceOf(Integer.class, t.getMaxItems());
+		assertObject(t.getMaxItems()).isType(Integer.class);
 
 		t.maxItems("123");
 		assertEquals(123, t.getMaxItems().intValue());
-		assertInstanceOf(Integer.class, t.getMaxItems());
+		assertObject(t.getMaxItems()).isType(Integer.class);
 
 		t.maxItems(new StringBuilder("123"));
 		assertEquals(123, t.getMaxItems().intValue());
-		assertInstanceOf(Integer.class, t.getMaxItems());
+		assertObject(t.getMaxItems()).isType(Integer.class);
 
 		t.maxItems(null);
 		assertNull(t.getMaxItems());
@@ -337,19 +336,19 @@ public class SchemaInfoTest {
 
 		t.minItems(123);
 		assertEquals(123, t.getMinItems().intValue());
-		assertInstanceOf(Integer.class, t.getMinItems());
+		assertObject(t.getMinItems()).isType(Integer.class);
 
 		t.minItems(123f);
 		assertEquals(123, t.getMinItems().intValue());
-		assertInstanceOf(Integer.class, t.getMinItems());
+		assertObject(t.getMinItems()).isType(Integer.class);
 
 		t.minItems("123");
 		assertEquals(123, t.getMinItems().intValue());
-		assertInstanceOf(Integer.class, t.getMinItems());
+		assertObject(t.getMinItems()).isType(Integer.class);
 
 		t.minItems(new StringBuilder("123"));
 		assertEquals(123, t.getMinItems().intValue());
-		assertInstanceOf(Integer.class, t.getMinItems());
+		assertObject(t.getMinItems()).isType(Integer.class);
 
 		t.minItems(null);
 		assertNull(t.getMinItems());
@@ -364,15 +363,15 @@ public class SchemaInfoTest {
 
 		t.uniqueItems(true);
 		assertEquals(true, t.getUniqueItems());
-		assertInstanceOf(Boolean.class, t.getUniqueItems());
+		assertObject(t.getUniqueItems()).isType(Boolean.class);
 
 		t.uniqueItems("true");
 		assertEquals(true, t.getUniqueItems());
-		assertInstanceOf(Boolean.class, t.getUniqueItems());
+		assertObject(t.getUniqueItems()).isType(Boolean.class);
 
 		t.uniqueItems(new StringBuilder("true"));
 		assertEquals(true, t.getUniqueItems());
-		assertInstanceOf(Boolean.class, t.getUniqueItems());
+		assertObject(t.getUniqueItems()).isType(Boolean.class);
 
 		t.uniqueItems(null);
 		assertNull(t.getUniqueItems());
@@ -387,19 +386,19 @@ public class SchemaInfoTest {
 
 		t.maxProperties(123);
 		assertEquals(123, t.getMaxProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMaxProperties());
+		assertObject(t.getMaxProperties()).isType(Integer.class);
 
 		t.maxProperties(123f);
 		assertEquals(123, t.getMaxProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMaxProperties());
+		assertObject(t.getMaxProperties()).isType(Integer.class);
 
 		t.maxProperties("123");
 		assertEquals(123, t.getMaxProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMaxProperties());
+		assertObject(t.getMaxProperties()).isType(Integer.class);
 
 		t.maxProperties(new StringBuilder("123"));
 		assertEquals(123, t.getMaxProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMaxProperties());
+		assertObject(t.getMaxProperties()).isType(Integer.class);
 
 		t.maxProperties(null);
 		assertNull(t.getMaxProperties());
@@ -414,19 +413,19 @@ public class SchemaInfoTest {
 
 		t.minProperties(123);
 		assertEquals(123, t.getMinProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMinProperties());
+		assertObject(t.getMinProperties()).isType(Integer.class);
 
 		t.minProperties(123f);
 		assertEquals(123, t.getMinProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMinProperties());
+		assertObject(t.getMinProperties()).isType(Integer.class);
 
 		t.minProperties("123");
 		assertEquals(123, t.getMinProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMinProperties());
+		assertObject(t.getMinProperties()).isType(Integer.class);
 
 		t.minProperties(new StringBuilder("123"));
 		assertEquals(123, t.getMinProperties().intValue());
-		assertInstanceOf(Integer.class, t.getMinProperties());
+		assertObject(t.getMinProperties()).isType(Integer.class);
 
 		t.minProperties(null);
 		assertNull(t.getMinProperties());
@@ -441,15 +440,15 @@ public class SchemaInfoTest {
 
 		t.required("['x']");
 		assertEquals("[x]", t.getRequired().toString());
-		assertInstanceOf(List.class, t.getRequired());
+		assertObject(t.getRequired()).isType(List.class);
 
 		t.required("['x']");
 		assertEquals("[x, x]", t.getRequired().toString());
-		assertInstanceOf(List.class, t.getRequired());
+		assertObject(t.getRequired()).isType(List.class);
 
 		t.required(new StringBuilder("['x']"));
 		assertEquals("[x, x, x]", t.getRequired().toString());
-		assertInstanceOf(List.class, t.getRequired());
+		assertObject(t.getRequired()).isType(List.class);
 
 		t.setRequired(null);
 		assertNull(t.getRequired());
@@ -464,11 +463,11 @@ public class SchemaInfoTest {
 
 		t.setEnum(ASet.of("foo","bar"));
 		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t.setEnum(ASet.of());
 		assertObject(t.getEnum()).json().is("[]");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t.setEnum(null);
 		assertNull(t.getEnum());
@@ -483,15 +482,15 @@ public class SchemaInfoTest {
 
 		t.addEnum(ASet.of("foo","bar"));
 		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t.addEnum(ASet.of("baz"));
 		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t.addEnum(null);
 		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 	}
 
 	/**
@@ -503,20 +502,20 @@ public class SchemaInfoTest {
 
 		t._enum(ASet.of("foo","bar"));
 		assertObject(t.getEnum()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t._enum(ASet.of("baz"));
 		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t._enum((Object[])null);
 		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
 		assertObject(t.getEnum()).json().is("['foo','bar','baz','qux','quux']");
-		assertInstanceOf(List.class, t.getEnum());
+		assertObject(t.getEnum()).isType(List.class);
 	}
 
 	/**
@@ -531,7 +530,7 @@ public class SchemaInfoTest {
 
 		t.type(new StringBuilder("foo"));
 		assertEquals("foo", t.getType());
-		assertInstanceOf(String.class, t.getType());
+		assertObject(t.getType()).isType(String.class);
 
 		t.type(null);
 		assertNull(t.getType());
@@ -549,7 +548,7 @@ public class SchemaInfoTest {
 
 		t.items("{type:'foo'}");
 		assertObject(t.getItems()).json().is("{type:'foo'}");
-		assertInstanceOf(Items.class, t.getItems());
+		assertObject(t.getItems()).isType(Items.class);
 
 		t.items(null);
 		assertNull(t.getItems());
@@ -564,11 +563,11 @@ public class SchemaInfoTest {
 
 		t.setAllOf(ASet.of("foo","bar"));
 		assertObject(t.getAllOf()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getAllOf());
+		assertObject(t.getAllOf()).isType(List.class);
 
 		t.setAllOf(ASet.of());
 		assertObject(t.getAllOf()).json().is("[]");
-		assertInstanceOf(List.class, t.getAllOf());
+		assertObject(t.getAllOf()).isType(List.class);
 
 		t.setAllOf(null);
 		assertNull(t.getAllOf());
@@ -583,15 +582,15 @@ public class SchemaInfoTest {
 
 		t.addAllOf(ASet.of("foo","bar"));
 		assertObject(t.getAllOf()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getAllOf());
+		assertObject(t.getAllOf()).isType(List.class);
 
 		t.addAllOf(ASet.of());
 		assertObject(t.getAllOf()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getAllOf());
+		assertObject(t.getAllOf()).isType(List.class);
 
 		t.addAllOf(null);
 		assertObject(t.getAllOf()).json().is("['foo','bar']");
-		assertInstanceOf(List.class, t.getAllOf());
+		assertObject(t.getAllOf()).isType(List.class);
 	}
 
 	/**
@@ -621,11 +620,11 @@ public class SchemaInfoTest {
 
 		t.setProperties(AMap.of("foo",new SchemaInfo().type("foo")));
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
-		assertInstanceOf(Map.class, t.getProperties());
+		assertObject(t.getProperties()).isType(Map.class);
 
 		t.setProperties(AMap.of());
 		assertObject(t.getProperties()).json().is("{}");
-		assertInstanceOf(Map.class, t.getProperties());
+		assertObject(t.getProperties()).isType(Map.class);
 
 		t.setProperties(null);
 		assertNull(t.getProperties());
@@ -640,15 +639,15 @@ public class SchemaInfoTest {
 
 		t.addProperties(AMap.of("foo", new SchemaInfo().type("foo")));
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
-		assertInstanceOf(Map.class, t.getProperties());
+		assertObject(t.getProperties()).isType(Map.class);
 
 		t.addProperties(AMap.of());
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
-		assertInstanceOf(Map.class, t.getProperties());
+		assertObject(t.getProperties()).isType(Map.class);
 
 		t.addProperties(null);
 		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
-		assertInstanceOf(Map.class, t.getProperties());
+		assertObject(t.getProperties()).isType(Map.class);
 	}
 
 	/**
@@ -665,9 +664,9 @@ public class SchemaInfoTest {
 		t.properties((Object[])null);
 
 		assertObject(t.getProperties()).json().is("{a:{type:'foo'},b:{type:'bar'},c:{type:'baz'}}");
-		assertInstanceOf(SchemaInfo.class, t.getProperties().get("a"));
-		assertInstanceOf(SchemaInfo.class, t.getProperties().get("b"));
-		assertInstanceOf(SchemaInfo.class, t.getProperties().get("c"));
+		assertObject(t.getProperties().get("a")).isType(SchemaInfo.class);
+		assertObject(t.getProperties().get("b")).isType(SchemaInfo.class);
+		assertObject(t.getProperties().get("c")).isType(SchemaInfo.class);
 	}
 
 	/**
@@ -679,11 +678,11 @@ public class SchemaInfoTest {
 
 		t.setAdditionalProperties(new SchemaInfo().type("foo"));
 		assertObject(t.getAdditionalProperties()).json().is("{type:'foo'}");
-		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).isType(SchemaInfo.class);
 
 		t.setAdditionalProperties(new SchemaInfo());
 		assertObject(t.getAdditionalProperties()).json().is("{}");
-		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).isType(SchemaInfo.class);
 
 		t.setAdditionalProperties((SchemaInfo)null);
 		assertNull(t.getAdditionalProperties());
@@ -699,7 +698,7 @@ public class SchemaInfoTest {
 		t.additionalProperties(AMap.of("type","foo"));
 
 		assertObject(t.getAdditionalProperties()).json().is("{type:'foo'}");
-		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).isType(SchemaInfo.class);
 	}
 
 	/**
@@ -714,7 +713,7 @@ public class SchemaInfoTest {
 
 		t.discriminator(new StringBuilder("foo"));
 		assertEquals("foo", t.getDiscriminator());
-		assertInstanceOf(String.class, t.getDiscriminator());
+		assertObject(t.getDiscriminator()).isType(String.class);
 
 		t.discriminator(null);
 		assertNull(t.getDiscriminator());
@@ -729,15 +728,15 @@ public class SchemaInfoTest {
 
 		t.readOnly(true);
 		assertEquals(true, t.getReadOnly());
-		assertInstanceOf(Boolean.class, t.getReadOnly());
+		assertObject(t.getReadOnly()).isType(Boolean.class);
 
 		t.readOnly("true");
 		assertEquals(true, t.getReadOnly());
-		assertInstanceOf(Boolean.class, t.getReadOnly());
+		assertObject(t.getReadOnly()).isType(Boolean.class);
 
 		t.readOnly(new StringBuilder("true"));
 		assertEquals(true, t.getReadOnly());
-		assertInstanceOf(Boolean.class, t.getReadOnly());
+		assertObject(t.getReadOnly()).isType(Boolean.class);
 
 		t.readOnly(null);
 		assertNull(t.getReadOnly());
@@ -755,7 +754,7 @@ public class SchemaInfoTest {
 
 		t.xml("{name:'foo'}");
 		assertObject(t.getXml()).json().is("{name:'foo'}");
-		assertInstanceOf(Xml.class, t.getXml());
+		assertObject(t.getXml()).isType(Xml.class);
 
 		t.xml(null);
 		assertNull(t.getXml());
@@ -773,7 +772,7 @@ public class SchemaInfoTest {
 
 		t.externalDocs("{url:'foo'}");
 		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
-		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
+		assertObject(t.getExternalDocs()).isType(ExternalDocumentation.class);
 
 		t.externalDocs(null);
 		assertNull(t.getExternalDocs());
@@ -936,36 +935,36 @@ public class SchemaInfoTest {
 		assertEquals("{name:'o'}", t.get("xml", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(StringBuilder.class, t.get("default", Object.class));
-		assertInstanceOf(List.class, t.get("enum", Object.class));
-		assertInstanceOf(SchemaInfo.class, t.get("additionalProperties", Object.class));
-		assertInstanceOf(List.class, t.get("allOf", Object.class));
-		assertInstanceOf(String.class, t.get("description", Object.class));
-		assertInstanceOf(String.class, t.get("discriminator", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("example", Object.class));
-		assertInstanceOf(Boolean.class, t.get("exclusiveMaximum", Object.class));
-		assertInstanceOf(Boolean.class, t.get("exclusiveMinimum", Object.class));
-		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertInstanceOf(String.class, t.get("format", Object.class));
-		assertInstanceOf(Items.class, t.get("items", Object.class));
-		assertInstanceOf(Float.class, t.get("maximum", Object.class));
-		assertInstanceOf(Integer.class, t.get("maxItems", Object.class));
-		assertInstanceOf(Integer.class, t.get("maxLength", Object.class));
-		assertInstanceOf(Integer.class, t.get("maxProperties", Object.class));
-		assertInstanceOf(Float.class, t.get("minimum", Object.class));
-		assertInstanceOf(Integer.class, t.get("minItems", Object.class));
-		assertInstanceOf(Integer.class, t.get("minLength", Object.class));
-		assertInstanceOf(Integer.class, t.get("minProperties", Object.class));
-		assertInstanceOf(Float.class, t.get("multipleOf", Object.class));
-		assertInstanceOf(String.class, t.get("pattern", Object.class));
-		assertInstanceOf(Map.class, t.get("properties", Object.class));
-		assertInstanceOf(Boolean.class, t.get("readOnly", Object.class));
-		assertInstanceOf(List.class, t.get("required", Object.class));
-		assertInstanceOf(String.class, t.get("title", Object.class));
-		assertInstanceOf(String.class, t.get("type", Object.class));
-		assertInstanceOf(Boolean.class, t.get("uniqueItems", Object.class));
-		assertInstanceOf(Xml.class, t.get("xml", Object.class));
-		assertInstanceOf(String.class, t.get("$ref", Object.class));
+		assertObject(t.get("default", Object.class)).isType(StringBuilder.class);
+		assertObject(t.get("enum", Object.class)).isType(List.class);
+		assertObject(t.get("additionalProperties", Object.class)).isType(SchemaInfo.class);
+		assertObject(t.get("allOf", Object.class)).isType(List.class);
+		assertObject(t.get("description", Object.class)).isType(String.class);
+		assertObject(t.get("discriminator", Object.class)).isType(String.class);
+		assertObject(t.get("example", Object.class)).isType(StringBuilder.class);
+		assertObject(t.get("exclusiveMaximum", Object.class)).isType(Boolean.class);
+		assertObject(t.get("exclusiveMinimum", Object.class)).isType(Boolean.class);
+		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
+		assertObject(t.get("format", Object.class)).isType(String.class);
+		assertObject(t.get("items", Object.class)).isType(Items.class);
+		assertObject(t.get("maximum", Object.class)).isType(Float.class);
+		assertObject(t.get("maxItems", Object.class)).isType(Integer.class);
+		assertObject(t.get("maxLength", Object.class)).isType(Integer.class);
+		assertObject(t.get("maxProperties", Object.class)).isType(Integer.class);
+		assertObject(t.get("minimum", Object.class)).isType(Float.class);
+		assertObject(t.get("minItems", Object.class)).isType(Integer.class);
+		assertObject(t.get("minLength", Object.class)).isType(Integer.class);
+		assertObject(t.get("minProperties", Object.class)).isType(Integer.class);
+		assertObject(t.get("multipleOf", Object.class)).isType(Float.class);
+		assertObject(t.get("pattern", Object.class)).isType(String.class);
+		assertObject(t.get("properties", Object.class)).isType(Map.class);
+		assertObject(t.get("readOnly", Object.class)).isType(Boolean.class);
+		assertObject(t.get("required", Object.class)).isType(List.class);
+		assertObject(t.get("title", Object.class)).isType(String.class);
+		assertObject(t.get("type", Object.class)).isType(String.class);
+		assertObject(t.get("uniqueItems", Object.class)).isType(Boolean.class);
+		assertObject(t.get("xml", Object.class)).isType(Xml.class);
+		assertObject(t.get("$ref", Object.class)).isType(String.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

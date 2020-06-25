@@ -14,7 +14,6 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -39,7 +38,7 @@ public class TagTest {
 
 		t.name(new StringBuilder("foo"));
 		assertEquals("foo", t.getName());
-		assertInstanceOf(String.class, t.getName());
+		assertObject(t.getName()).isType(String.class);
 
 		t.name(null);
 		assertNull(t.getName());
@@ -57,7 +56,7 @@ public class TagTest {
 
 		t.description(new StringBuilder("foo"));
 		assertEquals("foo", t.getDescription());
-		assertInstanceOf(String.class, t.getDescription());
+		assertObject(t.getDescription()).isType(String.class);
 
 		t.description(null);
 		assertNull(t.getDescription());
@@ -75,7 +74,7 @@ public class TagTest {
 
 		t.externalDocs("{url:'foo'}");
 		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
-		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
+		assertObject(t.getExternalDocs()).isType(ExternalDocumentation.class);
 
 		t.externalDocs(null);
 		assertNull(t.getExternalDocs());
@@ -117,10 +116,10 @@ public class TagTest {
 		assertEquals("c", t.get("name", String.class));
 		assertEquals("ref", t.get("$ref", String.class));
 
-		assertInstanceOf(String.class, t.get("description", Object.class));
-		assertInstanceOf(ExternalDocumentation.class, t.get("externalDocs", Object.class));
-		assertInstanceOf(String.class, t.get("name", Object.class));
-		assertInstanceOf(StringBuilder.class, t.get("$ref", Object.class));
+		assertObject(t.get("description", Object.class)).isType(String.class);
+		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
+		assertObject(t.get("name", Object.class)).isType(String.class);
+		assertObject(t.get("$ref", Object.class)).isType(StringBuilder.class);
 
 		t.set("null", null).set(null, "null");
 		assertNull(t.get("null", Object.class));

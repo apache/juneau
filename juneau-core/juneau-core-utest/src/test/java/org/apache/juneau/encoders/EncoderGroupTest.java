@@ -13,7 +13,6 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
@@ -28,15 +27,15 @@ public class EncoderGroupTest {
 	public void testEncoderGroupMatching() throws Exception {
 
 		EncoderGroup g = EncoderGroup.create().append(Encoder1.class, Encoder2.class, Encoder3.class).build();
-		assertInstanceOf(Encoder1.class, g.getEncoder("gzip1"));
-		assertInstanceOf(Encoder2.class, g.getEncoder("gzip2"));
-		assertInstanceOf(Encoder2.class, g.getEncoder("gzip2a"));
-		assertInstanceOf(Encoder3.class, g.getEncoder("gzip3"));
-		assertInstanceOf(Encoder3.class, g.getEncoder("gzip3a"));
-		assertInstanceOf(Encoder3.class, g.getEncoder("gzip3,gzip2,gzip1"));
-		assertInstanceOf(Encoder1.class, g.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1"));
-		assertInstanceOf(Encoder3.class, g.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3"));
-		assertInstanceOf(Encoder2.class, g.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2"));
+		assertObject(g.getEncoder("gzip1")).isType(Encoder1.class);
+		assertObject(g.getEncoder("gzip2")).isType(Encoder2.class);
+		assertObject(g.getEncoder("gzip2a")).isType(Encoder2.class);
+		assertObject(g.getEncoder("gzip3")).isType(Encoder3.class);
+		assertObject(g.getEncoder("gzip3a")).isType(Encoder3.class);
+		assertObject(g.getEncoder("gzip3,gzip2,gzip1")).isType(Encoder3.class);
+		assertObject(g.getEncoder("gzip3;q=0.9,gzip2;q=0.1,gzip1")).isType(Encoder1.class);
+		assertObject(g.getEncoder("gzip2;q=0.9,gzip1;q=0.1,gzip3")).isType(Encoder3.class);
+		assertObject(g.getEncoder("gzip1;q=0.9,gzip3;q=0.1,gzip2")).isType(Encoder2.class);
 	}
 
 	public static class Encoder1 extends GzipEncoder {
