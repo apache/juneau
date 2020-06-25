@@ -20,6 +20,7 @@ import java.util.Map.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -286,7 +287,7 @@ public abstract class RoundTripTest {
 		}
 
 		if (debug)
-			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? TestUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
+			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? StringUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
 			TestUtils.checkXmlWhitespace(out.toString());

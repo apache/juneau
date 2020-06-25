@@ -1126,6 +1126,22 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts the specified bytes into a readable string.
+	 *
+	 * @param b The number to convert to hex.
+	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
+	 */
+	public static final String toReadableBytes(byte[] b) {
+		StringBuilder sb = new StringBuilder();
+		for (byte b2 : b)
+			sb.append((b2 < ' ' || b2 > 'z') ? String.format("[%02X]", b2) : (char)b2 + "   ");
+		sb.append("\n");
+		for (byte b2 : b)
+			sb.append(String.format("[%02X]", b2));
+		return sb.toString();
+	}
+
+	/**
 	 * Converts the specified number into a 4 hexadecimal characters.
 	 *
 	 * @param num The number to convert to hex.

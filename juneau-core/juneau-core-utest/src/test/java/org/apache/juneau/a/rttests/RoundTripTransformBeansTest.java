@@ -14,6 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.DateUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -28,7 +29,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
@@ -357,7 +357,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("f1", x.f1);
 
 		r = getSerializer().serialize(x);
-		assertTrue(TestUtils.toString(r).contains("f2"));
+		assertTrue(toString(r).contains("f2"));
 
 		x = roundTrip(x, D1.class);
 	}
@@ -399,7 +399,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("f1", x.f1);
 
 		r = getSerializer().serialize(x);
-		assertTrue(TestUtils.toString(r).contains("f2"));
+		assertTrue(toString(r).contains("f2"));
 
 		x = roundTrip(x, E1.class);
 	}
@@ -442,7 +442,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("f1", x.f1);
 
 		r = getSerializer().serialize(x);
-		assertTrue(TestUtils.toString(r).contains("f2"));
+		assertTrue(toString(r).contains("f2"));
 
 		x = roundTrip(x, E1c.class);
 	}
@@ -660,4 +660,18 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertObject(f).json().is("{f1:1,f2:2}");
 	}
 
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Utility methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final String toString(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof String)
+			return (String)o;
+		if (o instanceof byte[])
+			return new String((byte[])o, UTF8);
+		return o.toString();
+	}
 }

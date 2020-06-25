@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -126,7 +127,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 		B t = new B().init();
 		if (! returnOriginalObject) {
 			Object r = getSerializer().serialize(t);
-			assertTrue(TestUtils.toString(r).contains("X-2"));
+			assertTrue(toString(r).contains("X-2"));
 		}
 		t = roundTrip(t);
 		assertObject(t).json().is("{b1:'X1',b2:'X-2'}");
@@ -273,5 +274,19 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 		public String toString() {
 			return "C4" + f;
 		}
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Utility methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final String toString(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof String)
+			return (String)o;
+		if (o instanceof byte[])
+			return new String((byte[])o, UTF8);
+		return o.toString();
 	}
 }

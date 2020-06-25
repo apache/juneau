@@ -13,7 +13,6 @@
 package org.apache.juneau.testutils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -244,30 +243,6 @@ public class TestUtils {
 		String o2 =  ws.toString(o);
 		if (! StringUtils.getMatchPattern(s).matcher(o2).matches())
 			throw new ComparisonFailure(null, s, o2);
-	}
-
-	public static final String toReadableBytes(byte[] b) {
-		StringBuilder sb = new StringBuilder();
-		for (byte b2 : b)
-			sb.append((b2 < ' ' || b2 > 'z') ? String.format("[%02X]", b2) : (char)b2 + "   ");
-		sb.append("\n");
-		for (byte b2 : b)
-			sb.append(String.format("[%02X]", b2));
-		return sb.toString();
-	}
-
-	/**
-	 * Tries to turn the serialized output to a String.
-	 * If it's a byte[], convert it to a UTF-8 encoded String.
-	 */
-	public static final String toString(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof String)
-			return (String)o;
-		if (o instanceof byte[])
-			return new String((byte[])o, UTF8);
-		return o.toString();
 	}
 
 	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<>();
