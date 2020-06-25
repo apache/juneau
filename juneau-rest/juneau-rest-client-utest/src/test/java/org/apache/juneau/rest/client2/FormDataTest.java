@@ -43,11 +43,7 @@ public class FormDataTest {
 
 	@Test
 	public void a01_formDataMethod() throws Exception {
-		String r = a.post("")
-			.formData("foo", 123)
-			.formData("bar", "baz")
-			.run()
-			.getBody().asString();
+		String r = a.post("").formData("foo", 123).formData("bar", "baz").run().getBody().asString();
 		assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=123&bar=baz]", r);
 	}
 
@@ -72,21 +68,11 @@ public class FormDataTest {
 			r = c.post("", l).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[0=foo&1='foo'&2=(foo)&3=@(foo)]", r);
 
-			NameValuePairs nvp = new NameValuePairs()
-				.append("foo", "foo")
-				.append("'foo'", "'foo'")
-				.append("(foo)", "(foo)")
-				.append("@(foo)", "@(foo)");
+			NameValuePairs nvp = new NameValuePairs().append("foo", "foo").append("'foo'", "'foo'").append("(foo)", "(foo)").append("@(foo)", "@(foo)");
 			r = c.post("", nvp).run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 
-			r = c.post("")
-				.formData("foo", "foo")
-				.formData("'foo'", "'foo'")
-				.formData("(foo)", "(foo)")
-				.formData("@(foo)", "@(foo)")
-				.run()
-				.getBody().asString();
+			r = c.post("").formData("foo", "foo").formData("'foo'", "'foo'").formData("(foo)", "(foo)").formData("@(foo)", "@(foo)").run().getBody().asString();
 			assertEquals("Content-Type=[application/x-www-form-urlencoded], contents=[foo=foo&%27foo%27=%27foo%27&%28foo%29=%28foo%29&%40%28foo%29=%40%28foo%29]", r);
 		} finally {
 			c.close();

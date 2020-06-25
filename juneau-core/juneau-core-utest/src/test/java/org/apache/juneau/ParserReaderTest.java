@@ -54,7 +54,7 @@ public class ParserReaderTest {
 		pr.unread();
 		try {
 			pr.unread();
-			fail("Exception expected");
+			fail();
 		} catch (IOException e) {
 			// Good
 		}

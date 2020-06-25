@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -97,7 +98,7 @@ public abstract class ComboSerializeTest {
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} serialize-normal failed", comboInput.label, testName);
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} serialize-normal failed", comboInput.label, testName);
+				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)

@@ -241,6 +241,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	/**
+	 * No-arg constructor.
+	 */
+	public UonParser() {
+		this(PropertyStore.DEFAULT, "text/uon");
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ps

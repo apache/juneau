@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
@@ -304,22 +305,22 @@ public class PojoExamplesTest {
 		try {
 			bs.getClassMeta(F1.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid method 'example(String)'");
+			assertThrowable(e).contains("invalid method 'example(String)'");
 		}
 		try {
 			bs.getClassMeta(F2.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid method 'example()'");
+			assertThrowable(e).contains("invalid method 'example()'");
 		}
 		try {
 			bs.getClassMeta(F3.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid field 'org.apache.juneau.PojoExamplesTest$F3.F3'");
+			assertThrowable(e).contains("invalid field","$F3.F3");
 		}
 		try {
 			bs.getClassMeta(F4.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid field 'org.apache.juneau.PojoExamplesTest$F4.f4'");
+			assertThrowable(e).contains("invalid field ","$F4.f4");
 		}
 	}
 

@@ -107,7 +107,7 @@ public class CommonParserTest {
 		try {
 			p = HtmlParser.DEFAULT;
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

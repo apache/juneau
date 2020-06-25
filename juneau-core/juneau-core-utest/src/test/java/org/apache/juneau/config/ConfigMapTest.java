@@ -273,7 +273,7 @@ public class ConfigMapTest {
 			ConfigStore s = initStore("Foo.cfg", t);
 			try {
 				s.getMap("Foo.cfg");
-				fail("Exception expected on t=["+t+"].");
+				fail();
 			} catch (ConfigException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
 			}
@@ -285,7 +285,7 @@ public class ConfigMapTest {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "[S1]");
 		try {
 			s.getMap("Foo.cfg");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Duplicate section found in configuration:  [S1]", e.getLocalizedMessage());
 		}
@@ -296,7 +296,7 @@ public class ConfigMapTest {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "foo=v1", "foo=v2");
 		try {
 			s.getMap("Foo.cfg");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Duplicate entry found in section [S1] of configuration:  foo", e.getLocalizedMessage());
 		}
@@ -652,7 +652,7 @@ public class ConfigMapTest {
 		for (String t : test) {
 			try {
 				cm.setSection(t, null);
-				fail("Exception expected.");
+				fail();
 			} catch (IllegalArgumentException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
 			}
@@ -893,7 +893,7 @@ public class ConfigMapTest {
 		for (String t : test) {
 			try {
 				cm.setEntry(t, "k1", "foo", null, null, null);
-				fail("Exception expected.");
+				fail();
 			} catch (IllegalArgumentException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name:"));
 			}
@@ -919,7 +919,7 @@ public class ConfigMapTest {
 		for (String t : test) {
 			try {
 				cm.setEntry("S1", t, "foo", null, null, null);
-				fail("Exception expected.");
+				fail();
 			} catch (IllegalArgumentException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid key name"));
 			}
@@ -1089,7 +1089,7 @@ public class ConfigMapTest {
 		for (String t : test) {
 			try {
 				cm.setEntry(t, "k1", "foo", null, null, null);
-				fail("Exception expected.");
+				fail();
 			} catch (IllegalArgumentException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
 			}
@@ -1115,7 +1115,7 @@ public class ConfigMapTest {
 		for (String t : test) {
 			try {
 				cm.setEntry("S1", t, "foo", null, null, null);
-				fail("Exception expected.");
+				fail();
 			} catch (IllegalArgumentException e) {
 				assertTrue(e.getLocalizedMessage().startsWith("Invalid key name"));
 			}
@@ -1175,14 +1175,14 @@ public class ConfigMapTest {
 
 		try {
 			cm.setEntry("S1", "k1", "v1", "X", null, null);
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Invalid modifiers: X", e.getLocalizedMessage());
 		}
 
 		try {
 			cm.setEntry("S1", "k1", "v1", " ", null, null);
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Invalid modifiers:  ", e.getLocalizedMessage());
 		}

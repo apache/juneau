@@ -45,7 +45,7 @@ public class MultiSetTest {
 		assertFalse(i.hasNext());
 		try {
 			i.next();
-			fail("Exception expected");
+			fail();
 		} catch (NoSuchElementException e) {
 		}
 
@@ -60,7 +60,7 @@ public class MultiSetTest {
 		assertFalse(i.hasNext());
 		try {
 			i.next();
-			fail("Exception expected");
+			fail();
 		} catch (NoSuchElementException e) {
 		}
 
@@ -75,7 +75,7 @@ public class MultiSetTest {
 		assertFalse(i.hasNext());
 		try {
 			i.next();
-			fail("Exception expected");
+			fail();
 		} catch (NoSuchElementException e) {
 		}
 
@@ -86,7 +86,7 @@ public class MultiSetTest {
 		assertFalse(i.hasNext());
 		try {
 			i.next();
-			fail("Exception expected");
+			fail();
 		} catch (NoSuchElementException e) {
 		}
 
@@ -100,7 +100,7 @@ public class MultiSetTest {
 		assertFalse(i.hasNext());
 		try {
 			i.next();
-			fail("Exception expected");
+			fail();
 		} catch (NoSuchElementException e) {
 		}
 

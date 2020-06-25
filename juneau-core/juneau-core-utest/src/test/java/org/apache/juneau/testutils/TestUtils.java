@@ -412,32 +412,6 @@ public class TestUtils {
 			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
 	}
 
-	public static final void assertContains(Object value, String...substrings) {
-		for (String substring : substrings)
-			if (! contains(toString(value), substring)) {
-				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");
-				System.err.println("=== TEXT ===");
-				System.err.println(toString(value));
-				System.err.println("============");
-				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
-			}
-	}
-
-	public static final void assertContains(Exception e, String...substrings) {
-		for (String substring : substrings) {
-			Throwable e2 = e;
-			boolean found = false;
-			while (e2 != null && ! found) {
-				found |= contains(e2.getMessage(), substring);
-				e2 = e2.getCause();
-			}
-			if (! found) {
-				e.printStackTrace();
-				throw new ComparisonFailure("Exception message did not contain expected substring.", toString(substring), StringUtils.getStackTrace(e));
-			}
-		}
-	}
-
 	/**
 	 * Creates a ClassMeta for the given types.
 	 */

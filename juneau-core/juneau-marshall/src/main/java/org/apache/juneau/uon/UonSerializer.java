@@ -377,6 +377,13 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	/**
+	 * No-arg constructor.
+	 */
+	public UonSerializer() {
+		this(PropertyStore.DEFAULT, "text/uon", (String)null);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ps

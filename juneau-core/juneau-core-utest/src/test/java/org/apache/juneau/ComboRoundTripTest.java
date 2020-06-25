@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
@@ -107,7 +108,7 @@ public abstract class ComboRoundTripTest {
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
+				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
@@ -150,7 +151,7 @@ public abstract class ComboRoundTripTest {
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
+				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)

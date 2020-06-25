@@ -313,7 +313,7 @@ public class XmlTest {
 		K t = new K();
 		try {
 			s.serialize(t);
-			fail("Exception not thrown");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Found @Xml.prefix annotation with no matching URI.  prefix='foo'", e.getLocalizedMessage());
 		}

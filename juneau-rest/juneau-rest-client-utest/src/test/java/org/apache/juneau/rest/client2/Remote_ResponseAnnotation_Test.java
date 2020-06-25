@@ -27,7 +27,7 @@ import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ResponseAnnotationTest {
+public class Remote_ResponseAnnotation_Test {
 
 	public static class Bean {
 		public int f;
@@ -54,30 +54,22 @@ public class ResponseAnnotationTest {
 	}
 
 	@Response
-	public interface AResponse {
-
-		@ResponseBody
-		Reader getBody();
-
-		@ResponseHeader("X")
-		String getHeader();
-
-		@ResponseStatus
-		int getStatus();
+	public interface A1 {
+		@ResponseBody Reader getBody();
+		@ResponseHeader("X") String getHeader();
+		@ResponseStatus int getStatus();
 	}
 
 	@Remote
-	public static interface AR {
-		@RemoteMethod AResponse get();
+	public static interface A2 {
+		@RemoteMethod A1 get();
 	}
-
-	private static AR ar = MockRestClient.build(A.class).getRemote(AR.class);
 
 	@Test
 	public void a01_basic() throws Exception {
-		AResponse r = ar.get();
-		assertEquals("foo", IOUtils.read(r.getBody()));
-		assertEquals("x", r.getHeader());
-		assertEquals(201, r.getStatus());
+		A1 x = MockRestClient.build(A.class).getRemote(A2.class).get();
+		assertEquals("foo", IOUtils.read(x.getBody()));
+		assertEquals("x", x.getHeader());
+		assertEquals(201, x.getStatus());
 	}
 }

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -37,19 +37,19 @@ public class RdfXmlTest {
 
 	@Test
 	public void write1() throws Exception {
-		assertContains(m.write("foo"), "<j:value>foo</j:value>");
+		assertString(m.write("foo")).contains("<j:value>foo</j:value>");
 	}
 
 	@Test
 	public void write2() throws Exception {
 		StringWriter sw = new StringWriter();
 		m.write("foo", sw);
-		assertContains(sw.toString(), "<j:value>foo</j:value>");
+		assertString(sw.toString()).contains("<j:value>foo</j:value>");
 	}
 
 	@Test
 	public void toString1() throws Exception {
-		assertContains(m.toString("foo"), "<j:value>foo</j:value>");
+		assertString(m.toString("foo")).contains("<j:value>foo</j:value>");
 	}
 
 	@Test

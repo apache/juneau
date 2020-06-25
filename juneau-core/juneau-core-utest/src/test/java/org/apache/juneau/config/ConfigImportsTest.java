@@ -92,7 +92,7 @@ public class ConfigImportsTest {
 		ms.write("B", "", "<A2>");
 		try {
 			Config.create("B").store(ms).build();
-			fail("Exception expected.");
+			fail();
 		} catch (Exception e) {
 			// OK
 		}

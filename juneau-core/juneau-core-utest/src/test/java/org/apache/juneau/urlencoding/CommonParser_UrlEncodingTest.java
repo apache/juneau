@@ -116,7 +116,7 @@ public class CommonParser_UrlEncodingTest {
 		try {
 			p = UrlEncodingParser.DEFAULT;
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

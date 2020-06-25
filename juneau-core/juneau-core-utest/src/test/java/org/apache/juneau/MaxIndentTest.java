@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -19,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -303,7 +303,7 @@ public class MaxIndentTest {
 				return;
 			}
 
-			TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", input.label, testName);
+			assertString(r).msg("{0}/{1} parse-normal failed", input.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			throw e;

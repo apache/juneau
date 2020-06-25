@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -288,30 +290,25 @@ public class CommonTest {
 		// No recursion detection
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
-			String msg = e.getLocalizedMessage();
-			assertContains(msg, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+			assertThrowable(e).contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		}
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
-			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("[0] root:org.apache.juneau.jena.CommonTest$R1"));
-			assertTrue(msg.contains("->[1] r2:org.apache.juneau.jena.CommonTest$R2"));
-			assertTrue(msg.contains("->[2] r3:org.apache.juneau.jena.CommonTest$R3"));
-			assertTrue(msg.contains("->[3] r1:org.apache.juneau.jena.CommonTest$R1"));
+			assertThrowable(e).contains("[0] root:org.apache.juneau.jena.CommonTest$R1", "->[1] r2:org.apache.juneau.jena.CommonTest$R2", "->[2] r3:org.apache.juneau.jena.CommonTest$R3", "->[3] r1:org.apache.juneau.jena.CommonTest$R1");
 		}
 
 		s.ignoreRecursions();
 		String r = s.build().serialize(r1).replace("\r", "");
 		// Note...the order of the namespaces is not always the same depending on the JVM.
 		// The Jena libraries appear to use a hashmap for these.
-		assertTrue(r.contains(
+		assertString(r).contains(
 			"<rdf:Description>\n"+
 			"<jp:name>foo</jp:name>\n"+
 			"<jp:r2 rdf:parseType='Resource'>\n"+
@@ -322,10 +319,8 @@ public class CommonTest {
 			"</jp:r2>\n"+
 			"</rdf:Description>\n"+
 			"</rdf:RDF>\n"
-		));
-		assertTrue(r.contains("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
-		assertTrue(r.contains("xmlns:j='http://www.apache.org/juneau/"));
-		assertTrue(r.contains("xmlns:jp='http://www.apache.org/juneaubp/"));
+		);
+		assertString(r).contains("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#", "xmlns:j='http://www.apache.org/juneau/", "xmlns:jp='http://www.apache.org/juneaubp/");
 	}
 
 	public static class R1 {

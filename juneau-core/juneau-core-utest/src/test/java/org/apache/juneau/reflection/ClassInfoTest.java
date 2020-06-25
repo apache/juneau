@@ -1370,19 +1370,19 @@ public class ClassInfoTest {
 		ClassInfo a = aClass;
 		try {
 			a.isAll(HAS_PARAMS);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAll(HAS_NO_PARAMS);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAll(TRANSIENT);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAll(NOT_TRANSIENT);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 	}
 
@@ -1487,19 +1487,19 @@ public class ClassInfoTest {
 		ClassInfo a = aClass;
 		try {
 			a.isAny(HAS_PARAMS);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAny(HAS_NO_PARAMS);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAny(TRANSIENT);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 		try {
 			a.isAny(NOT_TRANSIENT);
-			fail("Expected exception.");
+			fail();
 		} catch (Exception e) {}
 	}
 

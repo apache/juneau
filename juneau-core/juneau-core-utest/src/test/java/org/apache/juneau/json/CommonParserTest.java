@@ -127,7 +127,7 @@ public class CommonParserTest {
 		try {
 			p = JsonParser.DEFAULT;
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

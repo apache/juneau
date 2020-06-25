@@ -502,7 +502,7 @@ public class PropertyStoreTest {
 //		testError(b, "A.f1.ls/add.foo", "foo", "Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)");
 //		try {
 //			b.addTo("A.f1.ls", "foo", "bar");
-//			fail("Exception expected.");
+//			fail();
 //		} catch (Exception e) {
 //			assertEquals("Invalid argument 'foo' on add command for property 'f1.ls' (List<String>)", e.getMessage());
 //		}
@@ -606,7 +606,7 @@ public class PropertyStoreTest {
 //		testError(b, "A.f1.li/add.123", "foo", "Cannot add value 'foo' (String) to property 'f1.li' (List<Integer>).  Value 'foo' (String) cannot be converted to an Integer.");
 //		try {
 //			b.addTo("A.f1.li", "foo", "bar");
-//			fail("Exception expected.");
+//			fail();
 //		} catch (Exception e) {
 //			assertEquals("Invalid argument 'foo' on add command for property 'f1.li' (List<Integer>)", e.getMessage());
 //		}
@@ -679,7 +679,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.lc/prepend.123", "foo", "Cannot prepend value 'foo' (String) to property 'f1.lc' (List<Class>).  Value 'foo' (String) cannot be converted to a Class.");
 //		try {
 //			b.prependTo("A.f1.lc", "foo", "bar");
-//			fail("Exception expected.");
+//			fail();
 //		} catch (Exception e) {
 //			assertEquals("Invalid argument 'foo' on add command for property 'f1.lc' (List<Class>)", e.getMessage());
 //		}
@@ -752,7 +752,7 @@ public class PropertyStoreTest {
 //
 //		try {
 //			b.addTo("A.f1.lo", "foo", "bar");
-//			fail("Exception expected.");
+//			fail();
 //		} catch (Exception e) {
 //			assertEquals("Invalid argument 'foo' on add command for property 'f1.lo' (List<Object>)", e.getMessage());
 //		}
@@ -793,7 +793,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.sms/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
 		try {
 			b.removeFrom("A.f1.sms", "foo");
-			fail("Exception expected.");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).", e.getMessage());
 		}
@@ -834,7 +834,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.smi/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
 		try {
 			b.removeFrom("A.f1.smi", "foo");
-			fail("Exception expected.");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).", e.getMessage());
 		}
@@ -869,7 +869,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.smc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
 		try {
 			b.removeFrom("A.f1.smc", "foo");
-			fail("Exception expected.");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).", e.getMessage());
 		}
@@ -911,7 +911,7 @@ public class PropertyStoreTest {
 		testError(b, "A.f1.smo/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
 		try {
 			b.removeFrom("A.f1.smo", "foo");
-			fail("Exception expected.");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).", e.getMessage());
 		}
@@ -1645,13 +1645,13 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.removeFrom("A.foo.ss", "[xxx]");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>)."));
 		}
 		try {
 			b.removeFrom("A.foo.ls", "[xxx]");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertTrue(e.getMessage().startsWith("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>)."));
 		}
@@ -1662,19 +1662,19 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b = PropertyStore.create();
 		try {
 			b.putAllTo("A.foo.sms", "{xxx}");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertTrue(e.getMessage().startsWith("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>)."));
 		}
 		try {
 			b.putAllTo("A.foo.sms", "xxx");
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
 		try {
 			b.putAllTo("A.foo.sms", new StringBuilder("foo"));
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			assertEquals("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).", e.getMessage());
 		}
@@ -1887,7 +1887,7 @@ public class PropertyStoreTest {
 	private void testError(PropertyStoreBuilder b, String key, Object val, String msg) {
 		try {
 			b.set(key, val);
-			fail("Exception expected.");
+			fail();
 		} catch (ConfigException e) {
 			if ("xxx".equals(msg))
 				System.err.println(e.getLocalizedMessage());  // NOT DEBUG

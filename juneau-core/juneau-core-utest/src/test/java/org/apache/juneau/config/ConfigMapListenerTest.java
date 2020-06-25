@@ -549,7 +549,7 @@ public class ConfigMapListenerTest {
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			try {
 				cm.commit();
-				fail("Exception expected.");
+				fail();
 			} catch (ConfigException e) {
 				assertEquals("Unable to store contents of config to store.", e.getMessage());
 			}

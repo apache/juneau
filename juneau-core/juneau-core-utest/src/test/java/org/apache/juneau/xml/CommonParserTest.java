@@ -122,7 +122,7 @@ public class CommonParserTest {
 		try {
 			p = XmlParser.DEFAULT;
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

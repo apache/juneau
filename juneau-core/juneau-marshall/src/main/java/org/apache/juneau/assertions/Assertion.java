@@ -12,55 +12,78 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Parent class of all fluent assertion calls.
- *
- * @param <R> The return type.
+ * Base class for all assertion objects.
  */
-@FluentSetters(returns="FluentAssertion<R>")
-public abstract class FluentAssertion<R> extends Assertion {
+public class Assertion {
 
-	private final R returns;
+	private String msg;
+	private Object[] msgArgs;
+	private boolean stdout, stderr;
 
 	/**
-	 * Constructor.
+	 * Allows to to specify the assertion failure message.
 	 *
-	 * @param returns The object to return after the test.
+	 * <p>
+	 * String can contain <js>"{msg}"</js> to represent the original message.
+	 *
+	 * @param msg The assertion failure message.
+	 * @param args Optional message arguments.
+	 * @return This object (for method chaining).
 	 */
-	protected FluentAssertion(R returns) {
-		this.returns = returns;
+	@FluentSetter
+	public Assertion msg(String msg, Object...args) {
+		this.msg = msg.replace("{msg}", "<<<MSG>>>");
+		this.msgArgs = args;
+		return this;
 	}
 
 	/**
-	 * Returns the object that the fluent methods on this class should return.
+	 * If an error occurs, send the error message to STDOUT.
 	 *
-	 * @return The response object.
+	 * @return This object (for method chaining).
 	 */
-	protected R returns() {
-		return returns;
+	@FluentSetter
+	public Assertion stdout() {
+		this.stdout = true;
+		return this;
+	}
+
+	/**
+	 * If an error occurs, send the error message to STDERR.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public Assertion stderr() {
+		this.stderr = true;
+		return this;
+	}
+
+	/**
+	 * Creates a new {@link BasicAssertionError}.
+	 *
+	 * @param msg The message.
+	 * @param args The message arguments.
+	 * @return A new {@link BasicAssertionError}.
+	 */
+	protected BasicAssertionError error(String msg, Object...args) {
+		msg = format(msg, args);
+		if (this.msg != null)
+			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
+		if (stdout)
+			System.out.println(msg);
+		if (stderr)
+			System.err.println(msg);
+		return new BasicAssertionError(msg);
 	}
 
 	// <FluentSetters>
-
-	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> msg(String msg, Object...args) {
-		super.msg(msg, args);
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> stderr() {
-		super.stderr();
-		return this;
-	}
-
-	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> stdout() {
-		super.stdout();
-		return this;
-	}
 
 	// </FluentSetters>
 }

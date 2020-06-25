@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -29,19 +29,19 @@ public class NTripleTest {
 
 	@Test
 	public void write1() throws Exception {
-		assertContains(m.write("foo"), "<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(m.write("foo")).contains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test
 	public void write2() throws Exception {
 		StringWriter sw = new StringWriter();
 		m.write("foo", sw);
-		assertContains(sw.toString(), "<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(sw.toString()).contains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test
 	public void toString1() throws Exception {
-		assertContains(m.toString("foo"), "<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(m.toString("foo")).contains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test

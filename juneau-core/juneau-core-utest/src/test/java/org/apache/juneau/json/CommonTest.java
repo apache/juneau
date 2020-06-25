@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -250,25 +251,18 @@ public class CommonTest {
 		// No recursion detection
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
-			String msg = e.getLocalizedMessage();
-			assertContains(msg, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+			assertThrowable(e).contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		}
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
-			String msg = e.getLocalizedMessage();
-			assertContains(msg,
-				"[0] root:org.apache.juneau.json.CommonTest$R1",
-				"->[1] r2:org.apache.juneau.json.CommonTest$R2",
-				"->[2] r3:org.apache.juneau.json.CommonTest$R3",
-				"->[3] r1:org.apache.juneau.json.CommonTest$R1"
-			);
+			assertThrowable(e).contains("$R1","$R2","$R3");
 		}
 
 		s.ignoreRecursions();

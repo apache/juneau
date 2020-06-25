@@ -1032,7 +1032,7 @@ public class BeanMapTest {
 		try {
 			p = JsonParser.DEFAULT;
 			t = p.parse(json, O.class);
-			fail("Expected exception never occurred");
+			fail();
 		} catch (Exception e) {
 			// Good.
 		}
@@ -1046,7 +1046,7 @@ public class BeanMapTest {
 		try {
 			p = XmlParser.DEFAULT;
 			t = p.parse(json, O.class);
-			fail("Expected exception never occurred");
+			fail();
 		} catch (Exception e) {
 			// Good.
 		}
@@ -1060,7 +1060,7 @@ public class BeanMapTest {
 		try {
 			p = HtmlParser.DEFAULT;
 			t = p.parse(json, O.class);
-			fail("Expected exception never occurred");
+			fail();
 		} catch (Exception e) {
 			// Good.
 		}
@@ -1074,7 +1074,7 @@ public class BeanMapTest {
 		try {
 			p = UonParser.DEFAULT;
 			t = p.parse(json, O.class);
-			fail("Expected exception never occurred");
+			fail();
 		} catch (Exception e) {
 			// Good.
 		}
@@ -1088,7 +1088,7 @@ public class BeanMapTest {
 		try {
 			p = UrlEncodingParser.DEFAULT;
 			t = p.parse(json, O.class);
-			fail("Expected exception never occurred");
+			fail();
 		} catch (Exception e) {
 			// Good.
 		}

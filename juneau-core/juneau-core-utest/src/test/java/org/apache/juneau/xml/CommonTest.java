@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
@@ -261,17 +262,16 @@ public class CommonTest {
 		// No recursion detection
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
-			String msg = e.getLocalizedMessage();
-			assertContains(msg, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+			assertThrowable(e).contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		}
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
 		try {
 			s.build().serialize(r1);
-			fail("Exception expected!");
+			fail();
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
 			assertTrue(msg.contains("[0] <noname>:org.apache.juneau.xml.CommonTest$R1"));

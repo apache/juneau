@@ -44,7 +44,7 @@ public class MsgPackParserTest {
 		assertObjectEquals("0", r);
 		try {
 			r = p.parse(is, Object.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Stream is closed"));
 		}

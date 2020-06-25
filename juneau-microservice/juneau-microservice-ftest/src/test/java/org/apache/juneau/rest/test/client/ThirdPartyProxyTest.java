@@ -863,7 +863,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void ea02_setWrongInt() {
 		try {
 			proxy.setInt(2);
-			fail("Exception expected");
+			fail();
 		} catch (AssertionError e) { // AssertionError thrown on server side.
 			assertEquals("expected:<1> but was:<2>", e.getMessage());
 		}
@@ -903,7 +903,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void ea09_setNullStringBad() {
 		try {
 			proxy.setNullString("foo");
-			fail("Exception expected");
+			fail();
 		} catch (AssertionError e) { // AssertionError thrown on server side.
 			assertEquals("expected null, but was:<foo>", e.getLocalizedMessage());
 		}

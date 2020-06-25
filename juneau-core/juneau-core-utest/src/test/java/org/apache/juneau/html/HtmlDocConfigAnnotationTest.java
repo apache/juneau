@@ -14,8 +14,7 @@ package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
-
+import static org.apache.juneau.assertions.StringAssertion.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -328,7 +327,7 @@ public class HtmlDocConfigAnnotationTest {
 		AnnotationList al = e.getAnnotationList();
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().applyAnnotations(al, sr).build().createSession();
 		String r = x.serialize(null).replaceAll("[\r\n]+", "|");
-		assertContains(r,
+		assertString(r).contains(
 			"<aside>xxx</aside>",
 			"<footer>xxx</footer>",
 			"<head>xxx",

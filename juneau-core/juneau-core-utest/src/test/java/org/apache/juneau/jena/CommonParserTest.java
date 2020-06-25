@@ -151,7 +151,7 @@ public class CommonParserTest {
 		try {
 			p = RdfParser.create().xml().build();
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

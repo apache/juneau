@@ -1296,7 +1296,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param headers 
+	 * @param headers
 	 * 	The header to set.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
@@ -1304,7 +1304,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link Headerable}
 	 * 		<li>{@link NameValuePairable}
-	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link Map}
 	 * 		<ul>
@@ -2046,14 +2046,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.queries(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
 	 * </p>
-	 * 
-	 * @param params 
+	 *
+	 * @param params
 	 * 	The query parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link NameValuePairable}
-	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link Map}
 	 * 		<ul>
@@ -2334,13 +2334,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 * </p>
 	 *
-	 * @param params 
+	 * @param params
 	 * 	The form-data parameters.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link NameValuePairable}
-	 * 		<li>{@link java.util.Map.Entry}  
+	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link Map}
 	 * 		<ul>
@@ -2770,10 +2770,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	public RestClientBuilder interceptors(Class<?>...values) throws Exception {
 		for (Class<?> c : values) {
 			ClassInfo ci = ClassInfo.of(c);
-			if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
-				interceptors(ci.newInstance());
-			else
-				throw new ConfigException("Invalid class of type ''{0}'' passed to RestClientBuilder.interceptors.", ci.getSimpleName());
+			if (ci != null) {
+				if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
+					interceptors(ci.newInstance());
+				else
+					throw new ConfigException("Invalid class of type ''{0}'' passed to interceptors().", ci.getName());
+			}
 		}
 		return this;
 	}
@@ -2841,14 +2843,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 		List<RestCallInterceptor> l = new ArrayList<>();
 		for (Object o : value) {
 			ClassInfo ci = ClassInfo.of(o);
-			if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
-				throw new ConfigException("Invalid object of type ''{0}'' passed to RestClientBuilder.interceptors.", ci.getSimpleName());
-			if (o instanceof HttpRequestInterceptor)
-				addInterceptorLast((HttpRequestInterceptor)o);
-			if (o instanceof HttpResponseInterceptor)
-				addInterceptorLast((HttpResponseInterceptor)o);
-			if (o instanceof RestCallInterceptor)
-				l.add((RestCallInterceptor)o);
+			if (ci != null) {
+				if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
+					throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
+				if (o instanceof HttpRequestInterceptor)
+					addInterceptorLast((HttpRequestInterceptor)o);
+				if (o instanceof HttpResponseInterceptor)
+					addInterceptorLast((HttpResponseInterceptor)o);
+				if (o instanceof RestCallInterceptor)
+					l.add((RestCallInterceptor)o);
+			}
 		}
 		return prependTo(RESTCLIENT_interceptors, l);
 	}
@@ -5817,6 +5821,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	private static SerializedHeaderBuilder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
 	}
+
 	private static String className(Object value) {
 		return value == null ? null : value.getClass().getName();
 	}

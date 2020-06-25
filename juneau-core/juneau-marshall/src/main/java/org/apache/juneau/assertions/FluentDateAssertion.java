@@ -206,19 +206,19 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentDateAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentDateAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentDateAssertion<R> stdout() {
 		super.stdout();
 		return this;

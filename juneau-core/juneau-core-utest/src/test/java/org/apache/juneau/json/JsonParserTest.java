@@ -38,7 +38,7 @@ public class JsonParserTest {
 	public void testInvalidJson() {
 		try {
 			p.parse("{\na:1,\nb:xxx\n}", Object.class);
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {}
 	}
 
@@ -57,7 +57,7 @@ public class JsonParserTest {
 		// Strict mode does not allow unquoted values.
 		try {
 			sp.parse(json, String.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Did not find quote character"));
 		}
@@ -69,7 +69,7 @@ public class JsonParserTest {
 		// Strict mode does not allow unquoted values.
 		try {
 			sp.parse(json, String.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Did not find quote character"));
 		}
@@ -80,7 +80,7 @@ public class JsonParserTest {
 		json = "{\"fa\":123}";
 		try {
 			sp.parse(json, A.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Did not find quote character"));
 		}
@@ -91,7 +91,7 @@ public class JsonParserTest {
 		json = " { \"fa\" : 123 } ";
 		try {
 			sp.parse(json, A.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Did not find quote character"));
 		}
@@ -102,7 +102,7 @@ public class JsonParserTest {
 		json = "'123'";
 		try {
 			sp.parse(json, String.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Invalid quote character"));
 		}
@@ -120,7 +120,7 @@ public class JsonParserTest {
 		String json = "{\"foo\":,\"bar\":}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Missing value detected."));
 		}
@@ -129,7 +129,7 @@ public class JsonParserTest {
 		json = "{\"foo\":'bar'}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
 		}
@@ -138,7 +138,7 @@ public class JsonParserTest {
 		json = "{'foo':\"bar\"}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
 		}
@@ -147,7 +147,7 @@ public class JsonParserTest {
 		json = "{foo:\"bar\"}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Unquoted attribute detected."));
 		}
@@ -156,7 +156,7 @@ public class JsonParserTest {
 		json = "{\"foo\":\"bar\"+\"baz\"}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
 		}
@@ -165,7 +165,7 @@ public class JsonParserTest {
 		json = "{\"foo\":\"bar\" + \"baz\"}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
 		}
@@ -173,7 +173,7 @@ public class JsonParserTest {
 		json = "{\"foo\":/*comment*/\"bar\"}";
 		try {
 			p.parse(json, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getRootCause().getMessage().contains("Javascript comment detected."));
 		}
@@ -227,7 +227,7 @@ public class JsonParserTest {
 		assertTrue(r instanceof Integer);
 		try {
 			r = p2.parse(s, Number.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
@@ -256,7 +256,7 @@ public class JsonParserTest {
 		assertTrue(r instanceof Integer);
 		try {
 			r = p2.parse(s, Number.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
@@ -266,7 +266,7 @@ public class JsonParserTest {
 		assertTrue(r instanceof Integer);
 		try {
 			r = p2.parse(s, Number.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
@@ -278,7 +278,7 @@ public class JsonParserTest {
 		assertTrue(r instanceof Integer);
 		try {
 			r = p2.parse(s, Number.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
@@ -288,7 +288,7 @@ public class JsonParserTest {
 		assertTrue(r instanceof Integer);
 		try {
 			r = p2.parse(s, Number.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
@@ -309,7 +309,7 @@ public class JsonParserTest {
 
 		try {
 			p2.parse(s, C.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {
 			// OK
 		}
@@ -343,7 +343,7 @@ public class JsonParserTest {
 		assertObjectEquals("{foo:'bar'}", x);
 		try {
 			x = p.parse(r, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Reader is closed"));
 		}

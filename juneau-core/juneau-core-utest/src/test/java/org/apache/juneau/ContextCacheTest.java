@@ -188,13 +188,13 @@ public class ContextCacheTest {
 
 		try {
 			ContextCache.INSTANCE.create(D1.class, ps);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'", e.getLocalizedMessage());
 		}
 		try {
 			ContextCache.INSTANCE.create(D2.class, ps);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertEquals("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'", e.getLocalizedMessage());
 		}

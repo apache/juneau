@@ -232,7 +232,7 @@ public class UrlEncodingParserTest {
 		t = "_value=x{}|\\^[]`<>#%\"&+";
 		try {
 			assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, Object.class));
-			fail("Expected parse exception from invalid hex sequence.");
+			fail();
 		} catch (ParseException e) {
 			// Good.
 		}
@@ -244,7 +244,7 @@ public class UrlEncodingParserTest {
 		t = "?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+";
 		try {
 			m = (Map)p.parse(t, Object.class);
-			fail("Expected parse exception from invalid hex sequence.");
+			fail();
 		} catch (ParseException e) {
 			// Good.
 		}

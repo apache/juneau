@@ -1281,7 +1281,7 @@ public class RrpcInterfaceTest {
 	public void g01_throwException1() {
 		try {
 			proxy.throwException1();
-			fail("Exception expected");
+			fail();
 		} catch (InterfaceProxy.InterfaceProxyException1 e) {
 			assertEquals("foo", e.getMessage());
 		}
@@ -1291,7 +1291,7 @@ public class RrpcInterfaceTest {
 	public void g02_throwException2() {
 		try {
 			proxy.throwException2();
-			fail("Exception expected");
+			fail();
 		} catch (InterfaceProxy.InterfaceProxyException2 e) {
 		}
 	}
@@ -1315,7 +1315,7 @@ public class RrpcInterfaceTest {
 	public void h03_setWrongInt() {
 		try {
 			proxy.setInt(2);
-			fail("Exception expected");
+			fail();
 		} catch (AssertionError e) { // AssertionError thrown on server side.
 			assertEquals("expected:<1> but was:<2>", e.getMessage());
 		}
@@ -1355,9 +1355,9 @@ public class RrpcInterfaceTest {
 	public void h10_setNullStringBad() {
 		try {
 			proxy.setNullString("foo");
-			fail("Exception expected");
+			fail();
 		} catch (AssertionError e) { // AssertionError thrown on server side.
-			assertEquals("expected null, but was:<foo>", e.getLocalizedMessage());
+			assertEquals("expected null, but was:<foo>", e.getMessage());
 		}
 	}
 

@@ -266,7 +266,7 @@ public class UonParserTest {
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, String.class));
 		try {
 			assertEquals("x{}|\\^[]`<>#%\"&+", pe.parse(t, Object.class));
-			fail("Expected parse exception from invalid hex sequence.");
+			fail();
 		} catch (ParseException e) {
 			// Good.
 		}
@@ -280,7 +280,7 @@ public class UonParserTest {
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));
 		try {
 			m = (Map)pe.parse(t, Object.class);
-			fail("Expected parse exception from invalid hex sequence.");
+			fail();
 		} catch (ParseException e) {
 			// Good.
 		}
@@ -532,7 +532,7 @@ public class UonParserTest {
 		assertObjectEquals("{foo:'bar'}", x);
 		try {
 			x = p.parse(r, OMap.class);
-			fail("Exception expected");
+			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("Reader is closed"));
 		}

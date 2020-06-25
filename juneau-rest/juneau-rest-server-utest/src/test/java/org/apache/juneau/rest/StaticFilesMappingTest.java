@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -188,9 +189,9 @@ public class StaticFilesMappingTest {
 	public void d01_error_malformedJson() {
 		try {
 			parse("foo:bar:xxx");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Expected { at beginning of headers.");
+			assertThrowable(e).contains("Expected { at beginning of headers.");
 		}
 	}
 
@@ -198,9 +199,9 @@ public class StaticFilesMappingTest {
 	public void d02_error_textFollowingJson() {
 		try {
 			parse("foo:bar:{a:'b'}x");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Invalid text following headers.");
+			assertThrowable(e).contains("Invalid text following headers.");
 		}
 	}
 
@@ -208,9 +209,9 @@ public class StaticFilesMappingTest {
 	public void d03_error_missingLocation() {
 		try {
 			parse("foo");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Couldn't find ':' following path.");
+			assertThrowable(e).contains("Couldn't find ':' following path.");
 		}
 	}
 
@@ -218,9 +219,9 @@ public class StaticFilesMappingTest {
 	public void d04_error_danglingColonAfterLocation() {
 		try {
 			parse("foo:bar:");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Found extra ':' following location.");
+			assertThrowable(e).contains("Found extra ':' following location.");
 		}
 	}
 
@@ -228,9 +229,9 @@ public class StaticFilesMappingTest {
 	public void d05_error_malformedHeaders_openEnded() {
 		try {
 			parse("foo:bar:{");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Malformed headers.");
+			assertThrowable(e).contains("Malformed headers.");
 		}
 	}
 
@@ -238,9 +239,9 @@ public class StaticFilesMappingTest {
 	public void d06_error_malformedHeaders_mismatchedBrackets() {
 		try {
 			parse("foo:bar:{{}");
-			fail("Exception expected.");
+			fail();
 		} catch (ParseException e) {
-			assertContains(e, "Malformed headers.");
+			assertThrowable(e).contains("Malformed headers.");
 		}
 	}
 }

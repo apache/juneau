@@ -31,7 +31,7 @@ import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RequestAnnotationTest {
+public class Remote_RequestAnnotation_Test {
 
 	//=================================================================================================================
 	// Basic tests
@@ -49,8 +49,9 @@ public class RequestAnnotationTest {
 			).toString();
 		}
 	}
+
 	@Request
-	public static class ARequest {
+	public static class A1 {
 		@Body
 		public String getBody() {
 			return "foo";
@@ -70,19 +71,15 @@ public class RequestAnnotationTest {
 	}
 
 	@Remote
-	public static interface AR {
-		@RemoteMethod(path="/{x}") String post(ARequest req);
+	public static interface A2 {
+		@RemoteMethod(path="/{x}") String post(A1 req);
 	}
-
-	private static AR ar = MockRestClient.build(A.class).getRemote(AR.class);
 
 	@Test
 	public void a01_basic() throws Exception {
-		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", ar.post(new ARequest()));
-	}
-	@Test
-	public void a02_basic_nullValue() throws Exception {
-		assertEquals("{body:'',header:null,query:null,path:'{x}'}", ar.post(null));
+		A2 x = MockRestClient.build(A.class).getRemote(A2.class);
+		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new A1()));
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
 
 	//=================================================================================================================
@@ -103,18 +100,14 @@ public class RequestAnnotationTest {
 	}
 
 	@Request
-	public abstract static class BRequest {
-		@Body
-		public abstract String getBody();
-		@Header("X")
-		public abstract String getHeader();
-		@Query("x")
-		public abstract String getQuery();
-		@Path("x")
-		public abstract String getPath();
+	public abstract static class B1 {
+		@Body public abstract String getBody();
+		@Header("X") public abstract String getHeader();
+		@Query("x") public abstract String getQuery();
+		@Path("x") public abstract String getPath();
 	}
 
-	public static class BRequestImpl extends BRequest {
+	public static class B2 extends B1 {
 		@Override
 		public String getBody() {
 			return "foo";
@@ -134,19 +127,15 @@ public class RequestAnnotationTest {
 	}
 
 	@Remote
-	public static interface BR {
-		@RemoteMethod(path="/{x}") String post(BRequest req);
+	public static interface B3 {
+		@RemoteMethod(path="/{x}") String post(B1 req);
 	}
-
-	private static BR br = MockRestClient.build(B.class).getRemote(BR.class);
 
 	@Test
 	public void b01_annotationOnParent() throws Exception {
-		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", br.post(new BRequestImpl()));
-	}
-	@Test
-	public void b02_annotationOnParent_nullValue() throws Exception {
-		assertEquals("{body:'',header:null,query:null,path:'{x}'}", br.post(null));
+		B3 x = MockRestClient.build(B.class).getRemote(B3.class);
+		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new B2()));
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
 
 	//=================================================================================================================
@@ -167,18 +156,14 @@ public class RequestAnnotationTest {
 	}
 
 	@Request
-	public interface CRequest {
-		@Body
-		String getBody();
-		@Header("X")
-		String getHeader();
-		@Query("x")
-		String getQuery();
-		@Path("x")
-		String getPath();
+	public interface C1 {
+		@Body String getBody();
+		@Header("X") String getHeader();
+		@Query("x") String getQuery();
+		@Path("x") String getPath();
 	}
 
-	public static class CRequestImpl implements CRequest {
+	public static class C2 implements C1 {
 		@Override
 		public String getBody() {
 			return "foo";
@@ -198,19 +183,15 @@ public class RequestAnnotationTest {
 	}
 
 	@Remote
-	public static interface CR {
-		@RemoteMethod(path="/{x}") String post(CRequest req);
+	public static interface C3 {
+		@RemoteMethod(path="/{x}") String post(C1 req);
 	}
-
-	private static CR cr = MockRestClient.build(C.class).getRemote(CR.class);
 
 	@Test
 	public void c01_annotationOnInterface() throws Exception {
-		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", cr.post(new CRequestImpl()));
-	}
-	@Test
-	public void c02_annotationOnInterface_nullValue() throws Exception {
-		assertEquals("{body:'',header:null,query:null,path:'{x}'}", cr.post(null));
+		C3 x = MockRestClient.build(C.class).getRemote(C3.class);
+		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new C2()));
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
 
 	//=================================================================================================================
@@ -230,7 +211,7 @@ public class RequestAnnotationTest {
 		}
 	}
 
-	public static class DRequest {
+	public static class D1 {
 		@Body
 		public String getBody() {
 			return "foo";
@@ -250,19 +231,15 @@ public class RequestAnnotationTest {
 	}
 
 	@Remote
-	public static interface DR {
-		@RemoteMethod(path="/{x}") String post(@Request DRequest req);
+	public static interface D2 {
+		@RemoteMethod(path="/{x}") String post(@Request D1 req);
 	}
-
-	private static DR dr = MockRestClient.build(D.class).getRemote(DR.class);
 
 	@Test
 	public void d01_annotationOnParameter() throws Exception {
-		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", dr.post(new DRequest()));
-	}
-	@Test
-	public void d02_annotationOnParameter_nullValue() throws Exception {
-		assertEquals("{body:'',header:null,query:null,path:'{x}'}", dr.post(null));
+		D2 x = MockRestClient.build(D.class).getRemote(D2.class);
+		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new D1()));
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
 
 	//=================================================================================================================
@@ -283,7 +260,7 @@ public class RequestAnnotationTest {
 	}
 
 	@Request(partSerializer=XPartSerializer.class)
-	public static class ERequest {
+	public static class E1 {
 		@Body
 		public String getBody() {
 			return "foo";
@@ -303,19 +280,14 @@ public class RequestAnnotationTest {
 	}
 
 	@Remote
-	public static interface ER {
-		@RemoteMethod(path="/{x}") String post(ERequest req);
+	public static interface E2 {
+		@RemoteMethod(path="/{x}") String post(E1 req);
 	}
-
-	private static ER er = MockRestClient.build(E.class).getRemote(ER.class);
 
 	@Test
 	public void e01_partSerializer() throws Exception {
-		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}", er.post(new ERequest()));
+		E2 x = MockRestClient.build(E.class).getRemote(E2.class);
+		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}", x.post(new E1()));
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
-	@Test
-	public void a02_partSerializer_nullValue() throws Exception {
-		assertEquals("{body:'',header:null,query:null,path:'{x}'}", er.post(null));
-	}
-
 }

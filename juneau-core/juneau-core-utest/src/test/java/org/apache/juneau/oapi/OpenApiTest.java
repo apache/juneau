@@ -605,7 +605,7 @@ public class OpenApiTest {
 		HttpPartSchema ps = T_ARRAY;
 		try {
 			serialize(ps, in);
-			fail("Exception expected");
+			fail();
 		} catch (SerializeException e) {
 			assertEquals("Input is not a valid array type: java.lang.String", e.getMessage());
 		}

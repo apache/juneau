@@ -940,8 +940,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder header(NameValuePair header) {
-		super.header(header);
+	public MockRestClientBuilder header(NameValuePair pair) {
+		super.header(pair);
 		return this;
 	}
 

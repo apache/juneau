@@ -10,51 +10,50 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.marshall;
+package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.StringAssertion.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import java.io.*;
+/**
+ * Used for assertion calls against string objects.
+ */
+public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
-import org.junit.*;
-
-@FixMethodOrder(NAME_ASCENDING)
-public class RdfXmlAbbrevTest {
-
-	CharMarshall m = RdfXmlAbbrev.DEFAULT;
-
-	String r = ""
-		+ "<rdf:RDF"
-		+ "    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\""
-		+ "    xmlns:j=\"http://www.apache.org/juneau/\""
-		+ "    xmlns:jp=\"http://www.apache.org/juneaubp/\">"
-		+ "<rdf:Description>"
-		+ "<j:value>foo</j:value>"
-		+ "</rdf:Description>"
-		+ "</rdf:RDF>";
-
-	@Test
-	public void write1() throws Exception {
-		assertString(m.write("foo")).contains("<j:value>foo</j:value>");
+	/**
+	 * Creator.
+	 *
+	 * @param text The string being wrapped.
+	 * @return A new {@link StringAssertion} object.
+	 */
+	public static StringAssertion assertString(Object text) {
+		return new StringAssertion(text);
 	}
 
-	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertString(sw.toString()).contains("<j:value>foo</j:value>");
+	/**
+	 * Creator.
+	 *
+	 * @param text The string being wrapped.
+	 * @return A new {@link StringAssertion} object.
+	 */
+	public static StringAssertion create(Object text) {
+		return new StringAssertion(text);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertString(m.toString("foo")).contains("<j:value>foo</j:value>");
+	/**
+	 * Creator.
+	 *
+	 * @param text The string being wrapped.
+	 */
+	protected StringAssertion(Object text) {
+		super(stringify(text), null);
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read(r, String.class);
-		assertEquals("foo", s);
+	@Override
+	protected StringAssertion returns() {
+		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

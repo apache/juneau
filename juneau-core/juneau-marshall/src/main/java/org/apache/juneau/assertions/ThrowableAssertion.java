@@ -15,49 +15,78 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Parent class of all fluent assertion calls.
- *
- * @param <R> The return type.
+ * Used for assertion calls against throwable objects.
  */
-@FluentSetters(returns="FluentAssertion<R>")
-public abstract class FluentAssertion<R> extends Assertion {
+public class ThrowableAssertion extends Assertion {
 
-	private final R returns;
+	private final Throwable t;
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param returns The object to return after the test.
+	 * @param t The throwable being wrapped.
+	 * @return A new {@link ThrowableAssertion} object.
 	 */
-	protected FluentAssertion(R returns) {
-		this.returns = returns;
+	public static ThrowableAssertion assertThrowable(Throwable t) {
+		return new ThrowableAssertion(t);
 	}
 
 	/**
-	 * Returns the object that the fluent methods on this class should return.
+	 * Creator.
 	 *
-	 * @return The response object.
+	 * @param t The throwable being wrapped.
+	 * @return A new {@link ThrowableAssertion} object.
 	 */
-	protected R returns() {
-		return returns;
+	public static ThrowableAssertion create(Throwable t) {
+		return new ThrowableAssertion(t);
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param t The throwable being wrapped.
+	 */
+	protected ThrowableAssertion(Throwable t) {
+		this.t = t;
+	}
+
+	/**
+	 * Asserts that this throwable or any parent throwables contains all of the specified substrings.
+	 *
+	 * @param substrings The substrings to check for.
+	 * @return This object (for method chaining).
+	 */
+	public ThrowableAssertion contains(String...substrings) {
+		for (String substring : substrings) {
+			Throwable e2 = t;
+			boolean found = false;
+			while (e2 != null && ! found) {
+				found |= StringUtils.contains(e2.getMessage(), substring);
+				e2 = e2.getCause();
+			}
+			if (! found) {
+				throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, t.getMessage());
+			}
+		}
+		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> msg(String msg, Object...args) {
+	public ThrowableAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> stderr() {
+	public ThrowableAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentAssertion<R> stdout() {
+	public ThrowableAssertion stdout() {
 		super.stdout();
 		return this;
 	}

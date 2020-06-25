@@ -113,7 +113,7 @@ public class CommonParser_UonTest {
 		try {
 			p = UonParser.DEFAULT;
 			p.parse(in, B.class);
-			fail("Exception expected");
+			fail();
 		} catch (ParseException e) {}
 	}
 

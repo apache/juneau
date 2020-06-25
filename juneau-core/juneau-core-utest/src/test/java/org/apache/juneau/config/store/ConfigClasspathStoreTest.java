@@ -14,7 +14,7 @@ package org.apache.juneau.config.store;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.StringAssertion.*;
 
 import java.util.concurrent.*;
 
@@ -32,8 +32,8 @@ public class ConfigClasspathStoreTest {
 	@Test
 	public void testRealFiles() throws Exception {
 		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
-		assertContains(fs.read("foo1.cfg"), "bar1");
-		assertContains(fs.read("sub/foo2.cfg"), "bar2");
+		assertString(fs.read("foo1.cfg")).contains("bar1");
+		assertString(fs.read("sub/foo2.cfg")).contains("bar2");
 		assertEquals("", fs.read("sub/bad.cfg"));
 		assertEquals("", fs.read("bad/bad.cfg"));
 	}
@@ -41,7 +41,7 @@ public class ConfigClasspathStoreTest {
 	@Test
 	public void testOverwriteRealFiles() throws Exception {
 		ConfigClasspathStore fs = ConfigClasspathStore.create().build();
-		assertContains(fs.read("foo1.cfg"), "bar1");
+		assertString(fs.read("foo1.cfg")).contains("bar1");
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
 	}

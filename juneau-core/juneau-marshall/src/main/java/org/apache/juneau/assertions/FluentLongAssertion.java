@@ -328,19 +328,19 @@ public class FluentLongAssertion<R> extends FluentAssertion<R> {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentLongAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentLongAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
-	@Override /* GENERATED - FluentAssertion */
+	@Override /* GENERATED - Assertion */
 	public FluentLongAssertion<R> stdout() {
 		super.stdout();
 		return this;
