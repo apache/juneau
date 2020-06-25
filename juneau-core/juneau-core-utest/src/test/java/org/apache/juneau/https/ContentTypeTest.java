@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.https;
 
+import static org.apache.juneau.assertions.IntegerAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -19,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.testutils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -88,7 +88,6 @@ public class ContentTypeTest {
 	public void test() throws Exception {
 		ContentType ct = ContentType.of(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		int r = ct.findMatch(mt);
-		TestUtils.assertEquals(expected, r, "{0} failed", label);
+		assertInteger(ct.findMatch(mt)).msg("{0} failed", label).is(expected);
 	}
 }

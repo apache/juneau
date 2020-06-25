@@ -15,67 +15,67 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for assertion calls against arbitrary POJOs.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+ * 	<jc>// Validates the response length isn't too long.</jc>
+ * 	<jsm>assertLong</jsm>(responseLength).isLessThan(100000);
  * </p>
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="LongAssertion")
+public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param l The object being wrapped.
+	 * @return A new {@link LongAssertion} object.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static LongAssertion assertLong(Long l) {
+		return new LongAssertion(l);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param l The object being wrapped.
+	 * @return A new {@link LongAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static LongAssertion create(Long l) {
+		return new LongAssertion(l);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param l The object being wrapped.
 	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
+	protected LongAssertion(Long l) {
+		super(l, null);
 	}
 
 	@Override
-	protected ThrowableAssertion returns() {
+	protected LongAssertion returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public LongAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public LongAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public LongAssertion stdout() {
 		super.stdout();
 		return this;
 	}

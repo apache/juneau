@@ -12,70 +12,72 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.util.*;
+
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for assertion calls against {@link Date} objects.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+ * 	<jc>// Validates the specified date is after the current date.</jc>
+ * 	<jsm>assertDate</jsm>(myDate).isAfter(<jk>new</jk> Date());
  * </p>
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="DateAssertion")
+public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param date The date being wrapped.
+	 * @return A new {@link DateAssertion} object.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static DateAssertion assertDate(Date date) {
+		return new DateAssertion(date);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param date The date being wrapped.
+	 * @return A new {@link DateAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static DateAssertion create(Date date) {
+		return new DateAssertion(date);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param date The date being wrapped.
 	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
+	protected DateAssertion(Date date) {
+		super(date, null);
 	}
 
 	@Override
-	protected ThrowableAssertion returns() {
+	protected DateAssertion returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public DateAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public DateAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public DateAssertion stdout() {
 		super.stdout();
 		return this;
 	}

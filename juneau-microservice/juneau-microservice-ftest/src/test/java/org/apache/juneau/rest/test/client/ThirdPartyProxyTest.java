@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -572,28 +573,28 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void da12_returnIntegerList() {
 		List<Integer> x = proxy.returnIntegerList();
 		assertObjectEquals("[1,null]", x);
-		assertClass(Integer.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void da13_returnInteger3dList() {
 		List<List<List<Integer>>> x = proxy.returnInteger3dList();
 		assertObjectEquals("[[[1,null],null],null]", x);
-		assertClass(Integer.class, x.get(0).get(0).get(0));
+		assertObject(x.get(0).get(0).get(0)).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void da14_returnInteger1d3dList() {
 		List<Integer[][][]> x = proxy.returnInteger1d3dList();
 		assertObjectEquals("[[[[1,null],null],null],null]", x);
-		assertClass(Integer.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void da15_returnInt1d3dList() {
 		List<int[][][]> x = proxy.returnInt1d3dList();
 		assertObjectEquals("[[[[1,2],null],null],null]", x);
-		assertClass(int[][][].class, x.get(0));
+		assertObject(x.get(0)).instanceOf(int[][][].class);
 	}
 
 	@Test
@@ -607,49 +608,49 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void db01_returnBean() {
 		ABean x = proxy.returnBean();
 		assertObjectEquals("{a:1,b:'foo'}", x);
-		assertClass(ABean.class, x);
+		assertObject(x).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db02_returnBean3dArray() {
 		ABean[][][] x = proxy.returnBean3dArray();
 		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x);
-		assertClass(ABean.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db03_returnBeanList() {
 		List<ABean> x = proxy.returnBeanList();
 		assertObjectEquals("[{a:1,b:'foo'}]", x);
-		assertClass(ABean.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db04_returnBean1d3dList() {
 		List<ABean[][][]> x = proxy.returnBean1d3dList();
 		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x);
-		assertClass(ABean.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db05_returnBeanMap() {
 		Map<String,ABean> x = proxy.returnBeanMap();
 		assertObjectEquals("{foo:{a:1,b:'foo'}}", x);
-		assertClass(ABean.class, x.get("foo"));
+		assertObject(x.get("foo")).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db06_returnBeanListMap() {
 		Map<String,List<ABean>> x = proxy.returnBeanListMap();
 		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
-		assertClass(ABean.class, x.get("foo").get(0));
+		assertObject(x.get("foo").get(0)).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void db07_returnBean1d3dListMap() {
 		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
-		assertClass(ABean.class, x.get("foo").get(0)[0][0][0]);
+		assertObject(x.get("foo").get(0)[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
@@ -657,7 +658,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);
-		assertClass(Integer.class, x.keySet().iterator().next());
+		assertObject(x.keySet().iterator().next()).instanceOf(Integer.class);
 	}
 
 	// Typed beans
@@ -666,49 +667,49 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void dc01_returnTypedBean() {
 		TypedBean x = proxy.returnTypedBean();
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
-		assertClass(TypedBeanImpl.class, x);
+		assertObject(x).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc02_returnTypedBean3dArray() {
 		TypedBean[][][] x = proxy.returnTypedBean3dArray();
 		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
-		assertClass(TypedBeanImpl.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc03_returnTypedBeanList() {
 		List<TypedBean> x = proxy.returnTypedBeanList();
 		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
-		assertClass(TypedBeanImpl.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc04_returnTypedBean1d3dList() {
 		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
 		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
-		assertClass(TypedBeanImpl.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc05_returnTypedBeanMap() {
 		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
 		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo"));
+		assertObject(x.get("foo")).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc06_returnTypedBeanListMap() {
 		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
 		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo").get(0));
+		assertObject(x.get("foo").get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc07_returnTypedBean1d3dListMap() {
 		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+		assertObject(x.get("foo").get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
@@ -716,7 +717,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertClass(TypedBeanImpl.class, x.get(1).get(0));
+		assertObject(x.get(1).get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	// Swapped POJOs
@@ -799,28 +800,28 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void df02_returnEnum3d() {
 		TestEnum[][][] x = proxy.returnEnum3d();
 		assertObjectEquals("[[['TWO',null],null],null]", x);
-		assertClass(TestEnum.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void df03_returnEnumList() {
 		List<TestEnum> x = proxy.returnEnumList();
 		assertObjectEquals("['TWO',null]", x);
-		assertClass(TestEnum.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void df04_returnEnum3dList() {
 		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
 		assertObjectEquals("[[['TWO',null],null],null]", x);
-		assertClass(TestEnum.class, x.get(0).get(0).get(0));
+		assertObject(x.get(0).get(0).get(0)).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void df05_returnEnum1d3dList() {
 		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
 		assertObjectEquals("[[[['TWO',null],null],null],null]", x);
-		assertClass(TestEnum[][][].class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TestEnum[][][].class);
 	}
 
 	@Test
@@ -828,8 +829,8 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
 		assertObjectEquals("{ONE:'TWO'}", x);
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-		assertClass(TestEnum.class, e.getKey());
-		assertClass(TestEnum.class, e.getValue());
+		assertObject(e.getKey()).instanceOf(TestEnum.class);
+		assertObject(e.getValue()).instanceOf(TestEnum.class);
 	}
 
 	@Test
@@ -837,15 +838,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
 		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", x);
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-		assertClass(TestEnum.class, e.getKey());
-		assertClass(TestEnum[][][].class, e.getValue());
+		assertObject(e.getKey()).instanceOf(TestEnum.class);
+		assertObject(e.getValue()).instanceOf(TestEnum[][][].class);
 	}
 
 	@Test
 	public void df08_returnEnum1d3dListMap() {
 		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
 		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x);
-		assertClass(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
+		assertObject(x.get(TestEnum.ONE).get(0)).instanceOf(TestEnum[][][].class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

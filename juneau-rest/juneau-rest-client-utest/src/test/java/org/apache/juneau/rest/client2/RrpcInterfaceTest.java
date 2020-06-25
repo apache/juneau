@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client2;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
@@ -576,26 +577,26 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setIntegerList(List<Integer> x) {
 					assertObjectEquals("[1,null]", x);
-					assertClass(Integer.class, x.get(0));
+					assertObject(x.get(0)).instanceOf(Integer.class);
 				}
 
 				@Override
 				public void setInteger3dList(List<List<List<Integer>>> x) {
 					assertObjectEquals("[[[1,null],null],null]", x);
-					assertClass(Integer.class, x.get(0).get(0).get(0));
+					assertObject(x.get(0).get(0).get(0)).instanceOf(Integer.class);
 				}
 
 				@Override
 				public void setInteger1d3dList(List<Integer[][][]> x) {
 					assertObjectEquals("[[[[1,null],null],null],null]", x);
-					assertClass(Integer[][][].class, x.get(0));
-					assertClass(Integer.class, x.get(0)[0][0][0]);
+					assertObject(x.get(0)).instanceOf(Integer[][][].class);
+					assertObject(x.get(0)[0][0][0]).instanceOf(Integer.class);
 				}
 
 				@Override
 				public void setInt1d3dList(List<int[][][]> x) {
 					assertObjectEquals("[[[[1,2],null],null],null]", x);
-					assertClass(int[][][].class, x.get(0));
+					assertObject(x.get(0)).instanceOf(int[][][].class);
 				}
 
 				@Override
@@ -643,7 +644,7 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x) {
 					assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);  // Note: JsonSerializer serializes key as string.
-					assertClass(Integer.class, x.keySet().iterator().next());
+					assertObject(x.keySet().iterator().next()).instanceOf(Integer.class);
 				}
 
 				// Typed beans
@@ -651,49 +652,49 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setTypedBean(TypedBean x) {
 					assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
-					assertClass(TypedBeanImpl.class, x);
+					assertObject(x).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean3dArray(TypedBean[][][] x) {
 					assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
-					assertClass(TypedBeanImpl.class, x[0][0][0]);
+					assertObject(x[0][0][0]).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanList(List<TypedBean> x) {
 					assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
-					assertClass(TypedBeanImpl.class, x.get(0));
+					assertObject(x.get(0)).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean1d3dList(List<TypedBean[][][]> x) {
 					assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
-					assertClass(TypedBeanImpl.class, x.get(0)[0][0][0]);
+					assertObject(x.get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanMap(Map<String,TypedBean> x) {
 					assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
-					assertClass(TypedBeanImpl.class, x.get("foo"));
+					assertObject(x.get("foo")).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanListMap(Map<String,List<TypedBean>> x) {
 					assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-					assertClass(TypedBeanImpl.class, x.get("foo").get(0));
+					assertObject(x.get("foo").get(0)).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x) {
 					assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
-					assertClass(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+					assertObject(x.get("foo").get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 				}
 
 				@Override
 				public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x) {
 					assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);  // Note: JsonSerializer serializes key as string.
-					assertClass(TypedBeanImpl.class, x.get(1).get(0));
+					assertObject(x.get(1).get(0)).instanceOf(TypedBeanImpl.class);
 				}
 
 				// Swapped POJOs
@@ -769,43 +770,43 @@ public class RrpcInterfaceTest {
 				@Override
 				public void setEnumList(List<TestEnum> x) {
 					assertObjectEquals("['TWO',null]", x);
-					assertClass(TestEnum.class, x.get(0));
+					assertObject(x.get(0)).instanceOf(TestEnum.class);
 				}
 
 				@Override
 				public void setEnum3dList(List<List<List<TestEnum>>> x) {
 					assertObjectEquals("[[['TWO',null],null],null]", x);
-					assertClass(TestEnum.class, x.get(0).get(0).get(0));
+					assertObject(x.get(0).get(0).get(0)).instanceOf(TestEnum.class);
 				}
 
 				@Override
 				public void setEnum1d3dList(List<TestEnum[][][]> x) {
 					assertObjectEquals("[[[['TWO',null],null],null],null]", x);
-					assertClass(TestEnum[][][].class, x.get(0));
+					assertObject(x.get(0)).instanceOf(TestEnum[][][].class);
 				}
 
 				@Override
 				public void setEnumMap(Map<TestEnum,TestEnum> x) {
 					assertObjectEquals("{ONE:'TWO'}", x);
 					Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-					assertClass(TestEnum.class, e.getKey());
-					assertClass(TestEnum.class, e.getValue());
+					assertObject(e.getKey()).instanceOf(TestEnum.class);
+					assertObject(e.getValue()).instanceOf(TestEnum.class);
 				}
 
 				@Override
 				public void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x) {
 					assertObjectEquals("{ONE:[[['TWO',null],null],null]}", x);
 					Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-					assertClass(TestEnum.class, e.getKey());
-					assertClass(TestEnum[][][].class, e.getValue());
+					assertObject(e.getKey()).instanceOf(TestEnum.class);
+					assertObject(e.getValue()).instanceOf(TestEnum[][][].class);
 				}
 
 				@Override
 				public void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x) {
 					assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x);
 					Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
-					assertClass(TestEnum.class, e.getKey());
-					assertClass(TestEnum[][][].class, e.getValue().get(0));
+					assertObject(e.getKey()).instanceOf(TestEnum.class);
+					assertObject(e.getValue().get(0)).instanceOf(TestEnum[][][].class);
 				}
 
 				//--------------------------------------------------------------------------------
@@ -818,7 +819,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[[1,2],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[[1,2],null],null],null]", x3);
-					assertClass(int[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(int[][][].class);
 					assertNull(x3n);
 				}
 
@@ -828,7 +829,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[[1,null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[[1,null],null],null],null]", x3);
-					assertClass(Integer[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(Integer[][][].class);
 					assertNull(x3n);
 				}
 
@@ -838,7 +839,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[[1.0,2.0],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[[1.0,2.0],null],null],null]", x3);
-					assertClass(float[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(float[][][].class);
 					assertNull(x3n);
 				}
 
@@ -848,7 +849,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[[1.0,null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[[1.0,null],null],null],null]", x3);
-					assertClass(Float[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(Float[][][].class);
 					assertNull(x3n);
 				}
 
@@ -858,7 +859,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[['foo',null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[['foo',null],null],null],null]", x3);
-					assertClass(String[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(String[][][].class);
 					assertNull(x3n);
 				}
 
@@ -868,7 +869,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x3);
-					assertClass(ABean[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(ABean[][][].class);
 					assertNull(x3n);
 					assertObjectEquals("{foo:{a:1,b:'foo'}}", x4);
 					assertNull(x4n);
@@ -882,7 +883,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[['"+SWAP+"',null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[['"+SWAP+"',null],null],null],null]", x3);
-					assertClass(SwappedPojo[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(SwappedPojo[][][].class);
 					assertNull(x3n);
 					assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x4);
 					assertNull(x4n);
@@ -896,7 +897,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[['"+SWAP+"',null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[['"+SWAP+"',null],null],null],null]", x3);
-					assertClass(ImplicitSwappedPojo[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(ImplicitSwappedPojo[][][].class);
 					assertNull(x3n);
 					assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x4);
 					assertNull(x4n);
@@ -910,7 +911,7 @@ public class RrpcInterfaceTest {
 					assertObjectEquals("[[['TWO',null],null],null]", x2);
 					assertNull(x2n);
 					assertObjectEquals("[[[['TWO',null],null],null],null]", x3);
-					assertClass(TestEnum[][][].class, x3.get(0));
+					assertObject(x3.get(0)).instanceOf(TestEnum[][][].class);
 					assertNull(x3n);
 					assertObjectEquals("{ONE:'TWO'}", x4);
 					assertNull(x4n);
@@ -997,28 +998,28 @@ public class RrpcInterfaceTest {
 	public void a12_returnIntegerList() {
 		List<Integer> x = proxy.returnIntegerList();
 		assertObjectEquals("[1,null]", x);
-		assertClass(Integer.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void a13_returnInteger3dList() {
 		List<List<List<Integer>>> x = proxy.returnInteger3dList();
 		assertObjectEquals("[[[1,null],null],null]", x);
-		assertClass(Integer.class, x.get(0).get(0).get(0));
+		assertObject(x.get(0).get(0).get(0)).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void a14_returnInteger1d3dList() {
 		List<Integer[][][]> x = proxy.returnInteger1d3dList();
 		assertObjectEquals("[[[[1,null],null],null],null]", x);
-		assertClass(Integer.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(Integer.class);
 	}
 
 	@Test
 	public void a15_returnInt1d3dList() {
 		List<int[][][]> x = proxy.returnInt1d3dList();
 		assertObjectEquals("[[[[1,2],null],null],null]", x);
-		assertClass(int[][][].class, x.get(0));
+		assertObject(x.get(0)).instanceOf(int[][][].class);
 	}
 
 	@Test
@@ -1032,49 +1033,49 @@ public class RrpcInterfaceTest {
 	public void b01_returnBean() {
 		ABean x = proxy.returnBean();
 		assertObjectEquals("{a:1,b:'foo'}", x);
-		assertClass(ABean.class, x);
+		assertObject(x).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b02_returnBean3dArray() {
 		ABean[][][] x = proxy.returnBean3dArray();
 		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x);
-		assertClass(ABean.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b03_returnBeanList() {
 		List<ABean> x = proxy.returnBeanList();
 		assertObjectEquals("[{a:1,b:'foo'}]", x);
-		assertClass(ABean.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b04_returnBean1d3dList() {
 		List<ABean[][][]> x = proxy.returnBean1d3dList();
 		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x);
-		assertClass(ABean.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b05_returnBeanMap() {
 		Map<String,ABean> x = proxy.returnBeanMap();
 		assertObjectEquals("{foo:{a:1,b:'foo'}}", x);
-		assertClass(ABean.class, x.get("foo"));
+		assertObject(x.get("foo")).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b06_returnBeanListMap() {
 		Map<String,List<ABean>> x = proxy.returnBeanListMap();
 		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
-		assertClass(ABean.class, x.get("foo").get(0));
+		assertObject(x.get("foo").get(0)).instanceOf(ABean.class);
 	}
 
 	@Test
 	public void b07_returnBean1d3dListMap() {
 		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
-		assertClass(ABean.class, x.get("foo").get(0)[0][0][0]);
+		assertObject(x.get("foo").get(0)[0][0][0]).instanceOf(ABean.class);
 	}
 
 	@Test
@@ -1082,7 +1083,7 @@ public class RrpcInterfaceTest {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);
-		assertClass(Integer.class, x.keySet().iterator().next());
+		assertObject(x.keySet().iterator().next()).instanceOf(Integer.class);
 	}
 
 	// Typed beans
@@ -1091,49 +1092,49 @@ public class RrpcInterfaceTest {
 	public void c01_returnTypedBean() {
 		TypedBean x = proxy.returnTypedBean();
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
-		assertClass(TypedBeanImpl.class, x);
+		assertObject(x).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c02_returnTypedBean3dArray() {
 		TypedBean[][][] x = proxy.returnTypedBean3dArray();
 		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
-		assertClass(TypedBeanImpl.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c03_returnTypedBeanList() {
 		List<TypedBean> x = proxy.returnTypedBeanList();
 		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
-		assertClass(TypedBeanImpl.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c04_returnTypedBean1d3dList() {
 		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
 		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
-		assertClass(TypedBeanImpl.class, x.get(0)[0][0][0]);
+		assertObject(x.get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c05_returnTypedBeanMap() {
 		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
 		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo"));
+		assertObject(x.get("foo")).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c06_returnTypedBeanListMap() {
 		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
 		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo").get(0));
+		assertObject(x.get("foo").get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void c07_returnTypedBean1d3dListMap() {
 		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
-		assertClass(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
+		assertObject(x.get("foo").get(0)[0][0][0]).instanceOf(TypedBeanImpl.class);
 	}
 
 	@Test
@@ -1141,7 +1142,7 @@ public class RrpcInterfaceTest {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertClass(TypedBeanImpl.class, x.get(1).get(0));
+		assertObject(x.get(1).get(0)).instanceOf(TypedBeanImpl.class);
 	}
 
 	// Swapped POJOs
@@ -1224,28 +1225,28 @@ public class RrpcInterfaceTest {
 	public void f02_returnEnum3d() {
 		TestEnum[][][] x = proxy.returnEnum3d();
 		assertObjectEquals("[[['TWO',null],null],null]", x);
-		assertClass(TestEnum.class, x[0][0][0]);
+		assertObject(x[0][0][0]).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void f03_returnEnumList() {
 		List<TestEnum> x = proxy.returnEnumList();
 		assertObjectEquals("['TWO',null]", x);
-		assertClass(TestEnum.class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void f04_returnEnum3dList() {
 		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
 		assertObjectEquals("[[['TWO',null],null],null]", x);
-		assertClass(TestEnum.class, x.get(0).get(0).get(0));
+		assertObject(x.get(0).get(0).get(0)).instanceOf(TestEnum.class);
 	}
 
 	@Test
 	public void f05_returnEnum1d3dList() {
 		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
 		assertObjectEquals("[[[['TWO',null],null],null],null]", x);
-		assertClass(TestEnum[][][].class, x.get(0));
+		assertObject(x.get(0)).instanceOf(TestEnum[][][].class);
 	}
 
 	@Test
@@ -1253,8 +1254,8 @@ public class RrpcInterfaceTest {
 		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
 		assertObjectEquals("{ONE:'TWO'}", x);
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-		assertClass(TestEnum.class, e.getKey());
-		assertClass(TestEnum.class, e.getValue());
+		assertObject(e.getKey()).instanceOf(TestEnum.class);
+		assertObject(e.getValue()).instanceOf(TestEnum.class);
 	}
 
 	@Test
@@ -1262,15 +1263,15 @@ public class RrpcInterfaceTest {
 		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
 		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", x);
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-		assertClass(TestEnum.class, e.getKey());
-		assertClass(TestEnum[][][].class, e.getValue());
+		assertObject(e.getKey()).instanceOf(TestEnum.class);
+		assertObject(e.getValue()).instanceOf(TestEnum[][][].class);
 	}
 
 	@Test
 	public void f08_returnEnum1d3dListMap() {
 		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
 		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x);
-		assertClass(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
+		assertObject(x.get(TestEnum.ONE).get(0)).instanceOf(TestEnum[][][].class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

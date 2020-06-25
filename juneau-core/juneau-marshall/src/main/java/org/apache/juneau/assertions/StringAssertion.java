@@ -14,9 +14,18 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Used for assertion calls against string objects.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+ * 	<jsm>assertString</jsm>(httpBody).is(<js>"OK"</js>);
+ * </p>
  */
+@FluentSetters(returns="StringAssertion")
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
 	/**
@@ -54,6 +63,30 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public StringAssertion msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public StringAssertion stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public StringAssertion stdout() {
+		super.stdout();
+		return this;
+	}
+
+	@Override /* GENERATED - FluentStringAssertion */
+	public StringAssertion javaStrings() {
+		super.javaStrings();
+		return this;
+	}
 
 	// </FluentSetters>
 }

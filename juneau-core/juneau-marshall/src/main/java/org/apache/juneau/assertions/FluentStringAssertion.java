@@ -30,12 +30,13 @@ import org.apache.juneau.internal.*;
  * 		.run()
  * 		.assertBody().is(<js>"OK"</js>);
  * </p>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentStringAssertion<R>")
 public class FluentStringAssertion<R> extends FluentAssertion<R> {
 
-	private final String text;
+	private String text;
 	private boolean javaStrings;
 
 	/**
@@ -61,6 +62,34 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	@FluentSetter
 	public FluentStringAssertion<R> javaStrings() {
 		this.javaStrings = true;
+		return this;
+	}
+
+	/**
+	 * Performs the specified regular expression replacement on the underlying string.
+	 *
+	 * @param regex The regular expression to which this string is to be matched.
+	 * @param replacement The string to be substituted for each match.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
+		if (text != null)
+			text = text.replaceAll(regex, replacement);
+		return this;
+	}
+
+	/**
+	 * Performs the specified substring replacement on the underlying string.
+	 *
+	 * @param target The sequence of char values to be replaced.
+	 * @param replacement The replacement sequence of char values.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public FluentStringAssertion<R> replace(String target, String replacement) {
+		if (text != null)
+			text = text.replace(target, replacement);
 		return this;
 	}
 

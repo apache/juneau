@@ -15,67 +15,67 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for assertion calls against arbitrary POJOs.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+ * 	<jc>// Validates the response status code is 200 or 404.</jc>
+ * 	<jsm>assertInteger</jsm>(httpReponse).isAny(200,404);
  * </p>
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="IntegerAssertion")
+public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param integer The object being wrapped.
+	 * @return A new {@link IntegerAssertion} object.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static IntegerAssertion assertInteger(Integer integer) {
+		return new IntegerAssertion(integer);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param integer The object being wrapped.
+	 * @return A new {@link IntegerAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static IntegerAssertion create(Integer integer) {
+		return new IntegerAssertion(integer);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param integer The object being wrapped.
 	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
+	protected IntegerAssertion(Integer integer) {
+		super(integer, null);
 	}
 
 	@Override
-	protected ThrowableAssertion returns() {
+	protected IntegerAssertion returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public IntegerAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public IntegerAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public IntegerAssertion stdout() {
 		super.stdout();
 		return this;
 	}

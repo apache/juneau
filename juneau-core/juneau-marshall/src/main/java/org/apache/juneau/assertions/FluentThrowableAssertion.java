@@ -15,67 +15,63 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for fluent assertion calls.
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
- * </p>
+ * @param <R> The return type.
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="FluentThrowableAssertion<R>")
+public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
+
+	private final Throwable throwable;
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param throwable The throwable being tested.
+	 * @param returns The object to return after the test.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public FluentThrowableAssertion(Throwable throwable, R returns) {
+		super(returns);
+		this.throwable = throwable;
 	}
 
 	/**
-	 * Creator.
+	 * Asserts that this throwable or any parent throwables contains all of the specified substrings.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param substrings The substrings to check for.
+	 * @return This object (for method chaining).
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param throwable The throwable being wrapped.
-	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
-	}
-
-	@Override
-	protected ThrowableAssertion returns() {
-		return this;
+	public R contains(String...substrings) {
+		for (String substring : substrings) {
+			Throwable e2 = throwable;
+			boolean found = false;
+			while (e2 != null && ! found) {
+				found |= StringUtils.contains(e2.getMessage(), substring);
+				e2 = e2.getCause();
+			}
+			if (! found) {
+				throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, throwable.getMessage());
+			}
+		}
+		return returns();
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public FluentThrowableAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public FluentThrowableAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public FluentThrowableAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.https;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -36,74 +37,74 @@ public class AcceptExtensionsTest {
 
 		accept = Accept.of("text/json");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json", mr);
-		assertTextEquals("text/json", mr.getMediaType());
+		assertString(mr).is("text/json");
+		assertString(mr.getMediaType()).is("text/json");
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
-		assertTextEquals("1.0", mr.getQValue());
+		assertString(mr.getQValue()).is("1.0");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of("foo,bar");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("foo", mr);
-		assertTextEquals("foo", mr.getMediaType());
+		assertString(mr).is("foo");
+		assertString(mr.getMediaType()).is("foo");
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
-		assertTextEquals("1.0", mr.getQValue());
+		assertString(mr.getQValue()).is("1.0");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of(" foo , bar ");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("foo", mr);
-		assertTextEquals("foo", mr.getMediaType());
+		assertString(mr).is("foo");
+		assertString(mr.getMediaType()).is("foo");
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
-		assertTextEquals("1.0", mr.getQValue());
+		assertString(mr.getQValue()).is("1.0");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of("text/json;a=1;q=0.9;b=2");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;a=1;q=0.9;b=2", mr);
-		assertTextEquals("text/json;a=1", mr.getMediaType());
+		assertString(mr).is("text/json;a=1;q=0.9;b=2");
+		assertString(mr.getMediaType()).is("text/json;a=1");
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
-		assertTextEquals("0.9", mr.getQValue());
+		assertString(mr.getQValue()).is("0.9");
 		assertObjectEquals("{b:['2']}", mr.getExtensions());
 
 		accept = Accept.of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;a=1;a=2;q=0.9;b=3;b=4", mr);
-		assertTextEquals("text/json;a=1;a=2", mr.getMediaType());
+		assertString(mr).is("text/json;a=1;a=2;q=0.9;b=3;b=4");
+		assertString(mr.getMediaType()).is("text/json;a=1;a=2");
 		assertObjectEquals("{a:['1','2']}", mr.getMediaType().getParameters());
-		assertTextEquals("0.9", mr.getQValue());
+		assertString(mr.getQValue()).is("0.9");
 		assertObjectEquals("{b:['3','4']}", mr.getExtensions());
 
 		accept = Accept.of("text/json;a=1");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;a=1", mr);
-		assertTextEquals("text/json;a=1", mr.getMediaType());
+		assertString(mr).is("text/json;a=1");
+		assertString(mr.getMediaType()).is("text/json;a=1");
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
-		assertTextEquals("1.0", mr.getQValue());
+		assertString(mr.getQValue()).is("1.0");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of("text/json;a=1;");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;a=1", mr);
-		assertTextEquals("text/json;a=1", mr.getMediaType());
+		assertString(mr).is("text/json;a=1");
+		assertString(mr.getMediaType()).is("text/json;a=1");
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
-		assertTextEquals("1.0", mr.getQValue());
+		assertString(mr.getQValue()).is("1.0");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of("text/json;q=0.9");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;q=0.9", mr);
-		assertTextEquals("text/json", mr.getMediaType());
+		assertString(mr).is("text/json;q=0.9");
+		assertString(mr.getMediaType()).is("text/json");
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
-		assertTextEquals("0.9", mr.getQValue());
+		assertString(mr.getQValue()).is("0.9");
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.of("text/json;q=0.9;");
 		mr = accept.asRanges().get(0);
-		assertTextEquals("text/json;q=0.9", mr);
-		assertTextEquals("text/json", mr.getMediaType());
+		assertString(mr).is("text/json;q=0.9");
+		assertString(mr.getMediaType()).is("text/json");
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
-		assertTextEquals("0.9", mr.getQValue());
+		assertString(mr.getQValue()).is("0.9");
 		assertObjectEquals("{}", mr.getExtensions());
 	}
 

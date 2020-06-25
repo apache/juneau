@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.https;
 
+import static org.apache.juneau.assertions.IntegerAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -19,7 +20,6 @@ import java.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.testutils.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -167,7 +167,7 @@ public class AcceptTest {
 		Accept accept = Accept.of(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		int r = accept.findMatch(mt);
-		TestUtils.assertEquals(expected, r, "{0} failed", label);
+		assertInteger(r).msg("{0} failed", label).is(expected);
 	}
 
 	@Test
@@ -177,6 +177,6 @@ public class AcceptTest {
 		Collections.reverse(Arrays.asList(mt));
 		int r = accept.findMatch(mt);
 		int expected2 = expectedReverse == -1 ? -1 : mt.length-expectedReverse-1;
-		TestUtils.assertEquals(expected2, r, "{0} failed", label);
+		assertInteger(r).msg("{0} failed", label).is(expected2);
 	}
 }

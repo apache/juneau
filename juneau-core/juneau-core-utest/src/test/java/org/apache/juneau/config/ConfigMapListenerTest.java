@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -55,7 +56,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("foo = baz|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("foo = baz|");
 	}
 
 	@Test
@@ -82,7 +83,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("[S1]|foo = baz|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|foo = baz|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,7 +113,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("k = vb|[S1]|k1 = v1b|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = vb|[S1]|k1 = v1b|");
 	}
 
 	@Test
@@ -138,7 +139,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#k|k^* = kb # C|[S1]|#k1|k1^* = k1b # C1|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#k|k^* = kb # C|[S1]|#k1|k1^* = k1b # C1|");
 	}
 
 	@Test
@@ -170,7 +171,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#kb|k^* = kb # Cb|#S1|[S1]|#k1b|k1^* = k1b # Cb1|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#kb|k^* = kb # Cb|#S1|[S1]|#k1b|k1^* = k1b # Cb1|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -203,7 +204,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("[S1]|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|");
 	}
 
 	@Test
@@ -235,7 +236,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#S1|[S1]|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#S1|[S1]|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -268,7 +269,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#D1||#S1|[S1]|[S2]|[S3]|k3 = v3|");
 	}
 
 	@Test
@@ -303,7 +304,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#Db||#S1b|[S1]|[S2]|[S3]|k3 = v3|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -347,7 +348,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -387,7 +388,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#Da||k = v # cv||#S1|[S1]|#k1|k1 = v1 # cv1|[S2]|#k2|k2 = v2 # cv2|[S3]|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -425,7 +426,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("[S1]|k1 = v1b|[S2]|k2 = v2b|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|[S2]|k2 = v2b|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -463,7 +464,7 @@ public class ConfigMapListenerTest {
 		assertNull(l.error);
 		cm.unregister(l);
 
-		assertTextEquals("[S1]|k1 = v1c|", cm.toString());
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -506,7 +507,7 @@ public class ConfigMapListenerTest {
 			assertNull(l.error);
 			cm.unregister(l);
 
-			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
+			assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
 
 		} finally {
 			s.close();
@@ -557,7 +558,7 @@ public class ConfigMapListenerTest {
 			assertNull(l.error);
 			cm.unregister(l);
 
-			assertTextEquals("[S1]|k1 = v1c|", cm.toString());
+			assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1c|");
 
 		} finally {
 			s.close();

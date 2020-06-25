@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.io.*;
@@ -373,7 +374,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['foo','bar']", parse(s, "foo,bar", List.class, Object.class));
 		Object o = parse(s, "foo,bar", Object.class);
 		assertObjectEquals("['foo','bar']", o);
-		assertClass(OList.class, o);
+		assertObject(o).instanceOf(OList.class);
 		assertObjectEquals("['C2-foo','C2-bar']", parse(s, "foo,bar", C2[].class));
 		assertObjectEquals("['C2-foo','C2-bar']", parse(s, "foo,bar", List.class, C2.class));
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
@@ -390,7 +391,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[['foo','bar'],['baz']]", parse(s, "foo,bar|baz", List.class, List.class, Object.class));
 		Object o = parse(s, "foo,bar|baz", Object.class);
 		assertObjectEquals("[['foo','bar'],['baz']]", o);
-		assertClass(OList.class, o);
+		assertObject(o).instanceOf(OList.class);
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", parse(s, "foo,bar|baz", C2[][].class));
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", parse(s, "foo,bar|baz", List.class, C2[].class));
 		assertObjectEquals("[['C2-foo','C2-bar'],['C2-baz']]", parse(s, "foo,bar|baz", List.class, List.class, C2.class));
@@ -733,7 +734,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("'1'", parse(s, "1", String.class));
 		Object o = parse(s, "1", Object.class);
 		assertObjectEquals("1", o);
-		assertClass(Integer.class, o);
+		assertObject(o).instanceOf(Integer.class);
 		assertObjectEquals("'F1-1'", parse(s,  "1", F1.class));
 	}
 
@@ -801,7 +802,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("'1'", parse(s, "1", String.class));
 		Object o = parse(s, "1", Object.class);
 		assertObjectEquals("1", o);
-		assertClass(Long.class, o);
+		assertObject(o).instanceOf(Long.class);
 		assertObjectEquals("1", parse(s,  "1", F3.class));
 	}
 
@@ -914,7 +915,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("'1.0'", parse(s, "1", String.class));
 		Object o =  parse(s, "1", Object.class);
 		assertObjectEquals("1.0",o);
-		assertClass(Float.class, o);
+		assertObject(o).instanceOf(Float.class);
 		assertObjectEquals("1.0", parse(s,  "1", G1.class));
 	}
 
@@ -972,7 +973,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("'1.0'", parse(s, "1", String.class));
 		Object o = parse(s, "1", Object.class);
 		assertObjectEquals("1.0", o);
-		assertClass(Double.class, o);
+		assertObject(o).instanceOf(Double.class);
 		assertObjectEquals("1.0", parse(s,  "1", G3.class));
 	}
 
@@ -1036,7 +1037,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("{f:'1'}", parse(s, "f=1", OMap.class));
 		Object o = parse(s, "f=1", Object.class);
 		assertObjectEquals("{f:'1'}", o);
-		assertClass(OMap.class, o);
+		assertObject(o).instanceOf(OMap.class);
 	}
 
 	@Test
@@ -1050,7 +1051,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[{f:1},{f:2}]", parse(s, "@((f=1),(f=2))", List.class, Object.class));
 		Object o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertObjectEquals("[{f:1},{f:2}]", o);
-		assertClass(OList.class, o);
+		assertObject(o).instanceOf(OList.class);
 	}
 
 	@Test
@@ -1067,7 +1068,7 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
 		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", o);
-		assertClass(OList.class, o);
+		assertObject(o).instanceOf(OList.class);
 	}
 
 	public static class H2 {
@@ -1096,48 +1097,48 @@ public class OpenApiPartParserTest {
 
 		H2 h2 = parse(s, in, H2.class);
 		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
-		assertClass(String.class, h2.f01);
-		assertClass(byte[].class, h2.f02);
-		assertClass(GregorianCalendar.class, h2.f04);
-		assertClass(byte[].class, h2.f05);
-		assertClass(byte[].class, h2.f06);
-		assertClass(String.class, h2.f07);
-		assertClass(Integer.class, h2.f08);
-		assertClass(Long.class, h2.f09);
-		assertClass(Float.class, h2.f10);
-		assertClass(Double.class, h2.f11);
-		assertClass(Boolean.class, h2.f12);
-		assertClass(Integer.class, h2.f99);
+		assertObject(h2.f01).instanceOf(String.class);
+		assertObject(h2.f02).instanceOf(byte[].class);
+		assertObject(h2.f04).instanceOf(GregorianCalendar.class);
+		assertObject(h2.f05).instanceOf(byte[].class);
+		assertObject(h2.f06).instanceOf(byte[].class);
+		assertObject(h2.f07).instanceOf(String.class);
+		assertObject(h2.f08).instanceOf(Integer.class);
+		assertObject(h2.f09).instanceOf(Long.class);
+		assertObject(h2.f10).instanceOf(Float.class);
+		assertObject(h2.f11).instanceOf(Double.class);
+		assertObject(h2.f12).instanceOf(Boolean.class);
+		assertObject(h2.f99).instanceOf(Integer.class);
 
 		OMap om = parse(s, in, OMap.class);
 		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-		assertClass(String.class, om.get("f01"));
-		assertClass(byte[].class, om.get("f02"));
-		assertClass(GregorianCalendar.class, om.get("f04"));
-		assertClass(byte[].class, om.get("f05"));
-		assertClass(byte[].class, om.get("f06"));
-		assertClass(String.class, om.get("f07"));
-		assertClass(Integer.class, om.get("f08"));
-		assertClass(Long.class, om.get("f09"));
-		assertClass(Float.class, om.get("f10"));
-		assertClass(Double.class, om.get("f11"));
-		assertClass(Boolean.class, om.get("f12"));
-		assertClass(Integer.class, om.get("f99"));
+		assertObject(om.get("f01")).instanceOf(String.class);
+		assertObject(om.get("f02")).instanceOf(byte[].class);
+		assertObject(om.get("f04")).instanceOf(GregorianCalendar.class);
+		assertObject(om.get("f05")).instanceOf(byte[].class);
+		assertObject(om.get("f06")).instanceOf(byte[].class);
+		assertObject(om.get("f07")).instanceOf(String.class);
+		assertObject(om.get("f08")).instanceOf(Integer.class);
+		assertObject(om.get("f09")).instanceOf(Long.class);
+		assertObject(om.get("f10")).instanceOf(Float.class);
+		assertObject(om.get("f11")).instanceOf(Double.class);
+		assertObject(om.get("f12")).instanceOf(Boolean.class);
+		assertObject(om.get("f99")).instanceOf(Integer.class);
 
 		om = (OMap)parse(s, in, Object.class);
 		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-		assertClass(String.class, om.get("f01"));
-		assertClass(byte[].class, om.get("f02"));
-		assertClass(GregorianCalendar.class, om.get("f04"));
-		assertClass(byte[].class, om.get("f05"));
-		assertClass(byte[].class, om.get("f06"));
-		assertClass(String.class, om.get("f07"));
-		assertClass(Integer.class, om.get("f08"));
-		assertClass(Long.class, om.get("f09"));
-		assertClass(Float.class, om.get("f10"));
-		assertClass(Double.class, om.get("f11"));
-		assertClass(Boolean.class, om.get("f12"));
-		assertClass(Integer.class, om.get("f99"));
+		assertObject(om.get("f01")).instanceOf(String.class);
+		assertObject(om.get("f02")).instanceOf(byte[].class);
+		assertObject(om.get("f04")).instanceOf(GregorianCalendar.class);
+		assertObject(om.get("f05")).instanceOf(byte[].class);
+		assertObject(om.get("f06")).instanceOf(byte[].class);
+		assertObject(om.get("f07")).instanceOf(String.class);
+		assertObject(om.get("f08")).instanceOf(Integer.class);
+		assertObject(om.get("f09")).instanceOf(Long.class);
+		assertObject(om.get("f10")).instanceOf(Float.class);
+		assertObject(om.get("f11")).instanceOf(Double.class);
+		assertObject(om.get("f12")).instanceOf(Boolean.class);
+		assertObject(om.get("f99")).instanceOf(Integer.class);
 	}
 
 	@Test

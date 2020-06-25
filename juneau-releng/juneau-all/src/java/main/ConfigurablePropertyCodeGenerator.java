@@ -161,13 +161,23 @@ public class ConfigurablePropertyCodeGenerator {
 		BeanSessionArgs.class,
 		SerializerSessionArgs.class,
 		ParserSessionArgs.class,
+
 		Assertion.class,
 		FluentAssertion.class,
 		FluentDateAssertion.class,
 		FluentIntegerAssertion.class,
 		FluentLongAssertion.class,
 		FluentStringAssertion.class,
+		FluentThrowableAssertion.class,
+		FluentObjectAssertion.class,
+
+		DateAssertion.class,
+		IntegerAssertion.class,
+		LongAssertion.class,
+		StringAssertion.class,
 		ThrowableAssertion.class,
+		ObjectAssertion.class,
+
 		ReaderResourceBuilder.class,
 		StreamResourceBuilder.class,
 		ResolvingResourceReaderBuilder.class,

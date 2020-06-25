@@ -14,7 +14,7 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -995,61 +995,73 @@ public class UriContextResolutionComboTest {
 
 	@Test
 	public void a01_testAbsoluteResource() {
-		assertEquals(r.aResource, UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.aResource);
 	}
 
 	@Test
 	public void a02_testAppendAbsoluteResource() {
-		assertEquals(r.aResource, UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.aResource);
 	}
 
 	@Test
 	public void a03_testAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.aPathInfo);
 	}
 
 	@Test
 	public void a04_testAppendAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.aPathInfo);
 	}
 
 	@Test
 	public void a05_testRootRelativeResource() {
-		assertEquals(r.rrResource, UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.rrResource);
 	}
 
 	@Test
 	public void a06_testAppendRootRelativeResource() {
-		assertEquals(r.rrResource, UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.rrResource);
 	}
 
 	@Test
 	public void a07_testRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.rrPathInfo);
 	}
 
 	@Test
 	public void a08_testAppendRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.rrPathInfo);
 	}
 
 	@Test
 	public void a09_testNoneResource() {
-		assertEquals(r.nResource, UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.nResource);
 	}
 
 	@Test
 	public void a10_testAppendNoneResource() {
-		assertEquals(r.nResource, UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(NONE, RESOURCE, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.nResource);
 	}
 
 	@Test
 	public void a11_testNonePathInfo() {
-		assertEquals(r.nPathInfo, UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		String x = UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).resolve(in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.nPathInfo);
 	}
 
 	@Test
 	public void a12_testAppendNonePathInfo() {
-		assertEquals(r.nPathInfo, UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		Appendable x = UriResolver.of(NONE, PATH_INFO, UriContext.of(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri);
+		assertString(x).msg("{0}: testAbsolute() failed", label).is(r.nPathInfo);
 	}
 }

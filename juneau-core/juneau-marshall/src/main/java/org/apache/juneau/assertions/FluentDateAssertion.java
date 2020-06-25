@@ -29,6 +29,7 @@ import org.apache.juneau.internal.*;
  * 		.run()
  * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
  * </p>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentDateAssertion<R>")

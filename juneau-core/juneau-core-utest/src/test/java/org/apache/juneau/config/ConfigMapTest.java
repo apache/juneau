@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -64,7 +64,7 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("foo=bar|");
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("", join(cm.getEntry("", "foo").getPreLines(), '|'));
@@ -74,7 +74,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("foo=bar|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("#comment|foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#comment|foo=bar|");
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("#comment", join(cm.getEntry("", "foo").getPreLines(), '|'));
@@ -98,7 +98,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("#comment|foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#comment|foo=bar|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("[MySection]|foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("", join(cm.getPreLines("MySection"), '|'));
@@ -123,7 +123,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("[MySection]|foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("[MySection]|foo=bar|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[MySection]|foo=bar|");
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 
@@ -163,7 +163,7 @@ public class ConfigMapTest {
 			"k2=v2"
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
-		assertTextEquals("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|");
 
 		assertEquals("", join(cm.getPreLines(""), '|'));
 		assertEquals("#S1", join(cm.getPreLines("S1"), '|'));
@@ -177,7 +177,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#S1|[S1]|#k1|k1=v1|#S2|[S2]|#k2|k2=v2|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -196,7 +196,7 @@ public class ConfigMapTest {
 			"k1=v1"
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
-		assertTextEquals("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|");
 
 		assertEquals("#D", join(cm.getPreLines(""), '|'));
 		assertEquals("#k", join(cm.getEntry("", "k").getPreLines(), '|'));
@@ -209,7 +209,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#D||#k|k=v|#S1|[S1]|#k1|k1=v1|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ public class ConfigMapTest {
 			"k1=v1"
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
-		assertTextEquals("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|");
 
 		assertEquals("#Da|#Db", join(cm.getPreLines(""), '|'));
 		assertEquals("#ka||#kb|", join(cm.getEntry("", "k").getPreLines(), '|'));
@@ -253,7 +253,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#Da|#Db||#ka||#kb||k=v||#S1a||#S1b||[S1]||#k1a||#k1b||k1=v1|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@ public class ConfigMapTest {
 		assertEquals("", join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
-		assertTextEquals("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
@@ -328,7 +328,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
 	}
 
 	@Test
@@ -352,7 +352,7 @@ public class ConfigMapTest {
 		assertEquals("|#k1|", join(cm.getEntry("", "k1").getPreLines(), '|'));
 		assertEquals("|#k2|", join(cm.getEntry("", "k2").getPreLines(), '|'));
 
-		assertTextEquals("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("", "k2").getValue());
@@ -360,7 +360,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
 	}
 
 	@Test
@@ -379,7 +379,7 @@ public class ConfigMapTest {
 		assertEquals("", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
-		assertTextEquals("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("S1", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("S1", "k2").getValue());
@@ -387,7 +387,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1a,|\tv1b,|\tv1c|k2 = v2a,|\tv2b,|\tv2c|");
 	}
 
 	@Test
@@ -416,7 +416,7 @@ public class ConfigMapTest {
 		assertEquals("|#k1|", join(cm.getEntry("S1", "k1").getPreLines(), '|'));
 		assertEquals("|#k2|", join(cm.getEntry("S1", "k2").getPreLines(), '|'));
 
-		assertTextEquals("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
 
 		assertEquals("v1a,\nv1b,\nv1c", cm.getEntry("S1", "k1").getValue());
 		assertEquals("v2a,\nv2b,\nv2c", cm.getEntry("S1", "k2").getValue());
@@ -424,7 +424,7 @@ public class ConfigMapTest {
 		// Round trip.
 		s.update("Foo.cfg", cm.toString());
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1a,|	v1b,|	v1c||#k2||k2 = v2a,|	v2b,|	v2c|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -438,22 +438,22 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("[S1]|k1 = foo # comment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo # comment|");
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("comment", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, "newcomment", null);
-		assertTextEquals("[S1]|k1 = foo # newcomment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo # newcomment|");
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("newcomment", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, "", null);
-		assertTextEquals("[S1]|k1 = foo|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo|");
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertTextEquals("[S1]|k1 = foo|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo|");
 		assertEquals("foo", cm.getEntry("S1", "k1").getValue());
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 	}
@@ -466,7 +466,7 @@ public class ConfigMapTest {
 			"k2 = foo # "
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
-		assertTextEquals("[S1]|k1 = foo#|k2 = foo # |", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo#|k2 = foo # |");
 		assertEquals("", cm.getEntry("S1", "k1").getComment());
 		assertEquals("", cm.getEntry("S1", "k2").getComment());
 	}
@@ -480,7 +480,7 @@ public class ConfigMapTest {
 			"k3 = foo \\# bar # real-comment"
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
-		assertTextEquals("[S1]|k1 = foo\\#bar|k2 = foo \\# bar|k3 = foo \\# bar # real-comment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = foo\\#bar|k2 = foo \\# bar|k3 = foo \\# bar # real-comment|");
 
 		assertEquals(null, cm.getEntry("S1", "k1").getComment());
 		assertEquals(null, cm.getEntry("S1", "k2").getComment());
@@ -503,14 +503,14 @@ public class ConfigMapTest {
 		cm.setEntry("S1", "k2", null, null, null, null);
 		cm.setEntry("S1", "k3", "v3b", null, null, null);
 
-		assertTextEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
 
 		cm.commit();
-		assertTextEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", s.read("Foo.cfg"));
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
 
 		// Round trip.
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1b|k2 = v2a|k3 = v3b|");
 	}
 
 	@Test
@@ -536,14 +536,14 @@ public class ConfigMapTest {
 		cm.setEntry("S1", "k3", "v3b", null, null, null);
 		cm.setEntry("S1", "k4", "v4b", null, null, Arrays.asList("","#k4",""));
 
-		assertTextEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
 
 		cm.commit();
-		assertTextEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", s.read("Foo.cfg"));
+		assertString(s.read("Foo.cfg")).replaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
 
 		// Round trip.
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|");
 	}
 
 	@Test
@@ -554,16 +554,16 @@ public class ConfigMapTest {
 		cm.setEntry("", "k", "v1\nv2\nv3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\nv2\nv3", null, null, null);
 
-		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
 
 		assertEquals("v1\nv2\nv3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\nv2\nv3", cm.getEntry("S1", "k1").getValue());
 		cm.commit();
-		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
 
 		// Round trip.
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1|	v2|	v3|[S1]|k1 = v1|	v2|	v3|");
 	}
 
 	@Test
@@ -574,16 +574,16 @@ public class ConfigMapTest {
 		cm.setEntry("", "k", "v1 \n v2 \n v3", null, null, null);
 		cm.setEntry("S1", "k1", "v1\t\n\tv2\t\n\tv3", null, null, null);
 
-		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
 
 		assertEquals("v1 \n v2 \n v3", cm.getEntry("", "k").getValue());
 		assertEquals("v1\t\n\tv2\t\n\tv3", cm.getEntry("S1", "k1").getValue());
 		cm.commit();
-		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
 
 		// Round trip.
 		cm = s.getMap("Foo.cfg");
-		assertTextEquals("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("k = v1 |	 v2 |	 v3|[S1]|k1 = v1	|		v2	|		v3|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -598,11 +598,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setSection("S1", Arrays.asList("#S1"));
-		assertTextEquals("#S1|[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#S1|[S1]|k1 = v1|");
 		cm.setSection("S1", Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setSection("S1", null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -614,11 +614,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setSection("", Arrays.asList("#D"));
-		assertTextEquals("#D||[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("#D||[S1]|k1 = v1|");
 		cm.setSection("", Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setSection("", null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -630,11 +630,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setSection("S2", Arrays.asList("#S2"));
-		assertTextEquals("[S1]|k1 = v1|#S2|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|");
 		cm.setSection("S3", Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|#S2|[S2]|[S3]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|[S3]|");
 		cm.setSection("S4", null);
-		assertTextEquals("[S1]|k1 = v1|#S2|[S2]|[S3]|[S4]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|#S2|[S2]|[S3]|[S4]|");
 	}
 
 	@Test
@@ -695,7 +695,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.removeSection("S1");
-		assertTextEquals("[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S2]|k2 = v2|");
 	}
 
 	@Test
@@ -710,7 +710,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.removeSection("S3");
-		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 
 		try {
 			cm.removeSection(null);
@@ -733,7 +733,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.removeSection("");
-		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 	}
 
 	@Test
@@ -752,7 +752,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.removeSection("");
-		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -767,11 +767,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1"));
-		assertTextEquals("[S1]|#k1|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v1|");
 		cm.setEntry("S1", "k1", null, null, null, Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -784,7 +784,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1b"));
-		assertTextEquals("[S1]|#k1b|k1 = v1 # comment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1 = v1 # comment|");
 	}
 
 	@Test
@@ -796,18 +796,18 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k2", null, null, null, Arrays.asList("#k2"));
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setEntry("S1", "k2", null, null, null, Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 
 		cm.setEntry("S2", "k2", null, null, null, Arrays.asList("#k2"));
-		assertTextEquals("[S1]|k1 = v1|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
 		cm.setEntry("S2", "k2", null, null, null, Collections.<String>emptyList());
-		assertTextEquals("[S1]|k1 = v1|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
 		cm.setEntry("S2", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -822,7 +822,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v2|");
 	}
 
 	@Test
@@ -835,7 +835,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertTextEquals("[S1]|#k1|k1 = v2 # comment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v2 # comment|");
 	}
 
 	@Test
@@ -847,7 +847,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -859,11 +859,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
 	}
 
 	@Test
@@ -875,7 +875,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 	}
 
 	@Test
@@ -936,7 +936,7 @@ public class ConfigMapTest {
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertTextEquals("[S1]|k1 = v1 \\u0023 foo|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 \\u0023 foo|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -951,15 +951,15 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c1", null);
-		assertTextEquals("[S1]|k1 = v1 # c1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 # c1|");
 
 		cm.setEntry("S1", "k1", null, null, "", null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.commit();
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -972,7 +972,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, "c2", null);
-		assertTextEquals("[S1]|#k1a|k1 = v1 # c2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1 = v1 # c2|");
 	}
 
 	@Test
@@ -984,14 +984,14 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k2", null, null, "foo", null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 
 		cm.setEntry("S2", "k2", null, null, "foo", null);
-		assertTextEquals("[S1]|k1 = v1|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
 		cm.setEntry("S2", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|[S2]|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1006,13 +1006,13 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v2|");
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertTextEquals("[S1]|#k1a|k1* = v3 # c3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1* = v3 # c3|");
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertTextEquals("[S1]|#k1b|k1^ = v4 # c4|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1^ = v4 # c4|");
 	}
 
 	@Test
@@ -1025,13 +1025,13 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", "v2", null, null, null);
-		assertTextEquals("[S1]|#k1|k1 = v2 # comment|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1|k1 = v2 # comment|");
 
 		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
-		assertTextEquals("[S1]|#k1a|k1* = v3 # c3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1a|k1* = v3 # c3|");
 
 		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
-		assertTextEquals("[S1]|#k1b|k1^ = v4 # c4|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|#k1b|k1^ = v4 # c4|");
 	}
 
 	@Test
@@ -1043,7 +1043,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k1", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|");
 	}
 
 	@Test
@@ -1055,11 +1055,11 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S1", "k2", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
 		cm.setEntry("S1", "k2", null, null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = v2|");
 		cm.setEntry("S1", "k2", "", null, null, null);
-		assertTextEquals("[S1]|k1 = v1|k2 = |", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|k2 = |");
 	}
 
 	@Test
@@ -1071,7 +1071,7 @@ public class ConfigMapTest {
 		ConfigMap cm = s.getMap("Foo.cfg");
 
 		cm.setEntry("S2", "k2", "v2", null, null, null);
-		assertTextEquals("[S1]|k1 = v1|[S2]|k2 = v2|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 	}
 
 	@Test
@@ -1132,7 +1132,7 @@ public class ConfigMapTest {
 
 		// If value has # in it, it should get escaped.
 		cm.setEntry("S1", "k1", "v1 # foo", null, null, null);
-		assertTextEquals("[S1]|k1 = v1 \\u0023 foo|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1 \\u0023 foo|");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1148,7 +1148,7 @@ public class ConfigMapTest {
 		);
 		ConfigMap cm = s.getMap("Foo.cfg");
 
-		assertTextEquals("[S1]|k1^ = v1|k2* = v2|k3*^ = v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1^ = v1|k2* = v2|k3*^ = v3|");
 		assertTrue(cm.getEntry("S1", "k1").hasModifier('^'));
 		assertFalse(cm.getEntry("S1", "k1").hasModifier('*'));
 		assertFalse(cm.getEntry("S1", "k2").hasModifier('^'));
@@ -1157,7 +1157,7 @@ public class ConfigMapTest {
 		assertTrue(cm.getEntry("S1", "k3").hasModifier('*'));
 
 		cm.setEntry("S1", "k1", "v1", "#$%&*+^@~", null, null);
-		assertTextEquals("[S1]|k1#$%&*+^@~ = v1|k2* = v2|k3*^ = v3|", cm);
+		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1#$%&*+^@~ = v1|k2* = v2|k3*^ = v3|");
 	}
 
 	@Test

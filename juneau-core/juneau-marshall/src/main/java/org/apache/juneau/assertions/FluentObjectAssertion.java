@@ -13,69 +13,61 @@
 package org.apache.juneau.assertions;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for fluent assertion calls.
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
- * </p>
+ * @param <R> The return type.
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="FluentObjectAssertion<R>")
+public class FluentObjectAssertion<R> extends FluentAssertion<R> {
+
+	@SuppressWarnings("unused")
+	private final Object o;
 
 	/**
-	 * Creator.
+	 * Constructor.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param o The object being tested.
+	 * @param returns The object to return after the test.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public FluentObjectAssertion(Object o, R returns) {
+		super(returns);
+		this.o = o;
 	}
 
 	/**
-	 * Creator.
+	 * Asserts that the value equals the specified value.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param parent The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param throwable The throwable being wrapped.
-	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
-	}
-
-	@Override
-	protected ThrowableAssertion returns() {
-		return this;
+	public R instanceOf(Class<?> parent) throws AssertionError {
+		if (o == null && parent == null)
+			return returns();
+		if (o == null && parent != null || o != null && parent == null || ! ClassInfo.of(o).isChildOf(parent))
+			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", StringUtils.stringify(parent), o == null ? null : o.getClass());
+		return returns();
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public FluentObjectAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public FluentObjectAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public FluentObjectAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}

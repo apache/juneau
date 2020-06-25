@@ -29,6 +29,7 @@ import org.apache.juneau.marshall.*;
  * 		.run()
  * 		.assertStatus().isAny(200,404);
  * </p>
+ *
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentIntegerAssertion<R>")

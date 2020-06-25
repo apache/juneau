@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -102,7 +103,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
 
-		assertTextEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
 	}
 
 	//====================================================================================================
@@ -144,7 +145,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2"));
 		assertEquals("7", c.get("T/c1"));
 
-		assertTextEquals("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
 	}
 
 	//====================================================================================================
@@ -185,11 +186,11 @@ public class ConfigTest {
 		c.set("S/b2", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 		c.set("T/c1", b, UonSerializer.DEFAULT, ENCODED, "comment", Arrays.asList("#c1","#c2"));
 
-		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
 		c.commit();
-		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
 		c = cb.build();
-		assertTextEquals("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1* = {RhMWWFIFVksf} # comment|#c1|#c2|a2* = {RhMWWFIFVksf} # comment|#c1|#c2|a3* = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1* = {RhMWWFIFVksf} # comment|#c1|#c2|b2* = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1* = {RhMWWFIFVksf} # comment|");
 
 		assertEquals("(foo=bar)", c.get("a1"));
 		assertEquals("(foo=bar)", c.get("a2"));
@@ -212,11 +213,11 @@ public class ConfigTest {
 		c.remove("S/b1");
 		c.remove("T/c1");
 
-		assertTextEquals("[S]|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
 		c.commit();
-		assertTextEquals("[S]|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
 		c = cb.build();
-		assertTextEquals("[S]|", c.toString());
+		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
 	}
 
 	//====================================================================================================
@@ -1098,19 +1099,19 @@ public class ConfigTest {
 		Config c = init();
 
 		c.setSection("", Arrays.asList("#C1", "#C2"));
-		assertTextEquals("#C1|#C2||", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C1|#C2||");
 
 		c.setSection("", Arrays.asList("#C3", "#C4"));
-		assertTextEquals("#C3|#C4||", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||");
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
-		assertTextEquals("#C3|#C4|||#C5|#C6|[S1]|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
 
 		c.setSection("S1", null);
-		assertTextEquals("#C3|#C4|||#C5|#C6|[S1]|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
 
 		c.setSection("S1", Collections.<String>emptyList());
-		assertTextEquals("#C3|#C4||[S1]|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
 		try {
 			c.setSection(null, Arrays.asList("", "#C5", "#C6"));
@@ -1129,19 +1130,19 @@ public class ConfigTest {
 		OMap m = OMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
-		assertTextEquals("#C1|#C2||a = b|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C1|#C2||a = b|");
 
 		c.setSection("", Arrays.asList("#C3", "#C4"), m);
-		assertTextEquals("#C3|#C4||a = b|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|");
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
-		assertTextEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
 
 		c.setSection("S1", null, m);
-		assertTextEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
 
 		c.setSection("S1", Collections.<String>emptyList(), m);
-		assertTextEquals("#C3|#C4||a = b|[S1]|a = b|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
 		try {
 			c.setSection(null, Arrays.asList("", "#C5", "#C6"), m);
@@ -1161,10 +1162,10 @@ public class ConfigTest {
 		c.removeSection("S");
 		c.removeSection("T");
 
-		assertTextEquals("a=1|", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("a=1|");
 
 		c.removeSection("");
-		assertTextEquals("", c);
+		assertString(c).replaceAll("\\r?\\n", "|").is("");
 	}
 
 	//====================================================================================================
@@ -1174,7 +1175,7 @@ public class ConfigTest {
 	public void writeTo() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
-		assertTextEquals("a=1|[S]|b=2|c=|[T]|", c.writeTo(new StringWriter()).toString());
+		assertString(c.writeTo(new StringWriter())).replaceAll("\\r?\\n", "|").is("a=1|[S]|b=2|c=|[T]|");
 	}
 
 	//====================================================================================================
@@ -1257,9 +1258,8 @@ public class ConfigTest {
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
 		cf.commit();
-		String expected = "[s1]||foo* = {AwwJVhwUQFZEMg==}|";
 
-		assertTextEquals(expected, cf);
+		assertString(cf).replaceAll("\\r?\\n", "|").is("[s1]||foo* = {AwwJVhwUQFZEMg==}|");
 
 		assertEquals("mypassword", cf.getString("s1/foo"));
 
@@ -1272,8 +1272,7 @@ public class ConfigTest {
 		// INI output should be encoded
 		StringWriter sw = new StringWriter();
 		cf.writeTo(new PrintWriter(sw));
-		expected = "[s1]|foo* = {AwwJVhwUQFZEMg==}|";
-		assertTextEquals(expected, sw);
+		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|foo* = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1287,8 +1286,7 @@ public class ConfigTest {
 
 		cf.encodeEntries();
 		cf.commit();
-		String expected = "[s1]||foo* = {AwwJVhwUQFZEMg==}|";
-		assertTextEquals(expected, ConfigMemoryStore.DEFAULT.read("Test.cfg"));
+		assertString(ConfigMemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo* = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1389,8 +1387,7 @@ public class ConfigTest {
 
 		StringWriter sw = new StringWriter();
 		cf.writeTo(sw);
-		String expected = "[s1]|f1 = x |\ty |\tz|";
-		assertTextEquals(expected, sw);
+		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|f1 = x |\ty |\tz|");
 	}
 
 	//====================================================================================================
@@ -1613,7 +1610,7 @@ public class ConfigTest {
 
 		StringWriter sw = new StringWriter();
 		cf.writeTo(sw);
-		assertTextEquals("a = b|", sw);
+		assertString(sw).replaceAll("\\r?\\n", "|").is("a = b|");
 
 		assertEquals("text/plain", cf.getContentType().toString());
 	}
@@ -1703,15 +1700,15 @@ public class ConfigTest {
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
 
-		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
+		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
 		cf.commit();
-		assertTextEquals("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|", cf);
+		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
 
 		assertEquals("a,#b,=c", cf.getString("a"));
 		assertEquals("a,#b,=c", cf.getString("A/a"));
 
 		cf.set("a", "a,#b,=c", null, (ConfigMod)null, "comment#comment", null);
-		assertTextEquals("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|", cf);
+		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|");
 		assertEquals("a,#b,=c", cf.getString("a"));
 	}
 

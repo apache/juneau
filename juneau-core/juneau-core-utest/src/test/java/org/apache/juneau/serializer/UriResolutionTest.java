@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -567,7 +568,7 @@ public class UriResolutionTest {
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName());
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName());
+				assertString(r).msg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
 
 		} catch (AssertionError e) {
 			throw e;
@@ -584,7 +585,7 @@ public class UriResolutionTest {
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
 
 			String r2 = SimpleJsonSerializer.DEFAULT.toString(m);
-			TestUtils.assertEquals(results.json, r2, "{0}/{1} parse failed", label, s.getClass().getSimpleName());
+			assertString(results.json).msg("{0}/{1} parse failed", label, s.getClass().getSimpleName()).is(r2);
 
 		} catch (AssertionError e) {
 			throw e;

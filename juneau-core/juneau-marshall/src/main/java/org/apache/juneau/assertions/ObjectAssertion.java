@@ -15,67 +15,67 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against throwable objects.
+ * Used for assertion calls against arbitrary POJOs.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+ * 	<jc>// Validates the specified POJO is the specified type.</jc>
+ * 	<jsm>assertObject</jsm>(myPojo).instanceOf(MyBean.<jk>class</jk>);
  * </p>
  */
-@FluentSetters(returns="ThrowableAssertion")
-public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssertion> {
+@FluentSetters(returns="ObjectAssertion")
+public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param object The object being wrapped.
+	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static ObjectAssertion assertObject(Object object) {
+		return new ObjectAssertion(object);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
+	 * @param object The object being wrapped.
+	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static ObjectAssertion create(Object object) {
+		return new ObjectAssertion(object);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param object The object being wrapped.
 	 */
-	protected ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
+	protected ObjectAssertion(Object object) {
+		super(object, null);
 	}
 
 	@Override
-	protected ThrowableAssertion returns() {
+	protected ObjectAssertion returns() {
 		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion msg(String msg, Object...args) {
+	public ObjectAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stderr() {
+	public ObjectAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public ThrowableAssertion stdout() {
+	public ObjectAssertion stdout() {
 		super.stdout();
 		return this;
 	}

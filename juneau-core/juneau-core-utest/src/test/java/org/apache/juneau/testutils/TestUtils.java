@@ -322,14 +322,6 @@ public class TestUtils {
 			throw new ComparisonFailure(null, s, o2);
 	}
 
-	/**
-	 * Replaces all newlines with pipes, then compares the strings.
-	 */
-	public static final void assertTextEquals(String s, Object o) {
-		String s2 = o.toString().replaceAll("\\r?\\n", "|");
-		Assert.assertEquals(s, s2);
-	}
-
 	public static final String toReadableBytes(byte[] b) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b2 : b)
@@ -403,16 +395,6 @@ public class TestUtils {
 	}
 
 	/**
-	 * Same as {@link Assert#assertEquals(String,String,String) except takes in a MessageFormat-style message.
-	 */
-	public static final void assertEquals(Object expected, Object actual, String msg, Object...args) {
-		if ("xxx".equals(expected))
-			System.err.println("actual=["+actual+"]");  // NOT DEBUG
-		if (! isEquals(expected, actual))
-			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
-	}
-
-	/**
 	 * Creates a ClassMeta for the given types.
 	 */
 	public static final Type getType(Type type, Type...args) {
@@ -462,20 +444,5 @@ public class TestUtils {
 		if (o != null)
 			return null;
 		return StringUtils.format("Expected non null value but was null");
-	}
-
-	/**
-	 * Assert that the object is an instance of the specified class.
-	 */
-	public static final void assertClass(Class<?> c, Object o) {
-		Assert.assertEquals(c, o == null ? null : o.getClass());
-	}
-
-	private static boolean isEquals(Object o1, Object o2) {
-		if (o1 == null)
-			return o2 == null;
-		if (o2 == null)
-			return false;
-		return o1.equals(o2);
 	}
 }
