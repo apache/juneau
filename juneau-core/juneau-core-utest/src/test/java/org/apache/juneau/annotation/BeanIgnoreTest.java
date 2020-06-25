@@ -13,7 +13,6 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.json.*;
@@ -68,7 +67,7 @@ public class BeanIgnoreTest {
 
 	@Test
 	public void testBeanIgnoreOnProperties_usingConfig() throws Exception {
-		assertObjectEquals("{c:'c',a:'a'}", new Ac(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ac.class).build());
+		assertObject(new Ac()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ac.class).build()).is("{c:'c',a:'a'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -120,7 +119,7 @@ public class BeanIgnoreTest {
 
 	@Test
 	public void testBeanIgnoreOnBean_usingConfig() throws Exception {
-		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new Bc(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1c.class).build());
+		assertObject(new Bc()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B1c.class).build()).is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 }
 

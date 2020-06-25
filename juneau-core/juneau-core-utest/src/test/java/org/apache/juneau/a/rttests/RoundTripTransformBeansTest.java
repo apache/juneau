@@ -14,7 +14,6 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.DateUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -545,7 +544,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F1c.class);
-		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x, s);
+		assertObject(x).serialized(s).is("{c:'2018-12-12T05:12:00'}");
 
 		x = roundTrip(x, F1c.class);
 	}
@@ -625,7 +624,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x, s);
+		assertObject(x).serialized(s).is("{c:'2018-12-12T05:12:00'}");
 
 		x = roundTrip(x, F2.class);
 	}

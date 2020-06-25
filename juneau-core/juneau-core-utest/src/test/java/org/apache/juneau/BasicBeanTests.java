@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.beans.*;
@@ -53,13 +52,13 @@ public class BasicBeanTests {
 	@Test
 	public void a02_testTransientFieldsIgnored_overrideSetting() {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().dontIgnoreTransientFields().build();
-		assertObjectEquals("{f1:1,f2:2}", A1.create(), s);
+		assertObject(A1.create()).serialized(s).is("{f1:1,f2:2}");
 	}
 
 	@Test
 	public void a03_testTransientFieldsIgnored_overrideAnnotation() {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(A.class).build();
-		assertObjectEquals("{f1:1,f2:2}", A1.create(), s);
+		assertObject(A1.create()).serialized(s).is("{f1:1,f2:2}");
 	}
 
 	public static class A2 {

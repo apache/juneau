@@ -13,7 +13,6 @@
 package org.apache.juneau.pojotools;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -462,7 +461,7 @@ public class PojoSearcherTest {
 				"f = '2011' ",
 				"f = \"2011\" "
 			))
-			assertObjectEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
 	}
 
 	@Test
@@ -474,32 +473,32 @@ public class PojoSearcherTest {
 				"f='2011-01'",
 				"f=\"2011-01\""
 			))
-			assertObjectEquals("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2011-01-01T00:00:00'},{f:'2011-01-31T00:00:00'}]");
 	}
 
 	@Test
 	public void dateSearch_singleDate_ymd() throws Exception {
 		B[] in = B.create("2010-01-01", "2011-01-01", "2011-01-31", "2012-01-01");
-		assertObjectEquals("[{f:'2011-01-01T00:00:00'}]", run(in, "f=2011-01-01"), ws);
+		assertObject(run(in, "f=2011-01-01")).serialized(ws).is("[{f:'2011-01-01T00:00:00'}]");
 	}
 
 
 	@Test
 	public void dateSearch_singleDate_ymdh() throws Exception {
 		B[] in = B.create("2011-01-01T11:15:59", "2011-01-01T12:00:00", "2011-01-01T12:59:59", "2011-01-01T13:00:00");
-		assertObjectEquals("[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]", run(in, "f=2011-01-01T12"), ws);
+		assertObject(run(in, "f=2011-01-01T12")).serialized(ws).is("[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]");
 	}
 
 	@Test
 	public void dateSearch_singleDate_ymdhm() throws Exception {
 		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00", "2011-01-01T12:30:59", "2011-01-01T12:31:00");
-		assertObjectEquals("[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]", run(in, "f=2011-01-01T12:30"), ws);
+		assertObject(run(in, "f=2011-01-01T12:30")).serialized(ws).is("[{f:'2011-01-01T12:30:00'},{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test
 	public void dateSearch_singleDate_ymdhms() throws Exception {
 		B[] in = B.create("2011-01-01T12:30:29", "2011-01-01T12:30:30", "2011-01-01T12:30:31");
-		assertObjectEquals("[{f:'2011-01-01T12:30:30'}]", run(in, "f=2011-01-01T12:30:30"), ws);
+		assertObject(run(in, "f=2011-01-01T12:30:30")).serialized(ws).is("[{f:'2011-01-01T12:30:30'}]");
 	}
 
 	@Test
@@ -519,7 +518,7 @@ public class PojoSearcherTest {
 				"f>=\"2001\"",
 				"f >= \"2001\" "
 			))
-			assertObjectEquals("[{f:'2001-01-01T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2001-01-01T00:00:00'}]");
 		for (String s : a(
 				"f<2001",
 				"f < 2001 ",
@@ -534,21 +533,21 @@ public class PojoSearcherTest {
 				"f<=\"2000\"",
 				"f <= \"2000\" "
 			))
-			assertObjectEquals("[{f:'2000-12-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2000-12-31T00:00:00'}]");
 	}
 
 	@Test
 	public void dateSearch_openEndedRanges_toMinute() throws Exception {
 		B[] in = B.create("2011-01-01T12:29:59", "2011-01-01T12:30:00");
-		assertObjectEquals("[{f:'2011-01-01T12:30:00'}]", run(in, "f>=2011-01-01T12:30"), ws);
-		assertObjectEquals("[{f:'2011-01-01T12:29:59'}]", run(in, "f<2011-01-01T12:30"), ws);
+		assertObject(run(in, "f>=2011-01-01T12:30")).serialized(ws).is("[{f:'2011-01-01T12:30:00'}]");
+		assertObject(run(in, "f<2011-01-01T12:30")).serialized(ws).is("[{f:'2011-01-01T12:29:59'}]");
 	}
 
 	@Test
 	public void dateSearch_openEndedRanges_toSecond() throws Exception {
 		B[] in = B.create("2011-01-01T12:30:59", "2011-01-01T12:31:00");
-		assertObjectEquals("[{f:'2011-01-01T12:31:00'}]", run(in, "f>2011-01-01T12:30"), ws);
-		assertObjectEquals("[{f:'2011-01-01T12:30:59'}]", run(in, "f<=2011-01-01T12:30"), ws);
+		assertObject(run(in, "f>2011-01-01T12:30")).serialized(ws).is("[{f:'2011-01-01T12:31:00'}]");
+		assertObject(run(in, "f<=2011-01-01T12:30")).serialized(ws).is("[{f:'2011-01-01T12:30:59'}]");
 	}
 
 	@Test
@@ -567,7 +566,7 @@ public class PojoSearcherTest {
 				"f=2001 -\"2003-06-30\"",
 				"f= 2001 - \"2003-06-30\" "
 			))
-			assertObjectEquals("[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
 
 		for (String s : a(
 			"f= 2001 - 2003-06-30 2000",
@@ -592,7 +591,7 @@ public class PojoSearcherTest {
 			"f= 2001 - \"2003-06-30\"  '2000'",
 			"f= 2001 - \"2003-06-30\"  \"2000\""
 		))
-		assertObjectEquals("[{f:'2000-12-31T23:59:59'},{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2000-12-31T23:59:59'},{f:'2001-01-01T00:00:00'},{f:'2003-06-30T23:59:59'}]");
 	}
 
 	@Test
@@ -606,7 +605,7 @@ public class PojoSearcherTest {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObjectEquals("[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2001-12-31T00:00:00'}]");
 	}
 
 	@Test
@@ -620,7 +619,7 @@ public class PojoSearcherTest {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObjectEquals("[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2003-01-01T00:00:00'},{f:'2003-12-31T00:00:00'}]");
 	}
 
 	@Test
@@ -634,7 +633,7 @@ public class PojoSearcherTest {
 				"f=\"2001\" \"2003\" \"2005\"",
 				"f= \"2001\"  \"2003\"  \"2005\" "
 			))
-			assertObjectEquals("[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2005-01-01T00:00:00'},{f:'2005-12-31T00:00:00'}]");
 	}
 
 	@Test
@@ -666,7 +665,7 @@ public class PojoSearcherTest {
 				"f=>=\"2003\" \"2001\"",
 				"f= >=\"2003\"  \"2001\" "
 			))
-			assertObjectEquals("[{f:'2001-01-01T00:00:00'},{f:'2003-01-01T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2001-01-01T00:00:00'},{f:'2003-01-01T00:00:00'}]");
 		for (String s : a(
 				"f=<2001 2003",
 				"f= <2001  2003 ",
@@ -693,7 +692,7 @@ public class PojoSearcherTest {
 				"f=\"2003\" <=\"2000\"",
 				"f= \"2003\"  <=\"2000\" "
 			))
-			assertObjectEquals("[{f:'2000-12-31T00:00:00'},{f:'2003-01-01T00:00:00'}]", run(in, s), ws);
+			assertObject(run(in, s)).serialized(ws).is("[{f:'2000-12-31T00:00:00'},{f:'2003-01-01T00:00:00'}]");
 	}
 
 	@Test

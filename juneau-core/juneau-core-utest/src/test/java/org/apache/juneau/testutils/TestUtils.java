@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -231,15 +232,6 @@ public class TestUtils {
 	 */
 	public static final void assertXmlEquals(String expected, String actual) throws Exception {
 		Assert.assertEquals(sortXml(expected), sortXml(actual));
-	}
-
-	/**
-	 * Assert that the object equals the specified string after running it through ws.toString().
-	 */
-	public static final void assertObjectEquals(String s, Object o, WriterSerializer ws) {
-		if ("xxx".equals(s))
-			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\")); // NOT DEBUG
-		Assert.assertEquals(s, ws.toString(o));
 	}
 
 	public static final void assertObjectMatches(String s, Object o) {

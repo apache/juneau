@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -263,7 +262,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
-		assertObjectEquals("{f1:1,f2:2}", Dc.create(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Dc.class).build());
+		assertObject(Dc.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Dc.class).build()).is("{f1:1,f2:2}");
 	}
 
 	@Test
@@ -317,7 +316,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
-		assertObjectEquals("{}", E.create(), SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ec.class).build());
+		assertObject(E.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ec.class).build()).is("{}");
 	}
 
 	@Test

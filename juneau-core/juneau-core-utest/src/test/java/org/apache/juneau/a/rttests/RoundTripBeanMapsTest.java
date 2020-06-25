@@ -13,7 +13,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -234,19 +233,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(b1);
 		B b = p.parse(r, B.class);
 		assertTrue(b instanceof B1);
-		assertObjectEquals("{_type:'B1',f0:'f0',f1:'f1'}", b, js);
+		assertObject(b).serialized(js).is("{_type:'B1',f0:'f0',f1:'f1'}");
 
 		B2 b2 = B2.create();
 		r = s.serialize(b2);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B2);
-		assertObjectEquals("{_type:'B2',f0:'f0',f2:1}", b, js);
+		assertObject(b).serialized(js).is("{_type:'B2',f0:'f0',f2:1}");
 
 		B3 b3 = B3.create();
 		r = s.serialize(b3);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B3);
-		assertObjectEquals("{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}", b, js);
+		assertObject(b).serialized(js).is("{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
 }
 
 	@Bean(
@@ -307,19 +306,19 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(c1);
 		C c = p.parse(r, C.class);
 		assertTrue(c instanceof C1);
-		assertObjectEquals("{f0:'f0',f1:'f1'}", c, js);
+		assertObject(c).serialized(js).is("{f0:'f0',f1:'f1'}");
 
 		C2 c2 = C2.create();
 		r = s.serialize(c2);
 		c = p.parse(r, C.class);
 		assertTrue(c instanceof C2);
-		assertObjectEquals("{f0:'f0',f2:1}", c, js);
+		assertObject(c).serialized(js).is("{f0:'f0',f2:1}");
 
 		C3 c3 = C3.create();
 		r = s.serialize(c3);
 		c = p.parse(r, C.class);
 		assertTrue(c instanceof C3);
-		assertObjectEquals("{f0:'f0',f3:'2001-01-01T12:34:56.789Z'}", c, js);
+		assertObject(c).serialized(js).is("{f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
 	}
 
 	public abstract static class C {
@@ -499,7 +498,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(d);
 		d = p.parse(r, D2.class);
 		assertNull(d.f1);
-		assertObjectEquals("{f3:'f3',f2:'f2'}", d, js);
+		assertObject(d).serialized(js).is("{f3:'f3',f2:'f2'}");
 	}
 
 	public static class D2 {
