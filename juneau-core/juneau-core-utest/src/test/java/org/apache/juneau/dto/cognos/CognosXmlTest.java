@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.cognos;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -90,7 +90,7 @@ public class CognosXmlTest {
 
 		// Make sure we can parse it back into a POJO.
 		DataSet ds2 = XmlParser.DEFAULT.parse(out, DataSet.class);
-		assertEqualObjects(ds, ds2);
+		assertObject(ds).jsonSameAs(ds2);
 	}
 
 	public static class Item {

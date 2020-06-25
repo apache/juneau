@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -101,7 +101,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertEqualObjects(f, f2);
+		assertObject(f).jsonSameAs(f2);
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertEqualObjects(f, f2);
+		assertObject(f).jsonSameAs(f2);
 	}
 
 	@Test
@@ -191,7 +191,7 @@ public class AtomTest {
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
-		assertEqualObjects(f, f2);
+		assertObject(f).jsonSameAs(f2);
 	}
 
 	@Test
@@ -201,6 +201,6 @@ public class AtomTest {
 		Feed f = createFeed(), f2;
 		r = f.toString();
 		f2 = p.parse(r, Feed.class);
-		assertEqualObjects(f, f2);
+		assertObject(f).jsonSameAs(f2);
 	}
 }

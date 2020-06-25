@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
@@ -47,30 +47,30 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		in = " foo bar ";
 		e = "foo bar";
 		a = p.parse(s2.serialize(in), String.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 		a = p2.parse(s.serialize(in), String.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 
 		in = OMap.ofJson("{' foo ': ' bar '}");
 		e = OMap.ofJson("{foo:'bar'}");
 		a = p.parse(s2.serialize(in), OMap.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 		a = p2.parse(s.serialize(in), OMap.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 
 		in = new OList("[' foo ', {' foo ': ' bar '}]");
 		e = new OList("['foo',{foo:'bar'}]");
 		a = p.parse(s2.serialize(in), OList.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 		a = p2.parse(s.serialize(in), OList.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 
 		in = new A().init1();
 		e = new A().init2();
 		a = p.parse(s2.serialize(in), A.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 		a = p2.parse(s.serialize(in), A.class);
-		assertEqualObjects(e, a);
+		assertObject(e).jsonSameAs(a);
 	}
 
 	public static class A {

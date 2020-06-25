@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
@@ -65,7 +66,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Explicit sequence
@@ -93,7 +94,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Bag
@@ -121,7 +122,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// List
@@ -151,7 +152,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Multi-properties
@@ -173,7 +174,7 @@ public class RdfTest {
 		// Note - Must specify collection format on parser for it to be able to understand this layout.
 		p = RdfParser.create().xml().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
 		a2 = p.parse(rdfXml, A.class);
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 	}
 
 	@Rdf(prefix="a", namespace="http://ns/")

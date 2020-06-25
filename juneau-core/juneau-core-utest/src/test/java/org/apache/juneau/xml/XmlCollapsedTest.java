@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
@@ -273,14 +274,14 @@ public class XmlCollapsedTest {
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FA.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 		validateXml(t1, s);
 
 		t1 = FB.newInstance();
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FB.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 		validateXml(t1, s);
 	}
 
@@ -341,7 +342,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertEqualObjects(t, t2);
+		assertObject(t).jsonSameAs(t2);
 
 		validateXml(t, s);
 	}
@@ -375,7 +376,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, H.class);
-		assertEqualObjects(t, t2);
+		assertObject(t).jsonSameAs(t2);
 
 		validateXml(t, s);
 	}
@@ -414,7 +415,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertEqualObjects(t, t2);
+		assertObject(t).jsonSameAs(t2);
 
 		validateXml(t, s);
 	}

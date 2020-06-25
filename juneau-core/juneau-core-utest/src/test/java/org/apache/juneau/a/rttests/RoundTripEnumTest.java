@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -110,7 +111,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	public void testBeansWithEnumA() throws Exception {
 		A t1 = new A().init(), t2;
 		t2 = roundTrip(t1, A.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 		assertEquals(AEnum.FOO, t2.f3[0]);
 		assertNull(t2.f3[1]);
 		assertEquals(AEnum.FOO, t2.f4[0][0]);
@@ -122,7 +123,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	public void testBeansWithEnumB() throws Exception {
 		B t1 = new B().init(), t2;
 		t2 = roundTrip(t1, B.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 		assertEquals(BEnum.FOO, t2.f3[0]);
 		assertNull(t2.f3[1]);
 		assertEquals(BEnum.FOO, t2.f4[0][0]);

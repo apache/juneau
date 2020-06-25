@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -51,7 +51,7 @@ public class CommonXmlTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:name>bar</jp:name></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 	}
 
 	public static class A {
@@ -79,7 +79,7 @@ public class CommonXmlTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:url2 rdf:resource='http://foo/2'/></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 	}
 
 	public static class B {

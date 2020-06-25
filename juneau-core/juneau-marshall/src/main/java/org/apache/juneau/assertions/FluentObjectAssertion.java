@@ -13,7 +13,9 @@
 package org.apache.juneau.assertions;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls.
@@ -23,8 +25,22 @@ import org.apache.juneau.reflect.*;
 @FluentSetters(returns="FluentObjectAssertion<R>")
 public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 
-	@SuppressWarnings("unused")
 	private final Object o;
+
+	private static JsonSerializer JSON = JsonSerializer.create()
+		.ssq()
+		.keepNullProperties()
+		.addBeanTypes().addRootType()
+		.build();
+
+	private static JsonSerializer SORTEDJSON = JsonSerializer.create()
+		.ssq()
+		.sortCollections()
+		.sortMaps()
+		.keepNullProperties()
+		.addBeanTypes().addRootType()
+		.build();
+
 
 	/**
 	 * Constructor.
@@ -49,6 +65,44 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 			return returns();
 		if (o == null && parent != null || o != null && parent == null || ! ClassInfo.of(o).isChildOf(parent))
 			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", StringUtils.stringify(parent), o == null ? null : o.getClass());
+		return returns();
+	}
+
+	/**
+	 * Verifies that two objects are equivalent after converting them both to JSON.
+	 *
+	 * @param o The object to compare against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R jsonSameAs(Object o) throws AssertionError {
+		try {
+			String s1 = JSON.serialize(this.o);
+			String s2 = JSON.serialize(o);
+			if (! StringUtils.isEquals(s1, s2))
+				throw error("Unexpected JSON comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
+		}
+		return returns();
+	}
+
+	/**
+	 * Verifies that two objects are equivalent after converting them both to sorted JSON.
+	 *
+	 * @param o The object to compare against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R jsonSameAsSorted(Object o) {
+		try {
+			String s1 = SORTEDJSON.serialize(this.o);
+			String s2 = SORTEDJSON.serialize(o);
+			if (! StringUtils.isEquals(s1, s2))
+				throw error("Unexpected JSON comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
+		}
 		return returns();
 	}
 

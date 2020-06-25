@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -82,7 +83,7 @@ public class RdfParserTest {
 
 		A a2 = RdfXmlParser.DEFAULT.parse(rdfXml, A.class);
 
-		assertEqualObjects(a, a2);
+		assertObject(a).jsonSameAs(a2);
 
 		OMap m = RdfXmlParser.DEFAULT.parse(rdfXml, OMap.class);
 		String json = SimpleJsonSerializer.DEFAULT_READABLE.serialize(m);

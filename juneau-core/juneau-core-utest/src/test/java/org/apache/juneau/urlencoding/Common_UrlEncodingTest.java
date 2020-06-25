@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.ThrowableAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -41,13 +41,13 @@ public class Common_UrlEncodingTest {
 		String r = s.build().serialize(t1);
 		assertEquals("s2=s2", r);
 		t2 = p.parse(r, A.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 
 		s.keepNullProperties();
 		r = s.build().serialize(t1);
 		assertEquals("s1=null&s2=s2", r);
 		t2 = p.parse(r, A.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 	}
 
 	public static class A {
@@ -72,7 +72,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=()&f2=(f2a=null,f2b=(s2=s2))", r);
 		t2 = p.parse(r, B.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -104,7 +104,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, C.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -136,7 +136,7 @@ public class Common_UrlEncodingTest {
 		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, D.class);
-		assertEqualObjects(t1, t2);
+		assertObject(t1).jsonSameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
@@ -1605,7 +1606,7 @@ public class RestClient_Test {
 
 		ABean b = rc.post("/echoBody", bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 	}
 
 	@Test
@@ -1615,10 +1616,10 @@ public class RestClient_Test {
 		rc.post("/echoBody", bean).run().assertBody().is("{f:1}");
 
 		ABean b = rc.post("/echoBody", bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		b = rc.post("/echoBody", bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 	}
 
 	@Test
@@ -1627,13 +1628,13 @@ public class RestClient_Test {
 
 		ABean b = rc.post("/echoBody", bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		rc = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
 
 		b = rc.post("/echoBody", bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		try {
 			MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers, String.class).build(); fail();
@@ -1668,20 +1669,20 @@ public class RestClient_Test {
 		rc.post("/echoBody", bean).run().assertBody().is("{f:1}");
 
 		ABean b = rc.post("/echoBody", bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		b = rc.post("/echoBody", bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		rc = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
 
 		rc.post("/echoBody", bean).run().assertBody().is("{f:1}");
 
 		b = rc.post("/echoBody", bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 
 		b = rc.post("/echoBody", bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
-		assertEqualObjects(b, bean);
+		assertObject(b).jsonSameAs(bean);
 	}
 
 	@Rest(partSerializer=K12a.class, partParser=K12b.class)

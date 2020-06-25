@@ -66,14 +66,6 @@ public class TestUtils {
 	/**
 	 * Verifies that two objects are equivalent.
 	 * Does this by doing a string comparison after converting both to JSON.
-	 */
-	public static final void assertEqualObjects(Object o1, Object o2) throws SerializeException {
-		assertEqualObjects(o1, o2, false);
-	}
-
-	/**
-	 * Verifies that two objects are equivalent.
-	 * Does this by doing a string comparison after converting both to JSON.
 	 * @param sort If <jk>true</jk> sort maps and collections before comparison.
 	 */
 	public static final void assertEqualObjects(Object o1, Object o2, boolean sort) throws SerializeException {

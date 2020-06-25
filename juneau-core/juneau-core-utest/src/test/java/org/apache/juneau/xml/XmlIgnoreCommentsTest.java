@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.text.*;
@@ -20,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -695,7 +695,7 @@ public class XmlIgnoreCommentsTest {
 	public void testNoComment() throws Exception {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", ""), type);
-			TestUtils.assertEqualObjects(expected, actual);
+			assertObject(expected).jsonSameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -707,7 +707,7 @@ public class XmlIgnoreCommentsTest {
 	public void testNormalComment() throws Exception {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", "<!--x-->"), type);
-			TestUtils.assertEqualObjects(expected, actual);
+			assertObject(expected).jsonSameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -720,7 +720,7 @@ public class XmlIgnoreCommentsTest {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", " \n <!-- \n x \n --> \n "), type);
 			if (! skipWsTests)
-				TestUtils.assertEqualObjects(expected, actual);
+				assertObject(expected).jsonSameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -733,7 +733,7 @@ public class XmlIgnoreCommentsTest {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", " \n <!-- \n x \n --> \n \n <!-- \n x \n --> \n "), type);
 			if (! skipWsTests)
-				TestUtils.assertEqualObjects(expected, actual);
+				assertObject(expected).jsonSameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
