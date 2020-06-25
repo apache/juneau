@@ -269,7 +269,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
-		assertEqualObjects(b, b2, true);
+		assertObject(b).jsonSameAsSorted(b2);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Default is Bag - Should only affect DEFAULT properties.
@@ -340,7 +340,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
-		assertEqualObjects(b, b2, true);
+		assertObject(b).jsonSameAsSorted(b2);
 	}
 
 	@Rdf(prefix="b", namespace="http://ns/")
@@ -503,7 +503,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		c2 = p.parse(rdfXml, C.class);
-		assertEqualObjects(c, c2, true);
+		assertObject(c).jsonSameAsSorted(c2);
 	}
 
 	@Rdf(collectionFormat=RdfCollectionFormat.BAG)

@@ -35,21 +35,6 @@ import org.xml.sax.*;
 @SuppressWarnings({})
 public class TestUtils {
 
-	private static JsonSerializer js = JsonSerializer.create()
-		.ssq()
-		.keepNullProperties()
-		.addBeanTypes().addRootType()
-		.build();
-
-	private static JsonSerializer jsSorted = JsonSerializer.create()
-		.ssq()
-		.sortCollections()
-		.sortMaps()
-		.keepNullProperties()
-		.addBeanTypes().addRootType()
-		.build();
-
-
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.ssq()
 		.addBeanTypes().addRootType()
@@ -62,20 +47,6 @@ public class TestUtils {
 		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();
-
-	/**
-	 * Verifies that two objects are equivalent.
-	 * Does this by doing a string comparison after converting both to JSON.
-	 * @param sort If <jk>true</jk> sort maps and collections before comparison.
-	 */
-	public static final void assertEqualObjects(Object o1, Object o2, boolean sort) throws SerializeException {
-		JsonSerializer s = (sort ? jsSorted : js);
-		String s1 = s.serialize(o1);
-		String s2 = s.serialize(o2);
-		if (s1.equals(s2))
-			return;
-		throw new ComparisonFailure(null, s1, s2);
-	}
 
 	/**
 	 * Validates that the whitespace is correct in the specified XML.
