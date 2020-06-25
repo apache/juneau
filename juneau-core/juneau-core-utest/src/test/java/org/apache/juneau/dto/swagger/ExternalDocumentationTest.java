@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -75,14 +76,14 @@ public class ExternalDocumentationTest {
 			.set("url", "bar")
 			.set("$ref", "baz");
 
-		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", t);
+		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
 
 		t
 			.set("description", new StringBuilder("foo"))
 			.set("url", new StringBuilder("bar"))
 			.set("$ref", new StringBuilder("baz"));
 
-		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", t);
+		assertObject(t).json().is("{description:'foo',url:'bar','$ref':'baz'}");
 
 		assertEquals("foo", t.get("description", String.class));
 		assertEquals("bar", t.get("url", URI.class).toString());
@@ -97,6 +98,6 @@ public class ExternalDocumentationTest {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertObjectEquals("{description:'foo',url:'bar','$ref':'baz'}", JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class));
+		assertObject(JsonParser.DEFAULT.parse("{description:'foo',url:'bar','$ref':'baz'}", ExternalDocumentation.class)).json().is("{description:'foo',url:'bar','$ref':'baz'}");
 	}
 }

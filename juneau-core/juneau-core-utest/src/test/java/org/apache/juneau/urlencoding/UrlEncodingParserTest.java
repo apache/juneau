@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -465,7 +465,7 @@ public class UrlEncodingParserTest {
 
 		String s = "?f1=1,2,3&f2=a,b,c&f3=true,false&f4=&f5";
 		C c = p.parse(s, C.class);
-		assertObjectEquals("{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}", c);
+		assertObject(c).json().is("{f1:[1,2,3],f2:['a','b','c'],f3:[true,false],f4:[]}");
 	}
 
 	public static class C {
@@ -488,52 +488,52 @@ public class UrlEncodingParserTest {
 		// In the string below, the ~ character should not be interpreted as an escape.
 		s = "?f1=a~b,a~b";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['a~b','a~b']}", c);
+		assertObject(c).json().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@(a~b,a~b)";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['a~b','a~b']}", c);
+		assertObject(c).json().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['a~b','a~b']}", c);
+		assertObject(c).json().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['a~b','a~b']}", c);
+		assertObject(c).json().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=@('a~b','a~b')";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['a~b','a~b']}", c);
+		assertObject(c).json().is("{f1:['a~b','a~b']}");
 
 		s = "?f1=~~,~~";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['~','~']}", c);
+		assertObject(c).json().is("{f1:['~','~']}");
 
 		s = "?f1=@(~~,~~)";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['~','~']}", c);
+		assertObject(c).json().is("{f1:['~','~']}");
 
 		s = "?f1=@(~~~~~~,~~~~~~)";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['~~~','~~~']}", c);
+		assertObject(c).json().is("{f1:['~~~','~~~']}");
 
 		s = "?f1=@('~~~~~~','~~~~~~')";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['~~~','~~~']}", c);
+		assertObject(c).json().is("{f1:['~~~','~~~']}");
 
 		// The ~ should be treated as an escape if followed by any of the following characters:  '~
 		s = "?f1=~'~~,~'~~";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['\\'~','\\'~']}", c);
+		assertObject(c).json().is("{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@(~'~~,~'~~)";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['\\'~','\\'~']}", c);
+		assertObject(c).json().is("{f1:['\\'~','\\'~']}");
 
 		s = "?f1=@('~'~~','~'~~')";
 		c = p.parse(s, C1.class);
-		assertObjectEquals("{f1:['\\'~','\\'~']}", c);
+		assertObject(c).json().is("{f1:['\\'~','\\'~']}");
 
 		s = "?a~b=a~b";
 		OMap m = p.parse(s, OMap.class);
@@ -598,13 +598,13 @@ public class UrlEncodingParserTest {
 		m = p.parse(s, OMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		D d = p.parse(s, D.class);
-		assertObjectEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", d);  // Note that JsonSerializer escapes newlines and tabs.
+		assertObject(d).json().is("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
 		m = p.parse(s, OMap.class);
 		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		d = p.parse(s, D.class);
-		assertObjectEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", d);  // Note that JsonSerializer escapes newlines and tabs.
+		assertObject(d).json().is("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
 		m = p.parse(s, OMap.class);
@@ -612,11 +612,11 @@ public class UrlEncodingParserTest {
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
 		E e = p.parse(s, E.class);
-		assertObjectEquals("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}", e);
+		assertObject(e).json().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 
 		s = "f1=a%2C%0D%0Ab%2C%0D%0Ac%0D%0A&f2=1%2C%0D%0A2%2C%0D%0A3%0D%0A&f3=true%2C%0D%0Afalse%0D%0A";
 		e = p.parse(s, E.class);
-		assertObjectEquals("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}", e);
+		assertObject(e).json().is("{f1:['a','b','c'],f2:[1,2,3],f3:[true,false]}");
 	}
 
 	public static class D {
@@ -692,7 +692,7 @@ public class UrlEncodingParserTest {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertSortedObjectEquals(e, t);
+		assertObject(t).jsonSorted().is(e);
 	}
 
 	@Test
@@ -746,7 +746,7 @@ public class UrlEncodingParserTest {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertSortedObjectEquals(e, t);
+		assertObject(t).jsonSorted().is(e);
 	}
 
 	//====================================================================================================
@@ -802,7 +802,7 @@ public class UrlEncodingParserTest {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertSortedObjectEquals(e, t);
+		assertObject(t).jsonSorted().is(e);
 	}
 
 	@Test
@@ -855,6 +855,6 @@ public class UrlEncodingParserTest {
 			+ "f19:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]],"
 			+ "f20:[[{a:'a',b:1,c:true}],[{a:'b',b:2,c:false}]]"
 		+"}";
-		assertSortedObjectEquals(e, t);
+		assertObject(t).jsonSorted().is(e);
 	}
 }

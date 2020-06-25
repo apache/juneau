@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -162,11 +163,11 @@ public class SecuritySchemeTest {
 		SecurityScheme t = new SecurityScheme();
 
 		t.setScopes(AMap.of("foo","bar"));
-		assertObjectEquals("{foo:'bar'}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertInstanceOf(Map.class, t.getScopes());
 
 		t.setScopes(AMap.of());
-		assertObjectEquals("{}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{}");
 		assertInstanceOf(Map.class, t.getScopes());
 
 		t.setScopes(null);
@@ -181,15 +182,15 @@ public class SecuritySchemeTest {
 		SecurityScheme t = new SecurityScheme();
 
 		t.addScopes(AMap.of("foo","bar"));
-		assertObjectEquals("{foo:'bar'}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertInstanceOf(Map.class, t.getScopes());
 
 		t.addScopes(AMap.of());
-		assertObjectEquals("{foo:'bar'}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertInstanceOf(Map.class, t.getScopes());
 
 		t.addScopes(null);
-		assertObjectEquals("{foo:'bar'}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{foo:'bar'}");
 		assertInstanceOf(Map.class, t.getScopes());
 	}
 
@@ -205,7 +206,7 @@ public class SecuritySchemeTest {
 		t.scopes("{}");
 		t.scopes((Object[])null);
 
-		assertObjectEquals("{a:'a1',b:'b1'}", t.getScopes());
+		assertObject(t.getScopes()).json().is("{a:'a1',b:'b1'}");
 	}
 
 	/**
@@ -226,7 +227,7 @@ public class SecuritySchemeTest {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", "a")
@@ -239,7 +240,7 @@ public class SecuritySchemeTest {
 			.set("type", "g")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		t
 			.set("authorizationUrl", new StringBuilder("a"))
@@ -252,7 +253,7 @@ public class SecuritySchemeTest {
 			.set("type", new StringBuilder("g"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}");
 
 		assertEquals("a", t.get("authorizationUrl", String.class));
 		assertEquals("b", t.get("description", String.class));
@@ -280,6 +281,6 @@ public class SecuritySchemeTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{type:'g',description:'b',name:'e','in':'d',flow:'c',authorizationUrl:'a',tokenUrl:'f',scopes:{foo:'bar'},'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, SecurityScheme.class));
+		assertObject(JsonParser.DEFAULT.parse(s, SecurityScheme.class)).json().is(s);
 	}
 }

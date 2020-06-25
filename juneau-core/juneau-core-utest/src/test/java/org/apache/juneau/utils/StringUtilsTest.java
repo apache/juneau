@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -491,10 +491,10 @@ public class StringUtilsTest {
 		String[] r;
 
 		assertNull(split((String)null));
-		assertObjectEquals("[]", split(""));
-		assertObjectEquals("['1']", split("1"));
-		assertObjectEquals("['1','2']", split("1,2"));
-		assertObjectEquals("['1,2']", split("1\\,2"));
+		assertObject(split("")).json().is("[]");
+		assertObject(split("1")).json().is("['1']");
+		assertObject(split("1,2")).json().is("['1','2']");
+		assertObject(split("1\\,2")).json().is("['1,2']");
 
 		r = split("1\\\\,2");
 		assertEquals("1\\", r[0]);
@@ -526,25 +526,25 @@ public class StringUtilsTest {
 		String[] r;
 
 		r = split("boo:and:foo", ':', 10);
-		assertObjectEquals("['boo','and','foo']", r);
+		assertObject(r).json().is("['boo','and','foo']");
 
 		r = split("boo:and:foo", ':', 2);
-		assertObjectEquals("['boo','and:foo']", r);
+		assertObject(r).json().is("['boo','and:foo']");
 
 		r = split("boo:and:foo", ':', 1);
-		assertObjectEquals("['boo:and:foo']", r);
+		assertObject(r).json().is("['boo:and:foo']");
 
 		r = split("boo:and:foo", ':', 0);
-		assertObjectEquals("['boo:and:foo']", r);
+		assertObject(r).json().is("['boo:and:foo']");
 
 		r = split("boo:and:foo", ':', -1);
-		assertObjectEquals("['boo:and:foo']", r);
+		assertObject(r).json().is("['boo:and:foo']");
 
 		r = split("boo : and : foo", ':', 10);
-		assertObjectEquals("['boo','and','foo']", r);
+		assertObject(r).json().is("['boo','and','foo']");
 
 		r = split("boo : and : foo", ':', 2);
-		assertObjectEquals("['boo','and : foo']", r);
+		assertObject(r).json().is("['boo','and : foo']");
 	}
 
 	//====================================================================================================
@@ -739,16 +739,16 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testSplitMap() {
-		assertObjectEquals("{a:'1'}", splitMap("a=1", true));
-		assertObjectEquals("{a:'1',b:'2'}", splitMap("a=1,b=2", true));
-		assertObjectEquals("{a:'1',b:'2'}", splitMap(" a = 1 , b = 2 ", true));
-		assertObjectEquals("{' a ':' 1 ',' b ':' 2 '}", splitMap(" a = 1 , b = 2 ", false));
-		assertObjectEquals("{a:''}", splitMap("a", true));
-		assertObjectEquals("{a:'',b:''}", splitMap("a,b", true));
-		assertObjectEquals("{a:'1',b:''}", splitMap("a=1,b", true));
-		assertObjectEquals("{a:'',b:'1'}", splitMap("a,b=1", true));
-		assertObjectEquals("{'a=':'1'}", splitMap("a\\==1", true));
-		assertObjectEquals("{'a\\\\':'1'}", splitMap("a\\\\=1", true));
+		assertObject(splitMap("a=1", true)).json().is("{a:'1'}");
+		assertObject(splitMap("a=1,b=2", true)).json().is("{a:'1',b:'2'}");
+		assertObject(splitMap(" a = 1 , b = 2 ", true)).json().is("{a:'1',b:'2'}");
+		assertObject(splitMap(" a = 1 , b = 2 ", false)).json().is("{' a ':' 1 ',' b ':' 2 '}");
+		assertObject(splitMap("a", true)).json().is("{a:''}");
+		assertObject(splitMap("a,b", true)).json().is("{a:'',b:''}");
+		assertObject(splitMap("a=1,b", true)).json().is("{a:'1',b:''}");
+		assertObject(splitMap("a,b=1", true)).json().is("{a:'',b:'1'}");
+		assertObject(splitMap("a\\==1", true)).json().is("{'a=':'1'}");
+		assertObject(splitMap("a\\\\=1", true)).json().is("{'a\\\\':'1'}");
 	}
 
 	//====================================================================================================
@@ -784,25 +784,25 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getSplitQuoted() {
-		assertObjectEquals("null", splitQuoted(null));
-		assertObjectEquals("[]", splitQuoted(""));
-		assertObjectEquals("[]", splitQuoted(" \t "));
-		assertObjectEquals("['foo']", splitQuoted("foo"));
-		assertObjectEquals("['foo','bar','baz']", splitQuoted("foo  bar baz"));
-		assertObjectEquals("['foo']", splitQuoted("'foo'"));
-		assertObjectEquals("[' foo ']", splitQuoted(" ' foo ' "));
-		assertObjectEquals("['foo','bar']", splitQuoted("'foo' 'bar'"));
-		assertObjectEquals("['foo']", splitQuoted("\"foo\""));
-		assertObjectEquals("[' foo ']", splitQuoted(" \" foo \" "));
-		assertObjectEquals("['foo','bar']", splitQuoted("\"foo\" \"bar\""));
-		assertObjectEquals("['foo\\'bar']", splitQuoted("'foo\\'bar'"));
-		assertObjectEquals("['foo\"bar']", splitQuoted("'foo\\\"bar'"));
-		assertObjectEquals("['\\'foo\\'bar\\'']", splitQuoted("'\\'foo\\'bar\\''"));
-		assertObjectEquals("['\"foo\"bar\"']", splitQuoted("'\\\"foo\\\"bar\\\"'"));
-		assertObjectEquals("['\\'foo\\'']", splitQuoted("'\\'foo\\''"));
-		assertObjectEquals("['\"foo\"']", splitQuoted("\"\\\"foo\\\"\""));
-		assertObjectEquals("['\"foo\"']", splitQuoted("'\"foo\"'"));
-		assertObjectEquals("['\\'foo\\'']", splitQuoted("\"'foo'\""));
+		assertObject(splitQuoted(null)).json().is("null");
+		assertObject(splitQuoted("")).json().is("[]");
+		assertObject(splitQuoted(" \t ")).json().is("[]");
+		assertObject(splitQuoted("foo")).json().is("['foo']");
+		assertObject(splitQuoted("foo  bar baz")).json().is("['foo','bar','baz']");
+		assertObject(splitQuoted("'foo'")).json().is("['foo']");
+		assertObject(splitQuoted(" ' foo ' ")).json().is("[' foo ']");
+		assertObject(splitQuoted("'foo' 'bar'")).json().is("['foo','bar']");
+		assertObject(splitQuoted("\"foo\"")).json().is("['foo']");
+		assertObject(splitQuoted(" \" foo \" ")).json().is("[' foo ']");
+		assertObject(splitQuoted("\"foo\" \"bar\"")).json().is("['foo','bar']");
+		assertObject(splitQuoted("'foo\\'bar'")).json().is("['foo\\'bar']");
+		assertObject(splitQuoted("'foo\\\"bar'")).json().is("['foo\"bar']");
+		assertObject(splitQuoted("'\\'foo\\'bar\\''")).json().is("['\\'foo\\'bar\\'']");
+		assertObject(splitQuoted("'\\\"foo\\\"bar\\\"'")).json().is("['\"foo\"bar\"']");
+		assertObject(splitQuoted("'\\'foo\\''")).json().is("['\\'foo\\'']");
+		assertObject(splitQuoted("\"\\\"foo\\\"\"")).json().is("['\"foo\"']");
+		assertObject(splitQuoted("'\"foo\"'")).json().is("['\"foo\"']");
+		assertObject(splitQuoted("\"'foo'\"")).json().is("['\\'foo\\'']");
 	}
 
 	//====================================================================================================
@@ -1014,11 +1014,11 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testSplitMethodArgs() throws Exception {
-		assertObjectEquals("['java.lang.String']", splitMethodArgs("java.lang.String"));
-		assertObjectEquals("['java.lang.String','java.lang.Integer']", splitMethodArgs("java.lang.String,java.lang.Integer"));
-		assertObjectEquals("['x','y']", splitMethodArgs("x,y"));
-		assertObjectEquals("['x','y<a,b>','z']", splitMethodArgs("x,y<a,b>,z"));
-		assertObjectEquals("['x','y<a<b,c>,d<e,f>>','z']", splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"));
+		assertObject(splitMethodArgs("java.lang.String")).json().is("['java.lang.String']");
+		assertObject(splitMethodArgs("java.lang.String,java.lang.Integer")).json().is("['java.lang.String','java.lang.Integer']");
+		assertObject(splitMethodArgs("x,y")).json().is("['x','y']");
+		assertObject(splitMethodArgs("x,y<a,b>,z")).json().is("['x','y<a,b>','z']");
+		assertObject(splitMethodArgs("x,y<a<b,c>,d<e,f>>,z")).json().is("['x','y<a<b,c>,d<e,f>>','z']");
 	}
 
 	//====================================================================================================

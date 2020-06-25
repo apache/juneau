@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -181,6 +181,6 @@ public class CommonParser_UrlEncodingTest {
 
 		String in =  "0=foo&1=bar";
 		l = p.parse(in, LinkedList.class, String.class);
-		assertObjectEquals("['foo','bar']",l);
+		assertObject(l).json().is("['foo','bar']");
 	}
 }

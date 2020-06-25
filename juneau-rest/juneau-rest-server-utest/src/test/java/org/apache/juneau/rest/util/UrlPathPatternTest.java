@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -25,11 +25,11 @@ import org.junit.*;
 public class UrlPathPatternTest {
 
 	private void shouldMatch(UrlPathPattern p, String path, String expected) {
-		assertObjectEquals(expected, p.match(path));
+		assertObject(p.match(path)).json().is(expected);
 	}
 
 	private void shouldNotMatch(UrlPathPattern p, String path) {
-		assertObjectEquals("null", p.match(path));
+		assertObject(p.match(path)).json().is("null");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

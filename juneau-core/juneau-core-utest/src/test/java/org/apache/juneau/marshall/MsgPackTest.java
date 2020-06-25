@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -52,6 +52,6 @@ public class MsgPackTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read(fromHex("81A3666F6FA3626172"), Map.class, String.class, String.class);
-		assertObjectEquals("{foo:'bar'}", o);
+		assertObject(o).json().is("{foo:'bar'}");
 	}
 }

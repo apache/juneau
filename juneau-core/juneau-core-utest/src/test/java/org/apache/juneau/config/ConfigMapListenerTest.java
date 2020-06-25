@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.StringAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -44,7 +44,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(foo = baz)']", events);
+				assertObject(events).json().is("['SET(foo = baz)']");
 			}
 		};
 
@@ -71,7 +71,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(S1/foo = baz)']", events);
+				assertObject(events).json().is("['SET(S1/foo = baz)']");
 			}
 		};
 
@@ -100,7 +100,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k = vb)','SET(S1/k1 = v1b)']", events);
+				assertObject(events).json().is("['SET(k = vb)','SET(S1/k1 = v1b)']");
 			}
 		};
 
@@ -126,7 +126,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k^* = kb # C)','SET(S1/k1^* = k1b # C1)']", events);
+				assertObject(events).json().is("['SET(k^* = kb # C)','SET(S1/k1^* = k1b # C1)']");
 			}
 		};
 
@@ -158,7 +158,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k^* = kb # Cb)','SET(S1/k1^* = k1b # Cb1)']", events);
+				assertObject(events).json().is("['SET(k^* = kb # Cb)','SET(S1/k1^* = k1b # Cb1)']");
 			}
 		};
 
@@ -191,7 +191,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
+				assertObject(events).json().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']");
 			}
 		};
 
@@ -223,7 +223,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
+				assertObject(events).json().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']");
 			}
 		};
 
@@ -253,7 +253,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(S3/k3 = v3)']", events);
+				assertObject(events).json().is("['SET(S3/k3 = v3)']");
 			}
 		};
 
@@ -288,7 +288,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(S3/k3 = v3)']", events);
+				assertObject(events).json().is("['SET(S3/k3 = v3)']");
 			}
 		};
 
@@ -333,7 +333,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']", events);
+				assertObject(events).json().is("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']");
 			}
 		};
 
@@ -364,7 +364,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k = v # cv)','SET(S1/k1 = v1 # cv1)','SET(S2/k2 = v2 # cv2)']", events);
+				assertObject(events).json().is("['SET(k = v # cv)','SET(S1/k1 = v1 # cv1)','SET(S2/k2 = v2 # cv2)']");
 			}
 		};
 
@@ -410,7 +410,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals(eventList.poll(), events);
+				assertObject(events).json().is(eventList.poll());
 			}
 		};
 
@@ -448,7 +448,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals(eventList.poll(), events);
+				assertObject(events).json().is(eventList.poll());
 			}
 		};
 
@@ -495,7 +495,7 @@ public class ConfigMapListenerTest {
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObjectEquals(eventList.poll(), events);
+					assertObject(events).json().is(eventList.poll());
 				}
 			};
 
@@ -541,7 +541,7 @@ public class ConfigMapListenerTest {
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
 				public void check(ConfigEvents events) throws Exception {
-					assertObjectEquals(eventList.poll(), events);
+					assertObject(events).json().is(eventList.poll());
 				}
 			};
 

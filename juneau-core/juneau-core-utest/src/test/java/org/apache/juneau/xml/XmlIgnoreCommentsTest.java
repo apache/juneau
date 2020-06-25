@@ -695,7 +695,7 @@ public class XmlIgnoreCommentsTest {
 	public void testNoComment() throws Exception {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", ""), type);
-			assertObject(expected).jsonSameAs(actual);
+			assertObject(expected).sameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -707,7 +707,7 @@ public class XmlIgnoreCommentsTest {
 	public void testNormalComment() throws Exception {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", "<!--x-->"), type);
-			assertObject(expected).jsonSameAs(actual);
+			assertObject(expected).sameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -720,7 +720,7 @@ public class XmlIgnoreCommentsTest {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", " \n <!-- \n x \n --> \n "), type);
 			if (! skipWsTests)
-				assertObject(expected).jsonSameAs(actual);
+				assertObject(expected).sameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {
@@ -733,7 +733,7 @@ public class XmlIgnoreCommentsTest {
 		try {
 			Object actual = XmlParser.DEFAULT.parse(input.replace("|", " \n <!-- \n x \n --> \n \n <!-- \n x \n --> \n "), type);
 			if (! skipWsTests)
-				assertObject(expected).jsonSameAs(actual);
+				assertObject(expected).sameAs(actual);
 		} catch (ComparisonFailure e) {
 			throw new ComparisonFailure(MessageFormat.format("Test ''{0}'' failed with comparison error", label), e.getExpected(), e.getActual());
 		} catch (Exception e) {

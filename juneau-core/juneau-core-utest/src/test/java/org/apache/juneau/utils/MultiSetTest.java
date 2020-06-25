@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -107,33 +107,33 @@ public class MultiSetTest {
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
 		ms = new MultiSet<>(l1).append(l2);
-		assertObjectEquals("['1','2','3','4']", ms);
-		assertObjectEquals("['1','2','3','4']", ms.enumerator());
+		assertObject(ms).json().is("['1','2','3','4']");
+		assertObject(ms.enumerator()).json().is("['1','2','3','4']");
 		assertEquals(4, ms.size());
 
 		Iterator<String> t = ms.iterator();
 		t.next();
 		t.remove();
-		assertObjectEquals("['2','3','4']", ms.enumerator());
+		assertObject(ms.enumerator()).json().is("['2','3','4']");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertObjectEquals("['3','4']", ms.enumerator());
+		assertObject(ms.enumerator()).json().is("['3','4']");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertObjectEquals("['4']", ms.enumerator());
+		assertObject(ms.enumerator()).json().is("['4']");
 
 		t = ms.iterator();
 		t.next();
 		t.remove();
-		assertObjectEquals("[]", ms.enumerator());
+		assertObject(ms.enumerator()).json().is("[]");
 		assertEquals(0, ms.size());
 
 		ms = new MultiSet<>();
-		assertObjectEquals("[]", ms);
+		assertObject(ms).json().is("[]");
 		assertEquals(0, ms.size());
 
 		try { ms = new MultiSet<>((Collection<String>)null); fail(); } catch (IllegalArgumentException e) {}

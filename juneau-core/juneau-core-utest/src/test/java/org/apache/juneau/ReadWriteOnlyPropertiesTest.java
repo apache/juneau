@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -48,7 +49,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void a01_beanpOnPrimitiveFields_serializer() throws Exception {
-		assertObjectEquals("{f1:1}", A.create());
+		assertObject(A.create()).json().is("{f1:1}");
 	}
 
 	@Test
@@ -80,7 +81,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b01_beanAnnotation_serializer() throws Exception {
-		assertObjectEquals("{f1:1}", B.create());
+		assertObject(B.create()).json().is("{f1:1}");
 	}
 
 	@Test
@@ -111,7 +112,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b01_beanAnnotation_serializer_usingConfig() throws Exception {
-		assertObjectEquals("{f1:1}", B.create());
+		assertObject(B.create()).json().is("{f1:1}");
 	}
 
 	@Test
@@ -237,7 +238,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d01_beanAnnotation_bproAll_serializer() throws Exception {
-		assertObjectEquals("{f1:1,f2:2}", D.create());
+		assertObject(D.create()).json().is("{f1:1,f2:2}");
 	}
 
 	@Test
@@ -291,7 +292,7 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e01_beanAnnotation_bpwoAll_serializer() throws Exception {
-		assertObjectEquals("{}", E.create());
+		assertObject(E.create()).json().is("{}");
 	}
 
 	@Test

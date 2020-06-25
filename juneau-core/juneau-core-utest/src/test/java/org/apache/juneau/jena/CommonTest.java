@@ -56,13 +56,13 @@ public class CommonTest {
 		String r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.keepNullProperties();
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 	}
 
 	public static class A {
@@ -88,7 +88,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1 rdf:parseType='Resource'></jp:f1><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -121,7 +121,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -155,7 +155,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -188,7 +188,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:x1 rdf:parseType='Resource'><jp:f1>1</jp:f1></jp:x1><jp:x2 rdf:parseType='Resource'><jp:f1>1</jp:f1></jp:x2><jp:x3><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x3><jp:x4><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x4><jp:x5><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x5><jp:x6><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x6></rdf:Description>", strip(r));
 		t2 = p.parse(r, E1.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 	}
 
 	public static class E1 {
@@ -231,7 +231,7 @@ public class CommonTest {
 		String r = s.build().serialize(l1);
 		assertEquals("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x1><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x2>2</jp:x2></rdf:li></rdf:Seq></jp:x1><jp:x2>2</jp:x2></rdf:li></rdf:Seq>", strip(r));
 		l2 = p.parse(r, LinkedList.class, F.class);
-		assertObject(l1).jsonSameAs(l2);
+		assertObject(l1).sameAs(l2);
 	}
 
 	public static class F {

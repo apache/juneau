@@ -83,7 +83,7 @@ public class RdfParserTest {
 
 		A a2 = RdfXmlParser.DEFAULT.parse(rdfXml, A.class);
 
-		assertObject(a).jsonSameAs(a2);
+		assertObject(a).sameAs(a2);
 
 		OMap m = RdfXmlParser.DEFAULT.parse(rdfXml, OMap.class);
 		String json = SimpleJsonSerializer.DEFAULT_READABLE.serialize(m);

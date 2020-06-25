@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -30,12 +30,12 @@ public class SimpleMapTest {
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
-		assertObjectEquals("{a:'A',b:'B'}", m);
-		assertObjectEquals("['a','b']", m.keySet());
+		assertObject(m).json().is("{a:'A',b:'B'}");
+		assertObject(m.keySet()).json().is("['a','b']");
 		m.put("a", "1");
-		assertObjectEquals("{a:'1',b:'B'}", m);
+		assertObject(m).json().is("{a:'1',b:'B'}");
 		m.entrySet().iterator().next().setValue("2");
-		assertObjectEquals("{a:'2',b:'B'}", m);
+		assertObject(m).json().is("{a:'2',b:'B'}");
 		try { m.put("c", "1"); fail(); } catch (IllegalArgumentException e) {}
 
 		assertNull(m.get("c"));

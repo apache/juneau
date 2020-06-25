@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -94,7 +95,7 @@ public class ContactTest {
 			.set("email", "baz")
 			.set("$ref", "qux");
 
-		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", t);
+		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		t
 			.set("name", new StringBuilder("foo"))
@@ -102,7 +103,7 @@ public class ContactTest {
 			.set("email", new StringBuilder("baz"))
 			.set("$ref", new StringBuilder("qux"));
 
-		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", t);
+		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 
 		assertEquals("foo", t.get("name", String.class));
 		assertEquals("bar", t.get("url", URI.class).toString());
@@ -119,6 +120,6 @@ public class ContactTest {
 		assertNull(t.get(null, Object.class));
 		assertNull(t.get("foo", Object.class));
 
-		assertObjectEquals("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class));
+		assertObject(JsonParser.DEFAULT.parse("{name:'foo',url:'bar',email:'baz','$ref':'qux'}", Contact.class)).json().is("{name:'foo',url:'bar',email:'baz','$ref':'qux'}");
 	}
 }

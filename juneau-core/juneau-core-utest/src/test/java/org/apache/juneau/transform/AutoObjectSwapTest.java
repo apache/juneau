@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -74,12 +74,12 @@ public class AutoObjectSwapTest {
 
 	@Test
 	public void a01_swap_swap() throws Exception {
-		assertObjectEquals("{foo:'bar'}", find(A01.class).swap(null, new A01()));
+		assertObject(find(A01.class).swap(null, new A01())).json().is("{foo:'bar'}");
 	}
 
 	@Test
 	public void a02_swap_toObject() throws Exception {
-		assertObjectEquals("{foo:'bar'}", find(A02.class).swap(null, new A02()));
+		assertObject(find(A02.class).swap(null, new A02())).json().is("{foo:'bar'}");
 	}
 
 	@Test(expected = SerializeException.class)
@@ -102,7 +102,7 @@ public class AutoObjectSwapTest {
 			return STRINGMAP;
 		}
 		public static B01 unswap(Map<String,String> o) {
-			assertObjectEquals("{foo:'bar'}", o);
+			assertObject(o).json().is("{foo:'bar'}");
 			return new B01();
 		}
 	}
@@ -111,7 +111,7 @@ public class AutoObjectSwapTest {
 			return OMAP;
 		}
 		public static B02 create(OMap o) {
-			assertObjectEquals("{foo:'bar'}", o);
+			assertObject(o).json().is("{foo:'bar'}");
 			return new B02();
 		}
 	}
@@ -120,7 +120,7 @@ public class AutoObjectSwapTest {
 			return STRINGMAP;
 		}
 		public static B03 fromObject(Map<String,String> o) {
-			assertObjectEquals("{foo:'bar'}", o);
+			assertObject(o).json().is("{foo:'bar'}");
 			return new B03();
 		}
 	}
@@ -157,7 +157,7 @@ public class AutoObjectSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertObjectEquals("{foo:'bar'}", o);
+			assertObject(o).json().is("{foo:'bar'}");
 		}
 		public Map<String,String> swap() {
 			return STRINGMAP;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -1195,7 +1195,7 @@ public class BeanMapTest {
 		m.put("f2", 2);
 		m.put("f3", 3);
 
-		assertSortedObjectEquals("{f1:1,f2:2,f3:0}", m);
+		assertObject(m).jsonSorted().is("{f1:1,f2:2,f3:0}");
 	}
 
 	public static class Q1 {}
@@ -1921,8 +1921,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyOrder() throws Exception {
-		assertObjectEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", new V2());
-		assertObjectEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", new V3());
+		assertObject(new V2()).json().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertObject(new V3()).json().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class V {
@@ -1964,8 +1964,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanMethodOrder() throws Exception {
-		assertSortedObjectEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", new W2());
-		assertSortedObjectEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", new W3());
+		assertObject(new W2()).jsonSorted().is("{a1:'1',a2:'2',a3:'3',a4:'4'}");
+		assertObject(new W3()).jsonSorted().is("{a3:'3',a4:'4',a5:'5',a6:'6'}");
 	}
 
 	public static class W {
@@ -2102,7 +2102,7 @@ public class BeanMapTest {
 		BeanMap<AA> bm = BeanContext.DEFAULT.createSession().toBeanMap(aa);
 
 		bm.put("a", AList.of("x"));
-		assertObjectEquals("['x']", aa.a);
+		assertObject(aa.a).json().is("['x']");
 	}
 
 	public static class AA {

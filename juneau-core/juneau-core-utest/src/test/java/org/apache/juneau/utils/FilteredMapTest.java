@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,10 +40,10 @@ public class FilteredMapTest {
 
 		FilteredMap<String,Object> m2 = new FilteredMap<>(cm, m, new String[]{"a"});
 
-		assertObjectEquals("{a:'1'}", m2);
+		assertObject(m2).json().is("{a:'1'}");
 
 		m2.entrySet().iterator().next().setValue("3");
-		assertObjectEquals("{a:'3'}", m2);
+		assertObject(m2).json().is("{a:'3'}");
 
 		try { m3 = new FilteredMap<>(cm2, null, new String[0]); fail(); } catch (IllegalArgumentException e) {}
 		try { m3 = new FilteredMap<>(cm, m, null); fail(); } catch (IllegalArgumentException e) {}

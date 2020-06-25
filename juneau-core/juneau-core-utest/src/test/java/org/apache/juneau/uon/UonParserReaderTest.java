@@ -17,8 +17,8 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @SuppressWarnings({"resource"})
@@ -188,7 +188,7 @@ public class UonParserReaderTest {
 		StringBuilder sb = new StringBuilder();
 		byte[] b = s.getBytes("UTF-8");
 		for (int i = 0; i < b.length; i++)
-			sb.append('%').append(TestUtils.toHex(b[i]));
+			sb.append('%').append(StringUtils.toHex(b[i]));
 		return sb.toString();
 	}
 

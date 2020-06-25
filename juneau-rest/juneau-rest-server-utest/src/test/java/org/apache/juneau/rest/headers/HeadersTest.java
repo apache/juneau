@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.headers;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -658,136 +659,136 @@ public class HeadersTest {
 	@Test
 	public void sa01_accept() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/accept","get","header","Accept");
-		assertObjectEquals("{'in':'header',name:'Accept',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Accept',type:'string'}");
 	}
 	@Test
 	public void sa02_acceptCharset() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/acceptCharset","get","header","Accept-Charset");
-		assertObjectEquals("{'in':'header',name:'Accept-Charset',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Accept-Charset',type:'string'}");
 	}
 	@Test
 	public void sa03_acceptEncoding() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/acceptEncoding","get","header","Accept-Encoding");
-		assertObjectEquals("{'in':'header',name:'Accept-Encoding',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Accept-Encoding',type:'string'}");
 	}
 	@Test
 	public void sa04_acceptLanguage() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/acceptLanguage","get","header","Accept-Language");
-		assertObjectEquals("{'in':'header',name:'Accept-Language',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Accept-Language',type:'string'}");
 	}
 	@Test
 	public void sa05_authorization() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/authorization","get","header","Authorization");
-		assertObjectEquals("{'in':'header',name:'Authorization',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Authorization',type:'string'}");
 	}
 	@Test
 	public void sa06_cacheControl() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/cacheControl","get","header","Cache-Control");
-		assertObjectEquals("{'in':'header',name:'Cache-Control',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Cache-Control',type:'string'}");
 	}
 	@Test
 	public void sa07_connection() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/connection","get","header","Connection");
-		assertObjectEquals("{'in':'header',name:'Connection',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Connection',type:'string'}");
 	}
 	@Test
 	public void sa08_contentLength() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/contentLength","get","header","Content-Length");
-		assertObjectEquals("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}");
 	}
 	@Test
 	public void sa09_contentType() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/contentType","get","header","Content-Type");
-		assertObjectEquals("{'in':'header',name:'Content-Type',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Content-Type',type:'string'}");
 	}
 	@Test
 	public void sa10_date() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/date","get","header","Date");
-		assertObjectEquals("{'in':'header',name:'Date',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Date',type:'string'}");
 	}
 	@Test
 	public void sa11_expect() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/expect","get","header","Expect");
-		assertObjectEquals("{'in':'header',name:'Expect',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Expect',type:'string'}");
 	}
 	@Test
 	public void sa12_() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/from","get","header","From");
-		assertObjectEquals("{'in':'header',name:'From',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'From',type:'string'}");
 	}
 	@Test
 	public void sa13_host() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/host","get","header","Host");
-		assertObjectEquals("{'in':'header',name:'Host',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Host',type:'string'}");
 	}
 	@Test
 	public void sa14_ifMatch() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/ifMatch","get","header","If-Match");
-		assertObjectEquals("{'in':'header',name:'If-Match',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'If-Match',type:'string'}");
 	}
 	@Test
 	public void sa15_ifModifiedSince() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/ifModifiedSince","get","header","If-Modified-Since");
-		assertObjectEquals("{'in':'header',name:'If-Modified-Since',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'If-Modified-Since',type:'string'}");
 	}
 	@Test
 	public void sa16_ifNoneMatch() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/ifNoneMatch","get","header","If-None-Match");
-		assertObjectEquals("{'in':'header',name:'If-None-Match',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'If-None-Match',type:'string'}");
 	}
 	@Test
 	public void sa17_ifRange() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/ifRange","get","header","If-Range");
-		assertObjectEquals("{'in':'header',name:'If-Range',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'If-Range',type:'string'}");
 	}
 	@Test
 	public void sa18_ifUnmodifiedSince() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/ifUnmodifiedSince","get","header","If-Unmodified-Since");
-		assertObjectEquals("{'in':'header',name:'If-Unmodified-Since',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'If-Unmodified-Since',type:'string'}");
 	}
 	@Test
 	public void sa19_maxForwards() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/maxForwards","get","header","Max-Forwards");
-		assertObjectEquals("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}");
 	}
 	@Test
 	public void sa20_pragma() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/pragma","get","header","Pragma");
-		assertObjectEquals("{'in':'header',name:'Pragma',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Pragma',type:'string'}");
 	}
 	@Test
 	public void sa21_proxyAuthorization() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/proxyAuthorization","get","header","Proxy-Authorization");
-		assertObjectEquals("{'in':'header',name:'Proxy-Authorization',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Proxy-Authorization',type:'string'}");
 	}
 	@Test
 	public void sa22_range() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/range","get","header","Range");
-		assertObjectEquals("{'in':'header',name:'Range',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Range',type:'string'}");
 	}
 	@Test
 	public void sa23_referer() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/referer","get","header","Referer");
-		assertObjectEquals("{'in':'header',name:'Referer',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Referer',type:'string'}");
 	}
 	@Test
 	public void sa24_te() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/te","get","header","TE");
-		assertObjectEquals("{'in':'header',name:'TE',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'TE',type:'string'}");
 	}
 	@Test
 	public void sa25_upgrade() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/upgrade","get","header","Upgrade");
-		assertObjectEquals("{'in':'header',name:'Upgrade',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Upgrade',type:'string'}");
 	}
 	@Test
 	public void sa26_userAgent() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/userAgent","get","header","User-Agent");
-		assertObjectEquals("{'in':'header',name:'User-Agent',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'User-Agent',type:'string'}");
 	}
 	@Test
 	public void sa27_warning() throws Exception {
 		ParameterInfo pi = sa.getParameterInfo("/warning","get","header","Warning");
-		assertObjectEquals("{'in':'header',name:'Warning',type:'string'}", pi);
+		assertObject(pi).json().is("{'in':'header',name:'Warning',type:'string'}");
 	}
 }

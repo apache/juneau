@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -52,6 +52,6 @@ public class HtmlTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read("<table><tr><td>foo</td><td>bar</td></tr></table>", Map.class, String.class, String.class);
-		assertObjectEquals("{foo:'bar'}", o);
+		assertObject(o).json().is("{foo:'bar'}");
 	}
 }

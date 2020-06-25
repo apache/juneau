@@ -40,12 +40,6 @@ public class TestUtils {
 		.addBeanTypes().addRootType()
 		.build();
 
-	private static JsonSerializer js3 = JsonSerializer.create()
-		.ssq()
-		.sortProperties()
-		.addBeanTypes().addRootType()
-		.build();
-
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();
 
 	/**
@@ -139,16 +133,6 @@ public class TestUtils {
 			System.err.println(xml);               // NOT DEBUG
 			throw e;
 		}
-	}
-
-	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-
-	public static final String toHex(byte b) {
-		char[] c = new char[2];
-		int v = b & 0xFF;
-		c[0] = hexArray[v >>> 4];
-		c[1] = hexArray[v & 0x0F];
-		return new String(c);
 	}
 
 	/**
@@ -247,21 +231,6 @@ public class TestUtils {
 	 */
 	public static final void assertXmlEquals(String expected, String actual) throws Exception {
 		Assert.assertEquals(sortXml(expected), sortXml(actual));
-	}
-
-	/**
-	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT.toString().
-	 */
-	public static final void assertObjectEquals(String s, Object o) {
-		assertObjectEquals(s, o, js2);
-	}
-
-	/**
-	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT.toString()
-	 * with BEAN_sortProperties set to true.
-	 */
-	public static final void assertSortedObjectEquals(String s, Object o) {
-		assertObjectEquals(s, o, js3);
 	}
 
 	/**

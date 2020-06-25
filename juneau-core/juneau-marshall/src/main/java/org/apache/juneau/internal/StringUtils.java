@@ -1109,6 +1109,22 @@ public final class StringUtils {
 		return n;
 	}
 
+	private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+	/**
+	 * Converts the specified byte into a 2 hexadecimal characters.
+	 *
+	 * @param b The number to convert to hex.
+	 * @return A <code><jk>char</jk>[2]</code> containing the specified characters.
+	 */
+	public static final String toHex(byte b) {
+		char[] c = new char[2];
+		int v = b & 0xFF;
+		c[0] = hexArray[v >>> 4];
+		c[1] = hexArray[v & 0x0F];
+		return new String(c);
+	}
+
 	/**
 	 * Converts the specified number into a 4 hexadecimal characters.
 	 *
@@ -1164,7 +1180,7 @@ public final class StringUtils {
 
 	/**
 	 * Finds the position where the two strings differ.
-	 * 
+	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
 	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.
@@ -1187,7 +1203,7 @@ public final class StringUtils {
 
 	/**
 	 * Finds the position where the two strings differ ignoring case.
-	 * 
+	 *
 	 * @param s1 The first string.
 	 * @param s2 The second string.
 	 * @return The position where the two strings differ, or <c>-1</c> if they're equal.

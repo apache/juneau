@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
-import static org.apache.juneau.rest.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -47,10 +47,10 @@ public class ClientFuturesTest {
 
 		Future<RestResponse> f2 = a.get("").runFuture();
 		Future<OMap> m = f2.get().getBody().asFuture(OMap.class);
-		assertObjectEquals("{foo:'bar'}", m.get());
+		assertObject(m.get()).json().is("{foo:'bar'}");
 
 		Future<RestResponse> f3 = a.get("").runFuture();
 		Future<String> s = f3.get().getBody().asStringFuture();
-		assertObjectEquals("'{foo:\\'bar\\'}'", s.get());
+		assertObject(s.get()).json().is("'{foo:\\'bar\\'}'");
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -44,7 +45,7 @@ public class PropertyStoreTest {
 		b.set("A.f2.s", "2");
 		b.set("A.f1.s", "1");
 
-		assertObjectEquals("{A:{'f1.s':'1','f2.s':'2'},B:{'f3.s':'3','f4.s':'4'}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.s':'1','f2.s':'2'},B:{'f3.s':'3','f4.s':'4'}}");
 	}
 
 	//====================================================================================================
@@ -77,7 +78,7 @@ public class PropertyStoreTest {
 		b.set("A.f5.s", OList.ofJson("[1,2]"));
 		b.set("A.f6.s", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}", ps);
+		assertObject(ps).json().is("{A:{'f1.s':'1','f2.s':'2','f3.s':'true','f4.s':'{foo:\\'bar\\'}','f5.s':'[1,2]'}}");
 		assertInstanceOf(String.class, ps.getProperty("A.f1.s"));
 		assertInstanceOf(String.class, ps.getProperty("A.f2.s"));
 		assertInstanceOf(String.class, ps.getProperty("A.f3.s"));
@@ -92,7 +93,7 @@ public class PropertyStoreTest {
 		b.set("A.f5", OList.ofJson("[1,2]"));
 		b.set("A.f6", null);
 		ps = b.build();
-		assertObjectEquals("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}", ps);
+		assertObject(ps).json().is("{A:{f1:'1',f2:'2',f3:'true',f4:'{foo:\\'bar\\'}',f5:'[1,2]'}}");
 		assertInstanceOf(String.class, ps.getProperty("A.f1"));
 		assertInstanceOf(String.class, ps.getProperty("A.f2"));
 		assertInstanceOf(String.class, ps.getProperty("A.f3"));
@@ -105,7 +106,7 @@ public class PropertyStoreTest {
 		b.remove("A.f4");
 		b.remove("A.f5");
 
-		assertObjectEquals("{A:{f1:'x1'}}", b.build());
+		assertObject(b.build()).json().is("{A:{f1:'x1'}}");
 
 		testError(b, "A.f1/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
 		testError(b, "A.f1/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1'.");
@@ -122,7 +123,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.b", new StringBuilder("foo"));
 		b.set("A.f5.b", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.b':true,'f2.b':false,'f3.b':true,'f4.b':false}}", ps);
+		assertObject(ps).json().is("{A:{'f1.b':true,'f2.b':false,'f3.b':true,'f4.b':false}}");
 		assertInstanceOf(Boolean.class, ps.getProperty("A.f1.b"));
 		assertInstanceOf(Boolean.class, ps.getProperty("A.f2.b"));
 		assertInstanceOf(Boolean.class, ps.getProperty("A.f3.b"));
@@ -133,7 +134,7 @@ public class PropertyStoreTest {
 		b.set("A.f3.b", null);
 		b.remove("A.f4.b");
 		b.remove("A.f5.b");
-		assertObjectEquals("{A:{'f1.b':true}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.b':true}}");
 
 		testError(b, "A.f1.b/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.b'.");
 		testError(b, "A.f1.b/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.b'.");
@@ -150,7 +151,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.i", new StringBuilder("-1"));
 		b.set("A.f5.i", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.i':123,'f2.i':123,'f3.i':123,'f4.i':-1}}", ps);
+		assertObject(ps).json().is("{A:{'f1.i':123,'f2.i':123,'f3.i':123,'f4.i':-1}}");
 		assertInstanceOf(Integer.class, ps.getProperty("A.f1.i"));
 		assertInstanceOf(Integer.class, ps.getProperty("A.f2.i"));
 		assertInstanceOf(Integer.class, ps.getProperty("A.f3.i"));
@@ -161,7 +162,7 @@ public class PropertyStoreTest {
 		b.set("A.f3.i", null);
 		b.remove("A.f4.i");
 		b.remove("A.f5.i");
-		assertObjectEquals("{A:{'f1.i':123}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.i':123}}");
 
 		testError(b, "A.f1.i/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.i'.");
 		testError(b, "A.f1.i/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.i'.");
@@ -177,12 +178,12 @@ public class PropertyStoreTest {
 		b.set("A.f2.c", Integer.class);
 		b.set("A.f3.c", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.c':'java.lang.String','f2.c':'java.lang.Integer'}}", ps);
+		assertObject(ps).json().is("{A:{'f1.c':'java.lang.String','f2.c':'java.lang.Integer'}}");
 		assertInstanceOf(Class.class, ps.getProperty("A.f1.c"));
 
 		// Test nulls
 		b.set("A.f2.c", null);
-		assertObjectEquals("{A:{'f1.c':'java.lang.String'}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.c':'java.lang.String'}}");
 
 		testError(b, "A.f1.c/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.c'.");
 		testError(b, "A.f1.c/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.c'.");
@@ -202,7 +203,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.o", StringBuilder.class);
 		b.set("A.f5.o", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}", ps);
+		assertObject(ps).json().is("{A:{'f1.o':123,'f2.o':true,'f3.o':'123','f4.o':'java.lang.StringBuilder'}}");
 		assertInstanceOf(Integer.class, ps.getProperty("A.f1.o"));
 		assertInstanceOf(Boolean.class, ps.getProperty("A.f2.o"));
 		assertInstanceOf(StringBuilder.class, ps.getProperty("A.f3.o"));
@@ -213,7 +214,7 @@ public class PropertyStoreTest {
 		b.set("A.f3.o", null);
 		b.remove("A.f4.o");
 		b.remove("A.f5.o");
-		assertObjectEquals("{A:{'f1.o':123}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.o':123}}");
 
 		testError(b, "A.f1.o/add", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.o'.");
 		testError(b, "A.f1.o/add.123", "foo", "addTo() can only be used on properties of type Set on property 'A.f1.o'.");
@@ -230,7 +231,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.ss", "['foo',123,true]");
 		b.set("A.f5.ss", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.ss':['bar','foo'],'f2.ss':['123','ONE','true'],'f3.ss':['foo'],'f4.ss':['123','foo','true']}}", ps);
+		assertObject(ps).json().is("{A:{'f1.ss':['bar','foo'],'f2.ss':['123','ONE','true'],'f3.ss':['foo'],'f4.ss':['123','foo','true']}}");
 		assertInstanceOf(Set.class, ps.getProperty("A.f1.ss"));
 		assertInstanceOf(Set.class, ps.getProperty("A.f2.ss"));
 		assertInstanceOf(Set.class, ps.getProperty("A.f3.ss"));
@@ -238,48 +239,48 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.ss/add", "foo");
-		assertObjectEquals("{A:{'f1.ss':['foo']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['foo']}}");
 		b.set("A.f1.ss/remove", "foo");
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.ss/add", "['foo','bar','baz']");
 		b.set("A.f1.ss/add", "qux");
 		b.addTo("A.f1.ss","quux");
-		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}");
 		b.set("A.f1.ss/remove", "['foo','bar']");
 		b.set("A.f1.ss/remove", "qux");
 		b.removeFrom("A.f1.ss", "quux");
-		assertObjectEquals("{A:{'f1.ss':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['baz']}}");
 
 		b.clear();
 		b.set("A.f1.ss/add", AList.of("foo", "bar", "baz"));
 		b.set("A.f1.ss/add", AList.of("qux"));
 		b.addTo("A.f1.ss", AList.of("quux"));
-		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}");
 		b.set("A.f1.ss/remove", AList.of("foo", "bar"));
 		b.set("A.f1.ss/remove", AList.of("qux"));
 		b.removeFrom("A.f1.ss", AList.of("quux"));
-		assertObjectEquals("{A:{'f1.ss':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['baz']}}");
 
 		b.clear();
 		b.set("A.f1.ss/add", new String[]{"foo", "bar", "baz"});
 		b.set("A.f1.ss/add", new String[]{"qux"});
 		b.addTo("A.f1.ss", new String[]{"quux"});
-		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['bar','baz','foo','quux','qux']}}");
 
 		b.addTo("A.f1.ss", new String[]{"quuux"});
 		b.addTo("A.f1.ss", new String[]{"quuuux"});
-		assertObjectEquals("{A:{'f1.ss':['bar','baz','foo','quuuux','quuux','quux','qux']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['bar','baz','foo','quuuux','quuux','quux','qux']}}");
 		b.set("A.f1.ss/remove", new String[]{"quuux", "quuuux"});
 
 		b.set("A.f1.ss/remove", new String[]{"foo", "bar"});
 		b.set("A.f1.ss/remove", new String[]{"qux"});
 		b.removeFrom("A.f1.ss", new String[]{"quux"});
-		assertObjectEquals("{A:{'f1.ss':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ss':['baz']}}");
 
 		b.set("A.f1.ss", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
@@ -292,7 +293,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.si", "[1,2,3]");
 		b.set("A.f5.si", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.si':[1,2,3],'f2.si':[123,456],'f3.si':[123],'f4.si':[1,2,3]}}", ps);
+		assertObject(ps).json().is("{A:{'f1.si':[1,2,3],'f2.si':[123,456],'f3.si':[123],'f4.si':[1,2,3]}}");
 		assertInstanceOf(Set.class, ps.getProperty("A.f1.si"));
 		assertInstanceOf(Set.class, ps.getProperty("A.f2.si"));
 		assertInstanceOf(Set.class, ps.getProperty("A.f3.si"));
@@ -300,72 +301,72 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.si/add", "123");
-		assertObjectEquals("{A:{'f1.si':[123]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[123]}}");
 		b.set("A.f1.si/remove", "123");
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.si/add", "['3','2','1']");
 		b.set("A.f1.si/add", "4");
 		b.addTo("A.f1.si", "5");
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", "['1','2']");
 		b.set("A.f1.si/remove", "3");
 		b.removeFrom("A.f1.si", "4");
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.clear();
 		b.set("A.f1.si/add", AList.of("3", "2", "1"));
 		b.set("A.f1.si/add", AList.of("4"));
 		b.addTo("A.f1.si", AList.of("5"));
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", AList.of("1", "2"));
 		b.set("A.f1.si/remove", AList.of("3"));
 		b.removeFrom("A.f1.si", AList.of("4"));
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.clear();
 		b.set("A.f1.si/add", AList.of(1, 2, 3));
 		b.set("A.f1.si/add", AList.of(4));
 		b.addTo("A.f1.si", AList.of(5));
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", AList.of(1, 2));
 		b.set("A.f1.si/remove", AList.of(3));
 		b.removeFrom("A.f1.si", AList.of(4));
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.clear();
 		b.set("A.f1.si/add", new String[]{"3", "2", "1"});
 		b.set("A.f1.si/add", new String[]{"4"});
 		b.addTo("A.f1.si", new String[]{"5"});
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", new String[]{"1", "2"});
 		b.set("A.f1.si/remove", new String[]{"3"});
 		b.removeFrom("A.f1.si", new String[]{"4"});
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.clear();
 		b.set("A.f1.si/add", new Integer[]{3, 2, 1});
 		b.set("A.f1.si/add", new Integer[]{4});
 		b.addTo("A.f1.si", new Integer[]{5});
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", new Integer[]{1, 2});
 		b.set("A.f1.si/remove", new Integer[]{3});
 		b.removeFrom("A.f1.si", new Integer[]{4});
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.clear();
 		b.set("A.f1.si/add", new int[]{3, 2, 1});
 		b.set("A.f1.si/add", new int[]{4});
 		b.addTo("A.f1.si", new int[]{5});
-		assertObjectEquals("{A:{'f1.si':[1,2,3,4,5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[1,2,3,4,5]}}");
 		b.set("A.f1.si/remove", new int[]{1, 2});
 		b.set("A.f1.si/remove", new int[]{3});
 		b.removeFrom("A.f1.si", new int[]{4});
-		assertObjectEquals("{A:{'f1.si':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.si':[5]}}");
 
 		b.set("A.f1.si", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
@@ -376,7 +377,7 @@ public class PropertyStoreTest {
 		b.set("A.f2.sc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.sc", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}", ps);
+		assertObject(ps).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String'],'f2.sc':['java.lang.Integer','java.lang.String']}}");
 		assertInstanceOf(Set.class, ps.getProperty("A.f1.sc"));
 		assertInstanceOf(Set.class, ps.getProperty("A.f2.sc"));
 		assertInstanceOf(Class.class, ((Set<?>)ps.getProperty("A.f1.sc")).iterator().next());
@@ -384,9 +385,9 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.sc/add", Integer.class);
 		b.addTo("A.f1.sc", String.class);
-		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.sc/remove", Integer.class);
-		assertObjectEquals("{A:{'f1.sc':['java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.String']}}");
 
 		b.clear();
 		testError(b, "A.f1.sc/add", "['java.lang.Integer']", "Cannot add value '[\\'java.lang.Integer\\']' (String) to property 'f1.sc' (Set<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
@@ -396,34 +397,34 @@ public class PropertyStoreTest {
 		b.set("A.f1.sc/add", AList.of(Integer.class, String.class));
 		b.set("A.f1.sc/add", AList.of(Map.class));
 		b.addTo("A.f1.sc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}");
 		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
 		b.removeFrom("A.f1.sc", AList.of());
 		b.removeFrom("A.f1.sc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.sc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.util.Map']}}");
 
 		b.clear();
 		b.set("A.f1.sc/add", AList.of(Integer.class, String.class));
 		b.set("A.f1.sc/add", AList.of(Map.class));
 		b.addTo("A.f1.sc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}");
 		b.set("A.f1.sc/remove", AList.of(Integer.class, String.class));
 		b.set("A.f1.sc/remove", AList.of());
 		b.removeFrom("A.f1.sc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.sc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.util.Map']}}");
 
 		b.clear();
 		b.set("A.f1.sc/add", new Class<?>[]{Integer.class, String.class});
 		b.set("A.f1.sc/add", new Class<?>[]{Map.class});
 		b.addTo("A.f1.sc", new Class<?>[]{List.class});
-		assertObjectEquals("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.lang.Integer','java.lang.String','java.util.List','java.util.Map']}}");
 		b.set("A.f1.sc/remove", new Class<?>[]{Integer.class, String.class});
 		b.set("A.f1.sc/remove", new Class<?>[]{});
 		b.removeFrom("A.f1.sc", new Class<?>[]{List.class});
-		assertObjectEquals("{A:{'f1.sc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sc':['java.util.Map']}}");
 
 		b.set("A.f1.sc", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
@@ -436,7 +437,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.ls", "['foo',123,true]");
 		b.set("A.f5.ls", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.ls':['foo','bar'],'f2.ls':['123','true','ONE'],'f3.ls':['foo'],'f4.ls':['foo','123','true']}}", ps);
+		assertObject(ps).json().is("{A:{'f1.ls':['foo','bar'],'f2.ls':['123','true','ONE'],'f3.ls':['foo'],'f4.ls':['foo','123','true']}}");
 		assertInstanceOf(List.class, ps.getProperty("A.f1.ls"));
 		assertInstanceOf(List.class, ps.getProperty("A.f2.ls"));
 		assertInstanceOf(List.class, ps.getProperty("A.f3.ls"));
@@ -444,50 +445,50 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.ls/prepend", "foo");
-		assertObjectEquals("{A:{'f1.ls':['foo']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['foo']}}");
 		b.set("A.f1.ls/remove", "foo");
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.ls/prepend", "['foo','bar','baz']");
 		b.set("A.f1.ls/prepend", "qux");
 		b.prependTo("A.f1.ls","quux");
-		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}");
 		b.set("A.f1.ls/remove", "['foo','bar']");
 		b.set("A.f1.ls/remove", "qux");
 		b.removeFrom("A.f1.ls", "quux");
-		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['baz']}}");
 
 		b.clear();
 		b.set("A.f1.ls/prepend", AList.of("foo", "bar", "baz"));
 		b.set("A.f1.ls/prepend", AList.of("qux"));
 		b.prependTo("A.f1.ls", AList.of("quux"));
-		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}");
 		b.set("A.f1.ls/remove", AList.of("foo", "bar"));
 		b.set("A.f1.ls/remove", AList.of("qux"));
 		b.removeFrom("A.f1.ls", AList.of("quux"));
-		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['baz']}}");
 
 		b.clear();
 		b.set("A.f1.ls/prepend", new String[]{"foo", "bar", "baz"});
 		b.set("A.f1.ls/prepend", new String[]{"qux"});
 		b.prependTo("A.f1.ls", new String[]{"quux"});
-		assertObjectEquals("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['quux','qux','foo','bar','baz']}}");
 
 		b.appendTo("A.f1.ls", new String[]{"q1x", "q2x"});
 		b.appendTo("A.f1.ls", "q3x");
 		b.prependTo("A.f1.ls", new String[]{"q4x", "q5x"});
 		b.prependTo("A.f1.ls", "q6x");
-		assertObjectEquals("{A:{'f1.ls':['q6x','q4x','q5x','quux','qux','foo','bar','baz','q1x','q2x','q3x']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['q6x','q4x','q5x','quux','qux','foo','bar','baz','q1x','q2x','q3x']}}");
 		b.set("A.f1.ls/remove", new String[]{"q1x","q2x","q3x","q4x","q5x","q6x"});
 
 		b.set("A.f1.ls/remove", new String[]{"foo", "bar"});
 		b.set("A.f1.ls/remove", new String[]{"qux"});
 		b.removeFrom("A.f1.ls", new String[]{"quux"});
-		assertObjectEquals("{A:{'f1.ls':['baz']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.ls':['baz']}}");
 
 		b.set("A.f1.ls", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 //		b.clear();
 //		b.set("A.f1.ls/add", "['foo','bar','baz']");
@@ -518,7 +519,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.li", "[1,2,3]");
 		b.set("A.f5.li", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.li':[1,2,3],'f2.li':[123,456],'f3.li':[123],'f4.li':[1,2,3]}}", ps);
+		assertObject(ps).json().is("{A:{'f1.li':[1,2,3],'f2.li':[123,456],'f3.li':[123],'f4.li':[1,2,3]}}");
 		assertInstanceOf(List.class, ps.getProperty("A.f1.li"));
 		assertInstanceOf(List.class, ps.getProperty("A.f2.li"));
 		assertInstanceOf(List.class, ps.getProperty("A.f3.li"));
@@ -526,72 +527,72 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.li/prepend", "123");
-		assertObjectEquals("{A:{'f1.li':[123]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[123]}}");
 		b.set("A.f1.li/remove", "123");
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", "['1','2','3']");
 		b.set("A.f1.li/prepend", "4");
 		b.prependTo("A.f1.li", "5");
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", "['1','2']");
 		b.set("A.f1.li/remove", "3");
 		b.removeFrom("A.f1.li", "4");
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", AList.of("1", "2", "3"));
 		b.set("A.f1.li/prepend", AList.of("4"));
 		b.prependTo("A.f1.li", AList.of("5"));
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", AList.of("1", "2"));
 		b.set("A.f1.li/remove", AList.of("3"));
 		b.removeFrom("A.f1.li", AList.of("4"));
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", AList.of(1, 2, 3));
 		b.set("A.f1.li/prepend", AList.of(4));
 		b.prependTo("A.f1.li", AList.of(5));
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", AList.of(1, 2));
 		b.set("A.f1.li/remove", AList.of(3));
 		b.removeFrom("A.f1.li", AList.of(4));
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", new String[]{"1", "2", "3"});
 		b.set("A.f1.li/prepend", new String[]{"4"});
 		b.prependTo("A.f1.li", new String[]{"5"});
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", new String[]{"1", "2"});
 		b.set("A.f1.li/remove", new String[]{"3"});
 		b.removeFrom("A.f1.li", new String[]{"4"});
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", new Integer[]{1, 2, 3});
 		b.set("A.f1.li/prepend", new Integer[]{4});
 		b.prependTo("A.f1.li", new Integer[]{5});
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", new Integer[]{1, 2});
 		b.set("A.f1.li/remove", new Integer[]{3});
 		b.removeFrom("A.f1.li", new Integer[]{4});
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.clear();
 		b.set("A.f1.li/prepend", new int[]{1, 2, 3});
 		b.set("A.f1.li/prepend", new int[]{4});
 		b.prependTo("A.f1.li", new int[]{5});
-		assertObjectEquals("{A:{'f1.li':[5,4,1,2,3]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5,4,1,2,3]}}");
 		b.set("A.f1.li/remove", new int[]{1, 2});
 		b.set("A.f1.li/remove", new int[]{3});
 		b.removeFrom("A.f1.li", new int[]{4});
-		assertObjectEquals("{A:{'f1.li':[5]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.li':[5]}}");
 
 		b.set("A.f1.li", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 //		b.clear();
 //		b.set("A.f1.ls/add", "['1','2','3']");
@@ -620,16 +621,16 @@ public class PropertyStoreTest {
 		b.set("A.f2.lc", AList.of(String.class, Integer.class, null));
 		b.set("A.f3.lc", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}", ps);
+		assertObject(ps).json().is("{A:{'f1.lc':['java.lang.String','java.lang.Integer'],'f2.lc':['java.lang.String','java.lang.Integer']}}");
 		assertInstanceOf(List.class, ps.getProperty("A.f1.lc"));
 		assertInstanceOf(List.class, ps.getProperty("A.f2.lc"));
 
 		b.clear();
 		b.set("A.f1.lc/prepend", Integer.class);
 		b.prependTo("A.f1.lc", String.class);
-		assertObjectEquals("{A:{'f1.lc':['java.lang.String','java.lang.Integer']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.lang.String','java.lang.Integer']}}");
 		b.set("A.f1.lc/remove", Integer.class);
-		assertObjectEquals("{A:{'f1.lc':['java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.lang.String']}}");
 
 		b.clear();
 		testError(b, "A.f1.lc/prepend", "['java.lang.Integer']", "Cannot prepend value '[\\'java.lang.Integer\\']' (String) to property 'f1.lc' (List<Class>).  Value 'java.lang.Integer' (String) cannot be converted to a Class.");
@@ -639,34 +640,34 @@ public class PropertyStoreTest {
 		b.set("A.f1.lc/prepend", AList.of(Integer.class, String.class));
 		b.set("A.f1.lc/prepend", AList.of(Map.class));
 		b.prependTo("A.f1.lc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
 		b.removeFrom("A.f1.lc", AList.of());
 		b.removeFrom("A.f1.lc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.Map']}}");
 
 		b.clear();
 		b.set("A.f1.lc/prepend", AList.of(Integer.class, String.class));
 		b.set("A.f1.lc/prepend", AList.of(Map.class));
 		b.prependTo("A.f1.lc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.lc/remove", AList.of(Integer.class, String.class));
 		b.set("A.f1.lc/remove", AList.of());
 		b.removeFrom("A.f1.lc", AList.of(List.class));
-		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.Map']}}");
 
 		b.clear();
 		b.set("A.f1.lc/prepend", new Class<?>[]{Integer.class, String.class});
 		b.set("A.f1.lc/prepend", new Class<?>[]{Map.class});
 		b.prependTo("A.f1.lc", new Class<?>[]{List.class});
-		assertObjectEquals("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.List','java.util.Map','java.lang.Integer','java.lang.String']}}");
 		b.set("A.f1.lc/remove", new Class<?>[]{Integer.class, String.class});
 		b.set("A.f1.lc/remove", new Class<?>[]{});
 		b.removeFrom("A.f1.lc", new Class<?>[]{List.class});
-		assertObjectEquals("{A:{'f1.lc':['java.util.Map']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lc':['java.util.Map']}}");
 
 		b.set("A.f1.lc", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 //		b.set("A.f1.lc/add", String.class);
@@ -693,7 +694,7 @@ public class PropertyStoreTest {
 		b.set("A.f2.lo", AList.of(123, true, new StringBuilder(123), StringBuilder.class, null));
 		b.set("A.f3.lo", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}", ps);
+		assertObject(ps).json().is("{A:{'f1.lo':['java.lang.StringBuilder'],'f2.lo':[123,true,'','java.lang.StringBuilder']}}");
 		assertInstanceOf(List.class, ps.getProperty("A.f1.lo"));
 		assertInstanceOf(List.class, ps.getProperty("A.f2.lo"));
 		assertInstanceOf(Class.class, ((List<?>)ps.getProperty("A.f1.lo")).get(0));
@@ -705,42 +706,42 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.lo/prepend", 1);
 		b.prependTo("A.f1.lo", 2);
-		assertObjectEquals("{A:{'f1.lo':[2,1]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':[2,1]}}");
 		b.set("A.f1.lo/remove", 1);
-		assertObjectEquals("{A:{'f1.lo':[2]}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':[2]}}");
 
 		b.clear();
 		b.set("A.f1.lo/prepend", AList.of(StringBuilder.class));
 		b.set("A.f1.lo/prepend", AList.of(HashMap.class));
 		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}");
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
 		b.removeFrom("A.f1.lo", AList.of());
 		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.lang.StringBuilder']}}");
 
 		b.clear();
 		b.set("A.f1.lo/prepend", AList.of(StringBuilder.class));
 		b.set("A.f1.lo/prepend", AList.of(HashMap.class));
 		b.prependTo("A.f1.lo", AList.of(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}");
 		b.set("A.f1.lo/remove", AList.of(HashMap.class));
 		b.set("A.f1.lo/remove", AList.of());
 		b.removeFrom("A.f1.lo", AList.of(LinkedList.class));
-		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.lang.StringBuilder']}}");
 
 		b.clear();
 		b.set("A.f1.lo/prepend", new Class<?>[]{StringBuilder.class});
 		b.set("A.f1.lo/prepend", new Class<?>[]{HashMap.class});
 		b.prependTo("A.f1.lo", new Class<?>[]{LinkedList.class});
-		assertObjectEquals("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.util.LinkedList','java.util.HashMap','java.lang.StringBuilder']}}");
 		b.set("A.f1.lo/remove", new Class<?>[]{HashMap.class});
 		b.set("A.f1.lo/remove", new Class<?>[]{});
 		b.removeFrom("A.f1.lo", new Class<?>[]{LinkedList.class});
-		assertObjectEquals("{A:{'f1.lo':['java.lang.StringBuilder']}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.lo':['java.lang.StringBuilder']}}");
 
 		b.set("A.f1.lo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 //		b.clear();
 //		b.set("A.f1.lo/add", StringBuilder.class);
@@ -768,7 +769,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.sms", "{foo:'bar',baz:123,qux:true}");
 		b.set("A.f5.sms", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}", ps);
+		assertObject(ps).json().is("{A:{'f1.sms':{baz:'qux',foo:'bar'},'f2.sms':{bar:'true',baz:'ONE',foo:'123'},'f3.sms':{foo:'bar'},'f4.sms':{baz:'123',foo:'bar',qux:'true'}}}");
 		assertInstanceOf(Map.class, ps.getProperty("A.f1.sms"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f2.sms"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f3.sms"));
@@ -776,17 +777,17 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.sms/put", "{foo:'bar'}");
-		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sms':{foo:'bar'}}}");
 
 		b.clear();
 		b.set("A.f1.sms/put.foo", "bar");
-		assertObjectEquals("{A:{'f1.sms':{foo:'bar'}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.sms':{foo:'bar'}}}");
 		b.set("A.f1.sms/put.foo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.sms", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.sms", "{foo:'bar'}");
@@ -809,7 +810,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.smi", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smi", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}", ps);
+		assertObject(ps).json().is("{A:{'f1.smi':{baz:2,foo:1},'f2.smi':{bar:456,foo:123},'f3.smi':{foo:123},'f4.smi':{baz:456,foo:123}}}");
 		assertInstanceOf(Map.class, ps.getProperty("A.f1.smi"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f2.smi"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f3.smi"));
@@ -817,17 +818,17 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.smi/put", "{foo:'123'}");
-		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.smi':{foo:123}}}");
 
 		b.clear();
 		b.set("A.f1.smi/put.foo", "123");
-		assertObjectEquals("{A:{'f1.smi':{foo:123}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.smi':{foo:123}}}");
 		b.set("A.f1.smi/put.foo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smi", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smi", "{foo:'123'}");
@@ -848,7 +849,7 @@ public class PropertyStoreTest {
 		b.set("A.f2.smc", AMap.of("foo",String.class,"bar",Integer.class,"baz",null));
 		b.set("A.f3.smc", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}", ps);
+		assertObject(ps).json().is("{A:{'f1.smc':{baz:'java.lang.Integer',foo:'java.lang.String'},'f2.smc':{bar:'java.lang.Integer',foo:'java.lang.String'}}}");
 		assertInstanceOf(Map.class, ps.getProperty("A.f1.smc"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f2.smc"));
 		assertInstanceOf(Class.class, ((Map<?,?>)ps.getProperty("A.f1.smc")).values().iterator().next());
@@ -856,13 +857,13 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
-		assertObjectEquals("{A:{'f1.smc':{foo:'java.lang.String'}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.smc':{foo:'java.lang.String'}}}");
 		b.set("A.f1.smc/put.foo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smc", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
@@ -886,7 +887,7 @@ public class PropertyStoreTest {
 		b.set("A.f4.smo", "{foo:'123',baz:456,qux:null}");
 		b.set("A.f5.smo", null);
 		ps = b.build();
-		assertObjectEquals("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}", ps);
+		assertObject(ps).json().is("{A:{'f1.smo':{baz:'2',foo:'1'},'f2.smo':{bar:'java.lang.StringBuilder',foo:123},'f3.smo':{foo:'123'},'f4.smo':{baz:456,foo:'123'}}}");
 		assertInstanceOf(Map.class, ps.getProperty("A.f1.smo"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f2.smo"));
 		assertInstanceOf(Map.class, ps.getProperty("A.f3.smo"));
@@ -894,17 +895,17 @@ public class PropertyStoreTest {
 
 		b.clear();
 		b.set("A.f1.smo/put", "{foo:'123'}");
-		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.smo':{foo:'123'}}}");
 
 		b.clear();
 		b.set("A.f1.smo/put.foo", "123");
-		assertObjectEquals("{A:{'f1.smo':{foo:'123'}}}", b.build());
+		assertObject(b.build()).json().is("{A:{'f1.smo':{foo:'123'}}}");
 		b.set("A.f1.smo/put.foo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smo", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 
 		b.clear();
 		b.set("A.f1.smo", "{foo:'123'}");
@@ -1476,12 +1477,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.ss", "['foo','bar']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("['bar','foo']", ps.getProperty("A.f1.ss"));
+		assertObject(ps.getProperty("A.f1.ss")).json().is("['bar','foo']");
 
 		System.clearProperty("A.f1.ss");
 		System.setProperty("A.f1", "['foo','bar']");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("['bar','foo']", ps.getProperty("A.f1.ss"));
+		assertObject(ps.getProperty("A.f1.ss")).json().is("['bar','foo']");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.ss"));
@@ -1492,12 +1493,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.si", "['2','1']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("[1,2]", ps.getProperty("A.f1.si"));
+		assertObject(ps.getProperty("A.f1.si")).json().is("[1,2]");
 
 		System.clearProperty("A.f1.si");
 		System.setProperty("A.f1", "['2','1']");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("[1,2]", ps.getProperty("A.f1.si"));
+		assertObject(ps.getProperty("A.f1.si")).json().is("[1,2]");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.si"));
@@ -1508,12 +1509,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.ls", "['foo','bar']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("['foo','bar']", ps.getProperty("A.f1.ls"));
+		assertObject(ps.getProperty("A.f1.ls")).json().is("['foo','bar']");
 
 		System.clearProperty("A.f1.ls");
 		System.setProperty("A.f1", "['foo','bar']");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("['foo','bar']", ps.getProperty("A.f1.ls"));
+		assertObject(ps.getProperty("A.f1.ls")).json().is("['foo','bar']");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.ls"));
@@ -1524,12 +1525,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.li", "['2','1']");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("[2,1]", ps.getProperty("A.f1.li"));
+		assertObject(ps.getProperty("A.f1.li")).json().is("[2,1]");
 
 		System.clearProperty("A.f1.li");
 		System.setProperty("A.f1", "['2','1']");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("[2,1]", ps.getProperty("A.f1.li"));
+		assertObject(ps.getProperty("A.f1.li")).json().is("[2,1]");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.li"));
@@ -1540,12 +1541,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.sms", "{foo:'bar',baz:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.sms"));
+		assertObject(ps.getProperty("A.f1.sms")).json().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1.sms");
 		System.setProperty("A.f1", "{foo:'bar',baz:null}");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("{foo:'bar'}", ps.getProperty("A.f1.sms"));
+		assertObject(ps.getProperty("A.f1.sms")).json().is("{foo:'bar'}");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.sms"));
@@ -1556,12 +1557,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.smi", "{foo:'123',baz:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.smi"));
+		assertObject(ps.getProperty("A.f1.smi")).json().is("{foo:123}");
 
 		System.clearProperty("A.f1.smi");
 		System.setProperty("A.f1", "{foo:'123',baz:null}");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("{foo:123}", ps.getProperty("A.f1.smi"));
+		assertObject(ps.getProperty("A.f1.smi")).json().is("{foo:123}");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.smi"));
@@ -1572,12 +1573,12 @@ public class PropertyStoreTest {
 
 		System.setProperty("A.f1.smo", "{foo:123,bar:'baz',qux:true,quux:null}");
 		PropertyStore ps = PropertyStore.create().build();
-		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.smo"));
+		assertObject(ps.getProperty("A.f1.smo")).json().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1.smo");
 		System.setProperty("A.f1", "{foo:123,bar:'baz',qux:true,quux:null}");
 		ps = PropertyStore.create().build();
-		assertObjectEquals("{bar:'baz',foo:123,qux:true}", ps.getProperty("A.f1.smo"));
+		assertObject(ps.getProperty("A.f1.smo")).json().is("{bar:'baz',foo:123,qux:true}");
 
 		System.clearProperty("A.f1");
 		assertNull(ps.getProperty("A.f1.smo"));
@@ -1594,7 +1595,7 @@ public class PropertyStoreTest {
 		b.set("A.foo", "bar");
 		PropertyStore ps1 = b.build();
 		b = ps1.builder();
-		assertObjectEquals("{A:{foo:'bar'}}", b.build());
+		assertObject(b.build()).json().is("{A:{foo:'bar'}}");
 	}
 
 	@Test
@@ -1603,7 +1604,7 @@ public class PropertyStoreTest {
 		b.set(OMap.of("A.foo", "bar"));
 		b.set(OMap.of("A.baz", "qux"));
 		b.add(null);
-		assertObjectEquals("{A:{baz:'qux'}}", b.build());
+		assertObject(b.build()).json().is("{A:{baz:'qux'}}");
 	}
 
 	@Test
@@ -1613,14 +1614,14 @@ public class PropertyStoreTest {
 		b.add(OMap.of("A.baz", "qux"));
 		b.add(OMap.of("A.quux", null));
 		b.add(null);
-		assertObjectEquals("{A:{baz:'qux',foo:'bar'}}", b.build());
+		assertObject(b.build()).json().is("{A:{baz:'qux',foo:'bar'}}");
 	}
 
 	@Test
 	public void testRemoveNotExisting() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		b.removeFrom("A.foo.ls", "bar");
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
@@ -1628,16 +1629,16 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b = PropertyStore.create();
 		b.appendTo("A.foo.ls", null);
 		b.prependTo("A.foo.ls", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
 	public void testRemoveNull() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		b.removeFrom("A.foo.ss", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 		b.removeFrom("A.foo.ls", null);
-		assertObjectEquals("{}", b.build());
+		assertObject(b.build()).json().is("{}");
 	}
 
 	@Test
@@ -1731,9 +1732,9 @@ public class PropertyStoreTest {
 		b.set("A.foo", "bar").set("B.foo", "bar").set("D.foo", "bar");
 		PropertyStore ps = b.build();
 
-		assertObjectEquals("[]", ps.getPropertyKeys(null));
-		assertObjectEquals("['foo']", ps.getPropertyKeys("A"));
-		assertObjectEquals("[]", ps.getPropertyKeys("C"));
+		assertObject(ps.getPropertyKeys(null)).json().is("[]");
+		assertObject(ps.getPropertyKeys("A")).json().is("['foo']");
+		assertObject(ps.getPropertyKeys("C")).json().is("[]");
 	}
 
 	@Test
@@ -1760,7 +1761,7 @@ public class PropertyStoreTest {
 		b = ps.builder();
 		ps = b.build();
 
-		assertObjectEquals("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}", ps);
+		assertObject(ps).json().is("{A:{'foo.b':true,'foo.c':'java.lang.String','foo.i':123,'foo.lc':['java.lang.String'],'foo.li':[123],'foo.lo':['java.lang.StringBuilder'],'foo.ls':['bar'],'foo.o':'bar','foo.s':'bar','foo.sc':['java.lang.String'],'foo.si':[123],'foo.smc':{foo:'java.lang.String'},'foo.smi':{foo:123},'foo.smo':{foo:'java.lang.StringBuilder'},'foo.sms':{foo:'bar'},'foo.ss':['bar']}}");
 	}
 
 	@Test

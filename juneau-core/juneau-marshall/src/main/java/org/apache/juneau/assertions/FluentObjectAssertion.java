@@ -27,13 +27,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 
 	private final Object o;
 
-	private static JsonSerializer JSON = JsonSerializer.create()
+	private static JsonSerializer JSON_BEANCOMPARE = JsonSerializer.create()
 		.ssq()
 		.keepNullProperties()
 		.addBeanTypes().addRootType()
 		.build();
 
-	private static JsonSerializer SORTEDJSON = JsonSerializer.create()
+	private static JsonSerializer JSON_BEANCOMPARESORTED = JsonSerializer.create()
 		.ssq()
 		.sortCollections()
 		.sortMaps()
@@ -41,6 +41,16 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		.addBeanTypes().addRootType()
 		.build();
 
+	private static JsonSerializer JSON = JsonSerializer.create()
+		.ssq()
+		.addBeanTypes().addRootType()
+		.build();
+
+	private static JsonSerializer JSON_SORTED = JsonSerializer.create()
+		.ssq()
+		.sortProperties()
+		.addBeanTypes().addRootType()
+		.build();
 
 	/**
 	 * Constructor.
@@ -54,7 +64,13 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value equals the specified value.
+	 * Asserts that the object is an instance of the specified class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).instanceOf(MyBean.<jk>class</jk>);
+	 * </p>
 	 *
 	 * @param parent The value to check against.
 	 * @return The response object (for method chaining).
@@ -69,22 +85,66 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Converts this object to text using the specified serializer and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).serialized(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
+	 * </p>
+	 *
+	 * @param ws The serializer to use to convert the object to text.
+	 * @return A new fluent string assertion.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public FluentStringAssertion<R> serialized(WriterSerializer ws) {
+		try {
+			String s = ws.serialize(this.o);
+			return new FluentStringAssertion(s, this);
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Converts this object to simplified JSON and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).json().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> json() {
+		return serialized(JSON);
+	}
+
+	/**
+	 * Converts this object to sorted simplified JSON and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).jsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> jsonSorted() {
+		return serialized(JSON_SORTED);
+	}
+
+	/**
 	 * Verifies that two objects are equivalent after converting them both to JSON.
 	 *
 	 * @param o The object to compare against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R jsonSameAs(Object o) throws AssertionError {
-		try {
-			String s1 = JSON.serialize(this.o);
-			String s2 = JSON.serialize(o);
-			if (! StringUtils.isEquals(s1, s2))
-				throw error("Unexpected JSON comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
-		} catch (SerializeException e) {
-			throw new RuntimeException(e);
-		}
-		return returns();
+	public R sameAs(Object o) throws AssertionError {
+		return sameAsSerialized(o, JSON_BEANCOMPARE);
 	}
 
 	/**
@@ -94,12 +154,24 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R jsonSameAsSorted(Object o) {
+	public R sameAsSorted(Object o) {
+		return sameAsSerialized(o, JSON_BEANCOMPARESORTED);
+	}
+
+	/**
+	 * Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.
+	 *
+	 * @param o The object to compare against.
+	 * @param serializer The serializer to use to serialize this object.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R sameAsSerialized(Object o, WriterSerializer serializer) {
 		try {
-			String s1 = SORTEDJSON.serialize(this.o);
-			String s2 = SORTEDJSON.serialize(o);
+			String s1 = serializer.serialize(this.o);
+			String s2 = serializer.serialize(o);
 			if (! StringUtils.isEquals(s1, s2))
-				throw error("Unexpected JSON comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
+				throw error("Unexpected comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
 		}

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -1119,9 +1120,9 @@ public class PathAnnotationTest {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("['a','b']", x.getEnum());
+		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/basic/a'}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/basic/a'}}");
 	}
 	@Test
 	public void sa02_Path_onPojo_api() throws Exception {
@@ -1129,9 +1130,9 @@ public class PathAnnotationTest {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("['a','b']", x.getEnum());
+		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/api/a'}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/api/a'}}");
 	}
 	@Test
 	public void sa03_Path_onPojo_mixed() throws Exception {
@@ -1139,21 +1140,21 @@ public class PathAnnotationTest {
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("['a','b']", x.getEnum());
+		assertObject(x.getEnum()).json().is("['a','b']");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/mixed/a'}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/mixed/a'}}");
 	}
 	@Test
 	public void sa04_Path_onPojo_value() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/value/{P}","get","path","P");
 		assertEquals("P", x.getName());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 	@Test
 	public void sa05_Path_onPojo_enum() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/enum/{P}","get","path","P");
-		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}", x);
+		assertObject(x.getEnum()).json().is("['a','b']");
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1193,22 +1194,22 @@ public class PathAnnotationTest {
 	@Test
 	public void sb01_Path_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/schemaValue/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 	@Test
 	public void sb02_Path_onPojo_autoDetectBean() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/autoDetectBean/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void sb03_Path_onPojo_autoDetectList() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/autoDetectList/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 	}
 	@Test
 	public void sb04_Path_onPojo_autoDetectStringObject() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/autoDetectStringObject/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1308,7 +1309,7 @@ public class PathAnnotationTest {
 	@Test
 	public void ta05_Path_onParameter_enum() throws Exception {
 		ParameterInfo x = ta.getParameterInfo("/enum/{P}","get","path","P");
-		assertObjectEquals("['a','b']", x.getEnum());
+		assertObject(x.getEnum()).json().is("['a','b']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1349,32 +1350,32 @@ public class PathAnnotationTest {
 	@Test
 	public void tb01_Path_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/schemaValue/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 	@Test
 	public void tb02_Path_onParameter_autoDetectBean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/autoDetectBean/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void tb03_Path_onParameter_autoDetectList() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/autoDetectList/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}");
 	}
 	@Test
 	public void tb04_Path_onParameter_autoDetectStringObject() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/autoDetectStringObject/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'string',required:true}");
 	}
 	@Test
 	public void tb05_Path_onParameter_autoDetectInteger() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/autoDetectInteger/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}");
 	}
 	@Test
 	public void tb06_Path_onParameter_autoDetectBoolean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/autoDetectBoolean/{P}","get","path","P");
-		assertObjectEquals("{'in':'path',name:'P',type:'boolean',required:true}", x);
+		assertObject(x).json().is("{'in':'path',name:'P',type:'boolean',required:true}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -285,13 +285,13 @@ public class OMapTest {
 		OList l = m.getList("a");
 		OMap m2 = l.getMap(0);
 		m2.put("b", "x");
-		assertObjectEquals("{a:[{b:'x'}]}", m);
+		assertObject(m).json().is("{a:[{b:'x'}]}");
 
 		m = OMap.ofJson("{a:[{b:'c'}]}");
 		for (OMap m3 : m.getList("a").elements(OMap.class))
 			m3.put("b", "y");
 
-		assertObjectEquals("{a:[{b:'y'}]}", m);
+		assertObject(m).json().is("{a:[{b:'y'}]}");
 	}
 
 	//====================================================================================================
@@ -322,7 +322,7 @@ public class OMapTest {
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObjectEquals("{foo:'bar'}", OMap.ofJson(new StringReader("{foo:'bar'}")));
+		assertObject(OMap.ofJson(new StringReader("{foo:'bar'}"))).json().is("{foo:'bar'}");
 	}
 
 	//====================================================================================================
@@ -332,7 +332,7 @@ public class OMapTest {
 	public void testGetMap() throws Exception {
 		OMap m = OMap.ofJson("{a:{1:'true',2:'false'}}");
 		Map<Integer,Boolean> m2 = m.getMap("a", Integer.class, Boolean.class, null);
-		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertObject(m2).json().is("{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
@@ -340,7 +340,7 @@ public class OMapTest {
 		assertNull(m2);
 
 		m2 = m.get("a", Map.class, Integer.class, Boolean.class);
-		assertObjectEquals("{'1':true,'2':false}", m2);
+		assertObject(m2).json().is("{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
 		assertEquals(Boolean.class, m2.values().iterator().next().getClass());
 
@@ -355,14 +355,14 @@ public class OMapTest {
 	public void testGetList() throws Exception {
 		OMap m = OMap.ofJson("{a:['123','456']}");
 		List<Integer> l2 = m.getList("a", Integer.class, null);
-		assertObjectEquals("[123,456]", l2);
+		assertObject(l2).json().is("[123,456]");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.getList("b", Integer.class, null);
 		assertNull(l2);
 
 		l2 = m.get("a", List.class, Integer.class);
-		assertObjectEquals("[123,456]", l2);
+		assertObject(l2).json().is("[123,456]");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 
 		l2 = m.get("b", List.class, Integer.class);

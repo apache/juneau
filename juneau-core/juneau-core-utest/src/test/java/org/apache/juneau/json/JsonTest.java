@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -102,7 +102,7 @@ public class JsonTest {
 		for (String attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
 			m.clear();
 			m.put(attr,1);
-			assertObjectEquals("{'"+attr+"':1}", m);
+			assertObject(m).json().is("{'"+attr+"':1}");
 		}
 	}
 

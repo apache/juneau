@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -123,67 +123,67 @@ public class AutoNumberSwapTest {
 
 	@Test
 	public void a01_swap_toNumber() throws Exception {
-		assertObjectEquals("1", find(A01.class).swap(null, new A01()));
+		assertObject(find(A01.class).swap(null, new A01())).json().is("1");
 	}
 
 	@Test
 	public void a02_swap_toInteger() throws Exception {
-		assertObjectEquals("1", find(A02.class).swap(null, new A02()));
+		assertObject(find(A02.class).swap(null, new A02())).json().is("1");
 	}
 
 	@Test
 	public void a03_swap_toIntPrimitive() throws Exception {
-		assertObjectEquals("1", find(A03.class).swap(null, new A03()));
+		assertObject(find(A03.class).swap(null, new A03())).json().is("1");
 	}
 
 	@Test
 	public void a04_swap_toLong() throws Exception {
-		assertObjectEquals("1", find(A04.class).swap(null, new A04()));
+		assertObject(find(A04.class).swap(null, new A04())).json().is("1");
 	}
 
 	@Test
 	public void a05_swap_toLongPrimitive() throws Exception {
-		assertObjectEquals("1", find(A05.class).swap(null, new A05()));
+		assertObject(find(A05.class).swap(null, new A05())).json().is("1");
 	}
 
 	@Test
 	public void a06_swap_toFloat() throws Exception {
-		assertObjectEquals("1.0", find(A06.class).swap(null, new A06()));
+		assertObject(find(A06.class).swap(null, new A06())).json().is("1.0");
 	}
 
 	@Test
 	public void a07_swap_toFloatPrimitive() throws Exception {
-		assertObjectEquals("1.0", find(A07.class).swap(null, new A07()));
+		assertObject(find(A07.class).swap(null, new A07())).json().is("1.0");
 	}
 
 	@Test
 	public void a08_swap_toDouble() throws Exception {
-		assertObjectEquals("1.0", find(A08.class).swap(null, new A08()));
+		assertObject(find(A08.class).swap(null, new A08())).json().is("1.0");
 	}
 
 	@Test
 	public void a09_swap_toDoublePrimitive() throws Exception {
-		assertObjectEquals("1.0", find(A09.class).swap(null, new A09()));
+		assertObject(find(A09.class).swap(null, new A09())).json().is("1.0");
 	}
 
 	@Test
 	public void a10_swap_toShort() throws Exception {
-		assertObjectEquals("1", find(A10.class).swap(null, new A10()));
+		assertObject(find(A10.class).swap(null, new A10())).json().is("1");
 	}
 
 	@Test
 	public void a11_swap_toShortPrimitive() throws Exception {
-		assertObjectEquals("1", find(A11.class).swap(null, new A11()));
+		assertObject(find(A11.class).swap(null, new A11())).json().is("1");
 	}
 
 	@Test
 	public void a12_swap_toByte() throws Exception {
-		assertObjectEquals("1", find(A12.class).swap(null, new A12()));
+		assertObject(find(A12.class).swap(null, new A12())).json().is("1");
 	}
 
 	@Test
 	public void a13_swap_toBytePrimitive() throws Exception {
-		assertObjectEquals("1", find(A13.class).swap(null, new A13()));
+		assertObject(find(A13.class).swap(null, new A13())).json().is("1");
 	}
 
 	@Test(expected = SerializeException.class)
@@ -206,7 +206,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B01 fromInteger(Integer o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 			return new B01();
 		}
 	}
@@ -215,7 +215,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B02 fromInt(int o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B02();
 		}
 	}
@@ -224,7 +224,7 @@ public class AutoNumberSwapTest {
 			return 1l;
 		}
 		public static B03 fromLong(Long o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 			return new B03();
 		}
 	}
@@ -233,7 +233,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B04 fromLong(long o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B04();
 		}
 	}
@@ -242,7 +242,7 @@ public class AutoNumberSwapTest {
 			return 1f;
 		}
 		public static B05 fromFloat(Float o) {
-			assertObjectEquals("1.0", o);
+			assertObject(o).json().is("1.0");
 			return new B05();
 		}
 	}
@@ -251,7 +251,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B06 fromFloat(float o) {
-			assertObjectEquals("1.0", o);
+			assertObject((Object) o).json().is("1.0");
 			return new B06();
 		}
 	}
@@ -260,7 +260,7 @@ public class AutoNumberSwapTest {
 			return 1d;
 		}
 		public static B07 fromDouble(Double o) {
-			assertObjectEquals("1.0", o);
+			assertObject(o).json().is("1.0");
 			return new B07();
 		}
 	}
@@ -269,7 +269,7 @@ public class AutoNumberSwapTest {
 			return 1d;
 		}
 		public static B08 fromDouble(double o) {
-			assertObjectEquals("1.0", o);
+			assertObject((Object) o).json().is("1.0");
 			return new B08();
 		}
 	}
@@ -278,7 +278,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B09 fromShort(Short o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 			return new B09();
 		}
 	}
@@ -287,7 +287,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B10 fromShort(short o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B10();
 		}
 	}
@@ -296,7 +296,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B11 fromByte(Byte o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 			return new B11();
 		}
 	}
@@ -305,7 +305,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B12 fromByte(byte o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B12();
 		}
 	}
@@ -314,7 +314,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B13 create(int o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B13();
 		}
 	}
@@ -323,7 +323,7 @@ public class AutoNumberSwapTest {
 			return 1;
 		}
 		public static B14 valueOf(int o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 			return new B14();
 		}
 	}
@@ -415,7 +415,7 @@ public class AutoNumberSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(Integer o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 		}
 		public Integer toInteger() {
 			return 1;
@@ -424,7 +424,7 @@ public class AutoNumberSwapTest {
 	public static class C02 {
 		public C02() {}
 		public C02(int o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 		}
 		public int toInt() {
 			return 1;
@@ -433,7 +433,7 @@ public class AutoNumberSwapTest {
 	public static class C03 {
 		public C03() {}
 		public C03(Long o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 		}
 		public Long toLong() {
 			return 1l;
@@ -442,7 +442,7 @@ public class AutoNumberSwapTest {
 	public static class C04 {
 		public C04() {}
 		public C04(long o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 		}
 		public long toLong() {
 			return 1l;
@@ -451,7 +451,7 @@ public class AutoNumberSwapTest {
 	public static class C05 {
 		public C05() {}
 		public C05(Float o) {
-			assertObjectEquals("1.0", o);
+			assertObject(o).json().is("1.0");
 		}
 		public Float toFloat() {
 			return 1f;
@@ -460,7 +460,7 @@ public class AutoNumberSwapTest {
 	public static class C06 {
 		public C06() {}
 		public C06(float o) {
-			assertObjectEquals("1.0", o);
+			assertObject((Object) o).json().is("1.0");
 		}
 		public float toFloat() {
 			return 1f;
@@ -469,7 +469,7 @@ public class AutoNumberSwapTest {
 	public static class C07 {
 		public C07() {}
 		public C07(Double o) {
-			assertObjectEquals("1.0", o);
+			assertObject(o).json().is("1.0");
 		}
 		public Double toDouble() {
 			return 1d;
@@ -478,7 +478,7 @@ public class AutoNumberSwapTest {
 	public static class C08 {
 		public C08() {}
 		public C08(double o) {
-			assertObjectEquals("1.0", o);
+			assertObject((Object) o).json().is("1.0");
 		}
 		public double toDouble() {
 			return 1d;
@@ -487,7 +487,7 @@ public class AutoNumberSwapTest {
 	public static class C09 {
 		public C09() {}
 		public C09(Short o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 		}
 		public Short toShort() {
 			return 1;
@@ -496,7 +496,7 @@ public class AutoNumberSwapTest {
 	public static class C10 {
 		public C10() {}
 		public C10(short o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 		}
 		public short toShort() {
 			return 1;
@@ -505,7 +505,7 @@ public class AutoNumberSwapTest {
 	public static class C11 {
 		public C11() {}
 		public C11(Byte o) {
-			assertObjectEquals("1", o);
+			assertObject(o).json().is("1");
 		}
 		public Byte toByte() {
 			return 1;
@@ -514,7 +514,7 @@ public class AutoNumberSwapTest {
 	public static class C12 {
 		public C12() {}
 		public C12(byte o) {
-			assertObjectEquals("1", o);
+			assertObject((Object) o).json().is("1");
 		}
 		public byte toByte() {
 			return 1;

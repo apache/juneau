@@ -14,8 +14,7 @@ package org.apache.juneau.transform;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
-
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -72,12 +71,12 @@ public class AutoListSwapTest {
 
 	@Test
 	public void a01_swap_toList() throws Exception {
-		assertObjectEquals("['foo']", find(A01.class).swap(null, new A01()));
+		assertObject(find(A01.class).swap(null, new A01())).json().is("['foo']");
 	}
 
 	@Test
 	public void a02_swap_toOList() throws Exception {
-		assertObjectEquals("['foo']", find(A02.class).swap(null, new A02()));
+		assertObject(find(A02.class).swap(null, new A02())).json().is("['foo']");
 	}
 
 	@Test(expected = SerializeException.class)
@@ -99,7 +98,7 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 		public static B01 fromList(List<String> o) {
-			assertObjectEquals("['foo']", o);
+			assertObject(o).json().is("['foo']");
 			return new B01();
 		}
 	}
@@ -108,7 +107,7 @@ public class AutoListSwapTest {
 			return OLIST;
 		}
 		public static B02 fromOList(OList o) {
-			assertObjectEquals("['foo']", o);
+			assertObject(o).json().is("['foo']");
 			return new B02();
 		}
 	}
@@ -117,7 +116,7 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 		public static B03 create(List<String> o) {
-			assertObjectEquals("['foo']", o);
+			assertObject(o).json().is("['foo']");
 			return new B03();
 		}
 	}
@@ -154,7 +153,7 @@ public class AutoListSwapTest {
 	public static class C01 {
 		public C01() {}
 		public C01(List<String> o) {
-			assertObjectEquals("['foo']", o);
+			assertObject(o).json().is("['foo']");
 		}
 		public List<String> toList() {
 			return STRINGLIST;

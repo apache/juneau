@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -75,21 +76,21 @@ public class LicenseTest {
 			.set("url", URI.create("b"))
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", "a")
 			.set("url", "b")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
 
 		t
 			.set("name", new StringBuilder("a"))
 			.set("url", new StringBuilder("b"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{name:'a',url:'b','$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',url:'b','$ref':'ref'}");
 
 		assertEquals("a", t.get("name", String.class));
 		assertEquals("b", t.get("url", String.class));
@@ -105,6 +106,6 @@ public class LicenseTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',url:'b','$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, License.class));
+		assertObject(JsonParser.DEFAULT.parse(s, License.class)).json().is(s);
 	}
 }

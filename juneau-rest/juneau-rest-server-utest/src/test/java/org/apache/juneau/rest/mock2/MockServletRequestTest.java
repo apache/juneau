@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock2;
 
-import static org.apache.juneau.rest.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -99,10 +99,10 @@ public class MockServletRequestTest {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bing=qux");
 
 		assertEquals("bar=baz&bing=qux", req.getQueryString());
-		assertObjectEquals("{bar:['baz'],bing:['qux']}", req.getParameterMap());
-		assertObjectEquals("'baz'", req.getParameter("bar"));
-		assertObjectEquals("['bar','bing']", req.getParameterNames());
-		assertObjectEquals("['baz']", req.getParameterValues("bar"));
+		assertObject(req.getParameterMap()).json().is("{bar:['baz'],bing:['qux']}");
+		assertObject(req.getParameter("bar")).json().is("'baz'");
+		assertObject(req.getParameterNames()).json().is("['bar','bing']");
+		assertObject(req.getParameterValues("bar")).json().is("['baz']");
 	}
 
 	@Test
@@ -110,9 +110,9 @@ public class MockServletRequestTest {
 		MockServletRequest req = MockServletRequest.create("GET", "/foo?bar=baz&bar=bing");
 
 		assertEquals("bar=baz&bar=bing", req.getQueryString());
-		assertObjectEquals("{bar:['baz','bing']}", req.getParameterMap());
-		assertObjectEquals("'baz'", req.getParameter("bar"));
-		assertObjectEquals("['bar']", req.getParameterNames());
-		assertObjectEquals("['baz','bing']", req.getParameterValues("bar"));
+		assertObject(req.getParameterMap()).json().is("{bar:['baz','bing']}");
+		assertObject(req.getParameter("bar")).json().is("'baz'");
+		assertObject(req.getParameterNames()).json().is("['bar']");
+		assertObject(req.getParameterValues("bar")).json().is("['baz','bing']");
 	}
 }

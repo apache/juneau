@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -34,13 +34,13 @@ public class ResolvingOMapTest {
 		assertEquals(m.get("foo"), "1");
 
 		m.put("foo", new String[]{"$X{a}"});
-		assertObjectEquals("['1']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['1']");
 
 		m.put("foo", AList.of("$X{a}"));
-		assertObjectEquals("['1']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['1']");
 
 		m.put("foo", AMap.of("k1","$X{a}"));
-		assertObjectEquals("{k1:'1'}", m.get("foo"));
+		assertObject(m.get("foo")).json().is("{k1:'1'}");
 	}
 
 	public static class XVar extends MapVar {
@@ -61,13 +61,13 @@ public class ResolvingOMapTest {
 		assertNull(m.get("foo"));
 
 		m.put("foo", new String[]{null});
-		assertObjectEquals("[null]", m.get("foo"));
+		assertObject(m.get("foo")).json().is("[null]");
 
 		m.put("foo", AList.<String>of().a((String)null));
-		assertObjectEquals("[null]", m.get("foo"));
+		assertObject(m.get("foo")).json().is("[null]");
 
 		m.put("foo", AMap.of("k1",null));
-		assertObjectEquals("{k1:null}", m.get("foo"));
+		assertObject(m.get("foo")).json().is("{k1:null}");
 	}
 
 	//====================================================================================================
@@ -79,16 +79,16 @@ public class ResolvingOMapTest {
 		OMap m = new ResolvingOMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
-		assertObjectEquals("'ONE'", m.get("foo"));
+		assertObject(m.get("foo")).json().is("'ONE'");
 
 		m.put("foo", new Object[]{FooEnum.ONE});
-		assertObjectEquals("['ONE']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['ONE']");
 
 		m.put("foo", AList.of(FooEnum.ONE));
-		assertObjectEquals("['ONE']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['ONE']");
 
 		m.put("foo", AMap.of(FooEnum.ONE,FooEnum.ONE));
-		assertObjectEquals("{ONE:'ONE'}", m.get("foo"));
+		assertObject(m.get("foo")).json().is("{ONE:'ONE'}");
 	}
 
 	public static enum FooEnum {
@@ -111,12 +111,12 @@ public class ResolvingOMapTest {
 		assertEquals(m.get("foo"), "1");
 
 		m3.put("foo", new String[]{"$X{a}"});
-		assertObjectEquals("['1']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['1']");
 
 		m3.put("foo", AList.of("$X{a}"));
-		assertObjectEquals("['1']", m.get("foo"));
+		assertObject(m.get("foo")).json().is("['1']");
 
 		m3.put("foo", AMap.of("k1","$X{a}"));
-		assertObjectEquals("{k1:'1'}", m.get("foo"));
+		assertObject(m.get("foo")).json().is("{k1:'1'}");
 	}
 }

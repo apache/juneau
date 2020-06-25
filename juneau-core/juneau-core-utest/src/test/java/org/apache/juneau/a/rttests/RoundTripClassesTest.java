@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,14 +40,14 @@ public class RoundTripClassesTest extends RoundTripTest {
 
 		o = new Class[]{String.class};
 		o = roundTrip(o);
-		assertObjectEquals("['java.lang.String']", o);
+		assertObject(o).json().is("['java.lang.String']");
 
 		o = AList.of(String.class, Integer.class);
 		o = roundTrip(o);
-		assertObjectEquals("['java.lang.String','java.lang.Integer']", o);
+		assertObject(o).json().is("['java.lang.String','java.lang.Integer']");
 
 		o = AMap.of(String.class,String.class);
 		o = roundTrip(o);
-		assertObjectEquals("{'java.lang.String':'java.lang.String'}", o);
+		assertObject(o).json().is("{'java.lang.String':'java.lang.String'}");
 	}
 }

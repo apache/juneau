@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -400,7 +401,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void f01b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sf.getResponseInfo("/f01", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}");
 	}
 	@Test
 	public void f02a_basic_onType() throws Exception {
@@ -412,7 +413,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void f02b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sf.getResponseInfo("/f02", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}");
 	}
 	@Test
 	public void f03a_basic_onMethod() throws Exception {
@@ -424,7 +425,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void f03b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sf.getResponseInfo("/f03", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{description:'f03',collectionFormat:'pipes'}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{description:'f03',collectionFormat:'pipes'}}");
 	}
 	@Test
 	public void f04a_basic_onReturnedType() throws Exception {
@@ -436,7 +437,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void f04b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sf.getResponseInfo("/f04", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -485,7 +486,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void g01b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sg.getResponseInfo("/g01", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}");
 	}
 	@Test
 	public void g02a_basic_onType() throws Exception {
@@ -497,7 +498,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void g02b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sg.getResponseInfo("/g02", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}");
 	}
 	@Test
 	public void g03a_basic_onMethod() throws Exception {
@@ -509,7 +510,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void g03b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sg.getResponseInfo("/g03", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}");
 	}
 	@Test
 	public void g04a_basic_onReturnedType() throws Exception {
@@ -521,7 +522,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void g04b_basic_onParameter_swagger() throws Exception {
 		ResponseInfo ri = sg.getResponseInfo("/g04", "get", 200);
-		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+		assertObject(ri).json().is("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}");
 	}
 
 	//=================================================================================================================
@@ -646,55 +647,55 @@ public class ResponseAnnotationTest {
 	public void sa01a_Response_onPojo_basic() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa01a","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa01b_Response_onPojo_basic() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa01b","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa02a_Response_onPojo_api() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa02a","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa02b_Response_onPojo_api() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa02b","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa03a_Response_onPojo_mixed() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa03a","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{bar:{type:'number'},foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa03b_Response_onPojo_mixed() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa03b","get",200);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{bar:{type:'number'},foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void sa04a_Response_onPojo_code() throws Exception {
@@ -719,12 +720,12 @@ public class ResponseAnnotationTest {
 	@Test
 	public void sa06a_Response_onPojo_headers() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa06a","get",200);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
+		assertObject(x.getHeaders()).json().is("{foo:{type:'b'}}");
 	}
 	@Test
 	public void sa06b_Response_onPojo_headers() throws Exception {
 		ResponseInfo x = sa.getResponseInfo("/sa06b","get",200);
-		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
+		assertObject(x.getHeaders()).json().is("{foo:{type:'b'}}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -772,42 +773,42 @@ public class ResponseAnnotationTest {
 	@Test
 	public void sb01a_Response_onPojo_schemaValue() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb01a","get",200);
-		assertObjectEquals("{type:'number'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'number'}");
 	}
 	@Test
 	public void sb01b_Response_onPojo_schemaValue() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb01b","get",200);
-		assertObjectEquals("{type:'number'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'number'}");
 	}
 	@Test
 	public void sb02a_Response_onPojo_autoDetectBean() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb02a","get",200);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
 	}
 	@Test
 	public void sb02b_Response_onPojo_autoDetectBean() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb02b","get",200);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
 	}
 	@Test
 	public void sb03a_Response_onPojo_autoDetectList() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb03a","get",200);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb03b_Response_onPojo_autoDetectList() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb03b","get",200);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb04a_Response_onPojo_autoDetectStringObject() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb04a","get",200);
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 	}
 	@Test
 	public void sb04b_Response_onPojo_autoDetectStringObject() throws Exception {
 		ResponseInfo x = sb.getResponseInfo("/sb04b","get",200);
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -851,12 +852,12 @@ public class ResponseAnnotationTest {
 	@Test
 	public void sc02a_Response_onPojo_examples() throws Exception {
 		ResponseInfo x = sc.getResponseInfo("/sc02a","get",200);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'b'}");
 	}
 	@Test
 	public void sc02b_Response_onPojo_examples() throws Exception {
 		ResponseInfo x = sc.getResponseInfo("/sc02b","get",200);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'b'}");
 	}
 
 	//=================================================================================================================
@@ -934,28 +935,28 @@ public class ResponseAnnotationTest {
 	public void ua01_Response_onThrowable_basic() throws Exception {
 		ResponseInfo x = ua.getResponseInfo("/ua01","get",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void ua02_Response_onThrowable_api() throws Exception {
 		ResponseInfo x = ua.getResponseInfo("/ua02","get",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{foo:{type:'string'}}");
+		assertObject(x.getExample()).json().is("'a'");
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void ua03_Response_onThrowable_mixed() throws Exception {
 		ResponseInfo x = ua.getResponseInfo("/ua03","get",500);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
+		assertObject(x.getHeaders()).json().is("{bar:{type:'number'},foo:{type:'string'}}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'a'}");
 	}
 	@Test
 	public void ua04_Response_onThrowable_code() throws Exception {
@@ -970,7 +971,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void ua06_Response_onThrowable_headers1() throws Exception {
 		ResponseInfo x = ua.getResponseInfo("/ua06","get",500);
-		assertObjectEquals("{foo:{type:'number'}}", x.getHeaders());
+		assertObject(x.getHeaders()).json().is("{foo:{type:'number'}}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -991,7 +992,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void ub01_Response_onThrowable_schemaValue() throws Exception {
 		ResponseInfo x = ub.getResponseInfo("/ub01","get",500);
-		assertObjectEquals("{type:'number'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'number'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1022,6 +1023,6 @@ public class ResponseAnnotationTest {
 	@Test
 	public void uc02_Response_onThrowable_examples() throws Exception {
 		ResponseInfo x = uc.getResponseInfo("/uc02","get",500);
-		assertObjectEquals("{foo:'b'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'b'}");
 	}
 }

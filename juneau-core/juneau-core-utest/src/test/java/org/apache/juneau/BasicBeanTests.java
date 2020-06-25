@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -46,7 +47,7 @@ public class BasicBeanTests {
 
 	@Test
 	public void a01_testTransientFieldsIgnored() {
-		assertObjectEquals("{f1:1}", A1.create());
+		assertObject(A1.create()).json().is("{f1:1}");
 	}
 
 	@Test
@@ -85,7 +86,7 @@ public class BasicBeanTests {
 
 	@Test
 	public void a04_testTransientMethodsIgnored() {
-		assertObjectEquals("{f1:1}", A2.create());
+		assertObject(A2.create()).json().is("{f1:1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -105,9 +106,9 @@ public class BasicBeanTests {
 
 	@Test
 	public void b01_beanWithDynaProperty() throws Exception {
-		assertObjectEquals("{a:1}", B.create());
+		assertObject(B.create()).json().is("{a:1}");
 
 		B b = JsonParser.DEFAULT.parse("{a:1}", B.class);
-		assertObjectEquals("{a:1}", b);
+		assertObject(b).json().is("{a:1}");
 	}
 }

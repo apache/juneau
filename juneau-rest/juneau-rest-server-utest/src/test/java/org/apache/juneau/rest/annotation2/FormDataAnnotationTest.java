@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -353,22 +354,22 @@ public class FormDataAnnotationTest {
 	@Test
 	public void sb01_FormData_onPojo_value() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb01","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'string'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
 	}
 	@Test
 	public void sb02_FormData_onPojo_autoDetectBean() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb02","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void sb03_FormData_onPojo_autoDetectList() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb03","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'array',items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb04_FormData_onPojo_autoDetectStringObject() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb04","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'string'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -506,32 +507,32 @@ public class FormDataAnnotationTest {
 	@Test
 	public void tb01_FormData_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb01","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'string'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
 	}
 	@Test
 	public void tb02_FormData_onParameter_autoDetectBean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb02","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void tb03_FormData_onParameter_autoDetectList() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb03","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'array',items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void tb04_FormData_onParameter_autoDetectStringObject() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb04","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'string'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'string'}");
 	}
 	@Test
 	public void tb05_FormData_onParameter_autoDetectInteger() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb05","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'integer',format:'int32'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'integer',format:'int32'}");
 	}
 	@Test
 	public void tb06_FormData_onParameter_autoDetectBoolean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb06","get","formData","F");
-		assertObjectEquals("{'in':'formData',name:'F',type:'boolean'}", x);
+		assertObject(x).json().is("{'in':'formData',name:'F',type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

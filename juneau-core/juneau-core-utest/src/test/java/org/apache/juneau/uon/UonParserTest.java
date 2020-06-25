@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -529,7 +529,7 @@ public class UonParserTest {
 
 		r = reader("(foo=bar)(foo=bar)");
 		x = p.parse(r, OMap.class);
-		assertObjectEquals("{foo:'bar'}", x);
+		assertObject(x).json().is("{foo:'bar'}");
 		try {
 			x = p.parse(r, OMap.class);
 			fail();
@@ -550,15 +550,15 @@ public class UonParserTest {
 
 		r = reader("(foo=bar)(baz=qux)");
 		x = p.parse(r, OMap.class);
-		assertObjectEquals("{foo:'bar'}", x);
+		assertObject(x).json().is("{foo:'bar'}");
 		x = p.parse(r, OMap.class);
-		assertObjectEquals("{baz:'qux'}", x);
+		assertObject(x).json().is("{baz:'qux'}");
 
 		r = reader("@(123)@(456)");
 		x = p.parse(r, OList.class);
-		assertObjectEquals("[123]", x);
+		assertObject(x).json().is("[123]");
 		x = p.parse(r, OList.class);
-		assertObjectEquals("[456]", x);
+		assertObject(x).json().is("[456]");
 	}
 
 	private Reader reader(String in) {

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -507,7 +508,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F1.class);
-		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x);
+		assertObject(x).json().is("{c:'2018-12-12T05:12:00'}");
 
 		x = roundTrip(x, F1.class);
 	}
@@ -585,7 +586,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("{c:'2018-12-12T05:12:00'}", r);
 
 		x = p.parse(r, F2.class);
-		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x);
+		assertObject(x).json().is("{c:'2018-12-12T05:12:00'}");
 
 		x = roundTrip(x, F2.class);
 	}
@@ -657,7 +658,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testBeanWithIncompleteCopyConstructor() throws Exception {
 		F f = F.create();
 		f = roundTrip(f);
-		assertObjectEquals("{f1:1,f2:2}", f);
+		assertObject(f).json().is("{f1:1,f2:2}");
 	}
 
 }

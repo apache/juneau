@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -167,19 +168,19 @@ public class HeaderAnnotationTest {
 	public void sa01_Header_onPojo_basic() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa01","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("'string'", x.getType());
+		assertObject(x.getType()).json().is("'string'");
 	}
 	@Test
 	public void sa02_Header_onPojo_api() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa02","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("'string'", x.getType());
+		assertObject(x.getType()).json().is("'string'");
 	}
 	@Test
 	public void sa03_Header_onPojo_mixed() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa03","get","header","H");
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("'string'", x.getType());
+		assertObject(x.getType()).json().is("'string'");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -219,22 +220,22 @@ public class HeaderAnnotationTest {
 	@Test
 	public void sb01_Header_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb01","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
 	}
 	@Test
 	public void sb02_Header_onPojo_autoDetectBean() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb02","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void sb03_Header_onPojo_autoDetectList() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb03","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'array',items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb04_Header_onPojo_autoDetectStringObject() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb04","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -372,32 +373,32 @@ public class HeaderAnnotationTest {
 	@Test
 	public void tb01_Header_onParameter_string() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb01","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
 	}
 	@Test
 	public void tb02_Header_onParameter_bean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb02","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void tb03_Header_onParameter_array() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb03","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'array',items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void tb04_Header_onParameter_beanAsString() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb04","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'string'}");
 	}
 	@Test
 	public void tb05_Header_onParameter_Integer() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb05","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'integer',format:'int32'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'integer',format:'int32'}");
 	}
 	@Test
 	public void tb06_Header_onParameter_Boolean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb06","get","header","H");
-		assertObjectEquals("{'in':'header',name:'H',type:'boolean'}", x);
+		assertObject(x).json().is("{'in':'header',name:'H',type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

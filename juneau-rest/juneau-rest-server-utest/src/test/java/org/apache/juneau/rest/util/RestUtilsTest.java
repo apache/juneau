@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -239,7 +239,7 @@ public class RestUtilsTest {
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
 		m = parseQuery(s);
-		assertObjectEquals("{f1:null,f2:['abc','def']}", m);
+		assertObject(m).json().is("{f1:null,f2:['abc','def']}");
 	}
 
 	@Test

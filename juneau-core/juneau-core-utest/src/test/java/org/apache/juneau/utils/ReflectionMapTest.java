@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -368,7 +368,7 @@ public class ReflectionMapTest {
 
 	@Test
 	public void f01_cdl() {
-		assertObjectEquals("1", RM_F.find(F1.class, null));
+		assertObject(RM_F.find(F1.class, null)).json().is("1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -391,13 +391,13 @@ public class ReflectionMapTest {
 
 	@Test
 	public void h01_splitNamesTest() throws Exception {
-		assertObjectEquals("['foo']", ReflectionMap.splitNames("foo"));
-		assertObjectEquals("['foo']", ReflectionMap.splitNames(" foo "));
-		assertObjectEquals("['foo','bar']", ReflectionMap.splitNames("foo,bar"));
-		assertObjectEquals("['foo','bar']", ReflectionMap.splitNames(" foo , bar "));
-		assertObjectEquals("['foo()','bar()']", ReflectionMap.splitNames("foo(),bar()"));
-		assertObjectEquals("['foo()','bar()']", ReflectionMap.splitNames(" foo() , bar() "));
-		assertObjectEquals("['foo(bar,baz)','bar(baz,qux)']", ReflectionMap.splitNames("foo(bar,baz),bar(baz,qux)"));
-		assertObjectEquals("['foo(bar,baz)','bar(baz,qux)']", ReflectionMap.splitNames(" foo(bar,baz) , bar(baz,qux) "));
+		assertObject(ReflectionMap.splitNames("foo")).json().is("['foo']");
+		assertObject(ReflectionMap.splitNames(" foo ")).json().is("['foo']");
+		assertObject(ReflectionMap.splitNames("foo,bar")).json().is("['foo','bar']");
+		assertObject(ReflectionMap.splitNames(" foo , bar ")).json().is("['foo','bar']");
+		assertObject(ReflectionMap.splitNames("foo(),bar()")).json().is("['foo()','bar()']");
+		assertObject(ReflectionMap.splitNames(" foo() , bar() ")).json().is("['foo()','bar()']");
+		assertObject(ReflectionMap.splitNames("foo(bar,baz),bar(baz,qux)")).json().is("['foo(bar,baz)','bar(baz,qux)']");
+		assertObject(ReflectionMap.splitNames(" foo(bar,baz) , bar(baz,qux) ")).json().is("['foo(bar,baz)','bar(baz,qux)']");
 	}
 }

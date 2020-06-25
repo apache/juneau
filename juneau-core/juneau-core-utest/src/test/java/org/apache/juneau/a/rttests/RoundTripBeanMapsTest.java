@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -379,7 +380,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(ba1);
 		BA b = p.parse(r, BA.class);
 		assertTrue(b instanceof BA1);
-		assertObjectEquals("{_type:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}", b);
+		assertObject(b).json().is("{_type:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}");
 	}
 
 	@Bean(dictionary={BA1.class,BA2.class})
@@ -421,7 +422,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(c1);
 		CA c = p.parse(r, CA.class);
 		assertTrue(c instanceof CA1);
-		assertObjectEquals("{f0a:'f0a',f0b:'f0b',f1:'f1'}", c);
+		assertObject(c).json().is("{f0a:'f0a',f0b:'f0b',f1:'f1'}");
 	}
 
 	public abstract static class CA {
@@ -466,7 +467,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(d);
 		d = p.parse(r, D1.class);
 		assertNull(d.f1);
-		assertObjectEquals("{f3:'f3',f2:'f2'}", d);
+		assertObject(d).json().is("{f3:'f3',f2:'f2'}");
 	}
 
 	@Bean(bpi="f3,f2")
@@ -526,7 +527,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		E1 e = new E1().init();
 		Object r = s.serialize(e);
 		e = p.parse(r, E1.class);
-		assertObjectEquals("{f1:'f1',f3:'f3'}", e);
+		assertObject(e).json().is("{f1:'f1',f3:'f3'}");
 	}
 
 	@Bean(bpx="f2")
@@ -555,7 +556,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		E2 e = new E2().init();
 		Object r = s.serialize(e);
 		e = p.parse(r, E2.class);
-		assertObjectEquals("{f1:'f1',f3:'f3'}", e);
+		assertObject(e).json().is("{f1:'f1',f3:'f3'}");
 	}
 
 	public static class E2 {
@@ -583,7 +584,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		FA2 t = new FA2().init();
 		Object r = s.serialize(t);
 		t = p.parse(r, FA2.class);
-		assertObjectEquals("{f1:'f1'}", t);
+		assertObject(t).json().is("{f1:'f1'}");
 	}
 
 	@Bean(interfaceClass=FA1.class)
@@ -621,7 +622,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = new FB2().init();
 		r = s.build().serialize(t);
 		t = p.build().parse(r, FB2.class);
-		assertObjectEquals("{f1:'f1'}", t);
+		assertObject(t).json().is("{f1:'f1'}");
 
 		// --- BeanFilter defined on child class class ---
 		s.interfaces(FB1.class);
@@ -630,7 +631,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = new FB2().init();
 		r = s.build().serialize(t);
 		t = p.build().parse(r, FB2.class);
-		assertObjectEquals("{f1:'f1'}", t);
+		assertObject(t).json().is("{f1:'f1'}");
 
 		// --- BeanFilter defined as plain class ---
 		s.interfaces(FB1.class);
@@ -639,7 +640,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = new FB2().init();
 		r = s.build().serialize(t);
 		t = p.build().parse(r, FB2.class);
-		assertObjectEquals("{f1:'f1'}", t);
+		assertObject(t).json().is("{f1:'f1'}");
 	}
 
 	public static class FB1 {

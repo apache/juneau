@@ -51,7 +51,7 @@ public class CommonXmlTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:name>bar</jp:name></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 	}
 
 	public static class A {
@@ -79,7 +79,7 @@ public class CommonXmlTest {
 		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:url2 rdf:resource='http://foo/2'/></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 	}
 
 	public static class B {

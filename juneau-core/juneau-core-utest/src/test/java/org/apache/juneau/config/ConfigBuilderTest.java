@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -53,10 +53,10 @@ public class ConfigBuilderTest {
 		assertFalse(f.exists());
 
 		cf.commit();
-		assertObjectEquals("{'':{},Test:{A:'a'}}", cf.toMap());
+		assertObject(cf.toMap()).json().is("{'':{},Test:{A:'a'}}");
 
 		String NL = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+NL+"A = b"+NL, true);
-		assertObjectEquals("{'':{},Test:{A:'b'}}", cf.toMap());
+		assertObject(cf.toMap()).json().is("{'':{},Test:{A:'b'}}");
 	}
 }

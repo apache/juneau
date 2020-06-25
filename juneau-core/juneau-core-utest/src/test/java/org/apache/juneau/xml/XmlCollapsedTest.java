@@ -274,14 +274,14 @@ public class XmlCollapsedTest {
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FA.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 		validateXml(t1, s);
 
 		t1 = FB.newInstance();
 		r = s.serialize(t1);
 		assertEquals("<object><xf1>x1</xf1><xf1>x2</xf1></object>", r);
 		t2 = p.parse(r, FB.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 		validateXml(t1, s);
 	}
 
@@ -342,7 +342,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertObject(t).jsonSameAs(t2);
+		assertObject(t).sameAs(t2);
 
 		validateXml(t, s);
 	}
@@ -376,7 +376,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, H.class);
-		assertObject(t).jsonSameAs(t2);
+		assertObject(t).sameAs(t2);
 
 		validateXml(t, s);
 	}
@@ -415,7 +415,7 @@ public class XmlCollapsedTest {
 
 		// Note that existing fields should be reused and appended to.
 		t2 = p.parse(xml, G.class);
-		assertObject(t).jsonSameAs(t2);
+		assertObject(t).sameAs(t2);
 
 		validateXml(t, s);
 	}

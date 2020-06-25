@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -39,19 +39,19 @@ public class MultiIterableTest {
 		MultiIterable mi = new MultiIterable(l1.iterator(),l2.iterator());
 		mi.append(l3.iterator());
 
-		assertObjectEquals("['a','b','c']", mi.iterator());
+		assertObject(mi.iterator()).json().is("['a','b','c']");
 
 		mi = new MultiIterable(l1.iterator());
-		assertObjectEquals("[]", mi.iterator());
+		assertObject(mi.iterator()).json().is("[]");
 
 		mi = new MultiIterable(l2.iterator(), l1.iterator());
-		assertObjectEquals("['a','b']", mi.iterator());
+		assertObject(mi.iterator()).json().is("['a','b']");
 
 		mi = new MultiIterable(l2.iterator(), l1.iterator(), l3.iterator());
-		assertObjectEquals("['a','b','c']", mi.iterator());
+		assertObject(mi.iterator()).json().is("['a','b','c']");
 
 		mi = new MultiIterable();
-		assertObjectEquals("[]", mi.iterator());
+		assertObject(mi.iterator()).json().is("[]");
 
 		try { mi.append(null); fail(); } catch (IllegalArgumentException e) {}
 

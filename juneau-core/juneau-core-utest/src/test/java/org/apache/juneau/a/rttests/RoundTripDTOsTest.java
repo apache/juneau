@@ -38,13 +38,13 @@ public class RoundTripDTOsTest extends RoundTripTest {
 	public void testJsonSchema1() throws Exception {
 		JsonSchema s = JsonSchemaTest.getTest1();
 		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertObject(s).jsonSameAs(s2);
+		assertObject(s).sameAs(s2);
 	}
 
 	@Test
 	public void testJsonSchema2() throws Exception {
 		JsonSchema s = JsonSchemaTest.getTest2();
 		JsonSchema s2 = roundTrip(s, JsonSchema.class);
-		assertObject(s).jsonSameAs(s2);
+		assertObject(s).sameAs(s2);
 	}
 }

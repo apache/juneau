@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -43,19 +43,19 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=foo").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:'foo'}]", results);
+		assertObject(results).json().is("[{f:'foo'}]");
 
 		sa = SearchArgs.builder().search("f=fo*").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:'foo'}]", results);
+		assertObject(results).json().is("[{f:'foo'}]");
 
 		sa = SearchArgs.builder().search("f=*ar").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:'bar'}]", results);
+		assertObject(results).json().is("[{f:'bar'}]");
 
 		sa = SearchArgs.builder().search("f=foo bar").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:'foo'},{f:'bar'}]", results);
+		assertObject(results).json().is("[{f:'foo'},{f:'bar'}]");
 	}
 
 	public class A {
@@ -267,27 +267,27 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().search("f=1").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:1}]", results);
+		assertObject(results).json().is("[{f:1}]");
 
 		sa = SearchArgs.builder().search("f>1").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:2},{f:3}]", results);
+		assertObject(results).json().is("[{f:2},{f:3}]");
 
 		sa = SearchArgs.builder().search("f>=2").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:2},{f:3}]", results);
+		assertObject(results).json().is("[{f:2},{f:3}]");
 
 		sa = SearchArgs.builder().search("f<=2").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:1},{f:2}]", results);
+		assertObject(results).json().is("[{f:1},{f:2}]");
 
 		sa = SearchArgs.builder().search("f<2").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:1}]", results);
+		assertObject(results).json().is("[{f:1}]");
 
 		sa = SearchArgs.builder().search("f=1 3").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f:1},{f:3}]", results);
+		assertObject(results).json().is("[{f:1},{f:3}]");
 	}
 
 	public class C {
@@ -315,19 +315,19 @@ public class PojoQueryTest {
 
 		sa = SearchArgs.builder().view("f1").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]", results);
+		assertObject(results).json().is("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]");
 
 		sa = SearchArgs.builder().view("f2").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f2:1},{f2:2},{f2:3}]", results);
+		assertObject(results).json().is("[{f2:1},{f2:2},{f2:3}]");
 
 		sa = SearchArgs.builder().view("f3").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f3:true},{f3:false},{f3:true}]", results);
+		assertObject(results).json().is("[{f3:true},{f3:false},{f3:true}]");
 
 		sa = SearchArgs.builder().view("f3,f2,f1").build();
 		results = q.filter(sa);
-		assertObjectEquals("[{f3:true,f2:1,f1:'foo'},{f3:false,f2:2,f1:'bar'},{f3:true,f2:3,f1:'baz'}]", results);
+		assertObject(results).json().is("[{f3:true,f2:1,f1:'foo'},{f3:false,f2:2,f1:'bar'},{f3:true,f2:3,f1:'baz'}]");
 	}
 
 	public class E {

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -31,7 +31,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testContact() {
 		Contact t = contact();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testContactString() {
 		Contact t = contact("foo");
-		assertObjectEquals("{name:'foo'}", t);
+		assertObject(t).json().is("{name:'foo'}");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testContactStringObjectString() {
 		Contact t = contact("foo", "bar", "baz");
-		assertObjectEquals("{name:'foo',url:'bar',email:'baz'}", t);
+		assertObject(t).json().is("{name:'foo',url:'bar',email:'baz'}");
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testExternalDocumentation() {
 		ExternalDocumentation t = externalDocumentation();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testExternalDocumentationObject() {
 		ExternalDocumentation t = externalDocumentation("foo");
-		assertObjectEquals("{url:'foo'}", t);
+		assertObject(t).json().is("{url:'foo'}");
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testExternalDocumentationObjectString() {
 		ExternalDocumentation t = externalDocumentation("foo", "bar");
-		assertObjectEquals("{description:'bar',url:'foo'}", t);
+		assertObject(t).json().is("{description:'bar',url:'foo'}");
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testHeaderInfo() {
 		HeaderInfo t = headerInfo();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testHeaderInfoString() {
 		HeaderInfo t = headerInfo("foo");
-		assertObjectEquals("{type:'foo'}", t);
+		assertObject(t).json().is("{type:'foo'}");
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testHeaderInfoStrict() {
 		HeaderInfo t = headerInfoStrict("string");
-		assertObjectEquals("{type:'string'}", t);
+		assertObject(t).json().is("{type:'string'}");
 
 		try {
 			headerInfoStrict("foo");
@@ -118,7 +118,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testInfo() {
 		Info t = info();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testInfoStringString() {
 		Info t = info("foo", "bar");
-		assertObjectEquals("{title:'foo',version:'bar'}", t);
+		assertObject(t).json().is("{title:'foo',version:'bar'}");
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testItems() {
 		Items t = items();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testItemsString() {
 		Items t = items("foo");
-		assertObjectEquals("{type:'foo'}", t);
+		assertObject(t).json().is("{type:'foo'}");
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testItemsStrict() {
 		Items t = itemsStrict("string");
-		assertObjectEquals("{type:'string'}", t);
+		assertObject(t).json().is("{type:'string'}");
 
 		try {
 			itemsStrict("foo");
@@ -169,7 +169,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testLicense() {
 		License t = license();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testLicenseString() {
 		License t = license("foo");
-		assertObjectEquals("{name:'foo'}", t);
+		assertObject(t).json().is("{name:'foo'}");
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testOperation() {
 		Operation t = operation();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testParameterInfo() {
 		ParameterInfo t = parameterInfo();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testParameterInfoStringString() {
 		ParameterInfo t = parameterInfo("foo", "bar");
-		assertObjectEquals("{'in':'foo',name:'bar'}", t);
+		assertObject(t).json().is("{'in':'foo',name:'bar'}");
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testParameterInfoStrict() {
 		ParameterInfo t = parameterInfoStrict("query", "bar");
-		assertObjectEquals("{'in':'query',name:'bar'}", t);
+		assertObject(t).json().is("{'in':'query',name:'bar'}");
 
 		try {
 			parameterInfoStrict("foo", "bar");
@@ -229,7 +229,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testResponseInfo() {
 		ResponseInfo t = responseInfo();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testResponseInfoString() {
 		ResponseInfo t = responseInfo("foo");
-		assertObjectEquals("{description:'foo'}", t);
+		assertObject(t).json().is("{description:'foo'}");
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSchemaInfo() {
 		SchemaInfo t = schemaInfo();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSecurityScheme() {
 		SecurityScheme t = securityScheme();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSecuritySchemeString() {
 		SecurityScheme t = securityScheme("foo");
-		assertObjectEquals("{type:'foo'}", t);
+		assertObject(t).json().is("{type:'foo'}");
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSecuritySchemeStrict() {
 		SecurityScheme t = securityScheme("foo");
-		assertObjectEquals("{type:'foo'}", t);
+		assertObject(t).json().is("{type:'foo'}");
 	}
 
 	/**
@@ -283,7 +283,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSwagger() {
 		Swagger t = swagger();
-		assertObjectEquals("{swagger:'2.0'}", t);
+		assertObject(t).json().is("{swagger:'2.0'}");
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testSwaggerInfo() {
 		Swagger t = swagger(info());
-		assertObjectEquals("{swagger:'2.0',info:{}}", t);
+		assertObject(t).json().is("{swagger:'2.0',info:{}}");
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testTag() {
 		Tag t = tag();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 
 	/**
@@ -310,7 +310,7 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testTagString() {
 		Tag t = tag("foo");
-		assertObjectEquals("{name:'foo'}", t);
+		assertObject(t).json().is("{name:'foo'}");
 	}
 
 	/**
@@ -319,6 +319,6 @@ public class SwaggerBuilderTest {
 	@Test
 	public void testXml() {
 		Xml t = xml();
-		assertObjectEquals("{}", t);
+		assertObject(t).json().is("{}");
 	}
 }

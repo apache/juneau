@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -56,10 +57,10 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.info(info("foo", "bar"));
-		assertObjectEquals("{title:'foo',version:'bar'}", t.getInfo());
+		assertObject(t.getInfo()).json().is("{title:'foo',version:'bar'}");
 
 		t.info("{title:'foo',version:'bar'}");
-		assertObjectEquals("{title:'foo',version:'bar'}", t.getInfo());
+		assertObject(t.getInfo()).json().is("{title:'foo',version:'bar'}");
 		assertInstanceOf(Info.class, t.getInfo());
 
 		t.info(null);
@@ -110,11 +111,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setSchemes(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getSchemes());
 
 		t.setSchemes(ASet.of());
-		assertObjectEquals("[]", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("[]");
 		assertInstanceOf(List.class, t.getSchemes());
 
 		t.setSchemes(null);
@@ -129,15 +130,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addSchemes(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getSchemes());
 
 		t.addSchemes(ASet.of());
-		assertObjectEquals("['foo','bar']", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getSchemes());
 
 		t.addSchemes(null);
-		assertObjectEquals("['foo','bar']", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getSchemes());
 	}
 
@@ -156,7 +157,7 @@ public class SwaggerTest {
 		t.schemes("[]");
 		t.schemes((Object)null);
 
-		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getSchemes());
+		assertObject(t.getSchemes()).json().is("['foo','bar','baz','qux','quux']");
 	}
 
 	/**
@@ -167,11 +168,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
-		assertObjectEquals("['text/foo']", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getConsumes());
 
 		t.setConsumes(ASet.of());
-		assertObjectEquals("[]", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("[]");
 		assertInstanceOf(List.class, t.getConsumes());
 
 		t.setConsumes(null);
@@ -186,15 +187,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
-		assertObjectEquals("['text/foo']", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getConsumes());
 
 		t.addConsumes(ASet.of());
-		assertObjectEquals("['text/foo']", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getConsumes());
 
 		t.addConsumes(null);
-		assertObjectEquals("['text/foo']", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getConsumes());
 	}
 
@@ -214,7 +215,7 @@ public class SwaggerTest {
 		t.consumes("['text/quuuux']");
 		t.consumes("[]");
 		t.consumes((Object)null);
-		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getConsumes());
+		assertObject(t.getConsumes()).json().is("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']");
 		assertInstanceOf(List.class, t.getConsumes());
 		for (MediaType mt : t.getConsumes())
 			assertInstanceOf(MediaType.class, mt);
@@ -228,11 +229,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setProduces(ASet.of(MediaType.forString("text/foo")));
-		assertObjectEquals("['text/foo']", t.getProduces());
+		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getProduces());
 
 		t.setProduces(ASet.of());
-		assertObjectEquals("[]", t.getProduces());
+		assertObject(t.getProduces()).json().is("[]");
 		assertInstanceOf(List.class, t.getProduces());
 
 		t.setProduces(null);
@@ -247,15 +248,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addProduces(ASet.of(MediaType.forString("text/foo")));
-		assertObjectEquals("['text/foo']", t.getProduces());
+		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getProduces());
 
 		t.addProduces(ASet.of());
-		assertObjectEquals("['text/foo']", t.getProduces());
+		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getProduces());
 
 		t.addProduces(null);
-		assertObjectEquals("['text/foo']", t.getProduces());
+		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertInstanceOf(List.class, t.getProduces());
 	}
 
@@ -275,7 +276,7 @@ public class SwaggerTest {
 		t.produces("['text/quuuux']");
 		t.produces("[]");
 		t.produces((Object)null);
-		assertObjectEquals("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']", t.getProduces());
+		assertObject(t.getProduces()).json().is("['text/foo','text/bar','text/baz','text/qux','text/quux','text/quuux','text/quuuux']");
 		assertInstanceOf(List.class, t.getProduces());
 		for (MediaType mt : t.getProduces())
 			assertInstanceOf(MediaType.class, mt);
@@ -289,11 +290,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setPaths(AMap.of("foo", new OperationMap().append("bar",operation().summary("baz"))));
-		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertInstanceOf(Map.class, t.getPaths());
 
 		t.setPaths(AMap.of());
-		assertObjectEquals("{}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{}");
 		assertInstanceOf(Map.class, t.getPaths());
 
 		t.setPaths(null);
@@ -308,15 +309,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addPaths(AMap.of("foo",new OperationMap().append("bar",operation().summary("baz"))));
-		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertInstanceOf(Map.class, t.getPaths());
 
 		t.addPaths(AMap.of());
-		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertInstanceOf(Map.class, t.getPaths());
 
 		t.addPaths(null);
-		assertObjectEquals("{foo:{bar:{summary:'baz'}}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{foo:{bar:{summary:'baz'}}}");
 		assertInstanceOf(Map.class, t.getPaths());
 	}
 
@@ -330,7 +331,7 @@ public class SwaggerTest {
 		t.path("a", "a1", operation().description("a2"));
 		t.path("b", null, null);
 
-		assertObjectEquals("{a:{a1:{description:'a2'}},b:{null:null}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{a:{a1:{description:'a2'}},b:{null:null}}");
 	}
 
 	/**
@@ -347,7 +348,7 @@ public class SwaggerTest {
 		t.paths("{}");
 		t.paths((Object[])null);
 
-		assertObjectEquals("{a:{a1:{operationId:'a2'}},b:{b1:{operationId:'b2'}},c:{c1:{operationId:'c2'}},d:{d1:{operationId:'d2'}}}", t.getPaths());
+		assertObject(t.getPaths()).json().is("{a:{a1:{operationId:'a2'}},b:{b1:{operationId:'b2'}},c:{c1:{operationId:'c2'}},d:{d1:{operationId:'d2'}}}");
 		for (Map<String,Operation> m : t.getPaths().values()) {
 			for (Operation o : m.values()) {
 				assertInstanceOf(Operation.class, o);
@@ -363,11 +364,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setDefinitions(AMap.of("foo",OMap.of("type","bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.setDefinitions(AMap.of());
-		assertObjectEquals("{}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{}");
 		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.setDefinitions(null);
@@ -382,15 +383,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addDefinitions(AMap.of("foo",OMap.of("type", "bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.addDefinitions(AMap.of());
-		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getDefinitions());
 
 		t.addDefinitions(null);
-		assertObjectEquals("{foo:{type:'bar'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getDefinitions());
 	}
 
@@ -405,7 +406,7 @@ public class SwaggerTest {
 		t.definition("b", (OMap)null);
 		t.definition(null, OMap.of("type", "c1"));
 
-		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
 
 	/**
@@ -421,7 +422,7 @@ public class SwaggerTest {
 		t.definitions("{}");
 		t.definitions((Object[])null);
 
-		assertObjectEquals("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}", t.getDefinitions());
+		assertObject(t.getDefinitions()).json().is("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}");
 	}
 
 	/**
@@ -432,11 +433,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setParameters(AMap.of("foo",parameterInfo().name("bar")));
-		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertInstanceOf(Map.class, t.getParameters());
 
 		t.setParameters(AMap.of());
-		assertObjectEquals("{}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{}");
 		assertInstanceOf(Map.class, t.getParameters());
 
 		t.setParameters(null);
@@ -451,15 +452,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addParameters(AMap.of("foo",parameterInfo().name("bar")));
-		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertInstanceOf(Map.class, t.getParameters());
 
 		t.addParameters(AMap.of());
-		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertInstanceOf(Map.class, t.getParameters());
 
 		t.addParameters(null);
-		assertObjectEquals("{foo:{name:'bar'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{foo:{name:'bar'}}");
 		assertInstanceOf(Map.class, t.getParameters());
 	}
 
@@ -474,7 +475,7 @@ public class SwaggerTest {
 		t.parameter("b", null);
 		t.parameter(null, parameterInfo().in("c1"));
 
-		assertObjectEquals("{a:{'in':'a1'},b:null,null:{'in':'c1'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
 	}
 
 	/**
@@ -490,7 +491,7 @@ public class SwaggerTest {
 		t.parameters("{}");
 		t.parameters((Object[])null);
 
-		assertObjectEquals("{a:{'in':'a1',name:'a2'},b:{'in':'b1',name:'b2'},c:{'in':'c1',name:'c2'}}", t.getParameters());
+		assertObject(t.getParameters()).json().is("{a:{'in':'a1',name:'a2'},b:{'in':'b1',name:'b2'},c:{'in':'c1',name:'c2'}}");
 	}
 
 	/**
@@ -501,11 +502,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setResponses(AMap.of("123",responseInfo("bar")));
-		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertInstanceOf(Map.class, t.getResponses());
 
 		t.setResponses(AMap.of());
-		assertObjectEquals("{}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{}");
 		assertInstanceOf(Map.class, t.getResponses());
 
 		t.setResponses(null);
@@ -520,15 +521,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addResponses(AMap.of("123",responseInfo("bar")));
-		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertInstanceOf(Map.class, t.getResponses());
 
 		t.addResponses(AMap.of());
-		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertInstanceOf(Map.class, t.getResponses());
 
 		t.addResponses(null);
-		assertObjectEquals("{'123':{description:'bar'}}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{'123':{description:'bar'}}");
 		assertInstanceOf(Map.class, t.getResponses());
 	}
 
@@ -543,7 +544,7 @@ public class SwaggerTest {
 		t.response(null, responseInfo("b1"));
 		t.response("c", null);
 
-		assertObjectEquals("{a:{description:'a1'},null:{description:'b1'},c:null}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
 	}
 
 	/**
@@ -559,7 +560,7 @@ public class SwaggerTest {
 		t.responses("{}");
 		t.responses((Object[])null);
 
-		assertObjectEquals("{a:{description:'a1'},b:{description:'b1'},c:{description:'c1'}}", t.getResponses());
+		assertObject(t.getResponses()).json().is("{a:{description:'a1'},b:{description:'b1'},c:{description:'c1'}}");
 		for (ResponseInfo ri : t.getResponses().values())
 			assertInstanceOf(ResponseInfo.class, ri);
 	}
@@ -572,11 +573,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setSecurityDefinitions(AMap.of("foo",securityScheme("bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.setSecurityDefinitions(AMap.of());
-		assertObjectEquals("{}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{}");
 		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.setSecurityDefinitions(null);
@@ -591,15 +592,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addSecurityDefinitions(AMap.of("foo",securityScheme("bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.addSecurityDefinitions(AMap.of());
-		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 
 		t.addSecurityDefinitions(null);
-		assertObjectEquals("{foo:{type:'bar'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getSecurityDefinitions());
 	}
 
@@ -614,7 +615,7 @@ public class SwaggerTest {
 		t.securityDefinition("b", null);
 		t.securityDefinition(null, securityScheme("c1"));
 
-		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
 
 	/**
@@ -630,7 +631,7 @@ public class SwaggerTest {
 		t.securityDefinitions("{}");
 		t.securityDefinitions((Object[])null);
 
-		assertObjectEquals("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}", t.getSecurityDefinitions());
+		assertObject(t.getSecurityDefinitions()).json().is("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}");
 		for (SecurityScheme ss : t.getSecurityDefinitions().values())
 			assertInstanceOf(SecurityScheme.class, ss);
 	}
@@ -643,11 +644,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
-		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
 		assertInstanceOf(List.class, t.getSecurity());
 
 		t.setSecurity(ASet.of());
-		assertObjectEquals("[]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[]");
 		assertInstanceOf(List.class, t.getSecurity());
 
 		t.setSecurity(null);
@@ -662,15 +663,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addSecurity(ASet.of(AMap.of("foo",AList.of("bar"))));
-		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
 		assertInstanceOf(List.class, t.getSecurity());
 
 		t.addSecurity(ASet.of());
-		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
 		assertInstanceOf(List.class, t.getSecurity());
 
 		t.addSecurity(null);
-		assertObjectEquals("[{foo:['bar']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{foo:['bar']}]");
 		assertInstanceOf(List.class, t.getSecurity());
 	}
 
@@ -686,7 +687,7 @@ public class SwaggerTest {
 		t.security("c");
 		t.security(null, "d1", "d2");
 
-		assertObjectEquals("[{a:['a1','a2']},{b:[null]},{c:[]},{null:['d1','d2']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{a:['a1','a2']},{b:[null]},{c:[]},{null:['d1','d2']}]");
 	}
 
 	/**
@@ -705,7 +706,7 @@ public class SwaggerTest {
 		t.securities("[{g1:['g2']}]");
 		t.securities("[]");
 		t.securities((Object)null);
-		assertObjectEquals("[{a1:['a2']},{b1:['b2']},{c1:['c2']},{d1:['d2']},{e1:['e2']},{f1:['f2']},{g1:['g2']}]", t.getSecurity());
+		assertObject(t.getSecurity()).json().is("[{a1:['a2']},{b1:['b2']},{c1:['c2']},{d1:['d2']},{e1:['e2']},{f1:['f2']},{g1:['g2']}]");
 		assertInstanceOf(List.class, t.getSecurity());
 	}
 
@@ -717,11 +718,11 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.setTags(ASet.of(tag("foo")));
-		assertObjectEquals("[{name:'foo'}]", t.getTags());
+		assertObject(t.getTags()).json().is("[{name:'foo'}]");
 		assertInstanceOf(List.class, t.getTags());
 
 		t.setTags(ASet.of());
-		assertObjectEquals("[]", t.getTags());
+		assertObject(t.getTags()).json().is("[]");
 		assertInstanceOf(List.class, t.getTags());
 
 		t.setTags(null);
@@ -736,15 +737,15 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.addTags(ASet.of(tag("foo")));
-		assertObjectEquals("[{name:'foo'}]", t.getTags());
+		assertObject(t.getTags()).json().is("[{name:'foo'}]");
 		assertInstanceOf(List.class, t.getTags());
 
 		t.addTags(ASet.of());
-		assertObjectEquals("[{name:'foo'}]", t.getTags());
+		assertObject(t.getTags()).json().is("[{name:'foo'}]");
 		assertInstanceOf(List.class, t.getTags());
 
 		t.addTags(null);
-		assertObjectEquals("[{name:'foo'}]", t.getTags());
+		assertObject(t.getTags()).json().is("[{name:'foo'}]");
 		assertInstanceOf(List.class, t.getTags());
 	}
 
@@ -764,7 +765,7 @@ public class SwaggerTest {
 		t.tags("[{name:'g'}]");
 		t.tags("[]");
 		t.tags((Object)null);
-		assertObjectEquals("[{name:'a'},{name:'b'},{name:'c'},{name:'d'},{name:'e'},{name:'f'},{name:'g'}]", t.getTags());
+		assertObject(t.getTags()).json().is("[{name:'a'},{name:'b'},{name:'c'},{name:'d'},{name:'e'},{name:'f'},{name:'g'}]");
 		assertInstanceOf(List.class, t.getTags());
 		for (Tag tag : t.getTags())
 			assertInstanceOf(Tag.class, tag);
@@ -778,10 +779,10 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
 
 		t.externalDocs(null);
@@ -813,7 +814,7 @@ public class SwaggerTest {
 			.set("tags", ASet.of(tag("o")))
 			.set("$ref", "ref");
 
-		assertObjectEquals("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}", t);
+		assertObject(t).json().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		t
 			.set("basePath", "a")
@@ -833,7 +834,7 @@ public class SwaggerTest {
 			.set("tags", "[{name:'o'}]")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}", t);
+		assertObject(t).json().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		t
 			.set("basePath", new StringBuilder("a"))
@@ -853,7 +854,7 @@ public class SwaggerTest {
 			.set("tags", new StringBuilder("[{name:'o'}]"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}", t);
+		assertObject(t).json().is("{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}");
 
 		assertEquals("a", t.get("basePath", String.class));
 		assertEquals("['text/b']", t.get("consumes", String.class));
@@ -902,7 +903,7 @@ public class SwaggerTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{swagger:'n',info:{title:'f1',version:'f2'},tags:[{name:'o'}],externalDocs:{url:'d'},basePath:'a',schemes:['k1'],consumes:['text/b'],produces:['text/i'],paths:{h:{h1:{operationId:'h2'}}},definitions:{c:{type:'c1'}},parameters:{g:{'in':'g1',name:'g2'}},responses:{j:{description:'j1'}},securityDefinitions:{m:{type:'m1'}},security:[{l1:['l2']}],'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Swagger.class));
+		assertObject(JsonParser.DEFAULT.parse(s, Swagger.class)).json().is(s);
 	}
 
 }

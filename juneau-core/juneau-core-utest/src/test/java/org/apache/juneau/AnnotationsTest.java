@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -101,8 +101,7 @@ public class AnnotationsTest {
 		bm = session.newBeanMap(A.class).load("{publicField:123}");
 		assertNotNull("F1", bm);
 		assertNotNull("F2", bm.getBean());
-		assertObjectEquals("{publicField:123}", bm.getBean());
-
+		assertObject(bm.getBean()).json().is("{publicField:123}");
 	}
 
 	public static class A {

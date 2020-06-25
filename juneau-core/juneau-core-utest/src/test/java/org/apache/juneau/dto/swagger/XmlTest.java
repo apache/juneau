@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -140,7 +141,7 @@ public class XmlTest {
 			.set("wrapped", true)
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", "true")
@@ -150,7 +151,7 @@ public class XmlTest {
 			.set("wrapped", "true")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		t
 			.set("attribute", new StringBuilder("true"))
@@ -160,7 +161,7 @@ public class XmlTest {
 			.set("wrapped", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}");
 
 		assertEquals("true", t.get("attribute", String.class));
 		assertEquals("a", t.get("name", String.class));
@@ -182,6 +183,6 @@ public class XmlTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'a',namespace:'b',prefix:'c',attribute:true,wrapped:true,'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Xml.class));
+		assertObject(JsonParser.DEFAULT.parse(s, Xml.class)).json().is(s);
 	}
 }

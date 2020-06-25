@@ -15,7 +15,7 @@ package org.apache.juneau.httppart;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
@@ -86,7 +86,7 @@ public class HttpPartSchemaTest_Path {
 		assertEquals(2, s.getMinLength().longValue());
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
-		assertObjectEquals("['e1','e2','e3']", s.getEnum());
+		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
 	}
 
 	public static class A03 {
@@ -131,7 +131,7 @@ public class HttpPartSchemaTest_Path {
 		assertEquals(2, s.getMinLength().longValue());
 		assertTrue(s.isExclusiveMaximum());
 		assertTrue(s.isExclusiveMinimum());
-		assertObjectEquals("['e1','e2','e3']", s.getEnum());
+		assertObject(s.getEnum()).json().is("['e1','e2','e3']");
 	}
 
 	public static class A04 {
@@ -176,7 +176,7 @@ public class HttpPartSchemaTest_Path {
 		assertEquals(6, s.getMinLength().longValue());
 		assertFalse(s.isExclusiveMaximum());
 		assertFalse(s.isExclusiveMinimum());
-		assertObjectEquals("['e4','e5','e6']", s.getEnum());
+		assertObject(s.getEnum()).json().is("['e4','e5','e6']");
 	}
 
 	@Path(
@@ -276,7 +276,7 @@ public class HttpPartSchemaTest_Path {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObjectEquals("['e1','e2']", items.getEnum());
+		assertObject(items.getEnum()).json().is("['e1','e2']");
 		assertEquals("c1\nc2", items.getDefault());
 
 		items = items.getItems();
@@ -294,7 +294,7 @@ public class HttpPartSchemaTest_Path {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObjectEquals("['e3','e4']", items.getEnum());
+		assertObject(items.getEnum()).json().is("['e3','e4']");
 		assertEquals("c3\nc4", items.getDefault());
 
 		items = items.getItems();
@@ -312,7 +312,7 @@ public class HttpPartSchemaTest_Path {
 		assertTrue(items.isExclusiveMaximum());
 		assertTrue(items.isExclusiveMinimum());
 		assertTrue(items.isUniqueItems());
-		assertObjectEquals("['e5','e6']", items.getEnum());
+		assertObject(items.getEnum()).json().is("['e5','e6']");
 		assertEquals("c5\nc6", items.getDefault());
 
 		items = items.getItems();
@@ -330,7 +330,7 @@ public class HttpPartSchemaTest_Path {
 		assertFalse(items.isExclusiveMaximum());
 		assertFalse(items.isExclusiveMinimum());
 		assertFalse(items.isUniqueItems());
-		assertObjectEquals("['e7','e8']", items.getEnum());
+		assertObject(items.getEnum()).json().is("['e7','e8']");
 		assertEquals("c7\nc8", items.getDefault());
 	}
 

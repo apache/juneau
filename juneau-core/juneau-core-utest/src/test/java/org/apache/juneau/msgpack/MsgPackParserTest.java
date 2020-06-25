@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -41,7 +41,7 @@ public class MsgPackParserTest {
 
 		is = is("00 01");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("0", r);
+		assertObject(r).json().is("0");
 		try {
 			r = p.parse(is, Object.class);
 			fail();
@@ -62,75 +62,75 @@ public class MsgPackParserTest {
 
 		is = is("00 01");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("0", r);
+		assertObject(r).json().is("0");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("1", r);
+		assertObject(r).json().is("1");
 
 		is = is("D1 00 80 D1 00 81");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("128", r);
+		assertObject(r).json().is("128");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("129", r);
+		assertObject(r).json().is("129");
 
 		is = is("D2 00 00 80 00 D2 00 00 80 01");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("32768", r);
+		assertObject(r).json().is("32768");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("32769", r);
+		assertObject(r).json().is("32769");
 
 		is = is("CA 00 00 00 00 CA 3F 80 00 00");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("0.0", r);
+		assertObject(r).json().is("0.0");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("1.0", r);
+		assertObject(r).json().is("1.0");
 
 		is = is("CB 3F F0 00 00 00 00 00 00 CB BF F0 00 00 00 00 00 00");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("1.0", r);
+		assertObject(r).json().is("1.0");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("-1.0", r);
+		assertObject(r).json().is("-1.0");
 
 		is = is("A0 A0");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("''", r);
+		assertObject(r).json().is("''");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("''", r);
+		assertObject(r).json().is("''");
 
 		is = is("BF 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 BF 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'", r);
+		assertObject(r).json().is("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'", r);
+		assertObject(r).json().is("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'");
 
 		is = is("D9 20 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 D9 20 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62 62");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'", r);
+		assertObject(r).json().is("'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'", r);
+		assertObject(r).json().is("'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'");
 
 		is = is("90 90");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("[]", r);
+		assertObject(r).json().is("[]");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("[]", r);
+		assertObject(r).json().is("[]");
 
 		is = is("91 01 91 02");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("[1]", r);
+		assertObject(r).json().is("[1]");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("[2]", r);
+		assertObject(r).json().is("[2]");
 
 		is = is("80 80");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("{}", r);
+		assertObject(r).json().is("{}");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("{}", r);
+		assertObject(r).json().is("{}");
 
 		is = is("81 A1 31 01 81 A1 31 02");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("{'1':1}", r);
+		assertObject(r).json().is("{'1':1}");
 		r = p.parse(is, Object.class);
-		assertObjectEquals("{'1':2}", r);
+		assertObject(r).json().is("{'1':2}");
 	}
 
 	private InputStream is(String spacedHex) throws Exception {

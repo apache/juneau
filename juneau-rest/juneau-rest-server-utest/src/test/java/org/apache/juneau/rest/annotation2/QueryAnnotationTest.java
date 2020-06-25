@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -463,22 +464,22 @@ public class QueryAnnotationTest {
 	@Test
 	public void sb01_Query_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb01","get","query","Q");
-		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
+		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
 	}
 	@Test
 	public void sb02_Query_onPojo_autoDetectBean() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb02","get","query","Q");
-		assertObjectEquals("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
+		assertObject(x).json().is("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}");
 	}
 	@Test
 	public void sb03_Query_onPojo_autoDetectList() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb03","get","query","Q");
-		assertObjectEquals("{'in':'query',name:'Q',type:'array',items:{type:'string'}}", x);
+		assertObject(x).json().is("{'in':'query',name:'Q',type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb04_Query_onPojo_autoDetectStringObject() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb04","get","query","Q");
-		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
+		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -597,7 +598,7 @@ public class QueryAnnotationTest {
 	@Test
 	public void tb01_Query_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb01","get","query","Q");
-		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
+		assertObject(x).json().is("{'in':'query',name:'Q',type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

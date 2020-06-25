@@ -14,8 +14,7 @@ package org.apache.juneau.marshall;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
-
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import java.io.*;
 import java.util.*;
 
@@ -52,6 +51,6 @@ public class JsonTest {
 	@Test
 	public void read2() throws Exception {
 		Map<?,?> o = m.read("{foo:'bar'}", Map.class, String.class, String.class);
-		assertObjectEquals("{foo:'bar'}", o);
+		assertObject(o).json().is("{foo:'bar'}");
 	}
 }

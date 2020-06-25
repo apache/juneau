@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -40,9 +40,9 @@ public class ContextCacheTest {
 		B b = ContextCache.INSTANCE.create(B.class, ps);
 		C c = ContextCache.INSTANCE.create(C.class, ps);
 
-		assertObjectEquals("{f1:'xxx'}", a);
-		assertObjectEquals("{f1:'xxx',f2:-1}", b);
-		assertObjectEquals("{f1:'xxx',f2:-1,f3:false}", c);
+		assertObject(a).json().is("{f1:'xxx'}");
+		assertObject(b).json().is("{f1:'xxx',f2:-1}");
+		assertObject(c).json().is("{f1:'xxx',f2:-1,f3:false}");
 
 		A a2 = ContextCache.INSTANCE.create(A.class, ps);
 		B b2 = ContextCache.INSTANCE.create(B.class, ps);
@@ -59,9 +59,9 @@ public class ContextCacheTest {
 		b2 = ContextCache.INSTANCE.create(B.class, ps);
 		c2 = ContextCache.INSTANCE.create(C.class, ps);
 
-		assertObjectEquals("{f1:'foo'}", a2);
-		assertObjectEquals("{f1:'foo',f2:-1}", b2);
-		assertObjectEquals("{f1:'foo',f2:-1,f3:false}", c2);
+		assertObject(a2).json().is("{f1:'foo'}");
+		assertObject(b2).json().is("{f1:'foo',f2:-1}");
+		assertObject(c2).json().is("{f1:'foo',f2:-1,f3:false}");
 
 		assertTrue(a != a2);
 		assertTrue(b != b2);
@@ -75,9 +75,9 @@ public class ContextCacheTest {
 		b2 = ContextCache.INSTANCE.create(B.class, ps);
 		c2 = ContextCache.INSTANCE.create(C.class, ps);
 
-		assertObjectEquals("{f1:'foo'}", a2);
-		assertObjectEquals("{f1:'foo',f2:123}", b2);
-		assertObjectEquals("{f1:'foo',f2:123,f3:false}", c2);
+		assertObject(a2).json().is("{f1:'foo'}");
+		assertObject(b2).json().is("{f1:'foo',f2:123}");
+		assertObject(c2).json().is("{f1:'foo',f2:123,f3:false}");
 
 		assertTrue(a == a2);
 		assertTrue(b != b2);
@@ -91,9 +91,9 @@ public class ContextCacheTest {
 		b2 = ContextCache.INSTANCE.create(B.class, ps);
 		c2 = ContextCache.INSTANCE.create(C.class, ps);
 
-		assertObjectEquals("{f1:'foo'}", a2);
-		assertObjectEquals("{f1:'foo',f2:123}", b2);
-		assertObjectEquals("{f1:'foo',f2:123,f3:true}", c2);
+		assertObject(a2).json().is("{f1:'foo'}");
+		assertObject(b2).json().is("{f1:'foo',f2:123}");
+		assertObject(c2).json().is("{f1:'foo',f2:123,f3:true}");
 
 		assertTrue(a == a2);
 		assertTrue(b == b2);
@@ -107,9 +107,9 @@ public class ContextCacheTest {
 		b2 = ContextCache.INSTANCE.create(B.class, ps);
 		c2 = ContextCache.INSTANCE.create(C.class, ps);
 
-		assertObjectEquals("{f1:'foo'}", a2);
-		assertObjectEquals("{f1:'foo',f2:123}", b2);
-		assertObjectEquals("{f1:'foo',f2:123,f3:true}", c2);
+		assertObject(a2).json().is("{f1:'foo'}");
+		assertObject(b2).json().is("{f1:'foo',f2:123}");
+		assertObject(c2).json().is("{f1:'foo',f2:123,f3:true}");
 
 		assertTrue(a == a2);
 		assertTrue(b == b2);

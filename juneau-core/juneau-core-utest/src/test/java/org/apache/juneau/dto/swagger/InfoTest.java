@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -88,10 +89,10 @@ public class InfoTest {
 		Info t = new Info();
 
 		t.contact(contact("foo"));
-		assertObjectEquals("{name:'foo'}", t.getContact());
+		assertObject(t.getContact()).json().is("{name:'foo'}");
 
 		t.contact("{name:'foo'}");
-		assertObjectEquals("{name:'foo'}", t.getContact());
+		assertObject(t.getContact()).json().is("{name:'foo'}");
 		assertInstanceOf(Contact.class, t.getContact());
 
 		t.contact(null);
@@ -106,10 +107,10 @@ public class InfoTest {
 		Info t = new Info();
 
 		t.license(license("foo"));
-		assertObjectEquals("{name:'foo'}", t.getLicense());
+		assertObject(t.getLicense()).json().is("{name:'foo'}");
 
 		t.license("{name:'foo'}");
-		assertObjectEquals("{name:'foo'}", t.getLicense());
+		assertObject(t.getLicense()).json().is("{name:'foo'}");
 		assertInstanceOf(License.class, t.getLicense());
 
 		t.license(null);
@@ -150,7 +151,7 @@ public class InfoTest {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}", t);
+		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", "{name:'a'}")
@@ -161,7 +162,7 @@ public class InfoTest {
 			.set("version", "f")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}", t);
+		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		t
 			.set("contact", new StringBuilder("{name:'a'}"))
@@ -172,7 +173,7 @@ public class InfoTest {
 			.set("version", new StringBuilder("f"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}", t);
+		assertObject(t).json().is("{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}");
 
 		assertEquals("{name:'a'}", t.get("contact", String.class));
 		assertEquals("b", t.get("description", String.class));
@@ -196,6 +197,6 @@ public class InfoTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{title:'e',description:'b',version:'f',contact:{name:'a'},license:{name:'c'},termsOfService:'d','$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Info.class));
+		assertObject(JsonParser.DEFAULT.parse(s, Info.class)).json().is(s);
 	}
 }

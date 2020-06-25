@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -42,7 +43,7 @@ public class BeanIgnoreTest {
 
 	@Test
 	public void testBeanIgnoreOnProperties() throws Exception {
-		assertObjectEquals("{c:'c',a:'a'}", new A());
+		assertObject(new A()).json().is("{c:'c',a:'a'}");
 	}
 
 	@BeanConfig(
@@ -95,7 +96,7 @@ public class BeanIgnoreTest {
 
 	@Test
 	public void testBeanIgnoreOnBean() throws Exception {
-		assertObjectEquals("{f2:2,f3:'xxx',f4:'xxx'}", new B());
+		assertObject(new B()).json().is("{f2:2,f3:'xxx',f4:'xxx'}");
 	}
 
 	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="B1c"))

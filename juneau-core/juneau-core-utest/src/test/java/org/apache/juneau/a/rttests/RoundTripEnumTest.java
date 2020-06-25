@@ -13,7 +13,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -42,7 +41,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	@Test
 	public void testEnumA() throws Exception {
 		AEnum t = AEnum.FOO;
-		assertObjectEquals("'FOO'", t);
+		assertObject(t).json().is("'FOO'");
 		t = roundTrip(t, AEnum.class);
 		assertEquals(AEnum.FOO, t);
 	}
@@ -62,7 +61,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	@Test
 	public void testEnumArrayA() throws Exception {
 		AEnum[] t = {AEnum.FOO,AEnum.BAR,null};
-		assertObjectEquals("['FOO','BAR',null]", t);
+		assertObject(t).json().is("['FOO','BAR',null]");
 		t = roundTrip(t, AEnum[].class);
 		assertEquals(AEnum.FOO, t[0]);
 		assertEquals(AEnum.BAR, t[1]);
@@ -72,7 +71,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	@Test
 	public void testEnumArrayB() throws Exception {
 		BEnum[] t = {BEnum.FOO,BEnum.BAR,null};
-		assertObjectEquals("['xfoo','xbar',null]", t);
+		assertObject(t).json().is("['xfoo','xbar',null]");
 		t = roundTrip(t, BEnum[].class);
 		assertEquals(BEnum.FOO, t[0]);
 		assertEquals(BEnum.BAR, t[1]);
@@ -85,7 +84,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	@Test
 	public void testEnum2dArrayA() throws Exception {
 		AEnum[][] t = {{AEnum.FOO,AEnum.BAR,null},null};
-		assertObjectEquals("[['FOO','BAR',null],null]", t);
+		assertObject(t).json().is("[['FOO','BAR',null],null]");
 		t = roundTrip(t, AEnum[][].class);
 		assertEquals(AEnum.FOO, t[0][0]);
 		assertEquals(AEnum.BAR, t[0][1]);
@@ -96,7 +95,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	@Test
 	public void testEnum2dArrayB() throws Exception {
 		BEnum[][] t = {{BEnum.FOO,BEnum.BAR,null},null};
-		assertObjectEquals("[['xfoo','xbar',null],null]", t);
+		assertObject(t).json().is("[['xfoo','xbar',null],null]");
 		t = roundTrip(t, BEnum[][].class);
 		assertEquals(BEnum.FOO, t[0][0]);
 		assertEquals(BEnum.BAR, t[0][1]);
@@ -111,7 +110,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	public void testBeansWithEnumA() throws Exception {
 		A t1 = new A().init(), t2;
 		t2 = roundTrip(t1, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 		assertEquals(AEnum.FOO, t2.f3[0]);
 		assertNull(t2.f3[1]);
 		assertEquals(AEnum.FOO, t2.f4[0][0]);
@@ -123,7 +122,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 	public void testBeansWithEnumB() throws Exception {
 		B t1 = new B().init(), t2;
 		t2 = roundTrip(t1, B.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 		assertEquals(BEnum.FOO, t2.f3[0]);
 		assertNull(t2.f3[1]);
 		assertEquals(BEnum.FOO, t2.f4[0][0]);

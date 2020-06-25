@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -70,10 +71,10 @@ public class TagTest {
 		Tag t = new Tag();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
 
 		t.externalDocs(null);
@@ -93,7 +94,7 @@ public class TagTest {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -101,7 +102,7 @@ public class TagTest {
 			.set("name", "c")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -109,7 +110,7 @@ public class TagTest {
 			.set("name", new StringBuilder("c"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}", t);
+		assertObject(t).json().is("{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}");
 
 		assertEquals("a", t.get("description", String.class));
 		assertEquals("{url:'b'}", t.get("externalDocs", String.class));
@@ -127,6 +128,6 @@ public class TagTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{name:'c',description:'a',externalDocs:{url:'b'},'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Tag.class));
+		assertObject(JsonParser.DEFAULT.parse(s, Tag.class)).json().is(s);
 	}
 }

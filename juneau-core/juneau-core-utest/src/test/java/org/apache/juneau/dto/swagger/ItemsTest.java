@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -73,10 +74,10 @@ public class ItemsTest {
 		Items t = new Items();
 
 		t.items(items("foo"));
-		assertObjectEquals("{type:'foo'}", t.getItems());
+		assertObject(t.getItems()).json().is("{type:'foo'}");
 
 		t.items("{type:'foo'}");
-		assertObjectEquals("{type:'foo'}", t.getItems());
+		assertObject(t.getItems()).json().is("{type:'foo'}");
 		assertInstanceOf(Items.class, t.getItems());
 
 		t.items(null);
@@ -376,11 +377,11 @@ public class ItemsTest {
 		Items t = new Items();
 
 		t.setEnum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(ASet.of());
-		assertObjectEquals("[]", t.getEnum());
+		assertObject(t.getEnum()).json().is("[]");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(null);
@@ -395,15 +396,15 @@ public class ItemsTest {
 		Items t = new Items();
 
 		t.addEnum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.addEnum(ASet.of("baz"));
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.addEnum(null);
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 	}
 
@@ -415,20 +416,20 @@ public class ItemsTest {
 		Items t = new Items();
 
 		t._enum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum(ASet.of("baz"));
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum((Object[])null);
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
-		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz','qux','quux']");
 		assertInstanceOf(List.class, t.getEnum());
 	}
 
@@ -486,7 +487,7 @@ public class ItemsTest {
 			.set("uniqueItems", true)
 			.set("$ref", "ref");
 
-		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
 		t
 			.set("default", "a")
@@ -508,7 +509,7 @@ public class ItemsTest {
 			.set("uniqueItems", "true")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
 		t
 			.set("default", new StringBuilder("a"))
@@ -530,7 +531,7 @@ public class ItemsTest {
 			.set("uniqueItems", new StringBuilder("true"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}", t);
+		assertObject(t).json().is("{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}");
 
 		assertEquals("a", t.get("default", String.class));
 		assertEquals("['b']", t.get("enum", String.class));
@@ -576,6 +577,6 @@ public class ItemsTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{type:'j',format:'g',items:{type:'h'},collectionFormat:'c','default':'a',maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'i',maxItems:123,minItems:123,uniqueItems:true,'enum':['b'],multipleOf:123.0,'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, Items.class));
+		assertObject(JsonParser.DEFAULT.parse(s, Items.class)).json().is(s);
 	}
 }

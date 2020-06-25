@@ -90,7 +90,7 @@ public class CognosXmlTest {
 
 		// Make sure we can parse it back into a POJO.
 		DataSet ds2 = XmlParser.DEFAULT.parse(out, DataSet.class);
-		assertObject(ds).jsonSameAs(ds2);
+		assertObject(ds).sameAs(ds2);
 	}
 
 	public static class Item {

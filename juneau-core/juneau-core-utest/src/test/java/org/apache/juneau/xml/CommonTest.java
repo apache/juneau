@@ -45,13 +45,13 @@ public class CommonTest {
 		String r = s.build().serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.keepNullProperties();
 		r = s.build().serialize(t1);
 		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 	}
 
 	public static class A {
@@ -77,7 +77,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
@@ -110,7 +110,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
@@ -143,7 +143,7 @@ public class CommonTest {
 		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
-		assertObject(t1).jsonSameAs(t2);
+		assertObject(t1).sameAs(t2);
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);

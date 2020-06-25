@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation2;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -1289,28 +1290,28 @@ public class BodyAnnotationTest {
 	public void sa01_Body_onPojo_basic() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa01","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 	@Test
 	public void sa02_Body_onPojo_api() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa02","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 	@Test
 	public void sa03_Body_onPojo_mixed() throws Exception {
 		ParameterInfo x = sa.getParameterInfo("/sa03","get","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("'b'", x.getExample());
-		assertObjectEquals("{foo:'baz'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'baz'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1350,22 +1351,22 @@ public class BodyAnnotationTest {
 	@Test
 	public void sb01_Body_onPojo_schemaValue() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb01","get","body",null);
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'b'}");
 	}
 	@Test
 	public void sb02_Body_onPojo_autoDetectBean() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb02","get","body",null);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
 	}
 	@Test
 	public void sb03_Body_onPojo_autoDetectList() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb03","get","body",null);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void sb04_Body_onPojo_autoDetectStringObject() throws Exception {
 		ParameterInfo x = sb.getParameterInfo("/sb04","get","body",null);
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1398,7 +1399,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void sc02_Body_onPojo_examples() throws Exception {
 		ParameterInfo x = sc.getParameterInfo("/sc02","get","body",null);
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 
 	//=================================================================================================================
@@ -1467,28 +1468,28 @@ public class BodyAnnotationTest {
 	public void ta01_Body_onParameter_basic() throws Exception {
 		ParameterInfo x = ta.getParameterInfo("/ta01","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 	@Test
 	public void ta02_Body_onParameter_api() throws Exception {
 		ParameterInfo x = ta.getParameterInfo("/ta02","get","body",null);
 		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 	@Test
 	public void ta03_Body_onParameter_mixed() throws Exception {
 		ParameterInfo x = ta.getParameterInfo("/ta03","get","body",null);
 		assertEquals("b\nc", x.getDescription());
-		assertObjectEquals("true", x.getRequired());
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getRequired()).json().is("true");
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 		assertEquals("b", x.getExample());
-		assertObjectEquals("{foo:'baz'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'baz'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1530,32 +1531,32 @@ public class BodyAnnotationTest {
 	@Test
 	public void tb01_Body_onParameter_schemaValue() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb01","get","body",null);
-		assertObjectEquals("{type:'b'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'b'}");
 	}
 	@Test
 	public void tb02_Body_onParameter_autoDetectBean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb02","get","body",null);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'object',properties:{f1:{type:'string'}}}");
 	}
 	@Test
 	public void tb03_Body_onParameter_autoDetectList() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb03","get","body",null);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'array',items:{type:'string'}}");
 	}
 	@Test
 	public void tb04_Body_onParameter_autoDetectStringObject() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb04","get","body",null);
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'string'}");
 	}
 	@Test
 	public void tb05_Body_onParameter_autoDetectInteger() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb05","get","body",null);
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{format:'int32',type:'integer'}");
 	}
 	@Test
 	public void tb06_Body_onParameter_autoDetectBoolean() throws Exception {
 		ParameterInfo x = tb.getParameterInfo("/tb06","get","body",null);
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
+		assertObject(x.getSchema()).json().is("{type:'boolean'}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1586,6 +1587,6 @@ public class BodyAnnotationTest {
 	@Test
 	public void tc02_Body_onParameter_examples() throws Exception {
 		ParameterInfo x = tc.getParameterInfo("/tc02","get","body",null);
-		assertObjectEquals("{foo:'bar'}", x.getExamples());
+		assertObject(x.getExamples()).json().is("{foo:'bar'}");
 	}
 }

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 import static org.junit.runners.MethodSorters.*;
@@ -33,7 +33,7 @@ public class IgnoredClassesTest {
 		assumeTrue(System.getProperty("os.name").toLowerCase().startsWith("win"));
 		// Files should be rendered as strings.
 		File f = new File("C:/temp");
-		assertObjectEquals("'C:\\\\temp'", f);
+		assertObject(f).json().is("'C:\\\\temp'");
 	}
 
 	//====================================================================================================

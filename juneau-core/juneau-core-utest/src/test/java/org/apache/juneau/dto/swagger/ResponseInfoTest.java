@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -55,10 +56,10 @@ public class ResponseInfoTest {
 		ResponseInfo t = new ResponseInfo();
 
 		t.schema(schemaInfo().title("foo"));
-		assertObjectEquals("{title:'foo'}", t.getSchema());
+		assertObject(t.getSchema()).json().is("{title:'foo'}");
 
 		t.schema("{title:'foo'}");
-		assertObjectEquals("{title:'foo'}", t.getSchema());
+		assertObject(t.getSchema()).json().is("{title:'foo'}");
 		assertInstanceOf(SchemaInfo.class, t.getSchema());
 
 		t.schema(null);
@@ -73,12 +74,12 @@ public class ResponseInfoTest {
 		ResponseInfo t = new ResponseInfo();
 
 		t.setHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
 		t.setHeaders(AMap.of());
-		assertObjectEquals("{}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{}");
 		assertInstanceOf(Map.class, t.getHeaders());
 
 		t.setHeaders(null);
@@ -93,17 +94,17 @@ public class ResponseInfoTest {
 		ResponseInfo t = new ResponseInfo();
 
 		t.addHeaders(AMap.of("foo",headerInfo("bar")));
-		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
 		t.addHeaders(AMap.of());
-		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 
 		t.addHeaders(null);
-		assertObjectEquals("{foo:{type:'bar'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{foo:{type:'bar'}}");
 		assertInstanceOf(Map.class, t.getHeaders());
 		assertInstanceOf(HeaderInfo.class, t.getHeaders().get("foo"));
 	}
@@ -119,7 +120,7 @@ public class ResponseInfoTest {
 		t.header("b", null);
 		t.header(null, headerInfo("c1"));
 
-		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class ResponseInfoTest {
 		t.headers("{}");
 		t.headers((Object[])null);
 
-		assertObjectEquals("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}", t.getHeaders());
+		assertObject(t.getHeaders()).json().is("{a:{type:'a1'},b:{type:'b1'},c:{type:'c1'}}");
 	}
 
 	/**
@@ -146,11 +147,11 @@ public class ResponseInfoTest {
 		ResponseInfo t = new ResponseInfo();
 
 		t.setExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertInstanceOf(Map.class, t.getExamples());
 
 		t.setExamples(AMap.of());
-		assertObjectEquals("{}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{}");
 		assertInstanceOf(Map.class, t.getExamples());
 
 		t.setExamples(null);
@@ -165,15 +166,15 @@ public class ResponseInfoTest {
 		ResponseInfo t = new ResponseInfo();
 
 		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
-		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertInstanceOf(Map.class, t.getExamples());
 
 		t.addExamples(AMap.of());
-		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertInstanceOf(Map.class, t.getExamples());
 
 		t.addExamples(null);
-		assertObjectEquals("{foo:'bar',baz:['qux']}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{foo:'bar',baz:['qux']}");
 		assertInstanceOf(Map.class, t.getExamples());
 	}
 
@@ -188,7 +189,7 @@ public class ResponseInfoTest {
 		t.example("text/b", null);
 		t.example(null, "c");
 
-		assertObjectEquals("{'text/a':'a','text/b':null,null:'c'}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class ResponseInfoTest {
 		t.examples("{}");
 		t.examples((Object)null);
 
-		assertObjectEquals("{'1':['a'],'2':{c1:'c2'}}", t.getExamples());
+		assertObject(t.getExamples()).json().is("{'1':['a'],'2':{c1:'c2'}}");
 	}
 
 	/**
@@ -220,7 +221,7 @@ public class ResponseInfoTest {
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 
-		assertObjectEquals("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}", t);
+		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", "a")
@@ -229,7 +230,7 @@ public class ResponseInfoTest {
 			.set("schema", "{type:'d'}")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}", t);
+		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		t
 			.set("description", new StringBuilder("a"))
@@ -238,7 +239,7 @@ public class ResponseInfoTest {
 			.set("schema", new StringBuilder("{type:'d'}"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}", t);
+		assertObject(t).json().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
 
 		assertEquals("a", t.get("description", String.class));
 		assertEquals("{foo:'bar',baz:['qux']}", t.get("examples", String.class));
@@ -259,6 +260,6 @@ public class ResponseInfoTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, ResponseInfo.class));
+		assertObject(JsonParser.DEFAULT.parse(s, ResponseInfo.class)).json().is(s);
 	}
 }

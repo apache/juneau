@@ -656,13 +656,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -676,14 +676,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 
@@ -707,13 +707,13 @@ public class OpenApiTest {
 		SimpleJson.DEFAULT.println(in);
 		assertEquals("a", s);
 		F04 r = parse(ps, s, F04.class);
-		assertObject(in.toStringArray()).jsonSameAs(r.toStringArray());
+		assertObject(in.toStringArray()).sameAs(r.toStringArray());
 
 		in = new F04("a","b");
 		s = serialize(ps, in);
 		assertEquals("a,b", s);
 		r = parse(ps, s, F04.class);
-		assertObject(in.toStringArray()).jsonSameAs(r.toStringArray());
+		assertObject(in.toStringArray()).sameAs(r.toStringArray());
 	}
 
 	@Test
@@ -723,13 +723,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("@(123)", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("@(123,456)", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -739,14 +739,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("@(@(@(123)))", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("@(@(@(1,2),@(3,4)),@(@(5,6),@(7,8)))", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -756,13 +756,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123|456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -772,14 +772,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\,2,3\\\\,4|5\\\\,6,7\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -789,13 +789,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123 456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -805,14 +805,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4 5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -822,13 +822,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123\t456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -838,14 +838,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\,2,3\\,4\t5\\,6,7\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -855,13 +855,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[] r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = new int[]{123,456};
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -871,14 +871,14 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		int[][][] in2 = {{{1,2},{3,4}},{{5,6},{7,8}}};
 		in = in2;
 		s = serialize(ps, in);
 		assertEquals("1\\\\\\,2\\,3\\\\\\,4,5\\\\\\,6\\,7\\\\\\,8", s);
 		r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 
@@ -893,7 +893,7 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("1 2|3 4,5 6|7 8", s);
 		int[][][] r = parse(ps, s, int[][][].class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -907,13 +907,13 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("a=b", s);
 		OMap r = parse(ps, s, OMap.class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = OMap.of("a","b","c","d");
 		s = serialize(ps, in);
 		assertEquals("a=b,c=d", s);
 		r = parse(ps, s, OMap.class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 
 	@Test
@@ -928,12 +928,12 @@ public class OpenApiTest {
 		String s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d", s);
 		OMap r = parse(ps, s, OMap.class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 
 		in = OMap.of("a",OMap.of("b",OMap.of("c","d"),"e",OMap.of("f","g")));
 		s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
 		r = parse(ps, s, OMap.class);
-		assertObject(in).jsonSameAs(r);
+		assertObject(in).sameAs(r);
 	}
 }

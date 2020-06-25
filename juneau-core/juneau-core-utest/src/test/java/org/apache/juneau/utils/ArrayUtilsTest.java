@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -29,9 +29,9 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testArrayIterator() throws Exception {
-		assertObjectEquals("[1,2,3]", iterator(new Object[]{1,2,3}));
-		assertObjectEquals("[1,2,3]", iterator(new int[]{1,2,3}));
-		assertObjectEquals("[]", iterator(null));
+		assertObject(iterator(new Object[]{1,2,3})).json().is("[1,2,3]");
+		assertObject(iterator(new int[]{1,2,3})).json().is("[1,2,3]");
+		assertObject(iterator(null)).json().is("[]");
 	}
 
 	//====================================================================================================
@@ -42,19 +42,19 @@ public class ArrayUtilsTest {
 		String[] s = new String[0];
 
 		s = append(s, "a", "b");
-		assertObjectEquals("['a','b']", s);
+		assertObject(s).json().is("['a','b']");
 
 		s = append(s, "c");
-		assertObjectEquals("['a','b','c']", s);
+		assertObject(s).json().is("['a','b','c']");
 
 		s = append(s);
-		assertObjectEquals("['a','b','c']", s);
+		assertObject(s).json().is("['a','b','c']");
 
 		Object[] o = append((Object[])null);
-		assertObjectEquals("[]", o);
+		assertObject(o).json().is("[]");
 
 		s = append((String[])null, "a", "b");
-		assertObjectEquals("['a','b']", s);
+		assertObject(s).json().is("['a','b']");
 	}
 
 	//====================================================================================================
@@ -65,13 +65,13 @@ public class ArrayUtilsTest {
 		String[] s = new String[0];
 
 		s = append(s, Arrays.asList(new String[]{"a","b"}));
-		assertObjectEquals("['a','b']", s);
+		assertObject(s).json().is("['a','b']");
 
 		s = append(s, Arrays.asList(new String[]{"c"}));
-		assertObjectEquals("['a','b','c']", s);
+		assertObject(s).json().is("['a','b','c']");
 
 		s = append(s, Arrays.asList(new String[0]));
-		assertObjectEquals("['a','b','c']", s);
+		assertObject(s).json().is("['a','b','c']");
 
 		try {
 			append((Object[])null, Collections.emptyList());
@@ -89,16 +89,16 @@ public class ArrayUtilsTest {
 		assertNull(reverse(s));
 
 		s = new String[]{};
-		assertObjectEquals("[]", reverse(s));
+		assertObject(reverse(s)).json().is("[]");
 
 		s = new String[]{"a"};
-		assertObjectEquals("['a']", reverse(s));
+		assertObject(reverse(s)).json().is("['a']");
 
 		s = new String[]{"a","b"};
-		assertObjectEquals("['b','a']", reverse(s));
+		assertObject(reverse(s)).json().is("['b','a']");
 
 		s = new String[]{"a","b","c"};
-		assertObjectEquals("['c','b','a']", reverse(s));
+		assertObject(reverse(s)).json().is("['c','b','a']");
 }
 
 	//====================================================================================================
@@ -111,16 +111,16 @@ public class ArrayUtilsTest {
 		assertNull(reverseInline(s));
 
 		s = new String[]{};
-		assertObjectEquals("[]", reverseInline(s));
+		assertObject(reverseInline(s)).json().is("[]");
 
 		s = new String[]{"a"};
-		assertObjectEquals("['a']", reverseInline(s));
+		assertObject(reverseInline(s)).json().is("['a']");
 
 		s = new String[]{"a","b"};
-		assertObjectEquals("['b','a']", reverseInline(s));
+		assertObject(reverseInline(s)).json().is("['b','a']");
 
 		s = new String[]{"a","b","c"};
-		assertObjectEquals("['c','b','a']", reverseInline(s));
+		assertObject(reverseInline(s)).json().is("['c','b','a']");
 	}
 
 	//====================================================================================================
@@ -133,16 +133,16 @@ public class ArrayUtilsTest {
 		assertNull(toReverseArray(String.class, null));
 
 		s = new String[]{};
-		assertObjectEquals("[]", toReverseArray(String.class, Arrays.asList(s)));
+		assertObject(toReverseArray(String.class, Arrays.asList(s))).json().is("[]");
 
 		s = new String[]{"a"};
-		assertObjectEquals("['a']", toReverseArray(String.class, Arrays.asList(s)));
+		assertObject(toReverseArray(String.class, Arrays.asList(s))).json().is("['a']");
 
 		s = new String[]{"a","b"};
-		assertObjectEquals("['b','a']", toReverseArray(String.class, Arrays.asList(s)));
+		assertObject(toReverseArray(String.class, Arrays.asList(s))).json().is("['b','a']");
 
 		s = new String[]{"a","b","c"};
-		assertObjectEquals("['c','b','a']", toReverseArray(String.class, Arrays.asList(s)));
+		assertObject(toReverseArray(String.class, Arrays.asList(s))).json().is("['c','b','a']");
 	}
 
 	//====================================================================================================
@@ -201,11 +201,11 @@ public class ArrayUtilsTest {
 	public void testCombine() throws Exception {
 		String[] s1 = new String[]{"a"}, s2 = new String[]{"b"};
 
-		assertObjectEquals("['a','b']", combine(s1, s2));
-		assertObjectEquals("['a']", combine(s1));
-		assertObjectEquals("['b']", combine(s2));
-		assertObjectEquals("['a']", combine(s1,null));
-		assertObjectEquals("['b']", combine(null,s2));
+		assertObject(combine(s1, s2)).json().is("['a','b']");
+		assertObject(combine(s1)).json().is("['a']");
+		assertObject(combine(s2)).json().is("['b']");
+		assertObject(combine(s1,null)).json().is("['a']");
+		assertObject(combine(null,s2)).json().is("['b']");
 		assertNull(combine(null,null));
 		assertNull(combine());
 	}

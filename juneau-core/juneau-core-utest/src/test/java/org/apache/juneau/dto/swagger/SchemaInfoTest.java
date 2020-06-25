@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -462,11 +463,11 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.setEnum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(ASet.of());
-		assertObjectEquals("[]", t.getEnum());
+		assertObject(t.getEnum()).json().is("[]");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(null);
@@ -481,15 +482,15 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.addEnum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.addEnum(ASet.of("baz"));
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.addEnum(null);
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 	}
 
@@ -501,20 +502,20 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t._enum(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum(ASet.of("baz"));
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t._enum((Object[])null);
-		assertObjectEquals("['foo','bar','baz']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz']");
 		assertInstanceOf(List.class, t.getEnum());
 
 		t.setEnum(null);
 		t._enum("foo")._enum(new StringBuilder("bar"))._enum("['baz','qux']")._enum((Object)new String[]{"quux"});
-		assertObjectEquals("['foo','bar','baz','qux','quux']", t.getEnum());
+		assertObject(t.getEnum()).json().is("['foo','bar','baz','qux','quux']");
 		assertInstanceOf(List.class, t.getEnum());
 	}
 
@@ -544,10 +545,10 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.items(items("foo"));
-		assertObjectEquals("{type:'foo'}", t.getItems());
+		assertObject(t.getItems()).json().is("{type:'foo'}");
 
 		t.items("{type:'foo'}");
-		assertObjectEquals("{type:'foo'}", t.getItems());
+		assertObject(t.getItems()).json().is("{type:'foo'}");
 		assertInstanceOf(Items.class, t.getItems());
 
 		t.items(null);
@@ -562,11 +563,11 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.setAllOf(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getAllOf());
 
 		t.setAllOf(ASet.of());
-		assertObjectEquals("[]", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("[]");
 		assertInstanceOf(List.class, t.getAllOf());
 
 		t.setAllOf(null);
@@ -581,15 +582,15 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.addAllOf(ASet.of("foo","bar"));
-		assertObjectEquals("['foo','bar']", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getAllOf());
 
 		t.addAllOf(ASet.of());
-		assertObjectEquals("['foo','bar']", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getAllOf());
 
 		t.addAllOf(null);
-		assertObjectEquals("['foo','bar']", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("['foo','bar']");
 		assertInstanceOf(List.class, t.getAllOf());
 	}
 
@@ -608,7 +609,7 @@ public class SchemaInfoTest {
 		t.allOf("['f']");
 		t.allOf("[]");
 		t.allOf((Object)null);
-		assertObjectEquals("['a','b','c','d','e','f']", t.getAllOf());
+		assertObject(t.getAllOf()).json().is("['a','b','c','d','e','f']");
 	}
 
 	/**
@@ -619,11 +620,11 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.setProperties(AMap.of("foo",new SchemaInfo().type("foo")));
-		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertInstanceOf(Map.class, t.getProperties());
 
 		t.setProperties(AMap.of());
-		assertObjectEquals("{}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{}");
 		assertInstanceOf(Map.class, t.getProperties());
 
 		t.setProperties(null);
@@ -638,15 +639,15 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.addProperties(AMap.of("foo", new SchemaInfo().type("foo")));
-		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertInstanceOf(Map.class, t.getProperties());
 
 		t.addProperties(AMap.of());
-		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertInstanceOf(Map.class, t.getProperties());
 
 		t.addProperties(null);
-		assertObjectEquals("{foo:{type:'foo'}}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{foo:{type:'foo'}}");
 		assertInstanceOf(Map.class, t.getProperties());
 	}
 
@@ -663,7 +664,7 @@ public class SchemaInfoTest {
 		t.properties("{}");
 		t.properties((Object[])null);
 
-		assertObjectEquals("{a:{type:'foo'},b:{type:'bar'},c:{type:'baz'}}", t.getProperties());
+		assertObject(t.getProperties()).json().is("{a:{type:'foo'},b:{type:'bar'},c:{type:'baz'}}");
 		assertInstanceOf(SchemaInfo.class, t.getProperties().get("a"));
 		assertInstanceOf(SchemaInfo.class, t.getProperties().get("b"));
 		assertInstanceOf(SchemaInfo.class, t.getProperties().get("c"));
@@ -677,11 +678,11 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.setAdditionalProperties(new SchemaInfo().type("foo"));
-		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).json().is("{type:'foo'}");
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
 
 		t.setAdditionalProperties(new SchemaInfo());
-		assertObjectEquals("{}", t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).json().is("{}");
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
 
 		t.setAdditionalProperties((SchemaInfo)null);
@@ -697,7 +698,7 @@ public class SchemaInfoTest {
 
 		t.additionalProperties(AMap.of("type","foo"));
 
-		assertObjectEquals("{type:'foo'}", t.getAdditionalProperties());
+		assertObject(t.getAdditionalProperties()).json().is("{type:'foo'}");
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
 	}
 
@@ -750,10 +751,10 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.xml(xml().name("foo"));
-		assertObjectEquals("{name:'foo'}", t.getXml());
+		assertObject(t.getXml()).json().is("{name:'foo'}");
 
 		t.xml("{name:'foo'}");
-		assertObjectEquals("{name:'foo'}", t.getXml());
+		assertObject(t.getXml()).json().is("{name:'foo'}");
 		assertInstanceOf(Xml.class, t.getXml());
 
 		t.xml(null);
@@ -768,10 +769,10 @@ public class SchemaInfoTest {
 		SchemaInfo t = new SchemaInfo();
 
 		t.externalDocs(externalDocumentation("foo"));
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 
 		t.externalDocs("{url:'foo'}");
-		assertObjectEquals("{url:'foo'}", t.getExternalDocs());
+		assertObject(t.getExternalDocs()).json().is("{url:'foo'}");
 		assertInstanceOf(ExternalDocumentation.class, t.getExternalDocs());
 
 		t.externalDocs(null);
@@ -834,7 +835,7 @@ public class SchemaInfoTest {
 			.set("xml", xml().name("o"))
 			.set("$ref", "ref");
 
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObject(t).json().is("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
 
 		t
 			.set("default", "a")
@@ -868,7 +869,7 @@ public class SchemaInfoTest {
 			.set("xml", "{name:'o'}")
 			.set("$ref", "ref");
 
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObject(t).json().is("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
 
 		t
 			.set("default", new StringBuilder("a"))
@@ -902,7 +903,7 @@ public class SchemaInfoTest {
 			.set("xml", new StringBuilder("{name:'o'}"))
 			.set("$ref", new StringBuilder("ref"));
 
-		assertObjectEquals("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}", t);
+		assertObject(t).json().is("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
 
 		assertEquals("a", t.get("default", String.class));
 		assertEquals("['b']", t.get("enum", String.class));
@@ -972,6 +973,6 @@ public class SchemaInfoTest {
 		assertNull(t.get("foo", Object.class));
 
 		String s = "{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,required:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}";
-		assertObjectEquals(s, JsonParser.DEFAULT.parse(s, SchemaInfo.class));
+		assertObject(JsonParser.DEFAULT.parse(s, SchemaInfo.class)).json().is(s);
 	}
 }

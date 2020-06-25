@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.ThrowableAssertion.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -35,12 +35,12 @@ public class StaticFilesMappingTest {
 
 	@Test
 	public void a01_null() throws Exception {
-		assertObjectEquals("[]", parse(null));
+		assertObject(parse(null)).json().is("[]");
 	}
 
 	@Test
 	public void a02_emptySpaces() throws Exception {
-		assertObjectEquals("[]", parse("    "));
+		assertObject(parse("    ")).json().is("[]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -49,76 +49,52 @@ public class StaticFilesMappingTest {
 
 	@Test
 	public void b01_basic2Part() throws Exception {
-		assertObjectEquals("[{path:'foo',location:'bar'}]", parse("foo:bar"));
+		assertObject(parse("foo:bar")).json().is("[{path:'foo',location:'bar'}]");
 	}
 
 	@Test
 	public void b02_basic2Part_withSpaces() throws Exception {
-		assertObjectEquals("[{path:'foo',location:'bar'}]", parse("  foo  :  bar  "));
+		assertObject(parse("  foo  :  bar  ")).json().is("[{path:'foo',location:'bar'}]");
 	}
 
 	@Test
 	public void b03_basic3Part() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{baz:'qux'}}]",
-			parse("foo:bar:{baz:'qux'}")
-		);
+		assertObject(parse("foo:bar:{baz:'qux'}")).json().is("[{path:'foo',location:'bar',responseHeaders:{baz:'qux'}}]");
 	}
 
 	@Test
 	public void b04_basic3Part_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{baz:'qux'}}]",
-			parse("  foo  :  bar  :  {  baz  :  'qux'  }  ")
-		);
+		assertObject(parse("  foo  :  bar  :  {  baz  :  'qux'  }  ")).json().is("[{path:'foo',location:'bar',responseHeaders:{baz:'qux'}}]");
 	}
 
 	@Test
 	public void b05_multipleHeaders() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{baz:'qux',qux:'quux'}}]",
-			parse("foo:bar:{baz:'qux',qux:'quux'}")
-		);
+		assertObject(parse("foo:bar:{baz:'qux',qux:'quux'}")).json().is("[{path:'foo',location:'bar',responseHeaders:{baz:'qux',qux:'quux'}}]");
 	}
 
 	@Test
 	public void b06_multipleHeaders_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{baz:'qux',qux:'quux'}}]",
-			parse("  foo  :  bar  :  {  baz  :  'qux'  ,  qux:  'quux'  }  ")
-		);
+		assertObject(parse("  foo  :  bar  :  {  baz  :  'qux'  ,  qux:  'quux'  }  ")).json().is("[{path:'foo',location:'bar',responseHeaders:{baz:'qux',qux:'quux'}}]");
 	}
 
 	@Test
 	public void b07_nestedHeaders() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:{b:'c'}}}]",
-			parse("foo:bar:{a:{b:'c'}}")
-		);
+		assertObject(parse("foo:bar:{a:{b:'c'}}")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:{b:'c'}}}]");
 	}
 
 	@Test
 	public void b08_nestedHeaders_complex() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}}]",
-			parse("foo:bar:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}")
-		);
+		assertObject(parse("foo:bar:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}}]");
 	}
 
 	@Test
 	public void b09_nestedHeaders_complex_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}}]",
-			parse("  foo  :  bar  :  {  a  :  {  b  :  'c'  ,  d  :  'e'  }  ,  f  :  {  g  :  'h'  ,  i  :  'j'  }  }  ")
-		);
+		assertObject(parse("  foo  :  bar  :  {  a  :  {  b  :  'c'  ,  d  :  'e'  }  ,  f  :  {  g  :  'h'  ,  i  :  'j'  }  }  ")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:{b:'c',d:'e'},f:{g:'h',i:'j'}}}]");
 	}
 
 	@Test
 	public void b10_emptyHeaders() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar'}]",
-			parse("foo:bar:{}")
-		);
+		assertObject(parse("foo:bar:{}")).json().is("[{path:'foo',location:'bar'}]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -127,58 +103,37 @@ public class StaticFilesMappingTest {
 
 	@Test
 	public void c01_multipleMappings_basic2Part() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar'},{path:'baz',location:'qux'}]",
-			parse("foo:bar,baz:qux")
-		);
+		assertObject(parse("foo:bar,baz:qux")).json().is("[{path:'foo',location:'bar'},{path:'baz',location:'qux'}]");
 	}
 
 	@Test
 	public void c02_multipleMappings_basic2Part_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar'},{path:'baz',location:'qux'}]",
-			parse("  foo  :  bar  ,  baz  :  qux  ")
-		);
+		assertObject(parse("  foo  :  bar  ,  baz  :  qux  ")).json().is("[{path:'foo',location:'bar'},{path:'baz',location:'qux'}]");
 	}
 
 	@Test
 	public void c03_multipleMappings_basic3Part() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:'b'}},{path:'baz',location:'qux',responseHeaders:{c:'d'}}]",
-			parse("foo:bar:{a:'b'},baz:qux:{c:'d'}")
-		);
+		assertObject(parse("foo:bar:{a:'b'},baz:qux:{c:'d'}")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:'b'}},{path:'baz',location:'qux',responseHeaders:{c:'d'}}]");
 	}
 
 	@Test
 	public void c04_multipleMappings_basic3Part_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:'b'}},{path:'baz',location:'qux',responseHeaders:{c:'d'}}]",
-			parse("  foo  :  bar  :  {  a  :  'b'  }  ,  baz  :  qux  :  {  c  :  'd'  }  ")
-		);
+		assertObject(parse("  foo  :  bar  :  {  a  :  'b'  }  ,  baz  :  qux  :  {  c  :  'd'  }  ")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:'b'}},{path:'baz',location:'qux',responseHeaders:{c:'d'}}]");
 	}
 
 	@Test
 	public void c05_multipleMappings_multipleHeaders() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:'b',c:'d'}},{path:'baz',location:'qux',responseHeaders:{e:'f',g:'h'}}]",
-			parse("foo:bar:{a:'b',c:'d'},baz:qux:{e:'f',g:'h'}")
-		);
+		assertObject(parse("foo:bar:{a:'b',c:'d'},baz:qux:{e:'f',g:'h'}")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:'b',c:'d'}},{path:'baz',location:'qux',responseHeaders:{e:'f',g:'h'}}]");
 	}
 
 	@Test
 	public void c06_multipleMappings_multipleHeaders_withSpaces() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:'b',c:'d'}},{path:'baz',location:'qux',responseHeaders:{e:'f',g:'h'}}]",
-			parse("  foo  :  bar  :  {  a  :  'b'  ,  c  :  'd'  }  ,  baz  :  qux  :  {  e  :  'f'  ,  g  :  'h'  }  ")
-		);
+		assertObject(parse("  foo  :  bar  :  {  a  :  'b'  ,  c  :  'd'  }  ,  baz  :  qux  :  {  e  :  'f'  ,  g  :  'h'  }  ")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:'b',c:'d'}},{path:'baz',location:'qux',responseHeaders:{e:'f',g:'h'}}]");
 	}
 
 	@Test
 	public void c07_multipleMappings_nestedHeaders() throws Exception {
-		assertObjectEquals(
-			"[{path:'foo',location:'bar',responseHeaders:{a:{b:'c'}}},{path:'baz',location:'qux',responseHeaders:{d:{e:'f'}}}]",
-			parse("foo:bar:{a:{b:'c'}},baz:qux:{d:{e:'f'}}")
-		);
+		assertObject(parse("foo:bar:{a:{b:'c'}},baz:qux:{d:{e:'f'}}")).json().is("[{path:'foo',location:'bar',responseHeaders:{a:{b:'c'}}},{path:'baz',location:'qux',responseHeaders:{d:{e:'f'}}}]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -42,7 +43,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public void testBasic() throws Exception {
 		A t = new A().init();
 		t = roundTrip(t);
-		assertObjectEquals("{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}", t);
+		assertObject(t).json().is("{a1:{f:'1'},a2:{f:'2'},a3:{f:'3'},a4:{f:'4'}}");
 	}
 
 	public static class A {
@@ -128,7 +129,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 			assertTrue(TestUtils.toString(r).contains("X-2"));
 		}
 		t = roundTrip(t);
-		assertObjectEquals("{b1:'X1',b2:'X-2'}", t);
+		assertObject(t).json().is("{b1:'X1',b2:'X-2'}");
 	}
 
 	public static class B {
@@ -181,7 +182,7 @@ public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 	public void testOrdering() throws Exception {
 		C t = new C().init();
 		t = roundTrip(t);
-		assertObjectEquals("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}", t);
+		assertObject(t).json().is("{c1:{f:'1'},c2:{f:'2'},c3:{f:'3'},c4:{f:'4'}}");
 	}
 
 	public static class C {
