@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.headers;
 
-import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -134,15 +134,15 @@ public class AcceptEncodingTest {
 	}
 	@Test
 	public void b03_withCompression_gzip() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").run().getBody().asBytes()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("*").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("mycoding").run().getBody().asBytes()));
 	}
 	@Test
 	public void b04_withCompression_gzip_qValues() throws Exception {
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").run().getBody().asBytes()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").run().getBody().asBytes()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().getBody().asBytes()));
-		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").run().getBody().asBytes()));
+		assertEquals("foo", StringUtils.decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").run().getBody().asBytes()));
 	}
 	@Test
 	public void b05_withCompression_nomatch() throws Exception {
@@ -251,13 +251,13 @@ public class AcceptEncodingTest {
 			.run()
 			.assertHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
-		assertEquals("foo", decompress(body));
+		assertEquals("foo", StringUtils.decompress(body));
 		body = c.get("/c03")
 			.acceptEncoding("*")
 			.run()
 			.assertHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
-		assertEquals("foo", decompress(body));
+		assertEquals("foo", StringUtils.decompress(body));
 	}
 	@Test
 	public void c04_direct4() throws Exception {

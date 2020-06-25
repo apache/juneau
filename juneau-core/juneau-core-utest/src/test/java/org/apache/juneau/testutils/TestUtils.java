@@ -21,7 +21,6 @@ import javax.xml.parsers.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
@@ -31,11 +30,6 @@ import org.xml.sax.*;
 
 @SuppressWarnings({})
 public class TestUtils {
-
-	private static JsonSerializer js2 = JsonSerializer.create()
-		.ssq()
-		.addBeanTypes().addRootType()
-		.build();
 
 	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();
 
@@ -228,18 +222,6 @@ public class TestUtils {
 	 */
 	public static final void assertXmlEquals(String expected, String actual) throws Exception {
 		Assert.assertEquals(sortXml(expected), sortXml(actual));
-	}
-
-	public static final void assertObjectMatches(String s, Object o) {
-		assertObjectMatches(s, o, js2);
-	}
-
-	public static final void assertObjectMatches(String s, Object o, WriterSerializer ws) {
-		if ("xxx".equals(s))
-			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\")); // NOT DEBUG
-		String o2 =  ws.toString(o);
-		if (! StringUtils.getMatchPattern(s).matcher(o2).matches())
-			throw new ComparisonFailure(null, s, o2);
 	}
 
 	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<>();

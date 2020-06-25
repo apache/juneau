@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.regex.*;
+import java.util.zip.*;
 
 import javax.xml.bind.*;
 
@@ -2980,5 +2982,33 @@ public final class StringUtils {
 			if (s.charAt(i) == c)
 				count++;
 		return count;
+	}
+
+	/**
+	 * Converts string into a GZipped input stream.
+	 *
+	 * @param contents The contents to compress.
+	 * @return The input stream converted to GZip.
+	 * @throws Exception Exception occurred.
+	 */
+	public static final byte[] compress(String contents) throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(contents.length()>>1);
+		try (GZIPOutputStream gos = new GZIPOutputStream(baos)) {
+			gos.write(contents.getBytes());
+			gos.finish();
+			gos.flush();
+		}
+		return baos.toByteArray();
+	}
+
+	/**
+	 * Converts a GZipped input stream into a string.
+	 *
+	 * @param is The contents to decompress.
+	 * @return The string.
+	 * @throws Exception Exception occurred.
+	 */
+	public static final String decompress(byte[] is) throws Exception {
+		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
 	}
 }

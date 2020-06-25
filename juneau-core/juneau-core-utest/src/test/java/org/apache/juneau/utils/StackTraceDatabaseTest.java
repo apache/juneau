@@ -14,8 +14,7 @@ package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.testutils.TestUtils.*;
-
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import java.util.*;
 
 import org.junit.*;
@@ -62,7 +61,7 @@ public class StackTraceDatabaseTest {
 		List<StackTraceInfo> l = db.getClonedStackTraceInfos();
 		db.add(t1);
 
-		assertObjectMatches("[{exception:'Throwable',hash:'*',count:2},{exception:'Throwable',hash:'*',count:1}]", l);
+		assertObject(l).json().matchesSimple("[{exception:'Throwable',hash:'*',count:2},{exception:'Throwable',hash:'*',count:1}]");
 	}
 
 	@Test

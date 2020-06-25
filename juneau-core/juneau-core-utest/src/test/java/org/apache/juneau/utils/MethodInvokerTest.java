@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -42,7 +42,7 @@ public class MethodInvokerTest {
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertObjectMatches("{method:'A.foo',runs:3,running:0,errors:0,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[]}", mes);
+		assertObject(mes).json().matchesSimple("{method:'A.foo',runs:3,running:0,errors:0,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[]}");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class MethodInvokerTest {
 			mi.invoke(a);
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}", mes);
+		assertObject(mes).json().matchesSimple("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class MethodInvokerTest {
 			mi.invoke(a, 1, "x");
 		} catch (Exception e) {}
 
-		assertObjectMatches("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}", mes);
+		assertObject(mes).json().matchesSimple("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}
 
 	@Test

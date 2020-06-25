@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.headers;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
@@ -57,7 +57,7 @@ public class ContentEncodingTest {
 	}
 	@Test
 	public void a02_noCompression_invalid() throws Exception {
-		a.put("?noTrace=true", compress("foo")).contentEncoding("mycoding").run()
+		a.put("?noTrace=true", StringUtils.compress("foo")).contentEncoding("mycoding").run()
 			.assertStatus().is(415)
 			.assertBody().contains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
@@ -95,7 +95,7 @@ public class ContentEncodingTest {
 	@Test
 	@Ignore
 	public void b02_withCompression_gzip() throws Exception {
-		b.put("/", compress("foo"))
+		b.put("/", StringUtils.compress("foo"))
 			.contentEncoding("mycoding")
 			.run()
 			.assertBody().is("foo");
