@@ -95,9 +95,10 @@ public abstract class ComboSerializeTest {
 				}
 			}
 
-			if (isRdf)
-				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} serialize-normal failed", comboInput.label, testName);
-			else
+			if (isRdf) {
+				Object[] args = { comboInput.label, testName };
+				assertString(r).msg("{0}/{1} serialize-normal failed", args).equalsAfterSort(expected);
+			} else
 				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {

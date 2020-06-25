@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
@@ -130,6 +131,57 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 		String v = join(value, '\n');
 		if (! isEquals(v, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text equals the specified value after splitting both by newlines and sorting the rows.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equalsAfterSort(<js>"OK"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * Multiple values can be passed in to represent multiple lines of output like so:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().equalsAfterSort(
+	 * 			<js>"Line 1"</js>,
+	 * 			<js>"Line 2"</js>,
+	 * 			<js>"Line 3"</js>
+	 * 		);
+	 * </p>
+	 *
+	 * @param expected
+	 * 	The value to check against.
+	 * 	<br>If multiple values are specified, they are concatenated with newlines.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equalsAfterSort(String...expected) {
+		exists();
+		// Must work for windows too.
+		String[] e = StringUtils.join(expected, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
+
+		if (e.length != a.length)
+			throw error("Expected text had different numbers of lines.\n\tExpected=[{0}]\n\tActual={1}]", e.length, a.length);
+
+		Arrays.sort(e);
+		Arrays.sort(a);
+
+		for (int i = 0; i < e.length; i++)
+			if (! e[i].equals(a[i]))
+				throw error("Expected text had different values at line {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", i, e[i], a[i]);
+
 		return returns();
 	}
 

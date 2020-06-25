@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -275,21 +273,6 @@ public class TestUtils {
 
 	public static final void unsetLocale() {
 		Locale.setDefault(systemLocale.get());
-	}
-
-	public static final void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
-		// Must work for windows too.
-		String[] e = expected.trim().split("[\r\n]+"), a = actual.trim().split("[\r\n]+");
-
-		if (e.length != a.length)
-			throw new ComparisonFailure(format(msg, args), expected, actual);
-
-		Arrays.sort(e);
-		Arrays.sort(a);
-
-		for (int i = 0; i < e.length; i++)
-			if (! e[i].equals(a[i]))
-				throw new ComparisonFailure(format(msg, args), expected, actual);
 	}
 
 	/**
