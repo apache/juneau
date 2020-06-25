@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.StringAssertion.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -38,6 +39,8 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public abstract class ComboRoundTripTest {
 
+	private static final BeanSession BEANSESSION = BeanContext.DEFAULT.createSession();
+
 	private final ComboInput comboInput;
 
 	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<>();
@@ -45,6 +48,13 @@ public abstract class ComboRoundTripTest {
 
 	public ComboRoundTripTest(ComboInput<?> comboInput) {
 		this.comboInput = comboInput;
+	}
+
+	/**
+	 * Creates a ClassMeta for the given types.
+	 */
+	public static final Type getType(Type type, Type...args) {
+		return BEANSESSION.getClassMeta(type, args);
 	}
 
 	private Serializer getSerializer(Serializer s) throws Exception {

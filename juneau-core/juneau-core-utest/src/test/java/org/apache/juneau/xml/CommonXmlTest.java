@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -20,6 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.net.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -43,7 +43,7 @@ public class CommonXmlTest {
 		assertEquals(123, t.id);
 		assertEquals("bar", t.name);
 
-		validateXml(t, s);
+		XmlUtils.validateXml(t, s);
 	}
 
 	@Bean(bpi="url,id,name")

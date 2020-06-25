@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 1 */
 				new ComboInput<Calendar[]>(
@@ -102,7 +102,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 2 */
 				new ComboInput<OMap>(
@@ -132,7 +132,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 			{	/* 3 */
 				new ComboInput<Calendar>(
@@ -162,7 +162,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>1901-03-03T10:11:12-08:00</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>1901-03-03T10:11:12-08:00</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>1901-03-03T10:11:12-08:00</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 4 */
 				new ComboInput<Calendar[]>(
@@ -192,7 +192,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 5 */
 				new ComboInput<OMap>(
@@ -222,7 +222,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 			{	/* 6 */
 				new ComboInput<Calendar>(
@@ -252,7 +252,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 7 */
 				new ComboInput<Calendar[]>(
@@ -282,7 +282,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 8 */
 				new ComboInput<OMap>(
@@ -312,7 +312,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 			{	/* 9 */
 				new ComboInput<Calendar>(
@@ -342,7 +342,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>-2172116928000</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>-2172116928000</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>-2172116928000</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 10 */
 				new ComboInput<Calendar[]>(
@@ -372,7 +372,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>-2172116928000</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>-2172116928000</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>-2172116928000</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 11 */
 				new ComboInput<OMap>(
@@ -402,7 +402,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>-2172116928000</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>-2172116928000</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>-2172116928000</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 			{	/* 12 */
 				new ComboInput<Calendar>(
@@ -432,7 +432,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:time>-2172116928000</jp:time>\n    <jp:timeZone>PST</jp:timeZone>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 13 */
 				new ComboInput<Calendar[]>(
@@ -462,7 +462,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n      <jp:timeZone>PST</jp:timeZone>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 14 */
 				new ComboInput<OMap>(
@@ -492,7 +492,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n      <jp:timeZone>PST</jp:timeZone>\n    </jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 			{	/* 15 */
 				new ComboInput<Calendar>(
@@ -522,7 +522,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<j:value>Mar 3, 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<j:value>Mar 3, 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <j:value>Mar 3, 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x))
+				.verify(x -> verify(x).isType(Calendar.class))
 			},
 			{	/* 16 */
 				new ComboInput<Calendar[]>(
@@ -552,7 +552,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Mar 3, 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Mar 3, 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Mar 3, 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x[0]))
+				.verify(x -> verify(x[0]).isType(Calendar.class))
 			},
 			{	/* 17 */
 				new ComboInput<OMap>(
@@ -582,7 +582,7 @@ public class CalendarSwapComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Mar 3, 1901</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:foo>Mar 3, 1901</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Mar 3, 1901</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Calendar.class, x.get("foo")))
+				.verify(x -> verify(x.get("foo")).isType(Calendar.class))
 			},
 		});
 	}

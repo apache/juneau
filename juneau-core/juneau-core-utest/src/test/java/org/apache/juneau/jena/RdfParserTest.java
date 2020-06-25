@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -79,7 +78,7 @@ public class RdfParserTest {
 			+ "\n</rdf:RDF>";
 
 		String rdfXml = s.serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		A a2 = RdfXmlParser.DEFAULT.parse(rdfXml, A.class);
 

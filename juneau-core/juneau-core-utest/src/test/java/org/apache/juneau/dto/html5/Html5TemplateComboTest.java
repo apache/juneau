@@ -13,7 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
@@ -59,7 +59,7 @@ public class Html5TemplateComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:action rdf:resource='http://myaction'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n<jp:name>v1</jp:name>\n<jp:value>123</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n<jp:name>v2</jp:name>\n<jp:value>true</jp:value>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:action rdf:resource='http://myaction'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n<jp:name>v1</jp:name>\n<jp:value>123</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n<jp:name>v2</jp:name>\n<jp:value>true</jp:value>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action rdf:resource='http://myaction'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>text</jp:type>\n            <jp:name>v1</jp:name>\n            <jp:value>123</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>text</jp:type>\n            <jp:name>v2</jp:name>\n            <jp:value>true</jp:value>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(FormTemplate.class, x))
+				.verify(x -> verify(x).isType(FormTemplate.class))
 			},
 		});
 	}

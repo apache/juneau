@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
@@ -61,7 +61,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaField.class, x))
+				.verify(x -> verify(x).isType(BeanWithDynaField.class))
 			},
 			{ 	/* 1 */
 				new ComboInput<BeanWithDynaMethods>(
@@ -90,7 +90,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaMethods.class, x))
+				.verify(x -> verify(x).isType(BeanWithDynaMethods.class))
 				.verify(x -> x.setterCalled ? null : "Setter not called")
 			},
 			{ 	/* 2 */
@@ -120,7 +120,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaGetterOnly.class, x))
+				.verify(x -> verify(x).isType(BeanWithDynaGetterOnly.class))
 			},
 			{ 	/* 3 */
 				new ComboInput<BeanWithDynaFieldSwapped>(
@@ -149,8 +149,8 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1a>1901-03-03T18:11:12Z</jp:f1a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1a>1901-03-03T18:11:12Z</jp:f1a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1a>1901-03-03T18:11:12Z</jp:f1a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaFieldSwapped.class, x))
-				.verify(x -> verifyInstanceOf(Calendar.class, x.f1.get("f1a")))
+				.verify(x -> verify(x).isType(BeanWithDynaFieldSwapped.class))
+				.verify(x -> verify(x.f1.get("f1a")).isType(Calendar.class))
 			},
 			{ 	/* 4 */
 				new ComboInput<BeanWithDynaFieldStringList>(
@@ -179,7 +179,7 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1a>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:f1a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1a>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:f1a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1a>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:f1a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaFieldStringList.class, x))
+				.verify(x -> verify(x).isType(BeanWithDynaFieldStringList.class))
 			},
 			{ 	/* 5 */
 				new ComboInput<BeanWithDynaMethodsAndExtraKeys>(
@@ -208,8 +208,8 @@ public class DynaBeanComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1>1</jp:f1>\n<jp:f2a>a</jp:f2a>\n<jp:f2b>b</jp:f2b>\n<jp:f3>3</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1>1</jp:f1>\n    <jp:f2a>a</jp:f2a>\n    <jp:f2b>b</jp:f2b>\n    <jp:f3>3</jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithDynaMethodsAndExtraKeys.class, x))
-				.verify(x -> x.setterCalled ? null : "Setter not called")
+				.verify(x -> verify(x).isType(BeanWithDynaMethodsAndExtraKeys.class))
+				.verify(x -> x.setterCalled, "Setter not called")
 			},
 		});
 	}

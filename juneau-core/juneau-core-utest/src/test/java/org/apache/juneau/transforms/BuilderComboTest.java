@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
@@ -57,8 +57,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(A.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 1 */
 				new ComboInput<B>(
@@ -87,8 +87,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(B.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(B.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 2 */
 				new ComboInput<C>(
@@ -117,8 +117,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(C.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(C.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 3 */
 				new ComboInput<D>(
@@ -147,8 +147,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(D.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(D.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 4 */
 				new ComboInput<E>(
@@ -177,8 +177,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>1</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>1</jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(E.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(E.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 			{ 	/* 5 */
 				new ComboInput<H>(
@@ -207,8 +207,8 @@ public class BuilderComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:fooBar>1</jp:fooBar>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:fooBar>1</jp:fooBar>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(H.class, x))
-				.verify(x -> verifyTrue(x.createdByBuilder))
+				.verify(x -> verify(x).isType(H.class))
+				.verify(x -> verify(x.createdByBuilder).isTrue())
 			},
 		});
 	}

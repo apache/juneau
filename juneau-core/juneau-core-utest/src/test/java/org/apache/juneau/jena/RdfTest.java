@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.net.*;
@@ -23,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
@@ -63,7 +63,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
 		assertObject(a).sameAs(a2);
@@ -91,7 +91,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
 		assertObject(a).sameAs(a2);
@@ -119,7 +119,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
 		assertObject(a).sameAs(a2);
@@ -149,7 +149,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		a2 = p.parse(rdfXml, A.class);
 		assertObject(a).sameAs(a2);
@@ -169,7 +169,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		// Note - Must specify collection format on parser for it to be able to understand this layout.
 		p = RdfParser.create().xml().collectionFormat(RdfCollectionFormat.MULTI_VALUED).build();
@@ -266,7 +266,7 @@ public class RdfTest {
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(b);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
 		assertObject(b).sameAsSorted(b2);
@@ -337,7 +337,7 @@ public class RdfTest {
 			+ "\n</rdf:RDF>";
 
 		rdfXml = s.build().serialize(b);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		b2 = p.parse(rdfXml, B.class);
 		assertObject(b).sameAsSorted(b2);
@@ -500,7 +500,7 @@ public class RdfTest {
 			+ "\n</rdf:RDF>";
 
 		rdfXml = s.build().serialize(c);
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		c2 = p.parse(rdfXml, C.class);
 		assertObject(c).sameAsSorted(c2);
@@ -547,7 +547,7 @@ public class RdfTest {
 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		l = p.parse(rdfXml, LinkedList.class, D.class);
 		D[] da = l.toArray(new D[l.size()]);
@@ -563,7 +563,7 @@ public class RdfTest {
 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 
 		da = p.parse(rdfXml, D[].class);
 		rdfXml = s.serialize(da);
@@ -578,7 +578,7 @@ public class RdfTest {
 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
-		assertXmlEquals(expected, rdfXml);
+		XmlUtils.assertXmlEquals(expected, rdfXml);
 	}
 
 	public static class D {

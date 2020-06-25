@@ -14,13 +14,13 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.xml.annotation.*;
@@ -3019,6 +3019,15 @@ public class BasicHtmlTest {
 				}
 			},
 		});
+	}
+
+	private static final BeanSession BEANSESSION = BeanContext.DEFAULT.createSession();
+
+	/**
+	 * Creates a ClassMeta for the given types.
+	 */
+	public static final Type getType(Type type, Type...args) {
+		return BEANSESSION.getClassMeta(type, args);
 	}
 
 	private Input input;

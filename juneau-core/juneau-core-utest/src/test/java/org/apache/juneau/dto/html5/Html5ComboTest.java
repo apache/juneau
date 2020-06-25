@@ -13,7 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.assertions.Verify.*;
 
 import java.util.*;
 
@@ -61,7 +61,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 1 */
 				new ComboInput<A[]>(
@@ -90,8 +90,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://foo'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>bar</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://baz'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>qux</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A[].class, x))
-				.verify(x -> verifyEquals(2, x.length))
+				.verify(x -> verify(x).isType(A[].class))
+				.verify(x -> verify(x.length).is(2))
 			},
 			{	/* 2 */
 				new ComboInput<List<A>>(
@@ -120,9 +120,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://baz'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>qux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://foo'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>bar</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://baz'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>qux</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyEquals(2, x.size()))
-				.verify(x -> verifyInstanceOf(A.class, x.get(0)))
-				.verify(x -> verifyInstanceOf(A.class, x.get(1)))
+				.verify(x -> verify(x.size()).is(2))
+				.verify(x -> verify(x.get(0)).isType(A.class))
+				.verify(x -> verify(x.get(1)).isType(A.class))
 			},
 			{	/* 3 */
 				new ComboInput<A[][]>(
@@ -151,11 +151,11 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://c'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>d</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://e'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A[][].class,  x))
-				.verify(x -> verifyEquals(3, x.length))
-				.verify(x -> verifyEquals(2, x[0].length))
-				.verify(x -> verifyEquals(0, x[1].length))
-				.verify(x -> verifyEquals(1, x[2].length))
+				.verify(x -> verify(x).isType(A[][].class))
+				.verify(x -> verify(x.length).is(3))
+				.verify(x -> verify(x[0].length).is(2))
+				.verify(x -> verify(x[1].length).is(0))
+				.verify(x -> verify(x[2].length).is(1))
 			},
 			{	/* 4 */
 				new ComboInput<List<List<A>>>(
@@ -184,7 +184,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://c'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>d</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://c'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>d</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://e'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x.get(0).get(0)))
+				.verify(x -> verify(x.get(0).get(0)).isType(A.class))
 			},
 			{	/* 5 */
 				new ComboInput<java.util.Map<String,A>>(
@@ -213,8 +213,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:a>\n<jp:d rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:d>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:a>\n<jp:d rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://e'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:d>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://b'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>c</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:a>\n    <jp:d rdf:parseType='Resource'>\n      <jp:_type>a</jp:_type>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://e'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>f</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:d>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x.get("a")))
-				.verify(x -> verifyInstanceOf(A.class, x.get("d")))
+				.verify(x -> verify(x.get("a")).isType(A.class))
+				.verify(x -> verify(x.get("d")).isType(A.class))
 			},
 			{	/* 6 */
 				new ComboInput<java.util.Map<String,A[][]>>(
@@ -243,8 +243,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:a>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n</rdf:Seq>\n</jp:a>\n<jp:f>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:a>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n</rdf:Seq>\n</jp:a>\n<jp:f>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:a>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://b'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>c</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://d'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>e</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li>\n          <rdf:Seq/>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:a>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li rdf:parseType='Resource'>\n              <jp:_type>a</jp:_type>\n              <jp:a rdf:parseType='Resource'>\n                <jp:href rdf:resource='http://g'/>\n              </jp:a>\n              <jp:c>\n                <rdf:Seq>\n                  <rdf:li>h</rdf:li>\n                </rdf:Seq>\n              </jp:c>\n            </rdf:li>\n          </rdf:Seq>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x.get("a")[0][0]))
-				.verify(x -> verifyInstanceOf(A.class, x.get("f")[0][0]))
+				.verify(x -> verify(x.get("a")[0][0]).isType(A.class))
+				.verify(x -> verify(x.get("f")[0][0]).isType(A.class))
 			},
 			{	/* 7 */
 				new ComboInput<BeanWithAField>(
@@ -273,7 +273,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1 rdf:parseType='Resource'>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://b'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>c</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:f1>\n    <jp:f2>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f2>\n    <jp:f3>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithAField.class, x))
+				.verify(x -> verify(x).isType(BeanWithAField.class))
 			},
 			{	/* 8 */
 				new ComboInput<BeanWithAField[]>(
@@ -302,7 +302,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:f1 rdf:parseType='Resource'>\n        <jp:a rdf:parseType='Resource'>\n          <jp:href rdf:resource='http://b'/>\n        </jp:a>\n        <jp:c>\n          <rdf:Seq>\n            <rdf:li>c</rdf:li>\n          </rdf:Seq>\n        </jp:c>\n      </jp:f1>\n      <jp:f2>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f2>\n      <jp:f3>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f3>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithAField[].class, x))
+				.verify(x -> verify(x).isType(BeanWithAField[].class))
 			},
 			{	/* 9 */
 				new ComboInput<List<BeanWithAField>>(
@@ -331,7 +331,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1 rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f2>\n<jp:f3>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://b'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:f3>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:f1 rdf:parseType='Resource'>\n        <jp:a rdf:parseType='Resource'>\n          <jp:href rdf:resource='http://b'/>\n        </jp:a>\n        <jp:c>\n          <rdf:Seq>\n            <rdf:li>c</rdf:li>\n          </rdf:Seq>\n        </jp:c>\n      </jp:f1>\n      <jp:f2>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f2>\n      <jp:f3>\n        <rdf:Seq>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n          <rdf:li rdf:parseType='Resource'>\n            <jp:a rdf:parseType='Resource'>\n              <jp:href rdf:resource='http://b'/>\n            </jp:a>\n            <jp:c>\n              <rdf:Seq>\n                <rdf:li>c</rdf:li>\n              </rdf:Seq>\n            </jp:c>\n          </rdf:li>\n        </rdf:Seq>\n      </jp:f3>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(BeanWithAField.class, x.get(0)))
+				.verify(x -> verify(x.get(0)).isType(BeanWithAField.class))
 			},
 			{	/* 10 */
 				new ComboInput<A>(
@@ -360,7 +360,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 11 */
 				new ComboInput<A[][]>(
@@ -389,7 +389,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>i</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://a'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://d'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>e</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>f</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://g'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>h</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>i</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://a'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://d'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>e</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>f</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://g'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>h</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>i</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A[][].class, x))
+				.verify(x -> verify(x).isType(A[][].class))
 			},
 			{	/* 12 */
 				new ComboInput<A>(
@@ -418,7 +418,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 13 */
 				new ComboInput<A>(
@@ -447,7 +447,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>_x0020_</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>_x0020_</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 14 */
 				new ComboInput<A>(
@@ -476,7 +476,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href rdf:resource='http://foo'/>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(A.class, x))
+				.verify(x -> verify(x).isType(A.class))
 			},
 			{	/* 15 */
 				new ComboInput<Abbr>(
@@ -505,7 +505,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>abbr</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>abbr</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>abbr</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Abbr.class, x))
+				.verify(x -> verify(x).isType(Abbr.class))
 			},
 			{	/* 16 */
 				new ComboInput<Abbr>(
@@ -534,7 +534,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>abbr</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:title>foo</jp:title>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>abbr</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:title>foo</jp:title>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>abbr</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:title>foo</jp:title>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Abbr.class, x))
+				.verify(x -> verify(x).isType(Abbr.class))
 			},
 			{	/* 17 */
 				new ComboInput<Address>(
@@ -563,7 +563,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>address</jp:_type>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>address</jp:t>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Address.class, x))
+				.verify(x -> verify(x).isType(Address.class))
 			},
 			{	/* 18 */
 				new ComboInput<Address>(
@@ -592,7 +592,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>address</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>address</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li></rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li></rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Address.class, x))
+				.verify(x -> verify(x).isType(Address.class))
 			},
 			{	/* 19 */
 				new ComboInput<Address>(
@@ -621,9 +621,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>address</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>bar</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>qux</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>quux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>address</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>bar</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>qux</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>quux</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>address</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>bar</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>qux</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>quux</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Address.class, x))
-				.verify(x -> verifyInstanceOf(A.class, x.getChild(1)))
-				.verify(x -> verifyInstanceOf(A.class, x.getChild(2)))
+				.verify(x -> verify(x).isType(Address.class))
+				.verify(x -> verify(x.getChild(1)).isType(A.class))
+				.verify(x -> verify(x.getChild(2)).isType(A.class))
 			},
 			{	/* 20 */
 				new ComboInput<Aside>(
@@ -654,9 +654,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>aside</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h1</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>aside</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h1</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>aside</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>header1</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Aside.class, x))
-				.verify(x -> verifyInstanceOf(H1.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(P.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Aside.class))
+				.verify(x -> verify(x.getChild(0)).isType(H1.class))
+				.verify(x -> verify(x.getChild(1)).isType(P.class))
 			},
 			{	/* 21 */
 				new ComboInput<Audio>(
@@ -688,9 +688,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>audio</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:controls>controls</jp:controls>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>source</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.ogg</jp:src>\n<jp:type>audio/ogg</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>source</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.mp3</jp:src>\n<jp:type>audio/mpeg</jp:type>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>audio</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:controls>controls</jp:controls>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>source</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.ogg</jp:src>\n<jp:type>audio/ogg</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>source</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.mp3</jp:src>\n<jp:type>audio/mpeg</jp:type>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>audio</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:controls>controls</jp:controls>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.ogg</jp:src>\n            <jp:type>audio/ogg</jp:type>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.mp3</jp:src>\n            <jp:type>audio/mpeg</jp:type>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Audio.class, x))
-				.verify(x -> verifyInstanceOf(Source.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Source.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Audio.class))
+				.verify(x -> verify(x.getChild(0)).isType(Source.class))
+				.verify(x -> verify(x.getChild(1)).isType(Source.class))
 			},
 			{	/* 22 */
 				new ComboInput<P>(
@@ -719,8 +719,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>bdi</jp:_type>\n<jp:c>إيان</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>bdi</jp:t>\n<jp:c>إيان</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>bdi</jp:_type>\n          <jp:c>إيان</jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Bdi.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Bdi.class))
 			},
 			{	/* 23 */
 				new ComboInput<P>(
@@ -749,8 +749,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>bdo</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:dir>rtl</jp:dir>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>bdo</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:dir>rtl</jp:dir>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>bdo</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:dir>rtl</jp:dir>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Bdo.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Bdo.class))
 			},
 			{	/* 24 */
 				new ComboInput<Blockquote>(
@@ -779,7 +779,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>blockquote</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>blockquote</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>blockquote</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Blockquote.class, x))
+				.verify(x -> verify(x).isType(Blockquote.class))
 			},
 			{	/* 25 */
 				new ComboInput<Br>(
@@ -808,7 +808,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>br</jp:_type>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>br</jp:t>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>br</jp:_type>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Br.class, x))
+				.verify(x -> verify(x).isType(Br.class))
 			},
 			{	/* 26 */
 				new ComboInput<P>(
@@ -837,8 +837,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>br</jp:_type>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>br</jp:t>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>br</jp:_type>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Br.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Br.class))
 			},
 			{	/* 27 */
 				new ComboInput<Button>(
@@ -867,7 +867,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>button</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>button</jp:type>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>button</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>button</jp:type>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>button</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:type>button</jp:type>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Button.class, x))
+				.verify(x -> verify(x).isType(Button.class))
 			},
 			{	/* 28 */
 				new ComboInput<Canvas>(
@@ -896,7 +896,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>canvas</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>canvas</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>canvas</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>100</jp:width>\n      <jp:height>200</jp:height>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Canvas.class, x))
+				.verify(x -> verify(x).isType(Canvas.class))
 			},
 			{	/* 29 */
 				new ComboInput<P>(
@@ -925,8 +925,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>cite</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>cite</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>cite</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Cite.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Cite.class))
 			},
 			{	/* 30 */
 				new ComboInput<Code>(
@@ -955,7 +955,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>code</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo_x000A__x0009_bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>code</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo_x000A__x0009_bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>code</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo_x000A__x0009_bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Code.class, x))
+				.verify(x -> verify(x).isType(Code.class))
 			},
 			{	/* 31 */
 				new ComboInput<Datalist>(
@@ -987,9 +987,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>datalist</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:id>foo</jp:id>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>option</jp:_type>\n<jp:c>One</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>option</jp:_type>\n<jp:c>Two</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>datalist</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:id>foo</jp:id>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>option</jp:t>\n<jp:c>One</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>option</jp:t>\n<jp:c>Two</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>datalist</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:id>foo</jp:id>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>option</jp:_type>\n          <jp:c>One</jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>option</jp:_type>\n          <jp:c>Two</jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Datalist.class, x))
-				.verify(x -> verifyInstanceOf(Option.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Option.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Datalist.class))
+				.verify(x -> verify(x.getChild(0)).isType(Option.class))
+				.verify(x -> verify(x.getChild(1)).isType(Option.class))
 			},
 			{	/* 32 */
 				new ComboInput<Dl>(
@@ -1021,9 +1021,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>dl</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>dt</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>dd</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>dl</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>dt</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>dd</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>dl</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dt</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dd</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Dl.class, x))
-				.verify(x -> verifyInstanceOf(Dt.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Dd.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Dl.class))
+				.verify(x -> verify(x.getChild(0)).isType(Dt.class))
+				.verify(x -> verify(x.getChild(1)).isType(Dd.class))
 			},
 			{	/* 33 */
 				new ComboInput<P>(
@@ -1052,10 +1052,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>del</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>ins</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>del</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>ins</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>del</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>b</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>bbb</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>ins</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>baz</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Del.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(B.class, x.getChild(Del.class, 0).getChild(1)))
-				.verify(x -> verifyInstanceOf(Ins.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Del.class))
+				.verify(x -> verify(x.getChild(Del.class, 0).getChild(1)).isType(B.class))
+				.verify(x -> verify(x.getChild(1)).isType(Ins.class))
 			},
 			{	/* 34 */
 				new ComboInput<P>(
@@ -1084,8 +1084,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>dfn</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>dfn</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>dfn</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Dfn.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Dfn.class))
 			},
 			{	/* 35 */
 				new ComboInput<Div>(
@@ -1114,8 +1114,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>div</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>b</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>div</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>b</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bbb</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>div</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Div.class, x))
-				.verify(x -> verifyInstanceOf(B.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Div.class))
+				.verify(x -> verify(x.getChild(1)).isType(B.class))
 			},
 			{	/* 36 */
 				new ComboInput<P>(
@@ -1144,8 +1144,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>em</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>em</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>em</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Em.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Em.class))
 			},
 			{	/* 37 */
 				new ComboInput<Embed>(
@@ -1174,7 +1174,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>embed</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.swf</jp:src>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>embed</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.swf</jp:src>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>embed</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:src>foo.swf</jp:src>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Embed.class, x))
+				.verify(x -> verify(x).isType(Embed.class))
 			},
 			{	/* 38 */
 				new ComboInput<Form>(
@@ -1211,15 +1211,15 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>form</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:action>bar</jp:action>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>fieldset</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>legend</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo:</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>Name:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>br</jp:_type>\n</rdf:li>\n<rdf:li>Email:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>br</jp:_type>\n</rdf:li>\n<rdf:li>X:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>keygen</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>X</jp:name>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>label</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:for>Name</jp:for>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>label</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>form</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:action>bar</jp:action>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>fieldset</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>legend</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo:</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>Name:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>br</jp:t>\n</rdf:li>\n<rdf:li>Email:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>br</jp:t>\n</rdf:li>\n<rdf:li>X:</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>keygen</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>X</jp:name>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>label</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:for>Name</jp:for>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>label</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>form</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action>bar</jp:action>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>fieldset</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>legend</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>foo:</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>Name:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>input</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:type>text</jp:type>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>br</jp:_type>\n              </rdf:li>\n              <rdf:li>Email:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>input</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:type>text</jp:type>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>br</jp:_type>\n              </rdf:li>\n              <rdf:li>X:</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>keygen</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:name>X</jp:name>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>label</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:for>Name</jp:for>\n                </jp:a>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>label</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Form.class, x))
-				.verify(x -> verifyInstanceOf(Fieldset.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Legend.class, x.getChild(0,0)))
-				.verify(x -> verifyInstanceOf(Input.class, x.getChild(0,2)))
-				.verify(x -> verifyInstanceOf(Br.class, x.getChild(0,3)))
-				.verify(x -> verifyInstanceOf(Input.class, x.getChild(0,5)))
-				.verify(x -> verifyInstanceOf(Br.class, x.getChild(0,6)))
-				.verify(x -> verifyInstanceOf(Keygen.class, x.getChild(0,8)))
-				.verify(x -> verifyInstanceOf(Label.class, x.getChild(0,9)))
+				.verify(x -> verify(x).isType(Form.class))
+				.verify(x -> verify(x.getChild(0)).isType(Fieldset.class))
+				.verify(x -> verify(x.getChild(0,0)).isType(Legend.class))
+				.verify(x -> verify(x.getChild(0,2)).isType(Input.class))
+				.verify(x -> verify(x.getChild(0,3)).isType(Br.class))
+				.verify(x -> verify(x.getChild(0,5)).isType(Input.class))
+				.verify(x -> verify(x.getChild(0,6)).isType(Br.class))
+				.verify(x -> verify(x.getChild(0,8)).isType(Keygen.class))
+				.verify(x -> verify(x.getChild(0,9)).isType(Label.class))
 			},
 			{	/* 39 */
 				new ComboInput<Figure>(
@@ -1251,9 +1251,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>figure</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>img</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.png</jp:src>\n<jp:alt>foo</jp:alt>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>figcaption</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>The caption</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>figure</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>img</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.png</jp:src>\n<jp:alt>foo</jp:alt>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>figcaption</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>The caption</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>figure</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>img</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.png</jp:src>\n            <jp:alt>foo</jp:alt>\n            <jp:width>100</jp:width>\n            <jp:height>200</jp:height>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>figcaption</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>The caption</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Figure.class, x))
-				.verify(x -> verifyInstanceOf(Img.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Figcaption.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Figure.class))
+				.verify(x -> verify(x.getChild(0)).isType(Img.class))
+				.verify(x -> verify(x.getChild(1)).isType(Figcaption.class))
 			},
 			{	/* 40 */
 				new ComboInput<Div>(
@@ -1284,13 +1284,13 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>div</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h1</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>One</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h2</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Two</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h3</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Three</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h4</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Four</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h5</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Five</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h6</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Six</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>div</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h1</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>One</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h2</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Two</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h3</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Three</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h4</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Four</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h5</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Five</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h6</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Six</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>div</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>One</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h2</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Two</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h3</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Three</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h4</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Four</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h5</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Five</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h6</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Six</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Div.class, x))
-				.verify(x -> verifyInstanceOf(H1.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(H2.class, x.getChild(1)))
-				.verify(x -> verifyInstanceOf(H3.class, x.getChild(2)))
-				.verify(x -> verifyInstanceOf(H4.class, x.getChild(3)))
-				.verify(x -> verifyInstanceOf(H5.class, x.getChild(4)))
-				.verify(x -> verifyInstanceOf(H6.class, x.getChild(5)))
+				.verify(x -> verify(x).isType(Div.class))
+				.verify(x -> verify(x.getChild(0)).isType(H1.class))
+				.verify(x -> verify(x.getChild(1)).isType(H2.class))
+				.verify(x -> verify(x.getChild(2)).isType(H3.class))
+				.verify(x -> verify(x.getChild(3)).isType(H4.class))
+				.verify(x -> verify(x.getChild(4)).isType(H5.class))
+				.verify(x -> verify(x.getChild(5)).isType(H6.class))
 			},
 			{	/* 41 */
 				new ComboInput<P>(
@@ -1319,8 +1319,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>hr</jp:_type>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>hr</jp:t>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>hr</jp:_type>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Hr.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Hr.class))
 			},
 			{	/* 42 */
 				new ComboInput<Html>(
@@ -1377,13 +1377,13 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>html</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>head</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>title</jp:_type>\n<jp:c>title</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>base</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>foo</jp:href>\n<jp:target>_blank</jp:target>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>link</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:rel>stylesheet</jp:rel>\n<jp:type>text/css</jp:type>\n<jp:href>theme.css</jp:href>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>meta</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:charset>UTF-8</jp:charset>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>body</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>html</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>head</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>title</jp:t>\n<jp:c>title</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>base</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>foo</jp:href>\n<jp:target>_blank</jp:target>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>link</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:rel>stylesheet</jp:rel>\n<jp:type>text/css</jp:type>\n<jp:href>theme.css</jp:href>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>meta</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:charset>UTF-8</jp:charset>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>body</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>html</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>head</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>title</jp:_type>\n                <jp:c>title</jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>base</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:href>foo</jp:href>\n                  <jp:target>_blank</jp:target>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>link</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:rel>stylesheet</jp:rel>\n                  <jp:type>text/css</jp:type>\n                  <jp:href>theme.css</jp:href>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>meta</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:charset>UTF-8</jp:charset>\n                </jp:a>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>body</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Html.class, x))
-				.verify(x -> verifyInstanceOf(Head.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Title.class, x.getChild(0,0)))
-				.verify(x -> verifyInstanceOf(Base.class, x.getChild(0,1)))
-				.verify(x -> verifyInstanceOf(Link.class, x.getChild(0,2)))
-				.verify(x -> verifyInstanceOf(Meta.class, x.getChild(0,3)))
-				.verify(x -> verifyInstanceOf(Body.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Html.class))
+				.verify(x -> verify(x.getChild(0)).isType(Head.class))
+				.verify(x -> verify(x.getChild(0,0)).isType(Title.class))
+				.verify(x -> verify(x.getChild(0,1)).isType(Base.class))
+				.verify(x -> verify(x.getChild(0,2)).isType(Link.class))
+				.verify(x -> verify(x.getChild(0,3)).isType(Meta.class))
+				.verify(x -> verify(x.getChild(1)).isType(Body.class))
 			},
 			{	/* 43 */
 				new ComboInput<P>(
@@ -1412,8 +1412,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>i</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>i</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>i</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(I.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(I.class))
 			},
 			{	/* 44 */
 				new ComboInput<Iframe>(
@@ -1442,7 +1442,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>iframe</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>iframe</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>iframe</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Iframe.class, x))
+				.verify(x -> verify(x).isType(Iframe.class))
 			},
 			{	/* 45 */
 				new ComboInput<P>(
@@ -1471,8 +1471,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>kbd</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>kbd</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>kbd</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Kbd.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Kbd.class))
 			},
 			{	/* 46 */
 				new ComboInput<Main>(
@@ -1507,15 +1507,15 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>main</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>article</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>header</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h1</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>content</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>footer</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h2</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>footer1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>footer2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>main</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>article</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>header</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h1</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>header2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>content</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>footer</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h2</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>footer1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>footer2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>main</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>article</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>header</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>h1</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>header1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>p</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>header2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>p</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>content</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>footer</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>h2</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>footer1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>p</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>footer2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Main.class, x))
-				.verify(x -> verifyInstanceOf(Article.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Header.class, x.getChild(0,0)))
-				.verify(x -> verifyInstanceOf(H1.class, x.getChild(0,0,0)))
-				.verify(x -> verifyInstanceOf(P.class, x.getChild(0,0,1)))
-				.verify(x -> verifyInstanceOf(P.class, x.getChild(0,1)))
-				.verify(x -> verifyInstanceOf(Footer.class, x.getChild(0,2)))
-				.verify(x -> verifyInstanceOf(H2.class, x.getChild(0,2,0)))
-				.verify(x -> verifyInstanceOf(P.class, x.getChild(0,2,1)))
+				.verify(x -> verify(x).isType(Main.class))
+				.verify(x -> verify(x.getChild(0)).isType(Article.class))
+				.verify(x -> verify(x.getChild(0,0)).isType(Header.class))
+				.verify(x -> verify(x.getChild(0,0,0)).isType(H1.class))
+				.verify(x -> verify(x.getChild(0,0,1)).isType(P.class))
+				.verify(x -> verify(x.getChild(0,1)).isType(P.class))
+				.verify(x -> verify(x.getChild(0,2)).isType(Footer.class))
+				.verify(x -> verify(x.getChild(0,2,0)).isType(H2.class))
+				.verify(x -> verify(x.getChild(0,2,1)).isType(P.class))
 			},
 			{	/* 47 */
 				new ComboInput<Map>(
@@ -1544,8 +1544,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>map</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>baz</jp:name>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>area</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:shape>rect</jp:shape>\n<jp:coords>0,1,2,3</jp:coords>\n<jp:href>foo</jp:href>\n<jp:alt>bar</jp:alt>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>map</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>baz</jp:name>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>area</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:shape>rect</jp:shape>\n<jp:coords>0,1,2,3</jp:coords>\n<jp:href>foo</jp:href>\n<jp:alt>bar</jp:alt>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>map</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>baz</jp:name>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>area</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:shape>rect</jp:shape>\n            <jp:coords>0,1,2,3</jp:coords>\n            <jp:href>foo</jp:href>\n            <jp:alt>bar</jp:alt>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Map.class, x))
-				.verify(x -> verifyInstanceOf(Area.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Map.class))
+				.verify(x -> verify(x.getChild(0)).isType(Area.class))
 			},
 			{	/* 48 */
 				new ComboInput<P>(
@@ -1574,8 +1574,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>mark</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>mark</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>mark</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Mark.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Mark.class))
 			},
 			{	/* 49 */
 				new ComboInput<Meter>(
@@ -1604,7 +1604,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>meter</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:value>1</jp:value>\n<jp:min>0</jp:min>\n<jp:max>2</jp:max>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>meter</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:value>1</jp:value>\n<jp:min>0</jp:min>\n<jp:max>2</jp:max>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>meter</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:value>1</jp:value>\n      <jp:min>0</jp:min>\n      <jp:max>2</jp:max>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Meter.class, x))
+				.verify(x -> verify(x).isType(Meter.class))
 			},
 			{	/* 50 */
 				new ComboInput<Nav>(
@@ -1633,8 +1633,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>nav</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>a</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:href>foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>nav</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>a</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:href>foo</jp:href>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>nav</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>a</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href>foo</jp:href>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Nav.class, x))
-				.verify(x -> verifyInstanceOf(A.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Nav.class))
+				.verify(x -> verify(x.getChild(0)).isType(A.class))
 			},
 			{	/* 51 */
 				new ComboInput<Noscript>(
@@ -1663,7 +1663,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>noscript</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>No script!</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>noscript</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>No script!</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>noscript</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>No script!</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Noscript.class, x))
+				.verify(x -> verify(x).isType(Noscript.class))
 			},
 			{	/* 52 */
 				new ComboInput<Object_>(
@@ -1692,8 +1692,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>object</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:width>1</jp:width>\n<jp:height>2</jp:height>\n<jp:data>foo.swf</jp:data>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>param</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>autoplay</jp:name>\n<jp:value>true</jp:value>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>object</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:width>1</jp:width>\n<jp:height>2</jp:height>\n<jp:data>foo.swf</jp:data>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>param</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>autoplay</jp:name>\n<jp:value>true</jp:value>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>object</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>1</jp:width>\n      <jp:height>2</jp:height>\n      <jp:data>foo.swf</jp:data>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>param</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:name>autoplay</jp:name>\n            <jp:value>true</jp:value>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Object_.class, x))
-				.verify(x -> verifyInstanceOf(Param.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Object_.class))
+				.verify(x -> verify(x.getChild(0)).isType(Param.class))
 			},
 			{	/* 53 */
 				new ComboInput<Ol>(
@@ -1722,8 +1722,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>ol</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>li</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>ol</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>li</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ol</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>li</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Ol.class, x))
-				.verify(x -> verifyInstanceOf(Li.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Ol.class))
+				.verify(x -> verify(x.getChild(0)).isType(Li.class))
 			},
 			{	/* 54 */
 				new ComboInput<Form>(
@@ -1756,10 +1756,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>form</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:action>testform</jp:action>\n<jp:oninput>x.value=parseInt(a.value)+parseInt(b.value)</jp:oninput>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>0</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>range</jp:type>\n<jp:id>a</jp:id>\n<jp:value>50</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li>+</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>input</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>number</jp:type>\n<jp:id>b</jp:id>\n<jp:value>50</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li>=</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>output</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>x</jp:name>\n<jp:for>a b</jp:for>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>form</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:action>testform</jp:action>\n<jp:oninput>x.value=parseInt(a.value)+parseInt(b.value)</jp:oninput>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>0</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>range</jp:type>\n<jp:id>a</jp:id>\n<jp:value>50</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li>+</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>input</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>number</jp:type>\n<jp:id>b</jp:id>\n<jp:value>50</jp:value>\n</jp:a>\n</rdf:li>\n<rdf:li>=</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>output</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>x</jp:name>\n<jp:for>a b</jp:for>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>form</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:action>testform</jp:action>\n      <jp:oninput>x.value=parseInt(a.value)+parseInt(b.value)</jp:oninput>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>0</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>range</jp:type>\n            <jp:id>a</jp:id>\n            <jp:value>50</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li>+</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>input</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:type>number</jp:type>\n            <jp:id>b</jp:id>\n            <jp:value>50</jp:value>\n          </jp:a>\n        </rdf:li>\n        <rdf:li>=</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>output</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:name>x</jp:name>\n            <jp:for>a b</jp:for>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Form.class, x))
-				.verify(x -> verifyInstanceOf(Input.class, x.getChild(1)))
-				.verify(x -> verifyInstanceOf(Input.class, x.getChild(3)))
-				.verify(x -> verifyInstanceOf(Output.class, x.getChild(5)))
+				.verify(x -> verify(x).isType(Form.class))
+				.verify(x -> verify(x.getChild(1)).isType(Input.class))
+				.verify(x -> verify(x.getChild(3)).isType(Input.class))
+				.verify(x -> verify(x.getChild(5)).isType(Output.class))
 			},
 			{	/* 55 */
 				new ComboInput<P>(
@@ -1788,7 +1788,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
+				.verify(x -> verify(x).isType(P.class))
 			},
 			{	/* 56 */
 				new ComboInput<P[][]>(
@@ -1817,7 +1817,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Seq>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>a</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>b</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n<rdf:li>\n<rdf:Seq/>\n</rdf:li>\n<rdf:li>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>a</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>b</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq/>\n    </rdf:li>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P[][].class, x))
+				.verify(x -> verify(x).isType(P[][].class))
 			},
 			{	/* 57 */
 				new ComboInput<Pre>(
@@ -1846,7 +1846,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>pre</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo   _x000A_   bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>pre</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo   _x000A_   bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>pre</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo   _x000A_   bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Pre.class, x))
+				.verify(x -> verify(x).isType(Pre.class))
 			},
 			{	/* 58 */
 				new ComboInput<Progress>(
@@ -1875,7 +1875,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>progress</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:value>1</jp:value>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>progress</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:value>1</jp:value>\n</jp:a>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>progress</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:value>1</jp:value>\n    </jp:a>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Progress.class, x))
+				.verify(x -> verify(x).isType(Progress.class))
 			},
 			{	/* 59 */
 				new ComboInput<P>(
@@ -1904,8 +1904,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>q</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>q</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>q</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Q.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Q.class))
 			},
 			{	/* 60 */
 				new ComboInput<Ruby>(
@@ -1936,10 +1936,10 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>ruby</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>法</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>rb</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>華</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>経</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>rtc</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>き</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>rp</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>け</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>ょ</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>ruby</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>法</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>rb</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>華</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>経</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>rtc</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>き</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>rp</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>け</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>ょ</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ruby</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>法</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>rb</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>華</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>経</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>rtc</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>き</rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>rp</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li>け</rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n              <rdf:li>ょ</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Ruby.class, x))
-				.verify(x -> verifyInstanceOf(Rb.class, x.getChild(1)))
-				.verify(x -> verifyInstanceOf(Rtc.class, x.getChild(3)))
-				.verify(x -> verifyInstanceOf(Rp.class, x.getChild(3,1)))
+				.verify(x -> verify(x).isType(Ruby.class))
+				.verify(x -> verify(x.getChild(1)).isType(Rb.class))
+				.verify(x -> verify(x.getChild(3)).isType(Rtc.class))
+				.verify(x -> verify(x.getChild(3,1)).isType(Rp.class))
 			},
 			{	/* 61 */
 				new ComboInput<P>(
@@ -1968,8 +1968,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>s</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>s</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>baz</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>s</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(S.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(S.class))
 			},
 			{	/* 62 */
 				new ComboInput<Samp>(
@@ -1998,7 +1998,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>samp</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>samp</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>samp</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Samp.class, x))
+				.verify(x -> verify(x).isType(Samp.class))
 			},
 			{	/* 63 */
 				new ComboInput<Script>(
@@ -2027,7 +2027,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>script</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text/javascript</jp:type>\n</jp:a>\n<jp:c>_x000A__x0009_alert('hello world!');_x000A_</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>script</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:type>text/javascript</jp:type>\n</jp:a>\n<jp:c>_x000A__x0009_alert('hello world!');_x000A_</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>script</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:type>text/javascript</jp:type>\n    </jp:a>\n    <jp:c>_x000A__x0009_alert('hello world!');_x000A_</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Script.class, x))
+				.verify(x -> verify(x).isType(Script.class))
 			},
 			{	/* 64 */
 				new ComboInput<Section>(
@@ -2056,9 +2056,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>section</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>h1</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>section</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>h1</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>section</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>h1</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>p</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Section.class, x))
-				.verify(x -> verifyInstanceOf(H1.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(P.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Section.class))
+				.verify(x -> verify(x.getChild(0)).isType(H1.class))
+				.verify(x -> verify(x.getChild(1)).isType(P.class))
 			},
 			{	/* 65 */
 				new ComboInput<Select>(
@@ -2087,9 +2087,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>select</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>foo</jp:name>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>optgroup</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:label>bar</jp:label>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>option</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:value>o1</jp:value>\n</jp:a>\n<jp:c>v1</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>select</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>foo</jp:name>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>optgroup</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:label>bar</jp:label>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>option</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:value>o1</jp:value>\n</jp:a>\n<jp:c>v1</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>select</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>foo</jp:name>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>optgroup</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:label>bar</jp:label>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>option</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:value>o1</jp:value>\n                </jp:a>\n                <jp:c>v1</jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Select.class, x))
-				.verify(x -> verifyInstanceOf(Optgroup.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Option.class, x.getChild(0,0)))
+				.verify(x -> verify(x).isType(Select.class))
+				.verify(x -> verify(x.getChild(0)).isType(Optgroup.class))
+				.verify(x -> verify(x.getChild(0,0)).isType(Option.class))
 			},
 			{	/* 66 */
 				new ComboInput<P>(
@@ -2118,8 +2118,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>small</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>small</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>small</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Small.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Small.class))
 			},
 			{	/* 67 */
 				new ComboInput<P>(
@@ -2148,8 +2148,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>My mother has_x0020_</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>span</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:style>color:blue</jp:style>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>blue</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>_x0020_eyes.</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>My mother has_x0020_</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>span</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:style>color:blue</jp:style>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>blue</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>_x0020_eyes.</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>My mother has_x0020_</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>span</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:style>color:blue</jp:style>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>blue</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>_x0020_eyes.</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Span.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Span.class))
 			},
 			{	/* 68 */
 				new ComboInput<P>(
@@ -2178,8 +2178,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>strong</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>strong</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>strong</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Strong.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Strong.class))
 			},
 			{	/* 69 */
 				new ComboInput<Head>(
@@ -2208,8 +2208,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>head</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>style</jp:_type>\n<jp:c>_x000A__x0009_h1 {color:red;}_x000A__x0009_p: {color:blue;}_x000A_</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>head</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>style</jp:t>\n<jp:c>_x000A__x0009_h1 {color:red;}_x000A__x0009_p: {color:blue;}_x000A_</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>head</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>style</jp:_type>\n          <jp:c>_x000A__x0009_h1 {color:red;}_x000A__x0009_p: {color:blue;}_x000A_</jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Head.class, x))
-				.verify(x -> verifyInstanceOf(Style.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Head.class))
+				.verify(x -> verify(x.getChild(0)).isType(Style.class))
 			},
 			{	/* 70 */
 				new ComboInput<P>(
@@ -2238,8 +2238,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>sub</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>sub</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>sub</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Sub.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Sub.class))
 			},
 			{	/* 71 */
 				new ComboInput<P>(
@@ -2268,8 +2268,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>sup</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>sup</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>sup</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Sup.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Sup.class))
 			},
 			{	/* 72 */
 				new ComboInput<Table>(
@@ -2482,23 +2482,23 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>table</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>caption</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>caption1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>colgroup</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>col</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:class>foo</jp:class>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>col</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:class>bar</jp:class>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>thead</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>tr</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>th</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>th</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>tbody</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>tr</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>td</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>v1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>td</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>v2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>tfoot</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>tr</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>td</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>td</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>table</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>caption</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>caption1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>colgroup</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>col</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:class>foo</jp:class>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>col</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:class>bar</jp:class>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>thead</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>tr</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>th</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>th</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>c2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>tbody</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>tr</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>td</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>v1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>td</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>v2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>tfoot</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>tr</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>td</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f1</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>td</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>f2</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>table</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>caption</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>caption1</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>colgroup</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>col</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:class>foo</jp:class>\n                </jp:a>\n              </rdf:li>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>col</jp:_type>\n                <jp:a rdf:parseType='Resource'>\n                  <jp:class>bar</jp:class>\n                </jp:a>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>thead</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>th</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>c1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>th</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>c2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>tbody</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>v1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>v2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>tfoot</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li rdf:parseType='Resource'>\n                <jp:_type>tr</jp:_type>\n                <jp:c>\n                  <rdf:Seq>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>f1</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                    <rdf:li rdf:parseType='Resource'>\n                      <jp:_type>td</jp:_type>\n                      <jp:c>\n                        <rdf:Seq>\n                          <rdf:li>f2</rdf:li>\n                        </rdf:Seq>\n                      </jp:c>\n                    </rdf:li>\n                  </rdf:Seq>\n                </jp:c>\n              </rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Table.class, x))
-				.verify(x -> verifyInstanceOf(Caption.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Colgroup.class, x.getChild(1)))
-				.verify(x -> verifyInstanceOf(Col.class, x.getChild(1,0)))
-				.verify(x -> verifyInstanceOf(Col.class, x.getChild(1,1)))
-				.verify(x -> verifyInstanceOf(Thead.class, x.getChild(2)))
-				.verify(x -> verifyInstanceOf(Tr.class, x.getChild(2,0)))
-				.verify(x -> verifyInstanceOf(Th.class, x.getChild(2,0,0)))
-				.verify(x -> verifyInstanceOf(Th.class, x.getChild(2,0,1)))
-				.verify(x -> verifyInstanceOf(Tbody.class, x.getChild(3)))
-				.verify(x -> verifyInstanceOf(Tr.class, x.getChild(3,0)))
-				.verify(x -> verifyInstanceOf(Td.class, x.getChild(3,0,0)))
-				.verify(x -> verifyInstanceOf(Td.class, x.getChild(3,0,1)))
-				.verify(x -> verifyInstanceOf(Tfoot.class, x.getChild(4)))
-				.verify(x -> verifyInstanceOf(Tr.class, x.getChild(4,0)))
-				.verify(x -> verifyInstanceOf(Td.class, x.getChild(4,0,0)))
-				.verify(x -> verifyInstanceOf(Td.class, x.getChild(4,0,1)))
+				.verify(x -> verify(x).isType(Table.class))
+				.verify(x -> verify(x.getChild(0)).isType(Caption.class))
+				.verify(x -> verify(x.getChild(1)).isType(Colgroup.class))
+				.verify(x -> verify(x.getChild(1,0)).isType(Col.class))
+				.verify(x -> verify(x.getChild(1,1)).isType(Col.class))
+				.verify(x -> verify(x.getChild(2)).isType(Thead.class))
+				.verify(x -> verify(x.getChild(2,0)).isType(Tr.class))
+				.verify(x -> verify(x.getChild(2,0,0)).isType(Th.class))
+				.verify(x -> verify(x.getChild(2,0,1)).isType(Th.class))
+				.verify(x -> verify(x.getChild(3)).isType(Tbody.class))
+				.verify(x -> verify(x.getChild(3,0)).isType(Tr.class))
+				.verify(x -> verify(x.getChild(3,0,0)).isType(Td.class))
+				.verify(x -> verify(x.getChild(3,0,1)).isType(Td.class))
+				.verify(x -> verify(x.getChild(4)).isType(Tfoot.class))
+				.verify(x -> verify(x.getChild(4,0)).isType(Tr.class))
+				.verify(x -> verify(x.getChild(4,0,0)).isType(Td.class))
+				.verify(x -> verify(x.getChild(4,0,1)).isType(Td.class))
 			},
 			{	/* 73 */
 				new ComboInput<Template>(
@@ -2527,8 +2527,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>template</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:id>foo</jp:id>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>div</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>template</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:id>foo</jp:id>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>div</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>template</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:id>foo</jp:id>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>div</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bar</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Template.class, x))
-				.verify(x -> verifyInstanceOf(Div.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Template.class))
+				.verify(x -> verify(x.getChild(0)).isType(Div.class))
 			},
 			{	/* 74 */
 				new ComboInput<Textarea>(
@@ -2557,7 +2557,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>textarea</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:name>foo</jp:name>\n</jp:a>\n<jp:c>bar</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>textarea</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:name>foo</jp:name>\n</jp:a>\n<jp:c>bar</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>textarea</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:name>foo</jp:name>\n    </jp:a>\n    <jp:c>bar</jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Textarea.class, x))
+				.verify(x -> verify(x).isType(Textarea.class))
 			},
 			{	/* 75 */
 				new ComboInput<P>(
@@ -2586,8 +2586,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>I have a date on_x0020_</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>time</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:datetime>2016-02-14 18:00</jp:datetime>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Valentines day</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>.</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>I have a date on_x0020_</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>time</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:datetime>2016-02-14 18:00</jp:datetime>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li>Valentines day</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n<rdf:li>.</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>I have a date on_x0020_</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>time</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:datetime>2016-02-14 18:00</jp:datetime>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>Valentines day</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>.</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Time.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Time.class))
 			},
 			{	/* 76 */
 				new ComboInput<P>(
@@ -2616,8 +2616,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>u</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>u</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>u</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(U.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(U.class))
 			},
 			{	/* 77 */
 				new ComboInput<Ul>(
@@ -2646,8 +2646,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>ul</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>li</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>ul</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>li</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>ul</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>li</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Ul.class, x))
-				.verify(x -> verifyInstanceOf(Li.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(Ul.class))
+				.verify(x -> verify(x.getChild(0)).isType(Li.class))
 			},
 			{	/* 78 */
 				new ComboInput<P>(
@@ -2676,8 +2676,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>var</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>var</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>var</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>foo</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Var.class, x.getChild(0)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(0)).isType(Var.class))
 			},
 			{	/* 79 */
 				new ComboInput<Video>(
@@ -2709,9 +2709,9 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>video</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n<jp:controls>controls</jp:controls>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>source</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.mp4</jp:src>\n<jp:type>video/mp4</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>track</jp:_type>\n<jp:a rdf:parseType='Resource'>\n<jp:src>subtitles_en.vtt</jp:src>\n<jp:kind>subtitles</jp:kind>\n<jp:srclang>en</jp:srclang>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>video</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:width>100</jp:width>\n<jp:height>200</jp:height>\n<jp:controls>controls</jp:controls>\n</jp:a>\n<jp:c>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>source</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>foo.mp4</jp:src>\n<jp:type>video/mp4</jp:type>\n</jp:a>\n</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>track</jp:t>\n<jp:a rdf:parseType='Resource'>\n<jp:src>subtitles_en.vtt</jp:src>\n<jp:kind>subtitles</jp:kind>\n<jp:srclang>en</jp:srclang>\n</jp:a>\n</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>video</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:width>100</jp:width>\n      <jp:height>200</jp:height>\n      <jp:controls>controls</jp:controls>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>source</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>foo.mp4</jp:src>\n            <jp:type>video/mp4</jp:type>\n          </jp:a>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>track</jp:_type>\n          <jp:a rdf:parseType='Resource'>\n            <jp:src>subtitles_en.vtt</jp:src>\n            <jp:kind>subtitles</jp:kind>\n            <jp:srclang>en</jp:srclang>\n          </jp:a>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(Video.class, x))
-				.verify(x -> verifyInstanceOf(Source.class, x.getChild(0)))
-				.verify(x -> verifyInstanceOf(Track.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(Video.class))
+				.verify(x -> verify(x.getChild(0)).isType(Source.class))
+				.verify(x -> verify(x.getChild(1)).isType(Track.class))
 			},
 			{	/* 80 */
 				new ComboInput<P>(
@@ -2740,8 +2740,8 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				.rdfXml("<rdf:RDF>\n<rdf:Description>\n<jp:_type>p</jp:_type>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:_type>wbr</jp:_type>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlT("<rdf:RDF>\n<rdf:Description>\n<jp:t>p</jp:t>\n<jp:c>\n<rdf:Seq>\n<rdf:li>foo</rdf:li>\n<rdf:li rdf:parseType='Resource'>\n<jp:t>wbr</jp:t>\n</rdf:li>\n<rdf:li>bar</rdf:li>\n</rdf:Seq>\n</jp:c>\n</rdf:Description>\n</rdf:RDF>\n")
 				.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>wbr</jp:_type>\n        </rdf:li>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
-				.verify(x -> verifyInstanceOf(P.class, x))
-				.verify(x -> verifyInstanceOf(Wbr.class, x.getChild(1)))
+				.verify(x -> verify(x).isType(P.class))
+				.verify(x -> verify(x.getChild(1)).isType(Wbr.class))
 			},
 		});
 	}

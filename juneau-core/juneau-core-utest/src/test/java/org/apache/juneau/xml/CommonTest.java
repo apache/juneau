@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.testutils.*;
+import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -181,7 +181,7 @@ public class CommonTest {
 				+"<x6><object><f1 _type='number'>1</f1></object></x6>"
 			+"</object>",
 			r);
-		TestUtils.validateXml(t);
+		XmlUtils.validateXml(t);
 	}
 
 	public static class E1 {

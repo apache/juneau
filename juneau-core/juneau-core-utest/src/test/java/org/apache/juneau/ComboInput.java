@@ -62,6 +62,11 @@ public class ComboInput<T> {
 		return this;
 	}
 
+	public ComboInput<T> verify(Predicate<T> verify, String msg, Object...args) {
+		this.verify.add(x -> verify.test(x) ? null : StringUtils.format(msg, args));
+		return this;
+	}
+
 	public ComboInput<T> swaps(Class<?>...c) {
 		this.swaps.addAll(Arrays.asList(c));
 		return this;
