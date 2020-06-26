@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import java.io.*;
 import java.util.*;

@@ -19,7 +19,7 @@ package org.apache.juneau.assertions;
  * Allows you to pass in arbitrary snippets of code in fluent interfaces.
  *
  * <p>
- * See {@link ThrowableAssertion#assertThrown(Snippet)} for an example.
+ * See {@link Assertions#assertThrown(Snippet)} for an example.
  */
 public interface Snippet {
 

@@ -32,16 +32,6 @@ public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 	 * @param object The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static ObjectAssertion assertObject(Object object) {
-		return new ObjectAssertion(object);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param object The object being wrapped.
-	 * @return A new {@link ObjectAssertion} object.
-	 */
 	public static ObjectAssertion create(Object object) {
 		return new ObjectAssertion(object);
 	}
@@ -51,7 +41,7 @@ public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 	 *
 	 * @param object The object being wrapped.
 	 */
-	protected ObjectAssertion(Object object) {
+	public ObjectAssertion(Object object) {
 		super(object, null);
 	}
 

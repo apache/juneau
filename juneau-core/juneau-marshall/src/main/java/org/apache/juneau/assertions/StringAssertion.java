@@ -34,16 +34,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 * @param text The string being wrapped.
 	 * @return A new {@link StringAssertion} object.
 	 */
-	public static StringAssertion assertString(Object text) {
-		return new StringAssertion(text);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param text The string being wrapped.
-	 * @return A new {@link StringAssertion} object.
-	 */
 	public static StringAssertion create(Object text) {
 		return new StringAssertion(text);
 	}
@@ -53,7 +43,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 *
 	 * @param text The string being wrapped.
 	 */
-	protected StringAssertion(Object text) {
+	public StringAssertion(Object text) {
 		super(stringify(text), null);
 	}
 

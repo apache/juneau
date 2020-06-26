@@ -14,7 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.ThrowableAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.rest.annotation.*;

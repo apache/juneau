@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.assertions.StringAssertion.*;
-import static org.apache.juneau.assertions.ThrowableAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

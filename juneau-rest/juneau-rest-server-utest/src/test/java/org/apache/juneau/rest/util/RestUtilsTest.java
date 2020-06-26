@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.assertions.ThrowableAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;

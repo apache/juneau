@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 

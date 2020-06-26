@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.assertions.ThrowableAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 

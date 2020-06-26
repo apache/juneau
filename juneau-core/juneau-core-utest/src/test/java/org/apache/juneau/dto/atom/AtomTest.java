@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;

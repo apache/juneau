@@ -34,16 +34,6 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	 * @param date The date being wrapped.
 	 * @return A new {@link DateAssertion} object.
 	 */
-	public static DateAssertion assertDate(Date date) {
-		return new DateAssertion(date);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param date The date being wrapped.
-	 * @return A new {@link DateAssertion} object.
-	 */
 	public static DateAssertion create(Date date) {
 		return new DateAssertion(date);
 	}
@@ -53,7 +43,7 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	 *
 	 * @param date The date being wrapped.
 	 */
-	protected DateAssertion(Date date) {
+	public DateAssertion(Date date) {
 		super(date, null);
 	}
 

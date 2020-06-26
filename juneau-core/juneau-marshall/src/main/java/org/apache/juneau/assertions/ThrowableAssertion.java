@@ -32,40 +32,6 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	 * @param throwable The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
-	}
-
-	/**
-	 * Executes an arbitrary snippet of code and captures anything thrown from it.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(() -> {foo.getBar();})
-	 * 		.exists()
-	 * 		.isType(RuntimeException.<jk>class</jk>)
-	 * 		.contains(<js>"Foobar"</js>);
-	 * </p>
-	 *
-	 * @param snippet The snippet of code to execute.
-	 * @return A new assertion object.
-	 */
-	public static ThrowableAssertion assertThrown(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Throwable e) {
-			return assertThrowable(e);
-		}
-		return assertThrowable(null);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param throwable The throwable being wrapped.
-	 * @return A new {@link ThrowableAssertion} object.
-	 */
 	public static ThrowableAssertion create(Throwable throwable) {
 		return new ThrowableAssertion(throwable);
 	}
@@ -75,7 +41,7 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	 *
 	 * @param throwable The throwable being wrapped.
 	 */
-	protected ThrowableAssertion(Throwable throwable) {
+	public ThrowableAssertion(Throwable throwable) {
 		super(throwable, null);
 	}
 

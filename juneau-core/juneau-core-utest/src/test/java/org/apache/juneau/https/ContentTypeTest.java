@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.https;
 
-import static org.apache.juneau.assertions.IntegerAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;

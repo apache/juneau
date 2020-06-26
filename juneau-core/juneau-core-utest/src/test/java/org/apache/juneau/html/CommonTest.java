@@ -14,9 +14,7 @@ package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.apache.juneau.assertions.ThrowableAssertion.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.net.*;
 import java.net.URI;
 import java.util.*;

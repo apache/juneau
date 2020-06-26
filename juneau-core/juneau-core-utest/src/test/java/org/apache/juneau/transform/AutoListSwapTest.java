@@ -14,7 +14,7 @@ package org.apache.juneau.transform;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;

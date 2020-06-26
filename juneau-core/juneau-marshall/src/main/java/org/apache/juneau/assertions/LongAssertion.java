@@ -15,7 +15,7 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against arbitrary POJOs.
+ * Used for assertion calls against longs.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -32,16 +32,6 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	 * @param l The object being wrapped.
 	 * @return A new {@link LongAssertion} object.
 	 */
-	public static LongAssertion assertLong(Long l) {
-		return new LongAssertion(l);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param l The object being wrapped.
-	 * @return A new {@link LongAssertion} object.
-	 */
 	public static LongAssertion create(Long l) {
 		return new LongAssertion(l);
 	}
@@ -51,7 +41,7 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	 *
 	 * @param l The object being wrapped.
 	 */
-	protected LongAssertion(Long l) {
+	public LongAssertion(Long l) {
 		super(l, null);
 	}
 

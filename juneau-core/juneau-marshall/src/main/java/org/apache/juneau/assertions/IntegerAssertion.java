@@ -15,7 +15,7 @@ package org.apache.juneau.assertions;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for assertion calls against arbitrary POJOs.
+ * Used for assertion calls against integers.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -32,16 +32,6 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	 * @param integer The object being wrapped.
 	 * @return A new {@link IntegerAssertion} object.
 	 */
-	public static IntegerAssertion assertInteger(Integer integer) {
-		return new IntegerAssertion(integer);
-	}
-
-	/**
-	 * Creator.
-	 *
-	 * @param integer The object being wrapped.
-	 * @return A new {@link IntegerAssertion} object.
-	 */
 	public static IntegerAssertion create(Integer integer) {
 		return new IntegerAssertion(integer);
 	}
@@ -51,7 +41,7 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	 *
 	 * @param integer The object being wrapped.
 	 */
-	protected IntegerAssertion(Integer integer) {
+	public IntegerAssertion(Integer integer) {
 		super(integer, null);
 	}
 
