@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.io.*;
@@ -48,27 +49,10 @@ public class OpenApiPartParserTest {
 
 	@Test
 	public void a01_inputValidations_nullInput() throws Exception {
-		HttpPartSchema s = T_NONE;
-		assertNull(parse(s, null, String.class));
-
-		s = tNone().required(false).build();
-		assertNull(parse(s, null, String.class));
-
-		s = tNone().required().build();
-		try {
-			parse(s, null, String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("No value specified.", e.getMessage());
-		}
-
-		s = tNone().required(true).build();
-		try {
-			parse(s, null, String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("No value specified.", e.getMessage());
-		}
+		assertNull(parse(T_NONE, null, String.class));
+		assertNull(parse(tNone().required(false).build(), null, String.class));
+		assertThrown(()->{return parse(tNone().required().build(), null, String.class);}).contains("No value specified.");
+		assertThrown(()->{return parse(tNone().required(true).build(), null, String.class);}).contains("No value specified.");
 	}
 
 	@Test
@@ -80,80 +64,39 @@ public class OpenApiPartParserTest {
 		s = tNone().allowEmptyValue().build();
 		assertEquals("", parse(s, "", String.class));
 
-		s = tNone().allowEmptyValue(false).build();
-		try {
-			parse(s, "", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Empty value not allowed.", e.getMessage());
-		}
-
-		try {
-			parse(s, "", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Empty value not allowed.", e.getMessage());
-		}
+		assertThrown(()->{return parse(tNone().allowEmptyValue(false).build(), "", String.class);}).contains("Empty value not allowed.");
 
 		assertEquals(" ", parse(s, " ", String.class));
 	}
 
 	@Test
 	public void a03_inputValidations_pattern() throws Exception {
-		HttpPartSchema s = tNone().pattern("x.*").allowEmptyValue().build();
+		final HttpPartSchema s = tNone().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", parse(s, "x", String.class));
 		assertEquals("xx", parse(s, "xx", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		try {
-			parse(s, "y", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getMessage());
-		}
-
-		try {
-			parse(s, "", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getMessage());
-		}
+		assertThrown(()->{return parse(s, "y", String.class);}).contains("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{return parse(s, "", String.class);}).contains("Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
-		s = tNone().pattern("").allowEmptyValue().build();
-		assertEquals("x", parse(s, "x", String.class));
-		s = tNone().pattern(null).allowEmptyValue().build();
-		assertEquals("x", parse(s, "x", String.class));
+		assertEquals("x", parse(tNone().pattern("").allowEmptyValue().build(), "x", String.class));
+		assertEquals("x", parse(tNone().pattern(null).allowEmptyValue().build(), "x", String.class));
 	}
 
 	@Test
 	public void a04_inputValidations_enum() throws Exception {
-		HttpPartSchema s = tNone()._enum("foo").allowEmptyValue().build();
+		final HttpPartSchema s = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		try {
-			parse(s, "bar", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['foo']", e.getMessage());
-		}
+		assertThrown(()->{return parse(s, "bar", String.class);}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{return parse(s, "", String.class);}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 
-		try {
-			parse(s, "", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['foo']", e.getMessage());
-		}
-
-		s = tNone()._enum((Set<String>)null).build();
-		assertEquals("foo", parse(s, "foo", String.class));
-		s = tNone()._enum((Set<String>)null).allowEmptyValue().build();
-		assertEquals("foo", parse(s, "foo", String.class));
-
-		s = tNone()._enum("foo","foo").build();
-		assertEquals("foo", parse(s, "foo", String.class));
+		assertEquals("foo", parse(tNone()._enum((Set<String>)null).build(), "foo", String.class));
+		assertEquals("foo", parse(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
+		assertEquals("foo", parse(tNone()._enum("foo","foo").build(), "foo", String.class));
 	}
 
 	@Test
@@ -164,40 +107,11 @@ public class OpenApiPartParserTest {
 		assertEquals("1", parse(s, "1", String.class));
 		assertEquals("12", parse(s, "12", String.class));
 
-		try {
-			parse(s, "", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Minimum length of value not met.", e.getMessage());
-		}
-
-		try {
-			parse(s, "123", String.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Maximum length of value exceeded.", e.getMessage());
-		}
-
-		try {
-			s = tNone().minLength(2l).maxLength(1l).build();
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("maxLength cannot be less than minLength."));
-		}
-
-		try {
-			s = tNone().minLength(-2l).build();
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("minLength cannot be less than zero."));
-		}
-
-		try {
-			s = tNone().maxLength(-2l).build();
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("maxLength cannot be less than zero."));
-		}
+		assertThrown(()->{return parse(s, "", String.class);}).contains("Minimum length of value not met.");
+		assertThrown(()->{return parse(s, "123", String.class);}).contains("Maximum length of value exceeded.");
+		assertThrown(()->{return tNone().minLength(2l).maxLength(1l).build();}).contains("maxLength cannot be less than minLength.");
+		assertThrown(()->{return tNone().minLength(-2l).build();}).contains("minLength cannot be less than zero.");
+		assertThrown(()->{return tNone().maxLength(-2l).build();}).contains("maxLength cannot be less than zero.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -82,12 +83,8 @@ public class BeanConfigTest {
 			fail("Bean Map reverse equality failed for: " + p1 + " / " + pm1 + " / " + m1);
 
 		BeanMap bm1 = null;
-		try {
-			bm1 = session.newBeanMap(Address.class);
-			fail("Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.");
-		} catch (BeanRuntimeException e) {
-			// Good.
-		}
+		// Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
+		assertThrown(()->{ return session.newBeanMap(Address.class);}).isType(BeanRuntimeException.class);
 		bm1 = session.toBeanMap(new Address("street", "city", "state", "zip"));
 
 		BeanMap bm2 = session.newBeanMap(java.lang.Integer.class);

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -43,12 +44,7 @@ public class ClassUtilsTest {
 
 		FB t2 = null;
 
-		try {
-			t2 = ClassUtils.castOrCreate(FB.class, FB.class, true);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB", e.getMessage());
-		}
+		assertThrown(()->{return ClassUtils.castOrCreate(FB.class, FB.class, true);}).contains("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB");
 
 		t2 = ClassUtils.castOrCreate(FB.class, FB.class, true, "foo");
 		assertEquals(1, t2.c);

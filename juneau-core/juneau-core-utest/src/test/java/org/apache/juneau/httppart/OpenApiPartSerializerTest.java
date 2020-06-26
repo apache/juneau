@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.lang.String.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.util.*;
@@ -41,112 +42,49 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void a01_outputValidations_nullOutput() throws Exception {
-		HttpPartSchema ps = T_NONE;
-		assertEquals("null", serialize(ps, null));
-
-		ps = tNone().required(false).build();
-		assertEquals("null", serialize(ps, null));
-
-		ps = tNone().required().build();
-		try {
-			serialize(ps, null);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Required value not provided.", e.getMessage());
-		}
-
-		ps = tNone().required(true).build();
-		try {
-			serialize(ps, null);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Required value not provided.", e.getMessage());
-		}
+		assertEquals("null", serialize(T_NONE, null));
+		assertEquals("null", serialize(tNone().required(false).build(), null));
+		assertThrown(()->{return serialize(tNone().required().build(), null);}).contains("Required value not provided.");
+		assertThrown(()->{return serialize(tNone().required(true).build(), null);}).contains("Required value not provided.");
 	}
 
 	@Test
 	public void a02_outputValidations_emptyOutput() throws Exception {
-
-		HttpPartSchema ps = tNone().allowEmptyValue().build();
-		assertEquals("", serialize(ps, ""));
-
-		ps = tNone().allowEmptyValue().build();
-		assertEquals("", serialize(ps, ""));
-
-		ps = tNone().allowEmptyValue(false).build();
-		try {
-			serialize(ps, "");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Empty value not allowed.", e.getMessage());
-		}
-
-		try {
-			serialize(ps, "");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Empty value not allowed.", e.getMessage());
-		}
-
-		assertEquals(" ", serialize(ps, " "));
+		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
+		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
+		assertThrown(()->{return serialize(tNone().allowEmptyValue(false).build(), "");}).contains("Empty value not allowed.");
+		assertThrown(()->{return serialize(tNone().allowEmptyValue(false).build(), "");}).contains("Empty value not allowed.");
+		assertEquals(" ", serialize(tNone().allowEmptyValue(false).build(), " "));
 	}
 
 	@Test
 	public void a03_outputValidations_pattern() throws Exception {
-		HttpPartSchema ps = tNone().pattern("x.*").allowEmptyValue().build();
+		final HttpPartSchema ps = tNone().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", serialize(ps, "x"));
 		assertEquals("xx", serialize(ps, "xx"));
 		assertEquals("null", serialize(ps, null));
 
-		try {
-			serialize(ps, "y");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getMessage());
-		}
-
-		try {
-			serialize(ps, "");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match expected pattern.  Must match pattern: x.*", e.getMessage());
-		}
+		assertThrown(()->{return serialize(ps, "y");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{return serialize(ps, "");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
-		ps = tNone().pattern("").allowEmptyValue().build();
-		assertEquals("x", serialize(ps, "x"));
-		ps = tNone().pattern(null).allowEmptyValue().build();
-		assertEquals("x", serialize(ps, "x"));
+		assertEquals("x", serialize(tNone().pattern("").allowEmptyValue().build(), "x"));
+		assertEquals("x", serialize(tNone().pattern(null).allowEmptyValue().build(), "x"));
 	}
 
 	@Test
 	public void a04_outputValidations_enum() throws Exception {
-		HttpPartSchema ps = tNone()._enum("foo").allowEmptyValue().build();
+		final HttpPartSchema ps = tNone()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("null", serialize(ps, null));
 
-		try {
-			serialize(ps, "bar");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['foo']", e.getMessage());
-		}
+		assertThrown(()->{return serialize(ps, "bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{return serialize(ps, "");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 
-		try {
-			serialize(ps, "");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Value does not match one of the expected values.  Must be one of the following: ['foo']", e.getMessage());
-		}
-
-		ps = tNone()._enum((Set<String>)null).build();
-		assertEquals("foo", serialize(ps, "foo"));
-		ps = tNone()._enum((Set<String>)null).allowEmptyValue().build();
-		assertEquals("foo", serialize(ps, "foo"));
-
-		ps = tNone()._enum("foo","foo").build();
-		assertEquals("foo", serialize(ps, "foo"));
+		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).build(), "foo"));
+		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo"));
+		assertEquals("foo", serialize(tNone()._enum("foo","foo").build(), "foo"));
 	}
 
 	@Test
@@ -157,19 +95,8 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("12", serialize(ps, "12"));
 
-		try {
-			serialize(ps, "");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Minimum length of value not met.", e.getMessage());
-		}
-
-		try {
-			serialize(ps, "123");
-			fail();
-		} catch (Exception e) {
-			assertEquals("Maximum length of value exceeded.", e.getMessage());
-		}
+		assertThrown(()->{return serialize(ps, "");}).contains("Minimum length of value not met.");
+		assertThrown(()->{return serialize(ps, "123");}).contains("Maximum length of value exceeded.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

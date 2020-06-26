@@ -13,6 +13,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -113,11 +114,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		try {
-			p = UrlEncodingParser.DEFAULT;
-			p.parse(in, B.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return UrlEncodingParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -142,26 +143,9 @@ public class StringUtilsTest {
 		assertTrue(isNumeric("0x123e1"));
 		assertEquals(0x123e1, parseNumber("0x123e1", null));
 
-		try {
-			parseNumber("x", Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getCause() instanceof NumberFormatException);
-		}
-
-		try {
-			parseNumber("x", null);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getCause() instanceof NumberFormatException);
-		}
-
-		try {
-			parseNumber("x", BadNumber.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getLocalizedMessage().startsWith("Unsupported Number type"));
-		}
+		assertThrown(()->{return parseNumber("x", Number.class);});
+		assertThrown(()->{return parseNumber("x", null);});
+		assertThrown(()->{return parseNumber("x", BadNumber.class);}).contains("Unsupported Number type");
 	}
 
 	@SuppressWarnings("serial")
@@ -281,17 +265,11 @@ public class StringUtilsTest {
 
 		s = String.valueOf("214748364x");
 		assertFalse(isNumeric(s));
-		try {
-			parseNumber(s, Number.class);
-		} catch (ParseException e) {}
+		assertThrown(()->{return parseNumber(String.valueOf("214748364x"), Number.class);}).isType(ParseException.class);
 
 		s = String.valueOf("2147483640x");
 		assertFalse(isNumeric(s));
-		try {
-			parseNumber(s, Long.class);
-		} catch (ParseException e) {}
-
-
+		assertThrown(()->{return parseNumber(String.valueOf("2147483640x"), Long.class);}).isType(ParseException.class);
 	}
 
 	//====================================================================================================
@@ -628,19 +606,8 @@ public class StringUtilsTest {
 		s = "\u0000\uffff";
 		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
 
-		try {
-			base64Decode("a");
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Invalid BASE64 string length.  Must be multiple of 4.", e.getLocalizedMessage());
-			// OK.
-		}
-		try {
-			base64Decode("aaa");
-			fail();
-		} catch (IllegalArgumentException e) {
-			// OK.
-		}
+		assertThrown(()->{return base64Decode("a");}).contains("Invalid BASE64 string length.  Must be multiple of 4.");
+		assertThrown(()->{return base64Decode("aaa");}).isType(IllegalArgumentException.class);
 	}
 
 	//====================================================================================================
@@ -678,7 +645,6 @@ public class StringUtilsTest {
 
 		TestUtils.setTimeZone("GMT");
 		try {
-
 			assertEquals("'2000-01-01T00:00:00'", s.serialize(parseIsoDate("2000")));
 			assertEquals("'2000-02-01T00:00:00'", s.serialize(parseIsoDate("2000-02")));
 			assertEquals("'2000-02-03T00:00:00'", s.serialize(parseIsoDate("2000-02-03")));

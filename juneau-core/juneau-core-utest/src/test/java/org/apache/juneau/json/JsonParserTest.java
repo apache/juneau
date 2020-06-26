@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -36,10 +37,7 @@ public class JsonParserTest {
 	//====================================================================================================
 	@Test
 	public void testInvalidJson() {
-		try {
-			p.parse("{\na:1,\nb:xxx\n}", Object.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return p.parse("{\na:1,\nb:xxx\n}", Object.class);}).isType(ParseException.class);
 	}
 
 	@Test
@@ -55,57 +53,32 @@ public class JsonParserTest {
 		String s;
 
 		// Strict mode does not allow unquoted values.
-		try {
-			sp.parse(json, String.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Did not find quote character"));
-		}
+		assertThrown(()->{return sp.parse("123", String.class);}).contains("Did not find quote character");
 
 		s = p.parse(json, String.class);
 		assertEquals("123", s);
 
 		json = " 123 ";
 		// Strict mode does not allow unquoted values.
-		try {
-			sp.parse(json, String.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Did not find quote character"));
-		}
+		assertThrown(()->{return sp.parse(" 123 ", String.class);}).contains("Did not find quote character");
 
 		s = p.parse(json, String.class);
 		assertEquals("123", s);
 
 		json = "{\"fa\":123}";
-		try {
-			sp.parse(json, A.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Did not find quote character"));
-		}
+		assertThrown(()->{return sp.parse("{\"fa\":123}", A.class);}).contains("Did not find quote character");
 
 		A a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
 		json = " { \"fa\" : 123 } ";
-		try {
-			sp.parse(json, A.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Did not find quote character"));
-		}
+		assertThrown(()->{return sp.parse(" { \"fa\" : 123 } ", A.class);}).contains("Did not find quote character");
 
 		a = p.parse(json, A.class);
 		assertEquals("123", a.fa);
 
 		json = "'123'";
-		try {
-			sp.parse(json, String.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Invalid quote character"));
-		}
+		assertThrown(()->{return sp.parse("'123'", String.class);}).contains("Invalid quote character");
 	}
 
 	public static class A {
@@ -115,68 +88,13 @@ public class JsonParserTest {
 	@Test
 	public void testStrictMode() throws Exception {
 		JsonParser p = sp;
-
-		// Missing attribute values.
-		String json = "{\"foo\":,\"bar\":}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("Missing value detected."));
-		}
-
-		// Single quoted values.
-		json = "{\"foo\":'bar'}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
-		}
-
-		// Single quoted attribute name.
-		json = "{'foo':\"bar\"}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("Invalid quote character"));
-		}
-
-		// Unquoted attribute name.
-		json = "{foo:\"bar\"}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("Unquoted attribute detected."));
-		}
-
-		// Concatenated string
-		json = "{\"foo\":\"bar\"+\"baz\"}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
-		}
-
-		// Concatenated string 2
-		json = "{\"foo\":\"bar\" + \"baz\"}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("String concatenation detected."));
-		}
-
-		json = "{\"foo\":/*comment*/\"bar\"}";
-		try {
-			p.parse(json, OMap.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getRootCause().getMessage().contains("Javascript comment detected."));
-		}
+		assertThrown(()->{return p.parse("{\"foo\":,\"bar\":}", OMap.class);}).contains("Missing value detected.");
+		assertThrown(()->{return p.parse("{\"foo\":'bar'}", OMap.class);}).contains("Invalid quote character");
+		assertThrown(()->{return p.parse("{'foo':\"bar\"}", OMap.class);}).contains("Invalid quote character");
+		assertThrown(()->{return p.parse("{foo:\"bar\"}", OMap.class);}).contains("Unquoted attribute detected.");
+		assertThrown(()->{return p.parse("{\"foo\":\"bar\"+\"baz\"}", OMap.class);}).contains("String concatenation detected.");
+		assertThrown(()->{return p.parse("{\"foo\":\"bar\" + \"baz\"}", OMap.class);}).contains("String concatenation detected.");
+		assertThrown(()->{return p.parse("{\"foo\":/*comment*/\"bar\"}", OMap.class);}).contains("Javascript comment detected.");
 	}
 
 	/**
@@ -225,12 +143,7 @@ public class JsonParserTest {
 		r = p1.parse(s, Number.class);
 		assertEquals(0, r.intValue());
 		assertTrue(r instanceof Integer);
-		try {
-			r = p2.parse(s, Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getMessage().contains("Invalid JSON number"));
-		}
+		assertThrown(()->{return p2.parse("\"\"", Number.class);}).contains("Invalid JSON number");
 
 		// Either should allow 0 or -0.
 		s = "0";
@@ -254,44 +167,24 @@ public class JsonParserTest {
 		r = p1.parse(s, Number.class);
 		assertEquals(0123, r.intValue());
 		assertTrue(r instanceof Integer);
-		try {
-			r = p2.parse(s, Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getMessage().contains("Invalid JSON number"));
-		}
+		assertThrown(()->{return p2.parse("0123", Number.class);}).contains("Invalid JSON number");
 		s = "-0123";
 		r = p1.parse(s, Number.class);
 		assertEquals(-0123, r.intValue());
 		assertTrue(r instanceof Integer);
-		try {
-			r = p2.parse(s, Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getMessage().contains("Invalid JSON number"));
-		}
+		assertThrown(()->{return p2.parse("-0123", Number.class);}).contains("Invalid JSON number");
 
 		// Lax allows 0x123 and -0x123, strict does not.
 		s = "0x123";
 		r = p1.parse(s, Number.class);
 		assertEquals(0x123, r.intValue());
 		assertTrue(r instanceof Integer);
-		try {
-			r = p2.parse(s, Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getMessage().contains("Invalid JSON number"));
-		}
+		assertThrown(()->{return p2.parse("0x123", Number.class);}).contains("Invalid JSON number");
 		s = "-0x123";
 		r = p1.parse(s, Number.class);
 		assertEquals(-0x123, r.intValue());
 		assertTrue(r instanceof Integer);
-		try {
-			r = p2.parse(s, Number.class);
-			fail();
-		} catch (ParseException e) {
-			assertTrue(e.getMessage().contains("Invalid JSON number"));
-		}
+		assertThrown(()->{return p2.parse("-0x123", Number.class);}).contains("Invalid JSON number");
 	}
 
 	//====================================================================================================
@@ -307,12 +200,7 @@ public class JsonParserTest {
 		C c = p1.parse(s, C.class);
 		assertEquals("f=foobar", c.toString());
 
-		try {
-			p2.parse(s, C.class);
-			fail();
-		} catch (ParseException e) {
-			// OK
-		}
+		assertThrown(()->{return p2.parse(s, C.class);}).isType(ParseException.class);
 	}
 
 	public static class C {
@@ -341,12 +229,7 @@ public class JsonParserTest {
 		r = reader("{foo:'bar'}{baz:'qux'}");
 		x = p.parse(r, OMap.class);
 		assertObject(x).json().is("{foo:'bar'}");
-		try {
-			x = p.parse(r, OMap.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Reader is closed"));
-		}
+		assertThrown(()->{return p.parse(r, OMap.class);}).contains("Reader is closed");
 	}
 
 	//====================================================================================================

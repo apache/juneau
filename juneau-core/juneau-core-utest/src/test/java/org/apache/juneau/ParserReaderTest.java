@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -49,15 +50,10 @@ public class ParserReaderTest {
 		r = read(pr);
 		assertEquals(t, r);
 
-		pr = createParserReader(t);
-		pr.read();
-		pr.unread();
-		try {
-			pr.unread();
-			fail();
-		} catch (IOException e) {
-			// Good
-		}
+		ParserReader pr2 = createParserReader(t);
+		pr2.read();
+		pr2.unread();
+		assertThrown(()->{return pr2.unread();}).isType(IOException.class);
 	}
 
 	//====================================================================================================

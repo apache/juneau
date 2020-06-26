@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -44,19 +45,22 @@ public class StringBuilderWriterTest {
 		assertEquals("abcabcbbnullnullnull", sbw.toString());
 
 		char[] buff = "abc".toCharArray();
-		sbw = new StringBuilderWriter();
-		sbw.write(buff, 0, buff.length);
-		assertEquals("abc", sbw.toString());
-		sbw.write(buff, 0, 0);
-		assertEquals("abc", sbw.toString());
+		StringBuilderWriter sbw2 = new StringBuilderWriter();
+		sbw2.write(buff, 0, buff.length);
+		assertEquals("abc", sbw2.toString());
+		sbw2.write(buff, 0, 0);
+		assertEquals("abc", sbw2.toString());
 
-		try { sbw.write(buff, -1, buff.length); fail(); } catch (IndexOutOfBoundsException e) {}
-		try { sbw.write(buff, buff.length+1, 0); fail(); } catch (IndexOutOfBoundsException e) {}
-		try { sbw.write(buff, buff.length-1, 2); fail(); } catch (IndexOutOfBoundsException e) {}
-		try { sbw.write(buff, 0, buff.length+1); fail(); } catch (IndexOutOfBoundsException e) {}
-		try { sbw.write(buff, 0, -1); fail(); } catch (IndexOutOfBoundsException e) {}
+		assertThrown(()->{ sbw2.write(buff, -1, buff.length); return null;}).isType(IndexOutOfBoundsException.class);
+		assertThrown(()->{ sbw2.write(buff, buff.length+1, 0); return null;}).isType(IndexOutOfBoundsException.class);
+		assertThrown(()->{ sbw2.write(buff, buff.length-1, 2); return null;}).isType(IndexOutOfBoundsException.class);
+		assertThrown(()->{ sbw2.write(buff, 0, buff.length+1); return null;}).isType(IndexOutOfBoundsException.class);
+		assertThrown(()->{ sbw2.write(buff, 0, -1); return null;}).isType(IndexOutOfBoundsException.class);
 
 		sbw.flush();
 		sbw.close();
+
+		sbw2.flush();
+		sbw2.close();
 	}
 }

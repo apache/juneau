@@ -14,6 +14,7 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -194,11 +195,7 @@ public class FieldInfoTest {
 
 	@Test
 	public void isAll_invalidFlag() {
-		try {
-			c_deprecated.isAll(HAS_PARAMS);
-		} catch (RuntimeException e) {
-			assertEquals("Invalid flag for field: HAS_PARAMS", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c_deprecated.isAll(HAS_PARAMS);}).contains("Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test
@@ -224,11 +221,7 @@ public class FieldInfoTest {
 
 	@Test
 	public void isAny_invalidFlag() {
-		try {
-			c_deprecated.isAny(HAS_PARAMS);
-		} catch (RuntimeException e) {
-			assertEquals("Invalid flag for field: HAS_PARAMS", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c_deprecated.isAny(HAS_PARAMS);}).contains("Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test

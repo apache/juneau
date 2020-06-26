@@ -15,6 +15,7 @@ package org.apache.juneau.oapi;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.time.*;
@@ -24,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -603,12 +603,7 @@ public class OpenApiTest {
 	public void f01_tArray_String() throws Exception {
 		String in = "123";
 		HttpPartSchema ps = T_ARRAY;
-		try {
-			serialize(ps, in);
-			fail();
-		} catch (SerializeException e) {
-			assertEquals("Input is not a valid array type: java.lang.String", e.getMessage());
-		}
+		assertThrown(()->{return serialize(ps, in);}).contains("Input is not a valid array type: java.lang.String");
 	}
 
 	@Test

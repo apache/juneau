@@ -354,29 +354,21 @@ public class MethodInfoTest {
 		e_a3 = ofm(E.class, "a3");
 
 	@Test
-	public void invoke() {
-		try {
-			E e = new E();
-			e_a1.invoke(e, "foo");
-			assertEquals("foo", e.f);
-			e_a1.invoke(e, (CharSequence)null);
-			assertNull(e.f);
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+	public void invoke() throws Exception {
+		E e = new E();
+		e_a1.invoke(e, "foo");
+		assertEquals("foo", e.f);
+		e_a1.invoke(e, (CharSequence)null);
+		assertNull(e.f);
 	}
 
 	@Test
-	public void invokeFuzzy() {
-		try {
-			E e = new E();
-			e_a1.invokeFuzzy(e, "foo", 123);
-			assertEquals("foo", e.f);
-			e_a1.invokeFuzzy(e, 123, "bar");
-			assertEquals("bar", e.f);
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+	public void invokeFuzzy() throws Exception {
+		E e = new E();
+		e_a1.invokeFuzzy(e, "foo", 123);
+		assertEquals("foo", e.f);
+		e_a1.invokeFuzzy(e, 123, "bar");
+		assertEquals("bar", e.f);
 	}
 
 	@Test

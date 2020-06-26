@@ -13,8 +13,8 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
@@ -104,12 +104,7 @@ public class SwaggerBuilderTest {
 	public void testHeaderInfoStrict() {
 		HeaderInfo t = headerInfoStrict("string");
 		assertObject(t).json().is("{type:'string'}");
-
-		try {
-			headerInfoStrict("foo");
-		} catch (Exception e) {
-			assertEquals("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return headerInfoStrict("foo");}).contains("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	/**
@@ -155,12 +150,7 @@ public class SwaggerBuilderTest {
 	public void testItemsStrict() {
 		Items t = itemsStrict("string");
 		assertObject(t).json().is("{type:'string'}");
-
-		try {
-			itemsStrict("foo");
-		} catch (Exception e) {
-			assertEquals("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return itemsStrict("foo");}).contains("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	/**
@@ -215,12 +205,7 @@ public class SwaggerBuilderTest {
 	public void testParameterInfoStrict() {
 		ParameterInfo t = parameterInfoStrict("query", "bar");
 		assertObject(t).json().is("{'in':'query',name:'bar'}");
-
-		try {
-			parameterInfoStrict("foo", "bar");
-		} catch (Exception e) {
-			assertEquals("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return parameterInfoStrict("foo", "bar");}).contains("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
 	}
 
 	/**

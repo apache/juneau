@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -186,18 +187,8 @@ public class ContextCacheTest {
 		PropertyStoreBuilder psb = PropertyStore.create();
 		PropertyStore ps = psb.build();
 
-		try {
-			ContextCache.INSTANCE.create(D1.class, ps);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'", e.getLocalizedMessage());
-		}
-		try {
-			ContextCache.INSTANCE.create(D2.class, ps);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return ContextCache.INSTANCE.create(D1.class, ps);}).contains("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'");
+		assertThrown(()->{return ContextCache.INSTANCE.create(D2.class, ps);}).contains("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'");
 	}
 
 	public static class D1 extends A {

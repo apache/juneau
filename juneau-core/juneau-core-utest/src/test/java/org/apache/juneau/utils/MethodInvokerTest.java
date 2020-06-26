@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -53,15 +54,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = new MethodInvoker(m, mes);
 
 		A a = new A();
-		try {
-			mi.invoke(a);
-		} catch (Exception e) {}
-		try {
-			mi.invoke(a);
-		} catch (Exception e) {}
-		try {
-			mi.invoke(a);
-		} catch (Exception e) {}
+		assertThrown(()->{return mi.invoke(a);});
+		assertThrown(()->{return mi.invoke(a);});
+		assertThrown(()->{return mi.invoke(a);});
 
 		assertObject(mes).json().matchesSimple("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}
@@ -74,15 +69,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = new MethodInvoker(m, mes);
 
 		A a = new A();
-		try {
-			mi.invoke(a, "x");
-		} catch (Exception e) {}
-		try {
-			mi.invoke(a);
-		} catch (Exception e) {}
-		try {
-			mi.invoke(a, 1, "x");
-		} catch (Exception e) {}
+		assertThrown(()->{return mi.invoke(a, "x");});
+		assertThrown(()->{return mi.invoke(a);});
+		assertThrown(()->{return mi.invoke(a, 1, "x");});
 
 		assertObject(mes).json().matchesSimple("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}

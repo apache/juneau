@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -148,11 +149,7 @@ public class CommonParserTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		try {
-			p = RdfParser.create().xml().build();
-			p.parse(in, B.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return RdfParser.create().xml().build().parse(in, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

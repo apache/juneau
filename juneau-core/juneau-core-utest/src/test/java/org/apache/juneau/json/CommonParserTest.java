@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -72,13 +73,9 @@ public class CommonParserTest {
 		assertNull(p.parse("   /*foo*/   ", Object.class));
 		assertNull(p.parse("   //foo   ", Object.class));
 
-		try {
-			jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
-			assertEquals("value", jl.getMap(0).getString("attribute"));
-			assertEquals("value", jl.getMap(1).getString("attribute"));
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+		jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		A1 b = new A1();
 		A2 tl = new A2();
@@ -124,11 +121,7 @@ public class CommonParserTest {
 		assertEquals(b.a, 1);
 		assertEquals(b.b, 2);
 
-		try {
-			p = JsonParser.DEFAULT;
-			p.parse(in, B.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return JsonParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

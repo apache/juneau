@@ -13,13 +13,13 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.StringAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.junit.*;
@@ -271,35 +271,20 @@ public class ConfigMapTest {
 
 		for (String t : test) {
 			ConfigStore s = initStore("Foo.cfg", t);
-			try {
-				s.getMap("Foo.cfg");
-				fail();
-			} catch (ConfigException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
-			}
+			assertThrown(()->{return s.getMap("Foo.cfg");}).contains("Invalid section name");
 		}
 	}
 
 	@Test
 	public void testDuplicateSectionNames() throws Exception {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "[S1]");
-		try {
-			s.getMap("Foo.cfg");
-			fail();
-		} catch (ConfigException e) {
-			assertEquals("Duplicate section found in configuration:  [S1]", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return s.getMap("Foo.cfg");}).contains("Duplicate section found in configuration:  [S1]");
 	}
 
 	@Test
 	public void testDuplicateEntryNames() throws Exception {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "foo=v1", "foo=v2");
-		try {
-			s.getMap("Foo.cfg");
-			fail();
-		} catch (ConfigException e) {
-			assertEquals("Duplicate entry found in section [S1] of configuration:  foo", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return s.getMap("Foo.cfg");}).contains("Duplicate entry found in section [S1] of configuration:  foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -650,12 +635,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			try {
-				cm.setSection(t, null);
-				fail();
-			} catch (IllegalArgumentException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
-			}
+			assertThrown(()->{return cm.setSection(t, null);}).contains("Invalid section name");
 		}
 	}
 
@@ -712,12 +692,7 @@ public class ConfigMapTest {
 		cm.removeSection("S3");
 		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 
-		try {
-			cm.removeSection(null);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Invalid section name: 'null'", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return cm.removeSection(null);}).contains("Invalid section name: 'null'");
 	}
 
 	@Test
@@ -891,12 +866,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			try {
-				cm.setEntry(t, "k1", "foo", null, null, null);
-				fail();
-			} catch (IllegalArgumentException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name:"));
-			}
+			assertThrown(()->{return cm.setEntry(t, "k1", "foo", null, null, null);}).contains("Invalid section name:");
 		}
 	}
 
@@ -917,12 +887,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			try {
-				cm.setEntry("S1", t, "foo", null, null, null);
-				fail();
-			} catch (IllegalArgumentException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid key name"));
-			}
+			assertThrown(()->{return cm.setEntry("S1", t, "foo", null, null, null);}).contains("Invalid key name");
 		}
 	}
 
@@ -1087,12 +1052,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			try {
-				cm.setEntry(t, "k1", "foo", null, null, null);
-				fail();
-			} catch (IllegalArgumentException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid section name"));
-			}
+			assertThrown(()->{return cm.setEntry(t, "k1", "foo", null, null, null);}).contains("Invalid section name");
 		}
 	}
 
@@ -1113,12 +1073,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			try {
-				cm.setEntry("S1", t, "foo", null, null, null);
-				fail();
-			} catch (IllegalArgumentException e) {
-				assertTrue(e.getLocalizedMessage().startsWith("Invalid key name"));
-			}
+			assertThrown(()->{return cm.setEntry("S1", t, "foo", null, null, null);}).contains("Invalid key name");
 		}
 	}
 
@@ -1173,19 +1128,8 @@ public class ConfigMapTest {
 		// This is okay.
 		cm.setEntry("S1", "k1", "v1", "", null, null);
 
-		try {
-			cm.setEntry("S1", "k1", "v1", "X", null, null);
-			fail();
-		} catch (ConfigException e) {
-			assertEquals("Invalid modifiers: X", e.getLocalizedMessage());
-		}
-
-		try {
-			cm.setEntry("S1", "k1", "v1", " ", null, null);
-			fail();
-		} catch (ConfigException e) {
-			assertEquals("Invalid modifiers:  ", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return cm.setEntry("S1", "k1", "v1", "X", null, null);}).contains("Invalid modifiers: X");
+		assertThrown(()->{return cm.setEntry("S1", "k1", "v1", " ", null, null);}).contains("Invalid modifiers:  ");
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {

@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -53,20 +54,20 @@ public class MultiIterableTest {
 		mi = new MultiIterable();
 		assertObject(mi.iterator()).json().is("[]");
 
-		try { mi.append(null); fail(); } catch (IllegalArgumentException e) {}
+		assertThrown(()->{return new MultiIterable().append(null);}).isType(IllegalArgumentException.class);
 
 		mi = new MultiIterable(l1.iterator());
-		try { mi.iterator().next(); fail(); } catch (NoSuchElementException e) {}
+		assertThrown(()->{return new MultiIterable(l1.iterator()).iterator().next();}).isType(NoSuchElementException.class);
 
 		mi = new MultiIterable(l1.iterator());
-		Iterator i = mi.iterator();
+		final Iterator i = mi.iterator();
 		assertFalse(i.hasNext());
-		try { i.remove(); fail(); } catch (NoSuchElementException e) {}
+		assertThrown(()->{i.remove(); return null;}).isType(NoSuchElementException.class);
 
 		mi = new MultiIterable(l2.iterator());
-		i = mi.iterator();
-		assertTrue(i.hasNext());
-		assertEquals("a", i.next());
-		i.remove();
+		Iterator i2 = mi.iterator();
+		assertTrue(i2.hasNext());
+		assertEquals("a", i2.next());
+		i2.remove();
 	}
 }

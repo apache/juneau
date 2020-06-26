@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -223,12 +224,7 @@ public class StringVarResolverTest {
 
 		// Should reject names with characters outside A-Za-z
 		for (Class<?> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
-			try {
-				vrb.vars(c);
-				fail();
-			} catch (RuntimeException e) {
-				// OK.
-			}
+			assertThrown(()->{return vrb.vars(c);});
 		}
 
 		VarResolver vr = vrb.build();

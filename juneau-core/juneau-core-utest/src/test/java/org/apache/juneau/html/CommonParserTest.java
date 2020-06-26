@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -103,12 +104,7 @@ public class CommonParserTest {
 		t = p.parse(in, B.class);
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
-
-		try {
-			p = HtmlParser.DEFAULT;
-			p.parse(in, B.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return HtmlParser.DEFAULT.parse(in, B.class);});
 	}
 
 	public static class B {

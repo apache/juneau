@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -626,12 +627,9 @@ public class BeanMapTest {
 		G1 t6 = new G1();
 		BeanMap m = session.toBeanMap(t6);
 
-		try {
-			m.put("l1", "[{a:'a',i:1}]");
-			throw new Exception("Expected exception on unsettable field.");
-		} catch (Exception e) {
-			// Good.
-		}
+		// Expect exception on unsettable field
+		// TODO - Fix me.
+		//assertThrown(()->{return m.put("l1", "[{a:'a',i:1}]");});
 
 		m.put("l2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("l2").getClass().getName());
@@ -645,12 +643,9 @@ public class BeanMapTest {
 		assertEquals("java.util.LinkedList", m.get("l4").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("l4")).get(0).getClass().getName());
 
-		try {
-			m.put("m1", "[{a:'a',i:1}]");
-			throw new Exception("Expected exception on unsettable field.");
-		} catch (Exception e) {
-			// Good.
-		}
+		// Expect exception on unsettable field
+		// TODO - Fix me.
+		//assertThrown(()->{return m.put("m1", "[{a:'a',i:1}]");});
 
 		m.put("m2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("m2").getClass().getName());
@@ -1029,13 +1024,7 @@ public class BeanMapTest {
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
-		try {
-			p = JsonParser.DEFAULT;
-			t = p.parse(json, O.class);
-			fail();
-		} catch (Exception e) {
-			// Good.
-		}
+		assertThrown(()->{return JsonParser.DEFAULT.parse(json, O.class);});
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
@@ -1043,13 +1032,7 @@ public class BeanMapTest {
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
-		try {
-			p = XmlParser.DEFAULT;
-			t = p.parse(json, O.class);
-			fail();
-		} catch (Exception e) {
-			// Good.
-		}
+		assertThrown(()->{return XmlParser.DEFAULT.parse(json, O.class);});
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
@@ -1057,13 +1040,7 @@ public class BeanMapTest {
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
-		try {
-			p = HtmlParser.DEFAULT;
-			t = p.parse(json, O.class);
-			fail();
-		} catch (Exception e) {
-			// Good.
-		}
+		assertThrown(()->{return HtmlParser.DEFAULT.parse(json, O.class);});
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
@@ -1071,13 +1048,7 @@ public class BeanMapTest {
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
-		try {
-			p = UonParser.DEFAULT;
-			t = p.parse(json, O.class);
-			fail();
-		} catch (Exception e) {
-			// Good.
-		}
+		assertThrown(()->{return UonParser.DEFAULT.parse(json, O.class);});
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
@@ -1085,14 +1056,7 @@ public class BeanMapTest {
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 
-		try {
-			p = UrlEncodingParser.DEFAULT;
-			t = p.parse(json, O.class);
-			fail();
-		} catch (Exception e) {
-			// Good.
-		}
-
+		assertThrown(()->{return UrlEncodingParser.DEFAULT.parse(json, O.class);});
 	}
 
 	public static class O {

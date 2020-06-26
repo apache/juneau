@@ -14,6 +14,7 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import static org.junit.Assert.*;
@@ -161,41 +162,17 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getParam_indexOutOfBounds() {
-		try {
-			b_c1.getParam(0);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '0'.  No parameters.", e.getLocalizedMessage());
-		}
-		try {
-			b_c2.getParam(-1);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '-1'.  Parameter count: 1", e.getLocalizedMessage());
-		}
-		try {
-			b_c2.getParam(1);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '1'.  Parameter count: 1", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return b_c1.getParam(0);}).contains("Invalid index '0'.  No parameters.");
+		assertThrown(()->{return b_c2.getParam(-1);}).contains("Invalid index '-1'.  Parameter count: 1");
+		assertThrown(()->{return b_c2.getParam(1);}).contains("Invalid index '1'.  Parameter count: 1");
 	}
 
 	@Test
 	public void getParam_indexOutOfBounds_noCache() {
 		ClassInfo b = ClassInfo.of(B.class);
-		try {
-			b.getPublicConstructor().getParam(0);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '0'.  No parameters.", e.getLocalizedMessage());
-		}
-		try {
-			b.getPublicConstructor(String.class).getParam(-1);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '-1'.  Parameter count: 1", e.getLocalizedMessage());
-		}
-		try {
-			b.getPublicConstructor(String.class).getParam(1);
-		} catch (IndexOutOfBoundsException e) {
-			assertEquals("Invalid index '1'.  Parameter count: 1", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return b.getPublicConstructor().getParam(0);}).contains("Invalid index '0'.  No parameters.");
+		assertThrown(()->{return b.getPublicConstructor(String.class).getParam(-1);}).contains("Invalid index '-1'.  Parameter count: 1");
+		assertThrown(()->{return b.getPublicConstructor(String.class).getParam(1);}).contains("Invalid index '1'.  Parameter count: 1");
 	}
 
 	@Test
@@ -433,11 +410,7 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void isAll_invalidFlag() {
-		try {
-			e_deprecated.isAll(TRANSIENT);
-		} catch (RuntimeException e) {
-			assertEquals("Invalid flag for executable: TRANSIENT", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return e_deprecated.isAll(TRANSIENT);}).contains("Invalid flag for executable: TRANSIENT");
 	}
 
 	@Test
@@ -467,11 +440,7 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void isAny_invalidFlag() {
-		try {
-			e_deprecated.isAny(TRANSIENT);
-		} catch (RuntimeException e) {
-			assertEquals("Invalid flag for executable: TRANSIENT", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return e_deprecated.isAny(TRANSIENT);}).contains("Invalid flag for executable: TRANSIENT");
 	}
 
 	@Test

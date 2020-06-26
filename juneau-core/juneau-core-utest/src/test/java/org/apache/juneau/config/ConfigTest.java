@@ -14,6 +14,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.StringAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.config.ConfigMod.*;
 import static org.junit.Assert.*;
 
@@ -27,7 +28,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.encode.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -54,13 +54,7 @@ public class ConfigTest {
 		assertNull(c.get("b"));
 		assertNull(c.get("S/c"));
 		assertNull(c.get("T/d"));
-
-		try {
-			assertNull(c.get(null));
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'key' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.get(null);}).contains("Field 'key' cannot be null.");
 		c.close();
 	}
 
@@ -242,7 +236,6 @@ public class ConfigTest {
 	@Test
 	public void getString2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-
 		assertEquals("1", c.getString("a1", "foo"));
 		assertEquals("2", c.getString("a2", "foo"));
 		assertEquals("foo", c.getString("a3", "foo"));
@@ -258,7 +251,6 @@ public class ConfigTest {
 	@Test
 	public void getStringArray1() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-
 		assertObject(c.getStringArray("a1")).json().is("['1','2']");
 		assertObject(c.getStringArray("a2")).json().is("['2','3']");
 		assertObject(c.getStringArray("a3")).json().is("[]");
@@ -274,7 +266,6 @@ public class ConfigTest {
 	@Test
 	public void getStringArray2() throws Exception {
 		Config c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-
 		assertObject(c.getStringArray("a1", new String[] {"foo"})).json().is("['1','2']");
 		assertObject(c.getStringArray("a2", new String[] {"foo"})).json().is("['2','3']");
 		assertObject(c.getStringArray("a3", new String[] {"foo"})).json().is("['foo']");
@@ -290,7 +281,6 @@ public class ConfigTest {
 	@Test
 	public void getInt1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-
 		assertEquals(1, c.getInt("a1"));
 		assertEquals(2, c.getInt("a2"));
 		assertEquals(0, c.getInt("a3"));
@@ -303,23 +293,10 @@ public class ConfigTest {
 	@Test
 	public void getInt1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-
-		try {
-			c.getInt("a1");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a2");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a3");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a4");
-			fail();
-		} catch (NumberFormatException e) {}
+		assertThrown(()->{return c.getInt("a1");});
+		assertThrown(()->{return c.getInt("a2");});
+		assertThrown(()->{return c.getInt("a3");});
+		assertThrown(()->{return c.getInt("a4");});
 	}
 
 	//====================================================================================================
@@ -328,7 +305,6 @@ public class ConfigTest {
 	@Test
 	public void getInt2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-
 		assertEquals(1, c.getInt("a1", -1));
 		assertEquals(2, c.getInt("a2", -1));
 		assertEquals(-1, c.getInt("a3", -1));
@@ -341,23 +317,10 @@ public class ConfigTest {
 	@Test
 	public void getInt2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-
-		try {
-			c.getInt("a1", -1);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a2", -1);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a3", -1);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getInt("a4", -1);
-			fail();
-		} catch (NumberFormatException e) {}
+		assertThrown(()->{return c.getInt("a1", -1);});
+		assertThrown(()->{return c.getInt("a2", -1);});
+		assertThrown(()->{return c.getInt("a3", -1);});
+		assertThrown(()->{return c.getInt("a4", -1);});
 	}
 
 	//====================================================================================================
@@ -366,7 +329,6 @@ public class ConfigTest {
 	@Test
 	public void getBoolean1() throws Exception {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
-
 		assertEquals(true, c.getBoolean("a1"));
 		assertEquals(false, c.getBoolean("a2"));
 		assertEquals(false, c.getBoolean("a3"));
@@ -379,7 +341,6 @@ public class ConfigTest {
 	@Test
 	public void getBoolean1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
-
 		assertEquals(false, c.getBoolean("a1"));
 		assertEquals(false, c.getBoolean("a2"));
 		assertEquals(false, c.getBoolean("a3"));
@@ -392,7 +353,6 @@ public class ConfigTest {
 	@Test
 	public void getBoolean2() throws Exception {
 		Config c = init("a1=true", "a2=false", "[S]", "b1=TRUE", "b2=");
-
 		assertEquals(true, c.getBoolean("a1", true));
 		assertEquals(false, c.getBoolean("a2", true));
 		assertEquals(true, c.getBoolean("a3", true));
@@ -405,7 +365,6 @@ public class ConfigTest {
 	@Test
 	public void getBoolean2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=T");
-
 		assertEquals(false, c.getBoolean("a1", true));
 		assertEquals(false, c.getBoolean("a2", true));
 		assertEquals(false, c.getBoolean("a3", true));
@@ -418,7 +377,6 @@ public class ConfigTest {
 	@Test
 	public void getLong1() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-
 		assertEquals(1l, c.getLong("a1"));
 		assertEquals(2l, c.getLong("a2"));
 		assertEquals(0l, c.getLong("a3"));
@@ -431,23 +389,10 @@ public class ConfigTest {
 	@Test
 	public void getLong1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-
-		try {
-			c.getLong("a1");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a2");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a3");
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a4");
-			fail();
-		} catch (NumberFormatException e) {}
+		assertThrown(()->{return c.getLong("a1");});
+		assertThrown(()->{return c.getLong("a2");});
+		assertThrown(()->{return c.getLong("a3");});
+		assertThrown(()->{return c.getLong("a4");});
 	}
 
 	//====================================================================================================
@@ -456,7 +401,6 @@ public class ConfigTest {
 	@Test
 	public void getLong2() throws Exception {
 		Config c = init("a1=1", "a2=2", "[S]", "b1=1", "b2=");
-
 		assertEquals(1l, c.getLong("a1", Long.MAX_VALUE));
 		assertEquals(2l, c.getLong("a2", Long.MAX_VALUE));
 		assertEquals(Long.MAX_VALUE, c.getLong("a3", Long.MAX_VALUE));
@@ -470,22 +414,10 @@ public class ConfigTest {
 	public void getLong2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
-		try {
-			c.getLong("a1", -1l);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a2", -1l);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a3", -1l);
-			fail();
-		} catch (NumberFormatException e) {}
-		try {
-			c.getLong("a4", -1l);
-			fail();
-		} catch (NumberFormatException e) {}
+		assertThrown(()->{return c.getLong("a1", -1l);}).isType(NumberFormatException.class);
+		assertThrown(()->{return c.getLong("a2", -1l);}).isType(NumberFormatException.class);
+		assertThrown(()->{return c.getLong("a3", -1l);}).isType(NumberFormatException.class);
+		assertThrown(()->{return c.getLong("a4", -1l);}).isType(NumberFormatException.class);
 	}
 
 	//====================================================================================================
@@ -870,11 +802,7 @@ public class ConfigTest {
 		assertObject(c.getKeys("S")).json().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
-		try {
-			c.getKeys(null);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getMessage());
-		}
+		assertThrown(()->{return c.getKeys(null);}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -890,37 +818,14 @@ public class ConfigTest {
 		assertObject(a).json().is("{foo:'baz'}");
 		c.writeProperties("S", b, true);
 		assertObject(b).json().is("{foo:'baz'}");
-
-		try {
-			c.writeProperties("S", a, false);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'S'.", e.getMessage());
-		}
-
-		try {
-			c.writeProperties("S", b, false);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'S'.", e.getMessage());
-		}
-
-		try {
-			c.writeProperties("T", a, false);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Section 'T' not found in configuration.", e.getMessage());
-		}
-
+		assertThrown(()->{return c.writeProperties("S", a, false);}).contains("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->{return c.writeProperties("S", b, false);}).contains("Unknown property 'bar' encountered in configuration section 'S'.");
 		c.writeProperties("", b, true);
 		assertObject(b).json().is("{foo:'qux'}");
 		c.writeProperties("", a, true);
 		assertObject(a).json().is("{foo:'qux'}");
 
-		try {
-			c.writeProperties(null, a, true);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.writeProperties(null, a, true);}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -947,39 +852,10 @@ public class ConfigTest {
 		b = c.getSectionAsBean("S", BBean.class);
 		assertObject(b).json().is("{foo:'baz'}");
 
-		try {
-			a = c.getSectionAsBean("T", ABean.class);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'T'.", e.getMessage());
-		}
-
-		try {
-			b = c.getSectionAsBean("T", BBean.class);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'T'.", e.getMessage());
-		}
-
-		try {
-			a = c.getSectionAsBean("U", ABean.class);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Section 'U' not found in configuration.", e.getMessage());
-		}
-
-		try {
-			c.getSectionAsBean(null, ABean.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getMessage());
-		}
-
-		try {
-			c.getSectionAsBean(null, BBean.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getMessage());
-		}
+		assertThrown(()->{return c.getSectionAsBean("T", ABean.class);}).contains("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->{return c.getSectionAsBean("T", BBean.class);}).contains("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->{return c.getSectionAsBean(null, ABean.class);}).contains("Field 'section' cannot be null.");
+		assertThrown(()->{return c.getSectionAsBean(null, BBean.class);}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -997,25 +873,8 @@ public class ConfigTest {
 		b = c.getSectionAsBean("T", BBean.class, true);
 		assertObject(b).json().is("{foo:'qux'}");
 
-		try {
-			a = c.getSectionAsBean("T", ABean.class, false);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'T'.", e.getMessage());
-		}
-
-		try {
-			b = c.getSectionAsBean("T", BBean.class, false);
-			fail();
-		} catch (ParseException e) {
-			assertEquals("Unknown property 'bar' encountered in configuration section 'T'.", e.getMessage());
-		}
-
-		try {
-			a = c.getSectionAsBean("U", ABean.class, true);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Section 'U' not found in configuration.", e.getMessage());
-		}
+		assertThrown(()->{return c.getSectionAsBean("T", ABean.class, false);}).contains("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->{return c.getSectionAsBean("T", BBean.class, false);}).contains("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -1031,11 +890,7 @@ public class ConfigTest {
 		assertObject(c.getSectionAsMap("T")).json().is("{}");
 		assertNull(c.getSectionAsMap("U"));
 
-		try {
-			c.getSectionAsMap(null);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.getSectionAsMap(null);}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -1058,18 +913,8 @@ public class ConfigTest {
 		a = c.getSectionAsInterface("T", AInterface.class);
 		assertEquals("qux", a.getFoo());
 
-		try {
-			c.getSectionAsInterface("T", ABean.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.", e.getMessage());
-		}
-
-		try {
-			c.getSectionAsInterface(null, AInterface.class);
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.getSectionAsInterface("T", ABean.class);}).contains("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.");
+		assertThrown(()->{return c.getSectionAsInterface(null, AInterface.class);}).contains("Field 'section' cannot be null.");
 	}
 
 	public static interface AInterface {
@@ -1113,12 +958,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList());
 		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
-		try {
-			c.setSection(null, Arrays.asList("", "#C5", "#C6"));
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.setSection(null, Arrays.asList("", "#C5", "#C6"));}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -1144,12 +984,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
-		try {
-			c.setSection(null, Arrays.asList("", "#C5", "#C6"), m);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Field 'section' cannot be null.", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return c.setSection(null, Arrays.asList("", "#C5", "#C6"), m);}).contains("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================

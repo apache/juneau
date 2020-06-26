@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -88,28 +89,15 @@ public class DataConversionTest {
 		m.put("x", TestEnum.ENUM2);
 		assertEquals(m.getString("x"), "ENUM2");
 		assertFalse(m.getBoolean("x"));
-		try {
-			m.getMap("x");
-			fail("Invalid conversion from Enum to OMap");
-		} catch (InvalidDataConversionException e) {}
+		assertThrown(()->{return m.getMap("x");}).isType(InvalidDataConversionException.class);
 
 		// *** Not a bean ***
 		m.put("x", new NotABean("foo"));
 		assertEquals(m.getString("x"), "foo");
-		try {
-			m.getInt("x");
-			fail("Invalid conversion from NotABean to Integer");
-		} catch (InvalidDataConversionException e) {}
-		try {
-			m.getLong("x");
-			fail("Invalid conversion from NotABean to Long");
-		} catch (InvalidDataConversionException e) {}
+		assertThrown(()->{return m.getInt("x");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->{return m.getLong("x");}).isType(InvalidDataConversionException.class);
 		assertFalse(m.getBoolean("x"));
-		try {
-			m.getMap("x");
-			fail("Invalid conversion from NotABean to OMap");
-		} catch (InvalidDataConversionException e) {}
-
+		assertThrown(()->{return m.getMap("x");}).isType(InvalidDataConversionException.class);
 	}
 
 	public enum TestEnum {

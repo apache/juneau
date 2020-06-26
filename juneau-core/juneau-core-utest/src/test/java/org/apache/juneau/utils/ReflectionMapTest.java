@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -331,32 +332,17 @@ public class ReflectionMapTest {
 
 	@Test
 	public void e01_blankInput() throws Exception {
-		try {
-			create().append("", 1);
-			fail();
-		} catch (RuntimeException e) {
-			assertEquals("Invalid reflection signature: []", e.getMessage());
-		}
+		assertThrown(()->{return create().append("", 1);}).contains("Invalid reflection signature: []");
 	}
 
 	@Test
 	public void e02_nullInput() throws Exception {
-		try {
-			create().append(null, 1);
-			fail();
-		} catch (RuntimeException e) {
-			assertEquals("Invalid reflection signature: [null]", e.getMessage());
-		}
+		assertThrown(()->{return create().append(null, 1);}).contains("Invalid reflection signature: [null]");
 	}
 
 	@Test
 	public void e03_badInput() throws Exception {
-		try {
-			create().append("foo)", 1);
-			fail();
-		} catch (RuntimeException e) {
-			assertEquals("Invalid reflection signature: [foo)]", e.getMessage());
-		}
+		assertThrown(()->{return create().append("foo)", 1);}).contains("Invalid reflection signature: [foo)]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

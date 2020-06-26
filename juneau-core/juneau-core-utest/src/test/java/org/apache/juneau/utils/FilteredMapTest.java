@@ -13,7 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.junit.Assert.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public class FilteredMapTest {
 		m2.entrySet().iterator().next().setValue("3");
 		assertObject(m2).json().is("{a:'3'}");
 
-		try { m3 = new FilteredMap<>(cm2, null, new String[0]); fail(); } catch (IllegalArgumentException e) {}
-		try { m3 = new FilteredMap<>(cm, m, null); fail(); } catch (IllegalArgumentException e) {}
+		assertThrown(()->{return new FilteredMap<>(cm2, null, new String[0]);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{return new FilteredMap<>(cm, m, null);}).isType(IllegalArgumentException.class);
 	}
 }

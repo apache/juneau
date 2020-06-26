@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -28,81 +29,60 @@ public class MultiSetTest {
 	public void doTest() throws Exception {
 		List<String> l1, l2;
 		MultiSet<String> ms;
-		Iterator<String> i;
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{"3","4"});
 		ms = new MultiSet<>(l1, l2);
-		i = ms.iterator();
-		assertTrue(i.hasNext());
-		assertEquals("1", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("2", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("3", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("4", i.next());
-		assertFalse(i.hasNext());
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {
-		}
+		Iterator<String> i1 = ms.iterator();
+		assertTrue(i1.hasNext());
+		assertEquals("1", i1.next());
+		assertTrue(i1.hasNext());
+		assertEquals("2", i1.next());
+		assertTrue(i1.hasNext());
+		assertEquals("3", i1.next());
+		assertTrue(i1.hasNext());
+		assertEquals("4", i1.next());
+		assertFalse(i1.hasNext());
+		assertThrown(()->{return i1.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
-		i = ms.iterator();
-		assertTrue(i.hasNext());
-		assertEquals("1", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("2", i.next());
-		assertFalse(i.hasNext());
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {
-		}
+		Iterator<String> i2 = ms.iterator();
+		assertTrue(i2.hasNext());
+		assertEquals("1", i2.next());
+		assertTrue(i2.hasNext());
+		assertEquals("2", i2.next());
+		assertFalse(i2.hasNext());
+		assertThrown(()->{return i2.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{"3","4"});
 		ms = new MultiSet<>(l1, l2);
-		i = ms.iterator();
-		assertTrue(i.hasNext());
-		assertEquals("3", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("4", i.next());
-		assertFalse(i.hasNext());
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {
-		}
+		Iterator<String> i3 = ms.iterator();
+		assertTrue(i3.hasNext());
+		assertEquals("3", i3.next());
+		assertTrue(i3.hasNext());
+		assertEquals("4", i3.next());
+		assertFalse(i3.hasNext());
+		assertThrown(()->{return i3.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
-		i = ms.iterator();
-		assertFalse(i.hasNext());
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {
-		}
+		Iterator<String> i4 = ms.iterator();
+		assertFalse(i4.hasNext());
+		assertThrown(()->{return i4.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		ms = new MultiSet<>(l1);
-		i = ms.iterator();
-		assertTrue(i.hasNext());
-		assertEquals("1", i.next());
-		assertTrue(i.hasNext());
-		assertEquals("2", i.next());
-		assertFalse(i.hasNext());
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {
-		}
+		Iterator<String> i5 = ms.iterator();
+		assertTrue(i5.hasNext());
+		assertEquals("1", i5.next());
+		assertTrue(i5.hasNext());
+		assertEquals("2", i5.next());
+		assertFalse(i5.hasNext());
+		assertThrown(()->{return i5.next();}).isType(NoSuchElementException.class);
 
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
@@ -136,9 +116,9 @@ public class MultiSetTest {
 		assertObject(ms).json().is("[]");
 		assertEquals(0, ms.size());
 
-		try { ms = new MultiSet<>((Collection<String>)null); fail(); } catch (IllegalArgumentException e) {}
-		try { new MultiSet<String>().iterator().next(); fail(); } catch (NoSuchElementException e) {}
-		try { new MultiSet<String>().iterator().remove(); fail(); } catch (NoSuchElementException e) {}
+		assertThrown(()->{return new MultiSet<>((Collection<String>)null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{return new MultiSet<String>().iterator().next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{new MultiSet<String>().iterator().remove(); return null;}).isType(NoSuchElementException.class);
 
 	}
 }

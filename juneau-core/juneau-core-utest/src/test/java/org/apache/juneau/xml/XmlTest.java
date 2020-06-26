@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -311,12 +312,7 @@ public class XmlTest {
 	public void testXmlNsWithoutMatchingNsUri() throws Exception {
 		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		K t = new K();
-		try {
-			s.serialize(t);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Found @Xml.prefix annotation with no matching URI.  prefix='foo'", e.getLocalizedMessage());
-		}
+		assertThrown(()->{return s.serialize(t);}).contains("Found @Xml.prefix annotation with no matching URI.  prefix='foo'");
 	}
 
 	@Xml(prefix="foo")

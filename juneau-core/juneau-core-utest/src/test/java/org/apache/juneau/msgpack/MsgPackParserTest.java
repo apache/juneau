@@ -13,7 +13,7 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
-import static org.junit.Assert.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -42,12 +42,7 @@ public class MsgPackParserTest {
 		is = is("00 01");
 		r = p.parse(is, Object.class);
 		assertObject(r).json().is("0");
-		try {
-			r = p.parse(is, Object.class);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e.getMessage().contains("Stream is closed"));
-		}
+		assertThrown(()->{return p.parse(is, Object.class);}).contains("Stream is closed");
 	}
 
 	//====================================================================================================

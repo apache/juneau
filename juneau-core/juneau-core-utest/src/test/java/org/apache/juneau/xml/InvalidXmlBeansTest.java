@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.junit.Assert.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -115,23 +115,17 @@ public class InvalidXmlBeansTest {
 		});
 	}
 
-	private String label, expected;
+	private String expected;
 	private Object in;
 
 	public InvalidXmlBeansTest(String label, Object in, String expected) throws Exception {
-		this.label = label;
 		this.in = in;
 		this.expected = expected;
 	}
 
 	@Test
 	public void test() {
-		try {
-			s1.serialize(in);
-			fail(label + ":  Expected exception didn't occur.");
-		} catch (Exception e) {
-			assertEquals(label + ":  Wrong error message.", expected, e.getLocalizedMessage());
-		}
+		assertThrown(()->{return s1.serialize(in);}).contains(expected);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

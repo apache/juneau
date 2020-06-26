@@ -14,6 +14,7 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
@@ -1368,22 +1369,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAll_invalid() {
 		ClassInfo a = aClass;
-		try {
-			a.isAll(HAS_PARAMS);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAll(HAS_NO_PARAMS);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAll(TRANSIENT);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAll(NOT_TRANSIENT);
-			fail();
-		} catch (Exception e) {}
+		assertThrown(()->{return a.isAll(HAS_PARAMS);});
+		assertThrown(()->{return a.isAll(HAS_NO_PARAMS);});
+		assertThrown(()->{return a.isAll(TRANSIENT);});
+		assertThrown(()->{return a.isAll(NOT_TRANSIENT);});
 	}
 
 	@Test
@@ -1485,22 +1474,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAny_invalid() {
 		ClassInfo a = aClass;
-		try {
-			a.isAny(HAS_PARAMS);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAny(HAS_NO_PARAMS);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAny(TRANSIENT);
-			fail();
-		} catch (Exception e) {}
-		try {
-			a.isAny(NOT_TRANSIENT);
-			fail();
-		} catch (Exception e) {}
+		assertThrown(()->{return a.isAny(HAS_PARAMS);});
+		assertThrown(()->{return a.isAny(HAS_NO_PARAMS);});
+		assertThrown(()->{return a.isAny(TRANSIENT);});
+		assertThrown(()->{return a.isAny(NOT_TRANSIENT);});
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2071,48 +2048,17 @@ public class ClassInfoTest {
 	static ClassInfo la=of(LA.class);
 
 	@Test
-	public void newInstance() {
-		try {
-			assertNotNull(la.newInstance());
-		} catch (Exception e) {
-			fail();
-		}
+	public void newInstance() throws Exception {
+		assertNotNull(la.newInstance());
 	}
 
 	@Test
 	public void newInstance_type() {
-		try {
-			aTypeInfo.newInstance();
-			fail();
-		}
-		catch (ExecutableException e) { /* OK */ }
-		catch (Exception e) { fail(e.getMessage()); }
-
-		try {
-			pTypeInfo.newInstance();
-			fail();
-		}
-		catch (ExecutableException e) { /* OK */ }
-		catch (Exception e) { fail(e.getMessage()); }
-		try {
-			pTypeDimensionalInfo.newInstance();
-			fail();
-		}
-		catch (ExecutableException e) { /* OK */ }
-		catch (Exception e) { fail(e.getMessage()); }
-
-		try {
-			pTypeGenericInfo.newInstance();
-			fail();
-		}
-		catch (ExecutableException e) { /* OK */ }
-		catch (Exception e) { /* OK */ }
-		try {
-			pTypeGenericArgInfo.newInstance();
-			fail();
-		}
-		catch (ExecutableException e) { /* OK */ }
-		catch (Exception e) { fail(e.getMessage()); }
+		assertThrown(()->{return aTypeInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{return pTypeInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{return pTypeDimensionalInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{return pTypeGenericInfo.newInstance();}).isType(Exception.class);
+		assertThrown(()->{return pTypeGenericArgInfo.newInstance();}).isType(ExecutableException.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2160,52 +2106,27 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_outOfBounds() {
-		try {
-			ma.getParameterType(2, HashMap.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Invalid type index. index=2, argsLength=2", e.getMessage());
-		}
+		assertThrown(()->{return ma.getParameterType(2, HashMap.class);}).contains("Invalid type index. index=2, argsLength=2");
 	}
 
 	@Test
 	public void getParameterType_notASubclass() {
-		try {
-			aClass.getParameterType(2, HashMap.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Class 'AClass' is not a subclass of parameterized type 'HashMap'", e.getMessage());
-		}
+		assertThrown(()->{return aClass.getParameterType(2, HashMap.class);}).contains("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
 	}
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		try {
-			aClass.getParameterType(2, null);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Parameterized type cannot be null", e.getMessage());
-		}
+		assertThrown(()->{return aClass.getParameterType(2, null);}).contains("Parameterized type cannot be null");
 	}
 
 	@Test
 	public void getParameterType_notParamerizedType() {
-		try {
-			mb.getParameterType(2, MA.class);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertEquals("Class 'MA' is not a parameterized type", e.getMessage());
-		}
+		assertThrown(()->{return mb.getParameterType(2, MA.class);}).contains("Class 'MA' is not a parameterized type");
 	}
 
 	@Test
 	public void getParameterType_unresolvedTypes() {
-		try {
-			mc.getParameterType(1, HashMap.class);
-			fail();
-		} catch (Exception e) {
-			assertEquals("Could not resolve variable 'E' to a type.", e.getMessage());
-		}
+		assertThrown(()->{return mc.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'E' to a type.");
 	}
 
 	@Test
@@ -2235,20 +2156,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_unresolvedGenericArrayType() {
-		try {
-			mi.getParameterType(1, HashMap.class);
-		} catch (Exception e) {
-			assertEquals("Could not resolve variable 'X[]' to a type.", e.getMessage());
-		}
+		assertThrown(()-> {return mi.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'X[]' to a type.");
 	}
 
 	@Test
 	public void getParameterType_wildcardType() {
-		try {
-			mj.getParameterType(1, HashMap.class);
-		} catch (Exception e) {
-			assertEquals("Could not resolve variable 'X' to a type.", e.getMessage());
-		}
+		assertThrown(()-> {return mj.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'X' to a type.");
 	}
 
 	@Test

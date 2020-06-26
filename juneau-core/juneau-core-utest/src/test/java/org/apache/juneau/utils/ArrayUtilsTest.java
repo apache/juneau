@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -73,10 +74,7 @@ public class ArrayUtilsTest {
 		s = append(s, Arrays.asList(new String[0]));
 		assertObject(s).json().is("['a','b','c']");
 
-		try {
-			append((Object[])null, Collections.emptyList());
-			fail();
-		} catch (IllegalArgumentException e) {}
+		assertThrown(()->{return append((Object[])null, Collections.emptyList());}).isType(IllegalArgumentException.class);
 	}
 
 	//====================================================================================================
@@ -152,24 +150,14 @@ public class ArrayUtilsTest {
 	public void testAsSet() throws Exception {
 		String[] s = null;
 
-		try {
-			asSet(s);
-			fail();
-		} catch (IllegalArgumentException e) {}
+		assertThrown(()->{return asSet((String[])null);}).isType(IllegalArgumentException.class);
 
 		s = new String[]{"a"};
 		Iterator<String> i = asSet(s).iterator();
 		assertEquals("a", i.next());
 
-		try {
-			i.remove();
-			fail();
-		} catch (UnsupportedOperationException e) {}
-
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {}
+		assertThrown(()->{i.remove(); return null;}).isType(UnsupportedOperationException.class);
+		assertThrown(()->{return i.next();}).isType(NoSuchElementException.class);
 	}
 
 	//====================================================================================================
@@ -183,15 +171,8 @@ public class ArrayUtilsTest {
 		Iterator<Object> i = iterator(s);
 		assertEquals("a", i.next());
 
-		try {
-			i.remove();
-			fail();
-		} catch (UnsupportedOperationException e) {}
-
-		try {
-			i.next();
-			fail();
-		} catch (NoSuchElementException e) {}
+		assertThrown(()->{i.remove(); return null;}).isType(UnsupportedOperationException.class);
+		assertThrown(()->{return i.next();}).isType(NoSuchElementException.class);
 	}
 
 	//====================================================================================================

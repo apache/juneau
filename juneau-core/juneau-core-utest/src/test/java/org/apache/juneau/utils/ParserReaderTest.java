@@ -26,8 +26,7 @@ public class ParserReaderTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		ParserReader r = new ParserReader(new ParserPipe("abc123"));
-		try {
+		try (ParserReader r = new ParserReader(new ParserPipe("abc123"))) {
 			assertEquals('a', r.read());
 			r.unread();
 			assertEquals('a', r.read());
@@ -43,8 +42,6 @@ public class ParserReaderTest {
 			assertEquals('3', r.read());
 			assertEquals(-1, r.read());
 			assertEquals(-1, r.read());
-		} finally {
-			r.close();
 		}
 	}
 }

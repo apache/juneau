@@ -116,23 +116,15 @@ public class ConstructorInfoTest {
 
 
 	@Test
-	public void invoke() {
-		try {
-			assertEquals(null, b_c1.invoke().toString());
-			assertEquals("foo", b_c2.invoke("foo").toString());
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+	public void invoke() throws Exception {
+		assertEquals(null, b_c1.invoke().toString());
+		assertEquals("foo", b_c2.invoke("foo").toString());
 	}
 
 	@Test
-	public void makeAccessible() {
+	public void makeAccessible() throws Exception {
 		b_c3.makeAccessible(Visibility.PROTECTED);
-		try {
-			assertEquals(null, b_c3.invoke(123).toString());
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+		assertEquals(null, b_c3.invoke(123).toString());
 	}
 
 	@Test

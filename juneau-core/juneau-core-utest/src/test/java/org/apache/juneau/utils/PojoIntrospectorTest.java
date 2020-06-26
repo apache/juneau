@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -44,7 +45,7 @@ public class PojoIntrospectorTest {
 		r = new PojoIntrospector(in).invokeMethod("toString", "[]");
 		assertEquals("foobar", r);
 
-		try { new PojoIntrospector(in).invokeMethod("noSuchMethod", "[3,6]"); fail(); } catch (NoSuchMethodException e) {}
+		assertThrown(()->{return new PojoIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]");}).isType(NoSuchMethodException.class);
 
 		r = new PojoIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
 		assertNull(r);

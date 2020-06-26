@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -62,13 +63,9 @@ public class CommonParserTest {
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
-		try {
-			jl = (OList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
-			assertEquals("value", jl.getMap(0).getString("attribute"));
-			assertEquals("value", jl.getMap(1).getString("attribute"));
-		} catch (Exception e) {
-			fail(e.getLocalizedMessage());
-		}
+		jl = (OList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
+		assertEquals("value", jl.getMap(0).getString("attribute"));
+		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		A1 t1 = new A1();
 		A2 t2 = new A2();
@@ -113,17 +110,12 @@ public class CommonParserTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		in =  "<object><a>1</a><unknown><object><a _type='string'>foo</a></object></unknown><b>2</b></object>";
-		t = p.parse(in, B.class);
+		String in2 =  "<object><a>1</a><unknown><object><a _type='string'>foo</a></object></unknown><b>2</b></object>";
+		t = p.parse(in2, B.class);
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-
-		try {
-			p = XmlParser.DEFAULT;
-			p.parse(in, B.class);
-			fail();
-		} catch (ParseException e) {}
+		assertThrown(()->{return XmlParser.DEFAULT.parse(in2, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

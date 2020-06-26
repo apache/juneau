@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -90,12 +91,7 @@ public class ConfigImportsTest {
 		ms.write("A1", "", "<A2>\nx=1");
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
-		try {
-			Config.create("B").store(ms).build();
-			fail();
-		} catch (Exception e) {
-			// OK
-		}
+		assertThrown(()->{return Config.create("B").store(ms).build();});
 	}
 
 	@Test

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -29,10 +30,10 @@ public class IOPipeTest {
 	//====================================================================================================
 	@Test
 	public void testConstructor() throws Exception {
-		try { IOPipe.create(null, new StringWriter()); fail(); } catch (IllegalArgumentException e) {}
-		try { IOPipe.create(new StringReader(""), null); fail(); } catch (IllegalArgumentException e) {}
-		try { IOPipe.create(new Integer(1), new StringWriter()); fail(); } catch (IllegalArgumentException e) {}
-		try { IOPipe.create("", new Integer(1)); fail(); } catch (IllegalArgumentException e) {}
+		assertThrown(()->{return IOPipe.create(null, new StringWriter());}).isType(IllegalArgumentException.class);
+		assertThrown(()->{return IOPipe.create(new StringReader(""), null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{return IOPipe.create(new Integer(1), new StringWriter());}).isType(IllegalArgumentException.class);
+		assertThrown(()->{return IOPipe.create("", new Integer(1));}).isType(IllegalArgumentException.class);
 	}
 
 	//====================================================================================================
@@ -279,6 +280,6 @@ public class IOPipeTest {
 		IOPipe.create(in, out).buffSize(1).run();
 		assertEquals("foobar", out.toString().replaceAll("[\\r\\n]", ""));
 
-		try { IOPipe.create(in, out).buffSize(0); fail(); } catch (IllegalArgumentException e) {}
+		assertThrown(()->{return IOPipe.create(in, out).buffSize(0);}).isType(IllegalArgumentException.class);
 	}
 }
