@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.rest.testutils.Constants.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -861,12 +862,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea02_setWrongInt() {
-		try {
-			proxy.setInt(2);
-			fail();
-		} catch (AssertionError e) { // AssertionError thrown on server side.
-			assertEquals("expected:<1> but was:<2>", e.getMessage());
-		}
+		assertThrown(()->{proxy.setInt(2); return null;}).contains("expected:<1> but was:<2>");
 	}
 
 	@Test
@@ -901,12 +897,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea09_setNullStringBad() {
-		try {
-			proxy.setNullString("foo");
-			fail();
-		} catch (AssertionError e) { // AssertionError thrown on server side.
-			assertEquals("expected null, but was:<foo>", e.getLocalizedMessage());
-		}
+		assertThrown(()->{proxy.setNullString("foo");return null;}).contains("expected null, but was:<foo>");
 	}
 
 	@Test

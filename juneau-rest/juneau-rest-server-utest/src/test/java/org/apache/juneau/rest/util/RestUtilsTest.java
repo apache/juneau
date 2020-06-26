@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.Assert.*;
@@ -70,10 +71,7 @@ public class RestUtilsTest {
 
 		for (String s : new String[]{
 				"http:/hostname?foo"}) {
-			try {
-				trimPathInfo(new StringBuffer(s), cp, sp);
-				fail("Exception expected - " + s);
-			} catch (RuntimeException ex) {}
+			assertThrown(()->{return trimPathInfo(new StringBuffer(s), "", "");});
 		}
 
 		e = "http://hostname";
@@ -103,10 +101,7 @@ public class RestUtilsTest {
 				"http://hostname?foo",
 				"http://hostname/fo?bar",
 				"http:/hostname/foo"}) {
-			try {
-				trimPathInfo(new StringBuffer(s), cp, sp);
-				fail("Exception expected - " + s);
-			} catch (RuntimeException ex) {}
+			assertThrown(()->{return trimPathInfo(new StringBuffer(s), "/", "/foo");});
 		}
 
 		e = "http://hostname/foo/bar";
@@ -123,10 +118,7 @@ public class RestUtilsTest {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			try {
-				trimPathInfo(new StringBuffer(s), cp, sp);
-				fail("Exception expected - " + s);
-			} catch (RuntimeException ex) {}
+			assertThrown(()->{return trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar");});
 		}
 
 		e = "http://hostname/foo/bar";
@@ -143,10 +135,7 @@ public class RestUtilsTest {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			try {
-				trimPathInfo(new StringBuffer(s), cp, sp);
-				fail("Exception expected - " + s);
-			} catch (RuntimeException ex) {}
+			assertThrown(()->{return trimPathInfo(new StringBuffer(s), "/foo", "/bar");});
 		}
 	}
 

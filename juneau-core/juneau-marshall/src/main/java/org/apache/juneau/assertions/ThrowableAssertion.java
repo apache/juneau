@@ -55,10 +55,10 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	public static ThrowableAssertion assertThrown(Callable<Object> callable) {
 		try {
 			callable.call();
-			throw new BasicAssertionError("Exception not thrown.");
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			return assertThrowable(e);
 		}
+		throw new BasicAssertionError("Exception not thrown.");
 	}
 
 	/**

@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.assertions.ObjectAssertion.*;
 import static org.apache.juneau.assertions.ThrowableAssertion.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -142,61 +141,31 @@ public class StaticFilesMappingTest {
 
 	@Test
 	public void d01_error_malformedJson() {
-		try {
-			parse("foo:bar:xxx");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Expected { at beginning of headers.");
-		}
+		assertThrown(()->{return parse("foo:bar:xxx");}).contains("Expected { at beginning of headers.");
 	}
 
 	@Test
 	public void d02_error_textFollowingJson() {
-		try {
-			parse("foo:bar:{a:'b'}x");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Invalid text following headers.");
-		}
+		assertThrown(()->{return parse("foo:bar:{a:'b'}x");}).contains("Invalid text following headers.");
 	}
 
 	@Test
 	public void d03_error_missingLocation() {
-		try {
-			parse("foo");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Couldn't find ':' following path.");
-		}
+		assertThrown(()->{return parse("foo");}).contains("Couldn't find ':' following path.");
 	}
 
 	@Test
 	public void d04_error_danglingColonAfterLocation() {
-		try {
-			parse("foo:bar:");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Found extra ':' following location.");
-		}
+		assertThrown(()->{return parse("foo:bar:");}).contains("Found extra ':' following location.");
 	}
 
 	@Test
 	public void d05_error_malformedHeaders_openEnded() {
-		try {
-			parse("foo:bar:{");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Malformed headers.");
-		}
+		assertThrown(()->{return parse("foo:bar:{");}).contains("Malformed headers.");
 	}
 
 	@Test
 	public void d06_error_malformedHeaders_mismatchedBrackets() {
-		try {
-			parse("foo:bar:{{}");
-			fail();
-		} catch (ParseException e) {
-			assertThrowable(e).contains("Malformed headers.");
-		}
+		assertThrown(()->{return parse("foo:bar:{{}");}).contains("Malformed headers.");
 	}
 }
