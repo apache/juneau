@@ -83,6 +83,20 @@ public class Assertion {
 		return new BasicAssertionError(msg);
 	}
 
+	/**
+	 * Convenience method for getting the class name for an object.
+	 *
+	 * @param o The object to get the class name for.
+	 * @return The class name for an object.
+	 */
+	protected static String className(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Class)
+			return ((Class<?>)o).getName();
+		return className(o.getClass());
+	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>

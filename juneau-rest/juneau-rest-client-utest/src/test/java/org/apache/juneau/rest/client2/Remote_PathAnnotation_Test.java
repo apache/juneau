@@ -205,172 +205,172 @@ public class Remote_PathAnnotation_Test {
 		C1 x = MockRestClient.build(C.class).getRemote(C1.class);
 		assertEquals("{x:'1'}", x.getX1(1));
 		assertEquals("{x:'10'}", x.getX1(10));
-		try { x.getX1(0); fail(); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX1(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX1(0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX1(11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX2(1));
 		assertEquals("{x:'10'}", x.getX2(10));
-		try { x.getX2(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX2(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX2(0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX2(11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX3(2));
 		assertEquals("{x:'9'}", x.getX3(9));
-		try { x.getX3(1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX3(10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX3(1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX3(10);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX4((short)1));
 		assertEquals("{x:'10'}", x.getX4((short)10));
-		try { x.getX4((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX4((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX4((short)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX4((short)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX5((short)1));
 		assertEquals("{x:'10'}", x.getX5((short)10));
-		try { x.getX5((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX5((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX5((short)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX5((short)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX6((short)2));
 		assertEquals("{x:'9'}", x.getX6((short)9));
-		try { x.getX6((short)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX6((short)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX6((short)1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX6((short)10);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX7(1l));
 		assertEquals("{x:'10'}", x.getX7(10l));
-		try { x.getX7(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX7(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX7(0l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX7(11l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX8(1l));
 		assertEquals("{x:'10'}", x.getX8(10l));
-		try { x.getX8(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX8(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX8(0l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX8(11l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX9(2l));
 		assertEquals("{x:'9'}", x.getX9(9l));
-		try { x.getX9(1l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX9(10l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX9(1l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX9(10l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX10(1f));
 		assertEquals("{x:'10.0'}", x.getX10(10f));
-		try { x.getX10(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX10(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX10(0.9f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX10(10.1f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX11(1f));
 		assertEquals("{x:'10.0'}", x.getX11(10f));
-		try { x.getX11(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX11(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX11(0.9f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX11(10.1f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.getX12(1.1f));
 		assertEquals("{x:'9.9'}", x.getX12(9.9f));
-		try { x.getX12(1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX12(10f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX12(1f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX12(10f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX13(1d));
 		assertEquals("{x:'10.0'}", x.getX13(10d));
-		try { x.getX13(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX13(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX13(0.9d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX13(10.1d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX14(1d));
 		assertEquals("{x:'10.0'}", x.getX14(10d));
-		try { x.getX14(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX14(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX14(0.9d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX14(10.1d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.getX15(1.1d));
 		assertEquals("{x:'9.9'}", x.getX15(9.9d));
-		try { x.getX15(1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX15(10d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX15(1d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX15(10d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX16((byte)1));
 		assertEquals("{x:'10'}", x.getX16((byte)10));
-		try { x.getX16((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX16((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX16((byte)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX16((byte)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX17((byte)1));
 		assertEquals("{x:'10'}", x.getX17((byte)10));
-		try { x.getX17((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX17((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX17((byte)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX17((byte)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX18((byte)2));
 		assertEquals("{x:'9'}", x.getX18((byte)9));
-		try { x.getX18((byte)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX18((byte)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX18((byte)1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX18((byte)10);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX19(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", x.getX19(new AtomicInteger(10)));
-		try { x.getX19(new AtomicInteger(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX19(new AtomicInteger(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX19(new AtomicInteger(0));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX19(new AtomicInteger(11));}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX20(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", x.getX20(new AtomicInteger(10)));
-		try { x.getX20(new AtomicInteger(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX20(new AtomicInteger(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX20(new AtomicInteger(0));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX20(new AtomicInteger(11));}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX21(new AtomicInteger(2)));
 		assertEquals("{x:'9'}", x.getX21(new AtomicInteger(9)));
-		try { x.getX21(new AtomicInteger(1)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX21(new AtomicInteger(10)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX21(new AtomicInteger(1));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX21(new AtomicInteger(10));}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX22(new BigDecimal(1)));
 		assertEquals("{x:'10'}", x.getX22(new BigDecimal(10)));
-		try { x.getX22(new BigDecimal(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX22(new BigDecimal(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX22(new BigDecimal(0));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX22(new BigDecimal(11));}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX23(new BigDecimal(1)));
 		assertEquals("{x:'10'}", x.getX23(new BigDecimal(10)));
-		try { x.getX23(new BigDecimal(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX23(new BigDecimal(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX23(new BigDecimal(0));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX23(new BigDecimal(11));}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX24(new BigDecimal(2)));
 		assertEquals("{x:'9'}", x.getX24(new BigDecimal(9)));
-		try { x.getX24(new BigDecimal(1)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX24(new BigDecimal(10)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX24(new BigDecimal(1));}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX24(new BigDecimal(10));}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX25(1));
 		assertEquals("{x:'10'}", x.getX25(10));
-		try { x.getX25(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX25(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX25(0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX25(11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX26(1));
 		assertEquals("{x:'10'}", x.getX26(10));
-		try { x.getX26(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX26(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX26(0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX26(11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX27(2));
 		assertEquals("{x:'9'}", x.getX27(9));
-		try { x.getX27(1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX27(10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX27(1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX27(10);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX28((short)1));
 		assertEquals("{x:'10'}", x.getX28((short)10));
-		try { x.getX28((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX28((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX28((short)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX28((short)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX29((short)1));
 		assertEquals("{x:'10'}", x.getX29((short)10));
-		try { x.getX29((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX29((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX29((short)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX29((short)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX30((short)2));
 		assertEquals("{x:'9'}", x.getX30((short)9));
-		try { x.getX30((short)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX30((short)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX30((short)1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX30((short)10);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX31(1l));
 		assertEquals("{x:'10'}", x.getX31(10l));
-		try { x.getX31(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX31(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX31(0l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX31(11l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX32(1l));
 		assertEquals("{x:'10'}", x.getX32(10l));
-		try { x.getX32(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX32(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX32(0l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX32(11l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX33(2l));
 		assertEquals("{x:'9'}", x.getX33(9l));
-		try { x.getX33(1l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX33(10l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX33(1l);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX33(10l);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX34(1f));
 		assertEquals("{x:'10.0'}", x.getX34(10f));
-		try { x.getX34(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX34(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX34(0.9f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX34(10.1f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX35(1f));
 		assertEquals("{x:'10.0'}", x.getX35(10f));
-		try { x.getX35(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX35(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX35(0.9f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX35(10.1f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.getX36(1.1f));
 		assertEquals("{x:'9.9'}", x.getX36(9.9f));
-		try { x.getX36(1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX36(10f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX36(1f);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX36(10f);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX37(1d));
 		assertEquals("{x:'10.0'}", x.getX37(10d));
-		try { x.getX37(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX37(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX37(0.9d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX37(10.1d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.getX38(1d));
 		assertEquals("{x:'10.0'}", x.getX38(10d));
-		try { x.getX38(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX38(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX38(0.9d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX38(10.1d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.getX39(1.1d));
 		assertEquals("{x:'9.9'}", x.getX39(9.9d));
-		try { x.getX39(1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX39(10d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX39(1d);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX39(10d);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX40((byte)1));
 		assertEquals("{x:'10'}", x.getX40((byte)10));
-		try { x.getX40((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX40((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX40((byte)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX40((byte)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.getX41((byte)1));
 		assertEquals("{x:'10'}", x.getX41((byte)10));
-		try { x.getX41((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX41((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX41((byte)0);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX41((byte)11);}).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.getX42((byte)2));
 		assertEquals("{x:'9'}", x.getX42((byte)9));
-		try { x.getX42((byte)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.getX42((byte)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(()->{return x.getX42((byte)1);}).contains("Minimum value not met");
+		assertThrown(()->{return x.getX42((byte)10);}).contains("Maximum value exceeded");
 	}
 
 	//=================================================================================================================
@@ -401,20 +401,20 @@ public class Remote_PathAnnotation_Test {
 		D1 x = MockRestClient.build(D.class).getRemote(D1.class);
 		assertEquals("{x:'1'}", x.getX1("1"));
 		assertEquals("{x:'1|2'}", x.getX1("1","2"));
-		try { x.getX1(); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum number of items not met"); }
-		try { x.getX1("1","2","3"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum number of items exceeded"); }
+		assertThrown(()->{return x.getX1();}).contains("Minimum number of items not met");
+		assertThrown(()->{return x.getX1("1","2","3");}).contains("Maximum number of items exceeded");
 		assertEquals("{x:null}", x.getX1((String)null));
 		assertEquals("{x:'1'}", x.getX2(new String[]{"1"}));
 		assertEquals("{x:'1|2'}", x.getX2(new String[]{"1","2"}));
-		try { x.getX2(new String[]{}); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum number of items not met"); }
-		try { x.getX2(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum number of items exceeded"); }
+		assertThrown(()->{return x.getX2(new String[]{});}).contains("Minimum number of items not met");
+		assertThrown(()->{return x.getX2(new String[]{"1","2","3"});}).contains("Maximum number of items exceeded");
 		assertEquals("{x:null}", x.getX2(new String[]{null}));
 		assertEquals("{x:'1|1'}", x.getX3("1","1"));
 		assertEquals("{x:'1|1'}", x.getX4(new String[]{"1","1"}));
 		assertEquals("{x:'1|2'}", x.getX5("1","2"));
-		try { assertEquals("{x:'1|1'}", x.getX5("1","1")); fail(); } catch (Exception e) { assertThrowable(e).contains("Duplicate items not allowed"); }
+		assertThrown(()->{return x.getX5("1","1");}).contains("Duplicate items not allowed");
 		assertEquals("{x:'1|2'}", x.getX6(new String[]{"1","2"}));
-		try { assertEquals("{x:'1|1'}", x.getX6(new String[]{"1","1"})); fail(); } catch (Exception e) { assertThrowable(e).contains("Duplicate items not allowed"); }
+		assertThrown(()->{return x.getX6(new String[]{"1","1"});}).contains("Duplicate items not allowed");
 	}
 
 	//=================================================================================================================
@@ -445,22 +445,22 @@ public class Remote_PathAnnotation_Test {
 		E1 x = MockRestClient.build(E.class).getRemote(E1.class);
 		assertEquals("{x:'12'}", x.getX1("12"));
 		assertEquals("{x:'123'}", x.getX1("123"));
-		try { x.getX1("1"); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum length of value not met"); }
-		try { x.getX1("1234"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum length of value exceeded"); }
+		assertThrown(()->{return x.getX1("1");}).contains("Minimum length of value not met");
+		assertThrown(()->{return x.getX1("1234");}).contains("Maximum length of value exceeded");
 		assertEquals("{x:'12|34'}", x.getX2("12","34"));
 		assertEquals("{x:'123|456'}", x.getX2("123","456"));
-		try { x.getX2("1","2"); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum length of value not met"); }
-		try { x.getX2("1234","5678"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum length of value exceeded"); }
+		assertThrown(()->{return x.getX2("1","2");}).contains("Minimum length of value not met");
+		assertThrown(()->{return x.getX2("1234","5678");}).contains("Maximum length of value exceeded");
 		assertEquals("{x:'12|null'}", x.getX2("12",null));
 		assertEquals("{x:'foo'}", x.getX3("foo"));
-		try { x.getX3("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
+		assertThrown(()->{return x.getX3("bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 		assertEquals("{x:'foo'}", x.getX4("foo"));
-		try { x.getX4("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
+		assertThrown(()->{return x.getX4("bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 		assertEquals("{x:null}", x.getX4((String)null));
 		assertEquals("{x:'foo123'}", x.getX5("foo123"));
-		try { x.getX5("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match expected pattern"); }
+		assertThrown(()->{return x.getX5("bar");}).contains("Value does not match expected pattern");
 		assertEquals("{x:'foo123'}", x.getX6("foo123"));
-		try { x.getX6("foo"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match expected pattern"); }
+		assertThrown(()->{return x.getX6("foo");}).contains("Value does not match expected pattern");
 		assertEquals("{x:null}", x.getX6((String)null));
 	}
 
@@ -499,33 +499,33 @@ public class Remote_PathAnnotation_Test {
 	public void f01_path_multipleOf() throws Exception {
 		F1 x = MockRestClient.build(F.class).getRemote(F1.class);
 		assertEquals("{x:'4'}", x.getX1(4));
-		try { x.getX1(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX1(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX2((short)4));
-		try { x.getX2((short)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX2((short)5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX3(4));
-		try { x.getX3(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX3(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.getX4(4));
-		try { x.getX4(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX4(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.getX5(4));
-		try { x.getX5(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX5(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX6((byte)4));
-		try { x.getX6((byte)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX6((byte)5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX7(new AtomicInteger(4)));
-		try { x.getX7(new AtomicInteger(5)); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX7(new AtomicInteger(5));}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX8(new BigDecimal(4)));
-		try { x.getX8(new BigDecimal(5)); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX8(new BigDecimal(5));}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX9(4));
-		try { x.getX9(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX9(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX10((short)4));
-		try { x.getX10((short)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX10((short)5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX11(4l));
-		try { x.getX11(5l); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX11(5l);}).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.getX12(4f));
-		try { x.getX12(5f); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX12(5f);}).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.getX13(4d));
-		try { x.getX13(5d); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX13(5d);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX14((byte)4));
-		try { x.getX14((byte)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(()->{return x.getX14((byte)5);}).contains("Multiple-of not met");
 	}
 
 	//=================================================================================================================
@@ -549,7 +549,7 @@ public class Remote_PathAnnotation_Test {
 	@Test
 	public void h01_path_required() throws Exception {
 		G1 x = MockRestClient.build(G.class).getRemote(G1.class);
-		try { x.getX1(null); fail(); } catch (Exception e) { assertThrowable(e).contains("Required value not provided."); }
+		assertThrown(()->{return x.getX1(null);}).contains("Required value not provided.");
 	}
 
 	//=================================================================================================================

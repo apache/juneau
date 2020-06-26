@@ -138,11 +138,11 @@ public class Remote_FormDataAnnotation_Test {
 	public void b01_default_allowEmptyValue() throws Exception {
 		B1 x = MockRestClient.build(B.class).getRemote(B1.class);
 		assertEquals("{x:'foo'}", x.postX1(null));
-		try { x.postX1(""); } catch (Exception e) { assertThrowable(e).contains("Empty value not allowed"); }
+		assertThrown(() -> { return x.postX1(""); }).contains("Empty value not allowed");
 		assertEquals("{x:'foo'}", x.postX2(null));
 		assertEquals("{x:''}", x.postX2(""));
 		assertEquals("{x:''}", x.postX3(null));
-		try { x.postX3(""); } catch (Exception e) { assertThrowable(e).contains("Empty value not allowed"); }
+		assertThrown(() -> { return x.postX3(""); }).contains("Empty value not allowed");
 		assertEquals("{x:''}", x.postX4(null));
 		assertEquals("{x:''}", x.postX4(""));
 	}
@@ -265,189 +265,189 @@ public class Remote_FormDataAnnotation_Test {
 		D1 x = MockRestClient.build(D.class).getRemote(D1.class);
 		assertEquals("{x:'1'}", x.postX1(1));
 		assertEquals("{x:'10'}", x.postX1(10));
-		try { x.postX1(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX1(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX1(0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX1(11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX2(1));
 		assertEquals("{x:'10'}", x.postX2(10));
-		try { x.postX2(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX2(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX2(0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX2(11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX3(2));
 		assertEquals("{x:'9'}", x.postX3(9));
-		try { x.postX3(1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX3(10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX3(1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX3(10); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX5((short)1));
 		assertEquals("{x:'10'}", x.postX5((short)10));
-		try { x.postX5((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX5((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX5((short)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX5((short)11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX6((short)1));
 		assertEquals("{x:'10'}", x.postX6((short)10));
-		try { x.postX6((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX6((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX6((short)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX6((short)11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX7((short)2));
 		assertEquals("{x:'9'}", x.postX7((short)9));
-		try { x.postX7((short)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX7((short)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX7((short)1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX7((short)10); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX8(1l));
 		assertEquals("{x:'10'}", x.postX8(10l));
-		try { x.postX8(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX8(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX8(0l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX8(11l); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX9(1l));
 		assertEquals("{x:'10'}", x.postX9(10l));
-		try { x.postX9(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX9(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX9(0l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX9(11l); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX10(2l));
 		assertEquals("{x:'9'}", x.postX10(9l));
-		try { x.postX10(1l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX10(10l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX10(1l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX10(10l); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.postX11(1f));
 		assertEquals("{x:'10.0'}", x.postX11(10f));
-		try { x.postX11(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX11(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX11(0.9f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX11(10.1f); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.postX12(1f));
 		assertEquals("{x:'10.0'}", x.postX12(10f));
-		try { x.postX12(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX12(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX12(0.9f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX12(10.1f); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.postX13(1.1f));
 		assertEquals("{x:'9.9'}", x.postX13(9.9f));
-		try { x.postX13(1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX13(10f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX13(1f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX13(10f); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.postX14(1d));
 		assertEquals("{x:'10.0'}", x.postX14(10d));
-		try { x.postX14(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX14(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX14(0.9d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX14(10.1d); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.0'}", x.postX15(1d));
 		assertEquals("{x:'10.0'}", x.postX15(10d));
-		try { x.postX15(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX15(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX15(0.9d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX15(10.1d); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1.1'}", x.postX16(1.1d));
 		assertEquals("{x:'9.9'}", x.postX16(9.9d));
-		try { x.postX16(1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX16(10d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX16(1d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX16(10d); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX17((byte)1));
 		assertEquals("{x:'10'}", x.postX17((byte)10));
-		try { x.postX17((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX17((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX17((byte)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX17((byte)11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX18((byte)1));
 		assertEquals("{x:'10'}", x.postX18((byte)10));
-		try { x.postX18((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX18((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX18((byte)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX18((byte)11); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX19((byte)2));
 		assertEquals("{x:'9'}", x.postX19((byte)9));
-		try { x.postX19((byte)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX19((byte)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX19((byte)1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX19((byte)10); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX20(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", x.postX20(new AtomicInteger(10)));
-		try { x.postX20(new AtomicInteger(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX20(new AtomicInteger(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX20(new AtomicInteger(0)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX20(new AtomicInteger(11)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX21(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", x.postX21(new AtomicInteger(10)));
-		try { x.postX21(new AtomicInteger(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX21(new AtomicInteger(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX21(new AtomicInteger(0)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX21(new AtomicInteger(11)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX22(new AtomicInteger(2)));
 		assertEquals("{x:'9'}", x.postX22(new AtomicInteger(9)));
-		try { x.postX22(new AtomicInteger(1)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX22(new AtomicInteger(10)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX22(new AtomicInteger(1)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX22(new AtomicInteger(10)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX23(new BigDecimal(1)));
 		assertEquals("{x:'10'}", x.postX23(new BigDecimal(10)));
-		try { x.postX23(new BigDecimal(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX23(new BigDecimal(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX23(new BigDecimal(0)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX23(new BigDecimal(11)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX24(new BigDecimal(1)));
 		assertEquals("{x:'10'}", x.postX24(new BigDecimal(10)));
-		try { x.postX24(new BigDecimal(0)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX24(new BigDecimal(11)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX24(new BigDecimal(0)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX24(new BigDecimal(11)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'2'}", x.postX25(new BigDecimal(2)));
 		assertEquals("{x:'9'}", x.postX25(new BigDecimal(9)));
-		try { x.postX25(new BigDecimal(1)); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX25(new BigDecimal(10)); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX25(new BigDecimal(1)); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX25(new BigDecimal(10)); }).contains("Maximum value exceeded");
 		assertEquals("{x:'1'}", x.postX26(1));
 		assertEquals("{x:'10'}", x.postX26(10));
-		try { x.postX26(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX26(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX26(0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX26(11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX26(null));
 		assertEquals("{x:'1'}", x.postX27(1));
 		assertEquals("{x:'10'}", x.postX27(10));
-		try { x.postX27(0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX27(11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX27(0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX27(11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX27(null));
 		assertEquals("{x:'2'}", x.postX28(2));
 		assertEquals("{x:'9'}", x.postX28(9));
-		try { x.postX28(1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX28(10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX28(1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX28(10); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX28(null));
 		assertEquals("{x:'1'}", x.postX29((short)1));
 		assertEquals("{x:'10'}", x.postX29((short)10));
-		try { x.postX29((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX29((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX29((short)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX29((short)11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX29(null));
 		assertEquals("{x:'1'}", x.postX30((short)1));
 		assertEquals("{x:'10'}", x.postX30((short)10));
-		try { x.postX30((short)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX30((short)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX30((short)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX30((short)11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX30(null));
 		assertEquals("{x:'2'}", x.postX31((short)2));
 		assertEquals("{x:'9'}", x.postX31((short)9));
-		try { x.postX31((short)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX31((short)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX31((short)1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX31((short)10); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX31(null));
 		assertEquals("{x:'1'}", x.postX32(1l));
 		assertEquals("{x:'10'}", x.postX32(10l));
-		try { x.postX32(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX32(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX32(0l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX32(11l); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX32(null));
 		assertEquals("{x:'1'}", x.postX33(1l));
 		assertEquals("{x:'10'}", x.postX33(10l));
-		try { x.postX33(0l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX33(11l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX33(0l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX33(11l); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX33(null));
 		assertEquals("{x:'2'}", x.postX34(2l));
 		assertEquals("{x:'9'}", x.postX34(9l));
-		try { x.postX34(1l); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX34(10l); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX34(1l); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX34(10l); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX34(null));
 		assertEquals("{x:'1.0'}", x.postX35(1f));
 		assertEquals("{x:'10.0'}", x.postX35(10f));
-		try { x.postX35(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX35(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX35(0.9f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX35(10.1f); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX35(null));
 		assertEquals("{x:'1.0'}", x.postX36(1f));
 		assertEquals("{x:'10.0'}", x.postX36(10f));
-		try { x.postX36(0.9f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX36(10.1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX36(0.9f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX36(10.1f); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX36(null));
 		assertEquals("{x:'1.1'}", x.postX37(1.1f));
 		assertEquals("{x:'9.9'}", x.postX37(9.9f));
-		try { x.postX37(1f); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX37(10f); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX37(1f); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX37(10f); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX37(null));
 		assertEquals("{x:'1.0'}", x.postX38(1d));
 		assertEquals("{x:'10.0'}", x.postX38(10d));
-		try { x.postX38(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX38(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX38(0.9d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX38(10.1d); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX38(null));
 		assertEquals("{x:'1.0'}", x.postX39(1d));
 		assertEquals("{x:'10.0'}", x.postX39(10d));
-		try { x.postX39(0.9d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX39(10.1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX39(0.9d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX39(10.1d); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX39(null));
 		assertEquals("{x:'1.1'}", x.postX40(1.1d));
 		assertEquals("{x:'9.9'}", x.postX40(9.9d));
-		try { x.postX40(1d); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX40(10d); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX40(1d); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX40(10d); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX40(null));
 		assertEquals("{x:'1'}", x.postX41((byte)1));
 		assertEquals("{x:'10'}", x.postX41((byte)10));
-		try { x.postX41((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX41((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX41((byte)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX41((byte)11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX41(null));
 		assertEquals("{x:'1'}", x.postX42((byte)1));
 		assertEquals("{x:'10'}", x.postX42((byte)10));
-		try { x.postX42((byte)0); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX42((byte)11); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX42((byte)0); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX42((byte)11); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX42(null));
 		assertEquals("{x:'2'}", x.postX43((byte)2));
 		assertEquals("{x:'9'}", x.postX43((byte)9));
-		try { x.postX43((byte)1); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum value not met"); }
-		try { x.postX43((byte)10); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum value exceeded"); }
+		assertThrown(() -> { return x.postX43((byte)1); }).contains("Minimum value not met");
+		assertThrown(() -> { return x.postX43((byte)10); }).contains("Maximum value exceeded");
 		assertEquals("{}", x.postX43(null));
 	}
 
@@ -478,20 +478,20 @@ public class Remote_FormDataAnnotation_Test {
 		E1 x = MockRestClient.build(E.class).getRemote(E1.class);
 		assertEquals("{x:'1'}", x.postX1("1"));
 		assertEquals("{x:'1|2'}", x.postX1("1","2"));
-		try { x.postX1(); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum number of items not met"); }
-		try { x.postX1("1","2","3"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum number of items exceeded"); }
+		assertThrown(() -> { return x.postX1(); }).contains("Minimum number of items not met");
+		assertThrown(() -> { return x.postX1("1","2","3"); }).contains("Maximum number of items exceeded");
 		assertEquals("{x:null}", x.postX1((String)null));
 		assertEquals("{x:'1'}", x.postX2(new String[]{"1"}));
 		assertEquals("{x:'1|2'}", x.postX2(new String[]{"1","2"}));
-		try { x.postX2(new String[]{}); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum number of items not met"); }
-		try { x.postX2(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum number of items exceeded"); }
+		assertThrown(() -> { return x.postX2(new String[]{}); }).contains("Minimum number of items not met");
+		assertThrown(() -> { return x.postX2(new String[]{"1","2","3"}); }).contains("Maximum number of items exceeded");
 		assertEquals("{x:null}", x.postX2(new String[]{null}));
 		assertEquals("{x:'1|1'}", x.postX3("1","1"));
 		assertEquals("{x:'1|1'}", x.postX4(new String[]{"1","1"}));
 		assertEquals("{x:'1|2'}", x.postX5("1","2"));
-		try { x.postX5("1","1"); fail(); } catch (Exception e) { assertThrowable(e).contains("Duplicate items not allowed"); }
+		assertThrown(() -> { return x.postX5("1","1"); }).contains("Duplicate items not allowed");
 		assertEquals("{x:'1|2'}", x.postX6(new String[]{"1","2"}));
-		try { x.postX6(new String[]{"1","1"}); fail(); } catch (Exception e) { assertThrowable(e).contains("Duplicate items not allowed"); }
+		assertThrown(() -> { return x.postX6(new String[]{"1","1"}); }).contains("Duplicate items not allowed");
 	}
 
 	//=================================================================================================================
@@ -516,32 +516,31 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteMethod(path="/") String postX6(@FormData(n="x",cf="pipes",items=@Items(p="foo\\d{1,3}")) String...b);
 	}
 
-	private static F1 fr = MockRestClient.build(F.class).getRemote(F1.class);
-
 	@Test
 	public void f01_minl_maxl_enum_pattern() throws Exception {
-		assertEquals("{x:'12'}", fr.postX1("12"));
-		assertEquals("{x:'123'}", fr.postX1("123"));
-		try { fr.postX1("1"); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum length of value not met"); }
-		try { fr.postX1("1234"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum length of value exceeded"); }
-		assertEquals("{}", fr.postX1(null));
-		assertEquals("{x:'12|34'}", fr.postX2("12","34"));
-		assertEquals("{x:'123|456'}", fr.postX2("123","456"));
-		try { fr.postX2("1","2"); fail(); } catch (Exception e) { assertThrowable(e).contains("Minimum length of value not met"); }
-		try { fr.postX2("1234","5678"); fail(); } catch (Exception e) { assertThrowable(e).contains("Maximum length of value exceeded"); }
-		assertEquals("{x:'12|null'}", fr.postX2("12",null));
-		assertEquals("{x:'foo'}", fr.postX3("foo"));
-		try { fr.postX3("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match one of the expected values"); }
-		assertEquals("{}", fr.postX3(null));
-		assertEquals("{x:'foo'}", fr.postX4("foo"));
-		try { fr.postX4("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match one of the expected values"); }
-		assertEquals("{x:null}", fr.postX4((String)null));
-		assertEquals("{x:'foo123'}", fr.postX5("foo123"));
-		try { fr.postX5("bar"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match expected pattern"); }
-		assertEquals("{}", fr.postX5(null));
-		assertEquals("{x:'foo123'}", fr.postX6("foo123"));
-		try { fr.postX6("foo"); fail(); } catch (Exception e) { assertThrowable(e).contains("Value does not match expected pattern"); }
-		assertEquals("{x:null}", fr.postX6((String)null));
+		F1 x = MockRestClient.build(F.class).getRemote(F1.class);
+		assertEquals("{x:'12'}", x.postX1("12"));
+		assertEquals("{x:'123'}", x.postX1("123"));
+		assertThrown(() -> { return x.postX1("1"); }).contains("Minimum length of value not met");
+		assertThrown(() -> { return x.postX1("1234"); }).contains("Maximum length of value exceeded");
+		assertEquals("{}", x.postX1(null));
+		assertEquals("{x:'12|34'}", x.postX2("12","34"));
+		assertEquals("{x:'123|456'}", x.postX2("123","456"));
+		assertThrown(() -> { return x.postX2("1","2"); }).contains("Minimum length of value not met");
+		assertThrown(() -> { return x.postX2("1234","5678"); }).contains("Maximum length of value exceeded");
+		assertEquals("{x:'12|null'}", x.postX2("12",null));
+		assertEquals("{x:'foo'}", x.postX3("foo"));
+		assertThrown(() -> { return x.postX3("bar"); }).contains("Value does not match one of the expected values");
+		assertEquals("{}", x.postX3(null));
+		assertEquals("{x:'foo'}", x.postX4("foo"));
+		assertThrown(() -> { return x.postX4("bar"); }).contains("Value does not match one of the expected values");
+		assertEquals("{x:null}", x.postX4((String)null));
+		assertEquals("{x:'foo123'}", x.postX5("foo123"));
+		assertThrown(() -> { return x.postX5("bar"); }).contains("Value does not match expected pattern");
+		assertEquals("{}", x.postX5(null));
+		assertEquals("{x:'foo123'}", x.postX6("foo123"));
+		assertThrown(() -> { return x.postX6("foo"); }).contains("Value does not match expected pattern");
+		assertEquals("{x:null}", x.postX6((String)null));
 	}
 
 	//=================================================================================================================
@@ -578,33 +577,33 @@ public class Remote_FormDataAnnotation_Test {
 	public void g01_multipleOf() throws Exception {
 		G1 x = MockRestClient.build(G.class).getRemote(G1.class);
 		assertEquals("{x:'4'}", x.postX1(4));
-		try { x.postX1(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX1(5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX2((short)4));
-		try { x.postX2((short)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX2((short)5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX3(4));
-		try { x.postX3(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX3(5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.postX4(4));
-		try { x.postX4(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX4(5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.postX5(4));
-		try { x.postX5(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX5(5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX6((byte)4));
-		try { x.postX6((byte)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX6((byte)5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX7(new AtomicInteger(4)));
-		try { x.postX7(new AtomicInteger(5)); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX7(new AtomicInteger(5)); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX8(new BigDecimal(4)));
-		try { x.postX8(new BigDecimal(5)); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX8(new BigDecimal(5)); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX9(4));
-		try { x.postX9(5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX9(5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX10((short)4));
-		try { x.postX10((short)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX10((short)5); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX11(4l));
-		try { x.postX11(5l); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX11(5l); }).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.postX12(4f));
-		try { x.postX12(5f); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX12(5f); }).contains("Multiple-of not met");
 		assertEquals("{x:'4.0'}", x.postX13(4d));
-		try { x.postX13(5d); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX13(5d); }).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.postX14((byte)4));
-		try { x.postX14((byte)5); fail(); } catch (Exception e) { assertThrowable(e).contains("Multiple-of not met"); }
+		assertThrown(() -> { return x.postX14((byte)5); }).contains("Multiple-of not met");
 	}
 
 	//=================================================================================================================
@@ -632,7 +631,7 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{}", x.postX1(null));
 		assertEquals("{}", x.postX2(null));
 		assertEquals("{x:'1'}", x.postX3("1"));
-		try { x.postX3(null); fail(); } catch (Exception e) { assertThrowable(e).contains("Required value not provided."); }
+		assertThrown(() -> { return x.postX3(null); }).contains("Required value not provided.");
 	}
 
 	//=================================================================================================================

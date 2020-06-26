@@ -18,7 +18,6 @@ import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
@@ -253,7 +252,7 @@ public class Remote_Test {
 	@Test
 	public void c02_rootUriNotSpecified() throws Exception {
 		C1 x = MockRestClient.create(C.class).json().rootUrl("").build().getRemote(C1.class);
-		try { x.x1(); fail(); } catch (RemoteMetadataException e) { assertThrowable(e).contains("Root URI has not been specified."); }
+		assertThrown(()->{return x.x1();}).contains("Root URI has not been specified.");
 	}
 
 
@@ -317,11 +316,11 @@ public class Remote_Test {
 	@Test
 	public void c04_rethrownExceptions() throws Exception {
 		C4b x = MockRestClient.create(C4a.class).json().build().getRemote(C4b.class);
-		try { x.x1(); fail(); } catch (C4c e) { assertEquals("foo", e.getMessage()); }
-		try { x.x1a().get(); fail(); } catch (ExecutionException e) { assertEquals("foo", e.getCause().getMessage()); }
-		try { x.x1b().get(); fail(); } catch (ExecutionException e) { assertEquals("foo", e.getCause().getMessage()); }
-		try { x.x2(); fail(); } catch (RuntimeException e) { assertTrue(e.getMessage().contains("foo")); }
-		try { x.x3().get(); fail(); } catch (ExecutionException e) { assertEquals("foo", e.getCause().getCause().getMessage()); }
+		assertThrown(()->{return x.x1();}).contains("foo");
+		assertThrown(()->{return x.x1a().get();}).contains("foo");
+		assertThrown(()->{return x.x1b().get();}).contains("foo");
+		assertThrown(()->{return x.x2();}).contains("foo");
+		assertThrown(()->{return x.x3().get();}).contains("foo");
 	}
 
 	//=================================================================================================================
@@ -365,8 +364,8 @@ public class Remote_Test {
 		assertEquals(400, x.x7().intValue());
 		assertEquals(false, x.x8());
 		assertEquals(false, x.x9());
-		try { x.x5(); fail(); } catch (Exception e) { assertThrowable(e).contains("Only integer and booleans types are valid."); }
-		try { x.x10(); fail(); } catch (Exception e) { assertThrowable(e).contains("Only integer and booleans types are valid."); }
+		assertThrown(()->{return x.x5();}).contains("Only integer and booleans types are valid.");
+		assertThrown(()->{return x.x10();}).contains("Only integer and booleans types are valid.");
 	}
 
 	@Rest
@@ -426,11 +425,8 @@ public class Remote_Test {
 
 	@Test
 	public void e02_rrpc_noRootPath() throws Exception {
-		try {
-			MockRestClient.create(E.class).rootUrl("").json().build().getRrpcInterface(E1.class);
-		} catch (RemoteMetadataException e) {
-			assertThrowable(e).contains("Root URI has not been specified.");
-		}
+		RestClient x = MockRestClient.create(E.class).rootUrl("").json().build();
+		assertThrown(()->{return x.getRrpcInterface(E1.class);}).contains("Root URI has not been specified.");
 	}
 
 	@Remote(path="/proxy")
@@ -441,7 +437,6 @@ public class Remote_Test {
 	@Test
 	public void e03_rrpc_noRestUrl() throws Exception {
 		E3 x = MockRestClient.create(E.class).rootUrl("http://localhost").json().build().getRrpcInterface(E3.class);
-
 		assertEquals("foo", x.echo("foo"));
 	}
 
@@ -453,7 +448,6 @@ public class Remote_Test {
 	@Test
 	public void e04_rrpc_fullPathOnRemotePath() throws Exception {
 		E4 x = MockRestClient.create(E.class).rootUrl("").json().build().getRrpcInterface(E4.class);
-
 		assertEquals("foo", x.echo("foo"));
 	}
 
@@ -483,11 +477,8 @@ public class Remote_Test {
 
 	@Test
 	public void e05_rrpc_rethrownCheckedException() throws Exception {
-		try {
-			MockRestClient.create(E5.class).json().build().getRrpcInterface(E5b.class, "/proxy").echo("foo");
-		} catch (E5a e) {
-			assertEquals("foobar", e.getMessage());
-		}
+		RestClient x = MockRestClient.create(E5.class).json().build();
+		assertThrown(()->{return x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
 	}
 
 	@Rest
@@ -505,11 +496,7 @@ public class Remote_Test {
 
 	@Test
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
-		try {
-			MockRestClient.create(E6.class).json().build().getRrpcInterface(E5b.class, "/proxy").echo("foo");
-		} catch (RuntimeException e) {
-			assertEquals(RestCallException.class, e.getCause().getClass());
-			assertTrue(e.getCause().getMessage().contains("foobar"));
-		}
+		RestClient x = MockRestClient.create(E6.class).json().build();
+		assertThrown(()->{return x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
 	}
 }

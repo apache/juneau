@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import static org.apache.juneau.assertions.ThrowableAssertion.*;
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -25,7 +25,7 @@ import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class CallbackStringsTest {
+public class RestClient_CallbackStrings_Test {
 
 	//=================================================================================================================
 	// Basic tests
@@ -49,40 +49,23 @@ public class CallbackStringsTest {
 			return m;
 		}
 	}
-	static RestClient a = MockRestClient.build(A.class);
 
 	@Test
 	public void a01_basicTests() throws Exception {
-		String r;
-
-		r = a.callback("GET /testCallback").run().getBody().asString();
-		assertEquals("{method:'GET',headers:{},content:''}", r);
-
-		r = a.callback("GET /testCallback some sample content").run().getBody().asString();
-		assertEquals("{method:'GET',headers:{},content:'some sample content'}", r);
-
-		r = a.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback").run().getBody().asString();
-		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}", r);
-
-		r = a.callback("GET  { Foo-X : 123, Foo-Y : 'abc' } /testCallback").run().getBody().asString();
-		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}", r);
-
-		r = a.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().getBody().asString();
-		assertEquals("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}", r);
-
-		r = a.callback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().getBody().asString();
-		assertEquals("{method:'PUT',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}", r);
+		RestClient x = MockRestClient.build(A.class);
+		x.callback("GET /testCallback").run().assertBody().is("{method:'GET',headers:{},content:''}");
+		x.callback("GET /testCallback some sample content").run().assertBody().is("{method:'GET',headers:{},content:'some sample content'}");
+		x.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback").run().assertBody().is("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}");
+		x.callback("GET  { Foo-X : 123, Foo-Y : 'abc' } /testCallback").run().assertBody().is("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:''}");
+		x.callback("GET {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().assertBody().is("{method:'GET',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}");
+		x.callback("PUT {Foo-X:123,Foo-Y:'abc'} /testCallback   some sample content  ").run().assertBody().is("{method:'PUT',headers:{'Foo-X':'123','Foo-Y':'abc'},content:'some sample content'}");
 	}
 
 	@Test
 	public void a02_invalidStrings() throws Exception {
+		RestClient x = MockRestClient.build(A.class);
 		for (String s : AList.of("", "GET", "GET ", "GET {", "GET {xxx} /foo", null)) {
-			try {
-				a.callback(s).run().getBody().asString();
-				fail("'"+s+"' didn't fail");
-			} catch (RestCallException e) {
-				assertTrue(e.getMessage().startsWith("Invalid format for call string."));
-			}
+			assertThrown(()->{return x.callback(s).run().getBody().asString();}).contains("Invalid format for call string.");
 		}
 	}
 }

@@ -3893,6 +3893,16 @@ public final class RestContext extends BeanContext {
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getLastAnnotation(RestMethod.class);
+				
+				// Also include methods on @Rest-annotated interfaces.
+				if (a == null) {
+					for (Method mi2 : mi.getMatching()) {
+						Class<?> ci2 = mi2.getDeclaringClass();
+						if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
+							a = new RestMethodAnnotation();
+						}
+					}
+				}
 				if (a != null) {
 					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {

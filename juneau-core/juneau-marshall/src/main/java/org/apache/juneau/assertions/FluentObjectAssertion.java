@@ -80,7 +80,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		if (o == null && parent == null)
 			return returns();
 		if (o == null && parent != null || o != null && parent == null || ! ClassInfo.of(o).isChildOf(parent))
-			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", StringUtils.stringify(parent), o == null ? null : o.getClass());
+			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(o));
 		return returns();
 	}
 

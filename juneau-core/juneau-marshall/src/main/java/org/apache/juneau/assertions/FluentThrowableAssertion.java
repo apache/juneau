@@ -35,6 +35,19 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 		this.throwable = throwable;
 	}
 
+
+	/**
+	 * Asserts that this throwable is of the specified type.
+	 *
+	 * @param type The type.
+	 * @return This object (for method chaining).
+	 */
+	public R isType(Class<?> type) {
+		if (! type.isInstance(throwable))
+			throw error("Exception was not expected type.\n\tExpected=[{0}]\n\tActual=[{1}]", className(type), className(throwable));
+		return returns();
+	}
+
 	/**
 	 * Asserts that this throwable or any parent throwables contains all of the specified substrings.
 	 *

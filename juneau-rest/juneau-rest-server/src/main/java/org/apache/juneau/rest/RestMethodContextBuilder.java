@@ -45,6 +45,16 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 		try {
 
 			RestMethod m = mi.getLastAnnotation(RestMethod.class);
+
+			// Also include methods on @Rest-annotated interfaces.
+			if (m == null) {
+				for (Method mi2 : mi.getMatching()) {
+					Class<?> ci2 = mi2.getDeclaringClass();
+					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null)
+						m = new RestMethodAnnotation();
+				}
+			}
+
 			if (m == null)
 				throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
