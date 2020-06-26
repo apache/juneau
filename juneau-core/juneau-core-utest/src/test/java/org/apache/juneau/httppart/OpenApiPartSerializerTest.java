@@ -44,16 +44,16 @@ public class OpenApiPartSerializerTest {
 	public void a01_outputValidations_nullOutput() throws Exception {
 		assertEquals("null", serialize(T_NONE, null));
 		assertEquals("null", serialize(tNone().required(false).build(), null));
-		assertThrown(()->{return serialize(tNone().required().build(), null);}).contains("Required value not provided.");
-		assertThrown(()->{return serialize(tNone().required(true).build(), null);}).contains("Required value not provided.");
+		assertThrown(()->{serialize(tNone().required().build(), null);}).is("Required value not provided.");
+		assertThrown(()->{serialize(tNone().required(true).build(), null);}).is("Required value not provided.");
 	}
 
 	@Test
 	public void a02_outputValidations_emptyOutput() throws Exception {
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
 		assertEquals("", serialize(tNone().allowEmptyValue().build(), ""));
-		assertThrown(()->{return serialize(tNone().allowEmptyValue(false).build(), "");}).contains("Empty value not allowed.");
-		assertThrown(()->{return serialize(tNone().allowEmptyValue(false).build(), "");}).contains("Empty value not allowed.");
+		assertThrown(()->{serialize(tNone().allowEmptyValue(false).build(), "");}).is("Empty value not allowed.");
+		assertThrown(()->{serialize(tNone().allowEmptyValue(false).build(), "");}).is("Empty value not allowed.");
 		assertEquals(" ", serialize(tNone().allowEmptyValue(false).build(), " "));
 	}
 
@@ -64,8 +64,8 @@ public class OpenApiPartSerializerTest {
 		assertEquals("xx", serialize(ps, "xx"));
 		assertEquals("null", serialize(ps, null));
 
-		assertThrown(()->{return serialize(ps, "y");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->{return serialize(ps, "");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{serialize(ps, "y");}).is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{serialize(ps, "");}).is("Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
 		assertEquals("x", serialize(tNone().pattern("").allowEmptyValue().build(), "x"));
@@ -79,8 +79,8 @@ public class OpenApiPartSerializerTest {
 		assertEquals("foo", serialize(ps, "foo"));
 		assertEquals("null", serialize(ps, null));
 
-		assertThrown(()->{return serialize(ps, "bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertThrown(()->{return serialize(ps, "");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{serialize(ps, "bar");}).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{serialize(ps, "");}).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 
 		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).build(), "foo"));
 		assertEquals("foo", serialize(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo"));
@@ -95,8 +95,8 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1", serialize(ps, "1"));
 		assertEquals("12", serialize(ps, "12"));
 
-		assertThrown(()->{return serialize(ps, "");}).contains("Minimum length of value not met.");
-		assertThrown(()->{return serialize(ps, "123");}).contains("Maximum length of value exceeded.");
+		assertThrown(()->{serialize(ps, "");}).is("Minimum length of value not met.");
+		assertThrown(()->{serialize(ps, "123");}).is("Maximum length of value exceeded.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

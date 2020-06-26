@@ -1369,10 +1369,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAll_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->{return a.isAll(HAS_PARAMS);});
-		assertThrown(()->{return a.isAll(HAS_NO_PARAMS);});
-		assertThrown(()->{return a.isAll(TRANSIENT);});
-		assertThrown(()->{return a.isAll(NOT_TRANSIENT);});
+		assertThrown(()->{a.isAll(HAS_PARAMS);}).exists();
+		assertThrown(()->{a.isAll(HAS_NO_PARAMS);}).exists();
+		assertThrown(()->{a.isAll(TRANSIENT);}).exists();
+		assertThrown(()->{a.isAll(NOT_TRANSIENT);}).exists();
 	}
 
 	@Test
@@ -1474,10 +1474,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAny_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->{return a.isAny(HAS_PARAMS);});
-		assertThrown(()->{return a.isAny(HAS_NO_PARAMS);});
-		assertThrown(()->{return a.isAny(TRANSIENT);});
-		assertThrown(()->{return a.isAny(NOT_TRANSIENT);});
+		assertThrown(()->{a.isAny(HAS_PARAMS);}).exists();
+		assertThrown(()->{a.isAny(HAS_NO_PARAMS);}).exists();
+		assertThrown(()->{a.isAny(TRANSIENT);}).exists();
+		assertThrown(()->{a.isAny(NOT_TRANSIENT);}).exists();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2054,11 +2054,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void newInstance_type() {
-		assertThrown(()->{return aTypeInfo.newInstance();}).isType(ExecutableException.class);
-		assertThrown(()->{return pTypeInfo.newInstance();}).isType(ExecutableException.class);
-		assertThrown(()->{return pTypeDimensionalInfo.newInstance();}).isType(ExecutableException.class);
-		assertThrown(()->{return pTypeGenericInfo.newInstance();}).isType(Exception.class);
-		assertThrown(()->{return pTypeGenericArgInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{aTypeInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{pTypeInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{pTypeDimensionalInfo.newInstance();}).isType(ExecutableException.class);
+		assertThrown(()->{pTypeGenericInfo.newInstance();}).isType(Exception.class);
+		assertThrown(()->{pTypeGenericArgInfo.newInstance();}).isType(ExecutableException.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2106,27 +2106,27 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_outOfBounds() {
-		assertThrown(()->{return ma.getParameterType(2, HashMap.class);}).contains("Invalid type index. index=2, argsLength=2");
+		assertThrown(()->{ma.getParameterType(2, HashMap.class);}).is("Invalid type index. index=2, argsLength=2");
 	}
 
 	@Test
 	public void getParameterType_notASubclass() {
-		assertThrown(()->{return aClass.getParameterType(2, HashMap.class);}).contains("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
+		assertThrown(()->{aClass.getParameterType(2, HashMap.class);}).is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
 	}
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		assertThrown(()->{return aClass.getParameterType(2, null);}).contains("Parameterized type cannot be null");
+		assertThrown(()->{aClass.getParameterType(2, null);}).is("Parameterized type cannot be null");
 	}
 
 	@Test
 	public void getParameterType_notParamerizedType() {
-		assertThrown(()->{return mb.getParameterType(2, MA.class);}).contains("Class 'MA' is not a parameterized type");
+		assertThrown(()->{mb.getParameterType(2, MA.class);}).is("Class 'MA' is not a parameterized type");
 	}
 
 	@Test
 	public void getParameterType_unresolvedTypes() {
-		assertThrown(()->{return mc.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'E' to a type.");
+		assertThrown(()->{mc.getParameterType(1, HashMap.class);}).is("Could not resolve variable 'E' to a type.");
 	}
 
 	@Test
@@ -2156,12 +2156,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_unresolvedGenericArrayType() {
-		assertThrown(()-> {return mi.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'X[]' to a type.");
+		assertThrown(()-> {mi.getParameterType(1, HashMap.class);}).is("Could not resolve variable 'X[]' to a type.");
 	}
 
 	@Test
 	public void getParameterType_wildcardType() {
-		assertThrown(()-> {return mj.getParameterType(1, HashMap.class);}).contains("Could not resolve variable 'X' to a type.");
+		assertThrown(()-> {mj.getParameterType(1, HashMap.class);}).is("Could not resolve variable 'X' to a type.");
 	}
 
 	@Test

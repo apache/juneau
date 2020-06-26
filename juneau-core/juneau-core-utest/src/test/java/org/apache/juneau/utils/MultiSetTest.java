@@ -43,7 +43,7 @@ public class MultiSetTest {
 		assertTrue(i1.hasNext());
 		assertEquals("4", i1.next());
 		assertFalse(i1.hasNext());
-		assertThrown(()->{return i1.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{i1.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		l2 = Arrays.asList(new String[]{});
@@ -54,7 +54,7 @@ public class MultiSetTest {
 		assertTrue(i2.hasNext());
 		assertEquals("2", i2.next());
 		assertFalse(i2.hasNext());
-		assertThrown(()->{return i2.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{i2.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{"3","4"});
@@ -65,14 +65,14 @@ public class MultiSetTest {
 		assertTrue(i3.hasNext());
 		assertEquals("4", i3.next());
 		assertFalse(i3.hasNext());
-		assertThrown(()->{return i3.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{i3.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{});
 		l2 = Arrays.asList(new String[]{});
 		ms = new MultiSet<>(l1, l2);
 		Iterator<String> i4 = ms.iterator();
 		assertFalse(i4.hasNext());
-		assertThrown(()->{return i4.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{i4.next();}).isType(NoSuchElementException.class);
 
 		l1 = Arrays.asList(new String[]{"1","2"});
 		ms = new MultiSet<>(l1);
@@ -82,7 +82,7 @@ public class MultiSetTest {
 		assertTrue(i5.hasNext());
 		assertEquals("2", i5.next());
 		assertFalse(i5.hasNext());
-		assertThrown(()->{return i5.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{i5.next();}).isType(NoSuchElementException.class);
 
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
@@ -116,9 +116,9 @@ public class MultiSetTest {
 		assertObject(ms).json().is("[]");
 		assertEquals(0, ms.size());
 
-		assertThrown(()->{return new MultiSet<>((Collection<String>)null);}).isType(IllegalArgumentException.class);
-		assertThrown(()->{return new MultiSet<String>().iterator().next();}).isType(NoSuchElementException.class);
-		assertThrown(()->{new MultiSet<String>().iterator().remove(); return null;}).isType(NoSuchElementException.class);
+		assertThrown(()->{new MultiSet<>((Collection<String>)null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{new MultiSet<String>().iterator().next();}).isType(NoSuchElementException.class);
+		assertThrown(()->{new MultiSet<String>().iterator().remove();}).isType(NoSuchElementException.class);
 
 	}
 }

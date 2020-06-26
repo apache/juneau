@@ -45,7 +45,7 @@ public class FilteredMapTest {
 		m2.entrySet().iterator().next().setValue("3");
 		assertObject(m2).json().is("{a:'3'}");
 
-		assertThrown(()->{return new FilteredMap<>(cm2, null, new String[0]);}).isType(IllegalArgumentException.class);
-		assertThrown(()->{return new FilteredMap<>(cm, m, null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{new FilteredMap<>(cm2, null, new String[0]);}).isType(IllegalArgumentException.class);
+		assertThrown(()->{new FilteredMap<>(cm, m, null);}).isType(IllegalArgumentException.class);
 	}
 }

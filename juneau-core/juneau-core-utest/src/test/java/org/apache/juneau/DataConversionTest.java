@@ -89,15 +89,15 @@ public class DataConversionTest {
 		m.put("x", TestEnum.ENUM2);
 		assertEquals(m.getString("x"), "ENUM2");
 		assertFalse(m.getBoolean("x"));
-		assertThrown(()->{return m.getMap("x");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->{m.getMap("x");}).isType(InvalidDataConversionException.class);
 
 		// *** Not a bean ***
 		m.put("x", new NotABean("foo"));
 		assertEquals(m.getString("x"), "foo");
-		assertThrown(()->{return m.getInt("x");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{return m.getLong("x");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->{m.getInt("x");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->{m.getLong("x");}).isType(InvalidDataConversionException.class);
 		assertFalse(m.getBoolean("x"));
-		assertThrown(()->{return m.getMap("x");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->{m.getMap("x");}).isType(InvalidDataConversionException.class);
 	}
 
 	public enum TestEnum {

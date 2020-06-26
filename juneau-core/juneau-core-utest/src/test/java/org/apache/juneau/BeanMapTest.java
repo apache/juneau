@@ -629,7 +629,7 @@ public class BeanMapTest {
 
 		// Expect exception on unsettable field
 		// TODO - Fix me.
-		//assertThrown(()->{return m.put("l1", "[{a:'a',i:1}]");});
+		//assertThrown(()->{m.put("l1", "[{a:'a',i:1}]");}).exists();
 
 		m.put("l2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("l2").getClass().getName());
@@ -645,7 +645,7 @@ public class BeanMapTest {
 
 		// Expect exception on unsettable field
 		// TODO - Fix me.
-		//assertThrown(()->{return m.put("m1", "[{a:'a',i:1}]");});
+		//assertThrown(()->{m.put("m1", "[{a:'a',i:1}]");}).exists();
 
 		m.put("m2", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("m2").getClass().getName());
@@ -1024,7 +1024,7 @@ public class BeanMapTest {
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->{return JsonParser.DEFAULT.parse(json, O.class);});
+		assertThrown(()->{JsonParser.DEFAULT.parse(json, O.class);}).exists();
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
@@ -1032,7 +1032,7 @@ public class BeanMapTest {
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->{return XmlParser.DEFAULT.parse(json, O.class);});
+		assertThrown(()->{XmlParser.DEFAULT.parse(json, O.class);}).exists();
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
@@ -1040,7 +1040,7 @@ public class BeanMapTest {
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->{return HtmlParser.DEFAULT.parse(json, O.class);});
+		assertThrown(()->{HtmlParser.DEFAULT.parse(json, O.class);}).exists();
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
@@ -1048,7 +1048,7 @@ public class BeanMapTest {
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->{return UonParser.DEFAULT.parse(json, O.class);});
+		assertThrown(()->{UonParser.DEFAULT.parse(json, O.class);}).exists();
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
@@ -1056,7 +1056,7 @@ public class BeanMapTest {
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->{return UrlEncodingParser.DEFAULT.parse(json, O.class);});
+		assertThrown(()->{UrlEncodingParser.DEFAULT.parse(json, O.class);}).exists();
 	}
 
 	public static class O {

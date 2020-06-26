@@ -382,8 +382,8 @@ public class HttpPartSchemaTest_Header {
 	public void b01_required() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B01.class).build();
 		s.validateInput("x");
-		assertThrown(()->{return s.validateInput(null);}).contains("No value specified.");
-		assertThrown(()->{return s.validateInput("") /*Empty headers are never allowed*/ ;}).contains("Empty value not allowed.");
+		assertThrown(()->{s.validateInput(null);}).is("No value specified.");
+		assertThrown(()->{s.validateInput("") /*Empty headers are never allowed*/ ;}).is("Empty value not allowed.");
 	}
 
 	@Header(p="x.*")
@@ -394,9 +394,9 @@ public class HttpPartSchemaTest_Header {
 		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B02a.class).build();
 		s.validateInput("x");
 		s.validateInput("xx");
-		assertThrown(()->{return s.validateInput("y");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->{return s.validateInput("yx");}).contains("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->{return s.validateInput("") /*Empty headers are never allowed*/;}).contains("Empty value not allowed.");
+		assertThrown(()->{s.validateInput("y");}).is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{s.validateInput("yx");}).is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{s.validateInput("") /*Empty headers are never allowed*/;}).is("Empty value not allowed.");
 	}
 
 	@Header(minl=2, maxl=3)
@@ -408,8 +408,8 @@ public class HttpPartSchemaTest_Header {
 		s.validateInput("12");
 		s.validateInput("123");
 		s.validateInput(null);
-		assertThrown(()->{return s.validateInput("1");}).contains("Minimum length of value not met.");
-		assertThrown(()->{return s.validateInput("1234");}).contains("Maximum length of value exceeded.");
+		assertThrown(()->{s.validateInput("1");}).is("Minimum length of value not met.");
+		assertThrown(()->{s.validateInput("1234");}).is("Maximum length of value exceeded.");
 	}
 
 	@Header(
@@ -445,15 +445,15 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateInput(null);
 		s.getItems().getItems().getItems().getItems().validateInput(null);
 
-		assertThrown(()->{return s.getItems().validateInput("1");}).contains("Minimum length of value not met.");
-		assertThrown(()->{return s.getItems().getItems().validateInput("12");}).contains("Minimum length of value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateInput("123");}).contains("Minimum length of value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateInput("1234");}).contains("Minimum length of value not met.");
+		assertThrown(()->{s.getItems().validateInput("1");}).is("Minimum length of value not met.");
+		assertThrown(()->{s.getItems().getItems().validateInput("12");}).is("Minimum length of value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateInput("123");}).is("Minimum length of value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateInput("1234");}).is("Minimum length of value not met.");
 
-		assertThrown(()->{return s.getItems().validateInput("1234");}).contains("Maximum length of value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateInput("12345");}).contains("Maximum length of value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateInput("123456");}).contains("Maximum length of value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateInput("1234567");}).contains("Maximum length of value exceeded.");
+		assertThrown(()->{s.getItems().validateInput("1234");}).is("Maximum length of value exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateInput("12345");}).is("Maximum length of value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateInput("123456");}).is("Maximum length of value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateInput("1234567");}).is("Maximum length of value exceeded.");
 	}
 
 	@Header(e="X,Y")
@@ -465,7 +465,7 @@ public class HttpPartSchemaTest_Header {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->{return s.validateInput("Z");}).contains("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
+		assertThrown(()->{s.validateInput("Z");}).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
 	@Header(e=" X , Y ")
@@ -477,7 +477,7 @@ public class HttpPartSchemaTest_Header {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->{return s.validateInput("Z");}).contains("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
+		assertThrown(()->{s.validateInput("Z");}).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
 	@Header(e="['X','Y']")
@@ -489,7 +489,7 @@ public class HttpPartSchemaTest_Header {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->{return s.validateInput("Z");}).contains("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
+		assertThrown(()->{s.validateInput("Z");}).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
 	@Header(
@@ -515,10 +515,10 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateInput("Y");
 		s.getItems().getItems().getItems().getItems().validateInput("Z");
 
-		assertThrown(()->{return s.getItems().validateInput("V");}).contains("Value does not match one of the expected values.  Must be one of the following: ['W']");
-		assertThrown(()->{return s.getItems().getItems().validateInput("V");}).contains("Value does not match one of the expected values.  Must be one of the following: ['X']");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateInput("V");}).contains("Value does not match one of the expected values.  Must be one of the following: ['Y']");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateInput("V");}).contains("Value does not match one of the expected values.  Must be one of the following: ['Z']");
+		assertThrown(()->{s.getItems().validateInput("V");}).is("Value does not match one of the expected values.  Must be one of the following: ['W']");
+		assertThrown(()->{s.getItems().getItems().validateInput("V");}).is("Value does not match one of the expected values.  Must be one of the following: ['X']");
+		assertThrown(()->{s.getItems().getItems().getItems().validateInput("V");}).is("Value does not match one of the expected values.  Must be one of the following: ['Y']");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateInput("V");}).is("Value does not match one of the expected values.  Must be one of the following: ['Z']");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -534,8 +534,8 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(9, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.validateOutput(101, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.validateOutput(9, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.validateOutput(101, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(
@@ -566,15 +566,15 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(9, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);}).contains("Minimum value not met.");
+		assertThrown(()->{s.getItems().validateOutput(9, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);}).is("Minimum value not met.");
 
-		assertThrown(()->{return s.getItems().validateOutput(101, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().validateOutput(101, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(min="10", max="100", emin=true, emax=true)
@@ -586,8 +586,8 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(10, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.validateOutput(100, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.validateOutput(10, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.validateOutput(100, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(
@@ -618,15 +618,15 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(99999, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(10, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);}).contains("Minimum value not met.");
+		assertThrown(()->{s.getItems().validateOutput(10, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);}).is("Minimum value not met.");
 
-		assertThrown(()->{return s.getItems().validateOutput(100, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().validateOutput(100, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(min="10.1", max="100.1")
@@ -638,8 +638,8 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(10f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.validateOutput(100.2f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.validateOutput(10f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.validateOutput(100.2f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(
@@ -670,15 +670,15 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(10f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
+		assertThrown(()->{s.getItems().validateOutput(10f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);}).is("Minimum value not met.");
 
-		assertThrown(()->{return s.getItems().validateOutput(100.2f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().validateOutput(100.2f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(min="10.1", max="100.1", emin=true, emax=true)
@@ -690,8 +690,8 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(10.1f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.validateOutput(100.1f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.validateOutput(10.1f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.validateOutput(100.1f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(
@@ -722,15 +722,15 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000f, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);}).contains("Minimum value not met.");
+		assertThrown(()->{s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);}).is("Minimum value not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);}).is("Minimum value not met.");
 
-		assertThrown(()->{return s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);}).contains("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);}).is("Maximum value exceeded.");
 	}
 
 	@Header(mo="10")
@@ -745,7 +745,7 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(10f, BeanContext.DEFAULT);
 		s.validateOutput(20f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(11, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
+		assertThrown(()->{s.validateOutput(11, BeanContext.DEFAULT);}).is("Multiple-of not met.");
 	}
 
 	@Header(
@@ -791,10 +791,10 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(2000f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(20000f, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(11, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
+		assertThrown(()->{s.getItems().validateOutput(11, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);}).is("Multiple-of not met.");
 	}
 
 	@Header(mo="10.1")
@@ -807,7 +807,7 @@ public class HttpPartSchemaTest_Header {
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->{return s.validateOutput(10.2f, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
+		assertThrown(()->{s.validateOutput(10.2f, BeanContext.DEFAULT);}).is("Multiple-of not met.");
 	}
 
 	@Header(
@@ -843,10 +843,10 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(2000.2f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(20000.2f, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);}).contains("Multiple-of not met.");
+		assertThrown(()->{s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);}).is("Multiple-of not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);}).is("Multiple-of not met.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -880,10 +880,10 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().validateOutput(null, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
 	}
 
 	@Test
@@ -900,10 +900,10 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().validateOutput(null, BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).contains("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT);}).is("Duplicate items not allowed.");
 	}
 
 	@Header(
@@ -935,14 +935,14 @@ public class HttpPartSchemaTest_Header {
 		s.getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
 
-		assertThrown(()->{return s.getItems().validateOutput(new String[0], BeanContext.DEFAULT);}).contains("Minimum number of items not met.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT);}).contains("Minimum number of items not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);}).contains("Minimum number of items not met.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);}).contains("Minimum number of items not met.");
+		assertThrown(()->{s.getItems().validateOutput(new String[0], BeanContext.DEFAULT);}).is("Minimum number of items not met.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT);}).is("Minimum number of items not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);}).is("Minimum number of items not met.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);}).is("Minimum number of items not met.");
 
-		assertThrown(()->{return s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);}).contains("Maximum number of items exceeded.");
-		assertThrown(()->{return s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);}).contains("Maximum number of items exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);}).contains("Maximum number of items exceeded.");
-		assertThrown(()->{return s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT);}).contains("Maximum number of items exceeded.");
+		assertThrown(()->{s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);}).is("Maximum number of items exceeded.");
+		assertThrown(()->{s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);}).is("Maximum number of items exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);}).is("Maximum number of items exceeded.");
+		assertThrown(()->{s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT);}).is("Maximum number of items exceeded.");
 	}
 }

@@ -332,17 +332,17 @@ public class ReflectionMapTest {
 
 	@Test
 	public void e01_blankInput() throws Exception {
-		assertThrown(()->{return create().append("", 1);}).contains("Invalid reflection signature: []");
+		assertThrown(()->{create().append("", 1);}).is("Invalid reflection signature: []");
 	}
 
 	@Test
 	public void e02_nullInput() throws Exception {
-		assertThrown(()->{return create().append(null, 1);}).contains("Invalid reflection signature: [null]");
+		assertThrown(()->{create().append(null, 1);}).is("Invalid reflection signature: [null]");
 	}
 
 	@Test
 	public void e03_badInput() throws Exception {
-		assertThrown(()->{return create().append("foo)", 1);}).contains("Invalid reflection signature: [foo)]");
+		assertThrown(()->{create().append("foo)", 1);}).is("Invalid reflection signature: [foo)]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

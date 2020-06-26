@@ -302,10 +302,10 @@ public class PojoExamplesTest {
 	@Test
 	public void testInvalidUsesOfExample() throws Exception {
 		BeanSession bs = BeanContext.create().build().createSession();
-		assertThrown(()->{return bs.getClassMeta(F1.class);}).contains("invalid method 'example(String)'");
-		assertThrown(()->{return bs.getClassMeta(F2.class);}).contains("invalid method 'example()'");
-		assertThrown(()->{return bs.getClassMeta(F3.class);}).contains("invalid field","$F3.F3");
-		assertThrown(()->{return bs.getClassMeta(F4.class);}).contains("invalid field ","$F4.f4");
+		assertThrown(()->{bs.getClassMeta(F1.class);}).contains("invalid method 'example(String)'");
+		assertThrown(()->{bs.getClassMeta(F2.class);}).contains("invalid method 'example()'");
+		assertThrown(()->{bs.getClassMeta(F3.class);}).contains("invalid field","$F3.F3");
+		assertThrown(()->{bs.getClassMeta(F4.class);}).contains("invalid field ","$F4.f4");
 	}
 
 	public static class F1 {

@@ -51,8 +51,8 @@ public class OpenApiPartParserTest {
 	public void a01_inputValidations_nullInput() throws Exception {
 		assertNull(parse(T_NONE, null, String.class));
 		assertNull(parse(tNone().required(false).build(), null, String.class));
-		assertThrown(()->{return parse(tNone().required().build(), null, String.class);}).contains("No value specified.");
-		assertThrown(()->{return parse(tNone().required(true).build(), null, String.class);}).contains("No value specified.");
+		assertThrown(()->{parse(tNone().required().build(), null, String.class);}).is("No value specified.");
+		assertThrown(()->{parse(tNone().required(true).build(), null, String.class);}).is("No value specified.");
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class OpenApiPartParserTest {
 		s = tNone().allowEmptyValue().build();
 		assertEquals("", parse(s, "", String.class));
 
-		assertThrown(()->{return parse(tNone().allowEmptyValue(false).build(), "", String.class);}).contains("Empty value not allowed.");
+		assertThrown(()->{parse(tNone().allowEmptyValue(false).build(), "", String.class);}).is("Empty value not allowed.");
 
 		assertEquals(" ", parse(s, " ", String.class));
 	}
@@ -76,8 +76,8 @@ public class OpenApiPartParserTest {
 		assertEquals("xx", parse(s, "xx", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->{return parse(s, "y", String.class);}).contains("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->{return parse(s, "", String.class);}).contains("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{parse(s, "y", String.class);}).is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->{parse(s, "", String.class);}).is("Value does not match expected pattern.  Must match pattern: x.*");
 
 		// Blank/null patterns are ignored.
 		assertEquals("x", parse(tNone().pattern("").allowEmptyValue().build(), "x", String.class));
@@ -91,8 +91,8 @@ public class OpenApiPartParserTest {
 		assertEquals("foo", parse(s, "foo", String.class));
 		assertEquals(null, parse(s, null, String.class));
 
-		assertThrown(()->{return parse(s, "bar", String.class);}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertThrown(()->{return parse(s, "", String.class);}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{parse(s, "bar", String.class);}).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
+		assertThrown(()->{parse(s, "", String.class);}).is("Value does not match one of the expected values.  Must be one of the following: ['foo']");
 
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).build(), "foo", String.class));
 		assertEquals("foo", parse(tNone()._enum((Set<String>)null).allowEmptyValue().build(), "foo", String.class));
@@ -107,11 +107,11 @@ public class OpenApiPartParserTest {
 		assertEquals("1", parse(s, "1", String.class));
 		assertEquals("12", parse(s, "12", String.class));
 
-		assertThrown(()->{return parse(s, "", String.class);}).contains("Minimum length of value not met.");
-		assertThrown(()->{return parse(s, "123", String.class);}).contains("Maximum length of value exceeded.");
-		assertThrown(()->{return tNone().minLength(2l).maxLength(1l).build();}).contains("maxLength cannot be less than minLength.");
-		assertThrown(()->{return tNone().minLength(-2l).build();}).contains("minLength cannot be less than zero.");
-		assertThrown(()->{return tNone().maxLength(-2l).build();}).contains("maxLength cannot be less than zero.");
+		assertThrown(()->{parse(s, "", String.class);}).is("Minimum length of value not met.");
+		assertThrown(()->{parse(s, "123", String.class);}).is("Maximum length of value exceeded.");
+		assertThrown(()->{tNone().minLength(2l).maxLength(1l).build();}).contains("maxLength cannot be less than minLength.");
+		assertThrown(()->{tNone().minLength(-2l).build();}).contains("minLength cannot be less than zero.");
+		assertThrown(()->{tNone().maxLength(-2l).build();}).contains("maxLength cannot be less than zero.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -1021,8 +1021,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		serializer = (serializer == null ? partSerializer : serializer);
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
+		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return innerPath(serializedNameValuePair(name, value, PATH, serializer, schema, null));
@@ -1042,7 +1041,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			for (Map.Entry<String,Object> p : toBeanMap(value).entrySet())
 				innerPath(serializedNameValuePair(p.getKey(), p.getValue(), PATH, serializer, schema, null));
 		} else if (value != null) {
-			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, className(value));
+			throw new RestCallException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 		return this;
 	}
@@ -1395,9 +1394,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest queryArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
+		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return innerQuery(flags, AList.of(serializedNameValuePair(name, value, QUERY, serializer, schema, flags)));
@@ -1798,9 +1796,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest formDataArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
+		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return innerFormData(flags, AList.of(serializedNameValuePair(name, value, FORMDATA, serializer, schema, flags)));
@@ -2279,10 +2276,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
-		serializer = (serializer == null ? partSerializer : serializer);
 		flags = AddFlag.orDefault(flags);
-		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
-
+		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return innerHeaders(flags, AList.of(serializedHeader(name, value, serializer, schema, flags)));
@@ -3434,6 +3429,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private static String className(Object value) {
 		return value == null ? null : value.getClass().getName();
+	}
+
+	private static boolean isNameValuePairArray(Object o) {
+		if (o == null || ! o.getClass().isArray())
+			return false;
+		if (NameValuePair.class.isAssignableFrom(o.getClass().getComponentType()))
+			return true;
+		return false;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -53,7 +53,7 @@ public class ParserReaderTest {
 		ParserReader pr2 = createParserReader(t);
 		pr2.read();
 		pr2.unread();
-		assertThrown(()->{return pr2.unread();}).isType(IOException.class);
+		assertThrown(()->{pr2.unread();}).isType(IOException.class);
 	}
 
 	//====================================================================================================

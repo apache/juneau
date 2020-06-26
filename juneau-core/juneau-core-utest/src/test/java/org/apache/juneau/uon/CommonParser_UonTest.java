@@ -111,7 +111,7 @@ public class CommonParser_UonTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		assertThrown(()->{return UonParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
+		assertThrown(()->{UonParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

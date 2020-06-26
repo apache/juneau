@@ -774,7 +774,7 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.sms", "{foo:'bar'}");
 		testError(b, "A.f1.sms/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
-		assertThrown(()->{return b.removeFrom("A.f1.sms", "foo");}).contains("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
+		assertThrown(()->{b.removeFrom("A.f1.sms", "foo");}).is("Cannot remove value 'foo' (String) from property 'f1.sms' (Map<String,String>).");
 	}
 
 	@Test
@@ -810,7 +810,7 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.smi", "{foo:'123'}");
 		testError(b, "A.f1.smi/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
-		assertThrown(()->{return b.removeFrom("A.f1.smi", "foo");}).contains("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
+		assertThrown(()->{b.removeFrom("A.f1.smi", "foo");}).is("Cannot remove value 'foo' (String) from property 'f1.smi' (Map<String,Integer>).");
 	}
 
 	@Test
@@ -840,7 +840,7 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.smc/put.foo", String.class);
 		testError(b, "A.f1.smc/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
-		assertThrown(()->{return b.removeFrom("A.f1.smc", "foo");}).contains("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
+		assertThrown(()->{b.removeFrom("A.f1.smc", "foo");}).is("Cannot remove value 'foo' (String) from property 'f1.smc' (Map<String,Class>).");
 	}
 
 	@Test
@@ -877,7 +877,7 @@ public class PropertyStoreTest {
 		b.clear();
 		b.set("A.f1.smo", "{foo:'123'}");
 		testError(b, "A.f1.smo/remove", "foo", "Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
-		assertThrown(()->{return b.removeFrom("A.f1.smo", "foo");}).contains("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
+		assertThrown(()->{b.removeFrom("A.f1.smo", "foo");}).is("Cannot remove value 'foo' (String) from property 'f1.smo' (Map<String,Object>).");
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1607,16 +1607,16 @@ public class PropertyStoreTest {
 	@Test
 	public void testRemoveFromInvalidListOfObjects() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		assertThrown(()->{return b.removeFrom("A.foo.ss", "[xxx]");}).contains("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).");
-		assertThrown(()->{return b.removeFrom("A.foo.ls", "[xxx]");}).contains("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).");
+		assertThrown(()->{b.removeFrom("A.foo.ss", "[xxx]");}).contains("Cannot remove value '[xxx]' (String) from property 'foo.ss' (Set<String>).");
+		assertThrown(()->{b.removeFrom("A.foo.ls", "[xxx]");}).contains("Cannot remove value '[xxx]' (String) from property 'foo.ls' (List<String>).");
 	}
 
 	@Test
 	public void testAddToInvalidMapOfObjects() {
 		PropertyStoreBuilder b = PropertyStore.create();
-		assertThrown(()->{return b.putAllTo("A.foo.sms", "{xxx}");}).contains("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>).");
-		assertThrown(()->{return b.putAllTo("A.foo.sms", "xxx");}).contains("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).");
-		assertThrown(()->{return b.putAllTo("A.foo.sms", new StringBuilder("foo"));}).contains("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->{b.putAllTo("A.foo.sms", "{xxx}");}).contains("Cannot put '{xxx}' (String) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->{b.putAllTo("A.foo.sms", "xxx");}).is("Cannot put 'xxx' (String) to property 'foo.sms' (Map<String,String>).");
+		assertThrown(()->{b.putAllTo("A.foo.sms", new StringBuilder("foo"));}).is("Cannot put 'foo' (StringBuilder) to property 'foo.sms' (Map<String,String>).");
 	}
 
 	@Test
@@ -1824,7 +1824,7 @@ public class PropertyStoreTest {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private void testError(PropertyStoreBuilder b, String key, Object val, String msg) {
-		assertThrown(()->{return b.set(key, val);}).contains(msg);
+		assertThrown(()->{b.set(key, val);}).is(msg);
 	}
 
 	private void testEquals(PropertyStoreBuilder b1, PropertyStoreBuilder b2) {

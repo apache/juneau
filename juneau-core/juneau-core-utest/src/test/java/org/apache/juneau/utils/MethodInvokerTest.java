@@ -54,9 +54,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = new MethodInvoker(m, mes);
 
 		A a = new A();
-		assertThrown(()->{return mi.invoke(a);});
-		assertThrown(()->{return mi.invoke(a);});
-		assertThrown(()->{return mi.invoke(a);});
+		assertThrown(()->{mi.invoke(a);}).exists();
+		assertThrown(()->{mi.invoke(a);}).exists();
+		assertThrown(()->{mi.invoke(a);}).exists();
 
 		assertObject(mes).json().matchesSimple("{method:'A.bar',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}
@@ -69,9 +69,9 @@ public class MethodInvokerTest {
 		MethodInvoker mi = new MethodInvoker(m, mes);
 
 		A a = new A();
-		assertThrown(()->{return mi.invoke(a, "x");});
-		assertThrown(()->{return mi.invoke(a);});
-		assertThrown(()->{return mi.invoke(a, 1, "x");});
+		assertThrown(()->{mi.invoke(a, "x");}).exists();
+		assertThrown(()->{mi.invoke(a);}).exists();
+		assertThrown(()->{mi.invoke(a, 1, "x");}).exists();
 
 		assertObject(mes).json().matchesSimple("{method:'A.baz',runs:3,running:0,errors:3,minTime:*,maxTime:*,avgTime:*,totalTime:*,exceptions:[{hash:'*',count:3,exceptionClass:*,message:*,stackTrace:*}]}");
 	}

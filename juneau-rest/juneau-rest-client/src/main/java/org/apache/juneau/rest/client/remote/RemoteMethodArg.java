@@ -102,7 +102,7 @@ public final class RemoteMethodArg {
 	 * Returns the HTTP part serializer to use for serializing this part.
 	 *
 	 * @param _default The default serializer to use if the serializer was not defined via annotations.
-	 * @return The HTTP part serializer, or <jk>null</jk> if not specified.
+	 * @return The HTTP part serializer, or the default if not specified.
 	 */
 	public HttpPartSerializerSession getSerializer(HttpPartSerializerSession _default) {
 		return serializer == null ? _default : serializer.createPartSession(null);

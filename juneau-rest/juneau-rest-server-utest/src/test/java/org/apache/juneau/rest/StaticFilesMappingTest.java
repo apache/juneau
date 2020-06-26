@@ -141,31 +141,31 @@ public class StaticFilesMappingTest {
 
 	@Test
 	public void d01_error_malformedJson() {
-		assertThrown(()->{return parse("foo:bar:xxx");}).contains("Expected { at beginning of headers.");
+		assertThrown(()->{parse("foo:bar:xxx");}).contains("Expected { at beginning of headers.");
 	}
 
 	@Test
 	public void d02_error_textFollowingJson() {
-		assertThrown(()->{return parse("foo:bar:{a:'b'}x");}).contains("Invalid text following headers.");
+		assertThrown(()->{parse("foo:bar:{a:'b'}x");}).contains("Invalid text following headers.");
 	}
 
 	@Test
 	public void d03_error_missingLocation() {
-		assertThrown(()->{return parse("foo");}).contains("Couldn't find ':' following path.");
+		assertThrown(()->{parse("foo");}).contains("Couldn't find ':' following path.");
 	}
 
 	@Test
 	public void d04_error_danglingColonAfterLocation() {
-		assertThrown(()->{return parse("foo:bar:");}).contains("Found extra ':' following location.");
+		assertThrown(()->{parse("foo:bar:");}).contains("Found extra ':' following location.");
 	}
 
 	@Test
 	public void d05_error_malformedHeaders_openEnded() {
-		assertThrown(()->{return parse("foo:bar:{");}).contains("Malformed headers.");
+		assertThrown(()->{parse("foo:bar:{");}).contains("Malformed headers.");
 	}
 
 	@Test
 	public void d06_error_malformedHeaders_mismatchedBrackets() {
-		assertThrown(()->{return parse("foo:bar:{{}");}).contains("Malformed headers.");
+		assertThrown(()->{parse("foo:bar:{{}");}).contains("Malformed headers.");
 	}
 }

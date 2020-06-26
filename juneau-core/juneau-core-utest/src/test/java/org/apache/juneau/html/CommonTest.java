@@ -358,11 +358,11 @@ public class CommonTest {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->{return s.build().serialize(r1);}).contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrown(()->{s.build().serialize(r1);}).contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->{return s.build().serialize(r1);}).contains("[0] <noname>:org.apache.juneau.html.CommonTest$R1", "->[1] r2:org.apache.juneau.html.CommonTest$R2", "->[2] r3:org.apache.juneau.html.CommonTest$R3", "->[3] r1:org.apache.juneau.html.CommonTest$R1");
+		assertThrown(()->{s.build().serialize(r1);}).contains("[0] <noname>:org.apache.juneau.html.CommonTest$R1", "->[1] r2:org.apache.juneau.html.CommonTest$R2", "->[2] r3:org.apache.juneau.html.CommonTest$R3", "->[3] r1:org.apache.juneau.html.CommonTest$R1");
 
 		s.ignoreRecursions();
 		assertEquals(

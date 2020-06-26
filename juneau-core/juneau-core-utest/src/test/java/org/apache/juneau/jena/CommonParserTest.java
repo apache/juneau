@@ -149,7 +149,7 @@ public class CommonParserTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		assertThrown(()->{return RdfParser.create().xml().build().parse(in, B.class);}).isType(ParseException.class);
+		assertThrown(()->{RdfParser.create().xml().build().parse(in, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

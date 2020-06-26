@@ -115,7 +115,7 @@ public class CommonParserTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		assertThrown(()->{return XmlParser.DEFAULT.parse(in2, B.class);}).isType(ParseException.class);
+		assertThrown(()->{XmlParser.DEFAULT.parse(in2, B.class);}).isType(ParseException.class);
 	}
 
 	public static class B {

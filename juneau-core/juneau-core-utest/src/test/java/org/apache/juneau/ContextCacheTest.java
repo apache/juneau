@@ -186,9 +186,8 @@ public class ContextCacheTest {
 	public void testBadConstructor() {
 		PropertyStoreBuilder psb = PropertyStore.create();
 		PropertyStore ps = psb.build();
-
-		assertThrown(()->{return ContextCache.INSTANCE.create(D1.class, ps);}).contains("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'");
-		assertThrown(()->{return ContextCache.INSTANCE.create(D2.class, ps);}).contains("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'");
+		assertThrown(()->{ContextCache.INSTANCE.create(D1.class, ps);}).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D1'");
+		assertThrown(()->{ContextCache.INSTANCE.create(D2.class, ps);}).is("Could not create instance of class 'org.apache.juneau.ContextCacheTest$D2'");
 	}
 
 	public static class D1 extends A {

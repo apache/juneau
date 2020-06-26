@@ -224,7 +224,7 @@ public class StringVarResolverTest {
 
 		// Should reject names with characters outside A-Za-z
 		for (Class<?> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
-			assertThrown(()->{return vrb.vars(c);});
+			assertThrown(()->{vrb.vars(c);}).exists();
 		}
 
 		VarResolver vr = vrb.build();

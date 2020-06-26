@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import java.util.concurrent.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -40,25 +37,27 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	}
 
 	/**
+	 * Executes an arbitrary snippet of code and captures anything thrown from it.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(() -> {<jk>return</jk> foo.getBar();})
+	 * 	<jsm>assertThrown</jsm>(() -> {foo.getBar();})
+	 * 		.exists()
 	 * 		.isType(RuntimeException.<jk>class</jk>)
 	 * 		.contains(<js>"Foobar"</js>);
 	 * </p>
 	 *
-	 * @param callable The callable object to execute to retrieve the thrown object.
+	 * @param snippet The snippet of code to execute.
 	 * @return A new assertion object.
 	 */
-	public static ThrowableAssertion assertThrown(Callable<Object> callable) {
+	public static ThrowableAssertion assertThrown(Snippet snippet) {
 		try {
-			callable.call();
+			snippet.run();
 		} catch (Throwable e) {
 			return assertThrowable(e);
 		}
-		throw new BasicAssertionError("Exception not thrown.");
+		return assertThrowable(null);
 	}
 
 	/**

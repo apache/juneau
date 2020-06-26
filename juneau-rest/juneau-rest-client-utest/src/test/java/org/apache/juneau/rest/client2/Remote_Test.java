@@ -252,7 +252,7 @@ public class Remote_Test {
 	@Test
 	public void c02_rootUriNotSpecified() throws Exception {
 		C1 x = MockRestClient.create(C.class).json().rootUrl("").build().getRemote(C1.class);
-		assertThrown(()->{return x.x1();}).contains("Root URI has not been specified.");
+		assertThrown(()->{x.x1();}).contains("Root URI has not been specified.");
 	}
 
 
@@ -316,11 +316,11 @@ public class Remote_Test {
 	@Test
 	public void c04_rethrownExceptions() throws Exception {
 		C4b x = MockRestClient.create(C4a.class).json().build().getRemote(C4b.class);
-		assertThrown(()->{return x.x1();}).contains("foo");
-		assertThrown(()->{return x.x1a().get();}).contains("foo");
-		assertThrown(()->{return x.x1b().get();}).contains("foo");
-		assertThrown(()->{return x.x2();}).contains("foo");
-		assertThrown(()->{return x.x3().get();}).contains("foo");
+		assertThrown(()->{x.x1();}).is("foo");
+		assertThrown(()->{x.x1a().get();}).contains("foo");
+		assertThrown(()->{x.x1b().get();}).contains("foo");
+		assertThrown(()->{x.x2();}).contains("foo");
+		assertThrown(()->{x.x3().get();}).contains("foo");
 	}
 
 	//=================================================================================================================
@@ -364,8 +364,8 @@ public class Remote_Test {
 		assertEquals(400, x.x7().intValue());
 		assertEquals(false, x.x8());
 		assertEquals(false, x.x9());
-		assertThrown(()->{return x.x5();}).contains("Only integer and booleans types are valid.");
-		assertThrown(()->{return x.x10();}).contains("Only integer and booleans types are valid.");
+		assertThrown(()->{x.x5();}).contains("Only integer and booleans types are valid.");
+		assertThrown(()->{x.x10();}).contains("Only integer and booleans types are valid.");
 	}
 
 	@Rest
@@ -426,7 +426,7 @@ public class Remote_Test {
 	@Test
 	public void e02_rrpc_noRootPath() throws Exception {
 		RestClient x = MockRestClient.create(E.class).rootUrl("").json().build();
-		assertThrown(()->{return x.getRrpcInterface(E1.class);}).contains("Root URI has not been specified.");
+		assertThrown(()->{x.getRrpcInterface(E1.class);}).contains("Root URI has not been specified.");
 	}
 
 	@Remote(path="/proxy")
@@ -478,7 +478,7 @@ public class Remote_Test {
 	@Test
 	public void e05_rrpc_rethrownCheckedException() throws Exception {
 		RestClient x = MockRestClient.create(E5.class).json().build();
-		assertThrown(()->{return x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
+		assertThrown(()->{x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).is("foobar");
 	}
 
 	@Rest
@@ -497,6 +497,6 @@ public class Remote_Test {
 	@Test
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
 		RestClient x = MockRestClient.create(E6.class).json().build();
-		assertThrown(()->{return x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
+		assertThrown(()->{x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
 	}
 }

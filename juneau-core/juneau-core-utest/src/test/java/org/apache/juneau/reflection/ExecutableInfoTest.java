@@ -162,17 +162,17 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getParam_indexOutOfBounds() {
-		assertThrown(()->{return b_c1.getParam(0);}).contains("Invalid index '0'.  No parameters.");
-		assertThrown(()->{return b_c2.getParam(-1);}).contains("Invalid index '-1'.  Parameter count: 1");
-		assertThrown(()->{return b_c2.getParam(1);}).contains("Invalid index '1'.  Parameter count: 1");
+		assertThrown(()->{b_c1.getParam(0);}).is("Invalid index '0'.  No parameters.");
+		assertThrown(()->{b_c2.getParam(-1);}).is("Invalid index '-1'.  Parameter count: 1");
+		assertThrown(()->{b_c2.getParam(1);}).is("Invalid index '1'.  Parameter count: 1");
 	}
 
 	@Test
 	public void getParam_indexOutOfBounds_noCache() {
 		ClassInfo b = ClassInfo.of(B.class);
-		assertThrown(()->{return b.getPublicConstructor().getParam(0);}).contains("Invalid index '0'.  No parameters.");
-		assertThrown(()->{return b.getPublicConstructor(String.class).getParam(-1);}).contains("Invalid index '-1'.  Parameter count: 1");
-		assertThrown(()->{return b.getPublicConstructor(String.class).getParam(1);}).contains("Invalid index '1'.  Parameter count: 1");
+		assertThrown(()->{b.getPublicConstructor().getParam(0);}).is("Invalid index '0'.  No parameters.");
+		assertThrown(()->{b.getPublicConstructor(String.class).getParam(-1);}).is("Invalid index '-1'.  Parameter count: 1");
+		assertThrown(()->{b.getPublicConstructor(String.class).getParam(1);}).is("Invalid index '1'.  Parameter count: 1");
 	}
 
 	@Test
@@ -410,7 +410,7 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void isAll_invalidFlag() {
-		assertThrown(()->{return e_deprecated.isAll(TRANSIENT);}).contains("Invalid flag for executable: TRANSIENT");
+		assertThrown(()->{e_deprecated.isAll(TRANSIENT);}).is("Invalid flag for executable: TRANSIENT");
 	}
 
 	@Test
@@ -440,7 +440,7 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void isAny_invalidFlag() {
-		assertThrown(()->{return e_deprecated.isAny(TRANSIENT);}).contains("Invalid flag for executable: TRANSIENT");
+		assertThrown(()->{e_deprecated.isAny(TRANSIENT);}).is("Invalid flag for executable: TRANSIENT");
 	}
 
 	@Test

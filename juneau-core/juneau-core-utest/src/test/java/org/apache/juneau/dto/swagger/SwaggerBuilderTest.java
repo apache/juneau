@@ -104,7 +104,7 @@ public class SwaggerBuilderTest {
 	public void testHeaderInfoStrict() {
 		HeaderInfo t = headerInfoStrict("string");
 		assertObject(t).json().is("{type:'string'}");
-		assertThrown(()->{return headerInfoStrict("foo");}).contains("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrown(()->{headerInfoStrict("foo");}).is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class SwaggerBuilderTest {
 	public void testItemsStrict() {
 		Items t = itemsStrict("string");
 		assertObject(t).json().is("{type:'string'}");
-		assertThrown(()->{return itemsStrict("foo");}).contains("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
+		assertThrown(()->{itemsStrict("foo");}).is("Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']");
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class SwaggerBuilderTest {
 	public void testParameterInfoStrict() {
 		ParameterInfo t = parameterInfoStrict("query", "bar");
 		assertObject(t).json().is("{'in':'query',name:'bar'}");
-		assertThrown(()->{return parameterInfoStrict("foo", "bar");}).contains("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
+		assertThrown(()->{parameterInfoStrict("foo", "bar");}).is("Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']");
 	}
 
 	/**

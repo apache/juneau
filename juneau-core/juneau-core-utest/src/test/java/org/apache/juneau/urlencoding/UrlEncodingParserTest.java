@@ -231,14 +231,14 @@ public class UrlEncodingParserTest {
 		// Encoded chars
 		// Top level
 		t = "_value=x{}|\\^[]`<>#%\"&+";
-		assertThrown(()->{return p.parse("_value=x{}|\\^[]`<>#%\"&+", Object.class);}).isType(ParseException.class);
+		assertThrown(()->{p.parse("_value=x{}|\\^[]`<>#%\"&+", Object.class);}).isType(ParseException.class);
 		t = "_value=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, Object.class));
 		assertEquals("x{}|\\^[]`<>#%\"&+", p.parse(t, String.class));
 
 		// 2nd level
 		t = "?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+";
-		assertThrown(()->{return (Map)p.parse("?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+", Object.class);}).isType(ParseException.class);
+		assertThrown(()->{p.parse("?x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+", Object.class);}).isType(ParseException.class);
 		t = "?x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));
