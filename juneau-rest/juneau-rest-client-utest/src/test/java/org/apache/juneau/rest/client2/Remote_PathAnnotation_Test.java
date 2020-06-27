@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -31,10 +29,8 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
@@ -543,11 +539,6 @@ public class Remote_PathAnnotation_Test {
 
 	@Rest
 	public static class G {
-		@RestMethod(path="/{x}")
-		public String get(@Path("*") OMap m) {
-			m.removeAll("/*","/**");
-			return m.toString();
-		}
 	}
 
 	@Remote
@@ -775,45 +766,5 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null/", x1.getX1(new K4a()));
 		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()", x2.getX1(new K4a()));
 		assertEquals("fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null/", x2.getX2(new K4a()));
-	}
-
-	//=================================================================================================================
-	// Support classes
-	//=================================================================================================================
-
-	public static class XSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, "X");
-					if (isArray(value))
-						return join(toList(value, Object.class), "X");
-					return "x" + value + "x";
-				}
-			};
-		}
-	}
-
-	public static class ListSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, '|');
-					if (isArray(value))
-						return join(toList(value, Object.class), "|");
-					return "?" + value + "?";
-				}
-			};
-		}
 	}
 }

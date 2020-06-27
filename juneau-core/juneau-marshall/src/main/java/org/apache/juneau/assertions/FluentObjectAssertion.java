@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.util.function.*;
+
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
@@ -25,7 +27,7 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentObjectAssertion<R>")
 public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 
-	private final Object o;
+	private final Object value;
 
 	private static JsonSerializer JSON_BEANCOMPARE = JsonSerializer.create()
 		.ssq()
@@ -60,7 +62,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 */
 	public FluentObjectAssertion(Object o, R returns) {
 		super(returns);
-		this.o = o;
+		this.value = o;
 	}
 
 	/**
@@ -77,10 +79,10 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		if (o == null && parent == null)
+		if (value == null && parent == null)
 			return returns();
-		if (o == null && parent != null || o != null && parent == null || ! ClassInfo.of(o).isChildOf(parent))
-			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(o));
+		if (value == null && parent != null || value != null && parent == null || ! ClassInfo.of(value).isChildOf(parent))
+			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(value));
 		return returns();
 	}
 
@@ -99,7 +101,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> serialized(WriterSerializer ws) {
 		try {
-			String s = ws.serialize(this.o);
+			String s = ws.serialize(this.value);
 			return new FluentStringAssertion(s, this);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
@@ -168,13 +170,26 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R sameAsSerialized(Object o, WriterSerializer serializer) {
 		try {
-			String s1 = serializer.serialize(this.o);
+			String s1 = serializer.serialize(this.value);
 			String s2 = serializer.serialize(o);
 			if (! StringUtils.isEquals(s1, s2))
 				throw error("Unexpected comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
 		}
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value passes the specified predicate test.
+	 *
+	 * @param test The predicate to use to test the value.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R passes(Predicate<Object> test) throws AssertionError {
+		if (! test.test(value))
+			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}
 

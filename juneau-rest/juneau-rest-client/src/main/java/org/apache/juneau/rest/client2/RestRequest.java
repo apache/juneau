@@ -982,7 +982,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
-			} else {
+			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to paths(): " + className(o));
 			}
 		}
@@ -1315,7 +1315,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
-			} else {
+			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to queries(): " + className(o));
 			}
 		}
@@ -1385,7 +1385,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			else if (value instanceof InputStream)
 				q = IOUtils.read((InputStream)value);
 			else
-				q = value.toString();  // Works for NameValuePairs.
+				q = stringify(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
 			throw new RestCallException(e);
@@ -1416,10 +1416,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 				l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, serializer, schema, flags));
-		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
-			return queryCustom(value);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to query() for data type ''{1}''", name, className(value));
+			return queryCustom(value);
 		}
 
 		return innerQuery(flags, l);
@@ -1706,7 +1704,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
-			} else {
+			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to formDatas(): " + className(o));
 			}
 		}
@@ -1821,7 +1819,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
 			return formDataCustom(value);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to formData() for data type ''{1}''", name, className(value));
+			throw new RestCallException("Invalid value type for formdata arg ''{0}'': {1}", name, className(value));
 		}
 
 		return innerFormData(flags, l);
@@ -2239,7 +2237,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
-			} else {
+			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to headers(): " + className(o));
 			}
 		}
@@ -2299,7 +2297,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to header() for data type ''{1}''", name, className(value));
+			throw new RestCallException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
 		}
 
 		return innerHeaders(flags, l);
@@ -3420,11 +3418,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private static SerializedNameValuePair serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
-		return new SerializedNameValuePair(stringify(key), value, type, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
+		return key == null ? null : new SerializedNameValuePair(stringify(key), value, type, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
 	}
 
 	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
-		return new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
+		return key == null ? null : new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
 	}
 
 	private static String className(Object value) {

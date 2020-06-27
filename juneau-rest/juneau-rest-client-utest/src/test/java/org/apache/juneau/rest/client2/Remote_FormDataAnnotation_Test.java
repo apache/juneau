@@ -16,8 +16,6 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
@@ -32,10 +30,8 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -950,39 +946,4 @@ public class Remote_FormDataAnnotation_Test {
 	// Support classes
 	//=================================================================================================================
 
-	public static class XSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, "X");
-					if (isArray(value))
-						return join(toList(value, Object.class), "X");
-					return "x" + value + "x";
-				}
-			};
-		}
-	}
-
-	public static class ListSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, '|');
-					if (isArray(value))
-						return join(toList(value, Object.class), "|");
-					return "?" + value + "?";
-				}
-			};
-		}
-	}
 }

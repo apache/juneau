@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -32,10 +30,8 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -88,6 +84,10 @@ public class Remote_QueryAnnotation_Test {
 		@RemoteMethod(path="a") String getX18(@Query InputStream b);
 		@RemoteMethod(path="a") String getX19(@Query("*") NameValuePairs b);
 		@RemoteMethod(path="a") String getX20(@Query NameValuePairs b);
+		@RemoteMethod(path="a") String getX21(@Query NameValuePair b);
+		@RemoteMethod(path="a") String getX22(@Query NameValuePair[] b);
+		@RemoteMethod(path="a") String getX23(@Query BasicNameValuePair[] b);
+		@RemoteMethod(path="a") String getX24(@Query String b);
 	}
 
 	@Test
@@ -113,6 +113,11 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{x:'1'}", x.getX18(new StringInputStream("x=1")));
 		assertEquals("{foo:'bar'}", x.getX19(new NameValuePairs().append("foo", "bar")));
 		assertEquals("{foo:'bar'}", x.getX20(new NameValuePairs().append("foo", "bar")));
+		assertEquals("{foo:'bar'}", x.getX21(BasicNameValuePair.of("foo", "bar")));
+		assertEquals("{foo:'bar'}", x.getX22(new NameValuePairs().append("foo", "bar").toArray(new NameValuePair[0])));
+		assertEquals("{foo:'bar'}", x.getX23(new NameValuePairs().append("foo", "bar").toArray(new BasicNameValuePair[0])));
+		assertEquals("{foo:'bar'}", x.getX24("foo=bar"));
+		assertEquals("{}", x.getX24(null));
 	}
 
 	//=================================================================================================================
@@ -924,45 +929,5 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'foo||true|123|null|true|123|null',d:'',f:'foo,,true,123,null,true,123,null',g:'foo||true|123|null|true|123|null',h:''}", x1.getX1(new K6a()));
 		assertEquals("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'foo||true|123|null|true|123|null',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'foo||true|123|null|true|123|null',h:'@()'}", x2.getX1(new K6a()));
 		assertEquals("{a:'fooXXtrueX123XnullXtrueX123Xnull',b:'fooXXtrueX123XnullXtrueX123Xnull',c:'foo||true|123|null|true|123|null',d:'',f:'fooXXtrueX123XnullXtrueX123Xnull',g:'foo||true|123|null|true|123|null',h:''}", x2.getX2(new K6a()));
-	}
-
-	//=================================================================================================================
-	// Support classes
-	//=================================================================================================================
-
-	public static class XSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, "X");
-					if (isArray(value))
-						return join(toList(value, Object.class), "X");
-					return "x" + value + "x";
-				}
-			};
-		}
-	}
-
-	public static class ListSerializer extends BaseHttpPartSerializer {
-		@Override
-		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
-			return new BaseHttpPartSerializerSession() {
-				@Override
-				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-					if (value == null)
-						return "NULL";
-					if (value instanceof Collection)
-						return join((Collection<?>)value, '|');
-					if (isArray(value))
-						return join(toList(value, Object.class), "|");
-					return "?" + value + "?";
-				}
-			};
-		}
 	}
 }

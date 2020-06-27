@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.util.function.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -22,17 +24,17 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentThrowableAssertion<R>")
 public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 
-	private final Throwable throwable;
+	private final Throwable value;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param throwable The throwable being tested.
+	 * @param value The throwable being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentThrowableAssertion(Throwable throwable, R returns) {
+	public FluentThrowableAssertion(Throwable value, R returns) {
 		super(returns);
-		this.throwable = throwable;
+		this.value = value;
 	}
 
 
@@ -50,8 +52,8 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R isType(Class<?> type) {
-		if (! type.isInstance(throwable))
-			throw error("Exception was not expected type.\n\tExpected=[{0}]\n\tActual=[{1}]", className(type), className(throwable));
+		if (! type.isInstance(value))
+			throw error("Exception was not expected type.\n\tExpected=[{0}]\n\tActual=[{1}]", className(type), className(value));
 		return returns();
 	}
 
@@ -68,15 +70,16 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R contains(String...substrings) {
+		exists();
 		for (String substring : substrings) {
-			Throwable e2 = throwable;
+			Throwable e2 = value;
 			boolean found = false;
 			while (e2 != null && ! found) {
 				found |= StringUtils.contains(e2.getMessage(), substring);
 				e2 = e2.getCause();
 			}
 			if (! found) {
-				throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, throwable.getMessage());
+				throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value.getMessage());
 			}
 		}
 		return returns();
@@ -110,7 +113,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R exists() {
-		if (throwable == null)
+		if (value == null)
 			throw error("Exception was not thrown.");
 		return returns();
 	}
@@ -127,8 +130,21 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R notExists() {
-		if (throwable != null)
+		if (value != null)
 			throw error("Exception was thrown.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value passes the specified predicate test.
+	 *
+	 * @param test The predicate to use to test the value.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R passes(Predicate<Object> test) throws AssertionError {
+		if (! test.test(value))
+			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}
 
@@ -145,7 +161,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> message() {
-		return new FluentStringAssertion(throwable == null ? null : throwable.getMessage(), this);
+		return new FluentStringAssertion(value == null ? null : value.getMessage(), this);
 	}
 
 	/**
@@ -161,7 +177,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> localizedMessage() {
-		return new FluentStringAssertion(throwable == null ? null : throwable.getLocalizedMessage(), this);
+		return new FluentStringAssertion(value == null ? null : value.getLocalizedMessage(), this);
 	}
 
 	/**
@@ -177,7 +193,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> stackTrace() {
-		return new FluentStringAssertion(throwable == null ? null : StringUtils.getStackTrace(throwable), this);
+		return new FluentStringAssertion(value == null ? null : StringUtils.getStackTrace(value), this);
 	}
 
 	/**
@@ -193,7 +209,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentThrowableAssertion<R> causedBy() {
-		return new FluentThrowableAssertion(throwable == null ? null : throwable.getCause(), this);
+		return new FluentThrowableAssertion(value == null ? null : value.getCause(), this);
 	}
 
 	/**
@@ -210,7 +226,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentThrowableAssertion<R> find(Class<?> throwableClass) {
-		Throwable t = throwable;
+		Throwable t = value;
 		while (t != null) {
 			if (throwableClass.isInstance(t))
 				return new FluentThrowableAssertion(t, this);

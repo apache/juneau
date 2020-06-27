@@ -29,16 +29,6 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class Remote_ResponseAnnotation_Test {
 
-	public static class Bean {
-		public int f;
-
-		public static Bean create() {
-			Bean b = new Bean();
-			b.f = 1;
-			return b;
-		}
-	}
-
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================

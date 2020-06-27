@@ -10,17 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.testutils;
+package org.apache.juneau.rest.client2;
 
-@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
-public class TypedBeanImpl implements TypedBean {
-	public int a;
-	public String b;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-	public static TypedBeanImpl get() {
-		TypedBeanImpl x = new TypedBeanImpl();
-		x.a = 1;
-		x.b = "foo";
-		return x;
+import java.util.*;
+
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
+
+public class XSerializer extends BaseHttpPartSerializer {
+	@Override
+	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new BaseHttpPartSerializerSession() {
+			@Override
+			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				if (value instanceof Collection)
+					return join((Collection<?>)value, "X");
+				if (isArray(value))
+					return join(toList(value, Object.class), "X");
+				return "x" + value + "x";
+			}
+		};
 	}
 }

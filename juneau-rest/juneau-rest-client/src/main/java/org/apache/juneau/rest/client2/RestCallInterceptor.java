@@ -55,7 +55,7 @@ public interface RestCallInterceptor {
 	 * @param req The HTTP request object.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void onInit(RestRequest req) throws Exception;
+	void onInit(RestRequest req) throws Exception;
 
 	/**
 	 * Called immediately after an HTTP response has been received.
@@ -64,7 +64,7 @@ public interface RestCallInterceptor {
 	 * @param res The HTTP response object.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void onConnect(RestRequest req, RestResponse res) throws Exception;
+	void onConnect(RestRequest req, RestResponse res) throws Exception;
 
 	/**
 	 * Called when the response body is consumed.
@@ -74,5 +74,5 @@ public interface RestCallInterceptor {
 	 * @throws RestCallException Error occurred during call.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	public void onClose(RestRequest req, RestResponse res) throws Exception;
+	void onClose(RestRequest req, RestResponse res) throws Exception;
 }

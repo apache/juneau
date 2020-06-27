@@ -333,84 +333,84 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public ABean returnBean() {
-					return new ABean().init();
+					return ABean.get();
 				}
 
 				@Override
 				public ABean[][][] returnBean3dArray() {
-					return new ABean[][][]{{{new ABean().init(),null},null},null};
+					return new ABean[][][]{{{ABean.get(),null},null},null};
 				}
 
 				@Override
 				public List<ABean> returnBeanList() {
-					return asList(new ABean().init());
+					return asList(ABean.get());
 				}
 
 				@Override
 				public List<ABean[][][]> returnBean1d3dList() {
-					return AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null);
+					return AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null);
 				}
 
 				@Override
 				public Map<String,ABean> returnBeanMap() {
-					return AMap.of("foo",new ABean().init());
+					return AMap.of("foo",ABean.get());
 				}
 
 				@Override
 				public Map<String,List<ABean>> returnBeanListMap() {
-					return AMap.of("foo",asList(new ABean().init()));
+					return AMap.of("foo",asList(ABean.get()));
 				}
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return AMap.of("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+					return AMap.of("foo", AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-					return AMap.of(1,asList(new ABean().init()));
+					return AMap.of(1,asList(ABean.get()));
 				}
 
 				// Typed beans
 
 				@Override
 				public TypedBean returnTypedBean() {
-					return new TypedBeanImpl().init();
+					return TypedBeanImpl.get();
 				}
 
 				@Override
 				public TypedBean[][][] returnTypedBean3dArray() {
-					return new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null};
+					return new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null};
 				}
 
 				@Override
 				public List<TypedBean> returnTypedBeanList() {
-					return asList((TypedBean)new TypedBeanImpl().init());
+					return asList((TypedBean)TypedBeanImpl.get());
 				}
 
 				@Override
 				public List<TypedBean[][][]> returnTypedBean1d3dList() {
-					return AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null);
+					return AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 				}
 
 				@Override
 				public Map<String,TypedBean> returnTypedBeanMap() {
-					return AMap.of("foo",new TypedBeanImpl().init());
+					return AMap.of("foo",TypedBeanImpl.get());
 				}
 
 				@Override
 				public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-					return AMap.of("foo",asList((TypedBean)new TypedBeanImpl().init()));
+					return AMap.of("foo",asList((TypedBean)TypedBeanImpl.get()));
 				}
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return AMap.of("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+					return AMap.of("foo", AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-					return AMap.of(1,asList((TypedBean)new TypedBeanImpl().init()));
+					return AMap.of(1,asList((TypedBean)TypedBeanImpl.get()));
 				}
 
 				// Swapped POJOs
@@ -1313,12 +1313,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h03_setWrongInt() {
-		try {
-			proxy.setInt(2);
-			fail();
-		} catch (AssertionError e) { // AssertionError thrown on server side.
-			assertEquals("expected:<1> but was:<2>", e.getMessage());
-		}
+		assertThrown(()->{proxy.setInt(2);}).is("expected:<1> but was:<2>");
 	}
 
 	@Test
@@ -1353,12 +1348,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h10_setNullStringBad() {
-		try {
-			proxy.setNullString("foo");
-			fail();
-		} catch (AssertionError e) { // AssertionError thrown on server side.
-			assertEquals("expected null, but was:<foo>", e.getMessage());
-		}
+		assertThrown(()->{proxy.setNullString("foo");}).is("expected null, but was:<foo>");
 	}
 
 	@Test
@@ -1409,84 +1399,84 @@ public class RrpcInterfaceTest {
 	// Beans
 	@Test
 	public void h19_setBean() {
-		proxy.setBean(new ABean().init());
+		proxy.setBean(ABean.get());
 	}
 
 	@Test
 	public void h20_setBean3dArray() {
-		proxy.setBean3dArray(new ABean[][][]{{{new ABean().init(),null},null},null});
+		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
 	}
 
 	@Test
 	public void h21_setBeanList() {
-		proxy.setBeanList(Arrays.asList(new ABean().init()));
+		proxy.setBeanList(Arrays.asList(ABean.get()));
 	}
 
 	@Test
 	public void h22_setBean1d3dList() {
-		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@Test
 	public void h23_setBeanMap() {
-		proxy.setBeanMap(AMap.of("foo",new ABean().init()));
+		proxy.setBeanMap(AMap.of("foo",ABean.get()));
 	}
 
 	@Test
 	public void h24_setBeanListMap() {
-		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(new ABean().init())));
+		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(ABean.get())));
 	}
 
 	@Test
 	public void h25_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
+		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void h26_setBeanListMapIntegerKeys() {
-		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(new ABean().init())));
+		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(ABean.get())));
 	}
 
 	// Typed beans
 
 	@Test
 	public void i01_setTypedBean() {
-		proxy.setTypedBean(new TypedBeanImpl().init());
+		proxy.setTypedBean(TypedBeanImpl.get());
 	}
 
 	@Test
 	public void i02_setTypedBean3dArray() {
-		proxy.setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
+		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
 	}
 
 	@Test
 	public void i03_setTypedBeanList() {
-		proxy.setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
+		proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void i04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@Test
 	public void i05_setTypedBeanMap() {
-		proxy.setTypedBeanMap(AMap.of("foo",new TypedBeanImpl().init()));
+		proxy.setTypedBeanMap(AMap.of("foo",TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void i06_setTypedBeanListMap() {
-		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@Test
 	public void i07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void i08_setTypedBeanListMapIntegerKeys() {
-		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	// Swapped POJOs
@@ -1632,12 +1622,12 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void m06_setMultiParamsBean() {
-		ABean x1 = new ABean().init();
-		ABean[][][] x2 = new ABean[][][]{{{new ABean().init(),null},null},null};
+		ABean x1 = ABean.get();
+		ABean[][][] x2 = new ABean[][][]{{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
 		List<ABean[][][]> x3 = AList.of(x2,null);
 		List<ABean[][][]> x3n = null;
-		Map<String,ABean> x4 = AMap.of("foo",new ABean().init());
+		Map<String,ABean> x4 = AMap.of("foo",ABean.get());
 		Map<String,ABean> x4n = null;
 		Map<String,List<ABean[][][]>> x5 = AMap.of("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;

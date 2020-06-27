@@ -29,7 +29,7 @@ public class DTOs2 {
 		public int b;
 		public boolean c;
 
-		public static A create() {
+		public static A get() {
 			A t = new A();
 			t.a = "a";
 			t.b = 1;
@@ -84,7 +84,7 @@ public class DTOs2 {
 		public void setF19(A[][] f19) { this.f19 = f19; }
 		public void setF20(List<List<A>> f20) { this.f20 = f20; }
 
-		public static B create() {
+		public static B get() {
 			B t = new B();
 			t.f01 = new String[]{"a","b"};
 			t.f02 = AList.of("c","d");
@@ -92,28 +92,28 @@ public class DTOs2 {
 			t.f04 = AList.of(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
 			t.f06 = AList.of(new String[]{"i","j"},new String[]{"k","l"});
-			t.f07 = new A[]{A.create(),A.create()};
-			t.f08 = AList.of(A.create(),A.create());
-			t.f09 = new A[][]{{A.create()},{A.create()}};
-			t.f10 = AList.of(Arrays.asList(A.create()),Arrays.asList(A.create()));
+			t.f07 = new A[]{A.get(),A.get()};
+			t.f08 = AList.of(A.get(),A.get());
+			t.f09 = new A[][]{{A.get()},{A.get()}};
+			t.f10 = AList.of(Arrays.asList(A.get()),Arrays.asList(A.get()));
 			t.setF11(new String[]{"a","b"});
 			t.setF12(AList.of("c","d"));
 			t.setF13(new int[]{1,2});
 			t.setF14(AList.of(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
 			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
-			t.setF17(new A[]{A.create(),A.create()});
-			t.setF18(AList.of(A.create(),A.create()));
-			t.setF19(new A[][]{{A.create()},{A.create()}});
-			t.setF20(AList.of(Arrays.asList(A.create()),Arrays.asList(A.create())));
+			t.setF17(new A[]{A.get(),A.get()});
+			t.setF18(AList.of(A.get(),A.get()));
+			t.setF19(new A[][]{{A.get()},{A.get()}});
+			t.setF20(AList.of(Arrays.asList(A.get()),Arrays.asList(A.get())));
 			return t;
 		}
 
-		public static B INSTANCE = create();
+		public static B INSTANCE = get();
 	}
 
 	public static class C extends B {
-		public static C create() {
+		public static C get() {
 			C t = new C();
 			t.f01 = new String[]{"a","b"};
 			t.f02 = AList.of("c","d");
@@ -121,23 +121,23 @@ public class DTOs2 {
 			t.f04 = AList.of(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
 			t.f06 = AList.of(new String[]{"i","j"}, new String[]{"k","l"});
-			t.f07 = new A[]{A.create(),A.create()};
-			t.f08 = AList.of(A.create(), A.create());
-			t.f09 = new A[][]{{A.create()},{A.create()}};
-			t.f10 = AList.of(Arrays.asList(A.create()), Arrays.asList(A.create()));
+			t.f07 = new A[]{A.get(),A.get()};
+			t.f08 = AList.of(A.get(), A.get());
+			t.f09 = new A[][]{{A.get()},{A.get()}};
+			t.f10 = AList.of(Arrays.asList(A.get()), Arrays.asList(A.get()));
 			t.setF11(new String[]{"a","b"});
 			t.setF12(AList.of("c","d"));
 			t.setF13(new int[]{1,2});
 			t.setF14(AList.of(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
 			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
-			t.setF17(new A[]{A.create(),A.create()});
-			t.setF18(AList.of(A.create(), A.create()));
-			t.setF19(new A[][]{{A.create()},{A.create()}});
-			t.setF20(AList.of(Arrays.asList(A.create()), Arrays.asList(A.create())));
+			t.setF17(new A[]{A.get(),A.get()});
+			t.setF18(AList.of(A.get(), A.get()));
+			t.setF19(new A[][]{{A.get()},{A.get()}});
+			t.setF20(AList.of(Arrays.asList(A.get()), Arrays.asList(A.get())));
 			return t;
 		}
 
-		public static C INSTANCE = create();
+		public static C INSTANCE = get();
 	}
 }

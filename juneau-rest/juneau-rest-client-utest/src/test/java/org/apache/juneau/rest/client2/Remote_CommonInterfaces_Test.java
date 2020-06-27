@@ -120,9 +120,9 @@ public class Remote_CommonInterfaces_Test {
 		Ok ok();
 		Accepted accepted();
 		AlreadyReported alreadyReported();
-		Continue _continue();
+		//Continue _continue();
 		Created created();
-		EarlyHints earlyHints();
+		//EarlyHints earlyHints();
 		Found found();
 		IMUsed iMUsed();
 		MovedPermanently movedPermanently();
@@ -133,10 +133,10 @@ public class Remote_CommonInterfaces_Test {
 		NotModified notModified();
 		PartialContent partialContent();
 		PermanentRedirect permanentRedirect();
-		Processing processing();
+		//Processing processing();
 		ResetContent resetContent();
 		SeeOther seeOther();
-		SwitchingProtocols switchingProtocols();
+		//SwitchingProtocols switchingProtocols();
 		TemporaryRedirect temporaryRedirect();
 		UseProxy useProxy();
 	}
@@ -145,9 +145,9 @@ public class Remote_CommonInterfaces_Test {
 		@Override public Ok ok() { return Ok.OK; }
 		@Override public Accepted accepted() { return Accepted.INSTANCE; }
 		@Override public AlreadyReported alreadyReported() { return AlreadyReported.INSTANCE; }
-		@Override public Continue _continue() { return Continue.INSTANCE; }
+		//@Override public Continue _continue() { return Continue.INSTANCE; }
 		@Override public Created created() { return Created.INSTANCE; }
-		@Override public EarlyHints earlyHints() { return EarlyHints.INSTANCE; }
+		//@Override public EarlyHints earlyHints() { return EarlyHints.INSTANCE; }
 		@Override public Found found() { return Found.INSTANCE; }
 		@Override public IMUsed iMUsed() { return IMUsed.INSTANCE; }
 		@Override public MovedPermanently movedPermanently() { return MovedPermanently.INSTANCE; }
@@ -158,10 +158,10 @@ public class Remote_CommonInterfaces_Test {
 		@Override public NotModified notModified() { return NotModified.INSTANCE; }
 		@Override public PartialContent partialContent() { return PartialContent.INSTANCE; }
 		@Override public PermanentRedirect permanentRedirect() { return PermanentRedirect.INSTANCE; }
-		@Override public Processing processing() { return Processing.INSTANCE; }
+		//@Override public Processing processing() { return Processing.INSTANCE; }
 		@Override public ResetContent resetContent() { return ResetContent.INSTANCE; }
 		@Override public SeeOther seeOther() { return SeeOther.INSTANCE; }
-		@Override public SwitchingProtocols switchingProtocols() { return SwitchingProtocols.INSTANCE; }
+		//@Override public SwitchingProtocols switchingProtocols() { return SwitchingProtocols.INSTANCE; }
 		@Override public TemporaryRedirect temporaryRedirect() { return TemporaryRedirect.INSTANCE; }
 		@Override public UseProxy useProxy() { return UseProxy.INSTANCE; }
 	}

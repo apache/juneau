@@ -67,17 +67,17 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void a01_singleLanguages() throws Exception {
-		RestClient x1 = MockRestClient.create(A.class).simpleJson().build();
-		RestClient x2 = MockRestClient.create(A.class).json().build();
-		RestClient x3 = MockRestClient.create(A.class).xml().build();
-		RestClient x4 = MockRestClient.create(A.class).html().build();
-		RestClient x5 = MockRestClient.create(A.class).plainText().build();
-		RestClient x6 = MockRestClient.create(A.class).msgPack().build();
-		RestClient x7 = MockRestClient.create(A.class).uon().build();
-		RestClient x8 = MockRestClient.create(A.class).urlEnc().build();
-		RestClient x9 = MockRestClient.create(A.class).openApi().build();
-		RestClient x10 = MockRestClient.create(A.class).htmlDoc().build();
-		RestClient x11 = MockRestClient.create(A.class).htmlStrippedDoc().build();
+		RestClient x1 = client().simpleJson().build();
+		RestClient x2 = client().json().build();
+		RestClient x3 = client().xml().build();
+		RestClient x4 = client().html().build();
+		RestClient x5 = client().plainText().build();
+		RestClient x6 = client().msgPack().build();
+		RestClient x7 = client().uon().build();
+		RestClient x8 = client().urlEnc().build();
+		RestClient x9 = client().openApi().build();
+		RestClient x10 = client().htmlDoc().build();
+		RestClient x11 = client().htmlStrippedDoc().build();
 		x1.post("/a01", bean).header("X-Accept", "application/json+simple").header("X-Content-Type", "application/json+simple").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x2.post("/a01", bean).header("X-Accept", "application/json").header("X-Content-Type", "application/json").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x3.post("/a01", bean).header("X-Accept", "text/xml").header("X-Content-Type", "text/xml").run().assertStatus().is(200).getBody().as(Bean.class).check();
@@ -96,7 +96,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void a02_singleLanguages_perRequest() throws Exception {
-		RestClient x = MockRestClient.create(A.class).build();
+		RestClient x = client().build();
 		x.post("/a01", bean).header("X-Accept", "application/json+simple").header("X-Content-Type", "application/json+simple").simpleJson().run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("X-Accept", "application/json").header("X-Content-Type", "application/json").json().run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("X-Accept", "text/xml").header("X-Content-Type", "text/xml").xml().run().assertStatus().is(200).getBody().as(Bean.class).check();
@@ -112,7 +112,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void a03_noLanguages() throws Exception {
-		RestClient x = MockRestClient.create(A.class).build();
+		RestClient x = client().build();
 		x.post("/a01", bean).header("Accept", "application/json").header("Content-Type", "application/json").header("X-Accept", "application/json").header("X-Content-Type", "application/json").body("{f:1}").run().assertStatus().is(200).assertBody().is("{\"f\":1}");
 	}
 
@@ -122,7 +122,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void b01_multiLanguages() throws Exception {
-		RestClient x = MockRestClient.create(A.class).simpleJson().json().xml().html().plainText().msgPack().uon().urlEnc().openApi().build();
+		RestClient x = client().simpleJson().json().xml().html().plainText().msgPack().uon().urlEnc().openApi().build();
 		x.post("/a01", bean).header("Accept", "application/json").header("Content-Type", "application/json").header("X-Accept", "application/json").header("X-Content-Type", "application/json").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/xml").header("Content-Type", "text/xml").header("X-Accept", "text/xml").header("X-Content-Type", "text/xml").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/html").header("Content-Type", "text/html").header("X-Accept", "text/html").header("X-Content-Type", "text/html").run().assertStatus().is(200).getBody().as(Bean.class).check();
@@ -142,7 +142,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void c01_universal() throws Exception {
-		RestClient x = MockRestClient.create(A.class).universal().build();
+		RestClient x = client().universal().build();
 		x.post("/a01", bean).header("Accept", "application/json").header("Content-Type", "application/json").header("X-Accept", "application/json").header("X-Content-Type", "application/json").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/xml").header("Content-Type", "text/xml").header("X-Accept", "text/xml").header("X-Content-Type", "text/xml").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/html").header("Content-Type", "text/html").header("X-Accept", "text/html").header("X-Content-Type", "text/html").run().assertStatus().is(200).getBody().as(Bean.class).check();
@@ -163,7 +163,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void d01_universal() throws Exception {
-		RestClient x = MockRestClient.create(A.class).universal().header("Accept", "application/json").header("Content-Type", "application/json").build();
+		RestClient x = client().universal().header("Accept", "application/json").header("Content-Type", "application/json").build();
 		x.post("/a01", bean).header("Accept", "application/json").header("Content-Type", "application/json").header("X-Accept", "application/json").header("X-Content-Type", "application/json").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/xml").header("Content-Type", "text/xml").header("X-Accept", "text/xml").header("X-Content-Type", "text/xml").run().assertStatus().is(200).getBody().as(Bean.class).check();
 		x.post("/a01", bean).header("Accept", "text/html").header("Content-Type", "text/html").header("X-Accept", "text/html").header("X-Content-Type", "text/html").run().assertStatus().is(200).getBody().as(Bean.class).check();
@@ -179,7 +179,15 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void d03_nullMarshalls() throws Exception {
-		RestClient x = MockRestClient.create(A.class).marshall(null).marshalls(Json.DEFAULT, null).build();
+		RestClient x = client().marshall(null).marshalls(Json.DEFAULT, null).build();
 		x.post("/a01", bean).header("X-Accept", "application/json").header("X-Content-Type", "application/json").run().assertStatus().is(200).getBody().as(Bean.class).check();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static RestClientBuilder client() {
+		return MockRestClient.create(A.class);
 	}
 }

@@ -5815,11 +5815,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	private static SerializedNameValuePairBuilder serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return SerializedNameValuePair.create().name(stringify(key)).value(value).type(type).serializer(serializer).schema(schema);
+		return key == null ? null : SerializedNameValuePair.create().name(stringify(key)).value(value).type(type).serializer(serializer).schema(schema);
 	}
 
 	private static SerializedHeaderBuilder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
+		return key == null ? null : SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
 	}
 
 	private static String className(Object value) {

@@ -146,15 +146,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void a03_beanHeaders() throws Exception {
 		String r = proxy.beanHeaders(
-			new ABean().init(),
+			ABean.get(),
 			null,
-			new ABean[][][]{{{new ABean().init(),null},null},null},
-			AList.of(new ABean().init(),null),
-			AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null),
-			AMap.of("foo",new ABean().init()),
-			AMap.of("foo",Arrays.asList(new ABean().init())),
-			AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList(new ABean().init()))
+			new ABean[][][]{{{ABean.get(),null},null},null},
+			AList.of(ABean.get(),null),
+			AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			AMap.of("foo",ABean.get()),
+			AMap.of("foo",Arrays.asList(ABean.get())),
+			AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -163,15 +163,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void a04_typedBeanHeaders() throws Exception {
 		String r = proxy.typedBeanHeaders(
-			new TypedBeanImpl().init(),
+			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},
-			AList.of(new TypedBeanImpl().init(),null),
-			AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null),
-			AMap.of("foo",new TypedBeanImpl().init()),
-			AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())),
-			AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init()))
+			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			AList.of(TypedBeanImpl.get(),null),
+			AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			AMap.of("foo",TypedBeanImpl.get()),
+			AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
+			AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -275,15 +275,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b03_beanQueries() throws Exception {
 		String r = proxy.beanQueries(
-			new ABean().init(),
+			ABean.get(),
 			null,
-			new ABean[][][]{{{new ABean().init(),null},null},null},
-			AList.of(new ABean().init(),null),
-			AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null),
-			AMap.of("foo",new ABean().init()),
-			AMap.of("foo",Arrays.asList(new ABean().init())),
-			AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList(new ABean().init()))
+			new ABean[][][]{{{ABean.get(),null},null},null},
+			AList.of(ABean.get(),null),
+			AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			AMap.of("foo",ABean.get()),
+			AMap.of("foo",Arrays.asList(ABean.get())),
+			AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -292,15 +292,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b04_typedBeanQueries() throws Exception {
 		String r = proxy.typedBeanQueries(
-			new TypedBeanImpl().init(),
+			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},
-			AList.of(new TypedBeanImpl().init(),null),
-			AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null),
-			AMap.of("foo",new TypedBeanImpl().init()),
-			AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())),
-			AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init()))
+			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			AList.of(TypedBeanImpl.get(),null),
+			AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			AMap.of("foo",TypedBeanImpl.get()),
+			AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
+			AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -416,15 +416,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void c03_beanFormData() throws Exception {
 		String r = proxy.beanFormData(
-			new ABean().init(),
+			ABean.get(),
 			null,
-			new ABean[][][]{{{new ABean().init(),null},null},null},
-			AList.of(new ABean().init(),null),
-			AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null),
-			AMap.of("foo",new ABean().init()),
-			AMap.of("foo",Arrays.asList(new ABean().init())),
-			AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList(new ABean().init()))
+			new ABean[][][]{{{ABean.get(),null},null},null},
+			AList.of(ABean.get(),null),
+			AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			AMap.of("foo",ABean.get()),
+			AMap.of("foo",Arrays.asList(ABean.get())),
+			AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -433,15 +433,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void c04_typedBeanFormData() throws Exception {
 		String r = proxy.typedBeanFormData(
-			new TypedBeanImpl().init(),
+			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},
-			AList.of(new TypedBeanImpl().init(),null),
-			AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null),
-			AMap.of("foo",new TypedBeanImpl().init()),
-			AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())),
-			AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)),
-			AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init()))
+			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			AList.of(TypedBeanImpl.get(),null),
+			AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			AMap.of("foo",TypedBeanImpl.get()),
+			AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
+			AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
 	}
@@ -942,84 +942,84 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Beans
 	@Test
 	public void eb01_setBean() {
-		proxy.setBean(new ABean().init());
+		proxy.setBean(ABean.get());
 	}
 
 	@Test
 	public void eb02_setBean3dArray() {
-		proxy.setBean3dArray(new ABean[][][]{{{new ABean().init(),null},null},null});
+		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
 	}
 
 	@Test
 	public void eb03_setBeanList() {
-		proxy.setBeanList(Arrays.asList(new ABean().init()));
+		proxy.setBeanList(Arrays.asList(ABean.get()));
 	}
 
 	@Test
 	public void eb04_setBean1d3dList() {
-		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@Test
 	public void eb05_setBeanMap() {
-		proxy.setBeanMap(AMap.of("foo",new ABean().init()));
+		proxy.setBeanMap(AMap.of("foo",ABean.get()));
 	}
 
 	@Test
 	public void eb06_setBeanListMap() {
-		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(new ABean().init())));
+		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(ABean.get())));
 	}
 
 	@Test
 	public void eb07_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
+		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void eb08_setBeanListMapIntegerKeys() {
-		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(new ABean().init())));
+		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(ABean.get())));
 	}
 
 	// Typed beans
 
 	@Test
 	public void ec01_setTypedBean() {
-		proxy.setTypedBean(new TypedBeanImpl().init());
+		proxy.setTypedBean(TypedBeanImpl.get());
 	}
 
 	@Test
 	public void ec02_setTypedBean3dArray() {
-		proxy.setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
+		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
 	}
 
 	@Test
 	public void ec03_setTypedBeanList() {
-		proxy.setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
+		proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void ec04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@Test
 	public void ec05_setTypedBeanMap() {
-		proxy.setTypedBeanMap(AMap.of("foo",new TypedBeanImpl().init()));
+		proxy.setTypedBeanMap(AMap.of("foo",TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void ec06_setTypedBeanListMap() {
-		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@Test
 	public void ec07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void ec08_setTypedBeanListMapIntegerKeys() {
-		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	// Swapped POJOs
@@ -1128,7 +1128,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void f03_pathVars3() {
 		String r = proxy.pathVars3(
-			new ABean().init()
+			ABean.get()
 		);
 		assertEquals("OK", r);
 	}
@@ -1207,7 +1207,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new ReqBeanPath7() {
 				@Override
 				public ABean getX() {
-					return new ABean().init();
+					return ABean.get();
 				}
 			}
 		);
@@ -1288,7 +1288,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new ReqBeanQuery7() {
 				@Override
 				public ABean getX() {
-					return new ABean().init();
+					return ABean.get();
 				}
 			}
 		);
@@ -1369,7 +1369,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new ReqBeanFormData7() {
 				@Override
 				public ABean getX() {
-					return new ABean().init();
+					return ABean.get();
 				}
 			}
 		);
@@ -1450,7 +1450,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new ReqBeanHeader7() {
 				@Override
 				public ABean getX() {
-					return new ABean().init();
+					return ABean.get();
 				}
 			}
 		);

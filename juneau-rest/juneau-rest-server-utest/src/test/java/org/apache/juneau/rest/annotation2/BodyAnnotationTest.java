@@ -1191,7 +1191,7 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void j02_optionalParam_bean() throws Exception {
-		j.post("/b", new ABean().init())
+		j.post("/b", ABean.get())
 			.run()
 			.assertStatus().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
@@ -1203,7 +1203,7 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void j03_optionalParam_listOfBeans() throws Exception {
-		String body = SimpleJson.DEFAULT.toString(AList.of(new ABean().init()));
+		String body = SimpleJson.DEFAULT.toString(AList.of(ABean.get()));
 		j.post("/c", body, "application/json")
 			.run()
 			.assertStatus().is(200)
@@ -1216,7 +1216,7 @@ public class BodyAnnotationTest {
 
 	@Test
 	public void j04_optionalParam_listOfOptionals() throws Exception {
-		String body = SimpleJson.DEFAULT.toString(AList.of(Optional.of(new ABean().init())));
+		String body = SimpleJson.DEFAULT.toString(AList.of(Optional.of(ABean.get())));
 		j.post("/d", body, "application/json")
 			.run()
 			.assertStatus().is(200)

@@ -268,11 +268,6 @@ public class Remote_BodyAnnotation_Test {
 			return b;
 		}
 		@RestMethod
-		public Reader postX4(@Body Reader b, @Header("Content-Type") String ct) {
-			assertEquals("text/foo", ct);
-			return b;
-		}
-		@RestMethod
 		public Reader postX5(@Body Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo", ct);
 			return b;

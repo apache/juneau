@@ -1278,84 +1278,84 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=GET, path="/returnBean")
 	public ABean returnBean() {
-		return new ABean().init();
+		return ABean.get();
 	}
 
 	@RestMethod(name=GET, path="/returnBean3dArray")
 	public ABean[][][] returnBean3dArray() {
-		return new ABean[][][]{{{new ABean().init(),null},null},null};
+		return new ABean[][][]{{{ABean.get(),null},null},null};
 	}
 
 	@RestMethod(name=GET, path="/returnBeanList")
 	public List<ABean> returnBeanList() {
-		return asList(new ABean().init());
+		return asList(ABean.get());
 	}
 
 	@RestMethod(name=GET, path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null);
+		return AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnBeanMap")
 	public Map<String,ABean> returnBeanMap() {
-		return AMap.of("foo",new ABean().init());
+		return AMap.of("foo",ABean.get());
 	}
 
 	@RestMethod(name=GET, path="/returnBeanListMap")
 	public Map<String,List<ABean>> returnBeanListMap() {
-		return AMap.of("foo",asList(new ABean().init()));
+		return AMap.of("foo",asList(ABean.get()));
 	}
 
 	@RestMethod(name=GET, path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return AMap.of("foo", AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+		return AMap.of("foo", AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnBeanListMapIntegerKeys")
 	public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-		return AMap.of(1,asList(new ABean().init()));
+		return AMap.of(1,asList(ABean.get()));
 	}
 
 	// Typed beans
 
 	@RestMethod(name=GET, path="/returnTypedBean")
 	public TypedBean returnTypedBean() {
-		return new TypedBeanImpl().init();
+		return TypedBeanImpl.get();
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBean3dArray")
 	public TypedBean[][][] returnTypedBean3dArray() {
-		return new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null};
+		return new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null};
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanList")
 	public List<TypedBean> returnTypedBeanList() {
-		return asList((TypedBean)new TypedBeanImpl().init());
+		return asList((TypedBean)TypedBeanImpl.get());
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBean1d3dList")
 	public List<TypedBean[][][]> returnTypedBean1d3dList() {
-		return AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null);
+		return AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanMap")
 	public Map<String,TypedBean> returnTypedBeanMap() {
-		return AMap.of("foo",new TypedBeanImpl().init());
+		return AMap.of("foo",TypedBeanImpl.get());
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanListMap")
 	public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-		return AMap.of("foo",asList((TypedBean)new TypedBeanImpl().init()));
+		return AMap.of("foo",asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return AMap.of("foo", AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+		return AMap.of("foo", AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@RestMethod(name=GET, path="/returnTypedBeanListMapIntegerKeys")
 	public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-		return AMap.of(1,asList((TypedBean)new TypedBeanImpl().init()));
+		return AMap.of(1,asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	// Swapped POJOs

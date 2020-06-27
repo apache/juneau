@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.httppart.HttpPartSchema.*;
 
 import java.io.*;
 import java.net.*;
@@ -47,14 +46,11 @@ import org.apache.juneau.http.BasicNameValuePair;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
@@ -65,7 +61,6 @@ import org.apache.juneau.rest.client2.RestResponse;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.testutils.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
@@ -76,9 +71,10 @@ public class RestClient_Test {
 
 	public static class ABean {
 		public int f;
-		public ABean init() {
-			f = 1;
-			return this;
+		static ABean get() {
+			ABean x = new ABean();
+			x.f = 1;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -86,7 +82,7 @@ public class RestClient_Test {
 		}
 	}
 
-	public static ABean bean = new ABean().init();
+	public static ABean bean = ABean.get();
 
 	@Rest
 	public static class A extends BasicRest {
@@ -196,7 +192,7 @@ public class RestClient_Test {
 
 	@Test
 	public void a04_basicCalls() throws Exception {
-		RestClient x = MockRestClient.create(A.class).build();
+		RestClient x = client().build();
 		x.get().run().assertBody().is("GET");
 		x.get("/").run().assertBody().is("GET");
 		x.get("").run().assertBody().is("GET");
@@ -208,7 +204,7 @@ public class RestClient_Test {
 
 	@Test
 	public void a05_basicCalls_get() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/bean").run().assertBody().is("{f:1}");
+		client().build().get("/bean").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -221,19 +217,19 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().get(url).run().assertBody().is("{f:1}");
+			client().build().get(url).run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a07_basicCalls_put() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().put("/bean", bean).run().assertBody().is("{f:1}");
-		MockRestClient.create(A.class).simpleJson().build().put("/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().put("/bean", bean).run().assertBody().is("{f:1}");
+		client().build().put("/bean").body(bean).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void a08_basicCalls_put_fromString() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().put("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
+		client().build().put("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
  	}
 
 	@Test
@@ -246,9 +242,9 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().put(url, bean).run().assertBody().is("{f:1}");
-			MockRestClient.create(A.class).simpleJson().build().put(url, "{f:1}", "application/json").run().assertBody().is("{f:1}");
-			MockRestClient.create(A.class).simpleJson().build().put(url).body(bean).run().assertBody().is("{f:1}");
+			client().build().put(url, bean).run().assertBody().is("{f:1}");
+			client().build().put(url, "{f:1}", "application/json").run().assertBody().is("{f:1}");
+			client().build().put(url).body(bean).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -261,22 +257,22 @@ public class RestClient_Test {
 			StreamResource.create().contents("{f:1}").build(),
 			bean,
 			new StringEntity("{f:1}"),
-			NameValuePairs.of("f", 1)
+			pairs("f", 1)
 		);
 		for (Object body : bodies) {
-			MockRestClient.create(A.class).simpleJson().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean", body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean", body).run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a11_basicCalls_post() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().post("/bean", bean).run().assertBody().is("{f:1}");
-		MockRestClient.create(A.class).simpleJson().build().post("/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().post("/bean", bean).run().assertBody().is("{f:1}");
+		client().build().post("/bean").body(bean).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void a12_basicCalls_post_fromString() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().post("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
+		client().build().post("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -289,9 +285,9 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().post(url, bean).run().assertBody().is("{f:1}");
-			MockRestClient.create(A.class).simpleJson().build().post(url, "{f:1}", "application/json").run().assertBody().is("{f:1}");
-			MockRestClient.create(A.class).simpleJson().build().post(url).body(bean).run().assertBody().is("{f:1}");
+			client().build().post(url, bean).run().assertBody().is("{f:1}");
+			client().build().post(url, "{f:1}", "application/json").run().assertBody().is("{f:1}");
+			client().build().post(url).body(bean).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -304,16 +300,16 @@ public class RestClient_Test {
 			StreamResource.create().contents("{f:1}").build(),
 			bean,
 			new StringEntity("{f:1}"),
-			NameValuePairs.of("f", 1)
+			pairs("f", 1)
 		);
 		for (Object body : bodies) {
-			MockRestClient.create(A.class).simpleJson().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean", body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean", body).run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a15_basicCalls_delete() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().delete("/bean").run().assertBody().is("{f:1}");
+		client().build().delete("/bean").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -326,13 +322,13 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().delete(url).run().assertBody().is("{f:1}");
+			client().build().delete(url).run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a17_basicCalls_options() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().options("/bean").run().assertBody().is("{f:1}");
+		client().build().options("/bean").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -345,13 +341,13 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().options(url).run().assertBody().is("{f:1}");
+			client().build().options(url).run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a19_basicCalls_head() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().head("/bean").run().assertBody().is("");
+		client().build().head("/bean").run().assertBody().is("");
 	}
 
 	@Test
@@ -364,13 +360,13 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).simpleJson().build().head(url).run().assertBody().is("");
+			client().build().head(url).run().assertBody().is("");
 		}
 	}
 
 	@Test
 	public void a21_basicCalls_formPost() throws Exception {
-		MockRestClient.create(A.class).build().formPost("/bean", bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+		client().build().formPost("/bean", bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -383,7 +379,7 @@ public class RestClient_Test {
 			new StringBuilder("/bean")
 		);
 		for (Object url : urls) {
-			MockRestClient.create(A.class).build().formPost(url, bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+			client(A.class).build().formPost(url, bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -394,11 +390,11 @@ public class RestClient_Test {
 			s2 = () -> new ByteArrayInputStream("f=1".getBytes());
 		List<Object> bodies = AList.of(
 			/*[ 0]*/ bean,
-			/*[ 1]*/ NameValuePairs.of("f","1"),
-			/*[ 2]*/ new NameValuePair[]{BasicNameValuePair.of("f","1")},
+			/*[ 1]*/ pairs("f","1"),
+			/*[ 2]*/ new NameValuePair[]{pair("f","1")},
 			/*[ 3]*/ new StringEntity("f=1", org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
 			/*[ 4]*/ new StringEntity("f=1", (org.apache.http.entity.ContentType)null),
-			/*[ 5]*/ BasicNameValuePair.of("f","1"),
+			/*[ 5]*/ pair("f","1"),
 			/*[ 6]*/ ReaderResource.create().contents("f=1").build(),
 			/*[ 7]*/ ReaderResource.create().contents("f=1"),
 			/*[ 8]*/ ReaderResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
@@ -423,13 +419,13 @@ public class RestClient_Test {
 
 	@Test
 	public void a25_basicCalls_patch() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().patch("/bean", bean).run().assertBody().is("{f:1}");
-		MockRestClient.create(A.class).simpleJson().build().patch("/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().patch("/bean", bean).run().assertBody().is("{f:1}");
+		client().build().patch("/bean").body(bean).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void a26_basicCalls_patch_fromString() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().patch("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
+		client().build().patch("/bean", "{f:1}", "application/json").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -441,10 +437,10 @@ public class RestClient_Test {
 			StreamResource.create().contents("{f:1}").build(),
 			bean,
 			new StringEntity("{f:1}"),
-			NameValuePairs.of("f", 1)
+			pairs("f", 1)
 		);
 		for (Object body : bodies) {
-			MockRestClient.create(A.class).simpleJson().build().patch("/bean", body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			client().build().patch("/bean", body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -464,8 +460,8 @@ public class RestClient_Test {
 
 	@Test
 	public void a29_basicCalls_request_patch() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().request(HttpMethod.PATCH, "/bean", bean).run().assertBody().is("{f:1}");
-		MockRestClient.create(A.class).simpleJson().build().request(HttpMethod.PATCH, "/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().request(HttpMethod.PATCH, "/bean", bean).run().assertBody().is("{f:1}");
+		client().build().request(HttpMethod.PATCH, "/bean").body(bean).run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -477,10 +473,10 @@ public class RestClient_Test {
 			StreamResource.create().contents("{f:1}").build(),
 			bean,
 			new StringEntity("{f:1}"),
-			NameValuePairs.of("f", 1)
+			pairs("f", 1)
 		);
 		for (Object body : bodies) {
-			MockRestClient.create(A.class).simpleJson().build().request(HttpMethod.PATCH, "/bean", body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			client().build().request(HttpMethod.PATCH, "/bean", body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -500,8 +496,8 @@ public class RestClient_Test {
 
 	@Test
 	public void a32_basicCalls_request_get() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().request(HttpMethod.GET, "/bean", null).run().assertBody().is("{f:1}");
-		MockRestClient.create(A.class).simpleJson().build().request(HttpMethod.GET, "/bean").run().assertBody().is("{f:1}");
+		client().build().request(HttpMethod.GET, "/bean", null).run().assertBody().is("{f:1}");
+		client().build().request(HttpMethod.GET, "/bean").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -520,14 +516,14 @@ public class RestClient_Test {
 
 	@Test
 	public void a34_basicCalls_request_whenClosed() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).build();
+		RestClient rc = client().build();
 		rc.closeQuietly();
 		assertThrown(()->{rc.request(HttpMethod.GET, "/bean", null);}).contains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a35_basicCalls_request_whenClosed_withStackCreation() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).debug().build();
+		RestClient rc = client().debug().build();
 		rc.closeQuietly();
 		assertThrown(()->{rc.request(HttpMethod.GET, "/bean", null);}).contains("RestClient.close() has already been called");
 	}
@@ -541,15 +537,15 @@ public class RestClient_Test {
 		MockConsole c = MockConsole.create();
 		MockLogger l = MockLogger.create();
 
-		MockRestClient.create(A.class).simpleJson().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
+		client().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
 		c.assertContents().is("");
 		c.reset();
 
-		MockRestClient.create(A.class).simpleJson().logRequests(DetailLevel.SIMPLE, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
+		client().logRequests(DetailLevel.SIMPLE, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
 		c.assertContents().is("HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		c.reset();
 
-		MockRestClient.create(A.class).simpleJson().logRequests(DetailLevel.FULL, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
+		client().logRequests(DetailLevel.FULL, Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean", bean).complete();
 		c.assertContents().is(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
@@ -571,25 +567,25 @@ public class RestClient_Test {
 			""
 		);
 
-		MockRestClient.create(A.class).simpleJson().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).console(MockConsole.class).build().post("/bean", bean).complete();
+		client().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).console(MockConsole.class).build().post("/bean", bean).complete();
 	}
 
 	@Test
 	public void b02_logging_logTo() throws Exception {
 		MockLogger l = MockLogger.create();
 
-		MockRestClient.create(A.class).simpleJson().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).build().post("/bean", bean).complete();
+		client().logRequests(DetailLevel.NONE, Level.SEVERE).logToConsole().logger(l).build().post("/bean", bean).complete();
 		l.assertContents().is("");
 		l.assertRecordCount().is(0);
 		l.reset();
 
-		MockRestClient.create(A.class).simpleJson().logger(l).logRequests(DetailLevel.SIMPLE, Level.WARNING).build().post("/bean", bean).complete();
+		client().logger(l).logRequests(DetailLevel.SIMPLE, Level.WARNING).build().post("/bean", bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().stderr().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
 		l.assertContents().is("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		l.reset();
 
-		MockRestClient.create(A.class).simpleJson().logger(l).logRequests(DetailLevel.FULL, Level.WARNING).build().post("/bean", bean).complete();
+		client().logger(l).logRequests(DetailLevel.FULL, Level.WARNING).build().post("/bean", bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().is(
 			"",
@@ -648,10 +644,10 @@ public class RestClient_Test {
 	public void b03_logging_other() throws Exception {
 		MockLogger ml = MockLogger.create();
 		MockConsole mc = MockConsole.create();
-		MockRestClient.create(A.class).simpleJson().logger(ml).interceptors(B3.class).build().post("/bean", bean).complete();
+		client().logger(ml).interceptors(B3.class).build().post("/bean", bean).complete();
 		ml.assertRecordCount().is(5);
 		ml.reset();
-		MockRestClient.create(A.class).simpleJson().logger(ml).logToConsole().console(mc).interceptors(B3.class).build().post("/bean", bean).complete();
+		client().logger(ml).logToConsole().console(mc).interceptors(B3.class).build().post("/bean", bean).complete();
 		ml.assertRecordCount().is(5);
 		ml.assertContents().contains(
 			"WARNING: Foo",
@@ -719,10 +715,10 @@ public class RestClient_Test {
 			}
 		};
 
-		MockRestClient.create(A.class).simpleJson().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
+		client().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
 			.build().get("/echo").run().assertBody().contains("A1: 1", "A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");
-		MockRestClient.create(A.class).simpleJson().interceptors(C01.class).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
-		MockRestClient.create(A.class).simpleJson().interceptors(new C01()).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+		client().interceptors(C01.class).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+		client().interceptors(new C01()).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -737,7 +733,7 @@ public class RestClient_Test {
 				response.setHeader("B1", "1");
 			}
 		};
-		MockRestClient.create(A.class).simpleJson().httpProcessor(x).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+		client().httpProcessor(x).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -750,13 +746,13 @@ public class RestClient_Test {
 				return super.execute(request, conn, context);
 			}
 		};
-		MockRestClient.create(A.class).simpleJson().requestExecutor(x).build().get("/echo").run().assertBody().contains("HTTP GET /echo");
+		client().requestExecutor(x).build().get("/echo").run().assertBody().contains("HTTP GET /echo");
 		assertTrue(b1.get());
 	}
 
 	@Test
 	public void c04_httpClient_defaultHeaders() throws RestCallException {
-		MockRestClient.create(A.class).simpleJson().defaultHeaders(AList.of(new org.apache.http.message.BasicHeader("Foo", "bar"))).build().get("/echo").run().assertBody().contains("HTTP GET /echo","Foo: bar");
+		client().defaultHeaders(AList.of(new org.apache.http.message.BasicHeader("Foo", "bar"))).build().get("/echo").run().assertBody().contains("HTTP GET /echo","Foo: bar");
 	}
 
 	@Test
@@ -768,9 +764,7 @@ public class RestClient_Test {
 	@Test
 	public void c06_httpClient_unusedHttpClientMethods() {
 		RestClient x = RestClient.create().build();
-		try {
-			x.getParams();
-		} catch (UnsupportedOperationException e) {}
+		assertThrown(()->{x.getParams();}).isType(UnsupportedOperationException.class);
 		assertNotNull(x.getConnectionManager());
 	}
 
@@ -835,14 +829,14 @@ public class RestClient_Test {
 
 	@Test
 	public void c14_httpClient_requestConfig() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/bean").requestConfig(RequestConfig.custom().setMaxRedirects(1).build()).run().assertBody().is("{f:1}");
+		client().build().get("/bean").requestConfig(RequestConfig.custom().setMaxRedirects(1).build()).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void c15_httpClient_pooled() throws Exception {
 		RestClient x1 = RestClient.create().simpleJson().pooled().build();
 		RestClient x2 = RestClient.create().simpleJson().build();
-		RestClient x3 = MockRestClient.create(A.class).pooled().simpleJson().build();
+		RestClient x3 = client().pooled().build();
 		assertEquals("PoolingHttpClientConnectionManager", ClassInfo.of(x1.httpClient).getDeclaredField("connManager").accessible().invoke(x1.httpClient).getClass().getSimpleName());
 		assertEquals("BasicHttpClientConnectionManager", ClassInfo.of(x2.httpClient).getDeclaredField("connManager").accessible().invoke(x2.httpClient).getClass().getSimpleName());
 		assertEquals("MockHttpClientConnectionManager", ClassInfo.of(x3.httpClient).getDeclaredField("connManager").accessible().invoke(x3.httpClient).getClass().getSimpleName());
@@ -867,390 +861,7 @@ public class RestClient_Test {
 
 	@Test
 	public void e01_basicAuth() throws RestCallException {
-		MockRestClient.create(E.class).simpleJson().basicAuth(AuthScope.ANY_HOST, AuthScope.ANY_PORT, "user", "pw").build().get("/echo").run().assertBody().contains("OK");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Headers
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void f01_headers_basicHeader() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").header("Foo","bar").build().get("/checkHeader").header("Foo","baz").run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f02_headers_fromSupplier() throws Exception {
-		TestSupplier s = TestSupplier.of("foo");
-		RestClient x = MockRestClient.create(A.class).simpleJson().header("Check", "Foo").header("Foo", s).build();
-		x.get("/checkHeader").header("Foo", s).run().assertBody().is("['foo','foo']");
-		s.set("bar");
-		x.get("/checkHeader").header("Foo", s).run().assertBody().is("['bar','bar']");
-	}
-
-	@Test
-	public void f03_headers_beanValue() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Foo", bean).header("Check", "Foo").build().get("/checkHeader").header("Foo", bean).run().assertBody().is("['f=1','f=1']");
-	}
-
-	@Test
-	public void f04_headers_nullValue() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Foo", null).header("Check", "Foo").build().get("/checkHeader").header("Foo", null).run().assertBody().is("null");
-	}
-	@Test
-	public void f04_headers_nullHeader() throws Exception {
-		MockRestClient.create(A.class).simpleJson().headers(BasicStringHeader.of("Foo", "bar"), null).header("Check", "Foo").build().get("/checkHeader").run().assertBody().is("['bar']");
-	}
-
-	@Test
-	public void f05_headers_Header() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header(new org.apache.http.message.BasicHeader("Foo", "bar")).header("Check", "Foo").build().get("/checkHeader").header(new org.apache.http.message.BasicHeader("Foo", "baz")).run().assertBody().is("['bar','baz']");
-		MockRestClient.create(A.class).simpleJson().headers(new org.apache.http.message.BasicHeader("Foo", "bar"),new org.apache.http.message.BasicHeader("Baz", "baz")).header("Check", "Foo").build().get("/checkHeader").headers(new org.apache.http.message.BasicHeader("Foo", "baz"),new org.apache.http.message.BasicHeader("Baz", "quux")).run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f06_headers_NameValuePair() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header(new BasicNameValuePair("Foo", "bar")).header("Check", "Foo").build().get("/checkHeader").header(new BasicNameValuePair("Foo", "baz")).run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f07_headers_HttpHeader() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header(BasicStringHeader.of("Foo", "bar")).header("Check", "Foo").build().get("/checkHeader").header(BasicStringHeader.of("Foo", "baz")).run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f08_headers_objects() throws Exception {
-		MockRestClient.create(A.class).simpleJson().headers(OMap.of("Foo", "bar")).header("Check", "Foo").build().get("/checkHeader").headers(OMap.of("Foo", "baz")).run().assertBody().is("['bar','baz']");
-		MockRestClient.create(A.class).simpleJson().headers(AMap.of("Foo", "bar")).header("Check", "Foo").build().get("/checkHeader").headers(AMap.of("Foo", "baz")).run().assertBody().is("['bar','baz']");
-		MockRestClient.create(A.class).simpleJson().headers(NameValuePairs.of("Foo","bar")).header("Check", "Foo").build().get("/checkHeader").headers(NameValuePairs.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		MockRestClient.create(A.class).simpleJson().headers((Object)new NameValuePair[]{BasicNameValuePair.of("Foo","bar")}).header("Check", "Foo").build().get("/checkHeader").headers(NameValuePairs.of("Foo","baz")).run().assertBody().is("['bar','baz']");
-		MockRestClient.create(A.class).simpleJson().headers(new BasicNameValuePair("Foo","bar")).header("Check", "Foo").build().get("/checkHeader").headers(new BasicNameValuePair("Foo","baz")).run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f12_headers_headerPairs() throws Exception {
-		MockRestClient.create(A.class).simpleJson().headerPairs("Foo", "bar").header("Check", "Foo").build().get("/checkHeader").headerPairs("Foo", "baz").run().assertBody().is("['bar','baz']");
-	}
-
-	@Test
-	public void f13_headers_standardHeaders() throws Exception {
-		MockRestClient.create(A.class).simpleJson().accept("text/foo").header("Check", "Accept").build().get("/checkHeader").accept("text/plain").run().assertBody().is("['text/foo','text/plain']");
-		MockRestClient.create(A.class).simpleJson().acceptCharset("UTF-8").header("Check", "Accept-Charset").build().get("/checkHeader").run().assertBody().is("['UTF-8']");
-		MockRestClient.create(A.class).simpleJson().acceptEncoding("identity").header("Check", "Accept-Encoding").build().get("/checkHeader").run().assertBody().is("['identity']");
-		MockRestClient.create(A.class).simpleJson().acceptLanguage("en").header("Check", "Accept-Language").build().get("/checkHeader").run().assertBody().is("['en']");
-		MockRestClient.create(A.class).simpleJson().authorization("foo").header("Check", "Authorization").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().cacheControl("none").header("Check", "Cache-Control").build().get("/checkHeader").run().assertBody().is("['none']");
-		MockRestClient.create(A.class).simpleJson().clientVersion("1").header("Check", "X-Client-Version").build().get("/checkHeader").run().assertBody().is("['1']");
-		MockRestClient.create(A.class).simpleJson().connection("foo").header("Check", "Connection").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().contentLength("123").header("Check", "Content-Length").build().get("/checkHeader").run().assertBody().is("['123']");
-		MockRestClient.create(A.class).simpleJson().contentType("foo").header("Check", "Content-Type").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().contentEncoding("identity").header("Check", "Content-Encoding").build().get("/checkHeader").run().assertBody().is("['identity']");
-		MockRestClient.create(A.class).simpleJson().date("123").header("Check", "Date").build().get("/checkHeader").run().assertBody().is("['123']");
-		MockRestClient.create(A.class).simpleJson().expect("foo").header("Check", "Expect").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().forwarded("foo").header("Check", "Forwarded").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().from("foo").header("Check", "From").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().host("foo").header("Check", "Host").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().ifMatch("foo").header("Check", "If-Match").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().ifModifiedSince("foo").header("Check", "If-Modified-Since").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().ifNoneMatch("foo").header("Check", "If-None-Match").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().ifRange("foo").header("Check", "If-Range").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().ifUnmodifiedSince("foo").header("Check", "If-Unmodified-Since").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().maxForwards("10").header("Check", "Max-Forwards").build().get("/checkHeader").run().assertBody().is("['10']");
-		MockRestClient.create(A.class).simpleJson().noTrace().header("Check", "No-Trace").build().get("/checkHeader").run().assertBody().is("['true']");
-		MockRestClient.create(A.class).simpleJson().origin("foo").header("Check", "Origin").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().pragma("foo").header("Check", "Pragma").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().proxyAuthorization("foo").header("Check", "Proxy-Authorization").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().range("foo").header("Check", "Range").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().referer("foo").header("Check", "Referer").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().te("foo").header("Check", "TE").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().userAgent(new StringBuilder("foo")).header("Check", "User-Agent").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().upgrade("foo").header("Check", "Upgrade").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().via("foo").header("Check", "Via").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().warning("foo").header("Check", "Warning").build().get("/checkHeader").run().assertBody().is("['foo']");
-	}
-
-	@Test
-	public void f14_headers_debug_onRequest() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Debug").build().get("/checkHeader").debug().run().assertBody().is("['true']");
-	}
-
-	@Test
-	public void f15_headers_SerializedNameValuePairBuilder() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").headers(SerializedNameValuePair.create().name("Foo").value("Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/checkHeader").headers(SerializedNameValuePair.create().name("Foo").value("Baz").serializer(OpenApiSerializer.DEFAULT)).debug().run().assertBody().is("['Bar','Baz']");
-	}
-
-	@Test
-	public void f16_headers_SerializedHeaderBuilder() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").headers(SerializedHeader.create().name("Foo").value("Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/checkHeader").headers(SerializedHeader.create().name("Foo").value("Baz").serializer(OpenApiSerializer.DEFAULT)).debug().run().assertBody().is("['Bar','Baz']");
-	}
-
-	@Test
-	public void f17_headers_headerBeans() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header(new Accept("text/foo")).header("Check", "Accept").build().get("/checkHeader").header(new Accept("text/plain")).run().assertBody().is("['text/foo','text/plain']");
-		MockRestClient.create(A.class).simpleJson().header(new AcceptCharset("UTF-8")).header("Check", "Accept-Charset").build().get("/checkHeader").run().assertBody().is("['UTF-8']");
-		MockRestClient.create(A.class).simpleJson().header(new AcceptEncoding("identity")).header("Check", "Accept-Encoding").build().get("/checkHeader").run().assertBody().is("['identity']");
-		MockRestClient.create(A.class).simpleJson().header(new AcceptLanguage("en")).header("Check", "Accept-Language").build().get("/checkHeader").run().assertBody().is("['en']");
-		MockRestClient.create(A.class).simpleJson().header(new Authorization("foo")).header("Check", "Authorization").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new CacheControl("none")).header("Check", "Cache-Control").header("X-Expect", "none").build().get("/checkHeader").run().assertBody().is("['none']");
-		MockRestClient.create(A.class).simpleJson().header(new ClientVersion("1")).header("Check", "X-Client-Version").build().get("/checkHeader").run().assertBody().is("['1']");
-		MockRestClient.create(A.class).simpleJson().header(new Connection("foo")).header("Check", "Connection").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new ContentLength(123)).header("Check", "Content-Length").build().get("/checkHeader").run().assertBody().is("['123']");
-		MockRestClient.create(A.class).simpleJson().header(new ContentType("foo")).header("Check", "Content-Type").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new org.apache.juneau.http.header.Date("Sun, 31 Dec 2000 12:34:56 GMT")).header("Check", "Date").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new org.apache.juneau.http.header.Date(CALENDAR)).header("Check", "Date").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new Expect("foo")).header("Check", "Expect").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Forwarded("foo")).header("Check", "Forwarded").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new From("foo")).header("Check", "From").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Host("foo")).header("Check", "Host").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new IfMatch("\"foo\"")).header("Check", "If-Match").build().get("/checkHeader").run().assertBody().is("['\"foo\"']");
-		MockRestClient.create(A.class).simpleJson().header(new IfModifiedSince(CALENDAR)).header("Check", "If-Modified-Since").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).header("Check", "If-Modified-Since").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new IfNoneMatch("\"foo\"")).header("Check", "If-None-Match").build().get("/checkHeader").run().assertBody().is("['\"foo\"']");
-		MockRestClient.create(A.class).simpleJson().header(new IfRange("foo")).header("Check", "If-Range").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new IfUnmodifiedSince(CALENDAR)).header("Check", "If-Unmodified-Since").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).header("Check", "If-Unmodified-Since").build().get("/checkHeader").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
-		MockRestClient.create(A.class).simpleJson().header(new MaxForwards(10)).header("Check", "Max-Forwards").build().get("/checkHeader").run().assertBody().is("['10']");
-		MockRestClient.create(A.class).simpleJson().header(new NoTrace("true")).header("Check", "No-Trace").build().get("/checkHeader").run().assertBody().is("['true']");
-		MockRestClient.create(A.class).simpleJson().header(new Origin("foo")).header("Check", "Origin").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Pragma("foo")).header("Check", "Pragma").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new ProxyAuthorization("foo")).header("Check", "Proxy-Authorization").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Range("foo")).header("Check", "Range").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Referer("foo")).header("Check", "Referer").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new TE("foo")).header("Check", "TE").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new UserAgent("foo")).header("Check", "User-Agent").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Upgrade("foo")).header("Check", "Upgrade").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Via("foo")).header("Check", "Via").build().get("/checkHeader").run().assertBody().is("['foo']");
-		MockRestClient.create(A.class).simpleJson().header(new Warning("foo")).header("Check", "Warning").build().get("/checkHeader").run().assertBody().is("['foo']");
-	}
-
-	@Test
-	public void f18_headers_headerPairs() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").headerPairs("Foo","bar","Foo","baz").header("Foo","qux").build().get("/checkHeader").headerPairs("Foo","q1x","Foo","q2x").run().assertBody().is("['bar','baz','qux','q1x','q2x']");
-	}
-
-	@Test
-	public void f19_headers_dontOverrideAccept() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Accept").header("Accept", "text/plain").build().get("/checkHeader").run().assertBody().is("['text/plain']");
-		MockRestClient.create(A.class).simpleJson().header("Check", "Accept").header("Accept", "text/foo").build().get("/checkHeader").header("Accept","text/plain").run().assertBody().is("['text/foo','text/plain']");
-		RestClient rc = MockRestClient.create(A.class).simpleJson().header("Check", "Accept").header("Accept", "text/foo").build();
-		RestRequest req = rc.get("/checkHeader");
-		req.setHeader("Accept","text/plain");
-		req.run().assertBody().is("['text/plain']");
-	}
-
-	@Test
-	public void f20_headers_dontOverrideContentType() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Content-Type").header("Content-Type", "text/plain").build().get("/checkHeader").run().assertBody().is("['text/plain']");
-		MockRestClient.create(A.class).simpleJson().header("Check", "Content-Type").header("Content-Type", "text/foo").build().get("/checkHeader").header("Content-Type", "text/plain").run().assertBody().is("['text/foo','text/plain']");
-	}
-
-	@Test
-	public void f21_headers_HttpPartSerializer() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").header("Foo", bean, null, new K12a()).build().get("/checkHeader").run().assertBody().is("['x{f:1}']");
-	}
-
-	@Test
-	public void f22_headers_withSchema() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Foo", AList.of("bar","baz"), T_ARRAY_CSV).header("Check", "Foo").build().get("/checkHeader").run().assertBody().is("['bar,baz']");
-	}
-
-	@Test
-	public void f23_headers_withSchemaAndSupplier() throws Exception {
-		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
-		RestClient x = MockRestClient.create(A.class).simpleJson().header("Check", "Foo").header("Foo", s, T_ARRAY_PIPES).build();
-		x.get("/checkHeader").header("Foo", s, T_ARRAY_PIPES).run().assertBody().is("['foo|bar','foo|bar']");
-		s.set(new String[]{"bar","baz"});
-		x.get("/checkHeader").header("Foo", s, T_ARRAY_PIPES).run().assertBody().is("['bar|baz','bar|baz']");
-	}
-
-	@Test
-	public void f24_headers_withSchemaAndSupplierAndSerializer() throws Exception {
-		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
-		MockRestClient.create(A.class).simpleJson().header("Check", "Foo").header("Foo", s, T_ARRAY_PIPES, UonSerializer.DEFAULT).build().get("/checkHeader").run().assertBody().is("['@(foo,bar)']");
-	}
-
-	@Test
-	public void f25_headers_invalidHeader() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().headers("Foo");}).contains("Invalid type");
-	}
-
-	@Test
-	public void f26_headers_invalidHeaderPairs() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().headerPairs("Foo");}).contains("Odd number of parameters");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Query
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void i01_query_basic() throws Exception {
-		MockRestClient.create(A.class).simpleJson().query("Foo","bar").query("Foo",new StringBuilder("baz")).build().get("/checkQuery").run().assertBody().is("Foo=bar&Foo=baz");
-	}
-
-	@Test
-	public void i02_query_objects() throws Exception {
-		MockRestClient.create(A.class).simpleJson().queries(BasicNameValuePair.of("Foo","f1")).queries(OMap.of("Foo","f2")).queries(AMap.of("Foo","f3")).queries(NameValuePairs.of("Foo","f4","Foo","f5")).queries(BasicNameValuePair.of("Foo","f6"), BasicNameValuePair.of("Foo","f7")).queries((Object)new NameValuePair[]{BasicNameValuePair.of("Foo","f8")}).build().get("/checkQuery").run().assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7&Foo=f8");
-		MockRestClient.create(A.class).simpleJson().build().get("/checkQuery").queries(BasicNameValuePair.of("Foo","f1")).queries(OMap.of("Foo","f2")).queries(AMap.of("Foo","f3")).queries(NameValuePairs.of("Foo","f4","Foo","f5")).queries(BasicNameValuePair.of("Foo","f6"), BasicNameValuePair.of("Foo","f7")).queries((Object)new NameValuePair[]{BasicNameValuePair.of("Foo","f8")}).run().assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7&Foo=f8");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/checkQuery").queries((Object)null);}).contains("Invalid type");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().queries("Baz");}).contains("Invalid type");
-	}
-
-	@Test
-	public void i03_query_withSchema() throws Exception {
-		MockRestClient.create(A.class).simpleJson().query("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().get("/checkQuery").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-	}
-
-	@Test
-	public void i04_query_withSchemaAndSerializer() throws Exception {
-		MockRestClient.create(A.class).simpleJson().query("Foo",AList.of("bar","baz"), T_ARRAY_PIPES, UonSerializer.DEFAULT).build().get("/checkQuery").run().assertBody().is("Foo=%40%28bar%2Cbaz%29").assertBody().urlDecodedIs("Foo=@(bar,baz)");
-	}
-
-	@Test
-	public void i05_query_withSchemaAndSupplier() throws Exception {
-		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().query("Foo", s, T_ARRAY_PIPES).build();
-		x.get("/checkQuery").query("Bar", s, T_ARRAY_PIPES).run().assertBody().is("Foo=foo%7Cbar&Bar=foo%7Cbar").assertBody().urlDecodedIs("Foo=foo|bar&Bar=foo|bar");
-		s.set(new String[]{"bar","baz"});
-		x.get("/checkQuery").query("Bar", s, T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz&Bar=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz&Bar=bar|baz");
-	}
-
-	@Test
-	public void i06_query_withSchemaAndSupplierAndSerializer() throws Exception {
-		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().query("Foo", s, T_ARRAY_PIPES, new K12a()).build();
-		x.get("/checkQuery").run().assertBody().is("Foo=x%5B%27foo%27%2C%27bar%27%5D").assertBody().urlDecodedIs("Foo=x['foo','bar']");
-		s.set(AList.of("bar","baz"));
-		x.get("/checkQuery").run().assertBody().is("Foo=x%5B%27bar%27%2C%27baz%27%5D").assertBody().urlDecodedIs("Foo=x['bar','baz']");
-	}
-
-	@Test
-	public void i07_query_withSupplier() throws Exception {
-		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().query("Foo", s).build();
-		x.get("/checkQuery").run().assertBody().is("Foo=foo%2Cbar").assertBody().urlDecodedIs("Foo=foo,bar");
-		s.set(AList.of("bar","baz"));
-		x.get("/checkQuery").run().assertBody().is("Foo=bar%2Cbaz").assertBody().urlDecodedIs("Foo=bar,baz");
-	}
-
-	@Test
-	public void i08_query_withNull() throws Exception {
-		MockRestClient.create(A.class).simpleJson().queries(BasicNameValuePair.of("Foo","bar"), null).build().get("/checkQuery").run().assertBody().is("Foo=bar");
-	}
-
-	@Test
-	public void i09_queryPairs() throws Exception {
-		MockRestClient.create(A.class).simpleJson().queryPairs("foo","bar","baz","qux").build().get("/checkQuery").run().assertBody().is("foo=bar&baz=qux");
-		MockRestClient.create(A.class).simpleJson().build().get("/checkQuery").queryPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
-		MockRestClient.create(A.class).simpleJson().queryPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2")).build().get("/checkQuery").run().assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2").assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2");
-		MockRestClient.create(A.class).simpleJson().build().get("/checkQuery").queryPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2")).run().assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2").assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().queryPairs("foo","bar","baz");}).contains("Odd number of parameters");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get().queryPairs("foo","bar","baz");}).contains("Odd number of parameters");
-	}
-
-	public static class I11 {
-		public String foo;
-		I11 init() {
-			this.foo = "baz";
-			return this;
-		}
-	}
-
-	@Test
-	public void i11_query_request() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/echo").query("foo", "bar").run().assertBody().contains("GET /echo?foo=bar");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo").query("foo", AList.of("bar","baz"), T_ARRAY_PIPES).run().assertBody().contains("GET /echo?foo=bar%7Cbaz");
-		MockRestClient.create(A.class).simpleJson().query("foo","bar").build().get("/echo").query(EnumSet.of(AddFlag.PREPEND), "foo", "baz").run().assertBody().contains("GET /echo?foo=baz&foo=bar");
-		MockRestClient.create(A.class).simpleJson().query("foo","bar").build().get("/echo").query(EnumSet.of(AddFlag.PREPEND), "foo", AList.of("baz","qux"), T_ARRAY_PIPES).run().assertBody().contains("GET /echo?foo=baz%7Cqux&foo=bar");
-		MockRestClient.create(A.class).simpleJson().query("foo","bar").build().get("/echo").queries(BasicNameValuePair.of("foo","baz"), NameValuePairs.of("foo","qux"), OMap.of("foo","quux")).run().assertBody().contains("GET /echo?foo=bar&foo=baz&foo=qux&foo=quux");
-		MockRestClient.create(A.class).simpleJson().query("foo","bar").build().get("/echo").queries(new I11().init()).run().assertBody().contains("GET /echo?foo=bar&foo=baz");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/echo").queries("foo=baz");}).is("Invalid type passed to queries(): java.lang.String");
-	}
-
-	@Test
-	public void i12_query_NameValuePair() throws Exception {
-		MockRestClient.create(A.class).simpleJson().query(BasicNameValuePair.of("foo", "bar")).build().get("/echo").query(BasicNameValuePair.of("foo", "baz")).run().assertBody().contains("GET /echo?foo=bar&foo=baz");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Form data
-	//-----------------------------------------------------------------------------------------------------------------
-	@Test
-	public void j01_formData_basic() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formData("Foo","bar").formData("Foo",new StringBuilder("baz")).build().post("/checkFormData").run().assertBody().is("Foo=bar&Foo=baz");
-	}
-
-	@Test
-	public void j02_formData_objects() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formDatas(BasicNameValuePair.of("Foo","f1")).formDatas(OMap.of("Foo","f2")).formDatas(AMap.of("Foo","f3")).formDatas(NameValuePairs.of("Foo","f4","Foo","f5")).formDatas(BasicNameValuePair.of("Foo","f6"), BasicNameValuePair.of("Foo","f7")).formDatas((Object)new NameValuePair[]{BasicNameValuePair.of("Foo","f8")}).build().post("/checkFormData").run().assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7&Foo=f8");
-	}
-
-	@Test
-	public void j03_formData_withSchema() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/checkFormData").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-	}
-
-	@Test
-	public void j03_formData_withSchemaAndSerializer() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES, UonSerializer.DEFAULT).build().post("/checkFormData").run().assertBody().urlDecodedIs("Foo=@(bar,baz)");
-	}
-
-	@Test
-	public void j04_formData_withSupplier() throws Exception {
-		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().formData("Foo", s).build();
-		x.post("/checkFormData").run().assertBody().is("Foo=foo%2Cbar").assertBody().urlDecodedIs("Foo=foo,bar");
-		s.set(OList.of("bar","baz"));
-		x.post("/checkFormData").run().assertBody().is("Foo=bar%2Cbaz").assertBody().urlDecodedIs("Foo=bar,baz");
-	}
-
-	@Test
-	public void j05_formData_withSupplierAndSerializer() throws Exception {
-		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().formData("Foo", s, T_ARRAY_PIPES, new K12a()).build();
-		x.post("/checkFormData").run().assertBody().is("Foo=x%5B%27foo%27%2C%27bar%27%5D").assertBody().urlDecodedIs("Foo=x['foo','bar']");
-		s.set(OList.of("bar","baz"));
-		x.post("/checkFormData").run().assertBody().is("Foo=x%5B%27bar%27%2C%27baz%27%5D").assertBody().urlDecodedIs("Foo=x['bar','baz']");
-	}
-
-	@Test
-	public void j06_formData_withSupplierAndSchema() throws Exception {
-		TestSupplier s = TestSupplier.of(AList.of("foo","bar"));
-		RestClient x = MockRestClient.create(A.class).simpleJson().formData("Foo", s, T_ARRAY_PIPES).build();
-		x.post("/checkFormData").run().assertBody().is("Foo=foo%7Cbar").assertBody().urlDecodedIs("Foo=foo|bar");
-		s.set(AList.of("bar","baz"));
-		x.post("/checkFormData").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-	}
-
-	@Test
-	public void j07_formData_withNull() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formDatas(BasicNameValuePair.of("Foo","bar"), null).build().post("/checkFormData").run().assertBody().is("Foo=bar");
-	}
-
-	@Test
-	public void j08_formData_invalid() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().formDatas(BasicNameValuePair.of("Foo","bar"), "Baz");}).is("Invalid type passed to formData():  java.lang.String");
-	}
-
-	@Test
-	public void j09_formDataPairs() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formDataPairs("foo","bar","baz","qux").build().post("/checkFormData").run().assertBody().is("foo=bar&baz=qux");
-		MockRestClient.create(A.class).simpleJson().formDataPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2")).build().post("/checkFormData").run().assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2").assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2");
-	}
-
-	@Test
-	public void j10_formDataPairs_invalid() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs(Object...)");
-	}
-
-	@Test
-	public void j11_formData_serializedHeaderBuilder() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formDatas(SerializedHeader.create().name("foo").value("bar")).build().post("/checkFormData").run().assertBody().is("foo=bar");
-	}
-
-	@Test
-	public void j12_formData_NameValuePair() throws Exception {
-		MockRestClient.create(A.class).simpleJson().formData(BasicNameValuePair.of("foo", "bar")).build().post("/checkFormData").formData(BasicNameValuePair.of("foo", "baz")).run().assertBody().is("foo=bar&foo=baz");
+		client(E.class).basicAuth(AuthScope.ANY_HOST, AuthScope.ANY_PORT, "user", "pw").build().get("/echo").run().assertBody().contains("OK");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1274,59 +885,51 @@ public class RestClient_Test {
 		RestCallHandler x = new RestCallHandler() {
 			@Override
 			public HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
-				return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http", 1, 1), 201, null));
+				return null;
 			}
 			@Override
 			public HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
 				return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http", 1, 1), 201, null));
 			}
 		};
-		MockRestClient.create(A.class).simpleJson().callHandler(K1.class).header("Foo", "f1").build().get("/checkHeader").header("Foo","f2").run().assertBody().is("['f1','f2','baz']");
-		MockRestClient.create(A.class).simpleJson().callHandler(x).header("Foo", "f1").build().get("/checkHeader").header("Foo","f2").run().assertStatus().is(201);
+		client().callHandler(K1.class).header("Foo", "f1").build().get("/checkHeader").header("Foo","f2").run().assertBody().is("['f1','f2','baz']");
+		client().callHandler(x).header("Foo", "f1").build().get("/checkHeader").header("Foo","f2").run().assertStatus().is(201);
 	}
 
 	@Test
 	public void k02_restClient_errorCodes() throws Exception {
-		RestClient x1 = MockRestClient.create(A.class).simpleJson().errorCodes(x -> x == 200).ignoreErrors(false).build();
-		RestClient x2 = MockRestClient.create(A.class).simpleJson().ignoreErrors(false).build();
-		try {
-			x1.get("/echo").run(); fail();
-		} catch (RestCallException e) {
-			assertEquals(200, e.getResponseCode());
-		}
-		try {
-			x2.get("/echo").errorCodes(x -> x == 200).run(); fail();
-		} catch (RestCallException e) {
-			assertEquals(200, e.getResponseCode());
-		}
+		RestClient x1 = client().errorCodes(x -> x == 200).ignoreErrors(false).build();
+		RestClient x2 = client().ignoreErrors(false).build();
+		assertThrown(()->{x1.get("/echo").run();}).passes(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertThrown(()->{x2.get("/echo").errorCodes(x -> x == 200).run();}).passes(x -> ((RestCallException)x).getResponseCode() == 200);
 	}
 
 	@Test
 	public void k03_restClient_executorService() throws Exception {
 		ExecutorService es = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
-		RestClient x1 = MockRestClient.create(A.class).simpleJson().executorService(es, true).build();
+		RestClient x1 = client().executorService(es, true).build();
 
 		assertEquals(es, x1.getExecutorService());
 		x1.get("/echo").runFuture().get().assertStatus().is(200).assertBody().contains("HTTP GET /echo");
 
 		es = null;
-		RestClient x2 = MockRestClient.create(A.class).simpleJson().executorService(es, true).build();
+		RestClient x2 = client().executorService(es, true).build();
 		assertNotNull(x2.getExecutorService());
 		x2.get("/echo").runFuture().get().assertStatus().is(200).assertBody().contains("HTTP GET /echo");
 	}
 
 	@Test
 	public void k04_restClient_keepHttpClientOpen() throws Exception {
-		RestClient x = MockRestClient.create(A.class).simpleJson().keepHttpClientOpen().build();
+		RestClient x = client().keepHttpClientOpen().build();
 
 		CloseableHttpClient c = x.httpClient;
 		x.close();
-		MockRestClient.create(A.class).simpleJson().httpClient(c).build().get("/ok").runFuture().get().assertBody().contains("OK");
+		client().httpClient(c).build().get("/ok").runFuture().get().assertBody().contains("OK");
 
-		x = MockRestClient.create(A.class).simpleJson().keepHttpClientOpen().build();
+		x = client().keepHttpClientOpen().build();
 		c = x.httpClient;
 		x.close();
-		MockRestClient.create(A.class).simpleJson().httpClient(c).build().get("/ok").runFuture().get().assertBody().contains("OK");
+		client().httpClient(c).build().get("/ok").runFuture().get().assertBody().contains("OK");
 	}
 
 	public static class K5 extends BasicRestCallInterceptor {
@@ -1382,27 +985,27 @@ public class RestClient_Test {
 
 	@Test
 	public void k05_restClient_interceptors() throws Exception {
-		MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(K5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(K5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111, K5.x);
 
-		MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(new K5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(new K5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111, K5.x);
 
-		MockRestClient.create(A.class).simpleJson().header("Foo","f1").build().get("/checkHeader").interceptors(new K5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").build().get("/checkHeader").interceptors(new K5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111, K5.x);
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(K5a.class).build().get("/checkHeader");}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(K5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(K5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(new K5a()).build().get("/checkHeader");}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(new K5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").interceptors(new K5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").build().get("/checkHeader").interceptors(new K5a());}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").build().get("/checkHeader").interceptors(new K5b()).header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().header("Foo","f1").build().get("/checkHeader").interceptors(new K5c()).header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().interceptors(String.class);}).is("Invalid class of type 'java.lang.String' passed to interceptors().");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().interceptors("");}).is("Invalid object of type 'java.lang.String' passed to interceptors().");
-		MockRestClient.create(A.class).simpleJson().interceptors((Object)null).header("Foo","f1").build().get("/checkHeader");
-		MockRestClient.create(A.class).simpleJson().interceptors((Class<?>)null).header("Foo","f1").build().get("/checkHeader");
+		assertThrown(()->{client().header("Foo","f1").interceptors(K5a.class).build().get("/checkHeader");}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").interceptors(K5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").interceptors(K5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").interceptors(new K5a()).build().get("/checkHeader");}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").interceptors(new K5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").interceptors(new K5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new K5a());}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new K5b()).header("Check","foo").header("Foo","f3").run();}).is("foo");
+		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new K5c()).header("Check","foo").header("Foo","f3").run().close();}).is("foo");
+		assertThrown(()->{client().interceptors(String.class);}).is("Invalid class of type 'java.lang.String' passed to interceptors().");
+		assertThrown(()->{client().interceptors("");}).is("Invalid object of type 'java.lang.String' passed to interceptors().");
+		client().interceptors((Object)null).header("Foo","f1").build().get("/checkHeader");
+		client().interceptors((Class<?>)null).header("Foo","f1").build().get("/checkHeader");
 	}
 
 	public static class K6a extends BasicRestCallInterceptor {
@@ -1420,9 +1023,9 @@ public class RestClient_Test {
 
 	@Test
 	public void k06_restClient_interceptors_exceptionHandling() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().interceptors(K6a.class).build().post("/bean", bean).complete();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().interceptors(K6b.class).build().post("/bean", bean).complete();}).is("foo");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().interceptors(K6c.class).build().post("/bean", bean).complete();}).is("foo");
+		assertThrown(()->{client().interceptors(K6a.class).build().post("/bean", bean).complete();}).is("foo");
+		assertThrown(()->{client().interceptors(K6b.class).build().post("/bean", bean).complete();}).is("foo");
+		assertThrown(()->{client().interceptors(K6c.class).build().post("/bean", bean).complete();}).is("foo");
 	}
 
 	public static class K7 extends RestClient {
@@ -1438,13 +1041,13 @@ public class RestClient_Test {
 
 	@Test
 	public void k07_restClient_leakDetection() throws Throwable {
-		MockRestClient.create(A.class).simpleJson().leakDetection().build(K7.class).finalize();
+		client().leakDetection().build(K7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.", K7.lastMessage);
 
-		MockRestClient.create(A.class).simpleJson().debug().build(K7.class).finalize();
+		client().debug().build(K7.class).finalize();
 		assertTrue(K7.lastMessage.startsWith("WARNING:  RestClient garbage collected before it was finalized.\nCreation Stack:\n\t"));
 
-		MockRestClient.create(A.class).simpleJson().leakDetection().build(K7.class).finalize();
+		client().leakDetection().build(K7.class).finalize();
 		assertEquals("WARNING:  RestClient garbage collected before it was finalized.", K7.lastMessage);
 	}
 
@@ -1546,13 +1149,13 @@ public class RestClient_Test {
 
 	@Test
 	public void k12_restClient_partSerializer_partParser() throws Exception {
-		RestClient x = MockRestClient.create(K12.class).simpleJson().header("Foo",bean).partSerializer(K12a.class).partParser(K12b.class).build();
+		RestClient x = client(K12.class).header("Foo",bean).partSerializer(K12a.class).partParser(K12b.class).build();
 		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}", b.toString());
 		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}", b.toString());
 
-		x = MockRestClient.create(K12.class).simpleJson().header("Foo",bean).partSerializer(new K12a()).partParser(new K12b()).build();
+		x = client(K12.class).header("Foo",bean).partSerializer(new K12a()).partParser(new K12b()).build();
 		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}", b.toString());
 	}
@@ -1560,32 +1163,32 @@ public class RestClient_Test {
 
 	@Test
 	public void k13_restClient_toString() throws Exception {
-		String s = MockRestClient.create(A.class).simpleJson().rootUrl("foo").build().toString();
+		String s = client().rootUrl("foo").build().toString();
 		assertTrue(s.contains("rootUri: 'foo'"));
 	}
 
 	@Test
 	public void k14_restClient_request_target() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/bean").target(new HttpHost("localhost")).run().assertBody().is("{f:1}");
+		client().build().get("/bean").target(new HttpHost("localhost")).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void k15_restClient_request_context() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/bean").context(new BasicHttpContext()).run().assertBody().is("{f:1}");
+		client().build().get("/bean").context(new BasicHttpContext()).run().assertBody().is("{f:1}");
 	}
 
 	@Test
 	public void k16_restClient_request_uriParts() throws Exception {
-		java.net.URI uri = MockRestClient.create(A.class).simpleJson().build().get().scheme("http").host("localhost").port(8080).userInfo("foo:bar").uri("/bean").fragment("baz").query("foo", "bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		java.net.URI uri = client().build().get().scheme("http").host("localhost").port(8080).userInfo("foo:bar").uri("/bean").fragment("baz").query("foo", "bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz", uri.toString());
 
-		uri = MockRestClient.create(A.class).simpleJson().build().get().scheme("http").host("localhost").port(8080).userInfo("foo","bar").uri("/bean").fragment("baz").query("foo", "bar").run().assertBody().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().scheme("http").host("localhost").port(8080).userInfo("foo","bar").uri("/bean").fragment("baz").query("foo", "bar").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz", uri.toString());
 
-		uri = MockRestClient.create(A.class).simpleJson().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertBody().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz", uri.toString());
 
-		uri = MockRestClient.create(A.class).simpleJson().build().get().uri(new java.net.URI(null, null, null, null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertBody().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri(new java.net.URI(null, null, null, null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertBody().is("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz", uri.toString());
 	}
 
@@ -1595,75 +1198,78 @@ public class RestClient_Test {
 
 	public static class L1 {
 		public Object f1;
-		public L1 init() {
-			f1 = new L2().init();
-			return this;
+		static L1 get() {
+			L1 x = new L1();
+			x.f1 = L2.get();
+			return x;
 		}
 	}
 
 	@Test
 	public void l01_serializer_addBeanTypes() throws Exception {
-		L1 l1 = new L1().init();
-		MockRestClient.create(A.class).simpleJson().addBeanTypes().build().post("/echoBody", l1).run().assertBody().is("{f1:{_type:'L',f2:1}}");
+		L1 l1 = L1.get();
+		client().addBeanTypes().build().post("/echoBody", l1).run().assertBody().is("{f1:{_type:'L',f2:1}}");
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="L")
 	public static class L2 {
 		public int f2;
-		public L2 init() {
-			f2 = 1;
-			return this;
+		static L2 get() {
+			L2 x = new L2();
+			x.f2 = 1;
+			return x;
 		}
 	}
 
 	@Test
 	public void l02_serializer_addRootType() throws Exception {
-		L2 l2 = new L2().init();
-		MockRestClient.create(A.class).simpleJson().addBeanTypes().addRootType().build().post("/echoBody", l2).run().assertBody().is("{_type:'L',f2:1}");
+		L2 l2 = L2.get();
+		client().addBeanTypes().addRootType().build().post("/echoBody", l2).run().assertBody().is("{_type:'L',f2:1}");
 	}
 
 	@Test
 	public void l03_serializer_detectRecursions() throws Exception {
 		L1 l1 = new L1();
 		l1.f1 = l1;
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().detectRecursions().build().post("/echoBody", l1).run();}).contains("Recursion occurred");
+		assertThrown(()->{client().detectRecursions().build().post("/echoBody", l1).run();}).contains("Recursion occurred");
 	}
 
 	@Test
 	public void l04_serializer_ignoreRecursions() throws Exception {
 		L1 l1 = new L1();
 		l1.f1 = l1;
-		MockRestClient.create(A.class).simpleJson().ignoreRecursions().build().post("/echoBody", l1).run().assertBody().is("{}");
+		client().ignoreRecursions().build().post("/echoBody", l1).run().assertBody().is("{}");
 	}
 
 	@Test
 	public void l05_serializer_initialDepth() throws Exception {
-		MockRestClient.create(A.class).simpleJson().initialDepth(2).ws().build().post("/echoBody", bean).run().assertBody().is("\t\t{\n\t\t\tf: 1\n\t\t}");
+		client().initialDepth(2).ws().build().post("/echoBody", bean).run().assertBody().is("\t\t{\n\t\t\tf: 1\n\t\t}");
 	}
 
 	public static class L6 {
 		public ABean f;
-		public L6 init() {
-			f = bean;
-			return this;
+		static L6 get() {
+			L6 x = new L6();
+			x.f = bean;
+			return x;
 		}
 	}
 
 	@Test
 	public void l06_serializer_maxDepth() throws Exception {
-		MockRestClient.create(A.class).simpleJson().maxDepth(1).build().post("/echoBody", new L6().init()).run().assertBody().is("{}");
+		client().maxDepth(1).build().post("/echoBody", L6.get()).run().assertBody().is("{}");
 	}
 
 	@Test
 	public void l07_serializer_sortCollections() throws Exception {
 		String[] x = new String[]{"c","a","b"};
-		MockRestClient.create(A.class).simpleJson().sortCollections().build().post("/echoBody", x).run().assertBody().is("['a','b','c']");
+		client().sortCollections().build().post("/echoBody", x).run().assertBody().is("['a','b','c']");
 	}
 
 	@Test
 	public void l08_serializer_sortMapsBoolean() throws Exception {
 		AMap<String,Integer> x = AMap.of("c", 3, "a", 1, "b", 2);
-		MockRestClient.create(A.class).simpleJson().sortMaps().build().post("/echoBody", x).run().assertBody().is("{a:1,b:2,c:3}");
+		client().sortMaps().build().post("/echoBody", x).run().assertBody().is("{a:1,b:2,c:3}");
 	}
 
 	public static class L9 {
@@ -1674,7 +1280,7 @@ public class RestClient_Test {
 	@Test
 	public void l09_serializer_trimEmptyCollections() throws Exception {
 		L9 x = new L9();
-		MockRestClient.create(A.class).simpleJson().trimEmptyCollections().build().post("/echoBody", x).run().assertBody().is("{}");
+		client().trimEmptyCollections().build().post("/echoBody", x).run().assertBody().is("{}");
 	}
 
 	public static class L10 {
@@ -1685,7 +1291,7 @@ public class RestClient_Test {
 	@Test
 	public void l10_serializer_trimEmptyMaps() throws Exception {
 		L10 x = new L10();
-		MockRestClient.create(A.class).simpleJson().trimEmptyMaps().build().post("/echoBody", x).run().assertBody().is("{}");
+		client().trimEmptyMaps().build().post("/echoBody", x).run().assertBody().is("{}");
 	}
 
 	public static class L11 {
@@ -1695,7 +1301,7 @@ public class RestClient_Test {
 	@Test
 	public void l11_serializer_trimNullPropertiesBoolean() throws Exception {
 		L11 x = new L11();
-		MockRestClient.create(A.class).simpleJson().keepNullProperties().build().post("/echoBody", x).run().assertBody().is("{f:null}");
+		client().keepNullProperties().build().post("/echoBody", x).run().assertBody().is("{f:null}");
 	}
 
 	public static class L12 {
@@ -1705,7 +1311,7 @@ public class RestClient_Test {
 	@Test
 	public void l12_serializer_trimStringsOnWrite() throws Exception {
 		L12 x = new L12();
-		MockRestClient.create(A.class).simpleJson().trimStringsOnWrite().build().post("/echoBody", x).run().assertBody().is("{f:'foo'}");
+		client().trimStringsOnWrite().build().post("/echoBody", x).run().assertBody().is("{f:'foo'}");
 	}
 
 	public static class L13 {
@@ -1716,29 +1322,30 @@ public class RestClient_Test {
 	@Test
 	public void l13_serializer_uriContext_uriResolution_uriRelativity() throws Exception {
 		L13 x = new L13();
-		MockRestClient.create(A.class).simpleJson().uriResolution(UriResolution.ABSOLUTE).uriRelativity(UriRelativity.PATH_INFO).uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path")).build().post("/echoBody", x).run().assertBody().is("{f:'http://localhost:80/context/resource/foo'}");
-		MockRestClient.create(A.class).simpleJson().uriResolution(UriResolution.NONE).uriRelativity(UriRelativity.RESOURCE).uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path")).build().post("/echoBody", x).run().assertBody().is("{f:'foo'}");
+		client().uriResolution(UriResolution.ABSOLUTE).uriRelativity(UriRelativity.PATH_INFO).uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path")).build().post("/echoBody", x).run().assertBody().is("{f:'http://localhost:80/context/resource/foo'}");
+		client().uriResolution(UriResolution.NONE).uriRelativity(UriRelativity.RESOURCE).uriContext(UriContext.of("http://localhost:80", "/context", "/resource", "/path")).build().post("/echoBody", x).run().assertBody().is("{f:'foo'}");
 	}
 
 	public static class L14 {
 		public int f1;
 		public L14 f2;
 
-		public L14 init() {
+		static L14 get() {
+			L14 x = new L14();
 			L14 x2 = new L14(), x3 = new L14();
-			this.f1 = 1;
+			x.f1 = 1;
 			x2.f1 = 2;
 			x3.f1 = 3;
-			this.f2 = x2;
+			x.f2 = x2;
 			x2.f2 = x3;
-			return this;
+			return x;
 		}
 	}
 
 	@Test
 	public void l14_serializer_maxIndent() throws Exception {
-		L14 x = new L14().init();
-		MockRestClient.create(A.class).simpleJson().maxIndent(2).ws().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
+		L14 x = L14.get();
+		client().maxIndent(2).ws().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
 	}
 
 	public static class L15 {
@@ -1750,21 +1357,21 @@ public class RestClient_Test {
 		L15 x = new L15();
 		MockRestClient.create(A.class).json().quoteChar('\'').build().post("/echoBody", x).run().assertBody().is("{'f1':'foo'}");
 		MockRestClient.create(A.class).json().quoteChar('|').build().post("/echoBody", x).run().assertBody().is("{|f1|:|foo|}");
-		MockRestClient.create(A.class).simpleJson().quoteChar('|').build().post("/echoBody", x).run().assertBody().is("{f1:|foo|}");
+		client().quoteChar('|').build().post("/echoBody", x).run().assertBody().is("{f1:|foo|}");
 	}
 
 	@Test
 	public void l16_serializer_sq() throws Exception {
 		L15 x = new L15();
 		MockRestClient.create(A.class).json().sq().build().post("/echoBody", x).run().assertBody().is("{'f1':'foo'}");
-		MockRestClient.create(A.class).simpleJson().sq().build().post("/echoBody", x).run().assertBody().is("{f1:'foo'}");
+		client().sq().build().post("/echoBody", x).run().assertBody().is("{f1:'foo'}");
 	}
 
 	@Test
 	public void l17_serializer_useWhitespace() throws Exception {
 		L15 x = new L15();
-		MockRestClient.create(A.class).simpleJson().ws().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 'foo'\n}");
-		MockRestClient.create(A.class).simpleJson().useWhitespace().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 'foo'\n}");
+		client().ws().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 'foo'\n}");
+		client().useWhitespace().build().post("/echoBody", x).run().assertBody().is("{\n\tf1: 'foo'\n}");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1774,7 +1381,7 @@ public class RestClient_Test {
 
 	@Test
 	public void m01_parser_debugOutputLines() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).simpleJson().debugOutputLines(10).build();
+		RestClient rc = client().debugOutputLines(10).build();
 		assertEquals(10, rc.parsers.getParser("application/json").toMap().getMap("Parser").getInt("debugOutputLines").intValue());
 	}
 
@@ -1793,7 +1400,7 @@ public class RestClient_Test {
 
 	@Test
 	public void m03_parser_trimStringsOnRead() throws Exception {
-		M3 x = MockRestClient.create(A.class).simpleJson().trimStringsOnRead().build().post("/echoBody", new StringReader("{f:' 1 '}")).run().getBody().as(M3.class);
+		M3 x = client().trimStringsOnRead().build().post("/echoBody", new StringReader("{f:' 1 '}")).run().getBody().as(M3.class);
 		assertEquals("1", x.f);
 	}
 
@@ -1839,8 +1446,8 @@ public class RestClient_Test {
 
 	@Test
 	public void o01_beanContext_beanClassVisibility() throws Exception {
-		RestClient x1 = MockRestClient.create(A.class).simpleJson().build();
-		RestClient x2 = MockRestClient.create(A.class).beanClassVisibility(Visibility.PROTECTED).simpleJson().build();
+		RestClient x1 = client().build();
+		RestClient x2 = client(A.class).beanClassVisibility(Visibility.PROTECTED).build();
 		x1.post("/echoBody", new O1()).run().assertBody().is("'O1'");
 		x2.post("/echoBody", new O1()).run().assertBody().is("{f:1}");
 		x1.get("/checkQuery").query("foo", new O1()).run().assertBody().is("foo=O1");
@@ -1872,7 +1479,7 @@ public class RestClient_Test {
 
 	@Test
 	public void o02_beanContext_beanConstructorVisibility() throws Exception {
-		RestResponse x = MockRestClient.create(O2b.class).beanConstructorVisibility(Visibility.PROTECTED).simpleJson().build().post("/test", new O2a(1)).header("X", new O2a(1)).run().cacheBody().assertBody().is("1").assertHeader("X").is("1");
+		RestResponse x = client(O2b.class).beanConstructorVisibility(Visibility.PROTECTED).build().post("/test", new O2a(1)).header("X", new O2a(1)).run().cacheBody().assertBody().is("1").assertHeader("X").is("1");
 		assertEquals(1, x.getBody().as(O2a.class).f);
 		assertEquals(1, x.getHeader("X").as(O2a.class).f);
 	}
@@ -1880,10 +1487,11 @@ public class RestClient_Test {
 	public static class O3 {
 		public int f1;
 		protected int f2;
-		O3 init() {
-			f1 = 1;
-			f2 = 2;
-			return this;
+		static O3 get() {
+			O3 x = new O3();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -1893,7 +1501,7 @@ public class RestClient_Test {
 
 	@Test
 	public void o03_beanContext_beanFieldVisibility() throws Exception {
-		RestResponse x = MockRestClient.create(O2b.class).beanFieldVisibility(Visibility.PROTECTED).simpleJson().build().post("/test", new O3().init()).header("X", new O3().init()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		RestResponse x = client(O2b.class).beanFieldVisibility(Visibility.PROTECTED).build().post("/test", O3.get()).header("X", O3.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2, x.getBody().as(O3.class).f2);
 		assertEquals(2, x.getHeader("X").as(O3.class).f2);
 	}
@@ -1914,11 +1522,12 @@ public class RestClient_Test {
 		public void setF3(int f3) {
 			this.f3 = f3;
 		}
-		O4b init() {
-			f1 = 1;
-			f2 = 2;
-			f3 = 3;
-			return this;
+		static O4b get() {
+			O4b x = new O4b();
+			x.f1 = 1;
+			x.f2 = 2;
+			x.f3 = 3;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -1928,23 +1537,23 @@ public class RestClient_Test {
 
 	@Test
 	public void o04_beanContext_beanFilters() throws Exception {
-		RestResponse x = MockRestClient.create(O2b.class).bpi(O4b.class, "f1").simpleJson().build().post("/test", new O4b().init()).header("X", new O4b().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		RestResponse x = client(O2b.class).bpi(O4b.class, "f1").build().post("/test", O4b.get()).header("X", O4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals(0, x.getBody().as(O4b.class).f2);
 		assertEquals(0, x.getHeader("X").as(O4b.class).f2);
 
-		x = MockRestClient.create(O2b.class).bpi(O4b.class, "f1").simpleJson().build().post("/test", new O4b().init()).header("X", new O4b().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpi(O4b.class, "f1").build().post("/test", O4b.get()).header("X", O4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals(0, x.getBody().as(O4b.class).f2);
 		assertEquals(0, x.getHeader("X").as(O4b.class).f2);
 
-		x = MockRestClient.create(O2b.class).bpi(O4b.class, "f1").simpleJson().build().post("/test", new O4b().init()).header("X", new O4b().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpi(O4b.class, "f1").build().post("/test", O4b.get()).header("X", O4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals(0, x.getBody().as(O4b.class).f2);
 		assertEquals(0, x.getHeader("X").as(O4b.class).f2);
 
-		x = MockRestClient.create(O2b.class).bpi(O4b.class, "f1").simpleJson().build().post("/test", new O4b().init()).header("X", new O4b().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpi(O4b.class, "f1").build().post("/test", O4b.get()).header("X", O4b.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals(0, x.getBody().as(O4b.class).f2);
 		assertEquals(0, x.getHeader("X").as(O4b.class).f2);
 
-		x = MockRestClient.create(O2b.class).interfaces(O4a.class).simpleJson().build().post("/test", new O4b().init()).header("X", new O4b().init()).run().cacheBody().assertBody().is("{f3:3}").assertHeader("X").is("f3=3");
+		x = client(O2b.class).interfaces(O4a.class).build().post("/test", O4b.get()).header("X", O4b.get()).run().cacheBody().assertBody().is("{f3:3}").assertHeader("X").is("f3=3");
 		assertEquals(3, x.getBody().as(O4b.class).f3);
 		assertEquals(3, x.getHeader("X").as(O4b.class).f3);
 	}
@@ -1963,10 +1572,11 @@ public class RestClient_Test {
 		protected void setF2(int f2) {
 			this.f2 = f2;
 		}
-		O5 init() {
-			f1 = 1;
-			f2 = 2;
-			return this;
+		static O5 get() {
+			O5 x = new O5();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -1976,7 +1586,7 @@ public class RestClient_Test {
 
 	@Test
 	public void o05_beanContext_beanMethodVisibility() throws Exception {
-		RestResponse x = MockRestClient.create(O2b.class).beanMethodVisibility(Visibility.PROTECTED).simpleJson().build().post("/test", new O5().init()).header("X", new O5().init()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		RestResponse x = client(O2b.class).beanMethodVisibility(Visibility.PROTECTED).build().post("/test", O5.get()).header("X", O5.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
 		assertEquals(2, x.getBody().as(O5.class).f2);
 		assertEquals(2, x.getHeader("X").as(O5.class).f2);
 	}
@@ -1985,7 +1595,7 @@ public class RestClient_Test {
 
 	@Test
 	public void o06_beanContext_beansDontRequireSomeProperties() throws Exception {
-		MockRestClient.create(A.class).beansDontRequireSomeProperties().simpleJson().build().post("/echoBody", new O6()).run().assertBody().is("{}");
+		client().beansDontRequireSomeProperties().build().post("/echoBody", new O6()).run().assertBody().is("{}");
 	}
 
 	public static class O7  {
@@ -2001,14 +1611,14 @@ public class RestClient_Test {
 
 	@Test
 	public void o07_beanContext_beansRequireDefaultConstructor() throws Exception {
-		MockRestClient.create(O2b.class).simpleJson().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("{f1:'1'}").assertHeader("X").is("f1=1");
-		MockRestClient.create(O2b.class).simpleJson().beansRequireDefaultConstructor().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("'1'").assertHeader("X").is("1");
+		client(O2b.class).build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("{f1:'1'}").assertHeader("X").is("f1=1");
+		client(O2b.class).beansRequireDefaultConstructor().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("'1'").assertHeader("X").is("1");
 	}
 
 	@Test
 	public void o08_beanContext_beansRequireSerializable() throws Exception {
-		MockRestClient.create(O2b.class).simpleJson().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("{f1:'1'}").assertHeader("X").is("f1=1");
-		MockRestClient.create(O2b.class).simpleJson().beansRequireSerializable().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("'1'").assertHeader("X").is("1");
+		client(O2b.class).build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("{f1:'1'}").assertHeader("X").is("f1=1");
+		client(O2b.class).beansRequireSerializable().build().post("/test", new O7("1")).header("X", new O7("1")).run().assertBody().is("'1'").assertHeader("X").is("1");
 	}
 
 	public static class O9 {
@@ -2022,10 +1632,11 @@ public class RestClient_Test {
 		public int getF2() {
 			return f2;
 		}
-		O9 init() {
-			f1 = 1;
-			f2 = 2;
-			return this;
+		static O9 get() {
+			O9 x = new O9();
+			x.f1 = 1;
+			x.f2 = 2;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -2035,31 +1646,31 @@ public class RestClient_Test {
 
 	@Test
 	public void o09_beanContext_beansRequireSettersForGetters() throws Exception {
-		MockRestClient.create(O2b.class).simpleJson().build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
-		MockRestClient.create(O2b.class).simpleJson().beansRequireSettersForGetters().build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		client(O2b.class).build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		client(O2b.class).beansRequireSettersForGetters().build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 	}
 
 	@Test
 	public void o10_beanContext_bpi() throws Exception {
-		MockRestClient.create(O2b.class).simpleJson().bpi(OMap.of("O9", "f2")).build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpi(O9.class, "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpi("O9", "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpi(O9.class.getName(), "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpi(OMap.of("O9", "f2")).build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpi(O9.class, "f2").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpi("O9", "f2").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpi(O9.class.getName(), "f2").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
 	}
 
 	@Test
 	public void o11_beanContext_bpro() throws Exception {
 		RestResponse x = null;
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpro(OMap.of("09", "f2")).build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		x = client(O2b.class).bpro(OMap.of("09", "f2")).build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpro(O9.class, "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		x = client(O2b.class).bpro(O9.class, "f2").build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpro("O9", "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
+		x = client(O2b.class).bpro("O9", "f2").build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1,f2:2}").assertHeader("X").is("f1=1,f2=2");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 	}
@@ -2068,25 +1679,25 @@ public class RestClient_Test {
 	public void o12_beanContext_bpwo() throws Exception {
 		RestResponse x = null;
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpwo(OMap.of("O9", "f2")).build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpwo(OMap.of("O9", "f2")).build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpwo(O9.class, "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpwo(O9.class, "f2").build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 
-		x = MockRestClient.create(O2b.class).simpleJson().bpwo("O9", "f2").build().post("/test", new O9().init()).header("X", new O9().init()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
+		x = client(O2b.class).bpwo("O9", "f2").build().post("/test", O9.get()).header("X", O9.get()).run().cacheBody().assertBody().is("{f1:1}").assertHeader("X").is("f1=1");
 		assertEquals("1/0", x.getBody().as(O9.class).toString());
 		assertEquals("1/0", x.getHeader("X").as(O9.class).toString());
 	}
 
 	@Test
 	public void o13_beanContext_bpx() throws Exception {
-		MockRestClient.create(O2b.class).simpleJson().bpx(OMap.of("O9", "f1")).build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpx(O9.class, "f1").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpx("O9", "f1").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
-		MockRestClient.create(O2b.class).simpleJson().bpx(O9.class.getName(), "f1").build().post("/test", new O9().init()).header("X", new O9().init()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpx(OMap.of("O9", "f1")).build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpx(O9.class, "f1").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpx("O9", "f1").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
+		client(O2b.class).bpx(O9.class.getName(), "f1").build().post("/test", O9.get()).header("X", O9.get()).run().assertBody().is("{f2:2}").assertHeader("X").is("f2=2");
 	}
 
 	public static class O14 {
@@ -2097,46 +1708,49 @@ public class RestClient_Test {
 	public void o14_beanContext_debug() throws Exception {
 		O14 x = new O14();
 		x.f = x;
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().debug().build().post("/echo", x).run();}).contains("Recursion occurred");
+		assertThrown(()->{client().debug().build().post("/echo", x).run();}).contains("Recursion occurred");
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="foo")
 	public static class O15a {
 		public String foo;
-		public O15a init() {
-			foo = "1";
-			return this;
+		static O15a get() {
+			O15a x = new O15a();
+			x.foo = "1";
+			return x;
 		}
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="bar")
 	public static class O15b {
 		public String foo;
-		public O15b init() {
-			foo = "2";
-			return this;
+		static O15b get() {
+			O15b x = new O15b();
+			x.foo = "2";
+			return x;
 		}
 	}
 
 	public static class O15c {
 		public Object foo;
-		public O15c init() {
-			foo = new O15a().init();
-			return this;
+		static O15c get() {
+			O15c x = new O15c();
+			x.foo = O15a.get();
+			return x;
 		}
 	}
 
 	@Test
 	public void o15_beanContext_dictionary() throws Exception {
-		Object o = MockRestClient.create(A.class).simpleJson().dictionary(O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", new O15a().init()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().as(Object.class);;
+		Object o = client().dictionary(O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", O15a.get()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().as(Object.class);;
 		assertTrue(o instanceof O15a);
 
-		OMap m = OMap.of("x", new O15a().init(), "y", new O15b().init());
-		m = MockRestClient.create(A.class).simpleJson().dictionary(O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().as(OMap.class);;
+		OMap m = OMap.of("x", O15a.get(), "y", O15b.get());
+		m = client().dictionary(O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().as(OMap.class);;
 		assertTrue(m.get("x") instanceof O15a);
 		assertTrue(m.get("y") instanceof O15b);
 
-		O15c x = MockRestClient.create(A.class).simpleJson().dictionaryOn(O15c.class,O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", new O15c().init()).run().cacheBody().assertBody().is("{foo:{_type:'foo',foo:'1'}}").getBody().as(O15c.class);;
+		O15c x = client().dictionaryOn(O15c.class,O15a.class,O15b.class).addRootType().addBeanTypes().build().post("/echoBody", O15c.get()).run().cacheBody().assertBody().is("{foo:{_type:'foo',foo:'1'}}").getBody().as(O15c.class);;
 		assertTrue(x.foo instanceof O15a);
 	}
 
@@ -2145,34 +1759,36 @@ public class RestClient_Test {
 		public String getFoo() {
 			return foo;
 		}
-		public O16 init() {
-			foo = "foo";
-			return this;
+		static O16 get() {
+			O16 x = new O16();
+			x.foo = "foo";
+			return x;
 		}
 	}
 
 	@Test
 	public void o16_beanContext_dontIgnorePropertiesWithoutSetters() throws Exception {
-		O16 x = MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new O16().init()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(O16.class);;
+		O16 x = client().build().post("/echoBody", O16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(O16.class);
 		assertNull(x.foo);
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().dontIgnorePropertiesWithoutSetters().build().post("/echoBody", new O16().init()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(O16.class);}).contains("Setter or public field not defined");
+		assertThrown(()->{client().dontIgnorePropertiesWithoutSetters().build().post("/echoBody", O16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(O16.class);}).contains("Setter or public field not defined");
 	}
 
 	public static class O17 {
 		public String foo;
 		public transient String bar;
-		public O17 init() {
-			foo = "1";
-			bar = "2";
-			return this;
+		static O17 get() {
+			O17 x = new O17();
+			x.foo = "1";
+			x.bar = "2";
+			return x;
 		}
 	}
 
 	@Test
 	public void o17_beanContext_dontIgnoreTransientFields() throws Exception {
-		O17 x = MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new O17().init()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O17.class);;
+		O17 x = client().build().post("/echoBody", O17.get()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O17.class);;
 		assertNull(x.bar);
-		x = MockRestClient.create(A.class).simpleJson().dontIgnoreTransientFields().build().post("/echoBody", new O17().init()).run().cacheBody().assertBody().contains("{bar:'2',foo:'1'}").getBody().as(O17.class);
+		x = client().dontIgnoreTransientFields().build().post("/echoBody", O17.get()).run().cacheBody().assertBody().contains("{bar:'2',foo:'1'}").getBody().as(O17.class);
 		assertEquals("2", x.bar);
 	}
 
@@ -2182,8 +1798,8 @@ public class RestClient_Test {
 
 	@Test
 	public void o18_beanContext_dontIgnoreUnknownNullBeanProperties() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(O18.class);;
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().dontIgnoreUnknownNullBeanProperties().build().post("/echoBody", new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(O18.class);}).contains("Unknown property 'bar'");
+		client().build().post("/echoBody", new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(O18.class);;
+		assertThrown(()->{client().dontIgnoreUnknownNullBeanProperties().build().post("/echoBody", new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(O18.class);}).contains("Unknown property 'bar'");
 	}
 
 	public static interface O19 {
@@ -2193,9 +1809,9 @@ public class RestClient_Test {
 
 	@Test
 	public void o19_beanContext_dontUseInterfaceProxies() throws Exception {
-		O19 x = MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O19.class);;
+		O19 x = client().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O19.class);;
 		assertEquals("1", x.getFoo());
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().dontUseInterfaceProxies().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O19.class);}).contains("could not be instantiated");
+		assertThrown(()->{client().dontUseInterfaceProxies().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O19.class);}).contains("could not be instantiated");
 	}
 
 	public static class O20 {
@@ -2211,9 +1827,9 @@ public class RestClient_Test {
 
 	@Test
 	public void o20_beanContext_fluentSetters() throws Exception {
-		O20 x = MockRestClient.create(A.class).simpleJson().fluentSetters().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O20.class);;
+		O20 x = client().fluentSetters().build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O20.class);;
 		assertEquals("1", x.getFoo());
-		x = MockRestClient.create(A.class).simpleJson().fluentSetters(O20.class).build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O20.class);;
+		x = client().fluentSetters(O20.class).build().post("/echoBody", new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O20.class);;
 		assertEquals("1", x.getFoo());
 	}
 
@@ -2229,17 +1845,18 @@ public class RestClient_Test {
 		public String getBar() {
 			throw new RuntimeException("xxx");
 		}
-		public O21 init() {
-			this.foo = "1";
-			this.bar = "2";
-			return this;
+		static O21 get() {
+			O21 x = new O21();
+			x.foo = "1";
+			x.bar = "2";
+			return x;
 		}
 	}
 
 	@Test
 	public void o21_beanContext_ignoreInvocationExceptionsOnGetters() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new O21().init()).run();}).contains("Could not call getValue() on property 'bar'");
-		O21 x = MockRestClient.create(A.class).simpleJson().ignoreInvocationExceptionsOnGetters().build().post("/echoBody", new O21().init()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O21.class);;
+		assertThrown(()->{client().build().post("/echoBody", O21.get()).run();}).contains("Could not call getValue() on property 'bar'");
+		O21 x = client().ignoreInvocationExceptionsOnGetters().build().post("/echoBody", O21.get()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(O21.class);;
 		assertEquals("1", x.getFoo());
 	}
 
@@ -2258,17 +1875,18 @@ public class RestClient_Test {
 		public void setBar(String bar) {
 			throw new RuntimeException("xxx");
 		}
-		public O22 init() {
-			this.foo = "1";
-			this.bar = "2";
-			return this;
+		static O22 get() {
+			O22 x = new O22();
+			x.foo = "1";
+			x.bar = "2";
+			return x;
 		}
 	}
 
 	@Test
 	public void o22_beanContext_ignoreInvocationExceptionsOnSetters() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new O22().init()).run().getBody().as(O22.class);}).contains("Error occurred trying to set property 'bar'");
-		O22 x = MockRestClient.create(A.class).simpleJson().ignoreInvocationExceptionsOnSetters().build().post("/echoBody", new O22().init()).run().cacheBody().getBody().as(O22.class);;
+		assertThrown(()->{client().build().post("/echoBody", O22.get()).run().getBody().as(O22.class);}).contains("Error occurred trying to set property 'bar'");
+		O22 x = client().ignoreInvocationExceptionsOnSetters().build().post("/echoBody", O22.get()).run().cacheBody().getBody().as(O22.class);;
 		assertEquals("1", x.getFoo());
 	}
 
@@ -2278,8 +1896,8 @@ public class RestClient_Test {
 
 	@Test
 	public void o23_beanContext_ignoreUnknownBeanProperties() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().post("/echoBody", new StringReader("{foo:'1',bar:'2'}")).run().getBody().as(O23.class);}).contains("Unknown property 'bar' encountered");
-		O23 x = MockRestClient.create(A.class).simpleJson().ignoreUnknownBeanProperties().build().post("/echoBody", new StringReader("{foo:'1',bar:'2'}")).run().cacheBody().getBody().as(O23.class);;
+		assertThrown(()->{client().build().post("/echoBody", new StringReader("{foo:'1',bar:'2'}")).run().getBody().as(O23.class);}).contains("Unknown property 'bar' encountered");
+		O23 x = client().ignoreUnknownBeanProperties().build().post("/echoBody", new StringReader("{foo:'1',bar:'2'}")).run().cacheBody().getBody().as(O23.class);;
 		assertEquals("1", x.foo);
 	}
 
@@ -2302,11 +1920,11 @@ public class RestClient_Test {
 
 	@Test
 	public void o24_beanContext_implClass() throws Exception {
-		O24a x = MockRestClient.create(A.class).simpleJson().implClass(O24a.class, O24b.class).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(O24a.class);
+		O24a x = client().implClass(O24a.class, O24b.class).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(O24a.class);
 		assertEquals(1, x.getFoo());
 		assertTrue(x instanceof O24b);
 
-		x = MockRestClient.create(A.class).simpleJson().implClasses(AMap.of(O24a.class, O24b.class)).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(O24a.class);
+		x = client().implClasses(AMap.of(O24a.class, O24b.class)).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(O24a.class);
 		assertEquals(1, x.getFoo());
 		assertTrue(x instanceof O24b);
 	}
@@ -2325,59 +1943,49 @@ public class RestClient_Test {
 		public int getBar() { return bar; }  // Not executed
 		public void setBar(int bar) { this.bar = bar; }  // Not executed
 
-		public O25b init() {
-			foo = 1;
-			bar = 2;
-			return this;
+		static O25b get() {
+			O25b x = new O25b();
+			x.foo = 1;
+			x.bar = 2;
+			return x;
 		}
 	}
 
 	@Test
 	public void o25_beanContext_interfaceClass() throws Exception {
-		O25a x = MockRestClient.create(A.class).simpleJson().interfaceClass(O25b.class, O25a.class).build().post("/echoBody", new O25b().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O25b.class);
+		O25a x = client().interfaceClass(O25b.class, O25a.class).build().post("/echoBody", O25b.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O25b.class);
 		assertEquals(1, x.getFoo());
-		x = MockRestClient.create(A.class).simpleJson().interfaces(O25a.class).build().post("/echoBody", new O25b().init()).run().assertBody().is("{foo:1}").getBody().as(O25b.class);
+		x = client().interfaces(O25a.class).build().post("/echoBody", O25b.get()).run().assertBody().is("{foo:1}").getBody().as(O25b.class);
 		assertEquals(1, x.getFoo());
 	}
 
 	public static class O26a {
 		public int foo;
-		public O26a init() {
-			foo = 1;
-			return this;
-		}
-	}
-
-	public static class O26b extends StringSwap<O26a> {
-		@Override
-		public String swap(BeanSession session, O26a o) throws Exception {
-			assertEquals(Locale.UK, session.getLocale());
-			return super.swap(session, o);
-		}
-		@Override
-		public O26a unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
-			assertEquals(Locale.UK, session.getLocale());
-			return super.unswap(session, f, hint);
+		static O26a get() {
+			O26a x = new O26a();
+			x.foo = 1;
+			return x;
 		}
 	}
 
 	@Test
 	public void o26_beanContext_locale() throws Exception {
-		O26a x = MockRestClient.create(A.class).simpleJson().locale(Locale.UK).build().post("/echoBody", new O26a().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O26a.class);
+		O26a x = client().locale(Locale.UK).build().post("/echoBody", O26a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O26a.class);
 		assertEquals(1, x.foo);
 	}
 
 	@Test
 	public void o27_beanContext_mediaType() throws Exception {
-		O26a x = MockRestClient.create(A.class).simpleJson().mediaType(MediaType.JSON).build().post("/echoBody", new O26a().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O26a.class);
+		O26a x = client().mediaType(MediaType.JSON).build().post("/echoBody", O26a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O26a.class);
 		assertEquals(1, x.foo);
 	}
 
 	public static class O28 {
 		public int foo;
-		public O28 init() {
-			foo = 1;
-			return this;
+		static O28 get() {
+			O28 x = new O28();
+			x.foo = 1;
+			return x;
 		}
 		@Override
 		public String toString() {
@@ -2392,13 +2000,13 @@ public class RestClient_Test {
 
 	@Test
 	public void o28_beanContext_notBeanClasses() throws Exception {
-		O28 x = MockRestClient.create(A.class).simpleJson().notBeanClasses(O28.class).build().post("/echoBody", new O28().init()).run().cacheBody().assertBody().is("'1'").getBody().as(O28.class);
+		O28 x = client().notBeanClasses(O28.class).build().post("/echoBody", O28.get()).run().cacheBody().assertBody().is("'1'").getBody().as(O28.class);
 		assertEquals(1, x.foo);
 	}
 
 	@Test
 	public void o29_beanContext_notBeanPackages() throws Exception {
-		O28 x = MockRestClient.create(A.class).simpleJson().notBeanPackages(O28.class.getPackage()).build().post("/echoBody", new O28().init()).run().cacheBody().assertBody().is("'1'").getBody().as(O28.class);
+		O28 x = client().notBeanPackages(O28.class.getPackage()).build().post("/echoBody", O28.get()).run().cacheBody().assertBody().is("'1'").getBody().as(O28.class);
 		assertEquals(1, x.foo);
 	}
 
@@ -2406,9 +2014,10 @@ public class RestClient_Test {
 		private String foo;
 		public String getFoo() { return foo; }
 		public void setFoo(String foo) { this.foo = foo; }
-		public O30a init() {
-			foo = "foo";
-			return this;
+		static O30a get() {
+			O30a x = new O30a();
+			x.foo = "foo";
+			return x;
 		}
 	}
 
@@ -2428,7 +2037,7 @@ public class RestClient_Test {
 
 	@Test
 	public void o30_beanContext_beanInterceptor() throws Exception {
-		O30a x = MockRestClient.create(A.class).simpleJson().beanInterceptor(O30a.class, O30b.class).build().post("/echoBody", new O30a().init()).run().cacheBody().assertBody().is("{foo:'xfoo'}").getBody().as(O30a.class);
+		O30a x = client().beanInterceptor(O30a.class, O30b.class).build().post("/echoBody", O30a.get()).run().cacheBody().assertBody().is("{foo:'xfoo'}").getBody().as(O30a.class);
 		assertEquals("foo", x.foo);
 		assertTrue(O30b.getterCalled);
 		assertTrue(O30b.setterCalled);
@@ -2438,35 +2047,37 @@ public class RestClient_Test {
 		private String fooBar;
 		public String getFooBar() { return fooBar; }
 		public void setFooBar(String fooBar) { this.fooBar = fooBar; }
-		public O31 init() {
-			fooBar = "fooBar";
-			return this;
+		static O31 get() {
+			O31 x = new O31();
+			x.fooBar = "fooBar";
+			return x;
 		}
 	}
 
 	@Test
 	public void o31_beanContext_propertyNamer() throws Exception {
-		O31 x = MockRestClient.create(A.class).simpleJson().propertyNamer(PropertyNamerDLC.class).build().post("/echoBody", new O31().init()).run().cacheBody().assertBody().is("{'foo-bar':'fooBar'}").getBody().as(O31.class);
+		O31 x = client().propertyNamer(PropertyNamerDLC.class).build().post("/echoBody", O31.get()).run().cacheBody().assertBody().is("{'foo-bar':'fooBar'}").getBody().as(O31.class);
 		assertEquals("fooBar", x.fooBar);
-		x = MockRestClient.create(A.class).simpleJson().propertyNamer(O31.class, PropertyNamerDLC.class).build().post("/echoBody", new O31().init()).run().cacheBody().assertBody().is("{'foo-bar':'fooBar'}").getBody().as(O31.class);
+		x = client().propertyNamer(O31.class, PropertyNamerDLC.class).build().post("/echoBody", O31.get()).run().cacheBody().assertBody().is("{'foo-bar':'fooBar'}").getBody().as(O31.class);
 		assertEquals("fooBar", x.fooBar);
 	}
 
 	public static class O32 {
 		public int foo, bar, baz;
-		public O32 init() {
-			foo = 1;
-			bar = 2;
-			baz = 3;
-			return this;
+		static O32 get() {
+			O32 x = new O32();
+			x.foo = 1;
+			x.bar = 2;
+			x.baz = 3;
+			return x;
 		}
 	}
 
 	@Test
 	public void o32_beanContext_sortProperties() throws Exception {
-		O32 x = MockRestClient.create(A.class).simpleJson().sortProperties().build().post("/echoBody", new O32().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(O32.class);
+		O32 x = client().sortProperties().build().post("/echoBody", O32.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(O32.class);
 		assertEquals(1, x.foo);
-		x = MockRestClient.create(A.class).simpleJson().sortProperties(O32.class).build().post("/echoBody", new O32().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(O32.class);
+		x = client().sortProperties(O32.class).build().post("/echoBody", O32.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(O32.class);
 		assertEquals(1, x.foo);
 	}
 
@@ -2476,25 +2087,27 @@ public class RestClient_Test {
 
 	public static class O33b extends O33a {
 		public int bar;
-		public O33b init() {
-			foo = 1;
-			bar = 2;
-			return this;
+		static O33b get() {
+			O33b x = new O33b();
+			x.foo = 1;
+			x.bar = 2;
+			return x;
 		}
 	}
 
 	@Test
 	public void o33_beanContext_stopClass() throws Exception {
-		O33b x = MockRestClient.create(A.class).simpleJson().stopClass(O33b.class, O33a.class).build().post("/echoBody", new O33b().init()).run().cacheBody().assertBody().is("{bar:2}").getBody().as(O33b.class);
+		O33b x = client().stopClass(O33b.class, O33a.class).build().post("/echoBody", O33b.get()).run().cacheBody().assertBody().is("{bar:2}").getBody().as(O33b.class);
 		assertEquals(0, x.foo);
 		assertEquals(2, x.bar);
 	}
 
 	public static class O34a {
 		public int foo;
-		public O34a init() {
-			this.foo = 1;
-			return this;
+		static O34a get() {
+			O34a x = new O34a();
+			x.foo = 1;
+			return x;
 		}
 	}
 
@@ -2502,48 +2115,50 @@ public class RestClient_Test {
 		@Override
 		public Integer swap(BeanSession session, O34a o) { return o.foo; }
 		@Override
-		public O34a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new O34a().init(); }
+		public O34a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return O34a.get(); }
 	}
 
 	@Test
 	public void o34_beanContext_swaps() throws Exception {
-		O34a x = MockRestClient.create(A.class).simpleJson().swaps(O34b.class).build().post("/echoBody", new O34a().init()).run().cacheBody().assertBody().is("1").getBody().as(O34a.class);
+		O34a x = client().swaps(O34b.class).build().post("/echoBody", O34a.get()).run().cacheBody().assertBody().is("1").getBody().as(O34a.class);
 		assertEquals(1, x.foo);
 	}
 
 	public static class O35a {
 		public int foo;
-		public O35a init() {
-			foo = 1;
-			return this;
+		static O35a get() {
+			O35a x = new O35a();
+			x.foo = 1;
+			return x;
 		}
 	}
 
 	@Test
 	public void o35_beanContext_timeZone() throws Exception {
-		O35a x = MockRestClient.create(A.class).simpleJson().timeZone(TimeZone.getTimeZone("Z")).build().post("/echoBody", new O35a().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O35a.class);
+		O35a x = client().timeZone(TimeZone.getTimeZone("Z")).build().post("/echoBody", O35a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O35a.class);
 		assertEquals(1, x.foo);
 	}
 
 	public static class O36 {
 		public int foo;
-		public O36 init() {
-			this.foo = 1;
-			return this;
+		static O36 get() {
+			O36 x = new O36();
+			x.foo = 1;
+			return x;
 		}
 	}
 
 	@Test
 	public void o36_beanContext_typeName() throws Exception {
-		O36 x = MockRestClient.create(A.class).simpleJson().typeName(O36.class, "foo").addRootType().build().post("/echoBody", new O36().init()).run().cacheBody().assertBody().is("{_type:'foo',foo:1}").getBody().as(O36.class);
+		O36 x = client().typeName(O36.class, "foo").addRootType().build().post("/echoBody", O36.get()).run().cacheBody().assertBody().is("{_type:'foo',foo:1}").getBody().as(O36.class);
 		assertEquals(1, x.foo);
 	}
 
 	@Test
 	public void o37_beanContext_typePropertyName() throws Exception {
-		O36 x = MockRestClient.create(A.class).simpleJson().typeName(O36.class, "foo").typePropertyName("X").addRootType().build().post("/echoBody", new O36().init()).run().cacheBody().assertBody().is("{X:'foo',foo:1}").getBody().as(O36.class);
+		O36 x = client().typeName(O36.class, "foo").typePropertyName("X").addRootType().build().post("/echoBody", O36.get()).run().cacheBody().assertBody().is("{X:'foo',foo:1}").getBody().as(O36.class);
 		assertEquals(1, x.foo);
-		x = MockRestClient.create(A.class).simpleJson().typeName(O36.class, "foo").typePropertyName(O36.class, "X").addRootType().build().post("/echoBody", new O36().init()).run().cacheBody().assertBody().is("{X:'foo',foo:1}").getBody().as(O36.class);
+		x = client().typeName(O36.class, "foo").typePropertyName(O36.class, "X").addRootType().build().post("/echoBody", O36.get()).run().cacheBody().assertBody().is("{X:'foo',foo:1}").getBody().as(O36.class);
 		assertEquals(1, x.foo);
 	}
 
@@ -2561,15 +2176,16 @@ public class RestClient_Test {
 
 	public static class O38b {
 		public O38a foo;
-		public O38b init() {
-			this.foo = O38a.ONE;
-			return this;
+		static O38b get() {
+			O38b x = new O38b();
+			x.foo = O38a.ONE;
+			return x;
 		}
 	}
 
 	@Test
 	public void o38_beanContext_useEnumNames() throws Exception {
-		O38b x = MockRestClient.create(A.class).simpleJson().useEnumNames().build().post("/echoBody", new O38b().init()).run().cacheBody().assertBody().is("{foo:'ONE'}").getBody().as(O38b.class);
+		O38b x = client().useEnumNames().build().post("/echoBody", O38b.get()).run().cacheBody().assertBody().is("{foo:'ONE'}").getBody().as(O38b.class);
 		assertEquals(O38a.ONE, x.foo);
 	}
 
@@ -2582,16 +2198,17 @@ public class RestClient_Test {
 		public void setFoo(int foo) {
 			this.foo = foo;
 		}
-		public O39 init() {
-			this.foo = 1;
-			this.bar = 2;
-			return this;
+		static O39 get() {
+			O39 x = new O39();
+			x.foo = 1;
+			x.bar = 2;
+			return x;
 		}
 	}
 
 	@Test
 	public void o39_beanContext_useJavaIntrospector() throws Exception {
-		O39 x = MockRestClient.create(A.class).simpleJson().useJavaBeanIntrospector().build().post("/echoBody", new O39().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O39.class);
+		O39 x = client().useJavaBeanIntrospector().build().post("/echoBody", O39.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(O39.class);
 		assertEquals(1, x.foo);
 	}
 
@@ -2605,7 +2222,7 @@ public class RestClient_Test {
 
 	@Test
 	public void p01_context_addMap() throws Exception {
-		MockRestClient.create(A.class).simpleJson().add(OMap.of(Serializer.SERIALIZER_keepNullProperties, true)).build().post("/echoBody", new P1()).run().cacheBody().assertBody().is("{foo:null}").getBody().as(P1.class);
+		client().add(OMap.of(Serializer.SERIALIZER_keepNullProperties, true)).build().post("/echoBody", new P1()).run().cacheBody().assertBody().is("{foo:null}").getBody().as(P1.class);
 	}
 
 	public static class P2 {
@@ -2623,14 +2240,15 @@ public class RestClient_Test {
 
 	@Test
 	public void p02_context_addToStringObject() throws Exception {
-		MockRestClient.create(A.class).simpleJson().addTo(BeanContext.BEAN_notBeanClasses,P2.class).build().post("/echoBody", P2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().as(P2.class);
+		client().addTo(BeanContext.BEAN_notBeanClasses,P2.class).build().post("/echoBody", P2.fromString("bar")).run().cacheBody().assertBody().is("'bar'").getBody().as(P2.class);
 	}
 
 	public static class P3a {
 		public int foo;
-		public P3a init() {
-			foo = 1;
-			return this;
+		static P3a get() {
+			P3a x = new P3a();
+			x.foo = 1;
+			return x;
 		}
 	}
 
@@ -2638,41 +2256,43 @@ public class RestClient_Test {
 		@Override
 		public Integer swap(BeanSession session, P3a o) { return o.foo; }
 		@Override
-		public P3a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return new P3a().init(); }
+		public P3a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return P3a.get(); }
 	}
 
 	@Test
 	public void p03_context_appendToStringObject() throws Exception {
-		P3a x = MockRestClient.create(A.class).simpleJson().appendTo(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", new P3a().init()).run().cacheBody().assertBody().is("1").getBody().as(P3a.class);
+		P3a x = client().appendTo(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", P3a.get()).run().cacheBody().assertBody().is("1").getBody().as(P3a.class);
 		assertEquals(1, x.foo);
 	}
 
 	@Test
 	public void p04_context_prependToStringObject() throws Exception {
-		P3a x = MockRestClient.create(A.class).simpleJson().prependTo(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", new P3a().init()).run().cacheBody().assertBody().is("1").getBody().as(P3a.class);
+		P3a x = client().prependTo(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", P3a.get()).run().cacheBody().assertBody().is("1").getBody().as(P3a.class);
 		assertEquals(1, x.foo);
 	}
 
 	public static class P5 {
 		public int foo;
-		public P5 init() {
-			this.foo = 1;
-			return this;
+		static P5 get() {
+			P5 x = new P5();
+			x.foo = 1;
+			return x;
 		}
 	}
 
 	@Test
 	public void p05_context_apply() throws Exception {
-		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getPropertyStore()).build().post("/echoBody", new P5().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P5.class);
+		MockRestClient.create(A.class).json().apply(SimpleJsonSerializer.DEFAULT.getPropertyStore()).build().post("/echoBody", P5.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P5.class);
 	}
 
 	public static class P6a {
 		public int foo,bar,baz;
-		public P6a init() {
-			foo = 1;
-			bar = 2;
-			baz = 3;
-			return this;
+		static P6a get() {
+			P6a x = new P6a();
+			x.foo = 1;
+			x.bar = 2;
+			x.baz = 3;
+			return x;
 		}
 	}
 
@@ -2692,28 +2312,28 @@ public class RestClient_Test {
 		new P6b();
 		new P6c();
 		new P6d().foo();
-		MockRestClient.create(A.class).simpleJson().applyAnnotations(P6b.class).build().post("/echoBody", new P6a().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
-		MockRestClient.create(A.class).simpleJson().applyAnnotations(P6c.class).build().post("/echoBody", new P6a().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
-		MockRestClient.create(A.class).simpleJson().applyAnnotations(P6d.class.getMethod("foo")).build().post("/echoBody", new P6a().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
+		client().applyAnnotations(P6b.class).build().post("/echoBody", P6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
+		client().applyAnnotations(P6c.class).build().post("/echoBody", P6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
+		client().applyAnnotations(P6d.class.getMethod("foo")).build().post("/echoBody", P6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
 		AnnotationList al = ClassInfo.of(P6c.class).getAnnotationList(ConfigAnnotationFilter.INSTANCE);
 		VarResolverSession vr = VarResolver.DEFAULT.createSession();
-		MockRestClient.create(A.class).simpleJson().applyAnnotations(al,vr).build().post("/echoBody", new P6a().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
+		client().applyAnnotations(al,vr).build().post("/echoBody", P6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
 	}
 
 	@Test
 	public void p07_context_removeFrom() throws Exception {
-		P3a x = MockRestClient.create(A.class).simpleJson().appendTo(BeanContext.BEAN_swaps,P3b.class).removeFrom(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", new P3a().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P3a.class);
+		P3a x = client().appendTo(BeanContext.BEAN_swaps,P3b.class).removeFrom(BeanContext.BEAN_swaps,P3b.class).build().post("/echoBody", P3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P3a.class);
 		assertEquals(1, x.foo);
 	}
 
 	@Test
 	public void p08_context_setStringObject() throws Exception {
-		MockRestClient.create(A.class).json().set(JsonSerializer.JSON_simpleMode,true).build().post("/echoBody", new P3a().init()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P3a.class);
+		MockRestClient.create(A.class).json().set(JsonSerializer.JSON_simpleMode,true).build().post("/echoBody", P3a.get()).run().cacheBody().assertBody().is("{foo:1}").getBody().as(P3a.class);
 	}
 
 	@Test
 	public void p09_context_annotations() throws Exception {
-		MockRestClient.create(A.class).simpleJson().annotations(new BeanAnnotation(P6a.class).sort(true)).build().post("/echoBody", new P6a().init()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
+		client().annotations(new BeanAnnotation(P6a.class).sort(true)).build().post("/echoBody", P6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(P6a.class);
 	}
 
 	public static interface P10a {
@@ -2735,7 +2355,7 @@ public class RestClient_Test {
 
 	@Test
 	public void p10_context_putAllTo() throws Exception {
-		P10a x = MockRestClient.create(A.class).simpleJson().putAllTo(BeanContext.BEAN_implClasses, AMap.of(P10a.class.getName(), P10b.class)).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(P10a.class);
+		P10a x = client().putAllTo(BeanContext.BEAN_implClasses, AMap.of(P10a.class.getName(), P10b.class)).build().post("/echoBody", new StringReader("{foo:1}")).run().getBody().as(P10a.class);
 		assertEquals(1, x.getFoo());
 		assertTrue(x instanceof P10b);
 	}
@@ -2756,46 +2376,23 @@ public class RestClient_Test {
 		;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Path
-	//-----------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
 
-	public static class Q1 {
-		public int x;
-		public Q1 init() {
-			x = 1;
-			return this;
-		}
-		@Override
-		public String toString() {
-			return "xxx";
-		}
+	private static NameValuePair pair(String name, Object val) {
+		return BasicNameValuePair.of(name, val);
 	}
 
-	@Test
-	public void q01_paths() throws Exception {
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").path("x", new Q1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").path(BasicNameValuePair.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths(BasicNameValuePair.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths(NameValuePairs.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths((Object)new NameValuePair[]{BasicNameValuePair.of("x","foo")}).run().assertBody().contains("HTTP GET /echo/foo");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths(new Q1().init()).run().assertBody().contains("HTTP GET /echo/1");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").pathPairs("x", 1).run().assertBody().contains("HTTP GET /echo/1");
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/*").path("/*", new Q1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths("x");}).is("Invalid type passed to paths(): java.lang.String");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").pathPairs("x");}).is("Odd number of parameters passed into pathPairs()");
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").paths((Object)null);}).is("Invalid type passed to paths(): null");
+	private static NameValuePairs pairs(Object...pairs) {
+		return NameValuePairs.of(pairs);
 	}
 
-	@Test
-	public void q02_paths_withSchema() throws Exception {
-		String[] a = new String[]{"foo","bar"};
-		MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").path("x", a, T_ARRAY_PIPES).run().assertBody().contains("HTTP GET /echo/foo%7Cbar");
+	private static RestClientBuilder client() {
+		return MockRestClient.create(A.class).simpleJson();
 	}
 
-	@Test
-	public void q03_paths_invalid() throws Exception {
-		assertThrown(()->{MockRestClient.create(A.class).simpleJson().build().get("/echo/{x}").path("y", "foo");}).is("Path variable {y} was not found in path.");
+	private static RestClientBuilder client(Class<?> c) {
+		return MockRestClient.create(c).simpleJson();
 	}
 }
