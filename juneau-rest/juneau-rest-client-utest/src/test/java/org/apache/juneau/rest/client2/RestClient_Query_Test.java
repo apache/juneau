@@ -14,12 +14,11 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.AddFlag.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
@@ -126,10 +125,17 @@ public class RestClient_Query_Test {
 	public void a11_query_request() throws Exception {
 		client().build().get("/echo").query("foo", "bar").run().assertBody().contains("GET /echo?foo=bar");
 		client().build().get("/echo").query("foo", AList.of("bar","baz"), T_ARRAY_PIPES).run().assertBody().contains("GET /echo?foo=bar%7Cbaz");
-		client().query("foo","bar").build().get("/echo").query(EnumSet.of(AddFlag.PREPEND), "foo", "baz").run().assertBody().contains("GET /echo?foo=baz&foo=bar");
-		client().query("foo","bar").build().get("/echo").query(EnumSet.of(AddFlag.PREPEND), "foo", AList.of("baz","qux"), T_ARRAY_PIPES).run().assertBody().contains("GET /echo?foo=baz%7Cqux&foo=bar");
+		client().query("foo","bar").build().get("/echo").query(PREPEND, "foo", "baz").run().assertBody().contains("GET /echo?foo=baz&foo=bar");
+		client().query("foo","bar").build().get("/echo").query(PREPEND, "foo", AList.of("baz","qux"), T_ARRAY_PIPES).run().assertBody().contains("GET /echo?foo=baz%7Cqux&foo=bar");
+		client().query("foo","bar").build().get("/echo").query(PREPEND, "foo", "").run().assertBody().contains("GET /echo?foo=&foo=bar");
+		client().query("foo","bar").build().get("/echo").query(PREPEND, "foo", null).run().assertBody().contains("GET /echo?foo=bar");
 		client().query("foo","bar").build().get("/echo").queries(pair("foo","baz"), pairs("foo","qux"), OMap.of("foo","quux")).run().assertBody().contains("GET /echo?foo=bar&foo=baz&foo=qux&foo=quux");
 		client().query("foo","bar").build().get("/echo").queries(new A11().init()).run().assertBody().contains("GET /echo?foo=bar&foo=baz");
+		client().query("foo","bar").build().get("/echo").query(REPLACE, "foo", "baz").run().assertBody().contains("GET /echo?foo=baz");
+		client().query("foo","bar").build().get("/echo").query(REPLACE, "foo", null).run().assertBody().contains("GET /echo?");
+		client().query("foo","bar").build().get("/echo").query(REPLACE, "foo", "").run().assertBody().contains("GET /echo?foo=");
+		client().query("bar","baz").build().get("/echo").query(REPLACE, "foo", "bar").run().assertBody().contains("GET /echo?bar=baz&foo=bar");
+
 		assertThrown(()->{client().build().get("/echo").queries("foo=baz");}).is("Invalid type passed to queries(): java.lang.String");
 	}
 

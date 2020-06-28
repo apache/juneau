@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.AddFlag.*;
 
 import java.io.*;
 
@@ -58,6 +59,11 @@ public class RestClient_FormData_Test {
 	public void a03_formData_withSchema() throws Exception {
 		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
 		client().build().post("/formData").formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
+
+		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData("Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz&Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=bar|baz&Foo=qux|quux");
+		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(APPEND,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz&Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=bar|baz&Foo=qux|quux");
+		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(PREPEND,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=qux%7Cquux&Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=qux|quux&Foo=bar|baz");
+		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(REPLACE,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=qux|quux");
 	}
 
 	@Test

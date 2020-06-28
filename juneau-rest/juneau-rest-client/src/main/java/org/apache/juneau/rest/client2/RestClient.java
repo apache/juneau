@@ -320,11 +320,11 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestRequest#header(NameValuePair) header(NameValuePair)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
+ * 		<li class='jm'>{@link RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
  *		<li class='jm'>{@link RestRequest#accept(Object) accept(Object)}
  * 		<li class='jm'>{@link RestRequest#acceptCharset(Object) acceptCharset(Object)}
@@ -410,9 +410,9 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#query(AddFlag,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#queries(Object...) queries(Object...)}
- * 		<li class='jm'>{@link RestRequest#queries(EnumSet,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queries(AddFlag,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
  * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
@@ -449,9 +449,9 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#formData(AddFlag,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#formDatas(Object...) formDatas(Object...)}
- * 		<li class='jm'>{@link RestRequest#formDatas(EnumSet,Object...) formDatas(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDatas(AddFlag,Object...) formDatas(EnumSet&lt;AddFlag&gt;,Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
@@ -1165,9 +1165,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(String,Object) formData(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(EnumSet,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(AddFlag,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(Object...) formDatas(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(EnumSet,Object...) formDatas(EnumSet&lt;AddFlag&gt;Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(AddFlag,Object...) formDatas(EnumSet&lt;AddFlag&gt;Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataCustom(Object) formDataCustom(Object)}
 	 * 			</ul>
@@ -1234,11 +1234,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object) header(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(EnumSet,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header) header(Header)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(NameValuePair) header(NameValuePair)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object...) headers(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(EnumSet,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headerPairs(Object...) headerPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#accept(Object) accept(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#acceptCharset(Object) acceptCharset(Object)}
@@ -1768,9 +1768,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 			<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
 	 * 			<ul>
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String,Object) query(String,Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(EnumSet,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(AddFlag,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(Object...) queries(Object...)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(EnumSet,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(AddFlag,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
 	 * 			</ul>

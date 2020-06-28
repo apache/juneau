@@ -1074,19 +1074,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.query(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
 	 *		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1102,8 +1101,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return queries(flags, serializedNameValuePair(name, value, QUERY, partSerializer, schema, null));
+	public RestRequest query(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return queries(flag, serializedNameValuePair(name, value, QUERY, partSerializer, schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1192,18 +1191,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.query(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, <js>"bar"</js>
 	 *		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1214,8 +1212,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest query(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return queries(flags, serializedNameValuePair(name, value, QUERY, partSerializer, null, null));
+	public RestRequest query(AddFlag flag, String name, Object value) throws RestCallException {
+		return queries(flag, serializedNameValuePair(name, value, QUERY, partSerializer, null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1253,7 +1251,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest queries(Object...params) throws RestCallException {
-		return queries(DEFAULT_FLAGS, params);
+		return queries(APPEND, params);
 	}
 
 	/**
@@ -1265,19 +1263,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.queries(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param params
 	 * 	The parameters to set.
@@ -1298,7 +1295,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest queries(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+	public RestRequest queries(AddFlag flag, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicNameValuePair.canCast(o)) {
@@ -1311,15 +1308,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(BasicNameValuePair.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, null));
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to queries(): " + className(o));
 			}
 		}
-		return innerQuery(flags, l);
+		return innerQuery(EnumSet.of(flag), l);
 	}
 
 	/**
@@ -1425,7 +1422,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private RestRequest innerQuery(EnumSet<AddFlag> flags, List<NameValuePair> params) {
 		flags = AddFlag.orDefault(flags);
-		params.removeIf(x -> x == null || x.getValue() == null);
+		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(REPLACE)) {
 			List<NameValuePair> l = uriBuilder.getQueryParams();
 			for (NameValuePair p : params)
@@ -1463,18 +1460,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formData(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1490,8 +1486,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return formDatas(flags, serializedNameValuePair(name, value, FORMDATA, partSerializer, schema, flags));
+	public RestRequest formData(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return formDatas(flag, serializedNameValuePair(name, value, FORMDATA, partSerializer, schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1580,19 +1576,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formData(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, <js>"bar"</js>
 	 *		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags
-	 * 	Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The parameter name.
 	 * @param value The parameter value.
@@ -1603,8 +1597,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formData(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return formDatas(flags, serializedNameValuePair(name, value, FORMDATA, partSerializer, null, flags));
+	public RestRequest formData(AddFlag flag, String name, Object value) throws RestCallException {
+		return formDatas(flag, serializedNameValuePair(name, value, FORMDATA, partSerializer, null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -1642,7 +1636,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest formDatas(Object...params) throws RestCallException {
-		return formDatas(DEFAULT_FLAGS, params);
+		return formDatas(APPEND, params);
 	}
 
 	/**
@@ -1654,19 +1648,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.formPost(<jsf>URL</jsf>)
 	 * 		.formDatas(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param params
 	 * 	The parameters to set.
@@ -1687,7 +1680,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formDatas(EnumSet<AddFlag> flags, Object...params) throws RestCallException {
+	public RestRequest formDatas(AddFlag flag, Object...params) throws RestCallException {
 		List<NameValuePair> l = new ArrayList<>();
 		for (Object o : params) {
 			if (BasicNameValuePair.canCast(o)) {
@@ -1700,15 +1693,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(BasicNameValuePair.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, flags));
+					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to formDatas(): " + className(o));
 			}
 		}
-		return innerFormData(flags, l);
+		return innerFormData(EnumSet.of(flag), l);
 	}
 
 	/**
@@ -1972,19 +1965,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.header(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>)),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
 	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The header name.
 	 * @param value The header value.
@@ -2000,8 +1992,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema) throws RestCallException {
-		return headers(flags, serializedHeader(name, value, partSerializer, schema, flags));
+	public RestRequest header(AddFlag flag, String name, Object value, HttpPartSchema schema) throws RestCallException {
+		return headers(flag, serializedHeader(name, value, partSerializer, schema, EnumSet.of(flag)));
 	}
 
 	/**
@@ -2070,18 +2062,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.header(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"Foo"</js>, <js>"bar"</js>
 	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 *	 	<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param name The header name.
 	 * @param value The header value.
@@ -2092,8 +2083,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest header(EnumSet<AddFlag> flags, String name, Object value) throws RestCallException {
-		return headers(flags, serializedHeader(name, value, partSerializer, null, flags));
+	public RestRequest header(AddFlag flag, String name, Object value) throws RestCallException {
+		return headers(flag, serializedHeader(name, value, partSerializer, null, EnumSet.of(flag)));
 	}
 
 	/**
@@ -2173,7 +2164,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException Invalid input.
 	 */
 	public RestRequest headers(Object...headers) throws RestCallException {
-		return headers(DEFAULT_FLAGS, headers);
+		return headers(APPEND, headers);
 	}
 
 	/**
@@ -2185,19 +2176,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.headers(
-	 * 			EnumSet.<jsm>of</jsm>(<jsf>APPEND</jsf>,<jsf>SKIP_IF_EMPTY</jsf>),
+	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"Baz"</js>, <js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
 	 *
-	 * @param flags Instructions on how to add this parameter.
+	 * @param flag How to add this parameter.
 	 * 	<ul>
 	 * 		<li>{@link AddFlag#APPEND APPEND} (default) - Append to end.
 	 * 		<li>{@link AddFlag#PREPEND PREPEND} - Prepend to beginning.
 	 * 		<li>{@link AddFlag#REPLACE REPLACE} - Delete any existing with same name and append to end.
-	 * 		<li>{@link AddFlag#SKIP_IF_EMPTY} - Don't add if value is an empty string.
 	 * 	</ul>
 	 * @param headers
 	 * 	The headers to set.
@@ -2220,7 +2210,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest headers(EnumSet<AddFlag> flags, Object...headers) throws RestCallException {
+	public RestRequest headers(AddFlag flag, Object...headers) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		for (Object o : headers) {
 			if (BasicHeader.canCast(o)) {
@@ -2233,15 +2223,15 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					l.add(BasicHeader.cast(Array.get(o, i)));
 			} else if (o instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(o).entrySet())
-					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
 			} else if (isBean(o)) {
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
-					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, flags));
+					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
 				throw new RestCallException("Invalid type passed to headers(): " + className(o));
 			}
 		}
-		return innerHeaders(flags, l);
+		return innerHeaders(EnumSet.of(flag), l);
 	}
 
 	/**
@@ -2270,7 +2260,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw new RestCallException("Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
-		return innerHeaders(DEFAULT_FLAGS, l);
+		return innerHeaders(EnumSet.of(APPEND), l);
 	}
 
 	RestRequest headerArg(EnumSet<AddFlag> flags, String name, Object value, HttpPartSchema schema, HttpPartSerializerSession serializer) throws RestCallException {
