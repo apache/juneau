@@ -1423,25 +1423,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestRequest innerQuery(EnumSet<AddFlag> flags, List<NameValuePair> params) {
 		flags = AddFlag.orDefault(flags);
 		params.removeIf(x -> x.getValue() == null);
+		if (flags.contains(SKIP_IF_EMPTY))
+			params.removeIf(x -> isEmpty(x.getValue()));
 		if (flags.contains(REPLACE)) {
 			List<NameValuePair> l = uriBuilder.getQueryParams();
 			for (NameValuePair p : params)
 				for (Iterator<NameValuePair> i = l.iterator(); i.hasNext();)
 					if (i.next().getName().equals(p.getName()))
 						i.remove();
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			l.addAll(params);
 			uriBuilder.setParameters(l);
 		} else if (flags.contains(PREPEND)) {
 			List<NameValuePair> l = uriBuilder.getQueryParams();
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			l.addAll(0, params);
 			uriBuilder.setParameters(l);
 		} else {
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			uriBuilder.addParameters(params);
 		}
 		return this;
@@ -1821,6 +1817,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
 		flags = AddFlag.orDefault(flags);
 		params.removeIf(x -> x == null|| x.getValue() == null);
+		if (flags.contains(SKIP_IF_EMPTY))
+			params.removeIf(x -> isEmpty(x.getValue()));
 		if (formData == null)
 			formData = new NameValuePairs();
 		if (flags.contains(REPLACE)) {
@@ -1828,16 +1826,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Iterator<NameValuePair> i = formData.iterator(); i.hasNext();)
 					if (i.next().getName().equals(p.getName()))
 						i.remove();
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			formData.addAll(params);
 		} else if (flags.contains(PREPEND)) {
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			formData.addAll(0, params);
 		} else {
-			if (flags.contains(SKIP_IF_EMPTY))
-				params.removeIf(x -> isEmpty(x.getValue()));
 			formData.addAll(params);
 		}
 		return this;
@@ -2296,6 +2288,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestRequest innerHeaders(EnumSet<AddFlag> flags, Collection<Header> headers) {
 		flags = AddFlag.orDefault(flags);
 		headers.removeIf(x -> x == null || x.getValue() == null);
+		if (flags.contains(SKIP_IF_EMPTY))
+			headers.removeIf(x -> isEmpty(x.getValue()));
 		if (flags.contains(REPLACE)) {
 			for (Header h : headers)
 				removeHeaders(h.getName());
@@ -2307,8 +2301,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 		}
 		for (Header h : headers) {
-			if ((! flags.contains(SKIP_IF_EMPTY)) || ! isEmpty(h.getValue()))
-				addHeader(h);
+			addHeader(h);
 		}
 		return this;
 	}
