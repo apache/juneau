@@ -237,9 +237,9 @@ public class RrpcInterfaceTest {
 	public static class InterfaceProxyResource extends BasicRestServletJena {
 		private static final long serialVersionUID = 1L;
 
-		//====================================================================================================
+		//-----------------------------------------------------------------------------------------------------------------
 		// Test that Q-values are being resolved correctly.
-		//====================================================================================================
+		//-----------------------------------------------------------------------------------------------------------------
 		@RestMethod(name=RRPC,path="/proxy/*")
 		public InterfaceProxy getProxy() {
 			return new InterfaceProxy() {

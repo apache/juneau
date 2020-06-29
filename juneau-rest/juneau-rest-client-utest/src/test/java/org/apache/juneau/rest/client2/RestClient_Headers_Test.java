@@ -226,6 +226,40 @@ public class RestClient_Headers_Test {
 		checkClient("Upgrade").upgrade("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Via").via("foo").build().get("/headers").run().assertBody().is("['foo']");
 		checkClient("Warning").warning("foo").build().get("/headers").run().assertBody().is("['foo']");
+
+		checkClient("Accept").build().get("/headers").accept("text/plain").run().assertBody().is("['text/plain']");
+		checkClient("Accept-Charset").build().get("/headers").acceptCharset("UTF-8").run().assertBody().is("['UTF-8']");
+		checkClient("Accept-Encoding").build().get("/headers").acceptEncoding("identity").run().assertBody().is("['identity']");
+		checkClient("Accept-Language").build().get("/headers").acceptLanguage("en").run().assertBody().is("['en']");
+		checkClient("Authorization").build().get("/headers").authorization("foo").run().assertBody().is("['foo']");
+		checkClient("Cache-Control").build().get("/headers").cacheControl("none").run().assertBody().is("['none']");
+		checkClient("X-Client-Version").build().get("/headers").clientVersion("1").run().assertBody().is("['1']");
+		checkClient("Connection").build().get("/headers").connection("foo").run().assertBody().is("['foo']");
+		checkClient("Content-Length").build().get("/headers").contentLength("123").run().assertBody().is("['123']");
+		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertBody().is("['foo']");
+		checkClient("Content-Encoding").build().get("/headers").contentEncoding("identity").run().assertBody().is("['identity']");
+		checkClient("Date").build().get("/headers").date("123").run().assertBody().is("['123']");
+		checkClient("Expect").build().get("/headers").expect("foo").run().assertBody().is("['foo']");
+		checkClient("Forwarded").build().get("/headers").forwarded("foo").run().assertBody().is("['foo']");
+		checkClient("From").build().get("/headers").from("foo").run().assertBody().is("['foo']");
+		checkClient("Host").build().get("/headers").hostHeader("foo").run().assertBody().is("['foo']");
+		checkClient("If-Match").build().get("/headers").ifMatch("foo").run().assertBody().is("['foo']");
+		checkClient("If-Modified-Since").build().get("/headers").ifModifiedSince("foo").run().assertBody().is("['foo']");
+		checkClient("If-None-Match").build().get("/headers").ifNoneMatch("foo").run().assertBody().is("['foo']");
+		checkClient("If-Range").build().get("/headers").ifRange("foo").run().assertBody().is("['foo']");
+		checkClient("If-Unmodified-Since").build().get("/headers").ifUnmodifiedSince("foo").run().assertBody().is("['foo']");
+		checkClient("Max-Forwards").build().get("/headers").maxForwards("10").run().assertBody().is("['10']");
+		checkClient("No-Trace").build().get("/headers").noTrace().run().assertBody().is("['true']");
+		checkClient("Origin").build().get("/headers").origin("foo").run().assertBody().is("['foo']");
+		checkClient("Pragma").build().get("/headers").pragma("foo").run().assertBody().is("['foo']");
+		checkClient("Proxy-Authorization").build().get("/headers").proxyAuthorization("foo").run().assertBody().is("['foo']");
+		checkClient("Range").build().get("/headers").range("foo").run().assertBody().is("['foo']");
+		checkClient("Referer").build().get("/headers").referer("foo").run().assertBody().is("['foo']");
+		checkClient("TE").build().get("/headers").te("foo").run().assertBody().is("['foo']");
+		checkClient("User-Agent").build().get("/headers").userAgent(new StringBuilder("foo")).run().assertBody().is("['foo']");
+		checkClient("Upgrade").build().get("/headers").upgrade("foo").run().assertBody().is("['foo']");
+		checkClient("Via").build().get("/headers").via("foo").run().assertBody().is("['foo']");
+		checkClient("Warning").build().get("/headers").warning("foo").run().assertBody().is("['foo']");
 	}
 
 	@Test

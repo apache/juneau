@@ -687,20 +687,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Set configuration settings on this request.
-	 *
-	 * <p>
-	 * Use {@link RequestConfig#custom()} to create configuration parameters for the request.
-	 *
-	 * @param config The new configuration settings for this request.
-	 * @return This object (for method chaining).
-	 */
-	public RestRequest requestConfig(RequestConfig config) {
-		setConfig(config);
-		return this;
-	}
-
-	/**
 	 * Sets <c>Debug: value</c> header on this request.
 	 *
 	 * @return This object (for method chaining).
@@ -872,7 +858,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -920,7 +906,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The part schema.  Can be <jk>null</jk>.
@@ -1090,7 +1076,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
@@ -1120,7 +1106,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1171,7 +1157,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
@@ -1206,7 +1192,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1471,7 +1457,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
@@ -1501,7 +1487,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1552,7 +1538,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
@@ -1587,7 +1573,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The parameter name.
 	 * @param value The parameter value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1813,6 +1799,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
+		input = null;
 		flags = AddFlag.orDefault(flags);
 		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
@@ -1860,6 +1847,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
@@ -1925,6 +1914,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
 	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1971,7 +1962,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The header name.
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
  	 * @param schema The schema object that defines the format of the output.
@@ -2001,7 +1992,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The header name.
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -2032,7 +2023,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The header name.
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @param schema The HTTP part schema.  Can be <jk>null</jk>.
@@ -2067,7 +2058,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The header name.
 	 * @param value The header value.
 	 * 	<ul>
-	 * 		<li>Value can be any POJO.
+	 * 		<li>Value can be any POJO or POJO {@link Supplier}.
 	 * 		<li>Value converted to a string using the configured part serializer.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -2516,7 +2507,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest host(Object value) throws RestCallException {
+	public RestRequest hostHeader(Object value) throws RestCallException {
 		return header("Host", value);
 	}
 
@@ -2602,6 +2593,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest maxForwards(Object value) throws RestCallException {
 		return header("Max-Forwards", value);
+	}
+
+	/**
+	 * When called, <c>No-Trace: true</c> is added to requests.
+	 *
+	 * <p>
+	 * This gives the opportunity for the servlet to not log errors on invalid requests.
+	 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
+	 * results of testing.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest noTrace() throws RestCallException {
+		return header("No-Trace", true);
 	}
 
 	/**
@@ -2785,7 +2791,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestResponse run() throws RestCallException {
 		if (response != null)
-			return response;
+			throw new RestCallException("run() already called.");
 
 		try {
 			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase ? (HttpEntityEnclosingRequestBase)request : null;
@@ -2810,9 +2816,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				setHeader("Accept", parser.getPrimaryMediaType().toString());
 
 			if (hasInput || formData != null) {
-
-				if (hasInput && formData != null && input != null)
-					throw new RestCallException("Both input and form-data found on same request.");
 
 				if (request2 == null)
 					throw new RestCallException(0, "Method does not support content entity.", getMethod(), getURI(), null);
@@ -2854,7 +2857,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else {
 					if (input2 == null)
 						input2 = "";
-					entity = new StringEntity(getBeanContext().getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
+					entity = new StringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
 				}
 
 				request2.setEntity(entity);
@@ -2875,9 +2878,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);
 			client.onConnect(this, response);
-
-			if (response.getStatusCode() == 0)
-				throw new RestCallException("HttpClient returned a null response");
 
 			String method = getMethod();
 			int sc = response.getStatusCode();
@@ -3059,7 +3059,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The new value.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setConfig(RequestConfig value) {
+	public RestRequest config(RequestConfig value) {
 		request.setConfig(value);
 		return this;
 	}
@@ -3070,7 +3070,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param cancellable The cancellable object.
 	 * @return This object (for method chaining).
 	 */
-	public RestRequest setCancellable(Cancellable cancellable) {
+	public RestRequest cancellable(Cancellable cancellable) {
 		request.setCancellable(cancellable);
 		return this;
 	}
@@ -3079,16 +3079,21 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the protocol version for this request.
 	 *
 	 * @param version The protocol version for this request.
+	 * @return This object (for method chaining).
 	 */
-	public void setProtocolVersion(ProtocolVersion version) {
+	public RestRequest protocolVersion(ProtocolVersion version) {
 		request.setProtocolVersion(version);
+		return this;
 	}
 
 	/**
-	 * Used in combination with {@link #setCancellable(Cancellable)}.
+	 * Used in combination with {@link #cancellable(Cancellable)}.
+	 *
+	 * @return This object (for method chaining).
 	 */
-	public void completed() {
+	public RestRequest completed() {
 		request.completed();
+		return this;
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -3371,13 +3376,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	// Utility methods
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private BeanContext getBeanContext() {
-		BeanContext bc = serializer;
-		if (bc == null)
-			bc = BeanContext.DEFAULT;
-		return bc;
-	}
-
 	private ContentType getRequestContentType(ContentType def) {
 		Header h = request.getFirstHeader("Content-Type");
 		if (h != null) {
@@ -3407,7 +3405,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	private static String className(Object value) {
-		return value == null ? null : value.getClass().getName();
+		return value.getClass().getName();
 	}
 
 	private static boolean isNameValuePairArray(Object o) {

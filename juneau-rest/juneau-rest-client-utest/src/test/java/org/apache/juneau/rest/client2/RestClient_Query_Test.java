@@ -131,6 +131,10 @@ public class RestClient_Query_Test {
 		client().query(pair("foo","bar")).build().get("/query").query(pair("foo","baz")).run().assertBody().contains("foo=bar&foo=baz");
 	}
 
+	public static class A10 {
+		public String foo="bar";
+	}
+
 	@Test
 	public void a10_queries_Objects() throws Exception {
 		client().queries(pair("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
@@ -147,6 +151,7 @@ public class RestClient_Query_Test {
 		client().build().get("/query").queries(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
 		client().build().get("/query").queries(pair("foo","bar"),pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
 		client().build().get("/query").queries((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
+		client().build().get("/query").queries(new A10()).run().assertBody().is("foo=bar");
 
 		client().queries((Object)null).build().get("/query").queries((Object)null).run().assertBody().is("");
 		assertThrown(()->{client().queries("baz");}).contains("Invalid type");

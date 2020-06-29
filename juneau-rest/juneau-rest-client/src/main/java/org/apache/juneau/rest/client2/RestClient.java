@@ -340,7 +340,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestRequest#expect(Object) expect(Object)}
  * 		<li class='jm'>{@link RestRequest#forwarded(Object) forwarded(Object)}
  * 		<li class='jm'>{@link RestRequest#from(Object) from(Object)}
- * 		<li class='jm'>{@link RestRequest#host(Object) host(Object)}
+ * 		<li class='jm'>{@link RestRequest#hostHeader(Object) host(Object)}
  * 		<li class='jm'>{@link RestRequest#ifMatch(Object) ifMatch(Object)}
  * 		<li class='jm'>{@link RestRequest#ifModifiedSince(Object) ifModifiedSince(Object)}
  * 		<li class='jm'>{@link RestRequest#ifNoneMatch(Object) ifNoneMatch(Object)}
@@ -1254,7 +1254,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#expect(Object) expect(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#forwarded(Object) forwarded(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#from(Object) from(Object)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#host(Object) host(Object)}
+	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#hostHeader(Object) hostHeader(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#ifMatch(Object) ifMatch(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#ifModifiedSince(Object) ifModifiedSince(Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#ifNoneMatch(Object) ifNoneMatch(Object)}
@@ -1918,7 +1918,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	private static final
-		Predicate<Integer> ERROR_CODES_DEFAULT = x ->  x>=400;
+		Predicate<Integer> ERROR_CODES_DEFAULT = x ->  x<=0 || x>=400;
 
 	private static final
 		BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req,res) -> true;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.testutils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -104,6 +106,8 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a02_get() throws Exception {
 		client().build().get("/bean").run().assertBody().is("{f:1}");
+
+		assertThrown(()->{client().build().get("/bean").body(bean).run();}).contains("Method does not support content entity.");
 	}
 
 	@Test
@@ -125,6 +129,8 @@ public class RestClient_BasicCalls_Test {
 	public void a04_put() throws Exception {
 		client().build().put("/bean",bean).run().assertBody().is("{f:1}");
 		client().build().put("/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().put("/bean",TestSupplier.of(bean)).run().assertBody().is("{f:1}");
+		client().build().put("/bean").body(TestSupplier.of(bean)).run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -158,7 +164,9 @@ public class RestClient_BasicCalls_Test {
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
 			ReaderResource.create().contents("{f:1}").build(),
+			ReaderResource.create().contents("{f:1}"),
 			StreamResource.create().contents("{f:1}").build(),
+			StreamResource.create().contents("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -275,6 +283,10 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a18_formPost() throws Exception {
 		client().build().formPost("/bean",bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+
+		client().build().formPost("/bean",bean).body(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+		client().build().post("/bean").urlEnc().formDatas(bean).body(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+		client().build().post("/bean").urlEnc().body(bean).formDatas(bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -428,9 +440,9 @@ public class RestClient_BasicCalls_Test {
 		}
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods.
-	//------------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static NameValuePair pair(String name, Object val) {
 		return BasicNameValuePair.of(name, val);

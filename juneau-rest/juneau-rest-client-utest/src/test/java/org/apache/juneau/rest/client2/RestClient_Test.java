@@ -26,12 +26,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.concurrent.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -118,6 +121,10 @@ public class RestClient_Test {
 		assertThrown(()->{rc.request(HttpMethod.GET,"/bean",null);}).contains("RestClient.close() has already been called");
 	}
 
+	@Test
+	public void a06_request_runCalledTwice() throws Exception {
+		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).is("run() already called.");
+	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Logging
@@ -293,7 +300,9 @@ public class RestClient_Test {
 
 	@Test
 	public void c14_httpClient_requestConfig() throws Exception {
-		client().build().get("/bean").requestConfig(RequestConfig.custom().setMaxRedirects(1).build()).run().assertBody().is("{f:1}");
+		RestRequest req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
+		req.run().assertBody().is("{f:1}");
+		assertEquals(1, req.getConfig().getMaxRedirects());
 	}
 
 	@Test
@@ -311,7 +320,7 @@ public class RestClient_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class E extends BasicRest {
+	public static class D extends BasicRest {
 		@RestMethod
 		public String getEcho(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {
@@ -325,7 +334,133 @@ public class RestClient_Test {
 
 	@Test
 	public void d01_basicAuth() throws RestCallException {
-		client(E.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertBody().contains("OK");
+		client(D.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertBody().contains("OK");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Other.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	public void e01_other_completeFuture() throws Exception {
+		client().build().get("/bean").completeFuture().get().assertStatus().is(200);
+	}
+
+	public static class E2 implements Cancellable {
+		@Override
+		public boolean cancel() {
+			return false;
+		}
+	}
+
+	@Test
+	public void e02_httpRequestBase_setCancellable() throws Exception {
+		client().build().get("/bean").cancellable(new E2()).run().assertStatus().is(200);
+	}
+
+	@Test
+	public void e03_httpRequestBase_protocolVersion() throws Exception {
+		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus().is(200);
+		ProtocolVersion x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
+		assertEquals(2,x.getMajor());
+	}
+
+	@Test
+	public void e04_httpRequestBase_completed() throws Exception {
+		client().build().get("/bean").completed().run().assertStatus().is(200);
+	}
+
+	@Test
+	public void e05_httpUriRequest_abort() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.abort();
+		assertTrue(x.isAborted());
+	}
+
+	@Test
+	public void e06_httpMessage_getRequestLine() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		assertEquals("GET",x.getRequestLine().getMethod());
+	}
+
+	@Test
+	public void e07_httpMessage_containsHeader() throws Exception {
+		RestRequest x = client().build().get("/bean").header("Foo", "bar");
+		assertTrue(x.containsHeader("Foo"));
+	}
+
+	@Test
+	public void e08_httpMessage_getFirstHeader_getLastHeader() throws Exception {
+		RestRequest x = client().build().get("/bean").header("Foo","bar").header("Foo","baz");
+		assertEquals("bar",x.getFirstHeader("Foo").getValue());
+		assertEquals("baz",x.getLastHeader("Foo").getValue());
+	}
+
+	@Test
+	public void e09_httpMessage_addHeader() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.addHeader(header("Foo","bar"));
+		x.addHeader("Foo","baz");
+		assertEquals("bar",x.getFirstHeader("Foo").getValue());
+		assertEquals("baz",x.getLastHeader("Foo").getValue());
+	}
+
+	@Test
+	public void e10_httpMessage_setHeader() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.setHeader(header("Foo","bar"));
+		x.setHeader(header("Foo","baz"));
+		assertEquals("baz",x.getFirstHeader("Foo").getValue());
+		assertEquals("baz",x.getLastHeader("Foo").getValue());
+		x.setHeader("Foo","qux");
+		assertEquals("qux",x.getFirstHeader("Foo").getValue());
+		assertEquals("qux",x.getLastHeader("Foo").getValue());
+	}
+
+	@Test
+	public void e11_httpMessage_setHeaders() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.setHeaders(new Header[]{header("Foo","bar")});
+		assertEquals("bar",x.getFirstHeader("Foo").getValue());
+	}
+
+	@Test
+	public void e12_httpMessage_removeHeaders() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.removeHeaders("Foo");
+		assertNull(x.getFirstHeader("Foo"));
+	}
+
+	@Test
+	public void e13_httpMessage_removeHeader() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.removeHeader(header("Foo","bar"));
+		//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?
+	}
+
+	@Test
+	public void e14_httpMessage_headerIterator() throws Exception {
+		RestRequest x = client().build().get("/bean");
+		x.setHeaders(new Header[]{header("Foo","bar")});
+		assertEquals("Foo: bar", x.headerIterator().next().toString());
+		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void e15_httpMessage_getParams() throws Exception {
+		HttpParams p = new BasicHttpParams();
+		RestRequest x = client().build().get("/bean");
+		x.setParams(p);
+		assertEquals(p, x.getParams());
+	}
+
+	@Test
+	public void e16_toMap() throws Exception {
+		assertNotNull(client().build().toString());
+		assertNotNull(client().build().get("/bean").toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -338,5 +473,9 @@ public class RestClient_Test {
 
 	private static RestClientBuilder client(Class<?> c) {
 		return MockRestClient.create(c).simpleJson();
+	}
+
+	private static Header header(String name, Object val) {
+		return BasicStringHeader.of(name, val);
 	}
 }

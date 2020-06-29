@@ -53,6 +53,9 @@ public class RestClient_FormData_Test {
 	public void a01_formData_String_Object() throws Exception {
 		client().formData("foo","bar").formData("foo",new StringBuilder("baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
 		client().build().post("/formData").formData("foo","bar").formData("foo",new StringBuilder("baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formData(null,"bar").run().assertBody().is("");
+		client().build().post("/formData").formData("foo",null).run().assertBody().is("");
+		client().build().post("/formData").formData(null,null).run().assertBody().is("");
 	}
 
 	@Test
