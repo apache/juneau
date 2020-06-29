@@ -2395,7 +2395,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDataPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new RuntimeException("Odd number of parameters passed into formDataPairs(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			formDatas(serializedNameValuePair(pairs[i], pairs[i+1], FORMDATA, null, null));
 		return this;

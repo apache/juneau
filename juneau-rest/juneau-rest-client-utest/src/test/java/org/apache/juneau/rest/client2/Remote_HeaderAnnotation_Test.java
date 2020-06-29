@@ -83,7 +83,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void a01_objectTypes() throws Exception {
-		A1 x = MockRestClient.build(A.class).getRemote(A1.class);
+		A1 x = remote(A.class, A1.class);
 		assertEquals("{x:'1'}", x.getX1(1));
 		assertEquals("{x:'1.0'}", x.getX2(1));
 		assertEquals("{x:'f=1'}", x.getX3(Bean.create()));
@@ -98,8 +98,8 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{k1:'f=1'}", x.getX12(AMap.of("k1",Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}", x.getX13(AMap.of("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}", x.getX14(AMap.of("k1",Bean.create())));
-		assertEquals("{foo:'bar'}", x.getX15(new NameValuePairs().append("foo", "bar")));
-		assertEquals("{foo:'bar'}", x.getX16(new NameValuePairs().append("foo", "bar")));
+		assertEquals("{foo:'bar'}", x.getX15(pairs("foo", "bar")));
+		assertEquals("{foo:'bar'}", x.getX16(pairs("foo", "bar")));
 	}
 
 	//=================================================================================================================
@@ -125,7 +125,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void b01_default_allowEmptyValue() throws Exception {
-		B1 x = MockRestClient.build(B.class).getRemote(B1.class);
+		B1 x = remote(B.class, B1.class);
 		assertEquals("{x:'foo'}", x.getX1(null));
 		assertThrown(()->{x.getX1("");}).contains("Empty value not allowed");
 		assertEquals("{x:'foo'}", x.getX2(null));
@@ -162,7 +162,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void c01_collectionFormat() throws Exception {
-		C1 x = MockRestClient.build(C.class).getRemote(C1.class);
+		C1 x = remote(C.class, C1.class);
 		assertEquals("{x:'foo,bar'}", x.getX1("foo","bar"));
 		assertEquals("{x:'foo,bar'}", x.getX2("foo","bar"));
 		assertEquals("{x:'foo bar'}", x.getX3("foo","bar"));
@@ -233,7 +233,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void d01_min_max_emin_emax() throws Exception {
-		D1 x = MockRestClient.build(D.class).getRemote(D1.class);
+		D1 x = remote(D.class, D1.class);
 		assertEquals("{x:'1'}", x.getX1(1));
 		assertEquals("{x:'10'}", x.getX1(10));
 		assertThrown(()->{x.getX1(0);}).contains("Minimum value not met");
@@ -447,7 +447,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void e01_mini_maxi_ui() throws Exception {
-		E1 x = MockRestClient.build(E.class).getRemote(E1.class);
+		E1 x = remote(E.class, E1.class);
 		assertEquals("{x:'1'}", x.getX1("1"));
 		assertEquals("{x:'1|2'}", x.getX1("1","2"));
 		assertThrown(()->{x.getX1();}).contains("Minimum number of items not met");
@@ -491,7 +491,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void f01_minl_maxl_enum_p() throws Exception {
-		F1 x = MockRestClient.build(F.class).getRemote(F1.class);
+		F1 x = remote(F.class, F1.class);
 		assertEquals("{x:'12'}", x.getX1("12"));
 		assertEquals("{x:'123'}", x.getX1("123"));
 		assertThrown(()->{x.getX1("1");}).contains("Minimum length of value not met");
@@ -549,7 +549,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void g01_multipleOf() throws Exception {
-		G1 x = MockRestClient.build(G.class).getRemote(G1.class);
+		G1 x = remote(G.class, G1.class);
 		assertEquals("{x:'4'}", x.getX1(4));
 		assertThrown(()->{x.getX1(5);}).contains("Multiple-of not met");
 		assertEquals("{x:'4'}", x.getX2((short)4));
@@ -594,7 +594,7 @@ public class Remote_HeaderAnnotation_Test {
 	}
 
 	@Remote
-	public static interface HR {
+	public static interface H1 {
 		@RemoteMethod(path="/") String getX1(@Header(n="x") String b);
 		@RemoteMethod(path="/") String getX2(@Header(n="x",r=false) String b);
 		@RemoteMethod(path="/") String getX3(@Header(n="x",r=true) String b);
@@ -602,7 +602,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void h01_required() throws Exception {
-		HR x = MockRestClient.build(H.class).getRemote(HR.class);
+		H1 x = remote(H.class, H1.class);
 		assertEquals("{}", x.getX1(null));
 		assertEquals("{}", x.getX2(null));
 		assertEquals("{x:'1'}", x.getX3("1"));
@@ -631,7 +631,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void h01_skipIfEmpty() throws Exception {
-		I1 x = MockRestClient.build(I.class).getRemote(I1.class);
+		I1 x = remote(I.class, I1.class);
 		assertEquals("{x:''}", x.getX1(""));
 		assertEquals("{x:''}", x.getX2(""));
 		assertEquals("{}", x.getX3(""));
@@ -657,7 +657,7 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void j01_serializer() throws Exception {
-		J1 x = MockRestClient.build(J.class).getRemote(J1.class);
+		J1 x = remote(J.class, J1.class);
 		assertEquals("{x:'xXx'}", x.getX1("X"));
 	}
 
@@ -728,8 +728,8 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void k01_requestBean_simpleVals() throws Exception {
-		K1 x1 = MockRestClient.build(K.class).getRemote(K1.class);
-		K1 x2 = MockRestClient.create(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
+		K1 x1 = remote(K.class, K1.class);
+		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123',i1:'foo'}", x1.getX1(new K1a()));
 		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\'',i1:'foo'}", x2.getX1(new K1a()));
 		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x',i1:'xfoox'}", x2.getX2(new K1a()));
@@ -766,8 +766,8 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void k02_requestBean_maps() throws Exception {
-		K2 x1 = MockRestClient.build(K.class).getRemote(K2.class);
-		K2 x2 = MockRestClient.create(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
+		K2 x1 = remote(K.class, K2.class);
+		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a:'a1=v1,a2=123,a3=null,a4=',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", x1.getX1(new K2a()));
 		assertEquals("{a:'(a1=v1,a2=123,a3=null,a4=\\'\\')',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'123',c4:''}", x2.getX1(new K2a()));
 		assertEquals("{a:'x{a1:\\'v1\\',a2:123,a3:null,a4:\\'\\'}x',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", x2.getX2(new K2a()));
@@ -786,15 +786,15 @@ public class Remote_HeaderAnnotation_Test {
 	public static class K3a {
 		@Header(aev=true)
 		public NameValuePairs getA() {
-			return new NameValuePairs().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
+			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Header(value="*",aev=true)
 		public NameValuePairs getB() {
-			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
+			return pairs("b1","true","b2","123","b3","null");
 		}
 		@Header(n="*",aev=true)
 		public NameValuePairs getC() {
-			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
+			return pairs("c1","v1","c2", 123,"c3",null,"c4","");
 		}
 		@Header(value="*",aev=true)
 		public NameValuePairs getD() {
@@ -802,18 +802,18 @@ public class Remote_HeaderAnnotation_Test {
 		}
 		@Header(aev=true)
 		public NameValuePair[] getE() {
-			return new NameValuePairs().append("e1","v1").append("e2", 123).append("e3", null).append("e4", "").toArray(new NameValuePair[0]);
+			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new NameValuePair[0]);
 		}
 		@Header(aev=true)
 		public BasicNameValuePair[] getF() {
-			return new NameValuePairs().append("f1","v1").append("f2", 123).append("f3", null).append("f4", "").toArray(new BasicNameValuePair[0]);
+			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
 		}
 	}
 
 	@Test
 	public void k03_requestBean_nameValuePairs() throws Exception {
-		K3 x1 = MockRestClient.build(K.class).getRemote(K3.class);
-		K3 x2 = MockRestClient.create(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
+		K3 x1 = remote(K.class, K3.class);
+		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}", x1.getX1(new K3a()));
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}", x2.getX1(new K3a()));
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}", x2.getX2(new K3a()));
@@ -870,10 +870,26 @@ public class Remote_HeaderAnnotation_Test {
 
 	@Test
 	public void k04_requestBean_collections() throws Exception {
-		K4 x1 = MockRestClient.build(K.class).getRemote(K4.class);
-		K4 x2 = MockRestClient.create(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
+		K4 x1 = remote(K.class, K4.class);
+		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
 		assertEquals("{a:'foo,,true,123,null,true,123,null',b:'foo,,true,123,null,true,123,null',c:'foo||true|123|null|true|123|null',d:'',f:'foo,,true,123,null,true,123,null',g:'foo||true|123|null|true|123|null',h:''}", x1.getX1(new K4a()));
 		assertEquals("{a:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',b:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',c:'foo||true|123|null|true|123|null',d:'@()',f:'@(foo,\\'\\',\\'true\\',\\'123\\',\\'null\\',true,123,null)',g:'foo||true|123|null|true|123|null',h:'@()'}", x2.getX1(new K4a()));
 		assertEquals("{a:'fooXXtrueX123XnullXtrueX123Xnull',b:'fooXXtrueX123XnullXtrueX123Xnull',c:'foo||true|123|null|true|123|null',d:'',f:'fooXXtrueX123XnullXtrueX123Xnull',g:'foo||true|123|null|true|123|null',h:''}", x2.getX2(new K4a()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static NameValuePairs pairs(Object...pairs) {
+		return NameValuePairs.of(pairs);
+	}
+
+	private static RestClientBuilder client(Class<?> c) {
+		return MockRestClient.create(c);
+	}
+
+	private static <T> T remote(Class<?> rest, Class<T> t) {
+		return MockRestClient.build(rest).getRemote(t);
 	}
 }

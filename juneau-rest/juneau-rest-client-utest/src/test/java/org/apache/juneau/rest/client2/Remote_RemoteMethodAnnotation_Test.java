@@ -66,7 +66,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void a01_inferredMethodsAndPaths() throws Exception {
-		A1 t = MockRestClient.build(A.class).getRemote(A1.class);
+		A1 t = remote(A.class, A1.class);
 		assertEquals("foo", t.doGet());
 		assertEquals("foo", t.doGET());
 		assertEquals("qux", t.doFoo());
@@ -85,7 +85,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void a02_inferredMethodsAndPaths_futures() throws Exception {
-		A2 t = MockRestClient.build(A.class).getRemote(A2.class);
+		A2 t = remote(A.class, A2.class);
 		assertEquals("foo", t.doGet().get());
 		assertEquals("foo", t.doGET().get());
 		assertEquals("qux", t.doFoo().get());
@@ -104,7 +104,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void a03_inferredMethodsAndPaths_completableFutures() throws Exception {
-		A3 t = MockRestClient.build(A.class).getRemote(A3.class);
+		A3 t = remote(A.class, A3.class);
 		assertEquals("foo", t.doGet().get());
 		assertEquals("foo", t.doGET().get());
 		assertEquals("qux", t.doFoo().get());
@@ -145,7 +145,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void b01_returnTypes() throws Exception {
-		B1 x = MockRestClient.build(B.class).getRemote(B1.class);
+		B1 x = remote(B.class, B1.class);
 		x.x1();
 		assertEquals("foo", x.x2());
 		assertEquals("foo", IOUtils.read(x.x3().getEntity().getContent()));
@@ -238,7 +238,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
-		D1 x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
+		D1 x = client(D.class).openApi().build().getRemote(D1.class);
 		assertEquals("foo", x.postX1("foo"));
 		assertEquals("foo", IOUtils.read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(x.postX3("foo")));
@@ -251,5 +251,17 @@ public class Remote_RemoteMethodAnnotation_Test {
 		assertEquals("foo", IOUtils.read(x.postX10("foo").get().getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(x.postX11("foo").get()));
 		assertEquals("foo", IOUtils.read(x.postX12("foo").get()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static RestClientBuilder client(Class<?> c) {
+		return MockRestClient.create(c).simpleJson();
+	}
+
+	private static <T> T remote(Class<?> rest, Class<T> t) {
+		return MockRestClient.build(rest).getRemote(t);
 	}
 }

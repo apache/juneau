@@ -57,9 +57,17 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		A1 x = MockRestClient.build(A.class).getRemote(A2.class).get();
+		A1 x = remote(A.class, A2.class).get();
 		assertEquals("foo", IOUtils.read(x.getBody()));
 		assertEquals("x", x.getHeader());
 		assertEquals(201, x.getStatus());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static <T> T remote(Class<?> rest, Class<T> t) {
+		return MockRestClient.build(rest).getRemote(t);
 	}
 }

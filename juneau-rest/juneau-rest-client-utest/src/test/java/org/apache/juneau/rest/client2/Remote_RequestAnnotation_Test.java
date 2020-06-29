@@ -77,7 +77,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		A2 x = MockRestClient.build(A.class).getRemote(A2.class);
+		A2 x = remote(A.class, A2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new A1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
@@ -133,7 +133,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Test
 	public void b01_annotationOnParent() throws Exception {
-		B3 x = MockRestClient.build(B.class).getRemote(B3.class);
+		B3 x = remote(B.class, B3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new B2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
@@ -189,7 +189,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Test
 	public void c01_annotationOnInterface() throws Exception {
-		C3 x = MockRestClient.build(C.class).getRemote(C3.class);
+		C3 x = remote(C.class, C3.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new C2()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
@@ -237,7 +237,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Test
 	public void d01_annotationOnParameter() throws Exception {
-		D2 x = MockRestClient.build(D.class).getRemote(D2.class);
+		D2 x = remote(D.class, D2.class);
 		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}", x.post(new D1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
 	}
@@ -286,8 +286,16 @@ public class Remote_RequestAnnotation_Test {
 
 	@Test
 	public void e01_partSerializer() throws Exception {
-		E2 x = MockRestClient.build(E.class).getRemote(E2.class);
+		E2 x = remote(E.class, E2.class);
 		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}", x.post(new E1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", x.post(null));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static <T> T remote(Class<?> rest, Class<T> t) {
+		return MockRestClient.build(rest).getRemote(t);
 	}
 }

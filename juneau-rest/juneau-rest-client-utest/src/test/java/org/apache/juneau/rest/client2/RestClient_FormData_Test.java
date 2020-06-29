@@ -17,6 +17,7 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.AddFlag.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
@@ -45,113 +46,117 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a01_formData() throws Exception {
-		client().formData("Foo","bar").formData("Foo",new StringBuilder("baz")).build().post("/formData").run().assertBody().is("Foo=bar&Foo=baz");
-		client().build().post("/formData").formData("Foo","bar").formData("Foo",new StringBuilder("baz")).run().assertBody().is("Foo=bar&Foo=baz");
+		client().formData("foo","bar").formData("foo",new StringBuilder("baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formData("foo","bar").formData("foo",new StringBuilder("baz")).run().assertBody().is("foo=bar&foo=baz");
+
+		client().formData(pair("foo", "bar")).build().post("/formData").formData(pair("foo", "baz")).run().assertBody().is("foo=bar&foo=baz");
+
+		client().formData(pair("foo", "bar")).build().post("/formData").formData(APPEND,"foo","baz").run().assertBody().is("foo=bar&foo=baz");
+		client().formData(pair("foo", "bar")).build().post("/formData").formData(PREPEND,"foo","baz").run().assertBody().is("foo=baz&foo=bar");
+		client().formData(pair("foo", "bar")).build().post("/formData").formData(REPLACE,"foo","baz").run().assertBody().is("foo=baz");
 	}
 
 	@Test
 	public void a02_formDatas() throws Exception {
-		client().formDatas(pair("Foo","f1")).formDatas(OMap.of("Foo","f2")).formDatas(AMap.of("Foo","f3")).formDatas(pairs("Foo","f4","Foo","f5")).formDatas(pair("Foo","f6"), pair("Foo","f7")).formDatas((Object)new NameValuePair[]{pair("Foo","f8")}).build().post("/formData").run().assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7&Foo=f8");
-		client().build().post("/formData").formDatas(pair("Foo","f1")).formDatas(OMap.of("Foo","f2")).formDatas(AMap.of("Foo","f3")).formDatas(pairs("Foo","f4","Foo","f5")).formDatas(pair("Foo","f6"), pair("Foo","f7")).formDatas((Object)new NameValuePair[]{pair("Foo","f8")}).run().assertBody().is("Foo=f1&Foo=f2&Foo=f3&Foo=f4&Foo=f5&Foo=f6&Foo=f7&Foo=f8");
+		client().formDatas(pair("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(OMap.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(AMap.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(pairs("foo","bar","foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas(pair("foo","bar"), pair("foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas((Object)new NameValuePair[]{pair("foo","bar")}).build().post("/formData").run().assertBody().is("foo=bar");
+
+		client().build().post("/formData").formDatas(pair("foo","bar")).run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(OMap.of("foo","bar")).run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(AMap.of("foo","bar")).run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas(pair("foo","bar"), pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
+
+		client().build().post("/formData").formDatas(ABean.get()).run().assertBody().is("f=1");
+
+		client().formDatas(pair("foo","bar"), null).build().post("/formData").run().assertBody().is("foo=bar");
+		client().build().post("/formData").formDatas(pair("foo","bar"), null).run().assertBody().is("foo=bar");
+		client().formDatas(pair("foo",null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(pair(null,"foo")).build().post("/formData").run().assertBody().is("null=foo");
+		client().formDatas(pair(null,null)).build().post("/formData").run().assertBody().is("");
+
+		client().build().post("/formData").formDatas(pair("foo",null)).run().assertBody().is("");
+		client().build().post("/formData").formDatas(pair(null,"foo")).run().assertBody().is("null=foo");
+		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
+
+		client().formDatas(SerializedHeader.create().name("foo").value("bar")).build().post("/formData").run().assertBody().is("foo=bar");
+
+		assertThrown(()->{client().build().post("/formData").formDatas("bad");}).is("Invalid type passed to formDatas(): java.lang.String");
+		assertThrown(()->{client().formDatas(pair("foo","bar"), "baz");}).is("Invalid type passed to formData():  java.lang.String");
 	}
 
 	@Test
-	public void a03_formData_withSchema() throws Exception {
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-		client().build().post("/formData").formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
+	public void a03_formDataPairs() throws Exception {
+		List<String> l1 = AList.of("bar1","bar2"), l2 = AList.of("qux1","qux2");
 
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData("Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz&Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=bar|baz&Foo=qux|quux");
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(APPEND,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz&Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=bar|baz&Foo=qux|quux");
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(PREPEND,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=qux%7Cquux&Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=qux|quux&Foo=bar|baz");
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES).build().post("/formData").formData(REPLACE,"Foo",AList.of("qux","quux"), T_ARRAY_PIPES).run().assertBody().is("Foo=qux%7Cquux").assertBody().urlDecodedIs("Foo=qux|quux");
+		client().formDataPairs("foo","bar","baz","qux").build().post("/formData").run().assertBody().is("foo=bar&baz=qux");
+		client().formDataPairs("foo",l1,"baz",l2).build().post("/formData").run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+
+		client().build().post("/formData").formDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
+		client().build().post("/formData").formDataPairs("foo",l1,"baz",l2).run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
+
+		assertThrown(()->{client().formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs()");
+		assertThrown(()->{client().build().post("").formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs()");
 	}
 
 	@Test
-	public void a03_formData_withSchemaAndSerializer() throws Exception {
-		client().formData("Foo",AList.of("bar","baz"), T_ARRAY_PIPES, UonSerializer.DEFAULT).build().post("/formData").run().assertBody().urlDecodedIs("Foo=@(bar,baz)");
+	public void a04_formData_withSchema() throws Exception {
+		List<String> l1 = AList.of("bar","baz"), l2 = AList.of("qux","quux");
+
+		client().formData("foo",l1, T_ARRAY_PIPES).build().post("/formData").run().assertBody().urlDecode().is("foo=bar|baz");
+		client().build().post("/formData").formData("foo",l1, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz");
+
+		client().formData("foo",l1, T_ARRAY_PIPES).build().post("/formData").formData("foo",l2, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz&foo=qux|quux");
+		client().formData("foo",l1, T_ARRAY_PIPES).build().post("/formData").formData(APPEND,"foo",l2, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz&foo=qux|quux");
+		client().formData("foo",l1, T_ARRAY_PIPES).build().post("/formData").formData(PREPEND,"foo",l2, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=qux|quux&foo=bar|baz");
+		client().formData("foo",l1, T_ARRAY_PIPES).build().post("/formData").formData(REPLACE,"foo",l2, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=qux|quux");
+
+		client().formData("foo",l1, T_ARRAY_PIPES, UonSerializer.DEFAULT).build().post("/formData").run().assertBody().urlDecode().is("foo=@(bar,baz)");
 	}
 
 	@Test
-	public void a04_formData_withSupplier() throws Exception {
+	public void a05_formData_withSupplier() throws Exception {
 		TestSupplier s = TestSupplier.of(null);
 
-		RestClient x1 = client().formData("Foo", s).build();
+		RestClient x1 = client().formData("foo", s).build();
 		s.set(OList.of("foo","bar"));
-		x1.post("/formData").run().assertBody().is("Foo=foo%2Cbar").assertBody().urlDecodedIs("Foo=foo,bar");
+		x1.post("/formData").run().assertBody().is("foo=foo%2Cbar").assertBody().urlDecode().is("foo=foo,bar");
 		s.set(OList.of("bar","baz"));
-		x1.post("/formData").run().assertBody().is("Foo=bar%2Cbaz").assertBody().urlDecodedIs("Foo=bar,baz");
+		x1.post("/formData").run().assertBody().is("foo=bar%2Cbaz").assertBody().urlDecode().is("foo=bar,baz");
 
 		RestClient x2 = client().build();
 		s.set(OList.of("foo","bar"));
-		x2.post("/formData").formData("Foo", s).run().assertBody().is("Foo=foo%2Cbar").assertBody().urlDecodedIs("Foo=foo,bar");
+		x2.post("/formData").formData("foo", s).run().assertBody().is("foo=foo%2Cbar").assertBody().urlDecode().is("foo=foo,bar");
 		s.set(OList.of("bar","baz"));
-		x2.post("/formData").formData("Foo", s).run().assertBody().is("Foo=bar%2Cbaz").assertBody().urlDecodedIs("Foo=bar,baz");
-	}
+		x2.post("/formData").formData("foo", s).run().assertBody().is("foo=bar%2Cbaz").assertBody().urlDecode().is("foo=bar,baz");
 
-	@Test
-	public void a05_formData_withSupplierAndSerializer() throws Exception {
-		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
-		RestClient x = client().formData("Foo", s, T_ARRAY_PIPES, new K12a()).build();
-		x.post("/formData").run().assertBody().is("Foo=x%5B%27foo%27%2C%27bar%27%5D").assertBody().urlDecodedIs("Foo=x['foo','bar']");
+		s = TestSupplier.of(OList.of("foo","bar"));
+		RestClient x = client().formData("foo", s, T_ARRAY_PIPES, new K12a()).build();
+		x.post("/formData").run().assertBody().is("foo=x%5B%27foo%27%2C%27bar%27%5D").assertBody().urlDecode().is("foo=x['foo','bar']");
 		s.set(OList.of("bar","baz"));
-		x.post("/formData").run().assertBody().is("Foo=x%5B%27bar%27%2C%27baz%27%5D").assertBody().urlDecodedIs("Foo=x['bar','baz']");
+		x.post("/formData").run().assertBody().is("foo=x%5B%27bar%27%2C%27baz%27%5D").assertBody().urlDecode().is("foo=x['bar','baz']");
 	}
 
 	@Test
 	public void a06_formData_withSupplierAndSchema() throws Exception {
 		TestSupplier s = TestSupplier.of(null);
 
-		RestClient x1 = client().formData("Foo", s, T_ARRAY_PIPES).build();
+		RestClient x1 = client().formData("foo", s, T_ARRAY_PIPES).build();
 		s.set(AList.of("foo","bar"));
-		x1.post("/formData").run().assertBody().is("Foo=foo%7Cbar").assertBody().urlDecodedIs("Foo=foo|bar");
+		x1.post("/formData").run().assertBody().is("foo=foo%7Cbar").assertBody().urlDecode().is("foo=foo|bar");
 		s.set(AList.of("bar","baz"));
-		x1.post("/formData").run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
+		x1.post("/formData").run().assertBody().is("foo=bar%7Cbaz").assertBody().urlDecode().is("foo=bar|baz");
 
 		RestClient x2 = client().build();
 		s.set(AList.of("foo","bar"));
-		x2.post("/formData").formData("Foo", s, T_ARRAY_PIPES).run().assertBody().is("Foo=foo%7Cbar").assertBody().urlDecodedIs("Foo=foo|bar");
+		x2.post("/formData").formData("foo", s, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=foo|bar");
 		s.set(AList.of("bar","baz"));
-		x2.post("/formData").formData("Foo", s, T_ARRAY_PIPES).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-	}
-
-	@Test
-	public void a07_formDatas_withNulls() throws Exception {
-		client().formDatas(pair("Foo","bar"), null).build().post("/formData").run().assertBody().is("Foo=bar");
-		client().build().post("/formData").formDatas(pair("Foo","bar"), null).run().assertBody().is("Foo=bar");
-
-		client().formDatas(pair("Foo",null)).build().post("/formData").run().assertBody().is("");
-		client().formDatas(pair(null,"Foo")).build().post("/formData").run().assertBody().is("null=Foo");
-		client().formDatas(pair(null,null)).build().post("/formData").run().assertBody().is("");
-
-		client().build().post("/formData").formDatas(pair("Foo",null)).run().assertBody().is("");
-		client().build().post("/formData").formDatas(pair(null,"Foo")).run().assertBody().is("null=Foo");
-		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
-	}
-
-	@Test
-	public void a08_formDatas_invalid() throws Exception {
-		assertThrown(()->{client().formDatas(pair("Foo","bar"), "Baz");}).is("Invalid type passed to formData():  java.lang.String");
-	}
-
-	@Test
-	public void a09_formDataPairs() throws Exception {
-		client().formDataPairs("foo","bar","baz","qux").build().post("/formData").run().assertBody().is("foo=bar&baz=qux");
-		client().formDataPairs("foo",AList.of("bar1","bar2"),"baz",AList.of("qux1","qux2")).build().post("/formData").run().assertBody().is("foo=bar1%2Cbar2&baz=qux1%2Cqux2").assertBody().urlDecodedIs("foo=bar1,bar2&baz=qux1,qux2");
-	}
-
-	@Test
-	public void a10_formDataPairs_invalid() throws Exception {
-		assertThrown(()->{client().formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs(Object...)");
-	}
-
-	@Test
-	public void a11_formDatas_serializedHeaderBuilder() throws Exception {
-		client().formDatas(SerializedHeader.create().name("foo").value("bar")).build().post("/formData").run().assertBody().is("foo=bar");
-	}
-
-	@Test
-	public void a12_formData_NameValuePair() throws Exception {
-		client().formData(pair("foo", "bar")).build().post("/formData").formData(pair("foo", "baz")).run().assertBody().is("foo=bar&foo=baz");
+		x2.post("/formData").formData("foo", s, T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

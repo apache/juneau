@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.internal.*;
 
@@ -75,9 +76,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	@FluentSetter
 	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
-		if (text != null)
-			text = text.replaceAll(regex, replacement);
-		return this;
+		return apply(x -> x == null ? null : text.replaceAll(regex, replacement));
 	}
 
 	/**
@@ -89,8 +88,53 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	@FluentSetter
 	public FluentStringAssertion<R> replace(String target, String replacement) {
-		if (text != null)
-			text = text.replace(target, replacement);
+		return apply(x -> x == null ? null : text.replace(target, replacement));
+	}
+
+	/**
+	 * URL-decodes the text in this assertion.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> urlDecode() {
+		return apply(x->StringUtils.urlDecode(x));
+	}
+
+	/**
+	 * Sorts the contents of the text by lines.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> sort() {
+		return apply(x->x == null ? null : Arrays.asList(x.trim().split("[\r\n]+")).stream().sorted().collect(Collectors.joining("\n")));
+	}
+
+	/**
+	 * Converts the text to lowercase.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> lc() {
+		return apply(x->x == null ? null : x.toLowerCase());
+	}
+
+	/**
+	 * Converts the text to uppercase.
+	 *
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> uc() {
+		return apply(x->x == null ? null : x.toUpperCase());
+	}
+
+	/**
+	 * Applies an abitrary function against the text in this assertion.
+	 *
+	 * @param f The function to apply.
+	 * @return The response object (for method chaining).
+	 */
+	public FluentStringAssertion<R> apply(Function<String,String> f) {
+		text = f.apply(text);
 		return this;
 	}
 
@@ -223,20 +267,6 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R is(String...value) throws AssertionError {
 		return equals(value);
-	}
-
-	/**
-	 * Asserts that the text equals the specified value after the text has been URL-decoded.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R urlDecodedIs(String value) throws AssertionError {
-		String t = urlDecode(text);
-		if (! isEqualsIc(value, t))
-			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(t));
-		return returns();
 	}
 
 	/**

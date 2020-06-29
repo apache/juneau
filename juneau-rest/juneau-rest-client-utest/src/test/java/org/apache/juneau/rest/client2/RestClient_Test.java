@@ -1410,14 +1410,14 @@ public class RestClient_Test {
 
 	@Test
 	public void n01_openApi_oapiFormat() throws Exception {
-		MockRestClient.create(A.class).oapiFormat(HttpPartFormat.UON).build().get("/checkQuery").query("Foo", "bar baz").run().assertBody().is("Foo=%27bar+baz%27").assertBody().urlDecodedIs("Foo='bar baz'");
+		MockRestClient.create(A.class).oapiFormat(HttpPartFormat.UON).build().get("/checkQuery").query("Foo", "bar baz").run().assertBody().is("Foo=%27bar+baz%27").assertBody().urlDecode().is("Foo='bar baz'");
 	}
 
 	@Test
 	public void n02_openApi_oapiCollectionFormat() throws Exception {
 		RestClient x = MockRestClient.create(A.class).oapiCollectionFormat(HttpPartCollectionFormat.PIPES).build();
-		x.get("/checkQuery").query("Foo", new String[]{"bar","baz"}).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
-		x.post("/checkFormData").formData("Foo", new String[]{"bar","baz"}).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecodedIs("Foo=bar|baz");
+		x.get("/checkQuery").query("Foo", new String[]{"bar","baz"}).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecode().is("Foo=bar|baz");
+		x.post("/checkFormData").formData("Foo", new String[]{"bar","baz"}).run().assertBody().is("Foo=bar%7Cbaz").assertBody().urlDecode().is("Foo=bar|baz");
 		x.get("/checkHeader").header("Check", "Foo").header("Foo", new String[]{"bar","baz"}).accept("text/json+simple").run().assertBody().is("['bar|baz']");
 	}
 
@@ -1451,9 +1451,9 @@ public class RestClient_Test {
 		x1.post("/echoBody", new O1()).run().assertBody().is("'O1'");
 		x2.post("/echoBody", new O1()).run().assertBody().is("{f:1}");
 		x1.get("/checkQuery").query("foo", new O1()).run().assertBody().is("foo=O1");
-		x2.get("/checkQuery").query("foo", new O1()).run().assertBody().is("foo=f%3D1").assertBody().urlDecodedIs("foo=f=1");
+		x2.get("/checkQuery").query("foo", new O1()).run().assertBody().is("foo=f%3D1").assertBody().urlDecode().is("foo=f=1");
 		x1.formPost("/checkFormData").formData("foo", new O1()).run().assertBody().is("foo=O1");
-		x2.formPost("/checkFormData").formData("foo", new O1()).run().assertBody().is("foo=f%3D1").assertBody().urlDecodedIs("foo=f=1");
+		x2.formPost("/checkFormData").formData("foo", new O1()).run().assertBody().is("foo=f%3D1").assertBody().urlDecode().is("foo=f=1");
 		x1.get("/checkHeader").header("foo", new O1()).header("Check", "foo").run().assertBody().is("['O1']");
 		x2.get("/checkHeader").header("foo", new O1()).header("Check", "foo").run().assertBody().is("['f=1']");
 	}
