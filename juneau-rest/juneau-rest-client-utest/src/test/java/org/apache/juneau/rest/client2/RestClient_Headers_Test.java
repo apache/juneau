@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
 
 import java.util.*;
@@ -22,16 +23,18 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.RestClient_Test.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class RestClient_Headers_Test {
 
 	public static class ABean {
@@ -47,7 +50,7 @@ public class RestClient_Headers_Test {
 		}
 	}
 
-	public static ABean bean = ABean.get();
+	private static ABean bean = ABean.get();
 
 	@Rest
 	public static class A extends BasicRest {
@@ -152,9 +155,21 @@ public class RestClient_Headers_Test {
 		x.get("/headers").header("Foo",s).run().assertBody().is("['bar','bar']");
 	}
 
+	public static class A8 extends SimplePartSerializer {
+		@Override
+		public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new SimplePartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+					return "x" + SimpleJson.DEFAULT.toString(value);
+				}
+			};
+		}
+	}
+
 	@Test
 	public void a09_headers_String_Object_Schema_Serializer() throws Exception {
-		checkFooClient().header("Foo",bean,null,new K12a()).build().get("/headers").run().assertBody().is("['x{f:1}']");
+		checkFooClient().header("Foo",bean,null,new A8()).build().get("/headers").run().assertBody().is("['x{f:1}']");
 	}
 
 	@Test

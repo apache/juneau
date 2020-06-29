@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.junit.runners.MethodSorters.*;
 
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
@@ -23,18 +24,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
+@FixMethodOrder(NAME_ASCENDING)
 public class RestClient_Paths_Test {
-
-	public static class ABean {
-		public int f;
-		static ABean get() {
-			ABean x = new ABean();
-			x.f = 1;
-			return x;
-		}
-	}
-
-	public static ABean bean = ABean.get();
 
 	@Rest
 	public static class A extends BasicRest {
