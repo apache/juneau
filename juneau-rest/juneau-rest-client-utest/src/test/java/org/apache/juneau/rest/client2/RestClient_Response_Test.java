@@ -16,49 +16,90 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.*;
-
+import org.apache.http.*;
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client2.RestRequest;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RestClient_Config_Parser_Test {
+public class RestClient_Response_Test {
+
+	public static class ABean {
+		public int f;
+		static ABean get() {
+			ABean x = new ABean();
+			x.f = 1;
+			return x;
+		}
+	}
+
+	private static ABean bean = ABean.get();
 
 	@Rest
 	public static class A extends BasicRest {
-		@RestMethod(path="/echoBody")
-		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
+		@RestMethod(path="/bean")
+		public ABean getBean() {
+			return bean;
+		}
+	}
+
+	public static class A1 extends MockRestClient {
+		public A1(PropertyStore ps) {
+			super(ps);
+		}
+		@Override
+		protected MockRestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
+			return new MockRestResponse(this, request, null, parser);
 		}
 	}
 
 	@Test
-	public void a01_debugOutputLines() throws Exception {
-		RestClient rc = client().debugOutputLines(10).build();
-		assertEquals(10,rc.parsers.getParser("application/json").toMap().getMap("Parser").getInt("debugOutputLines").intValue());
-	}
-
-	public static class A2 {
-		public int f;
+	public void a01_getStatusLine() throws RestCallException {
+		assertEquals(200,client().build().get("/bean").run().getStatusLine().getStatusCode());
+		assertThrown(()->client().build(A1.class).get("/bean").run()).contains("caused response code '0, null'");
+		assertEquals(0,client().ignoreErrors().build(A1.class).get("/bean").run().getStatusLine().getStatusCode());
 	}
 
 	@Test
-	public void a02_parser_strict() throws Exception {
-		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",new StringReader("{f:1}")).run().getBody().as(A2.class)).contains("Unquoted attribute detected.");
-	}
-
-	public static class A3 {
-		public String f;
+	public void a02_getStatusLine_Mutable() throws RestCallException {
+		Mutable<StatusLine> m = Mutable.create();
+		client().build().get("/bean").run().getStatusLine(m);
+		assertEquals(200,m.get().getStatusCode());
 	}
 
 	@Test
-	public void a03_parser_trimStringsOnRead() throws Exception {
-		A3 x = client().trimStringsOnRead().build().post("/echoBody",new StringReader("{f:' 1 '}")).run().getBody().as(A3.class);
-		assertEquals("1",x.f);
+	public void a03_getStatusCode() throws RestCallException {
+		assertEquals(200,client().build().get("/bean").run().getStatusCode());
 	}
 
+	@Test
+	public void a04_getStatusCode_Mutable() throws RestCallException {
+		Mutable<Integer> m = Mutable.create();
+		client().build().get("/bean").run().getStatusCode(m);
+		assertEquals(200,m.get().intValue());
+	}
+
+	@Test
+	public void a05_getReasonPhrase() throws RestCallException {
+		assertNull(client().build().get("/bean").run().getReasonPhrase());
+	}
+
+	@Test
+	public void a06_getReasonPhrase_Mutable() throws RestCallException {
+		Mutable<String> m = Mutable.create();
+		client().build().get("/bean").run().getReasonPhrase(m);
+		assertNull(m.get());
+	}
+
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Response headers.
+	//------------------------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.

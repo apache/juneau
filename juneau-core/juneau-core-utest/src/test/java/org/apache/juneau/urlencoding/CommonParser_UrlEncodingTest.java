@@ -113,7 +113,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		assertThrown(()->{UrlEncodingParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
+		assertThrown(()->UrlEncodingParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
 	}
 
 	public static class B {

@@ -121,7 +121,7 @@ public class CommonParserTest {
 		assertEquals(b.a, 1);
 		assertEquals(b.b, 2);
 
-		assertThrown(()->{JsonParser.DEFAULT.parse(in, B.class);}).isType(ParseException.class);
+		assertThrown(()->JsonParser.DEFAULT.parse(in, B.class)).isType(ParseException.class);
 	}
 
 	public static class B {

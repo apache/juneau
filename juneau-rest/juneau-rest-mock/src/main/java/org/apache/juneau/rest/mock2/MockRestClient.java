@@ -30,10 +30,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestCallHandler;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client2.RestRequest;
 
 /**
  * Mocked {@link RestClient}.
@@ -627,6 +629,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return new MockRestRequest(this, uri, method, hasBody);
 	}
 
+	@Override /* RestClient */
+	protected MockRestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		return new MockRestResponse(this, req, httpResponse, parser);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// HttpClientConnection methods.
 	//------------------------------------------------------------------------------------------------------------------
@@ -706,7 +713,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
-	/** 
+	/**
 	 * Attempts to unwrap the request to find the underlying RestRequest object.
 	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).
 	 */

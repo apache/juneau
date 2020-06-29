@@ -52,7 +52,7 @@ public class ConfigTest {
 		assertNull(c.get("b"));
 		assertNull(c.get("S/c"));
 		assertNull(c.get("T/d"));
-		assertThrown(()->{c.get(null);}).is("Field 'key' cannot be null.");
+		assertThrown(()->c.get(null)).is("Field 'key' cannot be null.");
 		c.close();
 	}
 
@@ -291,10 +291,10 @@ public class ConfigTest {
 	@Test
 	public void getInt1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->{c.getInt("a1");}).exists();
-		assertThrown(()->{c.getInt("a2");}).exists();
-		assertThrown(()->{c.getInt("a3");}).exists();
-		assertThrown(()->{c.getInt("a4");}).exists();
+		assertThrown(()->c.getInt("a1")).exists();
+		assertThrown(()->c.getInt("a2")).exists();
+		assertThrown(()->c.getInt("a3")).exists();
+		assertThrown(()->c.getInt("a4")).exists();
 	}
 
 	//====================================================================================================
@@ -315,10 +315,10 @@ public class ConfigTest {
 	@Test
 	public void getInt2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->{c.getInt("a1", -1);}).exists();
-		assertThrown(()->{c.getInt("a2", -1);}).exists();
-		assertThrown(()->{c.getInt("a3", -1);}).exists();
-		assertThrown(()->{c.getInt("a4", -1);}).exists();
+		assertThrown(()->c.getInt("a1", -1)).exists();
+		assertThrown(()->c.getInt("a2", -1)).exists();
+		assertThrown(()->c.getInt("a3", -1)).exists();
+		assertThrown(()->c.getInt("a4", -1)).exists();
 	}
 
 	//====================================================================================================
@@ -387,10 +387,10 @@ public class ConfigTest {
 	@Test
 	public void getLong1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->{c.getLong("a1");}).exists();
-		assertThrown(()->{c.getLong("a2");}).exists();
-		assertThrown(()->{c.getLong("a3");}).exists();
-		assertThrown(()->{c.getLong("a4");}).exists();
+		assertThrown(()->c.getLong("a1")).exists();
+		assertThrown(()->c.getLong("a2")).exists();
+		assertThrown(()->c.getLong("a3")).exists();
+		assertThrown(()->c.getLong("a4")).exists();
 	}
 
 	//====================================================================================================
@@ -412,10 +412,10 @@ public class ConfigTest {
 	public void getLong2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
 
-		assertThrown(()->{c.getLong("a1", -1l);}).isType(NumberFormatException.class);
-		assertThrown(()->{c.getLong("a2", -1l);}).isType(NumberFormatException.class);
-		assertThrown(()->{c.getLong("a3", -1l);}).isType(NumberFormatException.class);
-		assertThrown(()->{c.getLong("a4", -1l);}).isType(NumberFormatException.class);
+		assertThrown(()->c.getLong("a1", -1l)).isType(NumberFormatException.class);
+		assertThrown(()->c.getLong("a2", -1l)).isType(NumberFormatException.class);
+		assertThrown(()->c.getLong("a3", -1l)).isType(NumberFormatException.class);
+		assertThrown(()->c.getLong("a4", -1l)).isType(NumberFormatException.class);
 	}
 
 	//====================================================================================================
@@ -800,7 +800,7 @@ public class ConfigTest {
 		assertObject(c.getKeys("S")).json().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
-		assertThrown(()->{c.getKeys(null);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.getKeys(null)).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -816,14 +816,14 @@ public class ConfigTest {
 		assertObject(a).json().is("{foo:'baz'}");
 		c.writeProperties("S", b, true);
 		assertObject(b).json().is("{foo:'baz'}");
-		assertThrown(()->{c.writeProperties("S", a, false);}).is("Unknown property 'bar' encountered in configuration section 'S'.");
-		assertThrown(()->{c.writeProperties("S", b, false);}).is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->c.writeProperties("S", a, false)).is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->c.writeProperties("S", b, false)).is("Unknown property 'bar' encountered in configuration section 'S'.");
 		c.writeProperties("", b, true);
 		assertObject(b).json().is("{foo:'qux'}");
 		c.writeProperties("", a, true);
 		assertObject(a).json().is("{foo:'qux'}");
 
-		assertThrown(()->{c.writeProperties(null, a, true);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.writeProperties(null, a, true)).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -850,10 +850,10 @@ public class ConfigTest {
 		b = c.getSectionAsBean("S", BBean.class);
 		assertObject(b).json().is("{foo:'baz'}");
 
-		assertThrown(()->{c.getSectionAsBean("T", ABean.class);}).is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->{c.getSectionAsBean("T", BBean.class);}).is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->{c.getSectionAsBean(null, ABean.class);}).is("Field 'section' cannot be null.");
-		assertThrown(()->{c.getSectionAsBean(null, BBean.class);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.getSectionAsBean("T", ABean.class)).is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSectionAsBean("T", BBean.class)).is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSectionAsBean(null, ABean.class)).is("Field 'section' cannot be null.");
+		assertThrown(()->c.getSectionAsBean(null, BBean.class)).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -871,8 +871,8 @@ public class ConfigTest {
 		b = c.getSectionAsBean("T", BBean.class, true);
 		assertObject(b).json().is("{foo:'qux'}");
 
-		assertThrown(()->{c.getSectionAsBean("T", ABean.class, false);}).is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->{c.getSectionAsBean("T", BBean.class, false);}).is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSectionAsBean("T", ABean.class, false)).is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSectionAsBean("T", BBean.class, false)).is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -888,7 +888,7 @@ public class ConfigTest {
 		assertObject(c.getSectionAsMap("T")).json().is("{}");
 		assertNull(c.getSectionAsMap("U"));
 
-		assertThrown(()->{c.getSectionAsMap(null);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.getSectionAsMap(null)).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -911,8 +911,8 @@ public class ConfigTest {
 		a = c.getSectionAsInterface("T", AInterface.class);
 		assertEquals("qux", a.getFoo());
 
-		assertThrown(()->{c.getSectionAsInterface("T", ABean.class);}).is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.");
-		assertThrown(()->{c.getSectionAsInterface(null, AInterface.class);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.getSectionAsInterface("T", ABean.class)).is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to getSectionAsInterface() is not an interface.");
+		assertThrown(()->c.getSectionAsInterface(null, AInterface.class)).is("Field 'section' cannot be null.");
 	}
 
 	public static interface AInterface {
@@ -956,7 +956,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList());
 		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
-		assertThrown(()->{c.setSection(null, Arrays.asList("", "#C5", "#C6"));}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"))).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -982,7 +982,7 @@ public class ConfigTest {
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
-		assertThrown(()->{c.setSection(null, Arrays.asList("", "#C5", "#C6"), m);}).is("Field 'section' cannot be null.");
+		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m)).is("Field 'section' cannot be null.");
 	}
 
 	//====================================================================================================

@@ -861,7 +861,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea02_setWrongInt() {
-		assertThrown(()->{proxy.setInt(2);}).contains("expected:<1> but was:<2>");
+		assertThrown(()->proxy.setInt(2)).contains("expected:<1> but was:<2>");
 	}
 
 	@Test
@@ -896,7 +896,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea09_setNullStringBad() {
-		assertThrown(()->{proxy.setNullString("foo");}).contains("expected null, but was:<foo>");
+		assertThrown(()->proxy.setNullString("foo")).contains("expected null, but was:<foo>");
 	}
 
 	@Test

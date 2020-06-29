@@ -125,7 +125,7 @@ public class InvalidXmlBeansTest {
 
 	@Test
 	public void test() {
-		assertThrown(()->{s1.serialize(in);}).is(expected);
+		assertThrown(()->s1.serialize(in)).is(expected);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

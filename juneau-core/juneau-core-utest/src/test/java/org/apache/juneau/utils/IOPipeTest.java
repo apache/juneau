@@ -30,10 +30,10 @@ public class IOPipeTest {
 	//====================================================================================================
 	@Test
 	public void testConstructor() throws Exception {
-		assertThrown(()->{IOPipe.create(null, new StringWriter());}).isType(IllegalArgumentException.class);
-		assertThrown(()->{IOPipe.create(new StringReader(""), null);}).isType(IllegalArgumentException.class);
-		assertThrown(()->{IOPipe.create(new Integer(1), new StringWriter());}).isType(IllegalArgumentException.class);
-		assertThrown(()->{IOPipe.create("", new Integer(1));}).isType(IllegalArgumentException.class);
+		assertThrown(()->IOPipe.create(null, new StringWriter())).isType(IllegalArgumentException.class);
+		assertThrown(()->IOPipe.create(new StringReader(""), null)).isType(IllegalArgumentException.class);
+		assertThrown(()->IOPipe.create(new Integer(1), new StringWriter())).isType(IllegalArgumentException.class);
+		assertThrown(()->IOPipe.create("", new Integer(1))).isType(IllegalArgumentException.class);
 	}
 
 	//====================================================================================================
@@ -280,6 +280,6 @@ public class IOPipeTest {
 		IOPipe.create(in, out).buffSize(1).run();
 		assertEquals("foobar", out.toString().replaceAll("[\\r\\n]", ""));
 
-		assertThrown(()->{IOPipe.create(in, out).buffSize(0);}).isType(IllegalArgumentException.class);
+		assertThrown(()->IOPipe.create(in, out).buffSize(0)).isType(IllegalArgumentException.class);
 	}
 }

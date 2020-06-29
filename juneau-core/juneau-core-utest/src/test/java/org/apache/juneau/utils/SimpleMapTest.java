@@ -36,15 +36,15 @@ public class SimpleMapTest {
 		assertObject(m).json().is("{a:'1',b:'B'}");
 		m.entrySet().iterator().next().setValue("2");
 		assertObject(m).json().is("{a:'2',b:'B'}");
-		assertThrown(()->{m.put("c", "1");}).isType(IllegalArgumentException.class);
+		assertThrown(()->m.put("c", "1")).isType(IllegalArgumentException.class);
 
 		assertNull(m.get("c"));
 
-		assertThrown(()->{new SimpleMap<>(null, vals);}).isType(IllegalArgumentException.class);
-		assertThrown(()->{new SimpleMap<>(keys, null);}).isType(IllegalArgumentException.class);
-		assertThrown(()->{new SimpleMap<>(keys, new Object[0]);}).isType(IllegalArgumentException.class);
+		assertThrown(()->new SimpleMap<>(null, vals)).isType(IllegalArgumentException.class);
+		assertThrown(()->new SimpleMap<>(keys, null)).isType(IllegalArgumentException.class);
+		assertThrown(()->new SimpleMap<>(keys, new Object[0])).isType(IllegalArgumentException.class);
 
 		keys[0] = null;
-		assertThrown(()->{new SimpleMap<>(keys, vals);}).isType(IllegalArgumentException.class);
+		assertThrown(()->new SimpleMap<>(keys, vals)).isType(IllegalArgumentException.class);
 	}
 }

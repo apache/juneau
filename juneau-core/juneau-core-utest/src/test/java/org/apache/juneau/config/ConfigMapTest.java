@@ -270,20 +270,20 @@ public class ConfigMapTest {
 
 		for (String t : test) {
 			ConfigStore s = initStore("Foo.cfg", t);
-			assertThrown(()->{s.getMap("Foo.cfg");}).contains("Invalid section name");
+			assertThrown(()->s.getMap("Foo.cfg")).contains("Invalid section name");
 		}
 	}
 
 	@Test
 	public void testDuplicateSectionNames() throws Exception {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "[S1]");
-		assertThrown(()->{s.getMap("Foo.cfg");}).is("Duplicate section found in configuration:  [S1]");
+		assertThrown(()->s.getMap("Foo.cfg")).is("Duplicate section found in configuration:  [S1]");
 	}
 
 	@Test
 	public void testDuplicateEntryNames() throws Exception {
 		ConfigStore s = initStore("Foo.cfg", "[S1]", "foo=v1", "foo=v2");
-		assertThrown(()->{s.getMap("Foo.cfg");}).is("Duplicate entry found in section [S1] of configuration:  foo");
+		assertThrown(()->s.getMap("Foo.cfg")).is("Duplicate entry found in section [S1] of configuration:  foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -634,7 +634,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			assertThrown(()->{cm.setSection(t, null);}).contains("Invalid section name");
+			assertThrown(()->cm.setSection(t, null)).contains("Invalid section name");
 		}
 	}
 
@@ -691,7 +691,7 @@ public class ConfigMapTest {
 		cm.removeSection("S3");
 		assertString(cm).replaceAll("\\r?\\n", "|").is("[S1]|k1 = v1|[S2]|k2 = v2|");
 
-		assertThrown(()->{cm.removeSection(null);}).is("Invalid section name: 'null'");
+		assertThrown(()->cm.removeSection(null)).is("Invalid section name: 'null'");
 	}
 
 	@Test
@@ -865,7 +865,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			assertThrown(()->{cm.setEntry(t, "k1", "foo", null, null, null);}).contains("Invalid section name:");
+			assertThrown(()->cm.setEntry(t, "k1", "foo", null, null, null)).contains("Invalid section name:");
 		}
 	}
 
@@ -886,7 +886,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			assertThrown(()->{cm.setEntry("S1", t, "foo", null, null, null);}).contains("Invalid key name");
+			assertThrown(()->cm.setEntry("S1", t, "foo", null, null, null)).contains("Invalid key name");
 		}
 	}
 
@@ -1051,7 +1051,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			assertThrown(()->{cm.setEntry(t, "k1", "foo", null, null, null);}).contains("Invalid section name");
+			assertThrown(()->cm.setEntry(t, "k1", "foo", null, null, null)).contains("Invalid section name");
 		}
 	}
 
@@ -1072,7 +1072,7 @@ public class ConfigMapTest {
 		};
 
 		for (String t : test) {
-			assertThrown(()->{cm.setEntry("S1", t, "foo", null, null, null);}).contains("Invalid key name");
+			assertThrown(()->cm.setEntry("S1", t, "foo", null, null, null)).contains("Invalid key name");
 		}
 	}
 
@@ -1127,8 +1127,8 @@ public class ConfigMapTest {
 		// This is okay.
 		cm.setEntry("S1", "k1", "v1", "", null, null);
 
-		assertThrown(()->{cm.setEntry("S1", "k1", "v1", "X", null, null);}).is("Invalid modifiers: X");
-		assertThrown(()->{cm.setEntry("S1", "k1", "v1", " ", null, null);}).is("Invalid modifiers:  ");
+		assertThrown(()->cm.setEntry("S1", "k1", "v1", "X", null, null)).is("Invalid modifiers: X");
+		assertThrown(()->cm.setEntry("S1", "k1", "v1", " ", null, null)).is("Invalid modifiers:  ");
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {

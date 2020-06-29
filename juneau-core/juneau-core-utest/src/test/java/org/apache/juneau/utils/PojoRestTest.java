@@ -291,9 +291,9 @@ public class PojoRestTest {
 	@Test
 	public void testRootLocked() throws Exception {
 		PojoRest model = new PojoRest(new AddressBook()).setRootLocked();
-		assertThrown(()->{model.put("", new AddressBook());}).is("Cannot overwrite root object");
-		assertThrown(()->{model.put(null, new AddressBook());}).is("Cannot overwrite root object");
-		assertThrown(()->{model.put("/", new AddressBook());}).is("Cannot overwrite root object");
+		assertThrown(()->model.put("", new AddressBook())).is("Cannot overwrite root object");
+		assertThrown(()->model.put(null, new AddressBook())).is("Cannot overwrite root object");
+		assertThrown(()->model.put("/", new AddressBook())).is("Cannot overwrite root object");
 	}
 
 	//====================================================================================================
@@ -456,9 +456,9 @@ public class PojoRestTest {
 		assertEquals(true, model.getBoolean("f8", true));
 
 		assertNull(model.getMap("f1"));
-		assertThrown(()->{model.getMap("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4")).isType(InvalidDataConversionException.class);
 		assertNull(model.getMap("f2a"));
 		assertNull(model.getMap("f3a"));
 		assertNull(model.getMap("f4a"));
@@ -468,9 +468,9 @@ public class PojoRestTest {
 		assertNull(model.getMap("f8"));
 
 		assertEquals("{a:'b'}", model.getMap("f1", m).toString());
-		assertThrown(()->{model.getMap("f2", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{a:'b'}", model.getMap("f2a", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f3a", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f4a", m).toString());
@@ -480,9 +480,9 @@ public class PojoRestTest {
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
 		assertNull(model.getMap("f1"));
-		assertThrown(()->{model.getOMap("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4")).isType(InvalidDataConversionException.class);
 		assertNull(model.getOMap("f2a"));
 		assertNull(model.getOMap("f3a"));
 		assertNull(model.getOMap("f4a"));
@@ -492,9 +492,9 @@ public class PojoRestTest {
 		assertNull(model.getOMap("f8"));
 
 		assertEquals("{a:'b'}", model.getOMap("f1", m).toString());
-		assertThrown(()->{model.getOMap("f2", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{a:'b'}", model.getOMap("f2a", m).toString());
 		assertEquals("{a:'b'}", model.getOMap("f3a", m).toString());
 		assertEquals("{a:'b'}", model.getOMap("f4a", m).toString());
@@ -504,9 +504,9 @@ public class PojoRestTest {
 		assertEquals("{a:'b'}", model.getOMap("f8", m).toString());
 
 		assertNull(model.getList("f1"));
-		assertThrown(()->{model.getList("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4")).isType(InvalidDataConversionException.class);
 		assertNull(model.getList("f2a"));
 		assertNull(model.getList("f3a"));
 		assertNull(model.getList("f4a"));
@@ -516,9 +516,9 @@ public class PojoRestTest {
 		assertNull(model.getList("f8"));
 
 		assertEquals("[{a:'b'}]", model.getList("f1", l).toString());
-		assertThrown(()->{model.getList("f2", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4", l);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4", l)).isType(InvalidDataConversionException.class);
 		assertEquals("[{a:'b'}]", model.getList("f2a", l).toString());
 		assertEquals("[{a:'b'}]", model.getList("f3a", l).toString());
 		assertEquals("[{a:'b'}]", model.getList("f4a", l).toString());
@@ -528,9 +528,9 @@ public class PojoRestTest {
 		assertEquals("[{a:'b'}]", model.getList("f8", l).toString());
 
 		assertNull(model.getOList("f1"));
-		assertThrown(()->{model.getOList("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4")).isType(InvalidDataConversionException.class);
 		assertNull(model.getOList("f2a"));
 		assertNull(model.getOList("f3a"));
 		assertNull(model.getOList("f4a"));
@@ -540,9 +540,9 @@ public class PojoRestTest {
 		assertNull(model.getOList("f8"));
 
 		assertEquals("[{a:'b'}]", model.getOList("f1", l).toString());
-		assertThrown(()->{model.getOList("f2", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4", l);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4", l)).isType(InvalidDataConversionException.class);
 		assertEquals("[{a:'b'}]", model.getOList("f2a", l).toString());
 		assertEquals("[{a:'b'}]", model.getOList("f3a", l).toString());
 		assertEquals("[{a:'b'}]", model.getOList("f4a", l).toString());
@@ -608,10 +608,10 @@ public class PojoRestTest {
 		assertEquals(2, (int)model.getInt("f2a"));
 		assertEquals(3, (int)model.getInt("f3a"));
 		assertEquals(1, (int)model.getInt("f4a"));
-		assertThrown(()->{model.getInt("f5");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f6");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f7");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f8");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f5")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f6")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f7")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f8")).isType(InvalidDataConversionException.class);
 
 		assertEquals(1, (int)model.getInt("f1", 9));
 		assertEquals(2, (int)model.getInt("f2", 9));
@@ -620,10 +620,10 @@ public class PojoRestTest {
 		assertEquals(2, (int)model.getInt("f2a", 9));
 		assertEquals(3, (int)model.getInt("f3a", 9));
 		assertEquals(1, (int)model.getInt("f4a", 9));
-		assertThrown(()->{model.getInt("f5", 9);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f6", 9);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f7", 9);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f8", 9);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f5", 9)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f6", 9)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f7", 9)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f8", 9)).isType(InvalidDataConversionException.class);
 
 		assertEquals(1, (long)model.getLong("f1"));
 		assertEquals(2, (long)model.getLong("f2"));
@@ -632,10 +632,10 @@ public class PojoRestTest {
 		assertEquals(2, (long)model.getLong("f2a"));
 		assertEquals(3, (long)model.getLong("f3a"));
 		assertEquals(1, (long)model.getLong("f4a"));
-		assertThrown(()->{model.getLong("f5");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getLong("f6");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getLong("f7");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getInt("f8");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f5")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f6")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f7")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getInt("f8")).isType(InvalidDataConversionException.class);
 
 		assertEquals(1, (long)model.getLong("f1", 9l));
 		assertEquals(2, (long)model.getLong("f2", 9l));
@@ -644,10 +644,10 @@ public class PojoRestTest {
 		assertEquals(2, (long)model.getLong("f2a", 9l));
 		assertEquals(3, (long)model.getLong("f3a", 9l));
 		assertEquals(1, (long)model.getLong("f4a", 9l));
-		assertThrown(()->{model.getLong("f5", 9l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getLong("f6", 9l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getLong("f7", 9l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getLong("f8", 9l);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f5", 9l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f6", 9l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f7", 9l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getLong("f8", 9l)).isType(InvalidDataConversionException.class);
 
 		assertEquals(false, model.getBoolean("f1"));  // String "1" equates to false.
 		assertEquals(true, model.getBoolean("f2"));
@@ -673,97 +673,97 @@ public class PojoRestTest {
 		assertEquals(false, model.getBoolean("f7", true));
 		assertEquals(false, model.getBoolean("f8", true));
 
-		assertThrown(()->{model.getMap("f1");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f2a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4a");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4a")).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getMap("f5").toString());
-		assertThrown(()->{model.getMap("f6");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f6")).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getMap("f7").toString());
-		assertThrown(()->{model.getMap("f8");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f8")).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->{model.getMap("f1", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f2", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f2a", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f3a", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getMap("f4a", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f1", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f2a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f3a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f4a", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getMap("f5", m).toString());
-		assertThrown(()->{model.getMap("f6", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f6", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getMap("f7", m).toString());
-		assertThrown(()->{model.getMap("f8", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getMap("f8", m)).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->{model.getOMap("f1");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f2a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4a");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4a")).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getOMap("f5").toString());
-		assertThrown(()->{model.getOMap("f6");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f6")).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getOMap("f7").toString());
-		assertThrown(()->{model.getOMap("f8");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f8")).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->{model.getOMap("f1", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f2", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f2a", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f3a", m);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOMap("f4a", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f1", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f2a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f3a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f4a", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getOMap("f5", m).toString());
-		assertThrown(()->{model.getOMap("f6", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f6", m)).isType(InvalidDataConversionException.class);
 		assertEquals("{f5a:'a'}", model.getOMap("f7", m).toString());
-		assertThrown(()->{model.getOMap("f8", m);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOMap("f8", m)).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->{model.getList("f1");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f2a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4a");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4a")).isType(InvalidDataConversionException.class);
 		assertEquals("[{f5a:'a'}]", model.getList("f5").toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f6").toString());
 		assertEquals("[{f5a:'a'}]", model.getList("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f8").toString());
 
-		assertThrown(()->{model.getList("f1", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f2", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f2a", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f3a", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getList("f4a", l);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f1", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f2a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f3a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getList("f4a", l)).isType(InvalidDataConversionException.class);
 		assertEquals("[{f5a:'a'}]", model.getList("f5", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f6", l).toString());
 		assertEquals("[{f5a:'a'}]", model.getList("f7", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f8", l).toString());
 
-		assertThrown(()->{model.getOList("f1");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f2");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f2a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3a");}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4a");}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4a")).isType(InvalidDataConversionException.class);
 		assertEquals("[{f5a:'a'}]", model.getOList("f5").toString());
 		assertEquals("[{f6a:'a'}]", model.getOList("f6").toString());
 		assertEquals("[{f5a:'a'}]", model.getOList("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.getOList("f8").toString());
 
-		assertThrown(()->{model.getOList("f1", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f2", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f2a", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f3a", l);}).isType(InvalidDataConversionException.class);
-		assertThrown(()->{model.getOList("f4a", l);}).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f1", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f2a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f3a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getOList("f4a", l)).isType(InvalidDataConversionException.class);
 		assertEquals("[{f5a:'a'}]", model.getOList("f5", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getOList("f6", l).toString());
 		assertEquals("[{f5a:'a'}]", model.getOList("f7", l).toString());

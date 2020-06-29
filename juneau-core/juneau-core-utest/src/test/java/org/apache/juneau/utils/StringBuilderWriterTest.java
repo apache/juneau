@@ -51,11 +51,11 @@ public class StringBuilderWriterTest {
 		sbw2.write(buff, 0, 0);
 		assertEquals("abc", sbw2.toString());
 
-		assertThrown(()->{ sbw2.write(buff, -1, buff.length);}).isType(IndexOutOfBoundsException.class);
-		assertThrown(()->{ sbw2.write(buff, buff.length+1, 0);}).isType(IndexOutOfBoundsException.class);
-		assertThrown(()->{ sbw2.write(buff, buff.length-1, 2);}).isType(IndexOutOfBoundsException.class);
-		assertThrown(()->{ sbw2.write(buff, 0, buff.length+1);}).isType(IndexOutOfBoundsException.class);
-		assertThrown(()->{ sbw2.write(buff, 0, -1);}).isType(IndexOutOfBoundsException.class);
+		assertThrown(()-> sbw2.write(buff, -1, buff.length)).isType(IndexOutOfBoundsException.class);
+		assertThrown(()-> sbw2.write(buff, buff.length+1, 0)).isType(IndexOutOfBoundsException.class);
+		assertThrown(()-> sbw2.write(buff, buff.length-1, 2)).isType(IndexOutOfBoundsException.class);
+		assertThrown(()-> sbw2.write(buff, 0, buff.length+1)).isType(IndexOutOfBoundsException.class);
+		assertThrown(()-> sbw2.write(buff, 0, -1)).isType(IndexOutOfBoundsException.class);
 
 		sbw.flush();
 		sbw.close();

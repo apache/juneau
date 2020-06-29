@@ -120,8 +120,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The status code of the response.
 	 */
 	public int getStatusCode() {
-		StatusLine sl = getStatusLine();
-		return sl == null ? -1 : sl.getStatusCode();
+		return getStatusLine().getStatusCode();
 	}
 
 	/**
@@ -143,8 +142,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The status line reason phrase of the response.
 	 */
 	public String getReasonPhrase() {
-		StatusLine sl = getStatusLine();
-		return sl == null ? null : sl.getReasonPhrase();
+		return getStatusLine().getReasonPhrase();
 	}
 
 	/**

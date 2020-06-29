@@ -2889,6 +2889,23 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
+	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own specialized {@link RestResponse} objects.
+	 *
+	 * @param request The request creating this response.
+	 * @param httpResponse The response object to wrap.
+	 * @param parser The parser to use to parse the response.
+	 *
+	 * @return A new {@link RestResponse} object.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	protected RestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		return new RestResponse(this, request, httpResponse, parser);
+	}
+
+	/**
 	 * Create a new proxy interface against a 3rd-party REST interface.
 	 *
 	 * <p>

@@ -104,7 +104,7 @@ public class CommonParserTest {
 		t = p.parse(in, B.class);
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
-		assertThrown(()->{HtmlParser.DEFAULT.parse(in, B.class);}).exists();
+		assertThrown(()->HtmlParser.DEFAULT.parse(in, B.class)).exists();
 	}
 
 	public static class B {

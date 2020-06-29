@@ -107,7 +107,7 @@ public class RestClient_BasicCalls_Test {
 	public void a02_get() throws Exception {
 		client().build().get("/bean").run().assertBody().is("{f:1}");
 
-		assertThrown(()->{client().build().get("/bean").body(bean).run();}).contains("Method does not support content entity.");
+		assertThrown(()->client().build().get("/bean").body(bean).run()).contains("Method does not support content entity.");
 	}
 
 	@Test

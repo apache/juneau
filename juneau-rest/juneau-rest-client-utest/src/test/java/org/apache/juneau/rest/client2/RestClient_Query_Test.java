@@ -154,8 +154,8 @@ public class RestClient_Query_Test {
 		client().build().get("/query").queries(new A10()).run().assertBody().is("foo=bar");
 
 		client().queries((Object)null).build().get("/query").queries((Object)null).run().assertBody().is("");
-		assertThrown(()->{client().queries("baz");}).contains("Invalid type");
-		assertThrown(()->{client().build().get("/query").queries("baz");}).contains("Invalid type");
+		assertThrown(()->client().queries("baz")).contains("Invalid type");
+		assertThrown(()->client().build().get("/query").queries("baz")).contains("Invalid type");
 
 		client().queries(pair("foo","bar"),null).build().get("/query").run().assertBody().is("foo=bar");
 	}
@@ -167,8 +167,8 @@ public class RestClient_Query_Test {
 		client().build().get("/query").queryPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
 		client().queryPairs("foo",l1,"baz",l2).build().get("/query").run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
 		client().build().get("/query").queryPairs("foo",l1,"baz",l2).run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
-		assertThrown(()->{client().queryPairs("foo","bar","baz");}).contains("Odd number of parameters");
-		assertThrown(()->{client().build().get().queryPairs("foo","bar","baz");}).contains("Odd number of parameters");
+		assertThrown(()->client().queryPairs("foo","bar","baz")).contains("Odd number of parameters");
+		assertThrown(()->client().build().get().queryPairs("foo","bar","baz")).contains("Odd number of parameters");
 	}
 
 	public static class A12 extends Reader {
@@ -183,7 +183,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a12_queryCustom_Object() throws Exception {
 		client().build().get("/query").queryCustom("foo=bar").run().assertBody().contains("foo=bar");
-		assertThrown(()->{client().build().get("").queryCustom(new A12());}).is("foo");
+		assertThrown(()->client().build().get("").queryCustom(new A12())).is("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

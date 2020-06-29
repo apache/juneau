@@ -126,8 +126,8 @@ public class RestClient_Config_RestClient_Test {
 	public void a02_errorCodes() throws Exception {
 		RestClient x1 = client().errorCodes(x -> x == 200).ignoreErrors(false).build();
 		RestClient x2 = client().ignoreErrors(false).build();
-		assertThrown(()->{x1.get("/echo").run();}).passes(x -> ((RestCallException)x).getResponseCode() == 200);
-		assertThrown(()->{x2.get("/echo").errorCodes(x -> x == 200).run();}).passes(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertThrown(()->x1.get("/echo").run()).passes(x -> ((RestCallException)x).getResponseCode() == 200);
+		assertThrown(()->x2.get("/echo").errorCodes(x -> x == 200).run()).passes(x -> ((RestCallException)x).getResponseCode() == 200);
 	}
 
 	@Test
@@ -219,17 +219,17 @@ public class RestClient_Config_RestClient_Test {
 
 		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
-		assertThrown(()->{client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader");}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").interceptors(A5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").interceptors(A5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").interceptors(new A5a()).build().get("/checkHeader");}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").interceptors(new A5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").interceptors(new A5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5a());}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5b()).header("Check","foo").header("Foo","f3").run();}).is("foo");
-		assertThrown(()->{client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5c()).header("Check","foo").header("Foo","f3").run().close();}).is("foo");
-		assertThrown(()->{client().interceptors(String.class);}).is("Invalid class of type 'java.lang.String' passed to interceptors().");
-		assertThrown(()->{client().interceptors("");}).is("Invalid object of type 'java.lang.String' passed to interceptors().");
+		assertThrown(()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader")).is("foo");
+		assertThrown(()->client().header("Foo","f1").interceptors(A5b.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run()).is("foo");
+		assertThrown(()->client().header("Foo","f1").interceptors(A5c.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close()).is("foo");
+		assertThrown(()->client().header("Foo","f1").interceptors(new A5a()).build().get("/checkHeader")).is("foo");
+		assertThrown(()->client().header("Foo","f1").interceptors(new A5b()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run()).is("foo");
+		assertThrown(()->client().header("Foo","f1").interceptors(new A5c()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().close()).is("foo");
+		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5a())).is("foo");
+		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5b()).header("Check","foo").header("Foo","f3").run()).is("foo");
+		assertThrown(()->client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5c()).header("Check","foo").header("Foo","f3").run().close()).is("foo");
+		assertThrown(()->client().interceptors(String.class)).is("Invalid class of type 'java.lang.String' passed to interceptors().");
+		assertThrown(()->client().interceptors("")).is("Invalid object of type 'java.lang.String' passed to interceptors().");
 		client().interceptors((Object)null).header("Foo","f1").build().get("/checkHeader");
 		client().interceptors((Class<?>)null).header("Foo","f1").build().get("/checkHeader");
 	}
@@ -249,9 +249,9 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a06_interceptors_exceptionHandling() throws Exception {
-		assertThrown(()->{client().interceptors(A6a.class).build().post("/bean",bean).complete();}).is("foo");
-		assertThrown(()->{client().interceptors(A6b.class).build().post("/bean",bean).complete();}).is("foo");
-		assertThrown(()->{client().interceptors(A6c.class).build().post("/bean",bean).complete();}).is("foo");
+		assertThrown(()->client().interceptors(A6a.class).build().post("/bean",bean).complete()).is("foo");
+		assertThrown(()->client().interceptors(A6b.class).build().post("/bean",bean).complete()).is("foo");
+		assertThrown(()->client().interceptors(A6c.class).build().post("/bean",bean).complete()).is("foo");
 	}
 
 	public static class A7 extends RestClient {
@@ -307,10 +307,10 @@ public class RestClient_Config_RestClient_Test {
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
 		b = x.post("/echoBody",bean).run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
-		assertThrown(()->{MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,String.class).build();}).contains("RESTCLIENT_serializers property had invalid class of type 'java.lang.String'");
-		assertThrown(()->{MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,"").build();}).contains("RESTCLIENT_serializers property had invalid object of type 'java.lang.String'");
-		assertThrown(()->{MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,String.class).build();}).contains("RESTCLIENT_parsers property had invalid class of type 'java.lang.String'");
-		assertThrown(()->{MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,"").build();}).contains("RESTCLIENT_parsers property had invalid object of type 'java.lang.String'");
+		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,String.class).build()).contains("RESTCLIENT_serializers property had invalid class of type 'java.lang.String'");
+		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_serializers,"").build()).contains("RESTCLIENT_serializers property had invalid object of type 'java.lang.String'");
+		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,String.class).build()).contains("RESTCLIENT_parsers property had invalid class of type 'java.lang.String'");
+		assertThrown(()->MockRestClient.create(A.class).prependTo(RESTCLIENT_parsers,"").build()).contains("RESTCLIENT_parsers property had invalid object of type 'java.lang.String'");
 	}
 
 	@Test

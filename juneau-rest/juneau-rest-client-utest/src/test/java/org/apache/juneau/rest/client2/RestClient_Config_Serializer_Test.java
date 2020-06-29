@@ -87,7 +87,7 @@ public class RestClient_Config_Serializer_Test {
 	public void a03_detectRecursions() throws Exception {
 		A1 l1 = new A1();
 		l1.f1 = l1;
-		assertThrown(()->{client().detectRecursions().build().post("/echoBody",l1).run();}).contains("Recursion occurred");
+		assertThrown(()->client().detectRecursions().build().post("/echoBody",l1).run()).contains("Recursion occurred");
 	}
 
 	@Test

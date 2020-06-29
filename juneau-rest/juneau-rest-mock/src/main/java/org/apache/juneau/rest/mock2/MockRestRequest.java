@@ -20,7 +20,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client2.*;
 
 /**
@@ -62,11 +61,6 @@ public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest 
 	 */
 	protected MockRestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
 		super(client, uri, method, hasBody);
-	}
-
-	@Override /* RestClient */
-	protected MockRestResponse createResponse(RestClient client, HttpResponse httpResponse, Parser parser) throws RestCallException {
-		return new MockRestResponse(client, this, httpResponse, parser);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

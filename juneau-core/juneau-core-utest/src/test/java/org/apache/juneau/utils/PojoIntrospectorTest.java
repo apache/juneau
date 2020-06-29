@@ -45,7 +45,7 @@ public class PojoIntrospectorTest {
 		r = new PojoIntrospector(in).invokeMethod("toString", "[]");
 		assertEquals("foobar", r);
 
-		assertThrown(()->{new PojoIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]");}).isType(NoSuchMethodException.class);
+		assertThrown(()->new PojoIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]")).isType(NoSuchMethodException.class);
 
 		r = new PojoIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
 		assertNull(r);

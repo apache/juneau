@@ -33,7 +33,7 @@ public class MockRestResponse extends org.apache.juneau.rest.client2.RestRespons
 	 * @param response The HTTP response.  Can be <jk>null</jk>.
 	 * @param parser The overridden parser passed into {@link RestRequest#parser(Parser)}.
 	 */
-	protected MockRestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
+	public MockRestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
 		super(client, request, response, parser);
 		((MockRestClient)client).currentResponse(this);
 	}

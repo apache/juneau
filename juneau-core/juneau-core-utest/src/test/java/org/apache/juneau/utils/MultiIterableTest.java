@@ -53,15 +53,15 @@ public class MultiIterableTest {
 		mi = new MultiIterable();
 		assertObject(mi.iterator()).json().is("[]");
 
-		assertThrown(()->{new MultiIterable().append(null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->new MultiIterable().append(null)).isType(IllegalArgumentException.class);
 
 		mi = new MultiIterable(l1.iterator());
-		assertThrown(()->{new MultiIterable(l1.iterator()).iterator().next();}).isType(NoSuchElementException.class);
+		assertThrown(()->new MultiIterable(l1.iterator()).iterator().next()).isType(NoSuchElementException.class);
 
 		mi = new MultiIterable(l1.iterator());
 		final Iterator i = mi.iterator();
 		assertFalse(i.hasNext());
-		assertThrown(()->{i.remove();}).isType(NoSuchElementException.class);
+		assertThrown(()->i.remove()).isType(NoSuchElementException.class);
 
 		mi = new MultiIterable(l2.iterator());
 		Iterator i2 = mi.iterator();

@@ -195,7 +195,7 @@ public class FieldInfoTest {
 
 	@Test
 	public void isAll_invalidFlag() {
-		assertThrown(()->{c_deprecated.isAll(HAS_PARAMS);}).is("Invalid flag for field: HAS_PARAMS");
+		assertThrown(()->c_deprecated.isAll(HAS_PARAMS)).is("Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test
@@ -221,7 +221,7 @@ public class FieldInfoTest {
 
 	@Test
 	public void isAny_invalidFlag() {
-		assertThrown(()->{c_deprecated.isAny(HAS_PARAMS);}).is("Invalid flag for field: HAS_PARAMS");
+		assertThrown(()->c_deprecated.isAny(HAS_PARAMS)).is("Invalid flag for field: HAS_PARAMS");
 	}
 
 	@Test

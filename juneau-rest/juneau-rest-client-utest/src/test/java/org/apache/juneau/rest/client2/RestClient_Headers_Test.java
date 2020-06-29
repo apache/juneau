@@ -102,8 +102,8 @@ public class RestClient_Headers_Test {
 	public void a05_headerPairs_Objects() throws Exception {
 		checkFooClient().headerPairs("Foo","bar").build().get("/headers").headerPairs("Foo","baz").run().assertBody().is("['bar','baz']");
 		checkFooClient().headerPairs("Foo","bar","Foo","baz").header("Foo","qux").build().get("/headers").headerPairs("Foo","q1x","Foo","q2x").run().assertBody().is("['bar','baz','qux','q1x','q2x']");
-		assertThrown(()->{client().headerPairs("Foo");}).contains("Odd number of parameters");
-		assertThrown(()->{client().build().get("").headerPairs("Foo");}).contains("Odd number of parameters");
+		assertThrown(()->client().headerPairs("Foo")).contains("Odd number of parameters");
+		assertThrown(()->client().build().get("").headerPairs("Foo")).contains("Odd number of parameters");
 	}
 
 	@Test
@@ -120,8 +120,8 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers((Object)new Header[]{header("Foo","baz")}).debug().run().assertBody().is("['bar','baz']");
 		checkClient("f").build().get("/headers").headers(bean).debug().run().assertBody().is("['1']");
 		checkClient("f").build().get("/headers").headers((Object)null).debug().run().assertBody().is("null");
-		assertThrown(()->{client().headers("Foo");}).contains("Invalid type");
-		assertThrown(()->{client().build().get("").headers("Foo");}).contains("Invalid type");
+		assertThrown(()->client().headers("Foo")).contains("Invalid type");
+		assertThrown(()->client().build().get("").headers("Foo")).contains("Invalid type");
 	}
 
 	@Test

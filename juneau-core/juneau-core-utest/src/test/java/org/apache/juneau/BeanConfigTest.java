@@ -84,7 +84,7 @@ public class BeanConfigTest {
 
 		BeanMap bm1 = null;
 		// Address returned as a new bean type, but shouldn't be since it doesn't have a default constructor.
-		assertThrown(()->{session.newBeanMap(Address.class);}).isType(BeanRuntimeException.class);
+		assertThrown(()->session.newBeanMap(Address.class)).isType(BeanRuntimeException.class);
 		bm1 = session.toBeanMap(new Address("street", "city", "state", "zip"));
 
 		BeanMap bm2 = session.newBeanMap(java.lang.Integer.class);

@@ -111,14 +111,14 @@ public class RestClient_Test {
 	public void a04_request_whenClosed() throws Exception {
 		RestClient rc = client().build();
 		rc.closeQuietly();
-		assertThrown(()->{rc.request(HttpMethod.GET,"/bean",null);}).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request(HttpMethod.GET,"/bean",null)).contains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a05_request_whenClosed_withStackCreation() throws Exception {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
-		assertThrown(()->{rc.request(HttpMethod.GET,"/bean",null);}).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request(HttpMethod.GET,"/bean",null)).contains("RestClient.close() has already been called");
 	}
 
 	@Test
@@ -235,7 +235,7 @@ public class RestClient_Test {
 	@Test
 	public void c06_httpClient_unusedHttpClientMethods() {
 		RestClient x = RestClient.create().build();
-		assertThrown(()->{x.getParams();}).isType(UnsupportedOperationException.class);
+		assertThrown(()->x.getParams()).isType(UnsupportedOperationException.class);
 		assertNotNull(x.getConnectionManager());
 	}
 

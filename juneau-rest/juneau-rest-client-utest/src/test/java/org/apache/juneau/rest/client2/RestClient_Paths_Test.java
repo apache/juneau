@@ -55,7 +55,7 @@ public class RestClient_Paths_Test {
 	public void a01_path_String_Object() throws Exception {
 		client().build().get("/echo/{x}").path("x",new A1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
 		client().build().get("/echo/*").path("/*",new A1().init()).run().assertBody().contains("HTTP GET /echo/x=1");
-		assertThrown(()->{client().build().get("/echo/{x}").path("y","foo");}).is("Path variable {y} was not found in path.");
+		assertThrown(()->client().build().get("/echo/{x}").path("y","foo")).is("Path variable {y} was not found in path.");
 	}
 
 	@Test
@@ -70,14 +70,14 @@ public class RestClient_Paths_Test {
 		client().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
 		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{pair("x","foo")}).run().assertBody().contains("HTTP GET /echo/foo");
 		client().build().get("/echo/{x}").paths(new A1().init()).run().assertBody().contains("HTTP GET /echo/1");
-		assertThrown(()->{client().build().get("/echo/{x}").paths("x");}).is("Invalid type passed to paths(): java.lang.String");
+		assertThrown(()->client().build().get("/echo/{x}").paths("x")).is("Invalid type passed to paths(): java.lang.String");
 		client().build().get("/echo/{x}").paths((Object)null).run().assertBody().contains("HTTP GET /echo/%7Bx%7D");
 	}
 
 	@Test
 	public void a04_pathPairs_Objects() throws Exception {
 		client().build().get("/echo/{x}").pathPairs("x",1).run().assertBody().contains("HTTP GET /echo/1");
-		assertThrown(()->{client().build().get("/echo/{x}").pathPairs("x");}).is("Odd number of parameters passed into pathPairs()");
+		assertThrown(()->client().build().get("/echo/{x}").pathPairs("x")).is("Odd number of parameters passed into pathPairs()");
 	}
 
 	@Test

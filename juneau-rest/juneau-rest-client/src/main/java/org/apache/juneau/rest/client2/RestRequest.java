@@ -2865,9 +2865,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			try {
 				if (request2 != null)
-					response = createResponse(client, client.execute(target, request2, context), parser);
+					response = client.createResponse(this, client.execute(target, request2, context), parser);
 				else
-					response = createResponse(client, client.execute(target, this.request, context), parser);
+					response = client.createResponse(this, client.execute(target, this.request, context), parser);
 			} catch (Exception e) {
 				throw e;
 			}
@@ -2895,23 +2895,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		return this.response;
-	}
-
-	/**
-	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own specialized {@link RestResponse} objects.
-	 *
-	 * @param client The client that created the request.
-	 * @param httpResponse The response object to wrap.
-	 * @param parser The parser to use to parse the response.
-	 *
-	 * @return A new {@link RestResponse} object.
-	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
-	 */
-	protected RestResponse createResponse(RestClient client, HttpResponse httpResponse, Parser parser) throws RestCallException {
-		return new RestResponse(client, this, httpResponse, parser);
 	}
 
 	/**

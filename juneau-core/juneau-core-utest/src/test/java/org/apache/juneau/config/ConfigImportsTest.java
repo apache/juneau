@@ -91,7 +91,7 @@ public class ConfigImportsTest {
 		ms.write("A1", "", "<A2>\nx=1");
 		ms.write("A2", "", "<A1>\ny=2");
 		ms.write("B", "", "<A2>");
-		assertThrown(()->{Config.create("B").store(ms).build();}).exists();
+		assertThrown(()->Config.create("B").store(ms).build()).exists();
 	}
 
 	@Test

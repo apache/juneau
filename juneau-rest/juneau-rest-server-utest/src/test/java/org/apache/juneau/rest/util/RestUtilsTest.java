@@ -70,7 +70,7 @@ public class RestUtilsTest {
 
 		for (String s : new String[]{
 				"http:/hostname?foo"}) {
-			assertThrown(()->{trimPathInfo(new StringBuffer(s), "", "");}).exists();
+			assertThrown(()->trimPathInfo(new StringBuffer(s), "", "")).exists();
 		}
 
 		e = "http://hostname";
@@ -100,7 +100,7 @@ public class RestUtilsTest {
 				"http://hostname?foo",
 				"http://hostname/fo?bar",
 				"http:/hostname/foo"}) {
-			assertThrown(()->{trimPathInfo(new StringBuffer(s), "/", "/foo");}).exists();
+			assertThrown(()->trimPathInfo(new StringBuffer(s), "/", "/foo")).exists();
 		}
 
 		e = "http://hostname/foo/bar";
@@ -117,7 +117,7 @@ public class RestUtilsTest {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			assertThrown(()->{trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar");}).exists();
+			assertThrown(()->trimPathInfo(new StringBuffer(s), "/foo/bar", "/foo/bar")).exists();
 		}
 
 		e = "http://hostname/foo/bar";
@@ -134,7 +134,7 @@ public class RestUtilsTest {
 				"http://hostname/foo2/bar",
 				"http://hostname/foo/bar2"
 			}) {
-			assertThrown(()->{trimPathInfo(new StringBuffer(s), "/foo", "/bar");}).exists();
+			assertThrown(()->trimPathInfo(new StringBuffer(s), "/foo", "/bar")).exists();
 		}
 	}
 

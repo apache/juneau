@@ -101,8 +101,8 @@ public class RestClient_FormData_Test {
 
 		client().formDatas(SerializedHeader.create().name("foo").value("bar")).build().post("/formData").run().assertBody().is("foo=bar");
 
-		assertThrown(()->{client().build().post("/formData").formDatas("bad");}).is("Invalid type passed to formDatas(): java.lang.String");
-		assertThrown(()->{client().formDatas(pair("foo","bar"),"baz");}).is("Invalid type passed to formData():  java.lang.String");
+		assertThrown(()->client().build().post("/formData").formDatas("bad")).is("Invalid type passed to formDatas(): java.lang.String");
+		assertThrown(()->client().formDatas(pair("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");
 	}
 
 	@Test
@@ -115,8 +115,8 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDataPairs("foo","bar","baz","qux").run().assertBody().is("foo=bar&baz=qux");
 		client().build().post("/formData").formDataPairs("foo",l1,"baz",l2).run().assertBody().urlDecode().is("foo=bar1,bar2&baz=qux1,qux2");
 
-		assertThrown(()->{client().formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs()");
-		assertThrown(()->{client().build().post("").formDataPairs("foo","bar","baz");}).is("Odd number of parameters passed into formDataPairs()");
+		assertThrown(()->client().formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs()");
+		assertThrown(()->client().build().post("").formDataPairs("foo","bar","baz")).is("Odd number of parameters passed into formDataPairs()");
 	}
 
 	@Test

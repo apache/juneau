@@ -73,7 +73,7 @@ public class ArrayUtilsTest {
 		s = append(s, Arrays.asList(new String[0]));
 		assertObject(s).json().is("['a','b','c']");
 
-		assertThrown(()->{append((Object[])null, Collections.emptyList());}).isType(IllegalArgumentException.class);
+		assertThrown(()->append((Object[])null, Collections.emptyList())).isType(IllegalArgumentException.class);
 	}
 
 	//====================================================================================================
@@ -149,14 +149,14 @@ public class ArrayUtilsTest {
 	public void testAsSet() throws Exception {
 		String[] s = null;
 
-		assertThrown(()->{asSet((String[])null);}).isType(IllegalArgumentException.class);
+		assertThrown(()->asSet((String[])null)).isType(IllegalArgumentException.class);
 
 		s = new String[]{"a"};
 		Iterator<String> i = asSet(s).iterator();
 		assertEquals("a", i.next());
 
-		assertThrown(()->{i.remove();}).isType(UnsupportedOperationException.class);
-		assertThrown(()->{i.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->i.remove()).isType(UnsupportedOperationException.class);
+		assertThrown(()->i.next()).isType(NoSuchElementException.class);
 	}
 
 	//====================================================================================================
@@ -170,8 +170,8 @@ public class ArrayUtilsTest {
 		Iterator<Object> i = iterator(s);
 		assertEquals("a", i.next());
 
-		assertThrown(()->{i.remove();}).isType(UnsupportedOperationException.class);
-		assertThrown(()->{i.next();}).isType(NoSuchElementException.class);
+		assertThrown(()->i.remove()).isType(UnsupportedOperationException.class);
+		assertThrown(()->i.next()).isType(NoSuchElementException.class);
 	}
 
 	//====================================================================================================
