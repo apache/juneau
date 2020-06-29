@@ -37,7 +37,7 @@ public class Remote_ResponseAnnotation_Test {
 	public static class A {
 		@RestMethod
 		public String get(RestResponse res) {
-			res.setHeader("X", "x");
+			res.setHeader("X","x");
 			res.setStatus(201);
 			return "foo";
 		}
@@ -57,10 +57,10 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		A1 x = remote(A.class, A2.class).get();
-		assertEquals("foo", IOUtils.read(x.getBody()));
-		assertEquals("x", x.getHeader());
-		assertEquals(201, x.getStatus());
+		A1 x = remote(A.class,A2.class).get();
+		assertEquals("foo",IOUtils.read(x.getBody()));
+		assertEquals("x",x.getHeader());
+		assertEquals(201,x.getStatus());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

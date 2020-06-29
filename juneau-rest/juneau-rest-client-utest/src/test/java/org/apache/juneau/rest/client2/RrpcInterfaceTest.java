@@ -202,15 +202,15 @@ public class RrpcInterfaceTest {
 		// Test multi-parameters
 		//-------------------------------------------------------------------------------------------------------------
 
-		void setMultiParamsInts(int x1, int[][][] x2, int[][][] x2n, List<int[][][]> x3, List<int[][][]> x3n);
-		void setMultiParamsInteger(Integer x1, Integer x1n, Integer[][][] x2, Integer[][][] x2n, List<Integer[][][]> x3, List<Integer[][][]> x3n);
-		void setMultiParamsFloat(float x1, float[][][] x2, float[][][] x2n, List<float[][][]> x3, List<float[][][]> x3n);
-		void setMultiParamsFloatObject(Float x1, Float x1n, Float[][][] x2, Float[][][] x2n, List<Float[][][]> x3, List<Float[][][]> x3n);
-		void setMultiParamsString(String x1, String[][][] x2, String[][][] x2n, List<String[][][]> x3, List<String[][][]> x3n);
-		void setMultiParamsBean(ABean x1, ABean[][][] x2, ABean[][][] x2n, List<ABean[][][]> x3, List<ABean[][][]> x3n, Map<String,ABean> x4, Map<String,ABean> x4n, Map<String,List<ABean[][][]>> x5, Map<String,List<ABean[][][]>> x5n);
-		void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n);
-		void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n);
-		void setMultiParamsEnum(TestEnum x1, TestEnum[][][] x2, TestEnum[][][] x2n, List<TestEnum[][][]> x3, List<TestEnum[][][]> x3n, Map<TestEnum,TestEnum> x4, Map<TestEnum,TestEnum> x4n, Map<TestEnum,List<TestEnum[][][]>> x5, Map<TestEnum,List<TestEnum[][][]>> x5n);
+		void setMultiParamsInts(int x1,int[][][] x2,int[][][] x2n,List<int[][][]> x3,List<int[][][]> x3n);
+		void setMultiParamsInteger(Integer x1,Integer x1n,Integer[][][] x2,Integer[][][] x2n,List<Integer[][][]> x3,List<Integer[][][]> x3n);
+		void setMultiParamsFloat(float x1,float[][][] x2,float[][][] x2n,List<float[][][]> x3,List<float[][][]> x3n);
+		void setMultiParamsFloatObject(Float x1,Float x1n,Float[][][] x2,Float[][][] x2n,List<Float[][][]> x3,List<Float[][][]> x3n);
+		void setMultiParamsString(String x1,String[][][] x2,String[][][] x2n,List<String[][][]> x3,List<String[][][]> x3n);
+		void setMultiParamsBean(ABean x1,ABean[][][] x2,ABean[][][] x2n,List<ABean[][][]> x3,List<ABean[][][]> x3n,Map<String,ABean> x4,Map<String,ABean> x4n,Map<String,List<ABean[][][]>> x5,Map<String,List<ABean[][][]>> x5n);
+		void setMultiParamsSwappedPojo(SwappedPojo x1,SwappedPojo[][][] x2,SwappedPojo[][][] x2n,List<SwappedPojo[][][]> x3,List<SwappedPojo[][][]> x3n,Map<SwappedPojo,SwappedPojo> x4,Map<SwappedPojo,SwappedPojo> x4n,Map<SwappedPojo,List<SwappedPojo[][][]>> x5,Map<SwappedPojo,List<SwappedPojo[][][]>> x5n);
+		void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1,ImplicitSwappedPojo[][][] x2,ImplicitSwappedPojo[][][] x2n,List<ImplicitSwappedPojo[][][]> x3,List<ImplicitSwappedPojo[][][]> x3n,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n);
+		void setMultiParamsEnum(TestEnum x1,TestEnum[][][] x2,TestEnum[][][] x2n,List<TestEnum[][][]> x3,List<TestEnum[][][]> x3n,Map<TestEnum,TestEnum> x4,Map<TestEnum,TestEnum> x4n,Map<TestEnum,List<TestEnum[][][]>> x5,Map<TestEnum,List<TestEnum[][][]>> x5n);
 
 		//-------------------------------------------------------------------------------------------------------------
 		// Helper classes
@@ -240,7 +240,7 @@ public class RrpcInterfaceTest {
 		//====================================================================================================
 		// Test that Q-values are being resolved correctly.
 		//====================================================================================================
-		@RestMethod(name=RRPC, path="/proxy/*")
+		@RestMethod(name=RRPC,path="/proxy/*")
 		public InterfaceProxy getProxy() {
 			return new InterfaceProxy() {
 
@@ -363,7 +363,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return AMap.of("foo", AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
+					return AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 				}
 
 				@Override
@@ -405,7 +405,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return AMap.of("foo", AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+					return AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 				}
 
 				@Override
@@ -427,12 +427,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
-					return AMap.of(new SwappedPojo(), new SwappedPojo());
+					return AMap.of(new SwappedPojo(),new SwappedPojo());
 				}
 
 				@Override
 				public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
-					return AMap.of(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+					return AMap.of(new SwappedPojo(),new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
 				}
 
 				// Implicit swapped POJOs
@@ -449,12 +449,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap() {
-					return AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
+					return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo());
 				}
 
 				@Override
 				public Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap() {
-					return AMap.of(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+					return AMap.of(new ImplicitSwappedPojo(),new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
 				}
 
 				// Enums
@@ -491,12 +491,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-					return AMap.of(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+					return AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 				}
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return AMap.of(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+					return AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -525,12 +525,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setInt(int x) {
-					assertEquals(1, x);
+					assertEquals(1,x);
 				}
 
 				@Override
 				public void setInteger(Integer x) {
-					assertEquals((Integer)1, x);
+					assertEquals((Integer)1,x);
 				}
 
 				@Override
@@ -550,7 +550,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setString(String x) {
-					assertEquals("foo", x);
+					assertEquals("foo",x);
 				}
 
 				@Override
@@ -758,7 +758,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public void setEnum(TestEnum x) {
-					assertEquals(TestEnum.TWO, x);
+					assertEquals(TestEnum.TWO,x);
 				}
 
 				@Override
@@ -813,7 +813,7 @@ public class RrpcInterfaceTest {
 				//--------------------------------------------------------------------------------
 
 				@Override
-				public void setMultiParamsInts(int x1, int[][][] x2, int[][][] x2n, List<int[][][]> x3, List<int[][][]> x3n) {
+				public void setMultiParamsInts(int x1,int[][][] x2,int[][][] x2n,List<int[][][]> x3,List<int[][][]> x3n) {
 					assertObject((Object) x1).json().is("1");
 					assertObject(x2).json().is("[[[1,2],null],null]");
 					assertNull(x2n);
@@ -823,7 +823,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsInteger(Integer x1, Integer x1n, Integer[][][] x2, Integer[][][] x2n, List<Integer[][][]> x3, List<Integer[][][]> x3n) {
+				public void setMultiParamsInteger(Integer x1,Integer x1n,Integer[][][] x2,Integer[][][] x2n,List<Integer[][][]> x3,List<Integer[][][]> x3n) {
 					assertObject(x1).json().is("1");
 					assertObject(x2).json().is("[[[1,null],null],null]");
 					assertNull(x2n);
@@ -833,7 +833,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsFloat(float x1, float[][][] x2, float[][][] x2n, List<float[][][]> x3, List<float[][][]> x3n) {
+				public void setMultiParamsFloat(float x1,float[][][] x2,float[][][] x2n,List<float[][][]> x3,List<float[][][]> x3n) {
 					assertObject((Object) x1).json().is("1.0");
 					assertObject(x2).json().is("[[[1.0,2.0],null],null]");
 					assertNull(x2n);
@@ -843,7 +843,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsFloatObject(Float x1, Float x1n, Float[][][] x2, Float[][][] x2n, List<Float[][][]> x3, List<Float[][][]> x3n) {
+				public void setMultiParamsFloatObject(Float x1,Float x1n,Float[][][] x2,Float[][][] x2n,List<Float[][][]> x3,List<Float[][][]> x3n) {
 					assertObject(x1).json().is("1.0");
 					assertObject(x2).json().is("[[[1.0,null],null],null]");
 					assertNull(x2n);
@@ -853,7 +853,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsString(String x1, String[][][] x2, String[][][] x2n, List<String[][][]> x3, List<String[][][]> x3n) {
+				public void setMultiParamsString(String x1,String[][][] x2,String[][][] x2n,List<String[][][]> x3,List<String[][][]> x3n) {
 					assertObject(x1).json().is("'foo'");
 					assertObject(x2).json().is("[[['foo',null],null],null]");
 					assertNull(x2n);
@@ -863,7 +863,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsBean(ABean x1, ABean[][][] x2, ABean[][][] x2n, List<ABean[][][]> x3, List<ABean[][][]> x3n, Map<String,ABean> x4, Map<String,ABean> x4n, Map<String,List<ABean[][][]>> x5, Map<String,List<ABean[][][]>> x5n) {
+				public void setMultiParamsBean(ABean x1,ABean[][][] x2,ABean[][][] x2n,List<ABean[][][]> x3,List<ABean[][][]> x3n,Map<String,ABean> x4,Map<String,ABean> x4n,Map<String,List<ABean[][][]>> x5,Map<String,List<ABean[][][]>> x5n) {
 					assertObject(x1).json().is("{a:1,b:'foo'}");
 					assertObject(x2).json().is("[[[{a:1,b:'foo'},null],null],null]");
 					assertNull(x2n);
@@ -877,7 +877,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
+				public void setMultiParamsSwappedPojo(SwappedPojo x1,SwappedPojo[][][] x2,SwappedPojo[][][] x2n,List<SwappedPojo[][][]> x3,List<SwappedPojo[][][]> x3n,Map<SwappedPojo,SwappedPojo> x4,Map<SwappedPojo,SwappedPojo> x4n,Map<SwappedPojo,List<SwappedPojo[][][]>> x5,Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
 					assertObject(x1).json().is("'"+SWAP+"'");
 					assertObject(x2).json().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
@@ -891,7 +891,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
+				public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1,ImplicitSwappedPojo[][][] x2,ImplicitSwappedPojo[][][] x2n,List<ImplicitSwappedPojo[][][]> x3,List<ImplicitSwappedPojo[][][]> x3n,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4,Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5,Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
 					assertObject(x1).json().is("'"+SWAP+"'");
 					assertObject(x2).json().is("[[['"+SWAP+"',null],null],null]");
 					assertNull(x2n);
@@ -905,7 +905,7 @@ public class RrpcInterfaceTest {
 				}
 
 				@Override
-				public void setMultiParamsEnum(TestEnum x1, TestEnum[][][] x2, TestEnum[][][] x2n, List<TestEnum[][][]> x3, List<TestEnum[][][]> x3n, Map<TestEnum,TestEnum> x4, Map<TestEnum,TestEnum> x4n, Map<TestEnum,List<TestEnum[][][]>> x5, Map<TestEnum,List<TestEnum[][][]>> x5n) {
+				public void setMultiParamsEnum(TestEnum x1,TestEnum[][][] x2,TestEnum[][][] x2n,List<TestEnum[][][]> x3,List<TestEnum[][][]> x3n,Map<TestEnum,TestEnum> x4,Map<TestEnum,TestEnum> x4n,Map<TestEnum,List<TestEnum[][][]>> x5,Map<TestEnum,List<TestEnum[][][]>> x5n) {
 					assertObject(x1).json().is("'TWO'");
 					assertObject(x2).json().is("[[['TWO',null],null],null]");
 					assertNull(x2n);
@@ -928,8 +928,8 @@ public class RrpcInterfaceTest {
 	public RrpcInterfaceTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).build().getRrpcInterface(InterfaceProxy.class, "/proxy");
-			cache.put(label, proxy);
+			proxy = MockRestClient.create(InterfaceProxyResource.class).serializer(serializer).parser(parser).ignoreErrors(false).build().getRrpcInterface(InterfaceProxy.class,"/proxy");
+			cache.put(label,proxy);
 		}
 	}
 
@@ -945,17 +945,17 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void a02_returnInteger() {
-		assertEquals((Integer)1, proxy.returnInteger());
+		assertEquals((Integer)1,proxy.returnInteger());
 	}
 
 	@Test
 	public void a03_returnInt() {
-		assertEquals(1, proxy.returnInt());
+		assertEquals(1,proxy.returnInt());
 	}
 
 	@Test
 	public void a04_returnBoolean() {
-		assertEquals(true, proxy.returnBoolean());
+		assertEquals(true,proxy.returnBoolean());
 	}
 
 	@Test
@@ -970,7 +970,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void a07_returnString() {
-		assertEquals("foobar", proxy.returnString());
+		assertEquals("foobar",proxy.returnString());
 	}
 
 	@Test
@@ -1283,7 +1283,7 @@ public class RrpcInterfaceTest {
 			proxy.throwException1();
 			fail();
 		} catch (InterfaceProxy.InterfaceProxyException1 e) {
-			assertEquals("foo", e.getMessage());
+			assertEquals("foo",e.getMessage());
 		}
 	}
 
@@ -1556,12 +1556,12 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void l07_setEnum3dArrayMap() {
-		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@Test
 	public void l08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE, AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1575,7 +1575,7 @@ public class RrpcInterfaceTest {
 		int[][][] x2n = null;
 		List<int[][][]> x3 = AList.of(x2,null);
 		List<int[][][]> x3n = null;
-		proxy.setMultiParamsInts(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n);
 	}
 
 	@Test
@@ -1586,7 +1586,7 @@ public class RrpcInterfaceTest {
 		Integer[][][] x2n = null;
 		List<Integer[][][]> x3 = AList.of(x2,null);
 		List<Integer[][][]> x3n = null;
-		proxy.setMultiParamsInteger(x1, x1n, x2, x2n, x3, x3n);
+		proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n);
 	}
 
 	@Test
@@ -1596,7 +1596,7 @@ public class RrpcInterfaceTest {
 		float[][][] x2n = null;
 		List<float[][][]> x3 = AList.of(x2,null);
 		List<float[][][]> x3n = null;
-		proxy.setMultiParamsFloat(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n);
 	}
 
 	@Test
@@ -1607,7 +1607,7 @@ public class RrpcInterfaceTest {
 		Float[][][] x2n = null;
 		List<Float[][][]> x3 = AList.of(x2,null);
 		List<Float[][][]> x3n = null;
-		proxy.setMultiParamsFloatObject(x1, x1n, x2, x2n, x3, x3n);
+		proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n);
 	}
 
 	@Test
@@ -1617,7 +1617,7 @@ public class RrpcInterfaceTest {
 		String[][][] x2n = null;
 		List<String[][][]> x3 = AList.of(x2,null);
 		List<String[][][]> x3n = null;
-		proxy.setMultiParamsString(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsString(x1,x2,x2n,x3,x3n);
 	}
 
 	@Test
@@ -1631,7 +1631,7 @@ public class RrpcInterfaceTest {
 		Map<String,ABean> x4n = null;
 		Map<String,List<ABean[][][]>> x5 = AMap.of("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
-		proxy.setMultiParamsBean(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 
 	@Test
@@ -1645,7 +1645,7 @@ public class RrpcInterfaceTest {
 		Map<SwappedPojo,SwappedPojo> x4n = null;
 		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = AMap.of(new SwappedPojo(),x3);
 		Map<SwappedPojo,List<SwappedPojo[][][]>> x5n = null;
-		proxy.setMultiParamsSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsSwappedPojo(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 
 	@Test
@@ -1659,7 +1659,7 @@ public class RrpcInterfaceTest {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
 		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = AMap.of(new ImplicitSwappedPojo(),x3);
 		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n = null;
-		proxy.setMultiParamsImplicitSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsImplicitSwappedPojo(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 
 	@Test
@@ -1673,6 +1673,6 @@ public class RrpcInterfaceTest {
 		Map<TestEnum,TestEnum> x4n = null;
 		Map<TestEnum,List<TestEnum[][][]>> x5 = AMap.of(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
-		proxy.setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
 }

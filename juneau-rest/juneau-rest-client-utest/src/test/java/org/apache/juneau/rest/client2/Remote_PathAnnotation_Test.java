@@ -86,28 +86,28 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void a01_path_objectTypes() throws Exception {
-		A1 x = remote(A.class, A1.class);
-		assertEquals("1", x.getX1(1));
-		assertEquals("1.0", x.getX2(1));
-		assertEquals("x=1", x.getX3(Bean.create()));
-		assertEquals("1", x.getX4(Bean.create()));
-		assertEquals("1", x.getX5(Bean.create()));
-		assertEquals("x=1,x=1", x.getX6(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("@((x=1),(x=1))", x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("x=1,x=1", x.getX8(AList.of(Bean.create(),Bean.create())));
-		assertEquals("@((x=1),(x=1))", x.getX9(AList.of(Bean.create(),Bean.create())));
-		assertEquals("x=x\\=1", x.getX10(AMap.of("x",Bean.create())));
-		assertEquals("x=1", x.getX11(AMap.of("x",Bean.create())));
-		assertEquals("x=1", x.getX12(AMap.of("x",Bean.create())));
-		assertEquals("(x=(x=1))", x.getX13(AMap.of("x",Bean.create())));
-		assertEquals("x=1", x.getX14(AMap.of("x",Bean.create())));
-		assertEquals("bar", x.getX15(pairs("x", "bar")));
-		assertEquals("bar", x.getX16(pairs("x", "bar")));
-		assertEquals("(x=(x=1))", x.getX17(AMap.of("x",Bean.create())));
-		assertEquals("bar", x.getX18(pair("x", "bar")));
-		assertEquals("bar", x.getX19(pair("x", "bar")));
-		assertEquals("bar", x.getX20(new NameValuePair[]{pair("x", "bar")}));
-		assertEquals("{x}", x.getX20(null));
+		A1 x = remote(A.class,A1.class);
+		assertEquals("1",x.getX1(1));
+		assertEquals("1.0",x.getX2(1));
+		assertEquals("x=1",x.getX3(Bean.create()));
+		assertEquals("1",x.getX4(Bean.create()));
+		assertEquals("1",x.getX5(Bean.create()));
+		assertEquals("x=1,x=1",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("@((x=1),(x=1))",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("x=1,x=1",x.getX8(AList.of(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))",x.getX9(AList.of(Bean.create(),Bean.create())));
+		assertEquals("x=x\\=1",x.getX10(AMap.of("x",Bean.create())));
+		assertEquals("x=1",x.getX11(AMap.of("x",Bean.create())));
+		assertEquals("x=1",x.getX12(AMap.of("x",Bean.create())));
+		assertEquals("(x=(x=1))",x.getX13(AMap.of("x",Bean.create())));
+		assertEquals("x=1",x.getX14(AMap.of("x",Bean.create())));
+		assertEquals("bar",x.getX15(pairs("x","bar")));
+		assertEquals("bar",x.getX16(pairs("x","bar")));
+		assertEquals("(x=(x=1))",x.getX17(AMap.of("x",Bean.create())));
+		assertEquals("bar",x.getX18(pair("x","bar")));
+		assertEquals("bar",x.getX19(pair("x","bar")));
+		assertEquals("bar",x.getX20(new NameValuePair[]{pair("x","bar")}));
+		assertEquals("{x}",x.getX20(null));
 		assertThrown(()->{x.getX21("foo");}).contains("Invalid value type for path arg 'null': java.lang.String");
 	}
 
@@ -130,20 +130,20 @@ public class Remote_PathAnnotation_Test {
 		@RemoteMethod(path="/a/{x}") String getX3(@Path(n="x",cf="ssv") String...b);
 		@RemoteMethod(path="/a/{x}") String getX4(@Path(n="x",cf="tsv") String...b);
 		@RemoteMethod(path="/a/{x}") String getX5(@Path(n="x",cf="pipes") String...b);
-		@RemoteMethod(path="/a/{x}") String getX6(@Path(n="x",cf="multi") String...b); // Not supported, but should be treated as csv.
+		@RemoteMethod(path="/a/{x}") String getX6(@Path(n="x",cf="multi") String...b); // Not supported,but should be treated as csv.
 		@RemoteMethod(path="/a/{x}") String getX7(@Path(n="x",cf="uon") String...b);
 	}
 
 	@Test
 	public void b01_path_collectionFormat() throws Exception {
-		B1 x = remote(B.class, B1.class);
-		assertEquals("foo,bar", x.getX1("foo","bar"));
-		assertEquals("foo,bar", x.getX2("foo","bar"));
-		assertEquals("foo bar", x.getX3("foo","bar"));
-		assertEquals("foo\tbar", x.getX4("foo","bar"));
-		assertEquals("foo|bar", x.getX5("foo","bar"));
-		assertEquals("foo,bar", x.getX6("foo","bar"));
-		assertEquals("@(foo,bar)", x.getX7("foo","bar"));
+		B1 x = remote(B.class,B1.class);
+		assertEquals("foo,bar",x.getX1("foo","bar"));
+		assertEquals("foo,bar",x.getX2("foo","bar"));
+		assertEquals("foo bar",x.getX3("foo","bar"));
+		assertEquals("foo\tbar",x.getX4("foo","bar"));
+		assertEquals("foo|bar",x.getX5("foo","bar"));
+		assertEquals("foo,bar",x.getX6("foo","bar"));
+		assertEquals("@(foo,bar)",x.getX7("foo","bar"));
 	}
 
 	//=================================================================================================================
@@ -207,173 +207,173 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void c01_path_min_max_emin_emax() throws Exception {
-		C1 x = remote(C.class, C1.class);
-		assertEquals("{x:'1'}", x.getX1(1));
-		assertEquals("{x:'10'}", x.getX1(10));
+		C1 x = remote(C.class,C1.class);
+		assertEquals("{x:'1'}",x.getX1(1));
+		assertEquals("{x:'10'}",x.getX1(10));
 		assertThrown(()->{x.getX1(0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX1(11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX2(1));
-		assertEquals("{x:'10'}", x.getX2(10));
+		assertEquals("{x:'1'}",x.getX2(1));
+		assertEquals("{x:'10'}",x.getX2(10));
 		assertThrown(()->{x.getX2(0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX2(11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX3(2));
-		assertEquals("{x:'9'}", x.getX3(9));
+		assertEquals("{x:'2'}",x.getX3(2));
+		assertEquals("{x:'9'}",x.getX3(9));
 		assertThrown(()->{x.getX3(1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX3(10);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX4((short)1));
-		assertEquals("{x:'10'}", x.getX4((short)10));
+		assertEquals("{x:'1'}",x.getX4((short)1));
+		assertEquals("{x:'10'}",x.getX4((short)10));
 		assertThrown(()->{x.getX4((short)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX4((short)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX5((short)1));
-		assertEquals("{x:'10'}", x.getX5((short)10));
+		assertEquals("{x:'1'}",x.getX5((short)1));
+		assertEquals("{x:'10'}",x.getX5((short)10));
 		assertThrown(()->{x.getX5((short)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX5((short)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX6((short)2));
-		assertEquals("{x:'9'}", x.getX6((short)9));
+		assertEquals("{x:'2'}",x.getX6((short)2));
+		assertEquals("{x:'9'}",x.getX6((short)9));
 		assertThrown(()->{x.getX6((short)1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX6((short)10);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX7(1l));
-		assertEquals("{x:'10'}", x.getX7(10l));
+		assertEquals("{x:'1'}",x.getX7(1l));
+		assertEquals("{x:'10'}",x.getX7(10l));
 		assertThrown(()->{x.getX7(0l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX7(11l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX8(1l));
-		assertEquals("{x:'10'}", x.getX8(10l));
+		assertEquals("{x:'1'}",x.getX8(1l));
+		assertEquals("{x:'10'}",x.getX8(10l));
 		assertThrown(()->{x.getX8(0l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX8(11l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX9(2l));
-		assertEquals("{x:'9'}", x.getX9(9l));
+		assertEquals("{x:'2'}",x.getX9(2l));
+		assertEquals("{x:'9'}",x.getX9(9l));
 		assertThrown(()->{x.getX9(1l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX9(10l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX10(1f));
-		assertEquals("{x:'10.0'}", x.getX10(10f));
+		assertEquals("{x:'1.0'}",x.getX10(1f));
+		assertEquals("{x:'10.0'}",x.getX10(10f));
 		assertThrown(()->{x.getX10(0.9f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX10(10.1f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX11(1f));
-		assertEquals("{x:'10.0'}", x.getX11(10f));
+		assertEquals("{x:'1.0'}",x.getX11(1f));
+		assertEquals("{x:'10.0'}",x.getX11(10f));
 		assertThrown(()->{x.getX11(0.9f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX11(10.1f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.1'}", x.getX12(1.1f));
-		assertEquals("{x:'9.9'}", x.getX12(9.9f));
+		assertEquals("{x:'1.1'}",x.getX12(1.1f));
+		assertEquals("{x:'9.9'}",x.getX12(9.9f));
 		assertThrown(()->{x.getX12(1f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX12(10f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX13(1d));
-		assertEquals("{x:'10.0'}", x.getX13(10d));
+		assertEquals("{x:'1.0'}",x.getX13(1d));
+		assertEquals("{x:'10.0'}",x.getX13(10d));
 		assertThrown(()->{x.getX13(0.9d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX13(10.1d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX14(1d));
-		assertEquals("{x:'10.0'}", x.getX14(10d));
+		assertEquals("{x:'1.0'}",x.getX14(1d));
+		assertEquals("{x:'10.0'}",x.getX14(10d));
 		assertThrown(()->{x.getX14(0.9d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX14(10.1d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.1'}", x.getX15(1.1d));
-		assertEquals("{x:'9.9'}", x.getX15(9.9d));
+		assertEquals("{x:'1.1'}",x.getX15(1.1d));
+		assertEquals("{x:'9.9'}",x.getX15(9.9d));
 		assertThrown(()->{x.getX15(1d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX15(10d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX16((byte)1));
-		assertEquals("{x:'10'}", x.getX16((byte)10));
+		assertEquals("{x:'1'}",x.getX16((byte)1));
+		assertEquals("{x:'10'}",x.getX16((byte)10));
 		assertThrown(()->{x.getX16((byte)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX16((byte)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX17((byte)1));
-		assertEquals("{x:'10'}", x.getX17((byte)10));
+		assertEquals("{x:'1'}",x.getX17((byte)1));
+		assertEquals("{x:'10'}",x.getX17((byte)10));
 		assertThrown(()->{x.getX17((byte)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX17((byte)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX18((byte)2));
-		assertEquals("{x:'9'}", x.getX18((byte)9));
+		assertEquals("{x:'2'}",x.getX18((byte)2));
+		assertEquals("{x:'9'}",x.getX18((byte)9));
 		assertThrown(()->{x.getX18((byte)1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX18((byte)10);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX19(new AtomicInteger(1)));
-		assertEquals("{x:'10'}", x.getX19(new AtomicInteger(10)));
+		assertEquals("{x:'1'}",x.getX19(new AtomicInteger(1)));
+		assertEquals("{x:'10'}",x.getX19(new AtomicInteger(10)));
 		assertThrown(()->{x.getX19(new AtomicInteger(0));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX19(new AtomicInteger(11));}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX20(new AtomicInteger(1)));
-		assertEquals("{x:'10'}", x.getX20(new AtomicInteger(10)));
+		assertEquals("{x:'1'}",x.getX20(new AtomicInteger(1)));
+		assertEquals("{x:'10'}",x.getX20(new AtomicInteger(10)));
 		assertThrown(()->{x.getX20(new AtomicInteger(0));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX20(new AtomicInteger(11));}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX21(new AtomicInteger(2)));
-		assertEquals("{x:'9'}", x.getX21(new AtomicInteger(9)));
+		assertEquals("{x:'2'}",x.getX21(new AtomicInteger(2)));
+		assertEquals("{x:'9'}",x.getX21(new AtomicInteger(9)));
 		assertThrown(()->{x.getX21(new AtomicInteger(1));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX21(new AtomicInteger(10));}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX22(new BigDecimal(1)));
-		assertEquals("{x:'10'}", x.getX22(new BigDecimal(10)));
+		assertEquals("{x:'1'}",x.getX22(new BigDecimal(1)));
+		assertEquals("{x:'10'}",x.getX22(new BigDecimal(10)));
 		assertThrown(()->{x.getX22(new BigDecimal(0));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX22(new BigDecimal(11));}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX23(new BigDecimal(1)));
-		assertEquals("{x:'10'}", x.getX23(new BigDecimal(10)));
+		assertEquals("{x:'1'}",x.getX23(new BigDecimal(1)));
+		assertEquals("{x:'10'}",x.getX23(new BigDecimal(10)));
 		assertThrown(()->{x.getX23(new BigDecimal(0));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX23(new BigDecimal(11));}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX24(new BigDecimal(2)));
-		assertEquals("{x:'9'}", x.getX24(new BigDecimal(9)));
+		assertEquals("{x:'2'}",x.getX24(new BigDecimal(2)));
+		assertEquals("{x:'9'}",x.getX24(new BigDecimal(9)));
 		assertThrown(()->{x.getX24(new BigDecimal(1));}).contains("Minimum value not met");
 		assertThrown(()->{x.getX24(new BigDecimal(10));}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX25(1));
-		assertEquals("{x:'10'}", x.getX25(10));
+		assertEquals("{x:'1'}",x.getX25(1));
+		assertEquals("{x:'10'}",x.getX25(10));
 		assertThrown(()->{x.getX25(0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX25(11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX26(1));
-		assertEquals("{x:'10'}", x.getX26(10));
+		assertEquals("{x:'1'}",x.getX26(1));
+		assertEquals("{x:'10'}",x.getX26(10));
 		assertThrown(()->{x.getX26(0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX26(11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX27(2));
-		assertEquals("{x:'9'}", x.getX27(9));
+		assertEquals("{x:'2'}",x.getX27(2));
+		assertEquals("{x:'9'}",x.getX27(9));
 		assertThrown(()->{x.getX27(1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX27(10);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX28((short)1));
-		assertEquals("{x:'10'}", x.getX28((short)10));
+		assertEquals("{x:'1'}",x.getX28((short)1));
+		assertEquals("{x:'10'}",x.getX28((short)10));
 		assertThrown(()->{x.getX28((short)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX28((short)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX29((short)1));
-		assertEquals("{x:'10'}", x.getX29((short)10));
+		assertEquals("{x:'1'}",x.getX29((short)1));
+		assertEquals("{x:'10'}",x.getX29((short)10));
 		assertThrown(()->{x.getX29((short)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX29((short)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX30((short)2));
-		assertEquals("{x:'9'}", x.getX30((short)9));
+		assertEquals("{x:'2'}",x.getX30((short)2));
+		assertEquals("{x:'9'}",x.getX30((short)9));
 		assertThrown(()->{x.getX30((short)1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX30((short)10);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX31(1l));
-		assertEquals("{x:'10'}", x.getX31(10l));
+		assertEquals("{x:'1'}",x.getX31(1l));
+		assertEquals("{x:'10'}",x.getX31(10l));
 		assertThrown(()->{x.getX31(0l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX31(11l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX32(1l));
-		assertEquals("{x:'10'}", x.getX32(10l));
+		assertEquals("{x:'1'}",x.getX32(1l));
+		assertEquals("{x:'10'}",x.getX32(10l));
 		assertThrown(()->{x.getX32(0l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX32(11l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX33(2l));
-		assertEquals("{x:'9'}", x.getX33(9l));
+		assertEquals("{x:'2'}",x.getX33(2l));
+		assertEquals("{x:'9'}",x.getX33(9l));
 		assertThrown(()->{x.getX33(1l);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX33(10l);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX34(1f));
-		assertEquals("{x:'10.0'}", x.getX34(10f));
+		assertEquals("{x:'1.0'}",x.getX34(1f));
+		assertEquals("{x:'10.0'}",x.getX34(10f));
 		assertThrown(()->{x.getX34(0.9f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX34(10.1f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX35(1f));
-		assertEquals("{x:'10.0'}", x.getX35(10f));
+		assertEquals("{x:'1.0'}",x.getX35(1f));
+		assertEquals("{x:'10.0'}",x.getX35(10f));
 		assertThrown(()->{x.getX35(0.9f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX35(10.1f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.1'}", x.getX36(1.1f));
-		assertEquals("{x:'9.9'}", x.getX36(9.9f));
+		assertEquals("{x:'1.1'}",x.getX36(1.1f));
+		assertEquals("{x:'9.9'}",x.getX36(9.9f));
 		assertThrown(()->{x.getX36(1f);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX36(10f);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX37(1d));
-		assertEquals("{x:'10.0'}", x.getX37(10d));
+		assertEquals("{x:'1.0'}",x.getX37(1d));
+		assertEquals("{x:'10.0'}",x.getX37(10d));
 		assertThrown(()->{x.getX37(0.9d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX37(10.1d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.0'}", x.getX38(1d));
-		assertEquals("{x:'10.0'}", x.getX38(10d));
+		assertEquals("{x:'1.0'}",x.getX38(1d));
+		assertEquals("{x:'10.0'}",x.getX38(10d));
 		assertThrown(()->{x.getX38(0.9d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX38(10.1d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1.1'}", x.getX39(1.1d));
-		assertEquals("{x:'9.9'}", x.getX39(9.9d));
+		assertEquals("{x:'1.1'}",x.getX39(1.1d));
+		assertEquals("{x:'9.9'}",x.getX39(9.9d));
 		assertThrown(()->{x.getX39(1d);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX39(10d);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX40((byte)1));
-		assertEquals("{x:'10'}", x.getX40((byte)10));
+		assertEquals("{x:'1'}",x.getX40((byte)1));
+		assertEquals("{x:'10'}",x.getX40((byte)10));
 		assertThrown(()->{x.getX40((byte)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX40((byte)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'1'}", x.getX41((byte)1));
-		assertEquals("{x:'10'}", x.getX41((byte)10));
+		assertEquals("{x:'1'}",x.getX41((byte)1));
+		assertEquals("{x:'10'}",x.getX41((byte)10));
 		assertThrown(()->{x.getX41((byte)0);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX41((byte)11);}).contains("Maximum value exceeded");
-		assertEquals("{x:'2'}", x.getX42((byte)2));
-		assertEquals("{x:'9'}", x.getX42((byte)9));
+		assertEquals("{x:'2'}",x.getX42((byte)2));
+		assertEquals("{x:'9'}",x.getX42((byte)9));
 		assertThrown(()->{x.getX42((byte)1);}).contains("Minimum value not met");
 		assertThrown(()->{x.getX42((byte)10);}).contains("Maximum value exceeded");
 	}
@@ -403,22 +403,22 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void d01_path_miniMaxi() throws Exception {
-		D1 x = remote(D.class, D1.class);
-		assertEquals("{x:'1'}", x.getX1("1"));
-		assertEquals("{x:'1|2'}", x.getX1("1","2"));
+		D1 x = remote(D.class,D1.class);
+		assertEquals("{x:'1'}",x.getX1("1"));
+		assertEquals("{x:'1|2'}",x.getX1("1","2"));
 		assertThrown(()->{x.getX1();}).contains("Minimum number of items not met");
 		assertThrown(()->{x.getX1("1","2","3");}).contains("Maximum number of items exceeded");
-		assertEquals("{x:null}", x.getX1((String)null));
-		assertEquals("{x:'1'}", x.getX2(new String[]{"1"}));
-		assertEquals("{x:'1|2'}", x.getX2(new String[]{"1","2"}));
+		assertEquals("{x:null}",x.getX1((String)null));
+		assertEquals("{x:'1'}",x.getX2(new String[]{"1"}));
+		assertEquals("{x:'1|2'}",x.getX2(new String[]{"1","2"}));
 		assertThrown(()->{x.getX2(new String[]{});}).contains("Minimum number of items not met");
 		assertThrown(()->{x.getX2(new String[]{"1","2","3"});}).contains("Maximum number of items exceeded");
-		assertEquals("{x:null}", x.getX2(new String[]{null}));
-		assertEquals("{x:'1|1'}", x.getX3("1","1"));
-		assertEquals("{x:'1|1'}", x.getX4(new String[]{"1","1"}));
-		assertEquals("{x:'1|2'}", x.getX5("1","2"));
+		assertEquals("{x:null}",x.getX2(new String[]{null}));
+		assertEquals("{x:'1|1'}",x.getX3("1","1"));
+		assertEquals("{x:'1|1'}",x.getX4(new String[]{"1","1"}));
+		assertEquals("{x:'1|2'}",x.getX5("1","2"));
 		assertThrown(()->{x.getX5("1","1");}).contains("Duplicate items not allowed");
-		assertEquals("{x:'1|2'}", x.getX6(new String[]{"1","2"}));
+		assertEquals("{x:'1|2'}",x.getX6(new String[]{"1","2"}));
 		assertThrown(()->{x.getX6(new String[]{"1","1"});}).contains("Duplicate items not allowed");
 	}
 
@@ -447,26 +447,26 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void e01_path_minLength_maxLength() throws Exception {
-		E1 x = remote(E.class, E1.class);
-		assertEquals("{x:'12'}", x.getX1("12"));
-		assertEquals("{x:'123'}", x.getX1("123"));
+		E1 x = remote(E.class,E1.class);
+		assertEquals("{x:'12'}",x.getX1("12"));
+		assertEquals("{x:'123'}",x.getX1("123"));
 		assertThrown(()->{x.getX1("1");}).contains("Minimum length of value not met");
 		assertThrown(()->{x.getX1("1234");}).contains("Maximum length of value exceeded");
-		assertEquals("{x:'12|34'}", x.getX2("12","34"));
-		assertEquals("{x:'123|456'}", x.getX2("123","456"));
+		assertEquals("{x:'12|34'}",x.getX2("12","34"));
+		assertEquals("{x:'123|456'}",x.getX2("123","456"));
 		assertThrown(()->{x.getX2("1","2");}).contains("Minimum length of value not met");
 		assertThrown(()->{x.getX2("1234","5678");}).contains("Maximum length of value exceeded");
-		assertEquals("{x:'12|null'}", x.getX2("12",null));
-		assertEquals("{x:'foo'}", x.getX3("foo"));
+		assertEquals("{x:'12|null'}",x.getX2("12",null));
+		assertEquals("{x:'foo'}",x.getX3("foo"));
 		assertThrown(()->{x.getX3("bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertEquals("{x:'foo'}", x.getX4("foo"));
+		assertEquals("{x:'foo'}",x.getX4("foo"));
 		assertThrown(()->{x.getX4("bar");}).contains("Value does not match one of the expected values.  Must be one of the following: ['foo']");
-		assertEquals("{x:null}", x.getX4((String)null));
-		assertEquals("{x:'foo123'}", x.getX5("foo123"));
+		assertEquals("{x:null}",x.getX4((String)null));
+		assertEquals("{x:'foo123'}",x.getX5("foo123"));
 		assertThrown(()->{x.getX5("bar");}).contains("Value does not match expected pattern");
-		assertEquals("{x:'foo123'}", x.getX6("foo123"));
+		assertEquals("{x:'foo123'}",x.getX6("foo123"));
 		assertThrown(()->{x.getX6("foo");}).contains("Value does not match expected pattern");
-		assertEquals("{x:null}", x.getX6((String)null));
+		assertEquals("{x:null}",x.getX6((String)null));
 	}
 
 	//=================================================================================================================
@@ -502,34 +502,34 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void f01_path_multipleOf() throws Exception {
-		F1 x = remote(F.class, F1.class);
-		assertEquals("{x:'4'}", x.getX1(4));
+		F1 x = remote(F.class,F1.class);
+		assertEquals("{x:'4'}",x.getX1(4));
 		assertThrown(()->{x.getX1(5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX2((short)4));
+		assertEquals("{x:'4'}",x.getX2((short)4));
 		assertThrown(()->{x.getX2((short)5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX3(4));
+		assertEquals("{x:'4'}",x.getX3(4));
 		assertThrown(()->{x.getX3(5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4.0'}", x.getX4(4));
+		assertEquals("{x:'4.0'}",x.getX4(4));
 		assertThrown(()->{x.getX4(5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4.0'}", x.getX5(4));
+		assertEquals("{x:'4.0'}",x.getX5(4));
 		assertThrown(()->{x.getX5(5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX6((byte)4));
+		assertEquals("{x:'4'}",x.getX6((byte)4));
 		assertThrown(()->{x.getX6((byte)5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX7(new AtomicInteger(4)));
+		assertEquals("{x:'4'}",x.getX7(new AtomicInteger(4)));
 		assertThrown(()->{x.getX7(new AtomicInteger(5));}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX8(new BigDecimal(4)));
+		assertEquals("{x:'4'}",x.getX8(new BigDecimal(4)));
 		assertThrown(()->{x.getX8(new BigDecimal(5));}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX9(4));
+		assertEquals("{x:'4'}",x.getX9(4));
 		assertThrown(()->{x.getX9(5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX10((short)4));
+		assertEquals("{x:'4'}",x.getX10((short)4));
 		assertThrown(()->{x.getX10((short)5);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX11(4l));
+		assertEquals("{x:'4'}",x.getX11(4l));
 		assertThrown(()->{x.getX11(5l);}).contains("Multiple-of not met");
-		assertEquals("{x:'4.0'}", x.getX12(4f));
+		assertEquals("{x:'4.0'}",x.getX12(4f));
 		assertThrown(()->{x.getX12(5f);}).contains("Multiple-of not met");
-		assertEquals("{x:'4.0'}", x.getX13(4d));
+		assertEquals("{x:'4.0'}",x.getX13(4d));
 		assertThrown(()->{x.getX13(5d);}).contains("Multiple-of not met");
-		assertEquals("{x:'4'}", x.getX14((byte)4));
+		assertEquals("{x:'4'}",x.getX14((byte)4));
 		assertThrown(()->{x.getX14((byte)5);}).contains("Multiple-of not met");
 	}
 
@@ -548,7 +548,7 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void h01_path_required() throws Exception {
-		G1 x = remote(G.class, G1.class);
+		G1 x = remote(G.class,G1.class);
 		assertThrown(()->{x.getX1(null);}).contains("Required value not provided.");
 	}
 
@@ -572,8 +572,8 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void h01_path_serializer() throws Exception {
-		H1 x = remote(H.class, H1.class);
-		assertEquals("{x:'xXx'}", x.getX1("X"));
+		H1 x = remote(H.class,H1.class);
+		assertEquals("{x:'xXx'}",x.getX1("X"));
 	}
 
 	//=================================================================================================================
@@ -627,11 +627,11 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void k01_requestBean_simpleVals() throws Exception {
-		K1 x1 = remote(K.class, K1.class);
+		K1 x1 = remote(K.class,K1.class);
 		K1 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
-		assertEquals("a1/b1/c1//true/123", x1.getX1(new K1a()));
-		assertEquals("a1/b1/c1//'true'/'123'", x2.getX1(new K1a()));
-		assertEquals("xa1x/xb1x/xc1x/xx/xtruex/x123x", x2.getX2(new K1a()));
+		assertEquals("a1/b1/c1//true/123",x1.getX1(new K1a()));
+		assertEquals("a1/b1/c1//'true'/'123'",x2.getX1(new K1a()));
+		assertEquals("xa1x/xb1x/xc1x/xx/xtruex/x123x",x2.getX2(new K1a()));
 	}
 
 	//=================================================================================================================
@@ -665,11 +665,11 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void k02_reauestBean_maps() throws Exception {
-		K2 x1 = remote(K.class, K2.class);
+		K2 x1 = remote(K.class,K2.class);
 		K2 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
-		assertEquals("v1/123/null//true/123/null/v1/123/null/", x1.getX1(new K2a()));
-		assertEquals("v1/123/null//'true'/'123'/'null'/v1/123/null/", x2.getX1(new K2a()));
-		assertEquals("xv1x/x123x/null/xx/xtruex/x123x/xnullx/xv1x/x123x/null/xx", x2.getX2(new K2a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null/",x1.getX1(new K2a()));
+		assertEquals("v1/123/null//'true'/'123'/'null'/v1/123/null/",x2.getX1(new K2a()));
+		assertEquals("xv1x/x123x/null/xx/xtruex/x123x/xnullx/xv1x/x123x/null/xx",x2.getX2(new K2a()));
 	}
 
 	//=================================================================================================================
@@ -705,17 +705,17 @@ public class Remote_PathAnnotation_Test {
 		}
 		@Path(aev=true)
 		public BasicNameValuePair[] getF() {
-			return pairs("f1","v1","f2", 123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
+			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
 		}
 	}
 
 	@Test
 	public void k03_requestBean_nameValuePairs() throws Exception {
-		K3 x1 = remote(K.class, K3.class);
+		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/", x1.getX1(new K3a()));
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/", x2.getX1(new K3a()));
-		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/", x2.getX2(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x1.getX1(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x2.getX1(new K3a()));
+		assertEquals("v1/123/null//true/123/null/v1/123/null//v1/123/null//v1/123/null/",x2.getX2(new K3a()));
 	}
 
 	//=================================================================================================================
@@ -737,7 +737,7 @@ public class Remote_PathAnnotation_Test {
 		public List<Object> getX1() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
-		@Path(n="c", serializer=ListSerializer.class)
+		@Path(n="c",serializer=ListSerializer.class)
 		public List<Object> getX2() {
 			return AList.of("foo","","true","123","null",true,123,null);
 		}
@@ -747,11 +747,11 @@ public class Remote_PathAnnotation_Test {
 		}
 		@Path("f")
 		public Object[] getX5() {
-			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
+			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
-		@Path(n="g", serializer=ListSerializer.class)
+		@Path(n="g",serializer=ListSerializer.class)
 		public Object[] getX6() {
-			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
+			return new Object[]{"foo","","true","123","null",true,123,null};
 		}
 		@Path(n="h",aev=true)
 		public Object[] getX7() {
@@ -761,11 +761,11 @@ public class Remote_PathAnnotation_Test {
 
 	@Test
 	public void k04_requestBean_collections() throws Exception {
-		K4 x1 = remote(K.class, K4.class);
+		K4 x1 = remote(K.class,K4.class);
 		K4 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
-		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null/", x1.getX1(new K4a()));
-		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()", x2.getX1(new K4a()));
-		assertEquals("fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null/", x2.getX2(new K4a()));
+		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null/",x1.getX1(new K4a()));
+		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()",x2.getX1(new K4a()));
+		assertEquals("fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null/",x2.getX2(new K4a()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -1805,10 +1805,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 				l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, serializer, schema, flags));
-		} else if (value instanceof Reader || value instanceof InputStream || value instanceof CharSequence) {
-			return formDataCustom(value);
 		} else {
-			throw new RestCallException("Invalid value type for formdata arg ''{0}'': {1}", name, className(value));
+			return formDataCustom(value);
 		}
 
 		return innerFormData(flags, l);
@@ -1816,7 +1814,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private RestRequest innerFormData(EnumSet<AddFlag> flags, List<NameValuePair> params) {
 		flags = AddFlag.orDefault(flags);
-		params.removeIf(x -> x == null|| x.getValue() == null);
+		params.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			params.removeIf(x -> isEmpty(x.getValue()));
 		if (formData == null)
@@ -2278,7 +2276,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
-		} else {
+		} else if (value != null) {
 			throw new RestCallException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
 		}
 
@@ -2287,14 +2285,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private RestRequest innerHeaders(EnumSet<AddFlag> flags, Collection<Header> headers) {
 		flags = AddFlag.orDefault(flags);
-		headers.removeIf(x -> x == null || x.getValue() == null);
+		headers.removeIf(x -> x.getValue() == null);
 		if (flags.contains(SKIP_IF_EMPTY))
 			headers.removeIf(x -> isEmpty(x.getValue()));
 		if (flags.contains(REPLACE)) {
 			for (Header h : headers)
 				removeHeaders(h.getName());
 		} else if (flags.contains(PREPEND)) {
-			for (Header h : headers) {
+			for (Header h : AList.of(headers)) {
 				for (Header h2 : getHeaders(h.getName()))
 					headers.add(h2);
 				removeHeaders(h.getName());

@@ -70,9 +70,9 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void a01_splitAnnotations() throws Exception {
 		A x = MockRestClient.buildJson(A1.class).getRemote(A.class);
-		assertEquals("foo", x.putX1("foo"));
-		assertEquals("foo", x.getX2("foo"));
-		assertEquals("foo", x.getX3("foo"));
+		assertEquals("foo",x.putX1("foo"));
+		assertEquals("foo",x.getX2("foo"));
+		assertEquals("foo",x.getX3("foo"));
 	}
 
 	//=================================================================================================================
@@ -105,9 +105,9 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void b01_combinedAnnotations() throws Exception {
 		B x = MockRestClient.create(B1.class).json().build().getRemote(B.class);
-		assertEquals("foo", x.putX1("foo"));
-		assertEquals("foo", x.getX2("foo"));
-		assertEquals("foo", x.getX3("foo"));
+		assertEquals("foo",x.putX1("foo"));
+		assertEquals("foo",x.getX2("foo"));
+		assertEquals("foo",x.getX3("foo"));
 	}
 
 	//=================================================================================================================
@@ -169,32 +169,32 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void c01_standardResponses() throws Exception {
 		C x = MockRestClient.create(C1.class).json().disableRedirectHandling().build().getRemote(C.class);
-		assertEquals("OK", x.ok().toString());
-		assertEquals("Accepted", x.accepted().toString());
-		assertEquals("Already Reported", x.alreadyReported().toString());
+		assertEquals("OK",x.ok().toString());
+		assertEquals("Accepted",x.accepted().toString());
+		assertEquals("Already Reported",x.alreadyReported().toString());
 		// HttpClient goes into loop if status code is less than 200.
-		//assertEquals("Continue", ic._continue().toString());
-		assertEquals("Created", x.created().toString());
+		//assertEquals("Continue",ic._continue().toString());
+		assertEquals("Created",x.created().toString());
 		// HttpClient goes into loop if status code is less than 200.
-		//assertEquals("Early Hints", ic.earlyHints().toString());
-		assertEquals("Found", x.found().toString());
-		assertEquals("IM Used", x.iMUsed().toString());
-		assertEquals("Moved Permanently", x.movedPermanently().toString());
-		assertEquals("Multiple Choices", x.multipleChoices().toString());
-		assertEquals("Multi-Status", x.multiStatus().toString());
-		assertEquals("No Content", x.noContent().toString());
-		assertEquals("Non-Authoritative Information", x.nonAuthoritiveInformation().toString());
-		assertEquals("Not Modified", x.notModified().toString());
-		assertEquals("Partial Content", x.partialContent().toString());
-		assertEquals("Permanent Redirect", x.permanentRedirect().toString());
+		//assertEquals("Early Hints",ic.earlyHints().toString());
+		assertEquals("Found",x.found().toString());
+		assertEquals("IM Used",x.iMUsed().toString());
+		assertEquals("Moved Permanently",x.movedPermanently().toString());
+		assertEquals("Multiple Choices",x.multipleChoices().toString());
+		assertEquals("Multi-Status",x.multiStatus().toString());
+		assertEquals("No Content",x.noContent().toString());
+		assertEquals("Non-Authoritative Information",x.nonAuthoritiveInformation().toString());
+		assertEquals("Not Modified",x.notModified().toString());
+		assertEquals("Partial Content",x.partialContent().toString());
+		assertEquals("Permanent Redirect",x.permanentRedirect().toString());
 		// HttpClient goes into loop if status code is less than 200.
-		//assertEquals("Processing", ic.processing().toString());
-		assertEquals("Reset Content", x.resetContent().toString());
-		assertEquals("See Other", x.seeOther().toString());
+		//assertEquals("Processing",ic.processing().toString());
+		assertEquals("Reset Content",x.resetContent().toString());
+		assertEquals("See Other",x.seeOther().toString());
 		// HttpClient goes into loop if status code is less than 200.
-		//assertEquals("Switching Protocols", ic.switchingProtocols().toString());
-		assertEquals("Temporary Redirect", x.temporaryRedirect().toString());
-		assertEquals("Use Proxy", x.useProxy().toString());
+		//assertEquals("Switching Protocols",ic.switchingProtocols().toString());
+		assertEquals("Temporary Redirect",x.temporaryRedirect().toString());
+		assertEquals("Use Proxy",x.useProxy().toString());
 	}
 
 	//=================================================================================================================
@@ -211,11 +211,11 @@ public class Remote_CommonInterfaces_Test {
 	public static class D1 implements D {
 		@Override
 		public StreamResource streamResource() throws IOException {
-			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo", "foo").headers(ETag.of("bar")).build();
+			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar")).build();
 		}
 		@Override
 		public ReaderResource readerResource() throws IOException {
-			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo", "foo").headers(ETag.of("bar")).build();
+			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo","foo").headers(ETag.of("bar")).build();
 		}
 	}
 
@@ -223,15 +223,15 @@ public class Remote_CommonInterfaces_Test {
 	public void d01_streamResource_readerResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
 		StreamResource sr = x.streamResource();
-		assertEquals("foo", IOUtils.read(sr.getContents()));
-		assertEquals("foo", sr.getHeaders().get("Foo"));
-		assertEquals("bar", sr.getHeaders().get("ETag"));
-		assertEquals("text/foo", sr.getContentType().toString());
+		assertEquals("foo",IOUtils.read(sr.getContents()));
+		assertEquals("foo",sr.getHeaders().get("Foo"));
+		assertEquals("bar",sr.getHeaders().get("ETag"));
+		assertEquals("text/foo",sr.getContentType().toString());
 		ReaderResource rr = x.readerResource();
-		assertEquals("foo", IOUtils.read(rr.getContents()));
-		assertEquals("foo", rr.getHeaders().get("Foo"));
-		assertEquals("bar", rr.getHeaders().get("ETag"));
-		assertEquals("text/foo", rr.getContentType().toString());
+		assertEquals("foo",IOUtils.read(rr.getContents()));
+		assertEquals("foo",rr.getHeaders().get("Foo"));
+		assertEquals("bar",rr.getHeaders().get("ETag"));
+		assertEquals("text/foo",rr.getContentType().toString());
 	}
 
 	//=================================================================================================================
@@ -802,39 +802,39 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void f01_badRequest_returnedExceptions() {
 		F x = MockRestClient.create(F1.class).json().build().getRemote(F.class);
-		assertEquals("foo", x.badRequest().getMessage());
-		assertEquals("foo", x.conflict().getMessage());
-		assertEquals("foo", x.expectationFailed().getMessage());
-		assertEquals("foo", x.failedDependency().getMessage());
-		assertEquals("foo", x.forbidden().getMessage());
-		assertEquals("foo", x.gone().getMessage());
-		assertEquals("foo", x.httpVersionNotSupported().getMessage());
-		assertEquals("foo", x.insufficientStorage().getMessage());
-		assertEquals("foo", x.internalServerError().getMessage());
-		assertEquals("foo", x.lengthRequired().getMessage());
-		assertEquals("foo", x.locked().getMessage());
-		assertEquals("foo", x.loopDetected().getMessage());
-		assertEquals("foo", x.methodNotAllowed().getMessage());
-		assertEquals("foo", x.misdirectedRequest().getMessage());
-		assertEquals("foo", x.networkAuthenticationRequired().getMessage());
-		assertEquals("foo", x.notAcceptable().getMessage());
-		assertEquals("foo", x.notExtended().getMessage());
-		assertEquals("foo", x.notFound().getMessage());
-		assertEquals("foo", x.notImplemented().getMessage());
-		assertEquals("foo", x.payloadTooLarge().getMessage());
-		assertEquals("foo", x.preconditionFailed().getMessage());
-		assertEquals("foo", x.preconditionRequired().getMessage());
-		assertEquals("foo", x.rangeNotSatisfiable().getMessage());
-		assertEquals("foo", x.requestHeaderFieldsTooLarge().getMessage());
-		assertEquals("foo", x.serviceUnavailable().getMessage());
-		assertEquals("foo", x.tooManyRequests().getMessage());
-		assertEquals("foo", x.unauthorized().getMessage());
-		assertEquals("foo", x.unavailableForLegalReasons().getMessage());
-		assertEquals("foo", x.unprocessableEntity().getMessage());
-		assertEquals("foo", x.unsupportedMediaType().getMessage());
-		assertEquals("foo", x.upgradeRequired().getMessage());
-		assertEquals("foo", x.uriTooLong().getMessage());
-		assertEquals("foo", x.variantAlsoNegotiates().getMessage());
+		assertEquals("foo",x.badRequest().getMessage());
+		assertEquals("foo",x.conflict().getMessage());
+		assertEquals("foo",x.expectationFailed().getMessage());
+		assertEquals("foo",x.failedDependency().getMessage());
+		assertEquals("foo",x.forbidden().getMessage());
+		assertEquals("foo",x.gone().getMessage());
+		assertEquals("foo",x.httpVersionNotSupported().getMessage());
+		assertEquals("foo",x.insufficientStorage().getMessage());
+		assertEquals("foo",x.internalServerError().getMessage());
+		assertEquals("foo",x.lengthRequired().getMessage());
+		assertEquals("foo",x.locked().getMessage());
+		assertEquals("foo",x.loopDetected().getMessage());
+		assertEquals("foo",x.methodNotAllowed().getMessage());
+		assertEquals("foo",x.misdirectedRequest().getMessage());
+		assertEquals("foo",x.networkAuthenticationRequired().getMessage());
+		assertEquals("foo",x.notAcceptable().getMessage());
+		assertEquals("foo",x.notExtended().getMessage());
+		assertEquals("foo",x.notFound().getMessage());
+		assertEquals("foo",x.notImplemented().getMessage());
+		assertEquals("foo",x.payloadTooLarge().getMessage());
+		assertEquals("foo",x.preconditionFailed().getMessage());
+		assertEquals("foo",x.preconditionRequired().getMessage());
+		assertEquals("foo",x.rangeNotSatisfiable().getMessage());
+		assertEquals("foo",x.requestHeaderFieldsTooLarge().getMessage());
+		assertEquals("foo",x.serviceUnavailable().getMessage());
+		assertEquals("foo",x.tooManyRequests().getMessage());
+		assertEquals("foo",x.unauthorized().getMessage());
+		assertEquals("foo",x.unavailableForLegalReasons().getMessage());
+		assertEquals("foo",x.unprocessableEntity().getMessage());
+		assertEquals("foo",x.unsupportedMediaType().getMessage());
+		assertEquals("foo",x.upgradeRequired().getMessage());
+		assertEquals("foo",x.uriTooLong().getMessage());
+		assertEquals("foo",x.variantAlsoNegotiates().getMessage());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -862,8 +862,8 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void g01_reader_inputStream() throws Exception {
 		G x = MockRestClient.build(G1.class).getRemote(G.class);
-		assertEquals("foo", IOUtils.read(x.reader()));
-		assertEquals("foo", IOUtils.read(x.inputStream()));
+		assertEquals("foo",IOUtils.read(x.reader()));
+		assertEquals("foo",IOUtils.read(x.inputStream()));
 	}
 
 	//=================================================================================================================
@@ -886,6 +886,6 @@ public class Remote_CommonInterfaces_Test {
 	@Test
 	public void h01_seeOtherRoot() throws Exception {
 		IH x = MockRestClient.create(H.class).json().disableRedirectHandling().build().getRemote(IH.class);
-		assertEquals("See Other", x.seeOtherRoot().toString());
+		assertEquals("See Other",x.seeOtherRoot().toString());
 	}
 }

@@ -59,9 +59,9 @@ public class Remote_Test {
 	@Test
 	public void a01_noPath() throws Exception {
 		A1 x = MockRestClient.build(A.class).getRemote(A1.class);
-		assertEquals("foo", x.x1());
-		assertEquals("foo", x.x1a());
-		assertEquals("foo", x.x1b());
+		assertEquals("foo",x.x1());
+		assertEquals("foo",x.x1a());
+		assertEquals("foo",x.x1b());
 	}
 
 	@Remote(path="A")
@@ -74,9 +74,9 @@ public class Remote_Test {
 	@Test
 	public void a02_normalPath() throws Exception {
 		A2 x = MockRestClient.build(A.class).getRemote(A2.class);
-		assertEquals("foo", x.x2());
-		assertEquals("foo", x.x2a());
-		assertEquals("foo", x.x2b());
+		assertEquals("foo",x.x2());
+		assertEquals("foo",x.x2a());
+		assertEquals("foo",x.x2b());
 	}
 
 	@Remote(path="/A/")
@@ -89,9 +89,9 @@ public class Remote_Test {
 	@Test
 	public void a03_normalPathWithSlashes() throws Exception {
 		A3 x = MockRestClient.build(A.class).getRemote(A3.class);
-		assertEquals("foo", x.x2());
-		assertEquals("foo", x.x2a());
-		assertEquals("foo", x.x2b());
+		assertEquals("foo",x.x2());
+		assertEquals("foo",x.x2a());
+		assertEquals("foo",x.x2b());
 	}
 
 	@Remote
@@ -104,9 +104,9 @@ public class Remote_Test {
 	@Test
 	public void a04_pathOnClient() throws Exception {
 		A4 x = MockRestClient.create(A.class).rootUrl("http://localhost/A").build().getRemote(A4.class);
-		assertEquals("foo", x.x2());
-		assertEquals("foo", x.x2a());
-		assertEquals("foo", x.x2b());
+		assertEquals("foo",x.x2());
+		assertEquals("foo",x.x2a());
+		assertEquals("foo",x.x2b());
 	}
 
 	@Remote(path="A/A")
@@ -119,9 +119,9 @@ public class Remote_Test {
 	@Test
 	public void a05_normalPath() throws Exception {
 		A5 x = MockRestClient.build(A.class).getRemote(A5.class);
-		assertEquals("foo", x.x3());
-		assertEquals("foo", x.x3a());
-		assertEquals("foo", x.x3b());
+		assertEquals("foo",x.x3());
+		assertEquals("foo",x.x3a());
+		assertEquals("foo",x.x3b());
 	}
 
 	@Remote(path="/A/A/")
@@ -134,9 +134,9 @@ public class Remote_Test {
 	@Test
 	public void a06_normalPathWithSlashes() throws Exception {
 		A6 x = MockRestClient.build(A.class).getRemote(A6.class);
-		assertEquals("foo", x.x3());
-		assertEquals("foo", x.x3a());
-		assertEquals("foo", x.x3b());
+		assertEquals("foo",x.x3());
+		assertEquals("foo",x.x3a());
+		assertEquals("foo",x.x3b());
 	}
 
 	@Remote(path="A")
@@ -149,9 +149,9 @@ public class Remote_Test {
 	@Test
 	public void a07_partialPath() throws Exception {
 		A7 x =  MockRestClient.create(A.class).rootUrl("http://localhost/A").build().getRemote(A7.class);
-		assertEquals("foo", x.x3());
-		assertEquals("foo", x.x3a());
-		assertEquals("foo", x.x3b());
+		assertEquals("foo",x.x3());
+		assertEquals("foo",x.x3a());
+		assertEquals("foo",x.x3b());
 	}
 
 	@Remote(path="/A/")
@@ -164,9 +164,9 @@ public class Remote_Test {
 	@Test
 	public void a08_partialPathExtraSlashes() throws Exception {
 		A8 x = MockRestClient.create(A.class).rootUrl("http://localhost/A/").build().getRemote(A8.class);
-		assertEquals("foo", x.x3());
-		assertEquals("foo", x.x3a());
-		assertEquals("foo", x.x3b());
+		assertEquals("foo",x.x3());
+		assertEquals("foo",x.x3a());
+		assertEquals("foo",x.x3b());
 	}
 
 	//=================================================================================================================
@@ -191,9 +191,9 @@ public class Remote_Test {
 	@Test
 	public void b01_noPath() throws Exception {
 		B1 x = MockRestClient.create(B.class).rootUrl("http://localhost/B").build().getRemote(B1.class);
-		assertEquals("foo", x.x1());
-		assertEquals("foo", x.x1a());
-		assertEquals("foo", x.x1b());
+		assertEquals("foo",x.x1());
+		assertEquals("foo",x.x1a());
+		assertEquals("foo",x.x1b());
 	}
 
 	@Remote(path="http://localhost/B")
@@ -206,9 +206,9 @@ public class Remote_Test {
 	@Test
 	public void b02_absolutePathOnClass() throws Exception {
 		B2 x = MockRestClient.create(B.class).rootUrl("http://localhost/B").build().getRemote(B2.class);
-		assertEquals("foo", x.x1());
-		assertEquals("foo", x.x1a());
-		assertEquals("foo", x.x1b());
+		assertEquals("foo",x.x1());
+		assertEquals("foo",x.x1a());
+		assertEquals("foo",x.x1b());
 	}
 
 	@Remote
@@ -220,10 +220,10 @@ public class Remote_Test {
 
 	@Test
 	public void b03_absolutePathsOnMethods() throws Exception {
-		B3 x1 = MockRestClient.create(B.class).rootUrl("http://localhost/B").build().getRemote(B3.class);
-		assertEquals("foo", x1.x1());
-		assertEquals("foo", x1.x1a());
-		assertEquals("foo", x1.x1b());
+		B3 x = MockRestClient.create(B.class).rootUrl("http://localhost/B").build().getRemote(B3.class);
+		assertEquals("foo",x.x1());
+		assertEquals("foo",x.x1a());
+		assertEquals("foo",x.x1b());
 	}
 
 	//=================================================================================================================
@@ -245,8 +245,8 @@ public class Remote_Test {
 
 	@Test
 	public void c01_overriddenRootUrl() throws Exception {
-		C1 x = MockRestClient.create(C.class).json().build().getRemote(C1.class, "http://localhost/C1");
-		assertEquals("foo", x.x1());
+		C1 x = MockRestClient.create(C.class).json().build().getRemote(C1.class,"http://localhost/C1");
+		assertEquals("foo",x.x1());
 	}
 
 	@Test
@@ -277,8 +277,8 @@ public class Remote_Test {
 	@Test
 	public void c03_methodNotAnnotated() throws Exception {
 		C3b x = MockRestClient.create(C3a.class).json().build().getRemote(C3b.class);
-		assertEquals("bar", x.x1());
-		assertEquals("baz", x.getX2());
+		assertEquals("bar",x.x1());
+		assertEquals("baz",x.getX2());
 	}
 
 	@Rest(path="/C4")
@@ -341,29 +341,29 @@ public class Remote_Test {
 
 	@Remote
 	public static interface D1a {
-		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS) int x1() throws AssertionError;
-		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS) Integer x2() throws AssertionError;
-		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS) boolean x3() throws AssertionError;
-		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS) Boolean x4() throws AssertionError;
-		@RemoteMethod(path="/r202", returns=RemoteReturn.STATUS) String x5() throws AssertionError;
-		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS) public int x6() throws AssertionError;
-		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS) public Integer x7() throws AssertionError;
-		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS) public boolean x8() throws AssertionError;
-		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS) public Boolean x9() throws AssertionError;
-		@RemoteMethod(path="/r400", returns=RemoteReturn.STATUS) public String x10() throws AssertionError;
+		@RemoteMethod(path="/r202",returns=RemoteReturn.STATUS) int x1() throws AssertionError;
+		@RemoteMethod(path="/r202",returns=RemoteReturn.STATUS) Integer x2() throws AssertionError;
+		@RemoteMethod(path="/r202",returns=RemoteReturn.STATUS) boolean x3() throws AssertionError;
+		@RemoteMethod(path="/r202",returns=RemoteReturn.STATUS) Boolean x4() throws AssertionError;
+		@RemoteMethod(path="/r202",returns=RemoteReturn.STATUS) String x5() throws AssertionError;
+		@RemoteMethod(path="/r400",returns=RemoteReturn.STATUS) public int x6() throws AssertionError;
+		@RemoteMethod(path="/r400",returns=RemoteReturn.STATUS) public Integer x7() throws AssertionError;
+		@RemoteMethod(path="/r400",returns=RemoteReturn.STATUS) public boolean x8() throws AssertionError;
+		@RemoteMethod(path="/r400",returns=RemoteReturn.STATUS) public Boolean x9() throws AssertionError;
+		@RemoteMethod(path="/r400",returns=RemoteReturn.STATUS) public String x10() throws AssertionError;
 	}
 
 	@Test
 	public void d01_statusReturnType() throws Exception {
 		D1a x = MockRestClient.create(D1.class).json().ignoreErrors().build().getRemote(D1a.class);
-		assertEquals(202, x.x1());
-		assertEquals(202, x.x2().intValue());
-		assertEquals(true, x.x3());
-		assertEquals(true, x.x4());
-		assertEquals(400, x.x6());
-		assertEquals(400, x.x7().intValue());
-		assertEquals(false, x.x8());
-		assertEquals(false, x.x9());
+		assertEquals(202,x.x1());
+		assertEquals(202,x.x2().intValue());
+		assertEquals(true,x.x3());
+		assertEquals(true,x.x4());
+		assertEquals(400,x.x6());
+		assertEquals(400,x.x7().intValue());
+		assertEquals(false,x.x8());
+		assertEquals(false,x.x9());
 		assertThrown(()->{x.x5();}).contains("Only integer and booleans types are valid.");
 		assertThrown(()->{x.x10();}).contains("Only integer and booleans types are valid.");
 	}
@@ -390,8 +390,8 @@ public class Remote_Test {
 	@Test
 	public void d02_primitiveReturns() throws Exception {
 		D2a x = MockRestClient.create(D2.class).json().ignoreErrors().build().getRemote(D2a.class);
-		assertEquals(0, x.x1());
-		assertEquals(1, x.x2());
+		assertEquals(0,x.x1());
+		assertEquals(1,x.x2());
 		assertNull(x.x1a());
 	}
 
@@ -420,7 +420,7 @@ public class Remote_Test {
 	public void e01_rrpcBasic() throws Exception {
 		E1 x = MockRestClient.create(E.class).rootUrl("http://localhost/proxy").json().build().getRrpcInterface(E1.class);
 
-		assertEquals("foo", x.echo("foo"));
+		assertEquals("foo",x.echo("foo"));
 	}
 
 	@Test
@@ -437,7 +437,7 @@ public class Remote_Test {
 	@Test
 	public void e03_rrpc_noRestUrl() throws Exception {
 		E3 x = MockRestClient.create(E.class).rootUrl("http://localhost").json().build().getRrpcInterface(E3.class);
-		assertEquals("foo", x.echo("foo"));
+		assertEquals("foo",x.echo("foo"));
 	}
 
 	@Remote(path="http://localhost/proxy")
@@ -448,7 +448,7 @@ public class Remote_Test {
 	@Test
 	public void e04_rrpc_fullPathOnRemotePath() throws Exception {
 		E4 x = MockRestClient.create(E.class).rootUrl("").json().build().getRrpcInterface(E4.class);
-		assertEquals("foo", x.echo("foo"));
+		assertEquals("foo",x.echo("foo"));
 	}
 
 	@Rest
@@ -478,7 +478,7 @@ public class Remote_Test {
 	@Test
 	public void e05_rrpc_rethrownCheckedException() throws Exception {
 		RestClient x = MockRestClient.create(E5.class).json().build();
-		assertThrown(()->{x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).is("foobar");
+		assertThrown(()->{x.getRrpcInterface(E5b.class,"/proxy").echo("foo");}).is("foobar");
 	}
 
 	@Rest
@@ -497,6 +497,6 @@ public class Remote_Test {
 	@Test
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
 		RestClient x = MockRestClient.create(E6.class).json().build();
-		assertThrown(()->{x.getRrpcInterface(E5b.class, "/proxy").echo("foo");}).contains("foobar");
+		assertThrown(()->{x.getRrpcInterface(E5b.class,"/proxy").echo("foo");}).contains("foobar");
 	}
 }
