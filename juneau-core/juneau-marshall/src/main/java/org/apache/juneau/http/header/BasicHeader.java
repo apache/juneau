@@ -37,6 +37,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	private final String name;
 	private final Object value;
+	private HeaderElement[] elements;
 
 	/**
 	 * Convenience creator.
@@ -149,11 +150,14 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override
 	public HeaderElement[] getElements() throws ParseException {
-		if (getValue() != null) {
-			// result intentionally not cached, it's probably not used again
-			return BasicHeaderValueParser.parseElements(getValue(), null);
+		if (elements == null) {
+			String s = getValue();
+			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
+			if (value instanceof Supplier)
+				return x;
+			elements = x;
 		}
-		return EMPTY_HEADER_ELEMENTS;
+		return elements;
 	}
 
 	/**

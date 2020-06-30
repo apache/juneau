@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.AddFlag.*;
 
@@ -323,6 +324,33 @@ public class RestClient_Headers_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// Response methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class C extends BasicRest {
+		@RestMethod(path="/")
+		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
+			String n = req.getHeader("Check");
+			String v = req.getHeaders().getString(n);
+			res.setHeader(n,v);
+			return v;
+		}
+	}
+
+	@Test
+	public void c01_response_getStringHeader() throws Exception {
+		assertEquals("bar", checkFooClient(C.class).build().get().json().header("Foo","bar").run().getStringHeader("Foo"));
+		assertEquals("bar", checkFooClient(C.class).build().get().json().header("Foo","bar").run().getStringHeader("Foo","baz"));
+		assertEquals("baz", checkFooClient(C.class).build().get().json().header("Foo","bar").run().getStringHeader("Bar","baz"));
+	}
+
+	@Test
+	public void c02_response_getCharacterEncoding() throws Exception {
+		assertEquals("iso-8859-1", checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().getCharacterEncoding());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -346,7 +374,15 @@ public class RestClient_Headers_Test {
 		return MockRestClient.create(A.class).simpleJson().header("Check","Foo");
 	}
 
+	private static RestClientBuilder checkFooClient(Class<?> c) {
+		return MockRestClient.create(c).simpleJson().header("Check","Foo");
+	}
+
 	private static RestClientBuilder checkClient(String headerToCheck) {
 		return MockRestClient.create(A.class).simpleJson().header("Check",headerToCheck);
+	}
+
+	private static RestClientBuilder checkClient(Class<?> c, String headerToCheck) {
+		return MockRestClient.create(c).simpleJson().header("Check",headerToCheck);
 	}
 }

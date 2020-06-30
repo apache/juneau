@@ -14,7 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.header.Constants.*;
 
-import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
@@ -52,7 +51,9 @@ import org.apache.juneau.internal.*;
  */
 @Header("Content-Type")
 @BeanIgnore
-public class ContentType extends MediaType implements org.apache.http.Header {
+public class ContentType extends BasicParameterizedHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	private static Cache<String,ContentType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
@@ -71,6 +72,7 @@ public class ContentType extends MediaType implements org.apache.http.Header {
 		return ct;
 	}
 
+	private final MediaType mediaType;
 
 	/**
 	 * Constructor.
@@ -78,7 +80,8 @@ public class ContentType extends MediaType implements org.apache.http.Header {
 	 * @param value The value for this header.
 	 */
 	public ContentType(String value) {
-		super(value);
+		super("Content-Type", value);
+		this.mediaType = new MediaType(value);
 	}
 
 	/**
@@ -101,7 +104,7 @@ public class ContentType extends MediaType implements org.apache.http.Header {
 
 		for (int i = 0; i < mediaTypes.length; i++) {
 			MediaType mt = mediaTypes[i];
-			int matchQuant2 = mt.match(this, true);
+			int matchQuant2 = mt.match(mediaType, true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;
@@ -110,19 +113,12 @@ public class ContentType extends MediaType implements org.apache.http.Header {
 		return matchIndex;
 	}
 
-	@Override /* Header */
-	public String getName() {
-		return "Content-Type";
-	}
-
-
-	@Override /* Header */
-	public String getValue() {
-		return toString();
-	}
-
-	@Override /* Header */
-	public HeaderElement[] getElements() throws ParseException {
-		return null;
+	/**
+	 * Returns this header as a {@link MediaType} object.
+	 *
+	 * @return This header as a {@link MediaType} object.
+	 */
+	public MediaType asMediaType() {
+		return mediaType;
 	}
 }

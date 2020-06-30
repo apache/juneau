@@ -31,6 +31,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
@@ -547,10 +548,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 		// Jetty doesn't set the content type correctly if set through this method.
 		// Tomcat/WAS does.
-		if (name.equalsIgnoreCase("Content-Type"))
+		if (name.equalsIgnoreCase("Content-Type")) {
 			super.setContentType(value);
-		else
+			ContentType ct = ContentType.of(value);
+			if (ct != null && ct.getParameter("charset") != null)
+				super.setCharacterEncoding(ct.getParameter("charset"));
+		} else {
 			super.setHeader(name, value);
+		}
 	}
 
 	/**

@@ -30,6 +30,7 @@ import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -225,8 +226,8 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public String getCharacterEncoding() throws RestCallException {
-		Set<String> s = getContentType().getParameters().get("charset");
-		return s == null || s.isEmpty() ? "utf-8" : s.iterator().next();
+		String s = getContentType().getParameter("charset");
+		return StringUtils.isEmpty(s) ? "utf-8" : s;
 	}
 
 	/**

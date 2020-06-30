@@ -123,7 +123,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @param mt The media type string.
 	 */
-	protected MediaType(String mt) {
+	public MediaType(String mt) {
 		Builder b = new Builder(mt);
 		this.mediaType = b.mediaType;
 		this.type = b.type;

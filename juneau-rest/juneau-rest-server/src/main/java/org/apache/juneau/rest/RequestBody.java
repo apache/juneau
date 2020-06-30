@@ -29,6 +29,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.util.*;
 
 /**
@@ -348,10 +349,10 @@ public class RequestBody {
 	private MediaType getMediaType() {
 		if (mediaType != null)
 			return mediaType;
-		MediaType mediaType = headers.getContentType();
-		if (mediaType == null && body != null)
+		ContentType ct = headers.getContentType();
+		if (ct == null && body != null)
 			return MediaType.UON;
-		return mediaType;
+		return ct == null ? null : ct.asMediaType();
 	}
 
 	/**
@@ -462,7 +463,7 @@ public class RequestBody {
 
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			headers.getContentType(), req.getParsers().getSupportedMediaTypes()
+			headers.getContentType().getValue(), req.getParsers().getSupportedMediaTypes()
 		);
 	}
 

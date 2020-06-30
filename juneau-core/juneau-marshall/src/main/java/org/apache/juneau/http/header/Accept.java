@@ -145,7 +145,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept")
-public class Accept extends BasicStringHeader {
+public class Accept extends BasicParameterizedArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 

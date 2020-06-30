@@ -12,69 +12,31 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.header.Constants.*;
-
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
+import org.apache.http.*;
 
 /**
- * Represents a parsed <l>Content-Disposition</l> HTTP request header.
+ * Category of headers that consist of multiple parameterized string values.
  *
  * <p>
- * In a regular HTTP response, the Content-Disposition response header is a header indicating if the content is expected
- * to be displayed inline in the browser, that is, as a Web page or as part of a Web page, or as an attachment, that is
- * downloaded and saved locally.
- *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Content-Disposition: form-data; name="fieldName"; filename="filename.jpg"
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
- * <p class='bcode w800'>
- *	content-disposition = "Content-Disposition" ":"
- *  	disposition-type *( ";" disposition-parm )
- * 	disposition-type = "attachment" | disp-extension-token
- * 	disposition-parm = filename-parm | disp-extension-parm
- * 	filename-parm = "filename" "=" quoted-string
- *	disp-extension-token = token
- * 	disp-extension-parm = token "=" ( token | quoted-string )
+ * 	Accept: application/json;q=0.9,text/xml;q=0.1
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
- */
-@Header("Content-Disposition")
-public class ContentDisposition extends BasicParameterizedHeader {
+*/
+public class BasicParameterizedArrayHeader extends BasicStringHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Cache<String,ContentDisposition> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
-
-	/**
-	 * Returns a parsed and cached header.
-	 *
-	 * @param value
-	 * 	The parameter value.
-	 * @return A cached {@link ContentDisposition} object.
-	 */
-	public static ContentDisposition of(String value) {
-		if (value == null)
-			return null;
-		ContentDisposition x = CACHE.get(value);
-		if (x == null)
-			x = CACHE.put(value, new ContentDisposition(value));
-		return x;
-	}
 
 	/**
 	 * Convenience creator.
 	 *
+	 * @param name The parameter name.
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
@@ -82,12 +44,10 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link ContentDisposition} object.
+	 * @return A new {@link BasicParameterizedArrayHeader} object.
 	 */
-	public static ContentDisposition of(Object value) {
-		if (value == null)
-			return null;
-		return new ContentDisposition(value);
+	public static BasicParameterizedArrayHeader of(String name, Object value) {
+		return new BasicParameterizedArrayHeader(name, value);
 	}
 
 	/**
@@ -96,6 +56,7 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
+	 * @param name The parameter name.
 	 * @param value
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
@@ -103,19 +64,17 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link ContentDisposition} object.
+	 * @return A new {@link BasicParameterizedArrayHeader} object.
 	 */
-	public static ContentDisposition of(Supplier<?> value) {
-		if (value == null)
-			return null;
-		return new ContentDisposition(value);
+	public static BasicParameterizedArrayHeader of(String name, Supplier<?> value) {
+		return new BasicParameterizedArrayHeader(name, value);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
+	 * @param name The parameter name.
 	 * @param value
-	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -123,17 +82,26 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public ContentDisposition(Object value) {
-		super("Content-Disposition", value);
+	public BasicParameterizedArrayHeader(String name, Object value) {
+		super(name, value);
 	}
 
 	/**
-	 * Constructor.
+	 * Returns a parameterized value of the header.
 	 *
-	 * @param value
-	 * 	The parameter value.
+	 * <p class='bcode w800'>
+	 * 	ContentType ct = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
+	 * 	assertEquals(<js>"foo"</js>, ct.getParameter(<js>"charset"</js>);
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @return The parameter value, or <jk>null</jk> if the parameter is not present.
 	 */
-	public ContentDisposition(String value) {
-		super("Content-Disposition", value);
+	public String getParameter(String name) {
+		HeaderElement[] elements = getElements();
+		if (elements.length == 0)
+			return null;
+		NameValuePair p = elements[0].getParameterByName(name);
+		return p == null ? null : p.getValue();
 	}
 }
