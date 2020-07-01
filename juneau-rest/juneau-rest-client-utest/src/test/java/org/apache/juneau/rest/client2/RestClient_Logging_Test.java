@@ -61,15 +61,15 @@ public class RestClient_Logging_Test {
 		MockConsole c = MockConsole.create();
 		MockLogger l = MockLogger.create();
 
-		client().logRequests(DetailLevel.NONE,Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
+		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
 		c.assertContents().is("");
 		c.reset();
 
-		client().logRequests(DetailLevel.SIMPLE,Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
+		client().logRequests(DetailLevel.SIMPLE,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
 		c.assertContents().is("HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		c.reset();
 
-		client().logRequests(DetailLevel.FULL,Level.SEVERE).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
+		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
 		c.assertContents().is(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
@@ -92,7 +92,7 @@ public class RestClient_Logging_Test {
 		);
 		c.reset();
 
-		client().logRequests(DetailLevel.FULL,Level.SEVERE).logToConsole().logger(l).console(c).build().get("/bean").complete();
+		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().get("/bean").complete();
 		c.assertContents().is(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
@@ -111,7 +111,7 @@ public class RestClient_Logging_Test {
 		);
 		c.reset();
 
-		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
 		c.assertContents().is(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
@@ -130,25 +130,29 @@ public class RestClient_Logging_Test {
 		);
 		c.reset();
 
-		client().logRequests(DetailLevel.NONE,Level.SEVERE).logToConsole().logger(l).console(MockConsole.class).build().post("/bean",bean).complete();
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,(req,res)->false).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
+		c.assertContents().isEmpty();
+		c.reset();
+
+		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).console(MockConsole.class).build().post("/bean",bean).complete();
 	}
 
 	@Test
 	public void a02_logTo() throws Exception {
 		MockLogger l = MockLogger.create();
 
-		client().logRequests(DetailLevel.NONE,Level.SEVERE).logToConsole().logger(l).build().post("/bean",bean).complete();
+		client().logRequests(DetailLevel.NONE,Level.SEVERE,null).logToConsole().logger(l).build().post("/bean",bean).complete();
 		l.assertContents().is("");
 		l.assertRecordCount().is(0);
 		l.reset();
 
-		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING).build().post("/bean",bean).complete();
+		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().stderr().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
 		l.assertContents().is("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		l.reset();
 
-		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING).build().post("/bean",bean).complete();
+		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().is(
 			"",
@@ -204,7 +208,7 @@ public class RestClient_Logging_Test {
 	}
 
 	@Test
-	public void a03_other() throws Exception {
+	public void a04_other() throws Exception {
 		MockLogger ml = MockLogger.create();
 		MockConsole mc = MockConsole.create();
 		client().logger(ml).interceptors(A1.class).build().post("/bean",bean).complete();

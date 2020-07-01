@@ -1132,8 +1132,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder logRequests(DetailLevel detail, Level level) {
-		super.logRequests(detail, level);
+	public MockRestClientBuilder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
+		super.logRequests(detail, level, test);
 		return this;
 	}
 

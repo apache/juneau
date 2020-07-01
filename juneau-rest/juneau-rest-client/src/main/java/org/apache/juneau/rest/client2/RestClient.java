@@ -828,7 +828,7 @@ import org.apache.http.client.CookieStore;
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#logger(Logger) logger(Logger)}
  * 		<li class='jm'>{@link RestClientBuilder#logToConsole() logToConsole()}
- * 		<li class='jm'>{@link RestClientBuilder#logRequests(DetailLevel,Level) logRequests(DetailLevel,Level)}
+ * 		<li class='jm'>{@link RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
  * 	</ul>
  * </ul>
  *
@@ -1528,7 +1528,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li><b>Default:</b>  {@link org.apache.juneau.DetailLevel#NONE}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1590,7 +1590,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li><b>Default:</b>  {@link java.util.logging.Level#INFO}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1615,7 +1615,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li><b>Default:</b>  <c>(req,res) -&gt; true</c>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate)}
 	 * 		</ul>
 	 * </ul>
 	 *

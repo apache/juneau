@@ -952,16 +952,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequests}
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequestsLevel}
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_logRequestsPredicate}
 	 * </ul>
 	 *
 	 * @param detail The detail level of logging.
 	 * @param level The log level.
+	 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder logRequests(DetailLevel detail, Level level) {
+	public RestClientBuilder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
 		set(RESTCLIENT_logRequests, detail);
 		set(RESTCLIENT_logRequestsLevel, level);
+		set(RESTCLIENT_logRequestsPredicate, test);
 		return this;
 	}
 
