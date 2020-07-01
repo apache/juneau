@@ -16,7 +16,10 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.http.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
 
@@ -35,6 +38,7 @@ public class RemoteMeta {
 
 	private final Map<Method,RemoteMethodMeta> methods;
 	private final String path;
+	private final HeaderSupplier headerSupplier = HeaderSupplier.create();
 
 	/**
 	 * Constructor.
@@ -52,9 +56,21 @@ public class RemoteMeta {
 		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotations(org.apache.juneau.http.remote.RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
-		for (Remote r : ci.getAnnotations(Remote.class))
+		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
+			for (String h : r.headers())
+				headerSupplier.add(BasicHeader.ofPair(h));
+			if (! r.version().isEmpty())
+				headerSupplier.add(ClientVersion.of(r.version()));
+			if (r.headerSupplier() != HeaderSupplier.Null.class) {
+				try {
+					headerSupplier.add(r.headerSupplier().newInstance());
+				} catch (Exception e) {
+					throw new RuntimeException("Could not instantiate HeaderSupplier class.", e);
+				}
+			}
+		}
 
 		AMap<Method,RemoteMethodMeta> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
@@ -85,5 +101,14 @@ public class RemoteMeta {
 	 */
 	public String getPath() {
 		return path;
+	}
+
+	/**
+	 * Returns the headers to set on all requests.
+	 *
+	 * @return The headers to set on all requests.
+	 */
+	public Iterable<Header> getHeaders() {
+		return headerSupplier;
 	}
 }

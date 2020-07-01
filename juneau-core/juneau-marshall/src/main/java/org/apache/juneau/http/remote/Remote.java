@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.http.*;
+
 /**
  * Identifies a proxy against a REST interface.
  *
@@ -42,4 +44,65 @@ public @interface Remote {
 	 * </ul>
 	 */
 	String path() default "";
+
+	/**
+	 * Default request headers.
+	 *
+	 * <p>
+	 * Specifies headers to set on all requests.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables}
+	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * </ul>
+	 */
+	String[] headers() default {};
+
+	/**
+	 * Default request header supplier.
+	 *
+	 * <p>
+	 * Specifies a dynamic supplier of headers to set on all requests.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supplier class must provide a public no-arg constructor.
+	 * </ul>
+	 */
+	Class<? extends HeaderSupplier> headerSupplier() default HeaderSupplier.Null.class;
+
+	/**
+	 * Specifies the client version of this interface.
+	 *
+	 * <p>
+	 * Used to populate the <js>"X-Client-Version"</js> header that identifies what version of client this is
+	 * so that the server side can handle older versions accordingly.
+	 *
+	 * <p>
+	 * The format of this is a string of the format <c>#[.#[.#[...]]</c> (e.g. <js>"1.2.3"</js>).
+	 * 
+	 * <p>
+	 * The server side then uses an OSGi-version matching pattern to identify which methods to call: 
+	 * <p class='bcode w800'>
+	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
+	 * 	// Note that this also matches 2.0.1.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<jk>public</jk> Object method1()  {...}
+	 *
+	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<jk>public</jk> Object method2()  {...}
+	 *
+	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<jk>public</jk> Object method3()  {...}
+	 * </p>
+	 */
+	String version() default "";
+
+	/**
+	 * Specifies the client version header name.
+	 */
+	String versionHeader() default "X-Client-Version";
 }

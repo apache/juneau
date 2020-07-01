@@ -474,7 +474,13 @@
 	Future&lt;String&gt; f = i.doGet();
 	<jc>// Do other stuff.</jc>
 	String result = f.get();	
-		</li>p>
+		</p>
+	<li>Additions to {@link oaj.http.remote.Remote} annotation:
+	<ul>
+		<li>{@link oaj.http.remote.Remote#version version} - Adds a client version header to all requests.
+		<li>{@link oaj.http.remote.Remote#headers headers} - Adds a set of headers to all requests.
+		<li>{@link oaj.http.remote.Remote#headerSupplier headerSupplier} - Adds a dynamic supplier of headers to all requests.
+	</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-mock</h5>

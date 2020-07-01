@@ -53,6 +53,21 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
+	 * Creates a {@link Header} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new {@link Header} object.
+	 */
+	public static BasicHeader ofPair(String pair) {
+		if (pair == null)
+			return null;
+		int i = pair.indexOf(':');
+		if (i == -1)
+			return of(pair, "");
+		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+	}
+
+	/**
 	 * Convenience creator.
 	 *
 	 * @param o The name value pair that makes up the header name and value.

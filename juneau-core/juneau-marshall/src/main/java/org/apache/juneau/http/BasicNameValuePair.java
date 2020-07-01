@@ -45,6 +45,21 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	}
 
 	/**
+	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new {@link NameValuePair} object.
+	 */
+	public static BasicNameValuePair ofPair(String pair) {
+		if (pair == null)
+			return null;
+		int i = pair.indexOf(':');
+		if (i == -1)
+			return of(pair, "");
+		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+	}
+
+	/**
 	 * Convenience creator using supplier.
 	 *
 	 * <p>

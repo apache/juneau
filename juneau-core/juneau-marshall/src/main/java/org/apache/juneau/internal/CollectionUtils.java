@@ -71,6 +71,42 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates an iterator over a list of iterable objects.
+	 *
+	 * @param <E> The element type.
+	 * @param l The iterables to iterate over.
+	 * @return A new iterator.
+	 */
+	public static <E> Iterator<E> iterator(final List<Iterable<E>> l) {
+		return new Iterator<E>() {
+			Iterator<Iterable<E>> i1 = l.iterator();
+			Iterator<E> i2 = i1.hasNext() ? i1.next().iterator() : null;
+
+			@Override /* Iterator */
+			public boolean hasNext() {
+				while (i2 != null && ! i2.hasNext())
+					i2 = (i1.hasNext() ? i1.next().iterator() : null);
+				return (i2 != null);
+			}
+
+			@Override /* Iterator */
+			public E next() {
+				hasNext();
+				if (i2 == null)
+					throw new NoSuchElementException();
+				return i2.next();
+			}
+
+			@Override /* Iterator */
+			public void remove() {
+				if (i2 == null)
+					throw new NoSuchElementException();
+				i2.remove();
+			}
+		};
+	}
+
+	/**
 	 * Adds a set of values to an existing list.
 	 *
 	 * @param appendTo

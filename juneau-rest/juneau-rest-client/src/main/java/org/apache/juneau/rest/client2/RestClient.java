@@ -30,7 +30,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 import javax.net.ssl.*;
 
@@ -1872,7 +1871,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private static final Set<String> NO_BODY_METHODS = ASet.unmodifiable("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE");
 
-	private final List<Object> headers, query, formData;
+	private final HeaderSupplier headers;
+	private final NameValuePairSupplier query, formData;
 	final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen, leakDetection;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
@@ -1982,48 +1982,41 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		HttpPartSerializerSession partSerializerSession = partSerializer.createPartSession(null);
 
-		Function<Object,Object> headerFunction = new Function<Object,Object>() {
-			@Override
-			public Object apply(Object x) {
-				if (x instanceof SerializedHeaderBuilder)
-					x = ((SerializedHeaderBuilder)x).serializer(partSerializerSession, false).build();
-				else if (x instanceof SerializedNameValuePairBuilder)
-					x = ((SerializedNameValuePairBuilder)x).serializer(partSerializerSession, false).build();
-				return BasicHeader.cast(x);
-			}
-		};
+		this.headers = HeaderSupplier.create();
+		for (Object o : getListProperty(RESTCLIENT_headers, Object.class)) {
+			if (o instanceof SerializedHeaderBuilder)
+				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
+			else if (o instanceof SerializedNameValuePairBuilder)
+				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			if (o instanceof HeaderSupplier)
+				headers.add((HeaderSupplier)o);
+			else
+				headers.add(BasicHeader.cast(o));
+		}
 
-		Function<Object,Object> nameValuePairFunction = new Function<Object,Object>() {
-			@Override
-			public Object apply(Object x) {
-				if (x instanceof SerializedNameValuePairBuilder)
-					x = ((SerializedNameValuePairBuilder)x).serializer(partSerializerSession, false).build();
-				if (x instanceof SerializedHeaderBuilder)
-					x = ((SerializedHeaderBuilder)x).serializer(partSerializerSession, false).build();
-				return BasicNameValuePair.cast(x);
-			}
-		};
+		this.query = NameValuePairSupplier.create();
+		for (Object o : getListProperty(RESTCLIENT_query, Object.class)) {
+			if (o instanceof SerializedHeaderBuilder)
+				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
+			else if (o instanceof SerializedNameValuePairBuilder)
+				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			if (o instanceof NameValuePairSupplier)
+				query.add((NameValuePairSupplier)o);
+			else
+				query.add(BasicNameValuePair.cast(o));
+		}
 
-		this.headers = Collections.unmodifiableList(
-			getListProperty(RESTCLIENT_headers, Object.class)
-				.stream()
-				.map(headerFunction)
-				.collect(Collectors.toList())
-		);
-
-		this.query = Collections.unmodifiableList(
-			getListProperty(RESTCLIENT_query, Object.class)
-				.stream()
-				.map(nameValuePairFunction)
-				.collect(Collectors.toList())
-		);
-
-		this.formData = Collections.unmodifiableList(
-			getListProperty(RESTCLIENT_formData, Object.class)
-				.stream()
-				.map(nameValuePairFunction)
-				.collect(Collectors.toList())
-		);
+		this.formData = NameValuePairSupplier.create();
+		for (Object o : getListProperty(RESTCLIENT_formData, Object.class)) {
+			if (o instanceof SerializedHeaderBuilder)
+				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
+			else if (o instanceof SerializedNameValuePairBuilder)
+				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			if (o instanceof NameValuePairSupplier)
+				formData.add((NameValuePairSupplier)o);
+			else
+				formData.add(BasicNameValuePair.cast(o));
+		}
 
 		this.callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, ResourceResolver.FUZZY, ps, this);
 
@@ -3038,6 +3031,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 					rc.serializer(serializer);
 					rc.parser(parser);
+
+					for (Header h : rm.getHeaders())
+						rc.header(h);
 
 					for (RemoteMethodArg a : rmm.getPathArgs())
 						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer(s));
