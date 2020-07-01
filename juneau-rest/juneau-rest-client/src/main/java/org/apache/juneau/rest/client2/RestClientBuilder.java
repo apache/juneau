@@ -1309,6 +1309,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link HeaderSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1322,7 +1323,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder headers(Object...headers) {
 		for (Object h : headers) {
-			if (BasicHeader.canCast(h)) {
+			if (BasicHeader.canCast(h) || h instanceof HeaderSupplier) {
 				appendTo(RESTCLIENT_headers, h);
 			} else if (h instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(h).entrySet())
@@ -2058,6 +2059,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2071,7 +2073,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder queries(Object...params) {
 		for (Object p : params) {
-			if (BasicNameValuePair.canCast(p)) {
+			if (BasicNameValuePair.canCast(p) || p instanceof NameValuePairSupplier) {
 				appendTo(RESTCLIENT_query, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())
@@ -2345,6 +2347,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2358,7 +2361,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder formDatas(Object...params) {
 		for (Object p : params) {
-			if (BasicNameValuePair.canCast(p)) {
+			if (BasicNameValuePair.canCast(p) || p instanceof NameValuePairSupplier) {
 				appendTo(RESTCLIENT_formData, p);
 			} else if (p instanceof Map) {
 				for (Map.Entry<Object,Object> e : toMap(p).entrySet())

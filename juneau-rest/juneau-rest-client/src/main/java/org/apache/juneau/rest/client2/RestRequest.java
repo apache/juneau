@@ -940,6 +940,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -956,6 +957,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		for (Object o : params) {
 			if (BasicNameValuePair.canCast(o)) {
 				innerPath(BasicNameValuePair.cast(o));
+			} else if (o instanceof NameValuePairSupplier) {
+				for (NameValuePair p : (NameValuePairSupplier)o)
+					innerPath(p);
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					innerPath(BasicNameValuePair.cast(o2));
@@ -1270,6 +1274,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1286,6 +1291,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		for (Object o : params) {
 			if (BasicNameValuePair.canCast(o)) {
 				l.add(BasicNameValuePair.cast(o));
+			} else if (o instanceof NameValuePairSupplier) {
+				for (NameValuePair p : (NameValuePairSupplier)o)
+					l.add(p);
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicNameValuePair.cast(o2));
@@ -1651,6 +1659,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -1667,6 +1676,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		for (Object o : params) {
 			if (BasicNameValuePair.canCast(o)) {
 				l.add(BasicNameValuePair.cast(o));
+			} else if (o instanceof NameValuePairSupplier) {
+				for (NameValuePair p : (NameValuePairSupplier)o)
+					l.add(p);
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicNameValuePair.cast(o2));
@@ -2180,6 +2192,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
 	 * 		<li>{@link NameValuePairs}
+	 * 		<li>{@link HeaderSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
@@ -2196,6 +2209,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		for (Object o : headers) {
 			if (BasicHeader.canCast(o)) {
 				l.add(BasicHeader.cast(o));
+			} else if (o instanceof HeaderSupplier) {
+				for (Header h : (HeaderSupplier)o)
+					l.add(h);
 			} else if (o instanceof Collection) {
 				for (Object o2 : (Collection<?>)o)
 					l.add(BasicHeader.cast(o2));

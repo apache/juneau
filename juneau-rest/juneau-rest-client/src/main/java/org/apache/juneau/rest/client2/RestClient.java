@@ -1984,10 +1984,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		this.headers = HeaderSupplier.create();
 		for (Object o : getListProperty(RESTCLIENT_headers, Object.class)) {
-			if (o instanceof SerializedHeaderBuilder)
-				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
-			else if (o instanceof SerializedNameValuePairBuilder)
-				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof HeaderSupplier)
 				headers.add((HeaderSupplier)o);
 			else
@@ -1996,10 +1993,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		this.query = NameValuePairSupplier.create();
 		for (Object o : getListProperty(RESTCLIENT_query, Object.class)) {
-			if (o instanceof SerializedHeaderBuilder)
-				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
-			else if (o instanceof SerializedNameValuePairBuilder)
-				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof NameValuePairSupplier)
 				query.add((NameValuePairSupplier)o);
 			else
@@ -2008,10 +2002,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		this.formData = NameValuePairSupplier.create();
 		for (Object o : getListProperty(RESTCLIENT_formData, Object.class)) {
-			if (o instanceof SerializedHeaderBuilder)
-				o = ((SerializedHeaderBuilder)o).serializer(partSerializerSession, false).build();
-			else if (o instanceof SerializedNameValuePairBuilder)
-				o = ((SerializedNameValuePairBuilder)o).serializer(partSerializerSession, false).build();
+			o = buildBuilders(o, partSerializerSession);
 			if (o instanceof NameValuePairSupplier)
 				formData.add((NameValuePairSupplier)o);
 			else
@@ -2023,6 +2014,14 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.interceptors = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
 
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
+	}
+
+	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
+		if (o instanceof SerializedHeaderBuilder)
+			return ((SerializedHeaderBuilder)o).serializer(ss, false).build();
+		if (o instanceof SerializedNameValuePairBuilder)
+			return ((SerializedNameValuePairBuilder)o).serializer(ss, false).build();
+		return o;
 	}
 
 	/**
