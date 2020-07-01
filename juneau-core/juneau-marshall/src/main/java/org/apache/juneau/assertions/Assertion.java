@@ -90,11 +90,7 @@ public class Assertion {
 	 * @return The class name for an object.
 	 */
 	protected static String className(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Class)
-			return ((Class<?>)o).getName();
-		return className(o.getClass());
+		return ClassUtils.className(o);
 	}
 
 	// <FluentSetters>

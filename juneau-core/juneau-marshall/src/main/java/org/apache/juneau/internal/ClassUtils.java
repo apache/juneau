@@ -321,4 +321,15 @@ public final class ClassUtils {
 		}
 		return null;
 	}
+
+
+	/**
+	 * Returns the class name for the specified object.
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String className(Object value) {
+		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
+	}
 }

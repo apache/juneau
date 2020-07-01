@@ -17,6 +17,7 @@ import static org.apache.juneau.rest.client2.RestClient.*;
 import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
@@ -1267,25 +1268,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public RestClientBuilder header(Header header) {
 		return headers(header);
-	}
-
-	/**
-	 * Sets a header on all requests.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
-	 * 		.<jsm>create</jsm>()
-	 * 		.header(BasicNameValuePair.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-	 * 		.build();
-	 * </p>
-	 *
-	 * @param pair The header to set.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestClientBuilder header(NameValuePair pair) {
-		return headers(pair);
 	}
 
 	/**
@@ -5821,9 +5803,5 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	private static SerializedHeaderBuilder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		return key == null ? null : SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
-	}
-
-	private static String className(Object value) {
-		return value == null ? null : value.getClass().getName();
 	}
 }

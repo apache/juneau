@@ -142,6 +142,7 @@ public class RestClient_Query_Test {
 		client().queries(AMap.of("foo","bar")).build().get("/query").run().assertBody().is("foo=bar");
 		client().queries(pairs("foo","bar","foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
 		client().queries(pair("foo","bar"),pair("foo","baz")).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
+		client().queries(AList.of(pair("foo","bar"),pair("foo","baz"))).build().get("/query").run().assertBody().is("foo=bar&foo=baz");
 		client().queries((Object)new NameValuePair[]{pair("foo","bar")}).build().get("/query").run().assertBody().is("foo=bar");
 
 
@@ -150,6 +151,7 @@ public class RestClient_Query_Test {
 		client().build().get("/query").queries(AMap.of("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().get("/query").queries(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
 		client().build().get("/query").queries(pair("foo","bar"),pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().get("/query").queries(AList.of(pair("foo","bar"),pair("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
 		client().build().get("/query").queries((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
 		client().build().get("/query").queries(new A10()).run().assertBody().is("foo=bar");
 

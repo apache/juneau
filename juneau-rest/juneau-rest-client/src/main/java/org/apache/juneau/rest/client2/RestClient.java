@@ -281,7 +281,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSerializer,HttpPartSchema)}
  * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
- * 		<li class='jm'>{@link RestClientBuilder#header(NameValuePair) header(NameValuePair)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Object...) headers(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#accept(Object) accept(Object)}
@@ -1194,7 +1193,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object) header(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSerializer,HttpPartSchema)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(NameValuePair) header(NameValuePair)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Object...) headers(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#accept(Object) accept(Object)}

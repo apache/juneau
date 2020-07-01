@@ -78,6 +78,7 @@ public class RestClient_FormData_Test {
 		client().formDatas(AMap.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
 		client().formDatas(pairs("foo","bar","foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
 		client().formDatas(pair("foo","bar"),pair("foo","baz")).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
+		client().formDatas(AList.of(pair("foo","bar"),pair("foo","baz"))).build().post("/formData").run().assertBody().is("foo=bar&foo=baz");
 		client().formDatas((Object)new NameValuePair[]{pair("foo","bar")}).build().post("/formData").run().assertBody().is("foo=bar");
 
 		client().build().post("/formData").formDatas(pair("foo","bar")).run().assertBody().is("foo=bar");
@@ -85,6 +86,7 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(AMap.of("foo","bar")).run().assertBody().is("foo=bar");
 		client().build().post("/formData").formDatas(pairs("foo","bar","foo","baz")).run().assertBody().is("foo=bar&foo=baz");
 		client().build().post("/formData").formDatas(pair("foo","bar"),pair("foo","baz")).run().assertBody().is("foo=bar&foo=baz");
+		client().build().post("/formData").formDatas(AList.of(pair("foo","bar"),pair("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
 		client().build().post("/formData").formDatas((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
 
 		client().build().post("/formData").formDatas(ABean.get()).run().assertBody().is("f=1");

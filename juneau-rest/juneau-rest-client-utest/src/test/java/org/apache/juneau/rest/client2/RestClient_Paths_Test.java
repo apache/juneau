@@ -66,6 +66,7 @@ public class RestClient_Paths_Test {
 	@Test
 	public void a03_paths_Object() throws Exception {
 		client().build().get("/echo/{x}").paths(pair("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
+		client().build().get("/echo/{x}").paths(AList.of(pair("x","foo"))).run().assertBody().contains("HTTP GET /echo/foo");
 		client().build().get("/echo/{x}").paths(pairs("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
 		client().build().get("/echo/{x}").paths(OMap.of("x","foo")).run().assertBody().contains("HTTP GET /echo/foo");
 		client().build().get("/echo/{x}").paths((Object)new NameValuePair[]{pair("x","foo")}).run().assertBody().contains("HTTP GET /echo/foo");

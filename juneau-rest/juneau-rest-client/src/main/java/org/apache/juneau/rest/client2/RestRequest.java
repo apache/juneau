@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client2;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -3385,10 +3386,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, EnumSet<AddFlag> flags) {
 		return key == null ? null : new SerializedHeader(stringify(key), value, serializer, schema, flags == null ? false : flags.contains(SKIP_IF_EMPTY));
-	}
-
-	private static String className(Object value) {
-		return value.getClass().getName();
 	}
 
 	private static boolean isNameValuePairArray(Object o) {
