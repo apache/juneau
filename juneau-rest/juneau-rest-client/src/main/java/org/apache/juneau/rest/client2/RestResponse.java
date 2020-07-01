@@ -341,7 +341,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentIntegerAssertion<RestResponse> assertIntHeader(String name) throws RestCallException {
-		return getHeader(name).assertInt();
+		return getHeader(name).assertInteger();
 	}
 
 	/**

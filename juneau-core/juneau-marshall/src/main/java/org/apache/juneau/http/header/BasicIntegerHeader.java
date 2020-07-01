@@ -132,7 +132,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentIntegerAssertion<BasicIntegerHeader> assertThat() {
+	public FluentIntegerAssertion<BasicIntegerHeader> assertInteger() {
 		return new FluentIntegerAssertion<>(asInt(), this);
 	}
 

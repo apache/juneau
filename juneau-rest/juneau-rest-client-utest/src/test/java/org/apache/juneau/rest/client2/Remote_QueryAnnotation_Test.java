@@ -88,6 +88,7 @@ public class Remote_QueryAnnotation_Test {
 		@RemoteMethod(path="a") String getX22(@Query NameValuePair[] b);
 		@RemoteMethod(path="a") String getX23(@Query BasicNameValuePair[] b);
 		@RemoteMethod(path="a") String getX24(@Query String b);
+		@RemoteMethod(path="a") String getX25(@Query List<NameValuePair> b);
 	}
 
 	@Test
@@ -118,6 +119,7 @@ public class Remote_QueryAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.getX23(pairs("foo","bar").toArray(new BasicNameValuePair[0])));
 		assertEquals("{foo:'bar'}",x.getX24("foo=bar"));
 		assertEquals("{}",x.getX24(null));
+		assertEquals("{foo:'bar'}",x.getX25(AList.of(pair("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

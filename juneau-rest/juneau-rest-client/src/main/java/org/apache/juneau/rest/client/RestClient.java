@@ -1221,16 +1221,16 @@ public class RestClient extends BeanContext implements Closeable {
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
+								rc.path(a.getName(), args[a.getIndex()], s, a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), s, a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), s, a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
+								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), s, a.getSchema());
 
 							RemoteMethodArg ba = rmm.getBodyArg();
 							if (ba != null)

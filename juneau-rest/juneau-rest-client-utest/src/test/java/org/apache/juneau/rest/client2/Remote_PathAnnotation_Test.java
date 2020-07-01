@@ -82,6 +82,7 @@ public class Remote_PathAnnotation_Test {
 		@RemoteMethod(path="a/{x}") String getX19(@Path NameValuePair b);
 		@RemoteMethod(path="a/{x}") String getX20(@Path NameValuePair[] b);
 		@RemoteMethod(path="a/{x}") String getX21(@Path String b);
+		@RemoteMethod(path="a/{x}") String getX22(@Path List<NameValuePair> b);
 	}
 
 	@Test
@@ -109,6 +110,7 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("bar",x.getX20(new NameValuePair[]{pair("x","bar")}));
 		assertEquals("{x}",x.getX20(null));
 		assertThrown(()->x.getX21("foo")).contains("Invalid value type for path arg 'null': java.lang.String");
+		assertEquals("bar",x.getX22(AList.of(pair("x","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

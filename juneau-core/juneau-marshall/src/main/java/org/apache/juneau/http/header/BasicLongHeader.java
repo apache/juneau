@@ -132,7 +132,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentLongAssertion<BasicLongHeader> assertThat() {
+	public FluentLongAssertion<BasicLongHeader> assertLong() {
 		return new FluentLongAssertion<>(getParsedValue(), this);
 	}
 

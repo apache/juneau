@@ -101,6 +101,7 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteMethod(path="a") String postX23(@FormData InputStream b);
 		@RemoteMethod(path="a") String postX24(@FormData Reader b);
 		@RemoteMethod(path="a") String postX25(@FormData Bean2 b);
+		@RemoteMethod(path="a") String postX26(@FormData List<NameValuePair> b);
 	}
 
 	@Test
@@ -132,6 +133,7 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.postX23(new ByteArrayInputStream("foo=bar".getBytes())));
 		assertEquals("{foo:'bar'}",x.postX24(new StringReader("foo=bar")));
 		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
+		assertEquals("{foo:'bar'}",x.postX26(AList.of(pair("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

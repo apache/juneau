@@ -133,7 +133,7 @@ public class RemoteMethodMeta {
 				}
 				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, PropertyStore.DEFAULT);
 				if (rmba != null) {
-					requestArgs.add(new RemoteMethodBeanArg(mpi.getIndex(), null, rmba));
+					requestArgs.add(new RemoteMethodBeanArg(mpi.getIndex(), rmba));
 				}
 			}
 		}

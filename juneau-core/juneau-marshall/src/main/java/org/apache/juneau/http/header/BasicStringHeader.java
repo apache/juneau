@@ -109,7 +109,7 @@ public class BasicStringHeader extends BasicHeader {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentStringAssertion<BasicStringHeader> assertThat() {
+	public FluentStringAssertion<BasicStringHeader> assertString() {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 

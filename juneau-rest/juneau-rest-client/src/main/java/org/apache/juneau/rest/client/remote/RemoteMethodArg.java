@@ -33,21 +33,15 @@ public final class RemoteMethodArg {
 	private final HttpPartType partType;
 	private final HttpPartSerializer serializer;
 	private final HttpPartSchema schema;
-	private final String name;
-	private final boolean skipIfEmpty;
 
 	RemoteMethodArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
 		this.serializer = createSerializer(partType, schema);
 		this.schema = schema;
-		this.name = schema == null ? null : schema.getName();
-		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
 	}
 
 	private static HttpPartSerializer createSerializer(HttpPartType partType, HttpPartSchema schema) {
-		if (schema == null)
-			return null;
 		return castOrCreate(HttpPartSerializer.class, schema.getSerializer());
 	}
 
@@ -57,7 +51,7 @@ public final class RemoteMethodArg {
 	 * @return The name of the HTTP part.
 	 */
 	public String getName() {
-		return name;
+		return schema.getName();
 	}
 
 	/**
@@ -66,7 +60,7 @@ public final class RemoteMethodArg {
 	 * @return <jk>true</jk> if the <c>skipIfEmpty</c> flag was found in the schema.
 	 */
 	public boolean isSkipIfEmpty() {
-		return skipIfEmpty;
+		return schema.isSkipIfEmpty();
 	}
 
 	/**
@@ -85,17 +79,6 @@ public final class RemoteMethodArg {
 	 */
 	public HttpPartType getPartType() {
 		return partType;
-	}
-
-	/**
-	 * Returns the HTTP part serializer to use for serializing this part.
-	 *
-	 * @param _default The default serializer to use if the serializer was not defined via annotations.
-	 * @return The HTTP part serializer, or <jk>null</jk> if not specified.
-	 */
-	@Deprecated
-	public HttpPartSerializer getSerializer(HttpPartSerializer _default) {
-		return serializer == null ? _default : serializer;
 	}
 
 	/**

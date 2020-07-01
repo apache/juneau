@@ -456,7 +456,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public Matcher asMatcher(Pattern pattern) throws RestCallException {
-		return pattern.matcher(asString());
+		return pattern.matcher(asStringOrElse(""));
 	}
 
 	/**
@@ -481,7 +481,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public RestResponse asMatcher(Mutable<Matcher> m, Pattern pattern) throws RestCallException {
-		m.set(pattern.matcher(asString()));
+		m.set(pattern.matcher(asStringOrElse("")));
 		return response;
 	}
 
@@ -530,7 +530,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public RestResponse asMatcher(Mutable<Matcher> m, String regex) throws RestCallException {
-		asMatcher(regex, 0);
+		m.set(asMatcher(regex, 0));
 		return response;
 	}
 
@@ -581,7 +581,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If a connection error occurred.
 	 */
 	public RestResponse asMatcher(Mutable<Matcher> m, String regex, int flags) throws RestCallException {
-		asMatcher(Pattern.compile(regex, flags));
+		m.set(asMatcher(Pattern.compile(regex, flags)));
 		return response;
 	}
 
@@ -681,9 +681,8 @@ public class RestResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertInt() throws RestCallException {
-		BasicIntegerHeader h = asIntegerHeader();
-		return new FluentIntegerAssertion<>(h == null ? -1 : h.asInt(), response);
+	public FluentIntegerAssertion<RestResponse> assertInteger() throws RestCallException {
+		return new FluentIntegerAssertion<>(asIntegerHeader().asInt(), response);
 	}
 
 	/**
@@ -705,8 +704,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentLongAssertion<RestResponse> assertLong() throws RestCallException {
-		BasicLongHeader h = asLongHeader();
-		return new FluentLongAssertion<>(h == null ? -1 : h.asLong(), response);
+		return new FluentLongAssertion<>(asLongHeader().asLong(), response);
 	}
 
 	/**
@@ -728,8 +726,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentDateAssertion<RestResponse> assertDate() throws RestCallException {
-		BasicDateHeader h = asDateHeader();
-		return new FluentDateAssertion<>(h == null ? null : h.asDate(), response);
+		return new FluentDateAssertion<>(asDateHeader().asDate(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

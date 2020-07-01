@@ -82,6 +82,7 @@ public class Remote_HeaderAnnotation_Test {
 		@RemoteMethod(path="a") String getX17(@Header org.apache.http.Header b);
 		@RemoteMethod(path="a") String getX18(@Header org.apache.http.Header[] b);
 		@RemoteMethod(path="a") String getX19(@Header String b);
+		@RemoteMethod(path="a") String getX20(@Header List<org.apache.http.Header> b);
 	}
 
 	@Test
@@ -107,6 +108,7 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.getX18(new org.apache.http.Header[]{header("foo","bar")}));
 		assertThrown(()->x.getX19("Foo")).contains("Invalid value type");
 		assertEquals("{}",x.getX19(null));
+		assertEquals("{foo:'bar'}",x.getX20(AList.of(header("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

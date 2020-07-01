@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
-import static org.apache.juneau.internal.IOUtils.*;
-
 import java.io.*;
 import java.net.*;
 import java.text.*;
@@ -21,7 +19,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.client.*;
-import org.apache.http.util.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -88,16 +85,6 @@ public final class RestCallException extends HttpException {
 				responseCode = Integer.parseInt(m.group(1));
 		}
 		setStackTrace(e.getStackTrace());
-	}
-
-	/**
-	 * Create an exception with a simple message and the status code and body of the specified response.
-	 *
-	 * @param msg The exception message.
-	 * @param response The HTTP response object.
-	 */
-	public RestCallException(String msg, HttpResponse response) {
-		super(clean(format("{0}\n{1}\nstatus=''{2}''\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), readEntity(response))));
 	}
 
 	/**
@@ -261,13 +248,5 @@ public final class RestCallException extends HttpException {
 		}
 
 		return sb.toString();
-	}
-
-	private static String readEntity(HttpResponse response) {
-		try {
-			return EntityUtils.toString(response.getEntity(), UTF8);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

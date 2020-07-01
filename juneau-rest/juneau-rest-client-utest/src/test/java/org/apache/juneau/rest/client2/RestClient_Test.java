@@ -24,10 +24,12 @@ import org.apache.http.*;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.*;
+import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
@@ -36,6 +38,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -127,25 +130,35 @@ public class RestClient_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Logging
+	// Overridden methods
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B4 extends RestClient {
-		private static boolean METHOD_CALLED;
+		private static boolean CREATE_REQUEST_CALLED, CREATE_RESPONSE_CALLED;
 		public B4(PropertyStore ps) {
 			super(ps);
 		}
 		@Override
 		protected RestRequest createRequest(java.net.URI uri, String method, boolean hasBody) throws RestCallException {
-			METHOD_CALLED = true;
+			CREATE_REQUEST_CALLED = true;
 			return super.createRequest(uri, method, hasBody);
+		}
+		@Override
+		protected RestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
+			CREATE_RESPONSE_CALLED = true;
+			return super.createResponse(req, httpResponse, parser);
+		}
+		@Override /* HttpClient */
+		public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
+			return new BasicHttpResponse(new ProtocolVersion("http",1,1),200,null);
 		}
 	}
 
 	@Test
 	public void b04_restClient_overrideCreateRequest() throws Exception {
-		RestClient.create().simpleJson().build(B4.class).get("foo");
-		assertTrue(B4.METHOD_CALLED);
+		RestClient.create().simpleJson().build(B4.class).get("foo").run();
+		assertTrue(B4.CREATE_REQUEST_CALLED);
+		assertTrue(B4.CREATE_RESPONSE_CALLED);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

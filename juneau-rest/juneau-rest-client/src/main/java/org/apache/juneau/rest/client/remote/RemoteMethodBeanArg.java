@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 
 /**
@@ -29,11 +26,9 @@ public final class RemoteMethodBeanArg {
 
 	private final int index;
 	private final RequestBeanMeta meta;
-	private final HttpPartSerializer serializer;
 
-	RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, RequestBeanMeta meta) {
+	RemoteMethodBeanArg(int index, RequestBeanMeta meta) {
 		this.index = index;
-		this.serializer = castOrCreate(HttpPartSerializer.class, serializer);
 		this.meta = meta;
 	}
 
@@ -44,15 +39,6 @@ public final class RemoteMethodBeanArg {
 	 */
 	public int getIndex() {
 		return index;
-	}
-
-	/**
-	 * Returns the serializer to use for serializing parts on the request bean.
-	 *
-	 * @return The serializer to use for serializing parts on the request bean, or <jk>null</jk> if not defined.
-	 */
-	public HttpPartSerializer getSerializer() {
-		return serializer;
 	}
 
 	/**

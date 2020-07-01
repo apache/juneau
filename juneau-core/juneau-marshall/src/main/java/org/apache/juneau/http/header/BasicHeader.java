@@ -21,6 +21,7 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.BasicHeader;
 import org.apache.juneau.internal.*;
@@ -181,18 +182,26 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param compare The value to compare against.
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
-	public boolean eqIC(String compare) {
+	protected boolean eqIC(String compare) {
 		return getValue().equalsIgnoreCase(compare);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equals(Object)}.
+	 * Provides an object for performing assertions against the name of this header.
 	 *
-	 * @param compare The value to compare against.
-	 * @return <jk>true</jk> if the specified value is the same.
+	 * @return An object for performing assertions against the name of this header.
 	 */
-	public boolean eq(String compare) {
-		return getValue().equals(compare);
+	public FluentStringAssertion<BasicHeader> assertName() {
+		return new FluentStringAssertion<>(getName(), this);
+	}
+
+	/**
+	 * Provides an object for performing assertions against the value of this header.
+	 *
+	 * @return An object for performing assertions against the value of this header.
+	 */
+	public FluentStringAssertion<BasicHeader> assertValue() {
+		return new FluentStringAssertion<>(getValue(), this);
 	}
 
 	/**

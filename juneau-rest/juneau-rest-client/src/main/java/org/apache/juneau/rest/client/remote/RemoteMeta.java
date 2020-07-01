@@ -37,7 +37,6 @@ import org.apache.juneau.reflect.*;
 public class RemoteMeta {
 
 	private final Map<Method,RemoteMethodMeta> methods;
-	private final String path;
 	private final HeaderSupplier headerSupplier = HeaderSupplier.create();
 
 	/**
@@ -78,7 +77,6 @@ public class RemoteMeta {
 				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));
 
 		this.methods = methods.unmodifiable();
-		this.path = path;
 	}
 
 	/**
@@ -89,18 +87,6 @@ public class RemoteMeta {
 	 */
 	public RemoteMethodMeta getMethodMeta(Method m) {
 		return methods.get(m);
-	}
-
-	/**
-	 * Returns the HTTP path of this interface.
-	 *
-	 * @return
-	 * 	The HTTP path of this interface.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>Never has leading or trailing slashes.
-	 */
-	public String getPath() {
-		return path;
 	}
 
 	/**
