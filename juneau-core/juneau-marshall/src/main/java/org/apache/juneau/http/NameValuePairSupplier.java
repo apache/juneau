@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -35,6 +36,31 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 */
 	public static NameValuePairSupplier create() {
 		return new NameValuePairSupplier();
+	}
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param values
+	 * 	The values to populate this supplier with.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link NameValuePair}.
+	 * 		<li>{@link NameValuePairSupplier}.
+	 * 	</ul>
+	 * @return A new {@link NameValuePairSupplier} object.
+	 */
+	public static NameValuePairSupplier of(Object...values) {
+		NameValuePairSupplier s = NameValuePairSupplier.create();
+		for (Object v : values) {
+			if (v instanceof NameValuePair)
+				s.add((NameValuePair)v);
+			else if (v instanceof NameValuePairSupplier)
+				s.add((NameValuePairSupplier)v);
+			else if (v != null)
+				throw new BasicRuntimeException("Invalid type passed to NameValuePairSupplier.of(): {0}", v.getClass().getName());
+		}
+		return s;
 	}
 
 	private final List<Iterable<NameValuePair>> pairs = new CopyOnWriteArrayList<>();

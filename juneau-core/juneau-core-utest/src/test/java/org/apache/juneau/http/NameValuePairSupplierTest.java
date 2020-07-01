@@ -16,35 +16,34 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.header.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class HeaderSupplierTest {
+public class NameValuePairSupplierTest {
 
 	@Test
 	public void a01_basic() {
-		HeaderSupplier h = HeaderSupplier.of();
+		NameValuePairSupplier h = NameValuePairSupplier.of();
 		assertObject(h.iterator()).json().is("[]");
 		h.add(header("Foo","bar"));
-		assertObject(h.iterator()).json().is("['Foo: bar']");
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'}]");
 		h.add(header("Foo","baz"));
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz']");
-		h.add(HeaderSupplier.of());
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz']");
-		h.add(HeaderSupplier.of(header("Foo","qux")));
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux']");
-		h.add(HeaderSupplier.of(header("Foo","q2x"), header("Foo","q3x")));
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x']");
-		h.add(HeaderSupplier.of(HeaderSupplier.of(header("Foo","q4x"),header("Foo","q5x"))));
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
-		h.add((Header)null);
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
-		h.add((HeaderSupplier)null);
-		assertObject(h.iterator()).json().is("['Foo: bar','Foo: baz','Foo: qux','Foo: q2x','Foo: q3x','Foo: q4x','Foo: q5x']");
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'}]");
+		h.add(NameValuePairSupplier.of());
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'}]");
+		h.add(NameValuePairSupplier.of(header("Foo","qux")));
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'},{name:'Foo',value:'qux'}]");
+		h.add(NameValuePairSupplier.of(header("Foo","q2x"), header("Foo","q3x")));
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'},{name:'Foo',value:'qux'},{name:'Foo',value:'q2x'},{name:'Foo',value:'q3x'}]");
+		h.add(NameValuePairSupplier.of(NameValuePairSupplier.of(header("Foo","q4x"),header("Foo","q5x"))));
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'},{name:'Foo',value:'qux'},{name:'Foo',value:'q2x'},{name:'Foo',value:'q3x'},{name:'Foo',value:'q4x'},{name:'Foo',value:'q5x'}]");
+		h.add((NameValuePair)null);
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'},{name:'Foo',value:'qux'},{name:'Foo',value:'q2x'},{name:'Foo',value:'q3x'},{name:'Foo',value:'q4x'},{name:'Foo',value:'q5x'}]");
+		h.add((NameValuePairSupplier)null);
+		assertObject(h.iterator()).json().is("[{name:'Foo',value:'bar'},{name:'Foo',value:'baz'},{name:'Foo',value:'qux'},{name:'Foo',value:'q2x'},{name:'Foo',value:'q3x'},{name:'Foo',value:'q4x'},{name:'Foo',value:'q5x'}]");
 	}
 
-	private static Header header(String name, Object val) {
-		return BasicHeader.of(name, val);
+	private static NameValuePair header(String name, Object val) {
+		return BasicNameValuePair.of(name, val);
 	}
 }

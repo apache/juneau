@@ -437,6 +437,15 @@
 	)
 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
 		</p>
+	<li>
+		The {@link oajr.annotation.RestMethod @RestMethod} annotation is now implied on all unannotated methods of a {@link oajr.annotation.Rest @Rest}-annotated
+		interface.
+		<p class='bpcode w800'>
+	<ja>@Rest
+	<jk>public interface</jk> MyRest {
+		String getFoo();  <jc>// @RestMethod(name=GET,path="/foo") is implied.</jc>
+	}
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

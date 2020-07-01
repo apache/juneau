@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -35,6 +36,31 @@ public class HeaderSupplier implements Iterable<Header> {
 	 */
 	public static HeaderSupplier create() {
 		return new HeaderSupplier();
+	}
+
+	/**
+	 * Convenience creator.
+	 *
+	 * @param values
+	 * 	The values to populate this supplier with.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Header}.
+	 * 		<li>{@link HeaderSupplier}.
+	 * 	</ul>
+	 * @return A new {@link HeaderSupplier} object.
+	 */
+	public static HeaderSupplier of(Object...values) {
+		HeaderSupplier s = HeaderSupplier.create();
+		for (Object v : values) {
+			if (v instanceof Header)
+				s.add((Header)v);
+			else if (v instanceof HeaderSupplier)
+				s.add((HeaderSupplier)v);
+			else if (v != null)
+				throw new BasicRuntimeException("Invalid type passed to HeaderSupplier.of(): {0}", v.getClass().getName());
+		}
+		return s;
 	}
 
 	private final List<Iterable<Header>> headers = new CopyOnWriteArrayList<>();

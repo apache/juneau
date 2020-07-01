@@ -17,12 +17,15 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.remote.RemoteMethod;
 import org.apache.juneau.http.remote.RemoteReturn;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -498,5 +501,37 @@ public class Remote_Test {
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
 		RestClient x = MockRestClient.create(E6.class).json().build();
 		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).contains("foobar");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Remote headers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class F extends BasicRest {
+		@RestMethod
+		public String[] getHeaders(org.apache.juneau.rest.RestRequest req) {
+			return req.getHeaders().get(req.getHeader("Check"));
+		}
+	}
+
+	@Remote(headers="Foo:bar",headerSupplier=F2.class,version="1.2.3")
+	public static interface F1 {
+		String[] getHeaders();
+	}
+
+	public static class F2 extends HeaderSupplier {
+		public F2() {
+			add(BasicHeader.of("Foo","baz"));
+			add(HeaderSupplier.of(BasicHeader.of("Foo",()->"qux")));
+		}
+	}
+
+	@Test
+	public void f01_headers() throws Exception {
+		F1 x = MockRestClient.create(F.class).json().header("Check","Foo").build().getRemote(F1.class);
+		assertEquals("['bar','baz','qux']",SimpleJson.DEFAULT.toString(x.getHeaders()));
+		x = MockRestClient.create(F.class).json().header("Check","X-Client-Version").build().getRemote(F1.class);
+		assertEquals("['1.2.3']",SimpleJson.DEFAULT.toString(x.getHeaders()));
 	}
 }
