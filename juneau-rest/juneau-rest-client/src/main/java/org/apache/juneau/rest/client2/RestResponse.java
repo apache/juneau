@@ -985,19 +985,13 @@ public class RestResponse implements HttpResponse {
 				if (request.hasHttpEntity()) {
 					sb.append("\n---request entity---");
 					HttpEntity e = request.getHttpEntity();
-					if (e == null)
-						sb.append("\nEntity is null");
-					else {
-						if (e.getContentType() != null)
-							sb.append("\n\t").append(e.getContentType());
-						if (e.getContentEncoding() != null)
-							sb.append("\n\t").append(e.getContentEncoding());
-						if (e.isRepeatable()) {
-							try {
-								sb.append("\n---request content---\n").append(EntityUtils.toString(e));
-							} catch (Exception ex) {
-								throw new RuntimeException(ex);
-							}
+					if (e.getContentType() != null)
+						sb.append("\n\t").append(e.getContentType());
+					if (e.isRepeatable()) {
+						try {
+							sb.append("\n---request content---\n").append(EntityUtils.toString(e));
+						} catch (Exception ex) {
+							sb.append("\n---request content exception---\n").append(ex.getMessage());
 						}
 					}
 				}
@@ -1028,5 +1022,4 @@ public class RestResponse implements HttpResponse {
 	HttpResponse asHttpResponse() {
 		return response;
 	}
-
 }

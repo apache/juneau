@@ -3002,7 +3002,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The body of this request, or <jk>null</jk> if it doesn't have a body.
 	 */
 	public HttpEntity getHttpEntity() {
-		return (request instanceof HttpEntityEnclosingRequestBase ? ((HttpEntityEnclosingRequestBase)request).getEntity() : null);
+		return hasHttpEntity() ? ((HttpEntityEnclosingRequestBase)request).getEntity() : null;
 	}
 
 	/**

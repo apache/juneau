@@ -14,8 +14,10 @@ package org.apache.juneau.rest.client2;
 
 import static org.junit.runners.MethodSorters.*;
 
+import java.io.*;
 import java.util.logging.*;
 
+import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
@@ -39,9 +41,18 @@ public class RestClient_Logging_Test {
 
 	@Rest
 	public static class A extends BasicRest {
-		@RestMethod(path="/bean")
+		@RestMethod
 		public ABean postBean(@Body ABean b) {
 			return b;
+		}
+		@RestMethod
+		public InputStream postStream(@Body InputStream b, org.apache.juneau.rest.RestResponse res) {
+			res.setHeader("Content-Encoding", "identity");
+			return b;
+		}
+		@RestMethod
+		public ABean getBean() {
+			return bean;
 		}
 	}
 
@@ -79,6 +90,45 @@ public class RestClient_Logging_Test {
 			"=== END =======================================================================",
 			""
 		);
+		c.reset();
+
+		client().logRequests(DetailLevel.FULL,Level.SEVERE).logToConsole().logger(l).console(c).build().get("/bean").complete();
+		c.assertContents().is(
+			"",
+			"=== HTTP Call (outgoing) ======================================================",
+			"=== REQUEST ===",
+			"GET http://localhost/bean",
+			"---request headers---",
+			"	Accept: application/json+simple",
+			"=== RESPONSE ===",
+			"HTTP/1.1 200 ",
+			"---response headers---",
+			"	Content-Type: application/json",
+			"---response content---",
+			"{f:1}",
+			"=== END =======================================================================",
+			""
+		);
+		c.reset();
+
+		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
+		c.assertContents().is(
+			"",
+			"=== HTTP Call (outgoing) ======================================================",
+			"=== REQUEST ===",
+			"POST http://localhost/stream",
+			"---request headers---",
+			"---request entity---",
+			"=== RESPONSE ===",
+			"HTTP/1.1 200 ",
+			"---response headers---",
+			"	Content-Encoding: identity",
+			"---response content---",
+			"foo",
+			"=== END =======================================================================",
+			""
+		);
+		c.reset();
 
 		client().logRequests(DetailLevel.NONE,Level.SEVERE).logToConsole().logger(l).console(MockConsole.class).build().post("/bean",bean).complete();
 	}
@@ -178,5 +228,9 @@ public class RestClient_Logging_Test {
 
 	private static RestClientBuilder client() {
 		return MockRestClient.create(A.class).simpleJson();
+	}
+
+	private static RestClientBuilder clientPlain() {
+		return MockRestClient.create(A.class);
 	}
 }
