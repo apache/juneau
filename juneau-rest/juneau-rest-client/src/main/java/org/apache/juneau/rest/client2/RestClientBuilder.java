@@ -1304,11 +1304,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<br>Can be any of the following types:
 	 * 	<ul>
 	 * 		<li>{@link Header} (including any subclasses such as {@link Accept})
-	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link Headerable}
-	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link HeaderSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
@@ -2058,7 +2055,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>
@@ -2346,7 +2342,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<li>{@link NameValuePair}
 	 * 		<li>{@link NameValuePairable}
 	 * 		<li>{@link java.util.Map.Entry}
-	 * 		<li>{@link NameValuePairs}
 	 * 		<li>{@link NameValuePairSupplier}
 	 * 		<li>{@link Map}
 	 * 		<ul>

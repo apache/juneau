@@ -21,7 +21,6 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -78,8 +77,8 @@ public class Remote_HeaderAnnotation_Test {
 		@RemoteMethod(path="a") String getX12(@Header Map<String,Bean> b);
 		@RemoteMethod(path="a") String getX13(@Header(n="x",f="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getX14(@Header(format="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a") String getX15(@Header("*") NameValuePairs b);
-		@RemoteMethod(path="a") String getX16(@Header NameValuePairs b);
+		@RemoteMethod(path="a") String getX15(@Header("*") HeaderSupplier b);
+		@RemoteMethod(path="a") String getX16(@Header HeaderSupplier b);
 		@RemoteMethod(path="a") String getX17(@Header org.apache.http.Header b);
 		@RemoteMethod(path="a") String getX18(@Header org.apache.http.Header[] b);
 		@RemoteMethod(path="a") String getX19(@Header String b);
@@ -102,8 +101,8 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{k1:'f=1'}",x.getX12(AMap.of("k1",Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.getX13(AMap.of("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX14(AMap.of("k1",Bean.create())));
-		assertEquals("{foo:'bar'}",x.getX15(pairs("foo","bar")));
-		assertEquals("{foo:'bar'}",x.getX16(pairs("foo","bar")));
+		assertEquals("{foo:'bar'}",x.getX15(headers("foo","bar")));
+		assertEquals("{foo:'bar'}",x.getX16(headers("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX17(header("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX18(new org.apache.http.Header[]{header("foo","bar")}));
 		assertThrown(()->x.getX19("Foo")).contains("Invalid value type");
@@ -793,33 +792,33 @@ public class Remote_HeaderAnnotation_Test {
 
 	public static class K3a {
 		@Header(aev=true)
-		public NameValuePairs getA() {
-			return pairs("a1","v1","a2",123,"a3",null,"a4","");
+		public HeaderSupplier getA() {
+			return headers("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Header(value="*",aev=true)
-		public NameValuePairs getB() {
-			return pairs("b1","true","b2","123","b3","null");
+		public HeaderSupplier getB() {
+			return headers("b1","true","b2","123","b3","null");
 		}
 		@Header(n="*",aev=true)
-		public NameValuePairs getC() {
-			return pairs("c1","v1","c2",123,"c3",null,"c4","");
+		public HeaderSupplier getC() {
+			return headers("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Header(value="*",aev=true)
-		public NameValuePairs getD() {
+		public HeaderSupplier getD() {
 			return null;
 		}
 		@Header(aev=true)
-		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new NameValuePair[0]);
+		public org.apache.http.Header[] getE() {
+			return headers("e1","v1","e2",123,"e3",null,"e4","").toArray();
 		}
 		@Header(aev=true)
-		public BasicNameValuePair[] getF() {
-			return pairs("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicNameValuePair[0]);
+		public BasicHeader[] getF() {
+			return headers("f1","v1","f2",123,"f3",null,"f4","").toArray(new BasicHeader[0]);
 		}
 	}
 
 	@Test
-	public void k03_requestBean_nameValuePairs() throws Exception {
+	public void k03_requestBean_headers() throws Exception {
 		K3 x1 = remote(K.class,K3.class);
 		K3 x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K3.class);
 		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:'',e1:'v1',e2:'123',e4:'',f1:'v1',f2:'123',f4:''}",x1.getX1(new K3a()));
@@ -889,8 +888,8 @@ public class Remote_HeaderAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static HeaderSupplier headers(Object...pairs) {
+		return HeaderSupplier.ofPairs(pairs);
 	}
 
 	private static org.apache.http.Header header(String key,Object val) {

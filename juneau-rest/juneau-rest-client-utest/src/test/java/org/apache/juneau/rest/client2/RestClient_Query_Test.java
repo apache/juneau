@@ -194,8 +194,8 @@ public class RestClient_Query_Test {
 		return BasicNameValuePair.of(name, val);
 	}
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static NameValuePairSupplier pairs(Object...pairs) {
+		return NameValuePairSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

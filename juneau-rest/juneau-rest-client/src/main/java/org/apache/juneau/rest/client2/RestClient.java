@@ -321,7 +321,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
- * 		<li class='jm'>{@link RestRequest#header(NameValuePair) header(NameValuePair)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
  * 		<li class='jm'>{@link RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
@@ -493,7 +492,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jc'>
  * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 		<li class='jc'>
- * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+ * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
  * 	</ul>
  *
  * <ul class='notes'>
@@ -1235,7 +1234,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object) header(String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header) header(Header)}
-	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(NameValuePair) header(NameValuePair)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object...) headers(Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;,Object...)}
 	 * 				<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headerPairs(Object...) headerPairs(Object...)}
@@ -2201,7 +2199,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
-	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li class='jc'>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2300,7 +2298,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
-	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li class='jc'>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2454,7 +2452,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link NameValuePair} - URL-encoded as a single name-value pair.
 	 * 		<li class='jc'>{@link NameValuePair} array - URL-encoded as name value pairs.
-	 * 		<li class='jc'>{@link NameValuePairs} - URL-encoded as name value pairs.
+	 * 		<li class='jc'>{@link NameValuePairSupplier} - URL-encoded as name value pairs.
 	 * 		<li class='jc'>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
 	 * 		<li class='jc'>{@link ReaderResource}/{@link ReaderResourceBuilder}/{@link StreamResource}/{@link StreamResourceBuilder}/{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
 	 * 		<li class='jc'>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
@@ -2474,8 +2472,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return req.body(new UrlEncodedFormEntity(AList.of((NameValuePair)body)));
 			if (body instanceof NameValuePair[])
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
-			if (body instanceof NameValuePairs)
-				return req.body(new UrlEncodedFormEntity((NameValuePairs)body));
+			if (body instanceof NameValuePairSupplier)
+				return req.body(new UrlEncodedFormEntity((NameValuePairSupplier)body));
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;
 				if (e.getContentType() == null)
@@ -2552,7 +2550,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest formPostPairs(Object url, Object...parameters) throws RestCallException {
-		return formPost(url, new NameValuePairs(parameters));
+		return formPost(url, NameValuePairSupplier.ofPairs(parameters));
 	}
 
 	/**
@@ -2586,7 +2584,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
-	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li class='jc'>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2731,7 +2729,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
 				for (Map.Entry<String,Object> e : OMap.ofJson(headers).entrySet())
-					req.header(BasicNameValuePair.of(e.getKey(), e.getValue()));
+					req.header(BasicHeader.of(e.getKey(), e.getValue()));
 			if (isNotEmpty(content))
 				req.bodyString(content);
 			return req;
@@ -2772,7 +2770,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li class='jc'>
-	 * 			{@link NameValuePairs} - Converted to a URL-encoded FORM post.
+	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li class='jc'>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>

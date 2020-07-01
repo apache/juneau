@@ -94,8 +94,8 @@ public class Remote_FormDataAnnotation_Test {
 		@RemoteMethod(path="a") String postX16(@FormData Reader b);
 		@RemoteMethod(path="a") String postX17(@FormData("*") InputStream b);
 		@RemoteMethod(path="a") String postX18(@FormData InputStream b);
-		@RemoteMethod(path="a") String postX19(@FormData("*") NameValuePairs b);
-		@RemoteMethod(path="a") String postX20(@FormData NameValuePairs b);
+		@RemoteMethod(path="a") String postX19(@FormData("*") NameValuePairSupplier b);
+		@RemoteMethod(path="a") String postX20(@FormData NameValuePairSupplier b);
 		@RemoteMethod(path="a") String postX21(@FormData NameValuePair b);
 		@RemoteMethod(path="a") String postX22(@FormData String b);
 		@RemoteMethod(path="a") String postX23(@FormData InputStream b);
@@ -827,24 +827,24 @@ public class Remote_FormDataAnnotation_Test {
 
 	public static class K3a {
 		@FormData
-		public NameValuePairs getA() {
-			return pairs("a1","v1").append("a2",123).append("a3",null).append("a4","");
+		public NameValuePairSupplier getA() {
+			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@FormData("*")
-		public NameValuePairs getB() {
-			return pairs("b1","true").append("b2","123").append("b3","null");
+		public NameValuePairSupplier getB() {
+			return pairs("b1","true","b2","123","b3","null");
 		}
 		@FormData(n="*")
-		public NameValuePairs getC() {
+		public NameValuePairSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@FormData("*")
-		public NameValuePairs getD() {
+		public NameValuePairSupplier getD() {
 			return null;
 		}
 		@FormData
 		public NameValuePair[] getE() {
-			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray(new NameValuePair[0]);
+			return pairs("e1","v1","e2",123,"e3",null,"e4","").toArray();
 		}
 		@FormData
 		public BasicNameValuePair[] getF() {
@@ -971,8 +971,8 @@ public class Remote_FormDataAnnotation_Test {
 		return BasicNameValuePair.of(name,val);
 	}
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static NameValuePairSupplier pairs(Object...pairs) {
+		return NameValuePairSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client(Class<?> c) {

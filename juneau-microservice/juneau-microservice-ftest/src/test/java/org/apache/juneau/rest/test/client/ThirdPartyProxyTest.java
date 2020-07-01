@@ -233,7 +233,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void a10_nameValuePairsHeader() throws Exception {
 		String r = proxy.nameValuePairsHeader(
-			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+			HeaderSupplier.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -374,7 +374,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b12_nameValuePairsQuery() throws Exception {
 		String r = proxy.nameValuePairsQuery(
-			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+			NameValuePairSupplier.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -503,7 +503,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void c10_nameValuePairsFormData() throws Exception {
 		String r = proxy.nameValuePairsFormData(
-			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+			NameValuePairSupplier.ofPairs("a","foo","b","","c",null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1618,7 +1618,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(method="GET", path="/nameValuePairsHeader")
 		String nameValuePairsHeader(
-			@Header(value="*", allowEmptyValue=true) NameValuePairs a
+			@Header(value="*", allowEmptyValue=true) HeaderSupplier a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -1726,7 +1726,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(method="GET", path="/nameValuePairsQuery")
 		String nameValuePairsQuery(
-			@Query("*") NameValuePairs a
+			@Query("*") NameValuePairSupplier a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -1824,7 +1824,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(method="POST", path="/nameValuePairsFormData")
 		String nameValuePairsFormData(
-			@FormData("*") NameValuePairs a
+			@FormData("*") NameValuePairSupplier a
 		);
 
 		//-------------------------------------------------------------------------------------------------------------

@@ -75,8 +75,8 @@ public class Remote_PathAnnotation_Test {
 		@RemoteMethod(path="a/{x}") String getX12(@Path Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getX13(@Path(n="x",cf="uon") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getX14(@Path(f="uon") Map<String,Bean> b);
-		@RemoteMethod(path="a/{x}") String getX15(@Path("*") NameValuePairs b);
-		@RemoteMethod(path="a/{x}") String getX16(@Path NameValuePairs b);
+		@RemoteMethod(path="a/{x}") String getX15(@Path("*") NameValuePairSupplier b);
+		@RemoteMethod(path="a/{x}") String getX16(@Path NameValuePairSupplier b);
 		@RemoteMethod(path="a/{x}") String getX17(@Path(n="x",serializer=UonSerializer.class) Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getX18(@Path(n="*") NameValuePair b);
 		@RemoteMethod(path="a/{x}") String getX19(@Path NameValuePair b);
@@ -684,19 +684,19 @@ public class Remote_PathAnnotation_Test {
 
 	public static class K3a {
 		@Path(n="*",aev=true)
-		public NameValuePairs getA() {
+		public NameValuePairSupplier getA() {
 			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Path("/*")
-		public NameValuePairs getB() {
+		public NameValuePairSupplier getB() {
 			return pairs("b1","true","b2","123","b3","null");
 		}
 		@Path(n="*",aev=true)
-		public NameValuePairs getC() {
+		public NameValuePairSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Path("/*")
-		public NameValuePairs getD() {
+		public NameValuePairSupplier getD() {
 			return null;
 		}
 		@Path(aev=true)
@@ -772,8 +772,8 @@ public class Remote_PathAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static NameValuePairSupplier pairs(Object...pairs) {
+		return NameValuePairSupplier.ofPairs(pairs);
 	}
 
 	private static NameValuePair pair(String key, Object val) {

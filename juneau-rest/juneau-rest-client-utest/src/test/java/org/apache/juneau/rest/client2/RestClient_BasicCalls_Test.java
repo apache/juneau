@@ -172,7 +172,7 @@ public class RestClient_BasicCalls_Test {
 			pairs("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").build().put("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -216,7 +216,7 @@ public class RestClient_BasicCalls_Test {
 			pairs("f",1)
 		);
 		for (Object body : bodies) {
-			client().contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
+			client().contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").build().post("/bean",body).run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -362,7 +362,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.patch("/bean",body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.patch("/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -400,7 +400,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request(HttpMethod.PATCH,"/bean",body).contentType(body instanceof NameValuePairs ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.request(HttpMethod.PATCH,"/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -448,8 +448,8 @@ public class RestClient_BasicCalls_Test {
 		return BasicNameValuePair.of(name, val);
 	}
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static NameValuePairSupplier pairs(Object...pairs) {
+		return NameValuePairSupplier.ofPairs(pairs);
 	}
 
 	private static RestClientBuilder client() {

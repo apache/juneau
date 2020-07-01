@@ -82,8 +82,8 @@ public class Remote_QueryAnnotation_Test {
 		@RemoteMethod(path="a") String getX16(@Query Reader b);
 		@RemoteMethod(path="a") String getX17(@Query("*") InputStream b);
 		@RemoteMethod(path="a") String getX18(@Query InputStream b);
-		@RemoteMethod(path="a") String getX19(@Query("*") NameValuePairs b);
-		@RemoteMethod(path="a") String getX20(@Query NameValuePairs b);
+		@RemoteMethod(path="a") String getX19(@Query("*") NameValuePairSupplier b);
+		@RemoteMethod(path="a") String getX20(@Query NameValuePairSupplier b);
 		@RemoteMethod(path="a") String getX21(@Query NameValuePair b);
 		@RemoteMethod(path="a") String getX22(@Query NameValuePair[] b);
 		@RemoteMethod(path="a") String getX23(@Query BasicNameValuePair[] b);
@@ -795,19 +795,19 @@ public class Remote_QueryAnnotation_Test {
 
 	public static class K3a {
 		@Query(aev=true)
-		public NameValuePairs getA() {
+		public NameValuePairSupplier getA() {
 			return pairs("a1","v1","a2",123,"a3",null,"a4","");
 		}
 		@Query("*")
-		public NameValuePairs getB() {
+		public NameValuePairSupplier getB() {
 			return pairs("b1","true","b2","123","b3","null");
 		}
 		@Query(n="*",aev=true)
-		public NameValuePairs getC() {
+		public NameValuePairSupplier getC() {
 			return pairs("c1","v1","c2",123,"c3",null,"c4","");
 		}
 		@Query("*")
-		public NameValuePairs getD() {
+		public NameValuePairSupplier getD() {
 			return null;
 		}
 		@Query(aev=true)
@@ -935,8 +935,8 @@ public class Remote_QueryAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static NameValuePairs pairs(Object...pairs) {
-		return NameValuePairs.of(pairs);
+	private static NameValuePairSupplier pairs(Object...pairs) {
+		return NameValuePairSupplier.ofPairs(pairs);
 	}
 
 	private static NameValuePair pair(String key,Object val) {
