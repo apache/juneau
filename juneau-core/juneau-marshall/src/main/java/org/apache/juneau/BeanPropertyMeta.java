@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1293,9 +1294,6 @@ public final class BeanPropertyMeta {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (o == null || ! (o instanceof BeanPropertyMeta))
-			return false;
-		BeanPropertyMeta o2 = (BeanPropertyMeta)o;
-		return o2.beanMeta.equals(this.beanMeta) && isEquals(o2.name, this.name);
+		return (o instanceof BeanPropertyMeta) && eq(this, (BeanPropertyMeta)o, (x,y)->eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
 	}
 }

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
@@ -974,7 +975,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Property read interceptor.
-	 * 
+	 *
 	 * <p>
 	 * Called immediately after calling the getter to allow the value to be overridden.
 	 *
@@ -989,7 +990,7 @@ public class BeanMeta<T> {
 
 	/**
 	 * Property write interceptor.
-	 * 
+	 *
 	 * <p>
 	 * Called immediately before calling theh setter to allow value to be overwridden.
 	 *
@@ -1044,9 +1045,6 @@ public class BeanMeta<T> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (o == null || ! (o instanceof BeanMeta))
-			return false;
-		BeanMeta<?> o2 = (BeanMeta<?>)o;
-		return o2.classMeta.equals(this.classMeta);
+		return (o instanceof BeanMeta) && eq(this, (BeanMeta<?>)o, (x,y)->eq(x.classMeta, y.classMeta));
 	}
 }

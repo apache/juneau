@@ -63,11 +63,11 @@ public class HeaderAnnotationTest {
 	public void a01_optionalParam_integer() throws Exception {
 		a.get("/a").header("f1", 123)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("123");
 		a.get("/a")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -76,11 +76,11 @@ public class HeaderAnnotationTest {
 		a.get("/b")
 			.header("f1", "a=1,b=foo")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 		a.get("/b")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -89,11 +89,11 @@ public class HeaderAnnotationTest {
 		a.get("/c")
 			.header("f1", "@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		a.get("/c")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -102,11 +102,11 @@ public class HeaderAnnotationTest {
 		a.get("/d")
 			.header("f1", "@((a=1,b=foo))")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		a.get("/d")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 

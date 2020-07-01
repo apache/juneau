@@ -44,7 +44,7 @@ public final class RestCallException extends HttpException {
 	 * @param e The exception to wrap.
 	 * @return The casted or wrapped exception.
 	 */
-	public static RestCallException create(Exception e) {
+	public static RestCallException create(Throwable e) {
 		if (e instanceof RestCallException)
 			return (RestCallException)e;
 		return new RestCallException(e);
@@ -77,7 +77,7 @@ public final class RestCallException extends HttpException {
 	 *
 	 * @param e The inner cause of the exception.
 	 */
-	public RestCallException(Exception e) {
+	public RestCallException(Throwable e) {
 		super(clean(e.getLocalizedMessage()), e);
 		if (e instanceof FileNotFoundException) {
 			responseCode = 404;

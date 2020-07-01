@@ -87,7 +87,7 @@ public class ContentTypeTest {
 	public void a02_defaultHeadersOnServletAnnotation_invalid() throws Exception {
 		a.put("/a01?noTrace=true", null, "text/p3")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
 	}
 
@@ -117,21 +117,21 @@ public class ContentTypeTest {
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
 		b.put("/b?noTrace=true", null, "")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/b?noTrace=true", null, "text/p1")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/b?noTrace=true", null, "text/p2")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
@@ -167,7 +167,7 @@ public class ContentTypeTest {
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
 		c.put("/c?noTrace=true", null).contentType("text/p4")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p4'",
 				"Supported media-types: ['text/p3','text/p1','text/p2']"
@@ -204,14 +204,14 @@ public class ContentTypeTest {
 	public void e02_restMethodParserSerializerAnnotations_invalid() throws Exception {
 		e.put("/e?noTrace=true", null, "text/p1")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		e.put("/e?noTrace=true", null, "text/p2")
 			.run()
-			.assertStatus().is(415)
+			.assertCode().is(415)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"

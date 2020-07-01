@@ -343,7 +343,7 @@ public class RestClient_Test {
 
 	@Test
 	public void e01_other_completeFuture() throws Exception {
-		client().build().get("/bean").completeFuture().get().assertStatus().is(200);
+		client().build().get("/bean").completeFuture().get().assertCode().is(200);
 	}
 
 	public static class E2 implements Cancellable {
@@ -355,19 +355,19 @@ public class RestClient_Test {
 
 	@Test
 	public void e02_httpRequestBase_setCancellable() throws Exception {
-		client().build().get("/bean").cancellable(new E2()).run().assertStatus().is(200);
+		client().build().get("/bean").cancellable(new E2()).run().assertCode().is(200);
 	}
 
 	@Test
 	public void e03_httpRequestBase_protocolVersion() throws Exception {
-		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus().is(200);
+		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertCode().is(200);
 		ProtocolVersion x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
 		assertEquals(2,x.getMajor());
 	}
 
 	@Test
 	public void e04_httpRequestBase_completed() throws Exception {
-		client().build().get("/bean").completed().run().assertStatus().is(200);
+		client().build().get("/bean").completed().run().assertCode().is(200);
 	}
 
 	@Test

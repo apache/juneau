@@ -216,7 +216,7 @@ public class AutoNumberSwap<T> extends PojoSwap<T,Number> {
 		if (unswapType == null)
 			throw new ParseException("No unparse methodology found for object.");
 		try {
-			Object o2 = ObjectUtils.toType(o, unswapType);
+			Object o2 = ConverterUtils.toType(o, unswapType);
 			if (unswapMethod != null)
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
 			if (unswapConstructor != null)

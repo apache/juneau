@@ -10,36 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.internal;
 
+import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ResponseStatusAnnotationTest {
-
-	//=================================================================================================================
-	// Test on parameter
-	//=================================================================================================================
-
-	@Rest
-	public static class A {
-		@RestMethod
-		public void a01(@ResponseStatus Value<Integer> status) {
-			status.set(202);
-		}
-	}
-
-	static MockRestClient a = MockRestClient.build(A.class);
+public class ObjectUtilsTest {
 
 	@Test
-	public void a01() throws Exception {
-		a.get("/a01")
-			.run()
-			.assertCode().is(202);
+	public void a01_eq() {
+		assertTrue(ObjectUtils.eq("foo","foo"));
+		assertTrue(ObjectUtils.eq(null,null));
+		assertFalse(ObjectUtils.eq(null,"foo"));
+		assertFalse(ObjectUtils.eq("foo",null));
+	}
+
+	@Test
+	public void a02_ne() {
+		assertFalse(ObjectUtils.ne("foo","foo"));
+		assertFalse(ObjectUtils.ne(null,null));
+		assertTrue(ObjectUtils.ne(null,"foo"));
+		assertTrue(ObjectUtils.ne("foo",null));
 	}
 }

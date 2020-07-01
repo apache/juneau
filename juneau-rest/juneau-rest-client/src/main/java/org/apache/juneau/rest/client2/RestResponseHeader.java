@@ -659,7 +659,7 @@ public class RestResponseHeader implements Header {
 	 * @throws RestCallException If REST call failed.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertThat() throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertString() throws RestCallException {
 		return new FluentStringAssertion<>(asString(), response);
 	}
 
@@ -681,7 +681,7 @@ public class RestResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertThatInteger() throws RestCallException {
+	public FluentIntegerAssertion<RestResponse> assertInt() throws RestCallException {
 		BasicIntegerHeader h = asIntegerHeader();
 		return new FluentIntegerAssertion<>(h == null ? -1 : h.asInt(), response);
 	}
@@ -704,7 +704,7 @@ public class RestResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentLongAssertion<RestResponse> assertThatLong() throws RestCallException {
+	public FluentLongAssertion<RestResponse> assertLong() throws RestCallException {
 		BasicLongHeader h = asLongHeader();
 		return new FluentLongAssertion<>(h == null ? -1 : h.asLong(), response);
 	}
@@ -727,7 +727,7 @@ public class RestResponseHeader implements Header {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentDateAssertion<RestResponse> assertThatDate() throws RestCallException {
+	public FluentDateAssertion<RestResponse> assertDate() throws RestCallException {
 		BasicDateHeader h = asDateHeader();
 		return new FluentDateAssertion<>(h == null ? null : h.asDate(), response);
 	}

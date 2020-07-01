@@ -28,12 +28,10 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -178,7 +176,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li class='jm'>{@link #asPojoRest(Mutable) asPojoRest(Mutable)}
 	 * 	<li class='jm'>{@link #asPojoRest(Class) asPojoRest(Class)}
 	 * 	<li class='jm'>{@link #asPojoRest(Mutable,Class) asPojoRest(Mutable,Class)}
-	 * 	<li class='jm'>{@link #assertThat() assertThat()}
+	 * 	<li class='jm'>{@link #assertString() assertString()}
 	 * 	<li class='jm'>{@link #asString() asString()}
 	 * 	<li class='jm'>{@link #asString(Mutable) asString(Mutable)}
 	 * 	<li class='jm'>{@link #asStringFuture() asStringFuture()}
@@ -1610,7 +1608,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertThat() throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertString() throws RestCallException {
 		return new FluentStringAssertion<>(asString(), response);
 	}
 
@@ -1621,8 +1619,7 @@ public class RestResponseBody implements HttpEntity {
 	 * This method is called directly from the {@link RestResponse#assertBody(Class)} method to instantiate a fluent assertions object.
 	 *
 	 * <p>
-	 * Combines the functionality of {@link #as(Class)} with {@link #assertThat()} by converting the body to the specified
-	 * bean and then serializing it to simplified JSON for easy string comparison.
+	 * Converts the body of the response to the specified object using {@link #as(Class)} and returns it as a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -1648,12 +1645,8 @@ public class RestResponseBody implements HttpEntity {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertThat(Class<?> type) throws RestCallException {
-		try {
-			return new FluentStringAssertion<>(SimpleJson.DEFAULT.write(as(type)), response);
-		} catch (SerializeException e) {
-			throw new RestCallException(e);
-		}
+	public FluentObjectAssertion<RestResponse> assertObject(Class<?> type) throws RestCallException {
+		return new FluentObjectAssertion<>(as(type), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import java.io.*;
@@ -2092,9 +2093,6 @@ public final class ClassMeta<T> implements Type {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (o == null || ! (o instanceof ClassMeta))
-			return false;
-		ClassMeta<?> o2 = (ClassMeta<?>)o;
-		return o2.innerClass.equals(innerClass);
+		return (o instanceof ClassMeta) && eq(this, (ClassMeta<?>)o, (x,y)->eq(x.innerClass, y.innerClass));
 	}
 }

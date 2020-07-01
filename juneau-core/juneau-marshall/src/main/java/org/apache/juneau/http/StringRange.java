@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 import java.util.Map.*;
 
@@ -230,17 +232,7 @@ public class StringRange implements Comparable<StringRange>  {
 	 */
 	@Override /* Object */
 	public boolean equals(Object o) {
-
-		if (o == null || !(o instanceof StringRange))
-			return false;
-
-		if (this == o)
-			return true;
-
-		StringRange o2 = (StringRange) o;
-		return qValue.equals(o2.qValue)
-			&& type.equals(o2.type)
-			&& extensions.equals(o2.extensions);
+		return (o instanceof StringRange) && eq(this, (StringRange)o, (x,y)->eq(x.qValue, y.qValue) && eq(x.type, y.type) && eq(x.extensions, y.extensions));
 	}
 
 	/**

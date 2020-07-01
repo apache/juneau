@@ -676,10 +676,10 @@ public class RestResourceLoggingTest {
 		MY_REST.post("/foo?foo=bar", "Foo")
 			.header("Foo", "bar")
 			.run()
-			.assertStatus().is(500);
+			.assertCode().is(500);
 		MY_REST.post("/foo?foo=bar", "Foo")
 			.header("Foo", "bar")
 			.run()
-			.assertStatus().is(500);
+			.assertCode().is(500);
 	}
 }

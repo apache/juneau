@@ -67,13 +67,13 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		}
 
 		if (a.serializers().length > 0)
-			psb.set(REST_serializers, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
+			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
 
 		if (a.parsers().length > 0)
-			psb.set(REST_parsers, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
+			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 
 		if (a.encoders().length > 0)
-			psb.set(REST_encoders, merge(ObjectUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
+			psb.set(REST_encoders, merge(ConverterUtils.toType(psb.peek(REST_encoders), Object[].class), a.encoders()));
 
 		if (a.produces().length > 0)
 			psb.set(REST_produces, strings(a.produces()));
@@ -118,9 +118,9 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (! a.clientVersion().isEmpty())
 			psb.set(RESTMETHOD_clientVersion, a.clientVersion());
 
-		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
+		psb.set(BEAN_beanFilters, merge(ConverterUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
-		psb.set(BEAN_pojoSwaps, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
+		psb.set(BEAN_pojoSwaps, merge(ConverterUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
 
 		if (a.bpi().length > 0) {
 			Map<String,String> bpiMap = new LinkedHashMap<>();

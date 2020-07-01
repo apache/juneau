@@ -65,151 +65,151 @@ public class BasicTest {
 	public void a01_accepted() throws Exception {
 		a.get("/accepted")
 			.run()
-			.assertStatus().is(202)
+			.assertCode().is(202)
 			.assertBody().is("Accepted");
 	}
 	@Test
 	public void a02_alreadyReported() throws Exception {
 		a.get("/alreadyReported")
 			.run()
-			.assertStatus().is(208)
+			.assertCode().is(208)
 			.assertBody().is("Already Reported");
 	}
 	@Test
 	public void a03_continue() throws Exception {
 		a.get("/continue")
 			.run()
-			.assertStatus().is(1100)
+			.assertCode().is(1100)
 			.assertBody().is("Continue");
 	}
 	@Test
 	public void a04_created() throws Exception {
 		a.get("/created")
 			.run()
-			.assertStatus().is(201)
+			.assertCode().is(201)
 			.assertBody().is("Created");
 	}
 	@Test
 	public void a05_earlyHints() throws Exception {
 		a.get("/earlyHints")
 			.run()
-			.assertStatus().is(1103)
+			.assertCode().is(1103)
 			.assertBody().is("Early Hints");
 	}
 	@Test
 	public void a06_found() throws Exception {
 		a.get("/found")
 			.run()
-			.assertStatus().is(302)
+			.assertCode().is(302)
 			.assertBody().is("Found");
 	}
 	@Test
 	public void a07_imUsed() throws Exception {
 		a.get("/imUsed")
 			.run()
-			.assertStatus().is(226)
+			.assertCode().is(226)
 			.assertBody().is("IM Used");
 	}
 	@Test
 	public void a08_movedPermanently() throws Exception {
 		a.get("/movedPermanently")
 			.run()
-			.assertStatus().is(301)
+			.assertCode().is(301)
 			.assertBody().is("Moved Permanently");
 	}
 	@Test
 	public void a09_multipleChoices() throws Exception {
 		a.get("/multipleChoices")
 			.run()
-			.assertStatus().is(300)
+			.assertCode().is(300)
 			.assertBody().is("Multiple Choices");
 	}
 	@Test
 	public void a10_multiStatus() throws Exception {
 		a.get("/multiStatus")
 			.run()
-			.assertStatus().is(207)
+			.assertCode().is(207)
 			.assertBody().is("Multi-Status");
 	}
 	@Test
 	public void a11_noContent() throws Exception {
 		a.get("/noContent")
 			.run()
-			.assertStatus().is(204);
+			.assertCode().is(204);
 	}
 	@Test
 	public void a12_nonAuthoritiveInformation() throws Exception {
 		a.get("/nonAuthoritiveInformation")
 			.run()
-			.assertStatus().is(203)
+			.assertCode().is(203)
 			.assertBody().is("Non-Authoritative Information");
 	}
 	@Test
 	public void a13_notModified() throws Exception {
 		a.get("/notModified")
 			.run()
-			.assertStatus().is(304);
+			.assertCode().is(304);
 	}
 	@Test
 	public void a14_ok() throws Exception {
 		a.get("/ok")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("OK");
 	}
 	@Test
 	public void a15_partialContent() throws Exception {
 		a.get("/partialContent")
 			.run()
-			.assertStatus().is(206)
+			.assertCode().is(206)
 			.assertBody().is("Partial Content");
 	}
 	@Test
 	public void a16_permanentRedirect() throws Exception {
 		a.get("/permanentRedirect")
 			.run()
-			.assertStatus().is(308)
+			.assertCode().is(308)
 			.assertBody().is("Permanent Redirect");
 	}
 	@Test
 	public void a17_processing() throws Exception {
 		a.get("/processing")
 			.run()
-			.assertStatus().is(1102)
+			.assertCode().is(1102)
 			.assertBody().is("Processing");
 	}
 	@Test
 	public void a18_resetContent() throws Exception {
 		a.get("/resetContent")
 			.run()
-			.assertStatus().is(205);
+			.assertCode().is(205);
 	}
 	@Test
 	public void a19_seeOther() throws Exception {
 		a.get("/seeOther")
 			.run()
-			.assertStatus().is(303)
+			.assertCode().is(303)
 			.assertBody().is("See Other");
 	}
 	@Test
 	public void a20_switchingProtocols() throws Exception {
 		a.get("/switchingProtocols")
 			.run()
-			.assertStatus().is(1101)
+			.assertCode().is(1101)
 			.assertBody().is("Switching Protocols");
 	}
 	@Test
 	public void a21_temporaryRedirect() throws Exception {
 		a.get("/temporaryRedirect")
 			.run()
-			.assertStatus().is(307)
+			.assertCode().is(307)
 			.assertBody().is("Temporary Redirect");
 	}
 	@Test
 	public void a22_useProxy() throws Exception {
 		a.get("/useProxy")
 			.run()
-			.assertStatus().is(305)
+			.assertCode().is(305)
 			.assertBody().is("Use Proxy");
 	}
 
@@ -231,28 +231,28 @@ public class BasicTest {
 	public void b01_movedPermanently() throws Exception {
 		b.get("/movedPermanently")
 			.run()
-			.assertStatus().is(301)
+			.assertCode().is(301)
 			.assertBody().is("Moved Permanently").assertHeader("Location").is("/foo");
 	}
 	@Test
 	public void b02_permanentRedirect() throws Exception {
 		b.get("/permanentRedirect")
 			.run()
-			.assertStatus().is(308)
+			.assertCode().is(308)
 			.assertBody().is("Permanent Redirect").assertHeader("Location").is("/foo");
 	}
 	@Test
 	public void b03_seeOther() throws Exception {
 		b.get("/seeOther")
 			.run()
-			.assertStatus().is(303)
+			.assertCode().is(303)
 			.assertBody().is("See Other").assertHeader("Location").is("/foo");
 	}
 	@Test
 	public void b04_temporaryRedirect() throws Exception {
 		b.get("/temporaryRedirect")
 			.run()
-			.assertStatus().is(307)
+			.assertCode().is(307)
 			.assertBody().is("Temporary Redirect").assertHeader("Location").is("/foo");
 	}
 
@@ -292,151 +292,151 @@ public class BasicTest {
 	public void c01_accepted() throws Exception {
 		c.get("/accepted")
 			.run()
-			.assertStatus().is(202)
+			.assertCode().is(202)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c02_alreadyReported() throws Exception {
 		c.get("/alreadyReported")
 			.run()
-			.assertStatus().is(208)
+			.assertCode().is(208)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c03_continue() throws Exception {
 		c.get("/continue")
 			.run()
-			.assertStatus().is(1100)
+			.assertCode().is(1100)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c04_created() throws Exception {
 		c.get("/created")
 			.run()
-			.assertStatus().is(201)
+			.assertCode().is(201)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c05_earlyHints() throws Exception {
 		c.get("/earlyHints")
 			.run()
-			.assertStatus().is(1103)
+			.assertCode().is(1103)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c06_found() throws Exception {
 		c.get("/found")
 			.run()
-			.assertStatus().is(302)
+			.assertCode().is(302)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c07_imUsed() throws Exception {
 		c.get("/imUsed")
 			.run()
-			.assertStatus().is(226)
+			.assertCode().is(226)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c08_movedPermanently() throws Exception {
 		c.get("/movedPermanently")
 			.run()
-			.assertStatus().is(301)
+			.assertCode().is(301)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c09_multipleChoices() throws Exception {
 		c.get("/multipleChoices")
 			.run()
-			.assertStatus().is(300)
+			.assertCode().is(300)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c10_multiStatus() throws Exception {
 		c.get("/multiStatus")
 			.run()
-			.assertStatus().is(207)
+			.assertCode().is(207)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c11_noContent() throws Exception {
 		c.get("/noContent")
 			.run()
-			.assertStatus().is(204);
+			.assertCode().is(204);
 	}
 	@Test
 	public void c12_nonAuthoritiveInformation() throws Exception {
 		c.get("/nonAuthoritiveInformation")
 			.run()
-			.assertStatus().is(203)
+			.assertCode().is(203)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c13_notModified() throws Exception {
 		c.get("/notModified")
 			.run()
-			.assertStatus().is(304);
+			.assertCode().is(304);
 	}
 	@Test
 	public void c14_ok() throws Exception {
 		c.get("/ok")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c15_partialContent() throws Exception {
 		c.get("/partialContent")
 			.run()
-			.assertStatus().is(206)
+			.assertCode().is(206)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c16_permanentRedirect() throws Exception {
 		c.get("/permanentRedirect")
 			.run()
-			.assertStatus().is(308)
+			.assertCode().is(308)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c17_processing() throws Exception {
 		c.get("/processing")
 			.run()
-			.assertStatus().is(1102)
+			.assertCode().is(1102)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c18_resetContent() throws Exception {
 		c.get("/resetContent")
 			.run()
-			.assertStatus().is(205);
+			.assertCode().is(205);
 	}
 	@Test
 	public void c19_seeOther() throws Exception {
 		c.get("/seeOther")
 			.run()
-			.assertStatus().is(303)
+			.assertCode().is(303)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c20_switchingProtocols() throws Exception {
 		c.get("/switchingProtocols")
 			.run()
-			.assertStatus().is(1101)
+			.assertCode().is(1101)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c21_temporaryRedirect() throws Exception {
 		c.get("/temporaryRedirect")
 			.run()
-			.assertStatus().is(307)
+			.assertCode().is(307)
 			.assertBody().is("foo");
 	}
 	@Test
 	public void c22_useProxy() throws Exception {
 		c.get("/useProxy")
 			.run()
-			.assertStatus().is(305)
+			.assertCode().is(305)
 			.assertBody().is("foo");
 	}
 
@@ -455,7 +455,7 @@ public class BasicTest {
 	public void d01_accepted() throws Exception {
 		d.get("/accepted").json()
 			.run()
-			.assertStatus().is(202)
+			.assertCode().is(202)
 			.assertBody().is("'foo'");
 	}
 

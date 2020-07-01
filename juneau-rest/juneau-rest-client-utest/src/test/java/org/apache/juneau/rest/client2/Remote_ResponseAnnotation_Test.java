@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -20,14 +21,31 @@ import java.io.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Remote_ResponseAnnotation_Test {
+
+	public static class ABean {
+		public int f;
+		static ABean get() {
+			ABean x = new ABean();
+			x.f = 1;
+			return x;
+		}
+		@Override
+		public String toString() {
+			return SimpleJson.DEFAULT.toString(this);
+		}
+	}
+
+	private static ABean bean = ABean.get();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -44,23 +62,66 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Response
-	public interface A1 {
+	public interface A1a {
 		@ResponseBody Reader getBody();
 		@ResponseHeader("X") String getHeader();
 		@ResponseStatus int getStatus();
 	}
 
 	@Remote
-	public static interface A2 {
-		@RemoteMethod A1 get();
+	public static interface A1b {
+		@RemoteMethod A1a get();
 	}
 
 	@Test
 	public void a01_basic() throws Exception {
-		A1 x = remote(A.class,A2.class).get();
+		A1a x = remote(A.class,A1b.class).get();
 		assertEquals("foo",IOUtils.read(x.getBody()));
 		assertEquals("x",x.getHeader());
 		assertEquals(201,x.getStatus());
+	}
+
+	@Response
+	public interface A2a {
+		@ResponseBody Reader getBody();
+	}
+
+	@Remote
+	public static interface A2b {
+		@RemoteMethod A2a get();
+	}
+
+	@Test
+	public void a02_unannotatedMethod() throws Exception {
+		A2a x = remote(A.class,A2b.class).get();
+		assertEquals("foo",IOUtils.read(x.getBody()));
+	}
+
+	@Rest
+	public static class A3 implements BasicJsonRest {
+		@RestMethod
+		public ABean get() {
+			return bean;
+		}
+	}
+
+	@Response
+	public interface A3a {
+		@ResponseBody ABean getBody();
+	}
+
+	@Remote
+	public static interface A3b {
+		@RemoteMethod A3a get();
+	}
+
+	@Test
+	public void a03_beanBody() throws Exception {
+		A3a x = client(A3.class).json().build().getRemote(A3b.class).get();
+		assertEquals("{f:1}",x.getBody().toString());
+
+		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
+		assertThrown(()->x2.getBody()).contains("Unsupported media-type");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -68,6 +129,10 @@ public class Remote_ResponseAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
-		return MockRestClient.build(rest).getRemote(t);
+		return MockRestClient.create(rest).build().getRemote(t);
+	}
+
+	private static <T> MockRestClientBuilder client(Class<?> rest) {
+		return MockRestClient.create(rest);
 	}
 }

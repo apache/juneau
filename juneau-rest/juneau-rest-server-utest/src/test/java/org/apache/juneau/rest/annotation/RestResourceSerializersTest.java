@@ -128,7 +128,7 @@ public class RestResourceSerializersTest {
 		a.get("/a01?noTrace=true")
 			.accept("text/b")
 			.run()
-			.assertStatus().is(406)
+			.assertCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
 				"Supported media-types: ['text/a'"
@@ -139,7 +139,7 @@ public class RestResourceSerializersTest {
 		a.get("/a02?noTrace=true")
 			.accept("text/a")
 			.run()
-			.assertStatus().is(406)
+			.assertCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -172,7 +172,7 @@ public class RestResourceSerializersTest {
 		a.get("/a05?noTrace=true")
 			.accept("text/bad")
 			.run()
-			.assertStatus().is(406)
+			.assertCode().is(406)
 			.assertBody().contains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
 				"Supported media-types: ['text/a"

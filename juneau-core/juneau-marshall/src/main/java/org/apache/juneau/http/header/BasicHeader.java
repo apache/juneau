@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -24,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.BasicHeader;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -200,6 +200,16 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		if (o instanceof Supplier)
 			return ((Supplier<?>)o).get();
 		return o;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		return (o instanceof Header) && ObjectUtils.eq(this, (Header)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return HashCode.create().add(name).add(value).get();
 	}
 
 	@Override /* Object */

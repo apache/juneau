@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
 
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -56,7 +58,21 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R equals(Date value) throws AssertionError {
-		if (! this.value.equals(value))
+		if (ne(this.value, value))
+			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value at the specified precision.
+	 *
+	 * @param value The value to check against.
+	 * @param precision The precision (e.g. {@link ChronoUnit#SECONDS}.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equals(Date value, ChronoUnit precision) throws AssertionError {
+		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -83,7 +99,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(Date value) throws AssertionError {
-		if (this.value.equals(value))
+		if (eq(this.value, value))
 			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -160,7 +176,8 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		if (! (this.value.after(value)))
+		if (this.value != null)
+			if (! (this.value.after(value)))
 				throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -173,7 +190,8 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		if (! (this.value.before(value)))
+		if (this.value != null)
+			if (! (this.value.before(value)))
 				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}

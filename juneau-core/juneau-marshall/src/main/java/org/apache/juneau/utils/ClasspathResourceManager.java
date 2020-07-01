@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -207,10 +209,7 @@ public final class ClasspathResourceManager {
 
 		@Override
 		public boolean equals(Object o) {
-			if (o == null)
-				return false;
-			ResourceKey ok = (ResourceKey)o;
-			return ObjectUtils.equals(name, ok.name) && ObjectUtils.equals(locale, ok.locale);
+			return (o instanceof ResourceKey) && eq(this, (ResourceKey)o, (x,y)->eq(x.name, y.name) && eq(x.locale, y.locale));
 		}
 	}
 }

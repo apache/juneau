@@ -624,7 +624,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertThat() assertThat()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -684,7 +684,7 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertThat() assertThat()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *

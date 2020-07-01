@@ -15,6 +15,7 @@ package org.apache.juneau.reflect;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -2351,6 +2352,6 @@ public final class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return o == null ? false : ((ClassInfo)o).t.equals(t);
+		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
 	}
 }

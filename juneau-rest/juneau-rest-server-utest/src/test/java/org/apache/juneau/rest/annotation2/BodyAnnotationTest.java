@@ -239,7 +239,7 @@ public class BodyAnnotationTest {
 	public void a08b_onParameter_Map_noContentType() throws Exception {
 		a.put("/Map", "(foo=123)", "text/openapi")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
@@ -263,7 +263,7 @@ public class BodyAnnotationTest {
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
 		a.put("/Bean", "(f1=a)", "text/openapi")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
@@ -409,7 +409,7 @@ public class BodyAnnotationTest {
 	public void b02b_onPojo_Bean_noContentType() throws Exception {
 		b.put("/Bean", "(f1=a)", "text/openapi")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void b03a_onPojo_BeanList() throws Exception {
@@ -421,7 +421,7 @@ public class BodyAnnotationTest {
 	public void b03b_onPojo_BeanList_noContentType() throws Exception {
 		b.put("/BeanList", "(f1=a)", "text/openapi")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void b04a_onPojo_InputStreamTransform() throws Exception {
@@ -481,7 +481,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/Integer?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c03_bodyParam_int() throws Exception {
@@ -499,7 +499,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("0");
 		a.put("/int?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c04_bodyParam_Boolean() throws Exception {
@@ -517,7 +517,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/Boolean?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c05_bodyParam_boolean() throws Exception {
@@ -535,7 +535,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("false");
 		a.put("/boolean?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c06_bodyParam_Float() throws Exception {
@@ -553,7 +553,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/Float?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c07_bodyParam_float() throws Exception {
@@ -571,7 +571,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("0.0");
 		a.put("/float?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c08_bodyParam_Map() throws Exception {
@@ -589,7 +589,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/Map?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c09_bodyParam_enum() throws Exception {
@@ -607,7 +607,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/enum?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c11_bodyParam_Bean() throws Exception {
@@ -625,7 +625,7 @@ public class BodyAnnotationTest {
 			.assertBody().is("null");
 		a.put("/Bean?body=bad&noTrace=true", null)
 			.run()
-			.assertStatus().is(400);
+			.assertCode().is(400);
 	}
 	@Test
 	public void c12_bodyParam_InputStream() throws Exception {
@@ -779,7 +779,7 @@ public class BodyAnnotationTest {
 	public void d04b_noMediaTypes_StringTransform_withContentType() throws Exception {
 		d.put("/StringTransform?noTrace=true", "a", "application/json")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void d05a_noMediaTypes_InputStreamTransform() throws Exception {
@@ -815,7 +815,7 @@ public class BodyAnnotationTest {
 	public void d07b_noMediaTypes_StringTransformBodyOnPojo_withContentType() throws Exception {
 		d.put("/StringTransformBodyOnPojo?noTrace=true", "a", "application/json")
 			.run()
-			.assertStatus().is(415);
+			.assertCode().is(415);
 	}
 	@Test
 	public void d08a_noMediaTypes_InputStreamTransformBodyOnPojo() throws Exception {
@@ -1120,11 +1120,11 @@ public class BodyAnnotationTest {
 	public void i01() throws Exception {
 		i.post("/", "", "application/json")
 			.run()
-			.assertStatus().is(400)
+			.assertCode().is(400)
 			.assertBody().contains("Required value not provided.");
 		i.post("/", "{}", "application/json")
 			.run()
-			.assertStatus().is(200);
+			.assertCode().is(200);
 	}
 
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
@@ -1142,11 +1142,11 @@ public class BodyAnnotationTest {
 	public void i02() throws Exception {
 		i2.post("/", "", "application/json")
 			.run()
-			.assertStatus().is(400)
+			.assertCode().is(400)
 			.assertBody().contains("Required value not provided.");
 		i2.post("/", "{}", "application/json")
 			.run()
-			.assertStatus().is(200);
+			.assertCode().is(200);
 	}
 
 	//=================================================================================================================
@@ -1181,11 +1181,11 @@ public class BodyAnnotationTest {
 	public void j01_optionalParam_integer() throws Exception {
 		j.post("/a", 123)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("123");
 		j.post("/a", null)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -1193,11 +1193,11 @@ public class BodyAnnotationTest {
 	public void j02_optionalParam_bean() throws Exception {
 		j.post("/b", ABean.get())
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("{a:1,b:'foo'}");
 		j.post("/b", null)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -1206,11 +1206,11 @@ public class BodyAnnotationTest {
 		String body = SimpleJson.DEFAULT.toString(AList.of(ABean.get()));
 		j.post("/c", body, "application/json")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		j.post("/c", null)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 
@@ -1219,11 +1219,11 @@ public class BodyAnnotationTest {
 		String body = SimpleJson.DEFAULT.toString(AList.of(Optional.of(ABean.get())));
 		j.post("/d", body, "application/json")
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("[{a:1,b:'foo'}]");
 		j.post("/d", null)
 			.run()
-			.assertStatus().is(200)
+			.assertCode().is(200)
 			.assertBody().is("null");
 	}
 

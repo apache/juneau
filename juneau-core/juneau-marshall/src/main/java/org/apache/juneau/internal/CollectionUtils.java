@@ -13,7 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

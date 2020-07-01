@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.PropertyType.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -638,11 +639,7 @@ public final class PropertyStore {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o instanceof PropertyStore)
-			return (this.groups.equals(((PropertyStore)o).groups));
-		return false;
+		return (o instanceof PropertyStore) && eq(this, (PropertyStore)o, (x,y)->eq(x.groups, y.groups));
 	}
 
 	/**
@@ -716,9 +713,7 @@ public final class PropertyStore {
 
 		@Override /* Object */
 		public boolean equals(Object o) {
-			if (o instanceof PropertyGroup)
-				return properties.equals(((PropertyGroup)o).properties);
-			return false;
+			return (o instanceof PropertyGroup) && eq(this, (PropertyGroup)o, (x,y)->eq(x.properties, y.properties));
 		}
 
 		Set<String> keySet() {
@@ -984,9 +979,7 @@ public final class PropertyStore {
 
 		@Override /* Object */
 		public boolean equals(Object o) {
-			if (o instanceof Property)
-				return ((Property)o).value.equals(value);
-			return false;
+			return (o instanceof Property) && eq(this, (Property)o, (x,y)->eq(x.value, y.value));
 		}
 
 		/**

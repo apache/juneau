@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client2;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 
 /**
@@ -25,10 +24,10 @@ import org.apache.juneau.assertions.*;
  * 	client
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
- * 		.assertStatus().isAny(200,404);
+ * 		.assertStatus().code().isAny(200,404);
  * </p>
  */
-public class RestResponseStatusLineAssertion extends FluentIntegerAssertion<RestResponse> {
+public class RestResponseStatusLineAssertion extends FluentAssertion<RestResponse> {
 
 	private final StatusLine statusLine;
 
@@ -39,20 +38,52 @@ public class RestResponseStatusLineAssertion extends FluentIntegerAssertion<Rest
 	 * @param returns The object to return after the test.
 	 */
 	public RestResponseStatusLineAssertion(StatusLine statusLine, RestResponse returns) {
-		super(statusLine.getStatusCode(), returns);
+		super(returns);
 		this.statusLine = statusLine;
 	}
 
 	/**
-	 * Asserts that the protocol version equals the specified value.
+	 * Returns an assertion against the status code on the response status object.
 	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
+	 * @return An assertion against the status code on the response status object.
 	 */
-	public RestResponse isProtocolVersion(ProtocolVersion value) throws AssertionError {
-		if (! statusLine.getProtocolVersion().equals(value))
-			throw new BasicAssertionError("Unexpected protocol version.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.statusLine.getProtocolVersion());
-		return returns();
+	public FluentIntegerAssertion<RestResponse> code() {
+		return new FluentIntegerAssertion<>(statusLine.getStatusCode(), returns());
+	}
+
+	/**
+	 * Returns an assertion against the reason phrase on the response status object.
+	 *
+	 * @return An assertion against the reason phrase on the response status object.
+	 */
+	public FluentStringAssertion<RestResponse> reason() {
+		return new FluentStringAssertion<>(statusLine.getReasonPhrase(), returns());
+	}
+
+	/**
+	 * Returns an assertion against the protocol on the response status object.
+	 *
+	 * @return An assertion against the protocol on the response status object.
+	 */
+	public FluentStringAssertion<RestResponse> protocol() {
+		return new FluentStringAssertion<>(statusLine.getProtocolVersion().getProtocol(), returns());
+	}
+
+	/**
+	 * Returns an assertion against the protocol major version on the response status object.
+	 *
+	 * @return An assertion against the protocol major version on the response status object.
+	 */
+	public FluentIntegerAssertion<RestResponse> major() {
+		return new FluentIntegerAssertion<>(statusLine.getProtocolVersion().getMajor(), returns());
+	}
+
+	/**
+	 * Returns an assertion against the protocol minor version on the response status object.
+	 *
+	 * @return An assertion against the protocol minor version on the response status object.
+	 */
+	public FluentIntegerAssertion<RestResponse> minor() {
+		return new FluentIntegerAssertion<>(statusLine.getProtocolVersion().getMinor(), returns());
 	}
 }

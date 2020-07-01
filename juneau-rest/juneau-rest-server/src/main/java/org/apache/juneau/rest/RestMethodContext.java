@@ -1176,9 +1176,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! (o instanceof RestMethodContext))
-			return false;
-		return (compareTo((RestMethodContext)o) == 0);
+		return (o instanceof RestMethodContext) && eq(this, (RestMethodContext)o, (x,y)->x.compareTo(y) == 0);
 	}
 
 	@Override /* Object */

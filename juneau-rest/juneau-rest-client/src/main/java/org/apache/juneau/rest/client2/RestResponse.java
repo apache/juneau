@@ -50,7 +50,7 @@ public class RestResponse implements HttpResponse {
 	private final RestRequest request;
 	private final HttpResponse response;
 	private final Parser parser;
-	private HttpPartParserSession partParser;
+	HttpPartParserSession partParser;
 	private RestResponseBody responseBody;
 	private boolean isClosed;
 
@@ -162,14 +162,14 @@ public class RestResponse implements HttpResponse {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on the response status code.
+	 * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	MyBean bean = client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertStatus().is(200)
+	 * 		.assertStatus().code().is(200)
 	 * 		.getBody().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
@@ -178,6 +178,25 @@ public class RestResponse implements HttpResponse {
 	 */
 	public RestResponseStatusLineAssertion assertStatus() throws RestCallException {
 		return new RestResponseStatusLineAssertion(getStatusLine(), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response status code.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	MyBean bean = client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertCode().is(200)
+	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentIntegerAssertion<RestResponse> assertCode() throws RestCallException {
+		return assertStatus().code();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -302,7 +321,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentStringAssertion<RestResponse> assertHeader(String name) throws RestCallException {
-		return getHeader(name).assertThat();
+		return getHeader(name).assertString();
 	}
 
 	/**
@@ -322,7 +341,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentIntegerAssertion<RestResponse> assertIntHeader(String name) throws RestCallException {
-		return getHeader(name).assertThatInteger();
+		return getHeader(name).assertInt();
 	}
 
 	/**
@@ -342,7 +361,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentLongAssertion<RestResponse> assertLongHeader(String name) throws RestCallException {
-		return getHeader(name).assertThatLong();
+		return getHeader(name).assertLong();
 	}
 
 	/**
@@ -362,7 +381,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentDateAssertion<RestResponse> assertDateHeader(String name) throws RestCallException {
-		return getHeader(name).assertThatDate();
+		return getHeader(name).assertDate();
 	}
 
 	/**
@@ -410,7 +429,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentStringAssertion<RestResponse> assertContentType() throws RestCallException {
-		return getHeader("Content-Type").assertThat();
+		return getHeader("Content-Type").assertString();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -496,7 +515,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public FluentStringAssertion<RestResponse> assertBody() throws RestCallException {
-		return responseBody.cache().assertThat();
+		return responseBody.cache().assertString();
 	}
 
 	/**
@@ -513,7 +532,7 @@ public class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody(MyBean.<js>class</js>).equals(<js>"{foo:'bar'}"</js>);
+	 * 		.assertBody(MyBean.<js>class</js>).json().equals(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -529,8 +548,8 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertBody(Class<?> type) throws RestCallException {
-		return responseBody.cache().assertThat(type);
+	public FluentObjectAssertion<RestResponse> assertBody(Class<?> type) throws RestCallException {
+		return responseBody.cache().assertObject(type);
 	}
 
 	/**
@@ -549,38 +568,28 @@ public class RestResponse implements HttpResponse {
 	}
 
 	@SuppressWarnings("unchecked")
-	<T> T as(ResponseBeanMeta rbm) throws RestCallException {
-		try {
-			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
-			final RestClient rc = this.client;
-			final HttpPartParserSession p = partParser == null ? rc.getPartParserSession() : partParser;
-			return (T)Proxy.newProxyInstance(
-				c.getClassLoader(),
-				new Class[] { c },
-				new InvocationHandler() {
-					@Override /* InvocationHandler */
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-						if (pm != null) {
-							HttpPartParserSession pp = pm.getParser(p);
-							HttpPartSchema schema = pm.getSchema();
-							String name = pm.getPartName();
-							ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
-							HttpPartType pt = pm.getPartType();
-							if (pt == RESPONSE_BODY)
-								return getBody().schema(schema).as(type);
-							if (pt == RESPONSE_HEADER)
-								return getHeader(name).parser(pp).schema(schema).as(type);
-							if (pt == RESPONSE_STATUS)
-								return getStatusCode();
-						}
-						return null;
-					}
-
-			});
-		} catch (Exception e) {
-			throw new RestCallException(e);
-		}
+	<T> T as(ResponseBeanMeta rbm) {
+		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
+		final RestClient rc = this.client;
+		return (T)Proxy.newProxyInstance(
+			c.getClassLoader(),
+			new Class[] { c },
+			new InvocationHandler() {
+				@Override /* InvocationHandler */
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+					HttpPartParserSession pp = pm.getParser(partParser);
+					HttpPartSchema schema = pm.getSchema();
+					HttpPartType pt = pm.getPartType();
+					String name = pm.getPartName();
+					ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
+					if (pt == RESPONSE_HEADER)
+						return getHeader(name).parser(pp).schema(schema).as(type);
+					if (pt == RESPONSE_STATUS)
+						return getStatusCode();
+					return getBody().schema(schema).as(type);
+				}
+		});
 	}
 
 	/**
@@ -811,7 +820,7 @@ public class RestResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	public RestResponseHeader getLastHeader(String name) {
 		Header h = response.getLastHeader(name);
-		return new RestResponseHeader(request, this, h).parser(partParser);
+		return h == null ? null : new RestResponseHeader(request, this, h).parser(partParser);
 	}
 
 	/**

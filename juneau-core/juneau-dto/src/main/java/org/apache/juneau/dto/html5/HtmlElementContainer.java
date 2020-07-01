@@ -105,7 +105,7 @@ public class HtmlElementContainer extends HtmlElement {
 	public <T> T getChild(Class<T> type, int index) {
 		return (children == null || children.size() <= index || index < 0
 			? null
-			: ObjectUtils.toType(children.get(index), type)
+			: ConverterUtils.toType(children.get(index), type)
 		);
 	}
 

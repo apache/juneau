@@ -71,10 +71,10 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		}
 
 		if (a.serializers().length > 0)
-			psb.set(REST_serializers, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
+			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
 
 		if (a.parsers().length > 0)
-			psb.set(REST_parsers, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
+			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 
 		if (a.partSerializer() != HttpPartSerializer.Null.class)
 			psb.set(REST_partSerializer, a.partSerializer());
@@ -135,9 +135,9 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		psb.prependTo(REST_children, a.children());
 
-		psb.set(BEAN_beanFilters, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
+		psb.set(BEAN_beanFilters, merge(ConverterUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
-		psb.set(BEAN_swaps, merge(ObjectUtils.toType(psb.peek(BEAN_swaps), Object[].class), a.pojoSwaps()));
+		psb.set(BEAN_swaps, merge(ConverterUtils.toType(psb.peek(BEAN_swaps), Object[].class), a.pojoSwaps()));
 
 		psb.prependTo(REST_paramResolvers, a.paramResolvers());
 

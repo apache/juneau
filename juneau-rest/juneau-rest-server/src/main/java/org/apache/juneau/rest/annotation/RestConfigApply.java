@@ -66,10 +66,10 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		}
 
 		if (a.serializers().length > 0)
-			psb.set(REST_serializers, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
+			psb.set(REST_serializers, merge(ConverterUtils.toType(psb.peek(REST_serializers), Object[].class), a.serializers()));
 
 		if (a.parsers().length > 0)
-			psb.set(REST_parsers, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
+			psb.set(REST_parsers, merge(ConverterUtils.toType(psb.peek(REST_parsers), Object[].class), a.parsers()));
 
 		if (a.partSerializer() != HttpPartSerializer.Null.class)
 			psb.set(REST_partSerializer, a.partSerializer());

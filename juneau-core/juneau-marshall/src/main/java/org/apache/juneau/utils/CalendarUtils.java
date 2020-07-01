@@ -14,6 +14,7 @@ package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -350,10 +351,7 @@ public class CalendarUtils {
 
 		@Override
 		public boolean equals(Object o) {
-			if (o == null)
-				return false;
-			DateFormatKey key = (DateFormatKey)o;
-			return format.equals(key.format) && locale.equals(key.locale) && timeZone.equals(key.timeZone);
+			return (o instanceof DateFormatKey) && eq(this, (DateFormatKey)o, (x,y)->eq(x.format, y.format) && eq(x.locale, y.locale) && eq(x.timeZone, y.timeZone));
 		}
 	}
 

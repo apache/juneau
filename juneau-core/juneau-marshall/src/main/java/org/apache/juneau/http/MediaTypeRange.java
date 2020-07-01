@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
@@ -231,17 +233,7 @@ public class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 */
 	@Override /* Object */
 	public boolean equals(Object o) {
-
-		if (o == null || !(o instanceof MediaTypeRange))
-			return false;
-
-		if (this == o)
-			return true;
-
-		MediaTypeRange o2 = (MediaTypeRange) o;
-		return qValue.equals(o2.qValue)
-			&& mediaType.equals(o2.mediaType)
-			&& extensions.equals(o2.extensions);
+		return (o instanceof MediaTypeRange) && eq(this, (MediaTypeRange)o, (x,y)->eq(x.qValue, y.qValue) && eq(x.mediaType, y.mediaType) && eq(x.extensions, y.extensions));
 	}
 
 	/**

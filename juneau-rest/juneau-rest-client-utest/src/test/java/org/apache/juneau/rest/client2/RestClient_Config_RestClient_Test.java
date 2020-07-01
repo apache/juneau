@@ -119,7 +119,7 @@ public class RestClient_Config_RestClient_Test {
 			}
 		};
 		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertBody().is("['f1','f2','baz']");
-		client().callHandler(x).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertStatus().is(201);
+		client().callHandler(x).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertCode().is(201);
 	}
 
 	@Test
@@ -136,12 +136,12 @@ public class RestClient_Config_RestClient_Test {
 		RestClient x1 = client().executorService(es,true).build();
 
 		assertEquals(es,x1.getExecutorService());
-		x1.get("/echo").runFuture().get().assertStatus().is(200).assertBody().contains("HTTP GET /echo");
+		x1.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("HTTP GET /echo");
 
 		es = null;
 		RestClient x2 = client().executorService(es,true).build();
 		assertNotNull(x2.getExecutorService());
-		x2.get("/echo").runFuture().get().assertStatus().is(200).assertBody().contains("HTTP GET /echo");
+		x2.get("/echo").runFuture().get().assertCode().is(200).assertBody().contains("HTTP GET /echo");
 	}
 
 	@Test

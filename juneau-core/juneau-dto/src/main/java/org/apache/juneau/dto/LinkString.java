@@ -13,6 +13,7 @@
 package org.apache.juneau.dto;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
 
@@ -145,9 +146,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		if (! (o instanceof LinkString))
-			return false;
-		return (compareTo((LinkString)o) == 0);
+		return (o instanceof LinkString) && eq(this, (LinkString)o, (x,y)->x.name.equals(y.name));
 	}
 
 	@Override /* Object */

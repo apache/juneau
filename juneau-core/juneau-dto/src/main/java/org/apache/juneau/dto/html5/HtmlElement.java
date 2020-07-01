@@ -131,12 +131,12 @@ public abstract class HtmlElement {
 	 *
 	 * @param type
 	 * 	The class type to convert this class to.
-	 * 	See {@link ObjectUtils} for a list of supported conversion types.
+	 * 	See {@link ConverterUtils} for a list of supported conversion types.
 	 * @param key The attribute name.
 	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
 	 */
 	public <T> T getAttr(Class<T> type, String key) {
-		return attrs == null ? null : ObjectUtils.toType(attrs.get(key), type);
+		return attrs == null ? null : ConverterUtils.toType(attrs.get(key), type);
 	}
 
 	/**
