@@ -22,6 +22,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentThrowableAssertion<R>")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 
 	private final Throwable value;
@@ -159,7 +160,6 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> message() {
 		return new FluentStringAssertion(value == null ? null : value.getMessage(), this);
 	}
@@ -175,7 +175,6 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> localizedMessage() {
 		return new FluentStringAssertion(value == null ? null : value.getLocalizedMessage(), this);
 	}
@@ -191,7 +190,6 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentStringAssertion<R> stackTrace() {
 		return new FluentStringAssertion(value == null ? null : StringUtils.getStackTrace(value), this);
 	}
@@ -207,7 +205,6 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentThrowableAssertion<R> causedBy() {
 		return new FluentThrowableAssertion(value == null ? null : value.getCause(), this);
 	}
@@ -224,7 +221,6 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @param throwableClass The class type to search for in the caused-by chain.
 	 * @return An assertion against the caused-by throwable.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public FluentThrowableAssertion<R> find(Class<?> throwableClass) {
 		Throwable t = value;
 		while (t != null) {

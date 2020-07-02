@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.io.*;
 import java.util.*;
+
+import org.apache.juneau.internal.*;
 
 /**
  * Main class for creation of assertions for testing.
@@ -137,5 +140,55 @@ public class Assertions {
 			return assertThrowable(e);
 		}
 		return assertThrowable(null);
+	}
+
+	/**
+	 * Used for assertion calls against the contents of input streams.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
+	 * 	<jsm>assertStream</jsm>(myStream).hex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * @param is The input stream being wrapped.
+	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
+	 * @throws IOException If thrown while reading contents from stream.
+	 */
+	public static ByteArrayAssertion assertStream(InputStream is) throws IOException {
+		return new ByteArrayAssertion(is == null ? null : IOUtils.readBytes(is));
+	}
+
+	/**
+	 * Used for assertion calls against byte arrays.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
+	 * 	<jsm>assertBytes</jsm>(myBytes).hex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * @param bytes The byte array being wrapped.
+	 * @return A new {@link ByteArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static ByteArrayAssertion assertBytes(byte[] bytes) {
+		return new ByteArrayAssertion(bytes);
+	}
+
+	/**
+	 * Used for assertion calls against the contents of readers.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
+	 * 	<jsm>assertReader</jsm>(myReader).is(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * @param r The reader being wrapped.
+	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
+	 * @throws IOException If thrown while reading contents from reader.
+	 */
+	public static StringAssertion assertReader(Reader r) throws IOException {
+		return new StringAssertion(r == null ? null : IOUtils.read(r));
 	}
 }

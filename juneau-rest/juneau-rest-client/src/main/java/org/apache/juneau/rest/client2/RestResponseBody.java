@@ -1613,6 +1613,37 @@ public class RestResponseBody implements HttpEntity {
 	}
 
 	/**
+	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertBodyBytes()} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body equals the text "foo".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentByteArrayAssertion<RestResponse> assertBytes() throws RestCallException {
+		return new FluentByteArrayAssertion<>(asBytes(), response);
+	}
+
+	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <p>

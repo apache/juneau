@@ -44,6 +44,10 @@ public class RestClient_Response_Body_Test {
 		public InputStream postEcho(InputStream is) {
 			return is;
 		}
+		@RestMethod
+		public ABean getBean() {
+			return bean;
+		}
 	}
 
 	@Test
@@ -58,6 +62,14 @@ public class RestClient_Response_Body_Test {
 		assertObject(b).json().is("{f:1}");
 		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).as(ABean.class)).contains("ParseError at [row,col]:[1,1]");
 		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertObject(ABean.class)).contains("ParseError at [row,col]:[1,1]");
+	}
+
+	@Test
+	public void a03_asInputStream() throws Exception {
+		RestResponse x = client().build().get("/bean").run();
+		InputStream is = x.getBody().asInputStream();
+		assertStream(is).string().is("{f:1}");
+		assertThrown(()->x.getBody().asInputStream()).contains("Response has already been consumed.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

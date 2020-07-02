@@ -519,6 +519,34 @@ public class RestResponse implements HttpResponse {
 	}
 
 	/**
+	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body equals the text "foo".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li>
+	 *		When using this method, the body is automatically cached by calling the {@link RestResponseBody#cache()}.
+	 * 	<li>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public FluentByteArrayAssertion<RestResponse> assertBodyBytes() throws RestCallException {
+		return responseBody.cache().assertBytes();
+	}
+
+	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <p>
