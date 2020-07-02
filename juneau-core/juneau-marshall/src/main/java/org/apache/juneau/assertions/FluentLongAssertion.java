@@ -81,6 +81,20 @@ public class FluentLongAssertion<R> extends FluentAssertion<R> {
 	/**
 	 * Asserts that the value equals the specified value.
 	 *
+	 * <p>
+	 * Equivalent to {@link #equals(Long)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(int value) throws AssertionError {
+		return equals((long)value);
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.

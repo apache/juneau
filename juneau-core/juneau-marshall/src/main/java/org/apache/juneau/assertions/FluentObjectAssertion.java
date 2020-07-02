@@ -25,7 +25,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentObjectAssertion<R>")
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 
 	private final Object value;
@@ -102,7 +101,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public FluentStringAssertion<R> serialized(WriterSerializer ws) {
 		try {
 			String s = ws.serialize(this.value);
-			return new FluentStringAssertion(s, this);
+			return new FluentStringAssertion<>(s, returns());
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
 		}

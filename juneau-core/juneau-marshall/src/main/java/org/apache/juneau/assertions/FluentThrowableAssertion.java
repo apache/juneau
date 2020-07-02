@@ -22,7 +22,6 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentThrowableAssertion<R>")
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 
 	private final Throwable value;
@@ -161,7 +160,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> message() {
-		return new FluentStringAssertion(value == null ? null : value.getMessage(), this);
+		return new FluentStringAssertion<>(value == null ? null : value.getMessage(), returns());
 	}
 
 	/**
@@ -176,7 +175,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> localizedMessage() {
-		return new FluentStringAssertion(value == null ? null : value.getLocalizedMessage(), this);
+		return new FluentStringAssertion<>(value == null ? null : value.getLocalizedMessage(), returns());
 	}
 
 	/**
@@ -191,7 +190,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> stackTrace() {
-		return new FluentStringAssertion(value == null ? null : StringUtils.getStackTrace(value), this);
+		return new FluentStringAssertion<>(value == null ? null : StringUtils.getStackTrace(value), returns());
 	}
 
 	/**
@@ -206,7 +205,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
 	public FluentThrowableAssertion<R> causedBy() {
-		return new FluentThrowableAssertion(value == null ? null : value.getCause(), this);
+		return new FluentThrowableAssertion<>(value == null ? null : value.getCause(), returns());
 	}
 
 	/**
@@ -225,10 +224,10 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 		Throwable t = value;
 		while (t != null) {
 			if (throwableClass.isInstance(t))
-				return new FluentThrowableAssertion(t, this);
+				return new FluentThrowableAssertion<>(t, returns());
 			t = t.getCause();
 		}
-		return new FluentThrowableAssertion(null, this);
+		return new FluentThrowableAssertion<>(null, returns());
 	}
 
 	// <FluentSetters>

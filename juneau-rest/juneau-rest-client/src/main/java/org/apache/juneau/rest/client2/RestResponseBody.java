@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
@@ -299,10 +300,11 @@ public class RestResponseBody implements HttpEntity {
 		String ct = getContentType().asString();
 
 		// First look for "charset=" in Content-Type header of response.
-		if (ct != null && ct.contains("charset="))
-			cs = ct.substring(ct.indexOf("charset=")+8).trim();
+		if (ct != null)
+			if (ct.contains("charset="))
+				cs = ct.substring(ct.indexOf("charset=")+8).trim();
 
-		return asReader(cs);
+		return asReader(cs == null ? IOUtils.UTF8 : Charset.forName(cs));
 	}
 
 	/**
@@ -326,14 +328,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
 	 * @throws IOException If an exception occurred.
 	 */
-	public Reader asReader(String charset) throws IOException {
-		try {
-			return new InputStreamReader(asInputStream(), charset == null ? "UTF-8" : charset);
-		} catch (UnsupportedEncodingException e) {
-			throw new IOException(e);
-		}
+	public Reader asReader(Charset charset) throws IOException {
+		return new InputStreamReader(asInputStream(), charset == null ? IOUtils.UTF8 : charset);
 	}
-
 
 	/**
 	 * Returns the HTTP response message body as a byte array.
@@ -428,7 +425,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w, String charset) throws IOException {
+	public RestResponse pipeTo(Writer w, Charset charset) throws IOException {
 		return pipeTo(w, charset, false);
 	}
 
@@ -481,7 +478,7 @@ public class RestResponseBody implements HttpEntity {
 	 * @return The response object (for method chaining).
 	 * @throws IOException If an IO exception occurred.
 	 */
-	public RestResponse pipeTo(Writer w, String charset, boolean byLines) throws IOException {
+	public RestResponse pipeTo(Writer w, Charset charset, boolean byLines) throws IOException {
 		IOPipe.create(asReader(charset), w).byLines(byLines).run();
 		return response;
 	}
@@ -838,8 +835,8 @@ public class RestResponseBody implements HttpEntity {
 				return type.getInputStreamMutater().mutate(asInputStream());
 
 			throw new ParseException(
-				"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-				response.getStringHeader("Content-Type"), parser == null ? null : parser.getMediaTypes()
+				"Unsupported media-type in request header ''Content-Type'': ''{0}''",
+				response.getStringHeader("Content-Type")
 			);
 
 		} catch (ParseException | IOException e) {
@@ -1728,7 +1725,7 @@ public class RestResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return cached ? cache.length : entity.getContentLength();
+		return cache != null ? cache.length : entity.getContentLength();
 	}
 
 	/**
@@ -1796,14 +1793,14 @@ public class RestResponseBody implements HttpEntity {
 	 * Tells whether this entity depends on an underlying stream.
 	 *
 	 * <ul class='notes'>
-	 *	<li>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}.
+	 *	<li>This method always returns <jk>false</jk> if the response body is cached (see {@link #cache()}.
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if the entity content is streamed, <jk>false</jk> otherwise.
 	 */
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return cached ? true : entity.isStreaming();
+		return cached ? false : entity.isStreaming();
 	}
 
 	/**

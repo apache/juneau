@@ -24,7 +24,6 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 
 	private byte[] contents;
@@ -68,7 +67,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> string(Charset cs) {
-		return new FluentStringAssertion(contents == null ? null : new String(contents, cs), this);
+		return new FluentStringAssertion<>(contents == null ? null : new String(contents, cs), returns());
 	}
 
 	/**
@@ -83,7 +82,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> base64() {
-		return new FluentStringAssertion(contents == null ? null : base64Encode(contents), this);
+		return new FluentStringAssertion<>(contents == null ? null : base64Encode(contents), returns());
 	}
 
 	/**
@@ -98,7 +97,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> hex() {
-		return new FluentStringAssertion(contents == null ? null : toHex(contents), this);
+		return new FluentStringAssertion<>(contents == null ? null : toHex(contents), returns());
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> spacedHex() {
-		return new FluentStringAssertion(contents == null ? null : toSpacedHex(contents), this);
+		return new FluentStringAssertion<>(contents == null ? null : toSpacedHex(contents), returns());
 	}
 
 	// <FluentSetters>
