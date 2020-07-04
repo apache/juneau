@@ -2867,7 +2867,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 
 			try {
-				response = client.createResponse(this, client.run(target, request2 != null ? request2 : this.request, context), parser);
+				response = client.createResponse(this, client.run(target, request, context), parser);
 			} catch (Exception e) {
 				throw e;
 			}
