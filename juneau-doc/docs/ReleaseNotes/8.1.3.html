@@ -28,10 +28,10 @@
 		<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 		<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
 	<li>
-		Configurable properties such as {@link oaj.BeanContext#BEAN_debug} can now be set globally by either
+		Configurable properties such as {@link oaj.Context#CONTEXT_debug} can now be set globally by either
 		system properties or environment variables.
-		<br>For <jsf>BEAN_debug</jsf> you can use either the system
-		property <js>"BeanContext.debug"</js> or environment variables <js>"BEANCONTEXT_DEBUG"</js>.
+		<br>For <jsf>CONTEXT_debug</jsf> you can use either the system
+		property <js>"Context.debug"</js> or environment variables <js>"CONTEXT_DEBUG"</js>.
 	<li>
 		Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
 		array types like so: 

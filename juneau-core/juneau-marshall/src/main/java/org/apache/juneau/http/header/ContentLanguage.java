@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -87,7 +88,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 		<li><c>String</c> - A comma-delimited string.
 	 * 		<li><c>String[]</c> - A pre-parsed value.
 	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
 	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the value was null.
@@ -111,7 +112,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 		<li><c>String</c> - A comma-delimited string.
 	 * 		<li><c>String[]</c> - A pre-parsed value.
 	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
 	 * @return The parsed <c>Content-Language</c> header, or <jk>null</jk> if the value was null.
@@ -132,7 +133,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 		<li><c>String</c> - A comma-delimited string.
 	 * 		<li><c>String[]</c> - A pre-parsed value.
 	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@Collection} - Converted to <c>String[]</c>.
+	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>

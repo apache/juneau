@@ -29,7 +29,7 @@ import org.apache.juneau.rest.client2.*;
  * Instances of this class are instantiated through methods on {@link MockRestClient} such as {@link MockRestClient#post(Object,Object)}
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
+ * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */
 public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest {

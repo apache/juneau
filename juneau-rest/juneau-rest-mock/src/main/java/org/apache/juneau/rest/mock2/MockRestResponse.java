@@ -20,7 +20,7 @@ import org.apache.juneau.rest.client2.*;
  * A subclass of {@link RestResponse} with additional features for mocked testing.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
+ * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
 */
 public class MockRestResponse extends org.apache.juneau.rest.client2.RestResponse {

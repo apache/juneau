@@ -237,6 +237,18 @@ public @interface Bean {
 	Class<?> interfaceClass() default Object.class;
 
 	/**
+	 * Bean property interceptor.
+	 *
+	 * <p>
+	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link BeanInterceptor}
+	 * </ul>
+	 */
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
+
+	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <p>
@@ -303,18 +315,6 @@ public @interface Bean {
 	 * </div>
 	 */
 	@Deprecated String properties() default "";
-
-	/**
-	 * Bean property interceptor.
-	 *
-	 * <p>
-	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link BeanInterceptor}
-	 * </ul>
-	 */
-	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
 
 	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.

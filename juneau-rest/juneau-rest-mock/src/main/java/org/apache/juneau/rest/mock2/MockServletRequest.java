@@ -32,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
  * A mutable implementation of {@link HttpServletRequest} for mocking purposes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
+ * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */
 public class MockServletRequest implements HttpServletRequest {

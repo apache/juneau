@@ -861,7 +861,7 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
+ * 		<li class='jm'>{@link RestClientBuilder#interceptors(Object...) interceptors(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
@@ -1326,8 +1326,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li><b>Default:</b>  empty list.
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(Class...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(Object...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3298,8 +3297,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
 	 * @param req The HTTP request.
@@ -3325,8 +3323,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
 	 * @param req The HTTP request.
@@ -3353,8 +3350,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Class...)}
-	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(RestCallInterceptor...)}
+	 * 	<li class='jm'>{@link RestClientBuilder#interceptors(Object...)}
 	 * </ul>
 	 *
 	 * @param req The HTTP request.

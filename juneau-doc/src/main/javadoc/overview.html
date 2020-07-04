@@ -460,7 +460,7 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a><span class='update'><b>8.1.4-updated</b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>Remote REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Remote'>@Remote</a><span class='update'>8.1.2-updated</span></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></p>
@@ -2744,8 +2744,8 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Bean#propertyFilter() @Bean(propertyFilter)} annotation
-	and {@link org.apache.juneau.transform.PropertyFilter} class can be used to perform interception
+	The {@link org.apache.juneau.annotation.Bean#interceptor() @Bean(interceptor)} annotation
+	and {@link org.apache.juneau.transform.BeanInterceptor} class can be used to perform interception
 	and inline handling of bean getter and setter calls.
 </p>
 <p class='bpcode w800'>
@@ -3828,9 +3828,9 @@
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
-	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} 
+	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_typePropertyName} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanTypePropertyName(String)} 
+	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#typePropertyName(String)} 
 		- Builder method on serializers and parsers.
 </ul>
 <p>
@@ -14554,34 +14554,34 @@
 				</ul>
 			<li><b>Parsed request header values:</b>
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.http.Accept}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptCharset}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptEncoding}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptLanguage}
-					<li class='jc'>{@link org.apache.juneau.http.Authorization}
-					<li class='jc'>{@link org.apache.juneau.http.CacheControl}
-					<li class='jc'>{@link org.apache.juneau.http.Connection}
-					<li class='jc'>{@link org.apache.juneau.http.ContentLength}
-					<li class='jc'>{@link org.apache.juneau.http.ContentType}
-					<li class='jc'>{@link org.apache.juneau.http.Date}
-					<li class='jc'>{@link org.apache.juneau.http.Expect}
-					<li class='jc'>{@link org.apache.juneau.http.From}
-					<li class='jc'>{@link org.apache.juneau.http.Host}
-					<li class='jc'>{@link org.apache.juneau.http.IfMatch}
-					<li class='jc'>{@link org.apache.juneau.http.IfModifiedSince}
-					<li class='jc'>{@link org.apache.juneau.http.IfNoneMatch}
-					<li class='jc'>{@link org.apache.juneau.http.IfRange}
-					<li class='jc'>{@link org.apache.juneau.http.IfUnmodifiedSince}
-					<li class='jc'>{@link org.apache.juneau.http.MaxForwards}
-					<li class='jc'>{@link org.apache.juneau.http.Pragma}
-					<li class='jc'>{@link org.apache.juneau.http.ProxyAuthorization}
-					<li class='jc'>{@link org.apache.juneau.http.Range}
-					<li class='jc'>{@link org.apache.juneau.http.Referer}
-					<li class='jc'>{@link org.apache.juneau.http.TE}
-					<li class='jc'>{@link org.apache.juneau.http.UserAgent}
-					<li class='jc'>{@link org.apache.juneau.http.Upgrade}
-					<li class='jc'>{@link org.apache.juneau.http.Via}
-					<li class='jc'>{@link org.apache.juneau.http.Warning}
+					<li class='jc'>{@link org.apache.juneau.http.header.Accept}
+					<li class='jc'>{@link org.apache.juneau.http.header.AcceptCharset}
+					<li class='jc'>{@link org.apache.juneau.http.header.AcceptEncoding}
+					<li class='jc'>{@link org.apache.juneau.http.header.AcceptLanguage}
+					<li class='jc'>{@link org.apache.juneau.http.header.Authorization}
+					<li class='jc'>{@link org.apache.juneau.http.header.CacheControl}
+					<li class='jc'>{@link org.apache.juneau.http.header.Connection}
+					<li class='jc'>{@link org.apache.juneau.http.header.ContentLength}
+					<li class='jc'>{@link org.apache.juneau.http.header.ContentType}
+					<li class='jc'>{@link org.apache.juneau.http.header.Date}
+					<li class='jc'>{@link org.apache.juneau.http.header.Expect}
+					<li class='jc'>{@link org.apache.juneau.http.header.From}
+					<li class='jc'>{@link org.apache.juneau.http.header.Host}
+					<li class='jc'>{@link org.apache.juneau.http.header.IfMatch}
+					<li class='jc'>{@link org.apache.juneau.http.header.IfModifiedSince}
+					<li class='jc'>{@link org.apache.juneau.http.header.IfNoneMatch}
+					<li class='jc'>{@link org.apache.juneau.http.header.IfRange}
+					<li class='jc'>{@link org.apache.juneau.http.header.IfUnmodifiedSince}
+					<li class='jc'>{@link org.apache.juneau.http.header.MaxForwards}
+					<li class='jc'>{@link org.apache.juneau.http.header.Pragma}
+					<li class='jc'>{@link org.apache.juneau.http.header.ProxyAuthorization}
+					<li class='jc'>{@link org.apache.juneau.http.header.Range}
+					<li class='jc'>{@link org.apache.juneau.http.header.Referer}
+					<li class='jc'>{@link org.apache.juneau.http.header.TE}
+					<li class='jc'>{@link org.apache.juneau.http.header.UserAgent}
+					<li class='jc'>{@link org.apache.juneau.http.header.Upgrade}
+					<li class='jc'>{@link org.apache.juneau.http.header.Via}
+					<li class='jc'>{@link org.apache.juneau.http.header.Warning}
 					<li class='jc'>{@link java.util.TimeZone}
 				</ul>
 			<li><b>Direct streams on request/response:</b>
@@ -22753,7 +22753,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.1 - REST Proxies</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.1 - Remote REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></h3>
 <div class='topic'><!-- START: 9.1 - juneau-rest-client.RestProxies -->
 <p>
 	The <c>juneau-rest-client</c> library can also be used to define interface proxies against 3rd-party REST interfaces.
@@ -22778,8 +22778,8 @@
 <ul class='javatree'>
 	<li class='jp'>{@link org.apache.juneau.http.remote}
 	<ul>
-		<li class='ja'>{@link org.apache.juneau.http.remote.Remote}
-		<li class='ja'>{@link org.apache.juneau.http.remote.RemoteMethod}
+		<li class='ja'>{@link org.apache.juneau.http.remote.Remote} - Applied to interface class.
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemoteMethod} - Applied to interface methods.
 	</ul>
 	<li class='jp'>{@link org.apache.juneau.http.annotation}
 	<ul>
@@ -22798,7 +22798,7 @@
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 		
-		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		<ja>@RemoteMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		String addPet(
 			<ja>@Body</ja> CreatePet pet, 
 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
@@ -22826,6 +22826,21 @@
 	{
 		name: 'Fluffy',
 		price: 9.99 
+	}
+</p>
+
+<p>
+	The <ja>@RemoteMethod</ja> annotations can be eliminated if you use specific naming conventions on your 
+	method names to identify the HTTP method and path. 
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// @RemoteMethod optional since method and path is inferred from method name.</jc> 
+		String postPets(<ja>@Body</ja> CreatePet pet);
 	}
 </p>
 
@@ -24295,7 +24310,7 @@
 <h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.7 - Interceptors</a></h3>
 <div class='topic'><!-- START: 9.7 - juneau-rest-client.Interceptors -->
 <p>
-	The {@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(RestCallInterceptor...)} method can be used to 
+	The {@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(Object...)} method can be used to 
 	intercept responses during specific connection lifecycle events.
 </p>
 <p>
@@ -24459,7 +24474,7 @@
 <div class='topic'><!-- START: 10.1 - juneau-rest-mock.MockRestClient -->
 <p>
 	The {@link org.apache.juneau.rest.mock2.MockRestClient} class is used for performing serverless unit testing of {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
-	and {@link aoj.http.remote.Remote @Remote}-annotated classes.
+	and {@link org.apache.juneau.http.remote.Remote @Remote}-annotated classes.
 </p>
 <p>
 	The {@link org.apache.juneau.rest.mock2.MockRestClient} itself extends from {@link org.apache.juneau.rest.client.RestClient} providing it with the rich
@@ -24553,6 +24568,31 @@
 </p>
 <hr>
 <p>
+	The {@link org.apache.juneau.rest.mock2.MockRestRequest} object has convenience methods provided to allow you to set properties
+	directly on the underlying {@link javax.servlet.HttpServletRequest} object.  The following example shows how
+	this can be used to directly set roles on the request object to perform security testing.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
+	public class A {
+		<ja>@RestMethod</ja>
+		<jk>public</jk> String get() {
+			<jk>return</jk> <js>"OK"</js>;
+		}
+	}
+
+	<ja>@Test</ja>
+	<jk>public void</jk> mytest() <jk>throws</jk> Exception {
+		MockRestClient a = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
+
+		<jc>// Admin user should get 200, but anyone else should get 403-Unauthorized.</jc>
+		a.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
+		a.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
+	}
+</p>
+<hr>
+<p>
 	The {@link org.apache.juneau.rest.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
 	be sent to the console:
 </p>
@@ -24565,7 +24605,7 @@
 </p>
 <hr>
 <p>
-	The {@link org.apache.juneau.rest.mock2.MockRestclient} class can also be used for testing of {@link org.apache.juneau.http.annotation.Remote}-annotated
+	The {@link org.apache.juneau.rest.mock2.MockRestClient} class can also be used for testing of {@link org.apache.juneau.http.Remote}-annotated
 	interfaces against {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated resources.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -24582,7 +24622,7 @@
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
-		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
 			<jk>return</jk> id;
 		}
@@ -29071,12 +29111,6 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_debug BEAN_debug}</td>
-		<td>Debug mode.</td>
-		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
-	</tr>
-	<tr>
-		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}</td>
 		<td>POJO examples.</td>
 		<td style='max-width:250px;overflow:hidden'><c>Map&lt;String,Object&gt;</c></td>
@@ -29131,18 +29165,6 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_locale BEAN_locale}</td>
-		<td>Locale.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link java.util.Locale}</td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_mediaType BEAN_mediaType}</td>
-		<td>Media type.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.http.MediaType}</td>
-	</tr>
-	<tr>
-		<td></td>
 		<td>{@link org.apache.juneau.BeanContext#BEAN_notBeanClasses BEAN_notBeanClasses}</td>
 		<td>Bean class exclusions.</td>
 		<td style='max-width:250px;overflow:hidden'><c>Set&lt;Class&gt;</c></td>
@@ -29170,12 +29192,6 @@
 		<td>{@link org.apache.juneau.BeanContext#BEAN_swaps BEAN_swaps}</td>
 		<td>Java object swaps.</td>
 		<td style='max-width:250px;overflow:hidden'><c>List&lt;Object&gt;</c></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>{@link org.apache.juneau.BeanContext#BEAN_timeZone BEAN_timeZone}</td>
-		<td>Time zone.</td>
-		<td style='max-width:250px;overflow:hidden'>{@link java.util.TimeZone}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -29320,6 +29336,30 @@
 		<td>{@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_watcherSensitivity FILESTORE_watcherSensitivity}</td>
 		<td>Watcher sensitivity.</td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.config.store.WatcherSensitivity}</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.Context}</td>
+		<td>{@link org.apache.juneau.Context#CONTEXT_debug CONTEXT_debug}</td>
+		<td>Debug mode.</td>
+		<td style='max-width:250px;overflow:hidden'><jk>boolean</jk></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.Context#CONTEXT_locale CONTEXT_locale}</td>
+		<td>Locale.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link java.util.Locale}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.Context#CONTEXT_mediaType CONTEXT_mediaType}</td>
+		<td>Media type.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.http.MediaType}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.Context#CONTEXT_timeZone CONTEXT_timeZone}</td>
+		<td>Time zone.</td>
+		<td style='max-width:250px;overflow:hidden'>{@link java.util.TimeZone}</td>
 	</tr>
 	<tr>
 		<td>{@link org.apache.juneau.html.HtmlDocSerializer}</td>
@@ -29818,6 +29858,12 @@
 		<td>{@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_callHandler RESTCLIENT_callHandler}</td>
 		<td>REST call handler.</td>
 		<td style='max-width:250px;overflow:hidden'>{@link org.apache.juneau.rest.client.RestCallHandler}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_console RESTCLIENT_console}</td>
+		<td>Console print stream</td>
+		<td style='max-width:250px;overflow:hidden'><ul><c>Class&lt;? <jk>extends</jk> {@link java.io.PrintStream}&gt; | {@link java.io.PrintStream}</c></ul></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -33711,7 +33757,7 @@
 			<li>{@link org.apache.juneau.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 			<li>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
-			<li>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
+			<li><dc>BEAN_beanTypePropertyName</dc> - The overridable type property name.  Default is <js>"_type"</js>.
 			<li><dc>@BeanProperty(beanDictionary)</dc> - Define a type dictionary
 				for a particular bean property value.  This overrides the value specified using {@link org.apache.juneau.BeanContext#BEAN_beanDictionary}.
 			<li><dc>SerializerContext.SERIALIZER_addBeanTypeProperties</dc> - Controls whether type properties are serialized.
@@ -33914,10 +33960,10 @@
 		now extend directly from {@link org.apache.juneau.BeanSession}.
 	<li>New settings in {@link org.apache.juneau.BeanContext}:
 	<ul>
-		<li>{@link org.apache.juneau.BeanContext#BEAN_debug} - Debug setting.  Replaces individual debug properties in the serializer and parser contexts.
-		<li>{@link org.apache.juneau.BeanContext#BEAN_locale} - Specifies a default locale at the context level.
-		<li>{@link org.apache.juneau.BeanContext#BEAN_timeZone} - Specifies a default timezone at the context level.
-		<li>{@link org.apache.juneau.BeanContext#BEAN_mediaType} - Specifies a default media type at the context level.
+		<li><dc>BEAN_debug</dc> - Debug setting.  Replaces individual debug properties in the serializer and parser contexts.
+		<li><dc>BEAN_locale</dc> - Specifies a default locale at the context level.
+		<li><dc>BEAN_timeZone</dc> - Specifies a default timezone at the context level.
+		<li><dc>BEAN_mediaType</dc> - Specifies a default media type at the context level.
 	</ul>
 	<li>Improvements to Parser class:  
 	<ul>
@@ -34505,7 +34551,7 @@
 			<li><dc>RestConfig.parserListener(Class)</dc>
 			<li><dc>RestClientBuilder.listeners(Class,Class)</dc>
 		</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
-	<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
+	<li>The <dc>BEAN_debug</dc> flag will now capture parser input and make it
 		available through the <dc>ParserSession.getInputAsString()</dc> method so that it can be used
 		in the listeners.
 	<li>Significant new functionality introduced to the HTML serializer.  
@@ -34576,34 +34622,34 @@
 		</ul>
 		The new supported types are:
 		<ul>
-			<li>{@link org.apache.juneau.http.Accept}
-			<li>{@link org.apache.juneau.http.AcceptCharset}
-			<li>{@link org.apache.juneau.http.AcceptEncoding}
-			<li>{@link org.apache.juneau.http.AcceptLanguage}
-			<li>{@link org.apache.juneau.http.Authorization}
-			<li>{@link org.apache.juneau.http.CacheControl}
-			<li>{@link org.apache.juneau.http.Connection}
-			<li>{@link org.apache.juneau.http.ContentLength}
-			<li>{@link org.apache.juneau.http.ContentType}
-			<li>{@link org.apache.juneau.http.Date}
-			<li>{@link org.apache.juneau.http.Expect}
-			<li>{@link org.apache.juneau.http.From}
-			<li>{@link org.apache.juneau.http.Host}
-			<li>{@link org.apache.juneau.http.IfMatch}
-			<li>{@link org.apache.juneau.http.IfModifiedSince}
-			<li>{@link org.apache.juneau.http.IfNoneMatch}
-			<li>{@link org.apache.juneau.http.IfRange}
-			<li>{@link org.apache.juneau.http.IfUnmodifiedSince}
-			<li>{@link org.apache.juneau.http.MaxForwards}
-			<li>{@link org.apache.juneau.http.Pragma}
-			<li>{@link org.apache.juneau.http.ProxyAuthorization}
-			<li>{@link org.apache.juneau.http.Range}
-			<li>{@link org.apache.juneau.http.Referer}
-			<li>{@link org.apache.juneau.http.TE}
-			<li>{@link org.apache.juneau.http.UserAgent}
-			<li>{@link org.apache.juneau.http.Upgrade}
-			<li>{@link org.apache.juneau.http.Via}
-			<li>{@link org.apache.juneau.http.Warning}
+			<li><dc>Accept</dc>
+			<li><dc>AcceptCharset</dc>
+			<li><dc>AcceptEncoding</dc>
+			<li><dc>AcceptLanguage</dc>
+			<li><dc>Authorization</dc>
+			<li><dc>CacheControl</dc>
+			<li><dc>Connection</dc>
+			<li><dc>ContentLength</dc>
+			<li><dc>ContentType</dc>
+			<li><dc>Date</dc>
+			<li><dc>Expect</dc>
+			<li><dc>From</dc>
+			<li><dc>Host</dc>
+			<li><dc>IfMatch</dc>
+			<li><dc>IfModifiedSince</dc>
+			<li><dc>IfNoneMatch</dc>
+			<li><dc>IfRange</dc>
+			<li><dc>IfUnmodifiedSince</dc>
+			<li><dc>MaxForwards</dc>
+			<li><dc>Pragma</dc>
+			<li><dc>ProxyAuthorization</dc>
+			<li><dc>Range</dc>
+			<li><dc>Referer</dc>
+			<li><dc>TE</dc>
+			<li><dc>UserAgent</dc>
+			<li><dc>Upgrade</dc>
+			<li><dc>Via</dc>
+			<li><dc>Warning</dc>
 			<li>{@link java.util.TimeZone}
 			<li>{@link java.io.InputStream}
 			<li>{@link javax.servlet.ServletInputStream}
@@ -36777,7 +36823,7 @@
 	<li>
 		The <c>ReaderResource</c> and <c>StreamResource</c> classes have been moved to the <c>org.apache.juneau.http</c>
 		package in <c>juneau-marshall</c>.  This allows them to be used as return types in remote REST interfaces.
-		<br>A new {@link org.apache.juneau.rest.helper.ResolvingReaderResource} class has been added that includes the variable-resolving support since
+		<br>A new <dc>ResolvingReaderResource</dc> class has been added that includes the variable-resolving support since
 		this relies on the <c>juneau-svl</c> package.
 	<li>
 		The <c>RemoteInterfaceServlet</c> class has been renamed to {@link org.apache.juneau.rest.remote.RrpcServlet}.
@@ -37460,10 +37506,10 @@
 		<br>Old:  <js>"&lt;myBean&gt;&lt;null&gt;&lt;/myBean&gt;"</js>
 		<br>New:  <js>"&lt;myBean nil='true'&gt;&lt;/myBean&gt;"</js>
 	<li>
-		Configurable properties such as {@link org.apache.juneau.BeanContext#BEAN_debug} can now be set globally by either
+		Configurable properties such as {@link org.apache.juneau.Context#CONTEXT_debug} can now be set globally by either
 		system properties or environment variables.
-		<br>For <jsf>BEAN_debug</jsf> you can use either the system
-		property <js>"BeanContext.debug"</js> or environment variables <js>"BEANCONTEXT_DEBUG"</js>.
+		<br>For <jsf>CONTEXT_debug</jsf> you can use either the system
+		property <js>"Context.debug"</js> or environment variables <js>"CONTEXT_DEBUG"</js>.
 	<li>
 		Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
 		array types like so: 
@@ -37753,7 +37799,7 @@
 	<li>
 		New Bean Property Interceptor API for intercepting calls to bean getters/setters.
 		<ul>
-			<li class='jac'>{@link org.apache.juneau.BeanInterceptor}
+			<li class='jac'>{@link org.apache.juneau.transform.BeanInterceptor}
 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor Bean(interceptor)}
 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanInterceptor(Class,Class)}
 		</ul>
@@ -37946,6 +37992,15 @@
 	)
 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
 		</p>
+	<li>
+		The {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation is now implied on all unannotated methods of a {@link org.apache.juneau.rest.annotation.Rest @Rest}-annotated
+		interface.
+		<p class='bpcode w800'>
+	<ja>@Rest
+	<jk>public interface</jk> MyRest {
+		String getFoo();  <jc>// @RestMethod(name=GET,path="/foo") is implied.</jc>
+	}
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>
@@ -37983,7 +38038,13 @@
 	Future&lt;String&gt; f = i.doGet();
 	<jc>// Do other stuff.</jc>
 	String result = f.get();	
-		</li>p>
+		</p>
+	<li>Additions to {@link org.apache.juneau.http.remote.Remote} annotation:
+	<ul>
+		<li>{@link org.apache.juneau.http.remote.Remote#version version} - Adds a client version header to all requests.
+		<li>{@link org.apache.juneau.http.remote.Remote#headers headers} - Adds a set of headers to all requests.
+		<li>{@link org.apache.juneau.http.remote.Remote#headerSupplier headerSupplier} - Adds a dynamic supplier of headers to all requests.
+	</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-mock</h5>
