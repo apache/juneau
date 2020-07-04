@@ -18,17 +18,44 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.*;
 
 /**
  * Interface that allows you to override the handling of HTTP requests.
  *
  * <p>
- * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpEntityEnclosingRequestBase,HttpContext)}
- * and {@link RestClient#execute(HttpHost,HttpRequestBase,HttpContext)} methods.
+ * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpRequest,HttpContext)}.
+ * <br>This can also be accomplished by providing your own {@link RestClientBuilder#connectionManager(org.apache.http.conn.HttpClientConnectionManager)}
+ * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
  *
  * <p>
- * This can also be accomplished by providing your own {@link RestClientBuilder#connectionManager(org.apache.http.conn.HttpClientConnectionManager)}
- * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
+ * The constructor on the implementation class can optionally take in any of the following parameters:
+ * <ul>
+ * 	<li>{@link RestClient} - The client using this handler.
+ * 	<li>{@link PropertyStore} - The properties used to initialize the client.
+ * </ul>
+ *
+ * <p>
+ * The {@link BasicRestCallHandler} shows an example of a simple pass-through handler.  Note that you must handle
+ * the case where {@link HttpHost} is null.
+ *
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> BasicRestCallHandler <jk>implements</jk> RestCallHandler {
+ *
+ * 		<jk>private final</jk> RestClient <jf>client</jf>;
+ *
+ * 		<jk>public</jk> BasicRestCallHandler(RestClient client) {
+ * 			<jk>this</jk>.<jf>client</jf> = client;
+ * 		}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+ * 			<jk>if</jk> (target == <jk>null</jk>)
+ * 				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)request, context);
+ * 			<jk>return</jk> <jf>client</jf>.execute(target, request, context);
+ * 		}
+ * 	}
+ * </p>
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
@@ -39,7 +66,7 @@ import org.apache.http.protocol.*;
 public interface RestCallHandler {
 
 	/**
-	 * Execute the specified body request (e.g. POST/PUT).
+	 * Execute the specified request.
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
@@ -47,7 +74,7 @@ public interface RestCallHandler {
 	 * @param target The target host for the request.
 	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
 	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
+	 * @param request The request to execute.  Must be an instance of {@link HttpUriRequest} if the target is <jk>null</jk>.
 	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
 	 * @return
 	 * 	The response to the request.
@@ -57,26 +84,5 @@ public interface RestCallHandler {
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException;
-
-	/**
-	 * Execute the specified no-body request (e.g. GET/DELETE).
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide specialized handling.
-	 *
-	 * @param target The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
-	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException;
+	HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException;
 }

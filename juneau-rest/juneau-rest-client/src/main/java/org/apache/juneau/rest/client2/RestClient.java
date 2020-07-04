@@ -806,14 +806,13 @@ import org.apache.http.client.CookieStore;
  * 	</ul>
  * 	<li class='jic'>{@link RestCallHandler}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestCallHandler#execute(HttpHost,HttpEntityEnclosingRequestBase,HttpContext) execute(HttpHost,HttpEntityEnclosingRequestBase,HttpContext)} <jk>returns</jk> HttpResponse</c>
- * 		<li class='jm'><c>{@link RestCallHandler#execute(HttpHost,HttpRequestBase,HttpContext) execute(HttpHost,HttpRequestBase,HttpContext)} <jk>returns</jk> HttpResponse</c>
+ * 		<li class='jm'><c>{@link RestCallHandler#run(HttpHost,HttpRequest,HttpContext) run(HttpHost,HttpRequest,HttpContext)} <jk>returns</jk> HttpResponse</c>
  * 	</ul>
  * </ul>
  *
  * <p class='w900'>
  * Note that there are other ways of accomplishing this such as extending the {@link RestClient} class and overriding
- * the {@link #execute(HttpHost,HttpEntityEnclosingRequestBase,HttpContext)} and {@link #execute(HttpHost,HttpRequestBase,HttpContext)}
+ * the {@link #run(HttpHost,HttpRequest,HttpContext)} method
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
  *
  *
@@ -2068,7 +2067,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Execute the specified no-body request (e.g. GET/DELETE).
+	 * Entrypoint for executing all requests and returning a response.
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide specialized handling.
@@ -2096,41 +2095,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
 	@Override /* RestCallHandler */
-	public HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
-		return callHandler.execute(target, request, context);
-	}
-
-	/**
-	 * Execute the specified body request (e.g. POST/PUT).
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide specialized handling.
-	 *
-	 * <p>
-	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_callHandler}
-	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(Class)}
-	 * 	<li class='jm'>{@link RestClientBuilder#callHandler(RestCallHandler)}
-	 * </ul>
-	 *
-	 * @param target The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
-	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* RestCallHandler */
-	public HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) throws ClientProtocolException, IOException {
-		return callHandler.execute(target, request, context);
+	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
+		return callHandler.run(target, request, context);
 	}
 
 	/**
@@ -3508,8 +3474,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <ul class='notes'>
 	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * 	<li>The {@link #execute(HttpHost,HttpEntityEnclosingRequestBase,HttpContext)} and
-	 * 		{@link #execute(HttpHost,HttpRequestBase,HttpContext)} methods have been provided as wrappers around this method.
+	 * 	<li>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
 	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
 	 * 	<li>The {@link RestCallHandler} interface can also be implemented to intercept this method.
 	 * </ul>

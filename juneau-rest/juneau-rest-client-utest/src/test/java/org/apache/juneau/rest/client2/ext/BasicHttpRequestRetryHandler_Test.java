@@ -10,34 +10,43 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2;
+package org.apache.juneau.rest.client2.ext;
+
+import static org.apache.juneau.assertions.Assertions.*;
 
 import java.io.*;
+import java.net.*;
 
 import org.apache.http.*;
-import org.apache.http.client.methods.*;
+import org.apache.http.HttpResponse;
 import org.apache.http.protocol.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.mock2.*;
+import org.junit.*;
 
-/**
- * Default HTTP call handler.
- *
- * Can be subclasses and specified via {@link RestClient#RESTCLIENT_callHandler}.
- */
-public class BasicRestCallHandler implements RestCallHandler {
+public class BasicHttpRequestRetryHandler_Test {
 
-	private final RestClient client;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param client The client to use for handling requests.
-	 */
-	public BasicRestCallHandler(RestClient client) {
-		this.client = client;
+	@Rest
+	public static class A extends BasicRest {
+		@RestMethod
+		public Ok get() {
+			return Ok.OK;
+		}
 	}
 
-	@Override /* RestCallHandler */
-	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
-		return target == null ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);
+	public static class A1 extends HttpRequestExecutor {
+		@Override
+		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, HttpException {
+			throw new UnknownHostException("foo");
+		}
+	}
+
+	@Test
+	public void a01_basic() throws Exception {
+		RestClient x = MockRestClient.create(A.class).retryHandler(new BasicHttpRequestRetryHandler(1, 1, true)).requestExecutor(new A1()).build();
+		assertThrown(()->x.get().run()).contains("foo");
 	}
 }

@@ -65,7 +65,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.client2.ext.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
@@ -714,12 +713,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Subclasses can override this method to provide their own client builder.
 	 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
 	 *
-	 * <p>
-	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
-	 * <ul>
-	 * 	<li>{@link AllRedirectsStrategy All redirect strategy}.
-	 * </ul>
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// A RestClientBuilder that provides it's own customized HttpClientBuilder.</jc>
@@ -737,7 +730,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
 	protected HttpClientBuilder createHttpClientBuilder() {
-		return HttpClientBuilder.create().setRedirectStrategy(new AllRedirectsStrategy());
+		return HttpClientBuilder.create();
 	}
 
 	/**
