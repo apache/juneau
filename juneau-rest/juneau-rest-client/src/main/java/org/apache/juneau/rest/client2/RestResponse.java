@@ -1036,8 +1036,10 @@ public class RestResponse implements HttpResponse {
 		for (RestCallInterceptor r : request.interceptors) {
 			try {
 				r.onClose(request, this);
+			} catch (RuntimeException | RestCallException e) {
+				throw e;
 			} catch (Exception e) {
-				throw RestCallException.create(e);
+				throw new RestCallException(this, e, "Interceptor throw exception on close");
 			}
 		}
 		client.onClose(request, this);

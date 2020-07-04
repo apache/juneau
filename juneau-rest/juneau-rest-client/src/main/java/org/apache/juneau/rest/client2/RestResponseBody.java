@@ -345,7 +345,7 @@ public class RestResponseBody implements HttpEntity {
 			try {
 				cache = IOUtils.readBytes(entity.getContent());
 			} catch (IOException e) {
-				throw new RestCallException(e);
+				throw new RestCallException(response, e, "Could not read response body.");
 			} finally {
 				response.close();
 			}
@@ -841,7 +841,7 @@ public class RestResponseBody implements HttpEntity {
 
 		} catch (ParseException | IOException e) {
 			response.close();
-			throw new RestCallException(e);
+			throw new RestCallException(response, e, "Could not parse response body.");
 		}
 	}
 
@@ -1105,7 +1105,7 @@ public class RestResponseBody implements HttpEntity {
 			return read(r).toString();
 		} catch (IOException e) {
 			response.close();
-			throw new RestCallException(e);
+			throw new RestCallException(response, e, "Could not read response body.");
 		}
 	}
 

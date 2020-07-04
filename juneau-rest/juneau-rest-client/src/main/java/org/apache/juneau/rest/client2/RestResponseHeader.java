@@ -338,7 +338,7 @@ public class RestResponseHeader implements Header {
 		try {
 			return parser.parse(HEADER, schema, asString(), type);
 		} catch (ParseException e) {
-			throw new RestCallException(e);
+			throw new RestCallException(response, e, "Could not parse response header {0}.", getName());
 		}
 	}
 

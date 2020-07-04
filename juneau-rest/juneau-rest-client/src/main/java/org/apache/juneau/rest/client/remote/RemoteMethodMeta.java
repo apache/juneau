@@ -39,12 +39,11 @@ import org.apache.juneau.reflect.*;
 public class RemoteMethodMeta {
 
 	private final String httpMethod;
-	private final String fullPath, path;
+	private final String fullPath;
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
 	private final RemoteMethodBeanArg[] requestArgs;
 	private final RemoteMethodArg bodyArg;
 	private final RemoteMethodReturn methodReturn;
-	private final Method method;
 	private final Class<?>[] exceptions;
 
 	/**
@@ -52,14 +51,11 @@ public class RemoteMethodMeta {
 	 *
 	 * @param parentPath The absolute URL of the REST interface backing the interface proxy.
 	 * @param m The Java method.
-	 * @param useMethodSignatures If <jk>true</jk> then the default path for the method should be the full method signature.
 	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
-	public RemoteMethodMeta(final String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
-		Builder b = new Builder(parentPath, m, useMethodSignatures, defaultMethod);
-		this.method = m;
+	public RemoteMethodMeta(final String parentPath, Method m, String defaultMethod) {
+		Builder b = new Builder(parentPath, m, defaultMethod);
 		this.httpMethod = b.httpMethod;
-		this.path = b.path;
 		this.fullPath = b.fullPath;
 		this.pathArgs = b.pathArgs.toArray(new RemoteMethodArg[b.pathArgs.size()]);
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
@@ -84,7 +80,7 @@ public class RemoteMethodMeta {
 		RemoteMethodReturn methodReturn;
 
 		@SuppressWarnings("deprecation")
-		Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
+		Builder(String parentPath, Method m, String defaultMethod) {
 
 			MethodInfo mi = MethodInfo.of(m);
 
@@ -99,18 +95,16 @@ public class RemoteMethodMeta {
 			path = rm == null ? (orm == null ? "" : orm.path()) : rm.path();
 
 			if (path.isEmpty()) {
-				path = HttpUtils.detectHttpPath(m, ! useMethodSignatures);
-				if (useMethodSignatures)
-					path += HttpUtils.getMethodArgsSignature(m, true);
+				path = HttpUtils.detectHttpPath(m, true);
 			}
 			if (httpMethod.isEmpty())
-				httpMethod = HttpUtils.detectHttpMethod(m, ! useMethodSignatures, defaultMethod);
+				httpMethod = HttpUtils.detectHttpMethod(m, true, defaultMethod);
 
 			path = trimSlashes(path);
 
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteMetadataException(m,
-					"Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT].");
+					"Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
 
 			methodReturn = new RemoteMethodReturn(mi);
 
@@ -218,29 +212,6 @@ public class RemoteMethodMeta {
 	 */
 	public RemoteMethodReturn getReturns() {
 		return methodReturn;
-	}
-
-	/**
-	 * Returns the HTTP path of this method.
-	 *
-	 * @return
-	 * 	The HTTP path of this method relative to the parent interface.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>Never has leading or trailing slashes.
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * Returns the underlying Java method that this metadata is about.
-	 *
-	 * @return
-	 * 	The underlying Java method that this metadata is about.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public Method getJavaMethod() {
-		return method;
 	}
 
 	/**

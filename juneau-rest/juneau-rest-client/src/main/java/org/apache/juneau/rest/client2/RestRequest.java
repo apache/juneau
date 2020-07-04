@@ -667,8 +667,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				this.interceptors.add(i);
 				i.onInit(this);
 			}
+		} catch (RuntimeException | RestCallException e) {
+			throw e;
 		} catch (Exception e) {
-			throw RestCallException.create(e);
+			throw new RestCallException(null, e, "Interceptor threw an exception on init.");
 		}
 
 		return this;
@@ -973,7 +975,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					innerPath(serializedNameValuePair(e.getKey(), e.getValue(), PATH, partSerializer, null, null));
 			} else if (o != null) {
-				throw new RestCallException("Invalid type passed to paths(): " + className(o));
+				throw new RestCallException(null, null, "Invalid type passed to paths(): {0}", className(o));
 			}
 		}
 		return this;
@@ -1004,7 +1006,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest pathPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into pathPairs()");
+			throw new RestCallException(null, null, "Odd number of parameters passed into pathPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			paths(serializedNameValuePair(pairs[i], pairs[i+1], PATH, partSerializer, null, null));
 		return this;
@@ -1034,7 +1036,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			for (Map.Entry<String,Object> p : toBeanMap(value).entrySet())
 				innerPath(serializedNameValuePair(p.getKey(), p.getValue(), PATH, serializer, schema, null));
 		} else if (value != null) {
-			throw new RestCallException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
+			throw new RestCallException(null, null, "Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 		return this;
 	}
@@ -1044,7 +1046,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		String name = param.getName(), value = param.getValue();
 		String var = "{" + name + "}";
 		if (path.indexOf(var) == -1 && ! name.equals("/*"))
-			throw new RestCallException("Path variable {"+name+"} was not found in path.");
+			throw new RestCallException(null, null, "Path variable {"+name+"} was not found in path.");
 		String p = null;
 		if (name.equals("/*"))
 			p = path.replaceAll("\\/\\*$", "/" + value);
@@ -1309,7 +1311,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), QUERY, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException("Invalid type passed to queries(): " + className(o));
+				throw new RestCallException(null, null, "Invalid type passed to queries(): {0}", className(o));
 			}
 		}
 		return innerQuery(EnumSet.of(flag), l);
@@ -1337,7 +1339,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into queryPairs()");
+			throw new RestCallException(null, null, "Odd number of parameters passed into queryPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			queries(serializedNameValuePair(pairs[i], pairs[i+1], QUERY, partSerializer, null, null));
 		return this;
@@ -1381,7 +1383,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				q = stringify(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
-			throw new RestCallException(e);
+			throw new RestCallException(null, e, "Could not read custom query.");
 		}
 		return this;
 	}
@@ -1696,7 +1698,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedNameValuePair(e.getKey(), e.getValue(), FORMDATA, partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException("Invalid type passed to formDatas(): " + className(o));
+				throw new RestCallException(null, null, "Invalid type passed to formDatas(): {0}", className(o));
 			}
 		}
 		return innerFormData(EnumSet.of(flag), l);
@@ -1724,7 +1726,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataPairs(Object...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into formDataPairs()");
+			throw new RestCallException(null, null, "Odd number of parameters passed into formDataPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			formDatas(serializedNameValuePair(pairs[i], pairs[i+1], FORMDATA, partSerializer, null, null));
 		return this;
@@ -2207,7 +2209,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (Map.Entry<String,Object> e : toBeanMap(o).entrySet())
 					l.add(serializedHeader(e.getKey(), e.getValue(), partSerializer, null, EnumSet.of(flag)));
 			} else if (o != null) {
-				throw new RestCallException("Invalid type passed to headers(): " + className(o));
+				throw new RestCallException(null, null, "Invalid type passed to headers(): {0}", className(o));
 			}
 		}
 		return innerHeaders(EnumSet.of(flag), l);
@@ -2236,7 +2238,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(Object...pairs) throws RestCallException {
 		List<Header> l = new ArrayList<>();
 		if (pairs.length % 2 != 0)
-			throw new RestCallException("Odd number of parameters passed into headerPairs()");
+			throw new RestCallException(null, null, "Odd number of parameters passed into headerPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			l.add(serializedHeader(pairs[i], pairs[i+1], partSerializer, null, null));
 		return innerHeaders(EnumSet.of(APPEND), l);
@@ -2269,7 +2271,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
 				l.add(serializedHeader(e.getKey(), e.getValue(), serializer, schema, flags));
 		} else if (value != null) {
-			throw new RestCallException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
+			throw new RestCallException(null, null, "Invalid value type for header arg ''{0}'': {1}", name, className(value));
 		}
 
 		return innerHeaders(flags, l);
@@ -2792,7 +2794,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestResponse run() throws RestCallException {
 		if (response != null)
-			throw new RestCallException("run() already called.");
+			throw new RestCallException(response, null, "run() already called.");
 
 		try {
 			HttpEntityEnclosingRequestBase request2 = request instanceof HttpEntityEnclosingRequestBase ? (HttpEntityEnclosingRequestBase)request : null;
@@ -2819,7 +2821,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (hasInput || formData != null) {
 
 				if (request2 == null)
-					throw new RestCallException(0, "Method does not support content entity.", getMethod(), getURI(), null);
+					throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
 
 				Object input2 = input;
 
@@ -2884,15 +2886,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			int sc = response.getStatusCode();
 
 			if (errorCodes.test(sc) && ! ignoreErrors) {
-				throw new RestCallException(sc, response.getReasonPhrase(), method, getURI(), response.getBody().asAbbreviatedString(1000))
-					.setServerException(response.getStringHeader("Exception-Name"), response.getStringHeader("Exception-Message"), response.getStringHeader("Exception-Trace"))
-					.setRestResponse(response);
+				throw new RestCallException(response, null, "HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}",
+					method, getURI(), sc, response.getReasonPhrase(), response.getBody().asAbbreviatedString(1000));
 			}
 
+		} catch (RuntimeException | RestCallException e) {
+			if (response != null)
+				response.close();
+			throw e;
 		} catch (Exception e) {
 			if (response != null)
 				response.close();
-			throw RestCallException.create(e).setRestResponse(response);
+			throw new RestCallException(response, e, "Call failed.");
 		}
 
 		return this.response;

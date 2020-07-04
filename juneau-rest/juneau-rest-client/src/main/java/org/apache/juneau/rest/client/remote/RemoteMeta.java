@@ -73,8 +73,7 @@ public class RemoteMeta {
 
 		AMap<Method,RemoteMethodMeta> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
-			if (m.isPublic())
-				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));
+			methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), "GET"));
 
 		this.methods = methods.unmodifiable();
 	}

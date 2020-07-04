@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client2;
 
-import java.io.*;
-import java.net.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
-import java.util.regex.*;
 
 import org.apache.http.*;
-import org.apache.http.client.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -28,98 +26,19 @@ public final class RestCallException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	private int responseCode;
-	private String response, responseStatusMessage;
-	HttpResponseException e;
-	private RestResponse restResponse;
-
-	private String serverExceptionName, serverExceptionMessage, serverExceptionTrace;
-
-	/**
-	 * Converts the specified exception to a {@link RestCallException} by either casting or wrapping.
-	 *
-	 * @param e The exception to wrap.
-	 * @return The casted or wrapped exception.
-	 */
-	public static RestCallException create(Throwable e) {
-		if (e instanceof RestCallException)
-			return (RestCallException)e;
-		return new RestCallException(e);
-	}
+	private RestResponse response;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public RestCallException(String message, Object...args) {
-		super(format(message, args));
-	}
-
-	/**
-	 * Constructor.
-	 *
+	 * @param response The HTTP response.  Can be <jk>null</jk>.
 	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RestCallException(Throwable cause, String message, Object...args) {
-		this(getMessage(cause, message, null), args);
-		initCause(cause);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param e The inner cause of the exception.
-	 */
-	public RestCallException(Throwable e) {
-		super(clean(e.getLocalizedMessage()), e);
-		if (e instanceof FileNotFoundException) {
-			responseCode = 404;
-		} else if (e.getMessage() != null) {
-			Pattern p = Pattern.compile("[^\\d](\\d{3})[^\\d]");
-			Matcher m = p.matcher(e.getMessage());
-			if (m.find())
-				responseCode = Integer.parseInt(m.group(1));
-		}
-		setStackTrace(e.getStackTrace());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param responseCode The response code.
-	 * @param responseMsg The response message.
-	 * @param method The HTTP method (for message purposes).
-	 * @param url The HTTP URL (for message purposes).
-	 * @param response The response from the server.
-	 */
-	public RestCallException(int responseCode, String responseMsg, String method, URI url, String response) {
-		super(format("HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}", method, url, responseCode, responseMsg, response));
-		this.responseCode = responseCode;
-		this.responseStatusMessage = responseMsg;
+	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
+		super(format(message,args),cause);
 		this.response = response;
-	}
-
-	/**
-	 * Sets the server-side exception details.
-	 *
-	 * @param exceptionName The <c>Exception-Name:</c> header specifying the full name of the exception.
-	 * @param exceptionMessage
-	 * 	The <c>Exception-Message:</c> header specifying the message returned by {@link Throwable#getMessage()}.
-	 * @param exceptionTrace The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
-	 * @return This object (for method chaining).
-	 */
-	protected RestCallException setServerException(String exceptionName, String exceptionMessage, String exceptionTrace) {
-		if (exceptionName != null)
-			serverExceptionName = exceptionName;
-		if (exceptionMessage != null)
-			serverExceptionMessage = exceptionMessage;
-		if (exceptionTrace != null)
-			serverExceptionTrace = exceptionTrace;
-		return this;
 	}
 
 	/**
@@ -128,7 +47,7 @@ public final class RestCallException extends HttpException {
 	 * @return The value of the <js>"Exception-Name"</js> header on the response, or <jk>null</jk> if not found.
 	 */
 	public String getServerExceptionName() {
-		return serverExceptionName;
+		return response == null ? null : response.getStringHeader("Exception-Name", null);
 	}
 
 	/**
@@ -137,27 +56,7 @@ public final class RestCallException extends HttpException {
 	 * @return The value of the <js>"Exception-Message"</js> header on the response, or <jk>null</jk> if not found.
 	 */
 	public String getServerExceptionMessage() {
-		return serverExceptionMessage;
-	}
-
-	/**
-	 * Returns the value of the <js>"Exception-Trace"</js> header on the response.
-	 *
-	 * @return The value of the <js>"Exception-Trace"</js> header on the response, or <jk>null</jk> if not found.
-	 */
-	public String getServerExceptionTrace() {
-		return serverExceptionTrace;
-	}
-
-	/**
-	 * Sets the HTTP response object that caused this exception.
-	 *
-	 * @param restResponse The REST response object.
-	 * @return This object (for method chaining).
-	 */
-	protected RestCallException setRestResponse(RestResponse restResponse) {
-		this.restResponse = restResponse;
-		return this;
+		return response == null ? null : response.getStringHeader("Exception-Message", null);
 	}
 
 	/**
@@ -167,8 +66,8 @@ public final class RestCallException extends HttpException {
 	 * 	The HTTP response object that caused this exception, or <jk>null</jk> if no response was created yet when the
 	 * 	exception was thrown.
 	 */
-	public RestResponse getRestResponse() {
-		return this.restResponse;
+	public RestResponse getResponse() {
+		return this.response;
 	}
 
 	/**
@@ -177,25 +76,7 @@ public final class RestCallException extends HttpException {
 	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
 	 */
 	public int getResponseCode() {
-		return responseCode;
-	}
-
-	/**
-	 * Returns the HTTP response message body text.
-	 *
-	 * @return The response message body text.
-	 */
-	public String getResponseMessage() {
-		return response;
-	}
-
-	/**
-	 * Returns the response status message as a plain string.
-	 *
-	 * @return The response status message.
-	 */
-	public String getResponseStatusMessage() {
-		return responseStatusMessage;
+		return response == null ? 0 : response.getStatusCode();
 	}
 
 	/**
@@ -213,14 +94,6 @@ public final class RestCallException extends HttpException {
 	// Helper methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static String getMessage(Throwable cause, String msg, String def) {
-		if (msg != null)
-			return clean(msg);
-		if (cause != null)
-			return clean(cause.getMessage());
-		return def;
-	}
-
 	private static String format(String msg, Object...args) {
 		if (args.length == 0)
 			return clean(msg);
@@ -229,9 +102,7 @@ public final class RestCallException extends HttpException {
 
 	// HttpException has a bug involving ASCII control characters so just replace them with spaces.
 	private static String clean(String message) {
-
-		if (message == null)
-			return "";
+		message = emptyIfNull(message);
 
 		boolean needsCleaning = false;
 		for (int i = 0; i < message.length() && !needsCleaning; i++)

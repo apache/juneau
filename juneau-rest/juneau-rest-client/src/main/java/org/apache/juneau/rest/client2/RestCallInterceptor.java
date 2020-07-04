@@ -53,7 +53,9 @@ public interface RestCallInterceptor {
 	 * copied from the client to the request object.
 	 *
 	 * @param req The HTTP request object.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws Exception
+	 * 	Any exception can be thrown.
+	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
 	void onInit(RestRequest req) throws Exception;
 
@@ -62,7 +64,9 @@ public interface RestCallInterceptor {
 	 *
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws Exception
+	 * 	Any exception can be thrown.
+	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
 	void onConnect(RestRequest req, RestResponse res) throws Exception;
 
@@ -72,7 +76,9 @@ public interface RestCallInterceptor {
 	 * @param req The request object.
 	 * @param res The response object.
 	 * @throws RestCallException Error occurred during call.
-	 * @throws Exception Any exception can be thrown.
+	 * @throws Exception
+	 * 	Any exception can be thrown.
+	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
 	void onClose(RestRequest req, RestResponse res) throws Exception;
 }

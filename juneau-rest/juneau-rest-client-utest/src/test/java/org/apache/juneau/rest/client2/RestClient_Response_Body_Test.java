@@ -95,6 +95,7 @@ public class RestClient_Response_Body_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		client().build().post("/echo",bean).run().assertBody(ABean.class).json().is("{f:1}");
+		client().build().post("/echo",bean).run().assertBodyBytes().string().is("{f:1}");
 	}
 
 	@Test
@@ -137,12 +138,8 @@ public class RestClient_Response_Body_Test {
 
 		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
 		assertThrown(()->x2.get("/bean").run().getBody().cache().asInputStream()).contains("foo");
-		is = x2.get("/bean").run().getBody().asInputStream();
-		assertStream(is).string().is("{f:2}");
-		is = x2.get("/bean").run().getBody().asInputStream();
-		is.close();
-		is = x2.get("/bean").run().getBody().asInputStream();
-		((EofSensorInputStream)is).abortConnection();
+		assertThrown(()->x2.get("/bean").run().getBody().asInputStream().close()).contains("foo");
+		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getBody().asInputStream()).abortConnection()).contains("foo");
 	}
 
 	@Test

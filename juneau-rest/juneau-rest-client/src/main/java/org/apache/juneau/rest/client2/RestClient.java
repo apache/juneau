@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.net.URI;
+import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -647,12 +648,12 @@ import org.apache.http.client.CookieStore;
  * 	<ul>
  * 		<li class='jm'><c>{@link RestResponseBody#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asReader() asReader()} <jk>returns</jk> Reader</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asReader(String) asReader(String)} <jk>returns</jk> Reader</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
  * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,String) pipeTo(Writer,String)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,Charset) pipeTo(Writer,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,boolean) pipeTo(Writer,boolean)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,String,boolean) pipeTo(Writer,String,boolean)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,Charset,boolean) pipeTo(Writer,String,boolean)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link RestResponseBody#as(Mutable,Type,Type...) as(Mutable&lt;T&gt;,Type,Type...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
@@ -2498,7 +2499,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			}
 			return req.body(new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
 		} catch (IOException e) {
-			throw new RestCallException(e);
+			throw new RestCallException(null, e, "Could not read form post body.");
 		}
 	}
 
@@ -2721,7 +2722,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		}
 
 		if (state != S05)
-			throw new RestCallException("Invalid format for call string.  State=" + state);
+			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
 
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
@@ -2732,7 +2733,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				req.bodyString(content);
 			return req;
 		} catch (ParseException e) {
-			throw new RestCallException(e, "Invalid format for call string.");
+			throw new RestCallException(null, e, "Invalid format for call string.");
 		}
 	}
 
@@ -2839,9 +2840,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			if (closedStack != null) {
 				e2 = new Exception("Creation stack:");
 				e2.setStackTrace(closedStack);
-				throw new RestCallException(e2, "RestClient.close() has already been called.  This client cannot be reused.");
+				throw new RestCallException(null, e2, "RestClient.close() has already been called.  This client cannot be reused.");
 			}
-			throw new RestCallException("RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
+			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
 		RestRequest req = createRequest(toURI(url, rootUrl), method.toUpperCase(Locale.ENGLISH), hasBody);
@@ -3127,7 +3128,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				else if (rt == Boolean.class || rt == boolean.class)
 					ret = returnCode < 400;
 				else
-					throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
+					throw new RestCallException(res, null, "Invalid return type on method annotated with @RemoteMethod(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
 			} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
 				rc.ignoreErrors();
 				res = rc.run();
@@ -3343,8 +3344,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onInit(req);
+		} catch (RuntimeException | RestCallException e) {
+			throw e;
 		} catch (Exception e) {
-			throw RestCallException.create(e);
+			throw new RestCallException(null, e, "Interceptor threw an exception on init.");
 		}
 	}
 
@@ -3369,8 +3372,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(req, res);
+		} catch (RuntimeException | RestCallException e) {
+			throw e;
 		} catch (Exception e) {
-			throw RestCallException.create(e);
+			throw new RestCallException(res, e, "Interceptor threw an exception on connect.");
 		}
 	}
 
@@ -3395,8 +3400,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onClose(req, res);
+		} catch (RuntimeException | RestCallException e) {
+			throw e;
 		} catch (Exception e) {
-			throw RestCallException.create(e);
+			throw new RestCallException(res, e, "Interceptor threw an exception on close.");
 		}
 	}
 
@@ -3662,7 +3669,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			s = fixUrl(s);
 			return new URI(s);
 		} catch (URISyntaxException e) {
-			throw new RestCallException(e, "Invalid URL encountered:  " + url);  // Shouldn't happen.
+			throw new RestCallException(null, e, "Invalid URL encountered:  {0}", url);  // Shouldn't happen.
 		}
 	}
 

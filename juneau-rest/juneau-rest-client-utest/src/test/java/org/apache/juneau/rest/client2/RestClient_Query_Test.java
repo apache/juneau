@@ -185,7 +185,7 @@ public class RestClient_Query_Test {
 	@Test
 	public void a12_queryCustom_Object() throws Exception {
 		client().build().get("/query").queryCustom("foo=bar").run().assertBody().contains("foo=bar");
-		assertThrown(()->client().build().get("").queryCustom(new A12())).is("foo");
+		assertThrown(()->client().build().get("").queryCustom(new A12())).contains("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
