@@ -447,8 +447,9 @@ public class RestResponseHeader implements Header {
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String mediaType = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param pattern The regular expression pattern to match.
@@ -465,14 +466,16 @@ public class RestResponseHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String mediaType = m.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
@@ -496,8 +499,9 @@ public class RestResponseHeader implements Header {
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String mediaType = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param regex The regular expression pattern to match.
@@ -514,14 +518,16 @@ public class RestResponseHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>);
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String mediaType = m.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
@@ -545,8 +551,9 @@ public class RestResponseHeader implements Header {
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String mediaType = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param regex The regular expression pattern to match.
@@ -564,14 +571,16 @@ public class RestResponseHeader implements Header {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String mediaType = m.get().group(1);
+	 * 	}
 	 * </p>
 	 *
 	 * @param m The mutable to set the value in.
@@ -667,7 +676,7 @@ public class RestResponseHeader implements Header {
 	 * Provides the ability to perform fluent-style assertions on an integer response header.
 	 *
 	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertIntHeader(String)} method to instantiate a fluent assertions object.
+	 * This method is called directly from the {@link RestResponse#assertIntegerHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -675,7 +684,7 @@ public class RestResponseHeader implements Header {
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertIntHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -719,7 +728,7 @@ public class RestResponseHeader implements Header {
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.

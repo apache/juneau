@@ -23,9 +23,9 @@ import org.apache.juneau.*;
 /**
  * Interface that allows you to override the handling of HTTP requests.
  *
- * <p>
+ * <p class='w900'>
  * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpRequest,HttpContext)}.
- * <br>This can also be accomplished by providing your own {@link RestClientBuilder#connectionManager(org.apache.http.conn.HttpClientConnectionManager)}
+ * <br>This can also be accomplished by providing your own {@link RestClientBuilder#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
  * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
  *
  * <p>

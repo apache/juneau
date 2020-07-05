@@ -58,7 +58,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>OpenApiCommon</l> configuration property:</i>  Default format for HTTP parts.
+	 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default format for HTTP parts.
 	 *
 	 * <p>
 	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()}.
@@ -118,7 +118,7 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>OpenApiCommon</l> configuration property:</i>  Default collection format for HTTP parts.
+	 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
 	 *
 	 * <p>
 	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()}.

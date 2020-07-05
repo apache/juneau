@@ -69,7 +69,7 @@ public class ConfigBuilder extends ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Configuration name.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration name.
 	 *
 	 * <p>
 	 * Specifies the configuration name.
@@ -86,7 +86,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Configuration store.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration store.
 	 *
 	 * <p>
 	 * The configuration store used for retrieving and storing configurations.
@@ -101,7 +101,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Configuration store.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Configuration store.
 	 *
 	 * <p>
 	 * Convenience method for calling <code>store(ConfigMemoryStore.<jsf>DEFAULT</jsf>)</code>.
@@ -113,7 +113,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  POJO serializer.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO serializer.
 	 *
 	 * <p>
 	 * The serializer to use for serializing POJO values.
@@ -128,7 +128,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  POJO serializer.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO serializer.
 	 *
 	 * <p>
 	 * The serializer to use for serializing POJO values.
@@ -143,7 +143,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  POJO parser.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO parser.
 	 *
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
@@ -158,7 +158,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  POJO parser.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  POJO parser.
 	 *
 	 * <p>
 	 * The parser to use for parsing values to POJOs.
@@ -173,7 +173,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Value encoder.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Value encoder.
 	 *
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
@@ -188,7 +188,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Value encoder.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Value encoder.
 	 *
 	 * <p>
 	 * The encoder to use for encoding encoded configuration values.
@@ -203,7 +203,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  SVL variable resolver.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  SVL variable resolver.
 	 *
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
@@ -218,7 +218,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  SVL variable resolver.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  SVL variable resolver.
 	 *
 	 * <p>
 	 * The resolver to use for resolving SVL variables.
@@ -233,7 +233,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Binary value line length.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Binary value line length.
 	 *
 	 * <p>
 	 * When serializing binary values, lines will be split after this many characters.
@@ -249,7 +249,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Binary value format.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Binary value format.
 	 *
 	 * <p>
 	 * The format to use when persisting byte arrays.
@@ -272,7 +272,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Multi-line values on separate lines.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Multi-line values on separate lines.
 	 *
 	 * <p>
 	 * When enabled, multi-line values will always be placed on a separate line from the key.
@@ -284,7 +284,7 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Config</l> configuration property:</i>  Beans on separate lines.
+	 * <i><l>Config</l> configuration property:&emsp;</i>  Beans on separate lines.
 	 *
 	 * <p>
 	 * When enabled, attempts to call any setters on this object will throw an {@link UnsupportedOperationException}.

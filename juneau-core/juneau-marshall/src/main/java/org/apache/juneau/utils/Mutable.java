@@ -50,17 +50,6 @@ public class Mutable<T> {
 	}
 
 	/**
-	 * Creates a mutable initialized with the specified object.
-	 *
-	 * @param <T> The inner object type.
-	 * @param t The inner object.
-	 * @return The new mutable object.
-	 */
-	public static <T> Mutable<T> create(T t) {
-		return new Mutable<>(t);
-	}
-
-	/**
 	 * Creates an empty mutable.
 	 *
 	 * @param <T> The inner object type.
@@ -68,6 +57,17 @@ public class Mutable<T> {
 	 */
 	public static <T> Mutable<T> create() {
 		return new Mutable<>();
+	}
+
+	/**
+	 * Creates a mutable initialized with the specified object.
+	 *
+	 * @param <T> The inner object type.
+	 * @param t The inner object.
+	 * @return The new mutable object.
+	 */
+	public static <T> Mutable<T> of(T t) {
+		return new Mutable<>(t);
 	}
 
 	/**

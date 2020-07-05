@@ -840,7 +840,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Logger.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Logger.
 	 *
 	 * <p>
 	 * Specifies the logger to use for logging.
@@ -875,7 +875,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Log to console.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Log to console.
 	 *
 	 * <p>
 	 * Specifies to log messages to the console.
@@ -902,7 +902,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><i><l>RestClient</l> configuration property:</i></i>  Log requests.
+	 * <i><i><l>RestClient</l> configuration property:&emsp;</i></i>  Log requests.
 	 *
 	 * <p>
 	 * Causes requests/responses to be logged at the specified log level at the end of the request.
@@ -1057,9 +1057,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1068,7 +1069,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1087,15 +1087,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets a header on all requests.
+	 * Sets a header with a dynamic value on all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1104,7 +1105,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1129,9 +1129,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1140,7 +1141,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1155,15 +1155,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets a header on all requests.
+	 * Sets a header with a dynamic value on all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1172,7 +1173,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1206,7 +1206,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -1216,7 +1215,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Sets a header on all requests.
+	 * Sets a header with a dynamic value on all requests.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1235,7 +1234,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -1286,7 +1284,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
@@ -1328,7 +1325,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -1814,9 +1810,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1825,7 +1822,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1844,15 +1840,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a query parameter to the URI.
+	 * Adds a query parameter with a dynamic value to the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1861,7 +1858,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1886,9 +1882,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1897,7 +1894,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1912,15 +1908,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a query parameter to the URI.
+	 * Adds a query parameter with a dynamic value to the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1929,7 +1926,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -1959,7 +1955,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -1988,7 +1983,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a query parameter to the URI.
+	 * Adds a query parameter with a dynamic value to the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2003,7 +1998,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -2035,7 +2029,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
@@ -2077,7 +2070,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -2101,9 +2093,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2112,7 +2105,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -2131,15 +2123,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a form-data parameter to all request bodies.
+	 * Adds a form-data parameter with a dynamic value to all request bodies.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2148,7 +2141,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -2173,9 +2165,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2184,7 +2177,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -2199,15 +2191,16 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a form-data parameter to all request bodies.
+	 * Adds a form-data parameter with a dynamic value to all request bodies.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
+	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
 	 * 	RestClient c = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);  <jc>// Gets set as "foo|bar"</jc>
+	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2216,7 +2209,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @param schema The schema object that defines the format of the output.
 	 * 	<ul>
@@ -2246,7 +2238,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -2275,7 +2266,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Adds a form-data parameter to all request bodies.
+	 * Adds a form-data parameter with a dynamic value to all request bodies.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2290,7 +2281,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Can be any POJO.
 	 * 		<li>Converted to a string using the specified part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -2322,7 +2312,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * 	</ul>
@@ -2364,7 +2353,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<ul>
 	 * 		<li>Values can be any POJO.
 	 * 		<li>Values converted to a string using the configured part serializer.
-	 * 		<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
@@ -2382,7 +2370,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  REST call handler.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  REST call handler.
 	 *
 	 * <p>
 	 * Allows you to provide a custom handler for making HTTP calls.
@@ -2393,13 +2381,8 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
-	 * 			<jc>// Custom handle requests with request bodies.</jc>
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
-	 * 			<jc>// Custom handle requests without request bodies.</jc>
+	 * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+	 * 			<jc>// Custom handle requests.</jc>
 	 * 		}
 	 * 	}
 	 *
@@ -2408,6 +2391,10 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jic'>{@link RestCallHandler}
@@ -2425,7 +2412,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  REST call handler.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  REST call handler.
 	 *
 	 * <p>
 	 * Allows you to provide a custom handler for making HTTP calls.
@@ -2438,17 +2425,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.callHandler(
 	 * 			<jk>new</jk> RestCallHandler() {
 	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse execute(HttpHost target, HttpEntityEnclosingRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
-	 * 					<jc>// Custom handle requests with request bodies.</jc>
-	 * 				}
-	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse execute(HttpHost target, HttpRequestBase request, HttpContext context) <jk>throws</jk> ClientProtocolException, IOException {
-	 * 					<jc>// Custom handle requests without request bodies.</jc>
+	 * 				<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+	 * 					<jc>// Custom handle requests.</jc>
 	 * 				}
 	 * 			}
 	 * 		)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jic'>{@link RestCallHandler}
@@ -2466,7 +2453,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:  Console print stream
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Console print stream
 	 *
 	 * <p>
 	 * Allows you to redirect the console output to a different print stream.
@@ -2485,7 +2472,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:  Console print stream
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Console print stream
 	 *
 	 * <p>
 	 * Allows you to redirect the console output to a different print stream.
@@ -2504,7 +2491,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Errors codes predicate.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Errors codes predicate.
 	 *
 	 * <p>
 	 * Defines a predicate to test for error codes.
@@ -2533,7 +2520,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Executor service.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Executor service.
 	 *
 	 * <p>
 	 * Defines the executor service to use when calling future methods on the {@link RestRequest} class.
@@ -2559,17 +2546,23 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).runFuture();
-	 * 	<jc>// Do some other stuff</jc>
-	 * 	<jk>try</jk> {
-	 * 		String body = f.get().getBody().asString();
-	 * 	} <jk>catch</jk> (RestCallException e) {
-	 * 	}
+	 * 	Future&lt;RestResponse&gt; responseFuture = client.get(<jsf>URI</jsf>).runFuture();
+	 *
+	 * 	<jc>// Do some other stuff.</jc>
+	 *
+	 * 	<jc>// Now read the response.</jc>
+	 * 	String body = responseFuture.get().getBody().asString();
+	 *
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	client
+	 * 	Future&lt;MyBean&gtl myBeanFuture = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Do some other stuff.</jc>
+	 *
+	 * 	<jc>// Now read the response.</jc>
+	 * 	MyBean bean = myBeanFuture.get();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2589,7 +2582,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Keep HttpClient open.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Keep HttpClient open.
 	 *
 	 * <p>
 	 * Don't close this client when the {@link RestClient#close()} method is called.
@@ -2618,7 +2611,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Ignore errors.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Ignore errors.
 	 *
 	 * <p>
 	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
@@ -2650,7 +2643,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Ignore errors.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Ignore errors.
 	 *
 	 * <p>
 	 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
@@ -2663,7 +2656,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
 	 * 	RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.ignoreErrors()
+	 * 		.ignoreErrors(<jk>true</jk>)
 	 * 		.build()
 	 * 		.get(<js>"/error"</js>)  <jc>// Throws a 500 error</jc>
 	 * 		.run()
@@ -2683,7 +2676,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Call interceptors.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Call interceptors.
 	 *
 	 * <p>
 	 * Adds an interceptor that can be called to hook into specified events in the lifecycle of a single request.
@@ -2693,29 +2686,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
 	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
 	 *
-	 * 		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 * 		<jk>public void</jk> init(RestRequest req) <jk>throws</jk> Exception {
+	 * 		<ja>@Override</ja>
+	 * 		<jk>public void</jk> onInit(RestRequest req) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
 	 *			// set on the request from the client.</jc>
 	 *		}
 	 *
-	 *		<ja>@Override</ja> <jc>// HttpRequestInterceptor</jc>
-	 *		<jk>public void</jk> process(HttpRequest request, HttpContext context) {
-	 *			<jc>// Intercept before the request is sent to the server.</jc>
-	 *		}
-	 *
-	 *		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 *		<jk>public void</jk> connect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<ja>@Override</ja>
+	 *		<jk>public void</jk> onConnect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *		}
 	 *
-	 *		<ja>@Override</ja> <jc>// HttpResponseInterceptor</jc>
-	 *		<jk>public void</jk> process(HttpResponse response, HttpContext context) <jk>throws</jk> HttpException, IOException {
-	 *			<jc>// Intercept before the message body is evaluated.</jc>
-	 *		}
-	 *
-	 *		<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 *		<jk>public void</jk> close(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<ja>@Override</ja>
+	 *		<jk>public void</jk> onClose(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 	 * 			<jc>// Intercept when the response body is consumed.</jc>
 	 * 		}
 	 * 	}
@@ -2726,6 +2709,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.interceptors(MyRestCallInterceptor.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
+	 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -2757,7 +2745,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Call interceptors.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Call interceptors.
 	 *
 	 * <p>
 	 * Adds an interceptor that gets called immediately after a connection is made.
@@ -2770,35 +2758,30 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.interceptors(
 	 * 			<jk>new</jk> RestCallInterceptor() {
 	 *
-	 * 				<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 * 				<jk>public void</jk> init(RestRequest req) <jk>throws</jk> Exception {
+	 * 				<ja>@Override</ja>
+	 * 				<jk>public void</jk> onInit(RestRequest req) <jk>throws</jk> Exception {
 	 *					<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
 	 *					// set on the request from the client.</jc>
 	 *				}
 	 *
-	 *				<ja>@Override</ja> <jc>// HttpRequestInterceptor</jc>
-	 *				<jk>public void</jk> process(HttpRequest request, HttpContext context) {
-	 *					<jc>// Intercept before the request is sent to the server.</jc>
-	 *				}
-	 *
-	 *				<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 *				<jk>public void</jk> connect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *				<ja>@Override</ja>
+	 *				<jk>public void</jk> onConnect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 	 *					<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *				}
 	 *
-	 *				<ja>@Override</ja> <jc>// HttpResponseInterceptor</jc>
-	 *				<jk>public void</jk> process(HttpResponse response, HttpContext context) <jk>throws</jk> HttpException, IOException {
-	 *					<jc>// Intercept before the message body is evaluated.</jc>
-	 *				}
-	 *
-	 *				<ja>@Override</ja> <jc>// RestCallInterceptor</jc>
-	 *				<jk>public void</jk> close(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *				<ja>@Override</ja>
+	 *				<jk>public void</jk> onClose(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
 	 * 					<jc>// Intercept when the response body is consumed.</jc>
 	 * 				}
 	 * 			}
 	 * 		)
 	 * 		.build();
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
+	 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_interceptors}
@@ -2834,7 +2817,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Enable leak detection.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Enable leak detection.
 	 *
 	 * <p>
 	 * Enable client and request/response leak detection.
@@ -2870,7 +2853,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Marshall
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshall
 	 *
 	 * <p>
 	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
@@ -2902,7 +2885,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Marshalls
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshalls
 	 *
 	 * <p>
 	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializers} and {@link RestClient#RESTCLIENT_parsers}
@@ -2935,7 +2918,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Parser.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parser.
 	 *
 	 * <p>
 	 * Associates the specified {@link Parser Parser} with the HTTP client.
@@ -2974,7 +2957,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Parser.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parser.
 	 *
 	 * <p>
 	 * Associates the specified {@link Parser Parser} with the HTTP client.
@@ -3012,7 +2995,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Parsers.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parsers.
 	 *
 	 * <p>
 	 * Associates the specified {@link Parser Parsers} with the HTTP client.
@@ -3055,7 +3038,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Parsers.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Parsers.
 	 *
 	 * <p>
 	 * Associates the specified {@link Parser Parsers} with the HTTP client.
@@ -3097,7 +3080,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Part parser.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part parser.
 	 *
 	 * <p>
 	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
@@ -3110,7 +3093,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.partParser(UonParser.<js>class</js>)
+	 * 		.partParser(UonParser.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -3129,7 +3112,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Part parser.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part parser.
 	 *
 	 * <p>
 	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
@@ -3161,7 +3144,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Part serializer.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part serializer.
 	 *
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
@@ -3174,7 +3157,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.partSerializer(UonSerializer.<js>class</js>)
+	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -3193,7 +3176,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Part serializer.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Part serializer.
 	 *
 	 * <p>
 	 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
@@ -3225,7 +3208,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Root URI.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Root URI.
 	 *
 	 * <p>
 	 * When set, relative URI strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
@@ -3241,7 +3224,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	Bar bar = client
-	 * 		.get(<js>"/bar"</js>)  // Relative to http://localhost:10000/foo
+	 * 		.get(<js>"/bar"</js>)  <jc>// Relative to http://localhost:10000/foo</jc>
 	 * 		.run()
 	 * 		.getBody().as(Bar.<jk>class</jk>);
 	 * </p>
@@ -3262,7 +3245,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Serializer.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializer.
 	 *
 	 * <p>
 	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
@@ -3301,7 +3284,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Serializer.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializer.
 	 *
 	 * <p>
 	 * Associates the specified {@link Serializer Serializer} with the HTTP client.
@@ -3339,7 +3322,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Serializers.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
@@ -3361,7 +3344,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.serializers(JsonSerializer.<jk>class</jk>,XmlSerializer.<jk>class</jk>)
+	 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
 	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
 	 * 		.build();
 	 * </p>
@@ -3382,7 +3365,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>RestClient</l> configuration property:</i>  Serializers.
+	 * <i><l>RestClient</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Associates the specified {@link Serializer Serializers} with the HTTP client.
@@ -3405,7 +3388,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
 	 * 	RestClient client = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>,XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
+	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -3428,7 +3411,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Automatically detect POJO recursions.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * When enabled, specifies that recursions should be checked for during traversal.
@@ -3481,7 +3464,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Ignore recursion errors.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
 	 *
 	 * <p>
 	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
@@ -3533,7 +3516,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Initial depth.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -3577,7 +3560,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Max serialization depth.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Max serialization depth.
 	 *
 	 * <p>
 	 * When enabled, abort traversal if specified depth is reached in the POJO tree.
@@ -3617,7 +3600,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Add <js>"_type"</js> properties when needed.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -3649,7 +3632,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
-	 * 	OMap map = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 * 	AMap map = AMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
 	 * 	client
@@ -3669,7 +3652,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Add type attribute to root nodes.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add type attribute to root nodes.
 	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
@@ -3722,7 +3705,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Don't trim null bean property values.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Don't trim null bean property values.
 	 *
 	 * <p>
 	 * When enabled, null bean values will be serialized to the output.
@@ -3763,7 +3746,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Sort arrays and collections alphabetically.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort arrays and collections alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
@@ -3801,7 +3784,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Sort maps alphabetically.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort maps alphabetically.
 	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
@@ -3819,7 +3802,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	AMap map = AMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
 	 * 	<jc>// Request body will contain:  {"bar":2,"baz":3,"foo":1}</jc>
 	 * 	client
@@ -3839,7 +3822,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Trim empty lists and arrays.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty lists and arrays.
 	 *
 	 * <p>
 	 * When enabled, empty lists and arrays will not be serialized.
@@ -3884,7 +3867,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Trim empty maps.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty maps.
 	 *
 	 * <p>
 	 * When enabled, empty map values will not be serialized to the output.
@@ -3907,7 +3890,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// A bean with a field with an empty map.</jc>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+	 * 		<jk>public</jk> AMap <jf>foo</jf> = AMap.<jsm>of</jsm>();
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {}</jc>
@@ -3928,7 +3911,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  Trim strings.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
@@ -3943,7 +3926,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	AMap map = AMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Request body will contain:  {"foo":"bar"}</jc>
 	 * 	client
@@ -3963,7 +3946,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  URI context bean.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI context bean.
 	 *
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
@@ -4011,7 +3994,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  URI relativity.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI relativity.
 	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -4049,7 +4032,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:</i>  URI resolution.
+	 * <i><l>Serializer</l> configuration property:&emsp;</i>  URI resolution.
 	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
@@ -4093,7 +4076,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Maximum indentation.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -4128,7 +4111,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies the character to use for quoting attributes and values.
@@ -4172,7 +4155,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies to use single quotes for quoting attributes and values.
@@ -4213,7 +4196,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -4249,7 +4232,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -4294,7 +4277,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Parser</l> configuration property:</i>  Debug output lines.
+	 * <i><l>Parser</l> configuration property:&emsp;</i>  Debug output lines.
 	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
@@ -4337,7 +4320,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:</i>  Strict mode.
+	 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
 	 *
 	 * <p>
 	 * When enabled, strict mode for the parser is enabled.
@@ -4402,7 +4385,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>Parser</l> configuration property:</i>  Trim parsed strings.
+	 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
 	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -4451,7 +4434,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>OpenApiCommon</l> configuration property:</i>  Default OpenAPI format for HTTP parts.
+	 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
 	 *
 	 * <p>
 	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#format()} for
@@ -4507,7 +4490,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>OpenApiCommon</l> configuration property:</i>  Default collection format for HTTP parts.
+	 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
 	 *
 	 * <p>
 	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.jsonschema.annotation.Schema#collectionFormat()} for the
@@ -4536,18 +4519,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	OList l = OList.<jsm>of</jsm>(
+	 * 	AList l = AList.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>,
 	 * 		<js>"bar"</js>,
-	 * 		OMap.<jsm>of</jsm>(
-	 * 			<js>"baz"</js>, OList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+	 * 		AMap.<jsm>of</jsm>(
+	 * 			<js>"baz"</js>, AList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
 	 *		)
 	 *	);
 	 *
 	 * 	<jc>// Set a header with a comma-separated list.</jc>
 	 * 	client
 	 * 		.get(<js>"/uri"</js>)
-	 * 		.header(<js>"Foo"</js>, l)  // Will be serialized as:  <jc>foo=bar,baz=qux\,true\,123</jc>
+	 * 		.header(<js>"Foo"</js>, l)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
 	 * 		.run();
 	 * </p>
 	 *
@@ -4570,7 +4553,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Parameter format.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
 	 *
 	 * <p>
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
@@ -4595,7 +4578,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(
+	 * 	AMap map = AMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);
@@ -4619,7 +4602,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Parameter format.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
 	 *
 	 * <p>
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
@@ -4636,7 +4619,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	OMap map = OMap.<jsm>of</jsm>(
+	 * 	AMap map = AMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);

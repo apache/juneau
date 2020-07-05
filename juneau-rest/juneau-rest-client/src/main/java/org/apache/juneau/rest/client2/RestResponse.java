@@ -333,14 +333,14 @@ public class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertIntHeader(<js>"Age"</js>).isGreaterThan(1);
+	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
 	 * </p>
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertIntHeader(String name) throws RestCallException {
+	public FluentIntegerAssertion<RestResponse> assertIntegerHeader(String name) throws RestCallException {
 		return getHeader(name).assertInteger();
 	}
 
@@ -373,7 +373,7 @@ public class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
 	 * </p>
 	 *
 	 * @param name The header name.
@@ -480,7 +480,7 @@ public class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertBody().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
@@ -560,7 +560,7 @@ public class RestResponse implements HttpResponse {
 	 * 	client
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody(MyBean.<js>class</js>).json().equals(<js>"{foo:'bar'}"</js>);
+	 * 		.assertBody(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>

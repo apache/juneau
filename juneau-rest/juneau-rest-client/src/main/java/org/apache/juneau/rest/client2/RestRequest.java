@@ -747,12 +747,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The URI of the remote REST resource.
 	 * 	<br>This overrides the URI passed in from the client.
 	 * 	<br>Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>{@link URIBuilder}
-	 * 		<li class='jc'>{@link URI}
-	 * 		<li class='jc'>{@link URL}
-	 * 		<li class='jc'>{@link String}
-	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException Invalid URI syntax detected.
@@ -927,7 +927,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/baz/qux".</jc>
 	 * 	client
-	 * 		.get(<js>"/{foo}/{bar}")
+	 * 		.get(<js>"/{foo}/{bar}"</js>)
 	 * 		.paths(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"baz"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"bar"</js>, <js>"qux"</js>)
@@ -947,7 +947,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -1221,7 +1220,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queries(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
-	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"</js>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
@@ -1238,7 +1237,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -1260,7 +1258,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.queries(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
-	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"</js>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
@@ -1283,7 +1281,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -1359,14 +1356,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param value The parameter value.
 	 * 	<br>Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>
+	 * 	<ul>
+	 * 		<li>
 	 * 			{@link CharSequence}
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded query.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1608,7 +1605,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDatas(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
-	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"</js>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
@@ -1625,7 +1622,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -1647,7 +1643,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		.formDatas(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
-	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
+	 * 			AMap.<jsm>of</jsm>(<js>"baz"</js>,<js>"qux"</js>)
 	 * 		)
 	 * 		.run();
 	 * </p>
@@ -1670,7 +1666,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -1746,35 +1741,35 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity.</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.formDataCustom(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.formDataCustom(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 *
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity and body().</jc>
 	 * 	client
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.body(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.body(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 * </p>
 	 *
 	 * @param value The parameter value.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link CharSequence}
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 	</ul>
 	 * @return This object (for method chaining).
@@ -1853,20 +1848,20 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The input to be sent to the REST resource (only valid for PUT/POST/PATCH) requests.
 	 * 	<br>Can be of the following types:
 	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			A {@link Supplier} of anything on this list.
@@ -1920,20 +1915,20 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	The input to be sent to the REST resource (only valid for PUT/POST/PATCH) requests.
 	 * 	<br>Can be of the following types:
 	 * 	<ul class='spaced-list'>
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li class='jc'>
+	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>
 	 * 			A {@link Supplier} of anything on this list.
@@ -2136,7 +2131,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>
@@ -2181,7 +2175,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<ul>
 	 * 			<li>Values can be any POJO.
 	 * 			<li>Values converted to a string using the configured part serializer.
-	 * 			<li>Values are converted to strings at runtime to allow them to be modified externally.
 	 * 		</ul>
 	 * 		<li>A collection or array of anything on this list.
 	 * </ul>

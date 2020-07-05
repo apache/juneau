@@ -57,7 +57,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Encode non-valid URI characters.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -104,7 +104,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Encode non-valid URI characters.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -148,7 +148,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Format to use for query/form-data/header values.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
@@ -200,7 +200,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>UonSerializer</l> configuration property:</i>  Format to use for query/form-data/header values.
+	 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies plain-text for the format to use for URL GET parameter keys and values.

@@ -156,39 +156,7 @@ public class RestResponseBody implements HttpEntity {
 	 * Causes the contents of the response body to be stored so that it can be repeatedly read.
 	 *
 	 * <p>
-	 * Calling this method allows the following methods to be called multiple times on the same response:
-	 *
-	 * <ul>
-	 * 	<li class='jm'>{@link #as(Class) as(Class)}}
-	 * 	<li class='jm'>{@link #as(Mutable,Class) as(Mutable,Class)}}
-	 * 	<li class='jm'>{@link #as(ClassMeta) as(ClassMeta)}
-	 * 	<li class='jm'>{@link #as(Mutable,ClassMeta) as(Mutable,ClassMeta)}
-	 * 	<li class='jm'>{@link #as(Type,Type...) as(Type,Type...)}
-	 * 	<li class='jm'>{@link #as(Mutable,Type,Type...) as(Mutable,Type,Type...)}
-	 * 	<li class='jm'>{@link #asAbbreviatedString(int) asAbbreviatedString(int)}
-	 * 	<li class='jm'>{@link #asAbbreviatedString(Mutable,int) asAbbreviatedString(Mutable,int)}
-	 * 	<li class='jm'>{@link #asFuture(Class) asFuture(Class)}
-	 * 	<li class='jm'>{@link #asFuture(Mutable,Class) asFuture(Mutable,Class)}
-	 * 	<li class='jm'>{@link #asFuture(ClassMeta) asFuture(ClassMeta)}
-	 * 	<li class='jm'>{@link #asFuture(Mutable,ClassMeta) asFuture(Mutable,ClassMeta)}
-	 * 	<li class='jm'>{@link #asFuture(Type,Type...) asFuture(Type,Type...)}
-	 * 	<li class='jm'>{@link #asFuture(Mutable,Type,Type...) asFuture(Mutable,Type,Type...)}
-	 * 	<li class='jm'>{@link #asPojoRest() asPojoRest()}
-	 * 	<li class='jm'>{@link #asPojoRest(Mutable) asPojoRest(Mutable)}
-	 * 	<li class='jm'>{@link #asPojoRest(Class) asPojoRest(Class)}
-	 * 	<li class='jm'>{@link #asPojoRest(Mutable,Class) asPojoRest(Mutable,Class)}
-	 * 	<li class='jm'>{@link #assertString() assertString()}
-	 * 	<li class='jm'>{@link #asString() asString()}
-	 * 	<li class='jm'>{@link #asString(Mutable) asString(Mutable)}
-	 * 	<li class='jm'>{@link #asStringFuture() asStringFuture()}
-	 * 	<li class='jm'>{@link #asStringFuture(Mutable) asStringFuture(Mutable)}
-	 * 	<li class='jm'>{@link #asInputStream() getInputStream()}
-	 * 	<li class='jm'>{@link #asReader() getReader()}
-	 * 	<li class='jm'>{@link #pipeTo(OutputStream) pipeTo(OutputStream)}
-	 * 	<li class='jm'>{@link #pipeTo(Writer) pipeTo(Writer)}
-	 * 	<li class='jm'>{@link #pipeTo(Writer, boolean) pipeTo(Writer, boolean)}
-	 * 	<li class='jm'>{@link #writeTo(OutputStream) writeTo(OutputStream)}
-	 * </ul>
+	 * Calling this method allows methods that read the response body to be called multiple times.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -336,7 +304,8 @@ public class RestResponseBody implements HttpEntity {
 	 * Returns the HTTP response message body as a byte array.
 	 *
 	 * 	The HTTP response message body reader, never <jk>null</jk>.
-	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty array.
+	 *
 	 * @return The HTTP response body as a byte array.
 	 * @throws RestCallException If an exception occurred.
 	 */
@@ -496,23 +465,33 @@ public class RestResponseBody implements HttpEntity {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; l = client.get(<jsf>URI</jsf>).run()
+	 * 	List&lt;String&gt; l = client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; l = client.get(<jsf>URI</jsf>).run()
+	 * 	List&lt;MyBean&gt; l = client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; l = client.get(<jsf>URI</jsf>).run()
+	 * 	List&lt;List&lt;String&gt;&gt; l = client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; m = client.get(<jsf>URI</jsf>).run()
+	 * 	Map&lt;String,String&gt; m = client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
 	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m = client.get(<jsf>URI</jsf>).run()
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m = client
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
 	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
@@ -530,12 +509,12 @@ public class RestResponseBody implements HttpEntity {
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li>
 	 * 		You can also specify any of the following types:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
-	 * 			<li class='jc'>{@link Reader} - Returns access to the raw reader of the response.
-	 * 			<li class='jc'>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li class='jc'>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
-	 * 			<li class='jc'>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
+	 * 		<ul class='compact'>
+	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 			<li>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
+	 * 			<li>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
@@ -568,9 +547,11 @@ public class RestResponseBody implements HttpEntity {
 	/**
 	 * Same as {@link #as(Type,Type...)} but sets the value in a mutable for fluent calls.
 	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;List&lt;String&gt;&gt; m = <jk>new</jk> Mutable&lt;&gt;();
+	 * 	Mutable&lt;List&lt;String&gt;&gt; m = Mutable.<jsm>create()</jsm>;
+	 *
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
@@ -578,6 +559,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.getBody().as(m, LinkedList.<jk>class</jk>, String.<jk>class</jk>)
 	 * 		.getBody().pipeTo(outputStream)
 	 * 		.assertStatus().is(200);
+	 *
 	 * 	List&lt;String&gt; l = m.get();
 	 * </p>
 	 *
@@ -639,12 +621,12 @@ public class RestResponseBody implements HttpEntity {
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		You can also specify any of the following types:
-	 * 		<ul>
-	 * 			<li class='jc'>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
-	 * 			<li class='jc'>{@link Reader} - Returns access to the raw reader of the response.
-	 * 			<li class='jc'>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li class='jc'>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
-	 * 			<li class='jc'>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
+	 * 		<ul class='compact'>
+	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 			<li>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
+	 * 			<li>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
@@ -670,9 +652,11 @@ public class RestResponseBody implements HttpEntity {
 	/**
 	 * Same as {@link #as(Class)} but sets the value in a mutable for fluent calls.
 	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a bean and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;MyBean&gt; m = <jk>new</jk> Mutable&lt;&gt;();
+	 * 	Mutable&lt;MyBean&gt; m = Mutable.<jsm>create()</jsm>;
+	 *
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
@@ -680,6 +664,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.getBody().as(m, MyBean.<jk>class</jk>)
 	 * 		.getBody().pipeTo(outputStream)
 	 * 		.assertStatus().is(200);
+	 *
 	 * 	MyBean b = m.get();
 	 * </p>
 	 *
@@ -848,10 +833,12 @@ public class RestResponseBody implements HttpEntity {
 	/**
 	 * Identical to {@link #as(ClassMeta)} but sets the value in a mutable for fluent calls.
 	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a bean and also pipe to an output stream.</jc>
-	 * 	Mutable&lt;List&lt;MyBean&gt;&gt; m = <jk>new</jk> Mutable&lt;&gt;();
+	 * 	Mutable&lt;List&lt;MyBean&gt;&gt; m = Mutable.<jsm>create()</jsm>;
 	 * 	ClassMeta&lt;List&lt;MyBean&gt;&gt; cm = BeanContext.<jsf>DEFAULT</jsf>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
 	 * 	client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
@@ -859,6 +846,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.getBody().as(m, cm)
 	 * 		.getBody().pipeTo(outputStream)
 	 * 		.assertStatus().is(200);
+	 *
 	 * 	MyBean b = m.get();
 	 * </p>
 	 *
@@ -1086,9 +1074,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1101,6 +1087,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	</ul>
 	 */
 	public String asString() throws RestCallException {
+		cache();
 		try (Reader r = asReader()) {
 			return read(r).toString();
 		} catch (IOException e) {
@@ -1116,9 +1103,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1142,9 +1127,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1307,8 +1290,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.run()
 	 * 		.getBody().asMatcher(Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>));
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String foo = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 *
@@ -1316,9 +1300,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1337,15 +1319,17 @@ public class RestResponseBody implements HttpEntity {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>))
 	 * 		.assertStatus().is(200);
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String foo = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 *
@@ -1353,9 +1337,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1381,8 +1363,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.run()
 	 * 		.getBody().asMatcher(<js>"foo=(.*)"</js>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String foo = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 *
@@ -1411,16 +1394,17 @@ public class RestResponseBody implements HttpEntity {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, <js>"foo=(.*)"</js>)
 	 * 		.assertStatus().is(200);
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String foo = m.group(1);
-	 * </p>
+	 * 	}
 	 *
 	 *
 	 * <ul class='notes'>
@@ -1455,8 +1439,9 @@ public class RestResponseBody implements HttpEntity {
 	 * 		.run()
 	 * 		.getBody().asMatcher(<js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
-	 * 	<jk>if</jk> (m.matches())
+	 * 	<jk>if</jk> (m.matches()) {
 	 * 		String foo = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 *
@@ -1486,15 +1471,17 @@ public class RestResponseBody implements HttpEntity {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
-	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
+	 * 	Mutable&lt;Matcher&gt; m = Mutable.<jsm>create</jsm>();
+	 *
 	 * 	Matcher m = client
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asMatcher(m, <js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>)
 	 * 		.assertStatus().is(200);
 	 *
-	 * 	<jk>if</jk> (m.get().matches())
+	 * 	<jk>if</jk> (m.get().matches()) {
 	 * 		String foo = m.group(1);
+	 * 	}
 	 * </p>
 	 *
 	 *
@@ -1595,9 +1582,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<li>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
 	 * 	<li>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -1655,7 +1640,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	client
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody(MyBean.<js>class</js>).equals(<js>"{foo:'bar'}"</js>);
+	 * 		.assertBody(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -1689,7 +1674,7 @@ public class RestResponseBody implements HttpEntity {
 	 * once whereas a non-repeatable entity's can not.
 	 *
 	 * <ul class='notes'>
-	 *	<li>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}.
+	 *	<li>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.

@@ -39,7 +39,7 @@ import org.apache.juneau.svl.*;
  * 	ArgsVar.<jsm>init</jsm>(args);
  *
  * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>);
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<jk>class</jk>);
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $A{1}"</js>));

@@ -318,7 +318,7 @@ public abstract class ContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>Context</l> configuration property:</i>  Debug mode.
+	 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
 	 *
 	 * <p>
 	 * Enables the following additional information during serialization:
@@ -375,7 +375,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Context</l> configuration property:</i>  Locale.
+	 * <i><l>Context</l> configuration property:&emsp;</i>  Locale.
 	 *
 	 * <p>
 	 * Specifies the default locale for serializer and parser sessions when not specified via {@link SessionArgs#locale(Locale)}.
@@ -431,7 +431,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Context</l> configuration property:</i>  Media type.
+	 * <i><l>Context</l> configuration property:&emsp;</i>  Media type.
 	 *
 	 * <p>
 	 * Specifies the default media type for serializer and parser sessions when not specified via {@link SessionArgs#mediaType(MediaType)}.
@@ -486,7 +486,7 @@ public abstract class ContextBuilder {
 	}
 
 	/**
-	 * <i><l>Context</l> configuration property:</i>  TimeZone.
+	 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 	 *
 	 * <p>
 	 * Specifies the default time zone for serializer and parser sessions when not specified via {@link SessionArgs#timeZone(TimeZone)}.
@@ -706,7 +706,7 @@ public abstract class ContextBuilder {
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.set(
-	 * 			OMap.<jsm>of</jsm>(
+	 * 			AMap.<jsm>of</jsm>(
 	 * 				<jsf>BEAN_sortMaps</jsf>, <jk>true</jk>,
 	 * 				<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>
 	 * 			)
@@ -761,7 +761,7 @@ public abstract class ContextBuilder {
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.add(
-	 * 			OMap.<jsm>of</jsm>(
+	 * 			AMap.<jsm>of</jsm>(
 	 * 				<jsf>BEAN_sortMaps</jsf>, <jk>true</jk>,
 	 * 				<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>
 	 * 			)

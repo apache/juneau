@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * 	client
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
- * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
+ * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
  * </p>
  *
  * @param <R> The return type.
@@ -169,7 +169,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value is greater than the specified value.
+	 * Asserts that the value is after the specified value.
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
@@ -183,7 +183,17 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value is less than the specified value.
+	 * Asserts that the value is after the current date.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isAfterNow() throws AssertionError {
+		return isAfter(new Date());
+	}
+
+	/**
+	 * Asserts that the value is before the specified value.
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
@@ -194,6 +204,16 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 			if (! (this.value.before(value)))
 				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
+	}
+
+	/**
+	 * Asserts that the value is before the current date.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isBeforeNow() throws AssertionError {
+		return isBefore(new Date());
 	}
 
 	/**

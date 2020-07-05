@@ -49,7 +49,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Automatically detect POJO recursions.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #detectRecursions()}
@@ -63,7 +63,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Automatically detect POJO recursions.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * When enabled, specifies that recursions should be checked for during traversal.
@@ -109,7 +109,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Ignore recursion errors.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #ignoreRecursions()}
@@ -123,7 +123,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Ignore recursion errors.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
 	 *
 	 * <p>
 	 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
@@ -172,7 +172,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Initial depth.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -208,7 +208,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanTraverse</l> configuration property:</i>  Max traversal depth.
+	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Max traversal depth.
 	 *
 	 * <p>
 	 * When enabled, abort traversal if specified depth is reached in the POJO tree.

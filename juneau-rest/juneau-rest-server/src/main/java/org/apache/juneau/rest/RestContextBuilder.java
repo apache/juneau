@@ -409,7 +409,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	//----------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allow body URL parameter.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
@@ -435,7 +435,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allow body URL parameter.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
@@ -458,7 +458,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allowed header URL parameters.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed header URL parameters.
 	 *
 	 * <p>
 	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
@@ -484,7 +484,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allowed method headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed method headers.
 	 *
 	 * <p>
 	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
@@ -510,7 +510,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allowed method parameters.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allowed method parameters.
 	 *
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
@@ -537,7 +537,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Allow header URL parameters.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow header URL parameters.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #allowedHeaderParams(String)}
@@ -568,7 +568,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST call handler.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
 	 *
 	 * <p>
 	 * This class handles the basic lifecycle of an HTTP REST call.
@@ -589,7 +589,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST call handler.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
 	 *
 	 * <p>
 	 * Same as {@link #callHandler(Class)} except input is a pre-constructed instance.
@@ -609,7 +609,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST call logger.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
 	 *
 	 * <p>
 	 * Specifies the logger to use for logging of HTTP requests and responses.
@@ -630,7 +630,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST call logger.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
 	 *
 	 * <p>
 	 * Specifies the logger to use for logging of HTTP requests and responses.
@@ -651,7 +651,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST call logging rules.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logging rules.
 	 *
 	 * <p>
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
@@ -672,7 +672,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Children.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
 	 *
 	 * <p>
 	 * Defines children of this resource.
@@ -694,7 +694,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Children.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
 	 *
 	 * <p>
 	 * Same as {@link #children(Class...)} except input is pre-constructed instances.
@@ -712,7 +712,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Children.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Children.
 	 *
 	 * <p>
 	 * Shortcut for adding a single child to this resource.
@@ -734,7 +734,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Classpath resource finder.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Classpath resource finder.
 	 *
 	 * <p>
 	 * Used to retrieve localized files from the classpath.
@@ -754,7 +754,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Classpath resource finder.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Classpath resource finder.
 	 *
 	 * <p>
 	 * Same as {@link #classpathResourceFinder(ClasspathResourceFinder)} except input is a pre-constructed instance.
@@ -774,7 +774,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Client version header.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Client version header.
 	 *
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
@@ -798,7 +798,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Class-level response converters.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level response converters.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
@@ -816,7 +816,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Response converters.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response converters.
 	 *
 	 * <p>
 	 * Same as {@link #converters(Class...)} except input is pre-constructed instances.
@@ -834,7 +834,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Debug mode.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode.
 	 *
 	 * <p>
 	 * Enables the following:
@@ -854,7 +854,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Debug mode on specified classes/methods.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Debug mode on specified classes/methods.
 	 *
 	 * Enables the following:
 	 * <ul class='spaced-list'>
@@ -877,7 +877,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default character encoding.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default character encoding.
 	 *
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
@@ -897,7 +897,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default character encoding.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default character encoding.
 	 *
 	 * <p>
 	 * Same as {@link #defaultCharset(Charset)} but takes in an instance of {@link Charset}.
@@ -917,7 +917,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request attributes.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #reqAttrs(String...)}
@@ -931,7 +931,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #reqHeaders(String...)}
@@ -975,7 +975,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request attribute.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #reqAttr(String, Object)}
@@ -989,7 +989,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #reqHeader(String,Object)}
@@ -1003,7 +1003,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #resHeaders(String...)}
@@ -1017,7 +1017,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #resHeader(String, Object)}
@@ -1031,7 +1031,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Compression encoders.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Compression encoders.
 	 *
 	 * <p>
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
@@ -1049,7 +1049,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Compression encoders.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Compression encoders.
 	 *
 	 * <p>
 	 * Same as {@link #encoders(Class...)} except input a pre-constructed instances.
@@ -1067,7 +1067,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Class-level guards.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level guards.
 	 *
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
@@ -1085,7 +1085,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Class-level guards.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Class-level guards.
 	 *
 	 * <p>
 	 * Same as {@link #guards(Class...)} except input is pre-constructed instances.
@@ -1103,7 +1103,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST info provider.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST info provider.
 	 *
 	 * <p>
 	 * Class used to retrieve title/description/swagger information about a resource.
@@ -1123,7 +1123,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST info provider.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST info provider.
 	 *
 	 * <p>
 	 * Same as {@link #infoProvider(Class)} except input is a pre-constructed instance.
@@ -1143,7 +1143,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST logger.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST logger.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #callLogger(Class)}
@@ -1169,7 +1169,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  REST logger.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST logger.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #callLogger(RestCallLogger)}
@@ -1195,7 +1195,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  The maximum allowed input size (in bytes) on HTTP requests.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  The maximum allowed input size (in bytes) on HTTP requests.
 	 *
 	 * <p>
 	 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
@@ -1216,7 +1216,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Messages.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
 	 *
 	 * <p>
 	 * Identifies the location of the resource bundle for this class.
@@ -1234,7 +1234,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Messages.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
 	 *
 	 * <p>
 	 * Same as {@link #messages(MessageBundleLocation...)} except allows you to pass in the base class and bundle
@@ -1256,7 +1256,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Messages.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
 	 *
 	 * <p>
 	 * Same as {@link #messages(Class,String)} except assumes the base class is the resource class itself.
@@ -1274,7 +1274,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  MIME types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  MIME types.
 	 *
 	 * <p>
 	 * Defines MIME-type file type mappings.
@@ -1292,7 +1292,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Java method parameter resolvers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
 	 *
 	 * <p>
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
@@ -1313,7 +1313,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Java method parameter resolvers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Java method parameter resolvers.
 	 *
 	 * <p>
 	 * Same as {@link #paramResolvers(Class...)} except input is pre-constructed instances.
@@ -1331,7 +1331,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Parser listener.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parser listener.
 	 *
 	 * <p>
 	 * Specifies the parser listener class to use for listening to non-fatal parsing errors.
@@ -1351,7 +1351,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Parsers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
 	 *
 	 * <p>
 	 * Adds class-level parsers to this resource.
@@ -1369,7 +1369,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Parsers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
 	 *
 	 * <p>
 	 * Same as {@link #parsers(Class...)} except input is pre-constructed instances.
@@ -1391,7 +1391,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Parsers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Parsers.
 	 *
 	 * <p>
 	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
@@ -1409,7 +1409,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTTP part parser.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part parser.
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
@@ -1431,7 +1431,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTTP part parser.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part parser.
 	 *
 	 * <p>
 	 * Same as {@link #partParser(Class)} except input is a pre-constructed instance.
@@ -1451,7 +1451,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTTP part serializer.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part serializer.
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
@@ -1473,7 +1473,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTTP part serializer.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTTP part serializer.
 	 *
 	 * <p>
 	 * Same as {@link #partSerializer(Class)} except input is a pre-constructed instance.
@@ -1493,7 +1493,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Resource path.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource path.
 	 *
 	 * <p>
 	 * Identifies the URL subpath relative to the parent resource.
@@ -1514,7 +1514,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Render response stack traces in responses.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
 	 *
 	 * <p>
 	 * Render stack traces in HTTP response bodies when errors occur.
@@ -1534,7 +1534,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Render response stack traces in responses.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
@@ -1551,7 +1551,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request attribute.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
 	 *
 	 * <p>
 	 * Same as {@link #reqAttrs(String...)} but adds a single attribute name/value pair.
@@ -1570,7 +1570,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request attributes.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
 	 *
 	 * <p>
 	 * Specifies default values for request attributes if they're not already set on the request.
@@ -1595,7 +1595,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <p>
 	 * Same as {@link #reqHeaders(String...)} but adds a single header name/value pair.
@@ -1614,7 +1614,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default request headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
 	 *
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
@@ -1639,7 +1639,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
 	 *
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
@@ -1664,7 +1664,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Default response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
 	 *
 	 * <p>
 	 * Same as {@link #resHeaders(String...)} but adds a single header name/value pair.
@@ -1726,7 +1726,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Response handlers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response handlers.
 	 *
 	 * <p>
 	 * Specifies a list of {@link ResponseHandler} classes that know how to convert POJOs returned by REST methods or
@@ -1745,7 +1745,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Response handlers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Response handlers.
 	 *
 	 * <p>
 	 * Same as {@link #responseHandlers(Class...)} except input is pre-constructed instances.
@@ -1763,7 +1763,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Declared roles.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Declared roles.
 	 *
 	 * <p>
 	 * A comma-delimited list of all possible user roles.
@@ -1794,7 +1794,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Role guard.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Role guard.
 	 *
 	 * <p>
 	 * An expression defining if a user with the specified roles are allowed to access methods on this class.
@@ -1845,7 +1845,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Serializer listener.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializer listener.
 	 *
 	 * <p>
 	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
@@ -1865,7 +1865,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Serializers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Adds class-level serializers to this resource.
@@ -1883,7 +1883,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Serializers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Same as {@link #serializers(Class[])} but replaces any existing values.
@@ -1901,7 +1901,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Serializers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Same as {@link #serializers(Class...)} except input is pre-constructed instances.
@@ -1923,7 +1923,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Serializers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializers.
 	 *
 	 * <p>
 	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
@@ -1941,7 +1941,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
 	 *
 	 * <p>
 	 * Used to customize the headers on responses returned for statically-served files.
@@ -1961,7 +1961,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
 	 *
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(Map)} but replaces any previous values.
@@ -1981,7 +1981,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
 	 *
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(Map)} with append=<jk>true</jk> except headers are strings
@@ -2007,7 +2007,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file response headers.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file response headers.
 	 *
 	 * <p>
 	 * Same as {@link #staticFileResponseHeaders(String...)} except header is broken into name/value pair.
@@ -2026,7 +2026,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file mappings.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
 	 *
 	 * <p>
 	 * Used to define paths and locations of statically-served files such as images or HTML documents.
@@ -2044,7 +2044,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file mappings.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(StaticFileMapping...)} except input is in the form of a mapping string.
@@ -2072,7 +2072,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file mappings.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(String)} except overrides the base class for retrieving the resource.
@@ -2103,7 +2103,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file mappings.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(String)} except path and location are already split values.
@@ -2126,7 +2126,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Static file mappings.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Static file mappings.
 	 *
 	 * <p>
 	 * Same as {@link #staticFiles(String,String)} except overrides the base class for retrieving the resource.
@@ -2152,7 +2152,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported accept media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
 	 *
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
@@ -2170,7 +2170,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported accept media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
 	 *
 	 * <p>
 	 * Same as {@link #produces(String...)} but replaces any previous values.
@@ -2188,7 +2188,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported accept media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
 	 *
 	 * <p>
 	 * Same as {@link #produces(String...)} except input is {@link MediaType} instances.
@@ -2206,7 +2206,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported accept media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported accept media types.
 	 *
 	 * <p>
 	 * Same as {@link #produces(MediaType...)} but replaces any previous values.
@@ -2224,7 +2224,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported content media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
 	 *
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
@@ -2242,7 +2242,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported content media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
 	 *
 	 * <p>
 	 * Same as {@link #consumes(String...)} but replaces any existing values.
@@ -2260,7 +2260,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported content media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
 	 *
 	 * <p>
 	 * Same as {@link #consumes(String...)} except input is {@link MediaType} instances.
@@ -2278,7 +2278,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Supported content media types.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Supported content media types.
 	 *
 	 * <p>
 	 * Same as {@link #consumes(MediaType...)} except replaces any existing values.
@@ -2296,7 +2296,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Properties.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Properties.
 	 *
 	 * <p>
 	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
@@ -2320,7 +2320,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Properties.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Properties.
 	 *
 	 * <p>
 	 * Shortcut to add properties to the bean contexts of all serializers and parsers on all methods in the class.
@@ -2345,7 +2345,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Resource authority path.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource authority path.
 	 *
 	 * <p>
 	 * Overrides the authority path value for this resource and any child resources.
@@ -2368,7 +2368,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Resource context path.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Resource context path.
 	 *
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
@@ -2392,7 +2392,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  URI resolution relativity.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  URI resolution relativity.
 	 *
 	 * <p>
 	 * Specifies how relative URIs should be interpreted by serializers.
@@ -2415,7 +2415,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  URI resolution.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  URI resolution.
 	 *
 	 * <p>
 	 * Specifies how relative URIs should be interpreted by serializers.
@@ -2438,7 +2438,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Use classpath resource caching.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Use classpath resource caching.
 	 *
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestContext#getClasspathResource(String, Locale)} (and related
@@ -2459,7 +2459,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  Use stack trace hashes.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Use stack trace hashes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #callLoggerConfig(RestCallLoggerConfig)}
@@ -2485,7 +2485,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTML Widgets.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(Class[])}
@@ -2511,7 +2511,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTML Widgets.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(Class[])}
@@ -2535,7 +2535,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTML Widgets.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(HtmlWidget[])}
@@ -2558,7 +2558,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:</i>  HTML Widgets.
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget[])}

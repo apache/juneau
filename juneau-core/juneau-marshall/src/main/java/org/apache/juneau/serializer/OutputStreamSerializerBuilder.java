@@ -50,7 +50,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>OutputStreamSerializer</l> configuration property:</i>  Binary output format.
+	 * <i><l>OutputStreamSerializer</l> configuration property:&emsp;</i>  Binary output format.
 	 *
 	 * <p>
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
@@ -87,7 +87,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>OutputStreamSerializer</l> configuration property:</i>  Binary output format.
+	 * <i><l>OutputStreamSerializer</l> configuration property:&emsp;</i>  Binary output format.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}

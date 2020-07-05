@@ -57,7 +57,7 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>SoapXmlSerializer</l> configuration property:</i>  The <c>SOAPAction</c> HTTP header value to set on responses.
+	 * <i><l>SoapXmlSerializer</l> configuration property:&emsp;</i>  The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link SoapXmlSerializer#SOAPXML_SOAPAction}

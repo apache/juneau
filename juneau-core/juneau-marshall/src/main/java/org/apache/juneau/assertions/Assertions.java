@@ -28,7 +28,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertDate</jsm>(myDate).isAfter(<jk>new</jk> Date());
+	 * 	<jsm>assertDate</jsm>(myDate).isAfterNow();
 	 * </p>
 	 *
 	 * @param date The date being wrapped.

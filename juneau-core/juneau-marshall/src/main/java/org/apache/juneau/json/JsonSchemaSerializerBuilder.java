@@ -59,7 +59,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Add descriptions.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Add descriptions.
 	 *
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
@@ -81,7 +81,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Add examples.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Add examples.
 	 *
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
@@ -108,7 +108,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Allow nested descriptions.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #allowNestedDescriptions()}
@@ -122,7 +122,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Allow nested descriptions.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
@@ -139,7 +139,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Allow nested examples.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested examples.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #allowNestedExamples()}
@@ -153,7 +153,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Allow nested examples.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested examples.
 	 *
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
@@ -170,7 +170,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Schema definition mapper.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -194,7 +194,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Bean schema definition mapper.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Bean schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -218,7 +218,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Default schemas.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Default schemas.
 	 *
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
@@ -241,7 +241,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Use bean definitions.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useBeanDefs()}
@@ -255,7 +255,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:</i>  Use bean definitions.
+	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
 	 *
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:

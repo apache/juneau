@@ -60,7 +60,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Add descriptions.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Add descriptions.
 	 *
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
@@ -82,7 +82,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Add examples.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Add examples.
 	 *
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
@@ -109,7 +109,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Allow nested descriptions.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #allowNestedDescriptions()}
@@ -123,7 +123,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Allow nested descriptions.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
@@ -140,7 +140,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Allow nested examples.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested examples.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #allowNestedExamples()}
@@ -154,7 +154,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Allow nested examples.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested examples.
 	 *
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
@@ -171,7 +171,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Schema definition mapper.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -195,7 +195,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Bean schema definition mapper.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Bean schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -219,7 +219,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Default schemas.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Default schemas.
 	 *
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
@@ -242,7 +242,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Use bean definitions.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useBeanDefs()}
@@ -256,7 +256,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSchemaSerializer</l> configuration property:</i>  Use bean definitions.
+	 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
 	 *
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:

@@ -57,7 +57,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Add key/value headers on bean/map tables.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #addKeyValueTableHeaders()}
@@ -71,7 +71,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Add key/value headers on bean/map tables.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>addKeyValueTableHeaders(<jk>true</jk>)</code>.
@@ -88,7 +88,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Look for URLs in {@link String Strings}.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for URLs in {@link String Strings}.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dontDetectLinksInStrings()}
@@ -102,7 +102,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Look for URLs in {@link String Strings}.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for URLs in {@link String Strings}.
 	 *
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
@@ -120,7 +120,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Link label parameter name.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Link label parameter name.
 	 *
 	 * <p>
 	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
@@ -140,7 +140,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Look for link labels in URIs.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for link labels in URIs.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #dontDetectLabelParameters()}
@@ -154,7 +154,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Look for link labels in URIs.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for link labels in URIs.
 	 *
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
@@ -171,7 +171,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Anchor text source.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Anchor text source.
 	 *
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
@@ -192,7 +192,7 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:</i>  Anchor text source.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Anchor text source.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #uriAnchorText(AnchorText)}

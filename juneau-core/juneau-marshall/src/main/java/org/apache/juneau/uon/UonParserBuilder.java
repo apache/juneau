@@ -58,7 +58,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>UonParser</l> configuration property:</i>  Decode <js>"%xx"</js> sequences.
+	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Decode <js>"%xx"</js> sequences.
 	 *
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
@@ -79,7 +79,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>UonParser</l> configuration property:</i>  Decode <js>"%xx"</js> sequences.
+	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Decode <js>"%xx"</js> sequences.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>decodeChars(<jk>true</jk>)</code>.
@@ -96,7 +96,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>UonParser</l> configuration property:</i>  Validate end.
+	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Validate end.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #validateEnd()}
@@ -110,7 +110,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>UonParser</l> configuration property:</i>  Validate end.
+	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Validate end.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.

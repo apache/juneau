@@ -57,7 +57,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:</i>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #escapeSolidus()}
@@ -71,7 +71,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:</i>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>escapeSolidus(<jk>true</jk>)</code>.
@@ -88,7 +88,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode.
+	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #simple()}
@@ -102,7 +102,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode.
+	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode.
 	 *
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
@@ -119,7 +119,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>JsonSerializer</l> configuration property:</i>  Simple JSON mode and single quote.
+	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode and single quote.
 	 *
 	 * <p>
 	 * Shortcut for calling <c>simple().sq()</c>.

@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * 	ManifestFileVar.<jsm>init</jsm>(mf);
  *
  * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "$MF{Main-Class}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ManifestFile.<js>class</js>);
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ManifestFile.<jk>class</jk>);
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(r.resolve(<js>"The main class is $MF{Main-Class}"</js>));

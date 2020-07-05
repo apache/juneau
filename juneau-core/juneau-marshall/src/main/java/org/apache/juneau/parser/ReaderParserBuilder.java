@@ -51,7 +51,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>ReaderParser</l> configuration property:</i>  File charset.
+	 * <i><l>ReaderParser</l> configuration property:&emsp;</i>  File charset.
 	 *
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
@@ -86,7 +86,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <i><l>ReaderParser</l> configuration property:</i>  Input stream charset.
+	 * <i><l>ReaderParser</l> configuration property:&emsp;</i>  Input stream charset.
 	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.

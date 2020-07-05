@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
  * 	Config config = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  *
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>)
+ * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<jk>class</jk>)
  * 		.addContextObject(<jsf>SESSION_config</jsf>, configFile);
  *
  * 	<jc>// Use it!</jc>

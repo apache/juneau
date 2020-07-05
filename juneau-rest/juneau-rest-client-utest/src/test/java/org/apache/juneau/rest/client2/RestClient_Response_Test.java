@@ -174,7 +174,7 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void c03_response_headerAssertions() throws Exception {
-		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertIntHeader("Foo").is(123);
+		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertIntegerHeader("Foo").is(123);
 		checkFooClient(C.class).build().get().json().header("Foo","123").run().assertLongHeader("Foo").is(123l);
 		checkFooClient(C.class).build().get().json().header(BasicDateHeader.of("Foo",CALENDAR)).run().assertDateHeader("Foo").equals(CALENDAR.getTime(), ChronoUnit.SECONDS);
 		checkClient(C.class,"Content-Type").build().get().json().header("Content-Type","application/json;charset=iso-8859-1").run().assertCharset().is("iso-8859-1");

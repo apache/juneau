@@ -50,7 +50,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>InputStreamParser</l> configuration property:</i>  Binary input format.
+	 * <i><l>InputStreamParser</l> configuration property:&emsp;</i>  Binary input format.
 	 *
 	 * <p>
 	 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
@@ -84,7 +84,7 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	/**
-	 * <i><l>InputStreamParser</l> configuration property:</i>  Binary input format.
+	 * <i><l>InputStreamParser</l> configuration property:&emsp;</i>  Binary input format.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}

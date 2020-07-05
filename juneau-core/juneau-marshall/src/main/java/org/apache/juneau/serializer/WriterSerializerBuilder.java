@@ -51,7 +51,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i> File charset.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i> File charset.
 	 *
 	 * <p>
 	 * The character set to use for writing <c>Files</c> to the file system.
@@ -86,7 +86,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Maximum indentation.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -120,7 +120,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies the character to use for quoting attributes and values.
@@ -161,7 +161,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Quote character.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
 	 *
 	 * <p>
 	 * Specifies to use single quotes for quoting attributes and values.
@@ -199,7 +199,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i> Output stream charset.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i> Output stream charset.
 	 *
 	 * <p>
 	 * The character set to use when writing to <c>OutputStreams</c>.
@@ -234,7 +234,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
 	 * <div class='warn'>
 	 * 	<b>Deprecated</b> - Use {@link #useWhitespace()}
@@ -248,7 +248,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
@@ -281,7 +281,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	/**
-	 * <i><l>WriterSerializer</l> configuration property:</i>  Use whitespace.
+	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
