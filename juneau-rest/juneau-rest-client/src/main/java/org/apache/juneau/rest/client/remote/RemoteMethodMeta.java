@@ -49,7 +49,7 @@ public class RemoteMethodMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param parentPath The absolute URL of the REST interface backing the interface proxy.
+	 * @param parentPath The absolute URI of the REST interface backing the interface proxy.
 	 * @param m The Java method.
 	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
@@ -143,9 +143,9 @@ public class RemoteMethodMeta {
 	}
 
 	/**
-	 * Returns the absolute URL of the REST interface invoked by this Java method.
+	 * Returns the absolute URI of the REST interface invoked by this Java method.
 	 *
-	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
+	 * @return The absolute URI of the REST interface, never <jk>null</jk>.
 	 */
 	public String getFullPath() {
 		return fullPath;

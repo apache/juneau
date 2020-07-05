@@ -2559,7 +2559,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).runFuture();
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>try</jk> {
 	 * 		String body = f.get().getBody().asString();
@@ -2567,7 +2567,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
 	 * </p>
@@ -3228,9 +3228,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <i><l>RestClient</l> configuration property:</i>  Root URI.
 	 *
 	 * <p>
-	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
+	 * When set, relative URI strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
 	 * will be prefixed with the specified root.
-	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 * <br>This root URI is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URI string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -3251,13 +3251,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * </ul>
 	 *
 	 * @param value
-	 * 	The root URL to prefix to relative URL strings.
+	 * 	The root URI to prefix to relative URI strings.
 	 * 	<br>Trailing slashes are trimmed.
 	 * 	<br>Usually a <c>String</c> but you can also pass in <c>URI</c> and <c>URL</c> objects as well.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestClientBuilder rootUrl(Object value) {
+	public RestClientBuilder rootUri(Object value) {
 		return set(RESTCLIENT_rootUri, value);
 	}
 
@@ -3985,15 +3985,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.json()
 	 * 		.uriContext(uriContext)
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
-	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URLs as absolute paths.</jc>
+	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URIs as absolute paths.</jc>
 	 * 		.build();
 	 *
-	 * 	<jc>// A relative URL</jc>
-	 * 	URL url = <jk>new</jk> URL(<js>"bar"</js>);
+	 * 	<jc>// A relative URI</jc>
+	 * 	URI uri = <jk>new</jk> URI(<js>"bar"</js>);
 	 *
 	 * 	<jc>// Request body will contain:  "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
 	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, url)
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, uri)
 	 * 		.run();
 	 * </p>
 	 *
@@ -4063,11 +4063,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Possible values are:
 	 * <ul>
 	 * 	<li class='jf'>{@link UriResolution#ABSOLUTE}
-	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 		- Resolve to an absolute URI (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 	 * 	<li class='jf'>{@link UriResolution#ROOT_RELATIVE}
-	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 		- Resolve to a root-relative URI (e.g. <js>"/context-root/servlet-path/path-info"</js>).
 	 * 	<li class='jf'>{@link UriResolution#NONE}
-	 * 		- Don't do any URL resolution.
+	 * 		- Don't do any URI resolution.
 	 * </ul>
 	 *
 	 * <p>
@@ -4487,7 +4487,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Set a header with a value in UON format.</jc>
 	 * 	client
-	 * 		.get(<js>"/url"</js>)
+	 * 		.get(<js>"/uri"</js>)
 	 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
 	 * 		.run();
 	 * </p>
@@ -4546,7 +4546,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Set a header with a comma-separated list.</jc>
 	 * 	client
-	 * 		.get(<js>"/url"</js>)
+	 * 		.get(<js>"/uri"</js>)
 	 * 		.header(<js>"Foo"</js>, l)  // Will be serialized as:  <jc>foo=bar,baz=qux\,true\,123</jc>
 	 * 		.run();
 	 * </p>
@@ -4576,7 +4576,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
 	 *
 	 * <p>
-	 * Specifies the format to use for URL GET parameter keys and values.
+	 * Specifies the format to use for GET parameter keys and values.
 	 *
 	 * <p>
 	 * Possible values:
@@ -4602,7 +4602,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
 	 * 	client
-	 * 		.post(<js>"/url"</js>, map)
+	 * 		.post(<js>"/uri"</js>, map)
 	 * 		.run();
 	 * </p>
 	 *
@@ -4625,7 +4625,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
 	 *
 	 * <p>
-	 * Specifies plaintext as the format to use for URL GET parameter keys and values.
+	 * Specifies plaintext as the format to use for GET parameter keys and values.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -4643,7 +4643,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
 	 * 	client
-	 * 		.post(<js>"/url"</js>, map)
+	 * 		.post(<js>"/uri"</js>, map)
 	 * 		.run();
 	 * </p>
 	 * <ul class='seealso'>

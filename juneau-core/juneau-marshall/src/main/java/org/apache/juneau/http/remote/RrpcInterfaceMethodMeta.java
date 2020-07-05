@@ -50,7 +50,7 @@ public class RrpcInterfaceMethodMeta {
 	 *
 	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
-	public String getUrl() {
+	public String getUri() {
 		return url;
 	}
 

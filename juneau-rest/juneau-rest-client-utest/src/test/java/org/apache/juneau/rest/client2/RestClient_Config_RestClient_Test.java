@@ -470,7 +470,7 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a13_toString() throws Exception {
-		String s = client().rootUrl("foo").build().toString();
+		String s = client().rootUri("foo").build().toString();
 		assertTrue(s.contains("rootUri: 'foo'"));
 	}
 

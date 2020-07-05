@@ -20,7 +20,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used for fluent assertion calls.
+ * Used for fluent assertion calls against POJOs.
  *
  * @param <R> The return type.
  */

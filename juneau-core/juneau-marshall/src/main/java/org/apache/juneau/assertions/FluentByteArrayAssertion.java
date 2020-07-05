@@ -19,7 +19,7 @@ import java.nio.charset.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls.
+ * Used for fluent assertion calls against byte arrays.
  *
  * @param <R> The return type.
  */

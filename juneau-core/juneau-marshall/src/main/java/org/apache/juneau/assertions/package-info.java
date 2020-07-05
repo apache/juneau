@@ -10,41 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client.remote;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
 
 /**
- * Identifies a proxy against a REST interface.
- *
- * <div class='warn'>
- * 	<b>Deprecated</b> - Use {@link org.apache.juneau.http.remote.RemoteMethod}
- * </div>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
- * </ul>
+ * Assertions API
  */
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-@Inherited
-@Deprecated
-public @interface RemoteResource {
+package org.apache.juneau.assertions;
 
-	/**
-	 * REST service path.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>An absolute URI.
-	 * 	<li>A relative URI interpreted as relative to the root URI defined on the <c>RestClient</c>
-	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
-	 * </ul>
-	 */
-	String path() default "";
-}

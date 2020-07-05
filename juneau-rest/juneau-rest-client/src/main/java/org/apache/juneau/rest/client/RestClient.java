@@ -1410,7 +1410,7 @@ public class RestClient extends BeanContext implements Closeable {
 						if (rim == null)
 							throw new RuntimeException("Method is not exposed as a remote method.");
 
-						String url = rim.getUrl();
+						String url = rim.getUri();
 
 						try (RestCall rc = doCall("POST", url, true)) {
 

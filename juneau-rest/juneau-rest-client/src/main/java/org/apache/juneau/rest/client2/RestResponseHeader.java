@@ -443,7 +443,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
@@ -467,7 +467,7 @@ public class RestResponseHeader implements Header {
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
@@ -492,7 +492,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>);
 	 *
@@ -516,7 +516,7 @@ public class RestResponseHeader implements Header {
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>);
 	 *
@@ -541,7 +541,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(<js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
@@ -566,7 +566,7 @@ public class RestResponseHeader implements Header {
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Mutable&lt;Matcher&gt; m = Mutable.create();
 	 * 	Matcher m = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Content-Type"</js>).asMatcher(m, <js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
@@ -608,37 +608,37 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
 	 *
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).passes(x -&gt; x.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
@@ -648,7 +648,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the header and converts it to a bean.</jc>
 	 * 	MediaType mediaType = client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
 	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
@@ -673,7 +673,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content age is greather than 1.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertIntHeader(<js>"Age"</js>).isGreaterThan(1);
 	 * </p>
@@ -695,7 +695,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response body is not too long.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
 	 * </p>
@@ -717,7 +717,7 @@ public class RestResponseHeader implements Header {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertDateHeader(<js>"Expires"</js>).isAfter(<jk>new</jk> Date());
 	 * </p>

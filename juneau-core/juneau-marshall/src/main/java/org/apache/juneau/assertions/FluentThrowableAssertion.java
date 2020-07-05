@@ -17,7 +17,7 @@ import java.util.function.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls.
+ * Used for fluent assertion calls against throwables.
  *
  * @param <R> The return type.
  */

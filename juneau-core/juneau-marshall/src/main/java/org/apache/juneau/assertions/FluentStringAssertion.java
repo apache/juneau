@@ -22,7 +22,7 @@ import java.util.stream.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls.
+ * Used for fluent assertion calls against strings.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>

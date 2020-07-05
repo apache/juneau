@@ -741,10 +741,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </ul>
 	 *
 	 * <p>
-	 * Relative URL strings will be interpreted as relative to the root URL defined on the client.
+	 * Relative URI strings will be interpreted as relative to the root URI defined on the client.
 	 *
 	 * @param uri
-	 * 	The URL of the remote REST resource.
+	 * 	The URI of the remote REST resource.
 	 * 	<br>This overrides the URI passed in from the client.
 	 * 	<br>Can be any of the following types:
 	 * 	<ul class='spaced-list'>
@@ -847,7 +847,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
+	 * Replaces a path parameter of the form <js>"{name}"</js> in the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -872,7 +872,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
+	 * Replaces a path parameter of the form <js>"{name}"</js> in the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -892,7 +892,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Replaces a path parameter of the form <js>"{name}"</js> in the URL.
+	 * Replaces a path parameter of the form <js>"{name}"</js> in the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -921,7 +921,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Replaces multiple path parameter of the form <js>"{name}"</js> in the URL.
+	 * Replaces multiple path parameter of the form <js>"{name}"</js> in the URI.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -982,7 +982,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Replaces path parameters of the form <js>"{name}"</js> in the URL using free-form key/value pairs.
+	 * Replaces path parameters of the form <js>"{name}"</js> in the URI using free-form key/value pairs.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1067,7 +1067,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar|baz".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -1107,7 +1107,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
 	 * </p>
@@ -1132,7 +1132,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
@@ -1155,7 +1155,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates query parameter "foo=bar|baz"</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
@@ -1184,7 +1184,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, <js>"bar"</js>
@@ -1218,7 +1218,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queries(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
@@ -1256,7 +1256,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queries(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
@@ -1324,7 +1324,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
 	 * 		.run();
 	 * </p>
@@ -1352,7 +1352,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryCustom(<js>"foo=bar&baz=qux"</js>)
 	 * 		.run();
 	 * </p>
@@ -1455,7 +1455,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -1494,7 +1494,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
 	 * </p>
@@ -1519,7 +1519,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
@@ -1542,7 +1542,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
@@ -1571,7 +1571,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"foo"</js>, <js>"bar"</js>
@@ -1605,7 +1605,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDatas(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"baz"<j/s>,<js>"qux"</js>)
@@ -1643,7 +1643,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDatas(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
@@ -1711,7 +1711,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates form data "key1=val1&key2=val2".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.run();
 	 * </p>
@@ -1739,19 +1739,19 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates form data "foo=bar&baz=qux".</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataCustom(<js>"foo=bar&baz=qux"</js>)
 	 * 		.run();
 	 *
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity.</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataCustom(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 *
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity and body().</jc>
 	 * 	client
-	 * 		.formPost(<jsf>URL</jsf>)
+	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.body(<js>new</js> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 * </p>
@@ -1965,7 +1965,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>)),
@@ -2005,7 +2005,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>)
 	 * 		.run();
 	 * </p>
@@ -2033,7 +2033,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
 	 * 			HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>
@@ -2062,7 +2062,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			<js>"Foo"</js>, <js>"bar"</js>
@@ -2096,7 +2096,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
 	 * </p>
@@ -2116,7 +2116,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(
 	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
 	 * 			AMap.<jsm>of</jsm>(<js>"Baz"</js>, <js>"qux"</js>)
@@ -2154,7 +2154,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(
 	 * 			<jsf>APPEND</jsf>,
 	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
@@ -2222,7 +2222,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
 	 * 		.run();
 	 * </p>
@@ -2296,6 +2296,28 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			addHeader(h);
 		}
 		return this;
+	}
+
+	/**
+	 * Convenience method for reading the current last value of the specified header.
+	 *
+	 * @param name The header name.
+	 * @return The header value or <jk>null</jk> if not set.
+	 */
+	public String getHeader(String name) {
+		return getHeader(name, null);
+	}
+
+	/**
+	 * Convenience method for reading the current last value of the specified header.
+	 *
+	 * @param name The header name.
+	 * @param def The default value if the header is not set.
+	 * @return The header value or the default value if not set.
+	 */
+	public String getHeader(String name, String def) {
+		Header h = getLastHeader(name);
+		return h == null ? def : h.getValue();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -2774,7 +2796,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>try</jk> {
-	 * 		<jk>int</jk> rc = client.get(<jsf>URL</jsf>).execute().getResponseStatus();
+	 * 		<jk>int</jk> rc = client.get(<jsf>URI</jsf>).execute().getResponseStatus();
 	 * 		<jc>// Succeeded!</jc>
 	 * 	} <jk>catch</jk> (RestCallException e) {
 	 * 		<jc>// Failed!</jc>
@@ -2905,7 +2927,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).runFuture();
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>try</jk> {
 	 * 		String body = f.get().getBody().asString();
@@ -2950,7 +2972,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 *  <jc>// Get the response code.
 	 *  // No need to call close() on the RestResponse object.</jc>
-	 *  <jk>int</jk> rc = client.get(<jsf>URL</jsf>).complete().getResponseCode();
+	 *  <jk>int</jk> rc = client.get(<jsf>URI</jsf>).complete().getResponseCode();
 	 * </p>
 	 *
 	 * @return The response object.
@@ -2965,7 +2987,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).completeFuture();
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).completeFuture();
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>int</jk> rc = f.get().getResponseStatus();
 	 * </p>
@@ -3108,6 +3130,19 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override /* HttpUriRequest */
 	public URI getURI() {
 		return request.getURI();
+	}
+
+	/**
+	 * Returns the original request URI as a simple string.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>URI remains unchanged in the course of request execution and is not updated if the request is redirected to another location.
+	 * </ul>
+	 *
+	 * @return The original request URI.
+	 */
+	public String getUri() {
+		return getURI().toString();
 	}
 
 	/**

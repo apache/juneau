@@ -1415,8 +1415,8 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder rootUrl(Object value) {
-		super.rootUrl(value);
+	public MockRestClientBuilder rootUri(Object value) {
+		super.rootUri(value);
 		return this;
 	}
 

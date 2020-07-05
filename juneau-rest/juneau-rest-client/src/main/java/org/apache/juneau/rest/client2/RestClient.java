@@ -32,19 +32,13 @@ import java.util.function.*;
 import java.util.logging.*;
 import java.util.regex.*;
 
-import javax.net.ssl.*;
-
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
-import org.apache.http.config.*;
 import org.apache.http.conn.*;
-import org.apache.http.conn.routing.*;
-import org.apache.http.conn.socket.*;
-import org.apache.http.conn.util.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.params.*;
@@ -69,7 +63,6 @@ import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
-import org.apache.http.client.CookieStore;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
@@ -81,25 +74,30 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
- * 	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().build()) {
- * 		MyBean b = c.get(<jsf>URL</jsf>)
- * 			.run()
- * 			.assertStatus().is(200)
- * 			.getBody().as(MyBean.<jk>class</jk>);
- * 	}
+ * 	MyBean bean = RestClient.<jsm>create</jsm>()
+ * 		.simpleJson()
+ * 		.build()
+ * 		.get(<jsf>URI</jsf>)
+ * 		.run()
+ * 		.assertStatus().code().is(200)
+ * 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+ * 		.getBody().as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bcode w800'>
- * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
- * 	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().build()) {
- * 		RestRequest req = c.get(<jsf>URL</jsf>);
- * 		RestResponse res = req.run();
- * 		res.assertStatus().is(200);
- * 		RestResponseBody body = res.getBody();
- * 		MyBean b = body.as(MyBean.<jk>class</jk>);
- * 	}
+ * 	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
+ * 	RestClient client = builder.build();
+ * 	RestRequest req = c.get(<jsf>URI</jsf>);
+ * 	RestResponse res = req.run();
+ * 	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
+ * 	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
+ * 	res = codeAssertion.is(200);
+ * 	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
+ * 	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
+ * 	RestResponseBody body = res.getBody();
+ * 	MyBean bean = body.as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -119,11 +117,10 @@ import org.apache.http.client.CookieStore;
  * 	}
  *
  * 	<jc>// Use a RestClient with default Simple JSON support.</jc>
- * 	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build()) {
- * 		PetStore store = c.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
- * 		CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
- * 		Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
- * 	}
+ * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+ * 	PetStore store = c.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+ * 	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+ * 	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -144,13 +141,13 @@ import org.apache.http.client.CookieStore;
  * the {@link #create() RestClient.create()} method as shown above.
  *
  * <p class='w900'>
- * Clients are typically created with a root URL so that relative URLs can be used when making requests.
- * This is done using the {@link RestClientBuilder#rootUrl(Object)} method.
+ * Clients are typically created with a root URI so that relative URIs can be used when making requests.
+ * This is done using the {@link RestClientBuilder#rootUri(Object)} method.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Create a client where all URLs are relative to localhost.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost:5000"</js>).build();
+ * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
  *
  * 	<jc>// Use relative paths.</jc>
  * 	String body = c.get(<js>"/subpath"</js>).run().getBody().asString();
@@ -162,19 +159,16 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient}
  * 	<ul>
- * 		<li class='jm'>{@link RestClient#get(Object) get(Object url)}
- * 		<li class='jm'>{@link RestClient#put(Object,Object) put(Object url, Object body)}
- * 		<li class='jm'>{@link RestClient#put(Object) put(Object url)}
- * 		<li class='jm'>{@link RestClient#post(Object) post(Object url, Object body)}
- * 		<li class='jm'>{@link RestClient#post(Object) post(Object url)}
- * 		<li class='jm'>{@link RestClient#patch(Object,Object) patch(Object url, Object body)}
- * 		<li class='jm'>{@link RestClient#patch(Object) patch(Object url)}
- * 		<li class='jm'>{@link RestClient#delete(Object) delete(Object url)}
- * 		<li class='jm'>{@link RestClient#options(Object) options(Object url)}
- * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(Object url, Object body)}
- * 		<li class='jm'>{@link RestClient#formPost(Object) formPost(Object url)}
- * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPost(Object url, Object...parameters)}
- * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object url, Object body)}
+ * 		<li class='jm'>{@link RestClient#get(Object) get(Object uri)}, {@link RestClient#get() get()}
+ * 		<li class='jm'>{@link RestClient#put(Object,Object) put(Object uri, Object body)}, {@link RestClient#put(Object) put(Object uri)}
+ * 		<li class='jm'>{@link RestClient#post(Object) post(Object uri, Object body)}, {@link RestClient#post(Object) post(Object uri)}
+ * 		<li class='jm'>{@link RestClient#patch(Object,Object) patch(Object uri, Object body)}, {@link RestClient#patch(Object) patch(Object uri)}
+ * 		<li class='jm'>{@link RestClient#delete(Object) delete(Object uri)}
+ * 		<li class='jm'>{@link RestClient#head(Object) head(Object uri)}
+ * 		<li class='jm'>{@link RestClient#options(Object) options(Object uri)}
+ * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(Object uri, Object body)}, {@link RestClient#formPost(Object) formPost(Object uri)}
+ * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPostPairs(Object uri, Object...parameters)}
+ * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object uri, Object body)}
  * 	</ul>
  * </ul>
  *
@@ -200,10 +194,10 @@ import org.apache.http.client.CookieStore;
  *
  * <p class='bcode w800'>
  * 	<jc>// Consuming the response, so use run().</jc>
- * 	String body = client.get(<jsf>URL</jsf>).run().getBody().asString();
+ * 	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
  *
  * 	<jc>// Only interested in response status code, so use complete().</jc>
- *   <jk>int</jk> status = client.get(<jsf>URL</jsf>).complete().getStatusCode();
+ *   <jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
  *
@@ -234,15 +228,65 @@ import org.apache.http.client.CookieStore;
  * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
  * </p>
  *
+ * Clients can also support multiple languages:
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a REST client with support for multiple languages.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
+ *
+ * 	<jc>// Create a REST client with support for all supported languages.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+ * </p>
+ *
+ * <p>
+ * When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
+ * to specify which serializer should be selected.
+ *
+ * <p class='bcode w800'>
+ * 	<jc>// Create a REST client with support for multiple languages.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+ *
+ * 	c.post(<jsf>URI</jsf>, myBean).header(<js>"Content-Type"</js>,<js>"application/json"</js>).run().assertStatus().is(200);
+ * </p>
+ *
+ * <p>
+ * Languages can also be specified per-request.
+ *
+ * <p class='bcode w800'>
+ * 	<jc>// Create a REST client with no default languages supported.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().build();
+ *
+ * 	<jc>// Use JSON for this request.</jc>
+ * 	c.post(<jsf>URI</jsf>, myBean).json().run().assertStatus().is(200);
+ * </p>
+ *
+ *
+ * <p class='w900'>
+ * The {@link RestClientBuilder} class provides convenience methods for setting common serializer and parser
+ * settings.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a basic REST client with JSON support.</jc>
+ * 	<jc>// Use single-quotes and whitespace.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().json().sq().ws().build();
+ *
+ * 	<jc>// Same, but using properties.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>()
+ * 		.json()
+ * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
+ * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+ * 		.build();
+ * </p>
+ *
  * <p class='w900'>
  * 	Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#serializer(Serializer) serializer(Serializer)}
- * 		<li class='jm'>{@link RestClientBuilder#serializer(Class) serializer(Class&lt;? extends Serializer>)}
  * 		<li class='jm'>{@link RestClientBuilder#parser(Parser) parser(Parser)}
- * 		<li class='jm'>{@link RestClientBuilder#parser(Class) parser(Class&lt;? extends Parser>)}
  * 		<li class='jm'>{@link RestClientBuilder#marshall(Marshall) marshall(Marshall)}
  * 	</ul>
  * </ul>
@@ -254,23 +298,10 @@ import org.apache.http.client.CookieStore;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#partSerializer(HttpPartSerializer) partSerializer(HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#partSerializer(Class) partSerializer(Class&lt;? extends HttpPartSerializer>)}
- * 		<li class='jm'>{@link RestClientBuilder#partParser(HttpPartParser) partParser(HttpPartParser)}
  * 		<li class='jm'>{@link RestClientBuilder#partParser(Class) partParser(Class&lt;? extends HttpPartParser>)}
  * 	</ul>
  * </ul>
- *
- * <p class='w900'>
- * The {@link RestClientBuilder} class also provides convenience methods for setting common serializer and parser
- * settings.
- *
- * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Create a basic REST client with JSON support.</jc>
- * 	<jc>// Use single-quotes and whitespace.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().json().sq().ws().build();
- * </p>
  *
  *
  * <h4 class='topic'>Request Headers</h4>
@@ -280,83 +311,31 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSchema,HttpPartSerializer)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema,HttpPartSerializer) header(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Object...) headers(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
- * 		<li class='jm'>{@link RestClientBuilder#accept(Object) accept(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#acceptCharset(Object) acceptCharset(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#acceptEncoding(Object) acceptEncoding(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#acceptLanguage(Object) acceptLanguage(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#authorization(Object) authorization(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#cacheControl(Object) cacheControl(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#clientVersion(Object) clientVersion(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#connection(Object) connection(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#contentLength(Object) contentLength(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#contentType(Object) contentType(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#date(Object) date(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#expect(Object) expect(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#forwarded(Object) forwarded(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#from(Object) from(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#host(Object) host(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#ifMatch(Object) ifMatch(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#ifModifiedSince(Object) ifModifiedSince(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#ifNoneMatch(Object) ifNoneMatch(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#ifRange(Object) ifRange(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#ifUnmodifiedSince(Object) ifUnmodifiedSince(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#maxForwards(Object) maxForwards(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#origin(Object) origin(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#pragma(Object) pragma(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#proxyAuthorization(Object) proxyAuthorization(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#range(Object) proxyAuthorization(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#referer(Object) referer(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#te(Object) te(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#userAgent(Object) userAgent(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#upgrade(Object) upgrade(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#via(Object) via(Object)}
- * 		<li class='jm'>{@link RestClientBuilder#warning(Object) warning(Object)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
- * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object) header(EnumSet&gt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
  * 		<li class='jm'>{@link RestRequest#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestRequest#headers(Object...) headers(Object...)}
- * 		<li class='jm'>{@link RestRequest#headers(AddFlag,Object...) headers(EnumSet&gt;AddFlag&gt;Object...)}
+ * 		<li class='jm'>{@link RestRequest#headers(AddFlag,Object...) headers(AddFlag;Object...)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(Object...) headers(Object...)}
- *		<li class='jm'>{@link RestRequest#accept(Object) accept(Object)}
- * 		<li class='jm'>{@link RestRequest#acceptCharset(Object) acceptCharset(Object)}
- * 		<li class='jm'>{@link RestRequest#acceptEncoding(Object) acceptEncoding(Object)}
- * 		<li class='jm'>{@link RestRequest#acceptLanguage(Object) acceptLanguage(Object)}
- * 		<li class='jm'>{@link RestRequest#authorization(Object) authorization(Object)}
- * 		<li class='jm'>{@link RestRequest#cacheControl(Object) cacheControl(Object)}
- * 		<li class='jm'>{@link RestRequest#clientVersion(Object) clientVersion(Object)}
- * 		<li class='jm'>{@link RestRequest#connection(Object) connection(Object)}
- * 		<li class='jm'>{@link RestRequest#contentLength(Object) contentLength(Object)}
- * 		<li class='jm'>{@link RestRequest#contentType(Object) contentType(Object)}
- * 		<li class='jm'>{@link RestRequest#date(Object) date(Object)}
- * 		<li class='jm'>{@link RestRequest#expect(Object) expect(Object)}
- * 		<li class='jm'>{@link RestRequest#forwarded(Object) forwarded(Object)}
- * 		<li class='jm'>{@link RestRequest#from(Object) from(Object)}
- * 		<li class='jm'>{@link RestRequest#hostHeader(Object) host(Object)}
- * 		<li class='jm'>{@link RestRequest#ifMatch(Object) ifMatch(Object)}
- * 		<li class='jm'>{@link RestRequest#ifModifiedSince(Object) ifModifiedSince(Object)}
- * 		<li class='jm'>{@link RestRequest#ifNoneMatch(Object) ifNoneMatch(Object)}
- * 		<li class='jm'>{@link RestRequest#ifRange(Object) ifRange(Object)}
- * 		<li class='jm'>{@link RestRequest#ifUnmodifiedSince(Object) ifUnmodifiedSince(Object)}
- * 		<li class='jm'>{@link RestRequest#maxForwards(Object) maxForwards(Object)}
- * 		<li class='jm'>{@link RestRequest#origin(Object) origin(Object)}
- * 		<li class='jm'>{@link RestRequest#pragma(Object) pragma(Object)}
- * 		<li class='jm'>{@link RestRequest#proxyAuthorization(Object) proxyAuthorization(Object)}
- * 		<li class='jm'>{@link RestRequest#range(Object) proxyAuthorization(Object)}
- * 		<li class='jm'>{@link RestRequest#referer(Object) referer(Object)}
- * 		<li class='jm'>{@link RestRequest#te(Object) te(Object)}
- * 		<li class='jm'>{@link RestRequest#userAgent(Object) userAgent(Object)}
- * 		<li class='jm'>{@link RestRequest#upgrade(Object) upgrade(Object)}
- * 		<li class='jm'>{@link RestRequest#via(Object) via(Object)}
- * 		<li class='jm'>{@link RestRequest#warning(Object) warning(Object)}
  * 	</ul>
  * </ul>
+ *
+ * <p>
+ * Additionally, methods are provided on the client builder and per request for all standard HTTP headers
+ * such as {@link RestClientBuilder#authorization(Object) authorization(Object)}.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
@@ -364,29 +343,36 @@ import org.apache.http.client.CookieStore;
  * 	RestClient c = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, <js>"Foo"</js>).build();
  *
  * 	<jc>// Or do it on every request.</jc>
- * 	String response = c.get(<jsf>URL</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+ * 	String response = c.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
  *
  * 	<jc>// Or use an HttpHeader.</jc>
- * 	response = c.get(<jsf>URL</jsf>).headers(<jk>new</jk> Authorization(<js>"Foo"</js>)).run().getBody().asString();
+ * 	response = c.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
  * </p>
  *
  * <p class='w900'>
- * Note that in the methods above, header values are specified as objects which are converted to strings at runtime.
- * This allows you to pass in headers whose values may change over time (such as <c>Authorization</c> headers
+ * The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
  * which may need to change every few minutes).
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jk>public class</jk> AuthGenerator {
- * 		<jk>public</jk> String toString() {
- * 			<jc>// Generate an updated auth token.</jc>
- * 		}
- * 	}
- *
- * 	<jc>// Create a client that adds an Authorization header to every request.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().authorization(<jk>new</jk> AuthGenerator()).build();
+ * 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
  * </p>
+ *
+ * The {@link HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on both requests
+ * and responses.
+ *
+ * <p class='bcode w800'>
+ * 	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
+ * 	RestClient c = RestClient.<jsm>create</jsm>()
+ * 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+ * 		.build();
+ * </p>
+ *
+ * <p>
+ * The methods with {@link AddFlag} parameters allow you to control whether new headers get appended, prepended, or
+ * replace existing headers with the same name.
  *
  * <ul class='notes'>
  * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
@@ -401,16 +387,20 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema,HttpPartSerializer) query(String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema,HttpPartSerializer) query(String,Object,HttpPartSchema,HttpPartSerializer)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier,HttpPartSchema,HttpPartSerializer) query(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#queries(Object...) queries(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#query(String,Object) query(String,Object)}
- * 		<li class='jm'>{@link RestRequest#query(AddFlag,String,Object) query(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
  * 		<li class='jm'>{@link RestRequest#queries(Object...) queries(Object...)}
- * 		<li class='jm'>{@link RestRequest#queries(AddFlag,Object...) queries(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
  * 		<li class='jm'>{@link RestRequest#queryPairs(Object...) queryPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 	</ul>
@@ -422,11 +412,11 @@ import org.apache.http.client.CookieStore;
  * 	RestClient c = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
  *
  * 	<jc>// Or do it on every request.</jc>
- * 	String response = c.get(<jsf>URL</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+ * 	String response = c.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
  * </p>
  *
  * <ul class='notes'>
- * 	<li>Like header values, you can pass in objects that get converted to strings at runtime.
+ * 	<li>Like header values, dynamic values and OpenAPI schemas are supported.
  * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
@@ -440,23 +430,27 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema,HttpPartSerializer) formData(String,Object,HttpPartSerializer,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema,HttpPartSerializer) formData(String,Object,HttpPartSchema,HttpPartSerializer)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier,HttpPartSchema,HttpPartSerializer) formData(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#formDatas(Object...) formDatas(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
  * 	</ul>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
- * 		<li class='jm'>{@link RestRequest#formData(AddFlag,String,Object) formData(EnumSet&lt;AddFlag&gt;,String,Object)}
+ * 		<li class='jm'>{@link RestRequest#formData(AddFlag,String,Object) formData(AddFlag,String,Object)}
  * 		<li class='jm'>{@link RestRequest#formDatas(Object...) formDatas(Object...)}
- * 		<li class='jm'>{@link RestRequest#formDatas(AddFlag,Object...) formDatas(EnumSet&lt;AddFlag&gt;,Object...)}
+ * 		<li class='jm'>{@link RestRequest#formDatas(AddFlag,Object...) formDatas(AddFlag,Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 	</ul>
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>Like header values, you can pass in objects that get converted to strings at runtime.
+ * 	<li>Like header values, dynamic values and OpenAPI schemas are supported.
  * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
@@ -493,6 +487,8 @@ import org.apache.http.client.CookieStore;
  * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 		<li class='jc'>
  * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+ * 		<li class='jc'>
+ * 			{@link Supplier} - A supplier of anything on this list.
  * 	</ul>
  *
  * <ul class='notes'>
@@ -512,27 +508,27 @@ import org.apache.http.client.CookieStore;
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
  * 		<li class='jm'><c>{@link RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link StatusLine}</c>
- * 		<li class='jm'><c>{@link RestResponse#getStatusLine(Mutable) getStatusLine(Mutable&lt;StatusLine&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
- * 		<li class='jm'><c>{@link RestResponse#getStatusCode(Mutable) getStatusCode(Mutable&lt;Integer&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponse#getReasonPhrase(Mutable) getReasonPhrase(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link RestResponseStatusLineAssertion}</c>
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
- * The methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
- *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Only interested in status code.</jc>
- * 	<jk>int</jk> statusCode = c.get(<jsf>URL</jsf>).complete().getStatusCode();
+ * 	<jk>int</jk> statusCode = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+ * </p>
  *
+ * <p class='w900'>
+ * Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
  *   <jc>// Interested in multiple values.</jc>
  * 	Mutable&lt;Integer&gt; statusCode;
  * 	Mutable&lt;String&gt; reasonPhrase;
- * 	c.get(<jsf>URL</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
+ * 	c.get(<jsf>URI</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
  * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+statusCode.get()+<js>", reasonPhrase="</js>+reasonPhrase.get());
  * </p>
  *
@@ -548,15 +544,15 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Status assertion using a static value.</jc>
- * 	String body = c.get(<jsf>URL</jsf>)
+ * 	String body = c.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().is(200)
+ * 		.assertStatus().code().isBetween(200,399)
  * 		.getBody().asString();
  *
  * 	<jc>// Status assertion using a predicate.</jc>
- * 	String body = c.get(<jsf>URL</jsf>)
+ * 	String body = c.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().passes(x -&gt; x &lt; 400)
+ * 		.assertStatus().code().passes(x -&gt; x &lt; 400)
  * 		.getBody().asString();
  * </p>
  *
@@ -588,7 +584,7 @@ import org.apache.http.client.CookieStore;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// See if response contains Location header.</jc>
- * 	<jk>boolean</jk> hasLocationHeader = c.get(<jsf>URL</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+ * 	<jk>boolean</jk> hasLocationHeader = c.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
  * </p>
  *
  * <p class='w900'>
@@ -600,32 +596,42 @@ import org.apache.http.client.CookieStore;
  * 	<ul>
  * 		<li class='jm'><c>{@link RestResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asString(Mutable) asString(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asStringOrElse(Mutable,String) asStringOrElse(Mutable&lt;String&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(Mutable,Type,Type...) as(Mutable&lt;T&gt;,Type,Type...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk>T</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(Mutable,Class) as(Mutable&lt;T&gt;,Class&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(ClassMeta) as(ClassMeta&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#as(Mutable,ClassMeta) as(Mutable&lt;T&gt;,ClassMeta&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Mutable,Type,Type...) asOptional(Mutable&lt;Optional&lt;T&gt;&gt;,Type,Type...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Mutable,Class) asOptional(Mutable&lt;Optional&lt;T&gt;&gt;,Class&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(ClassMeta) asOptional(ClassMeta&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asOptional(Mutable,ClassMeta) asOptional(Mutable&lt;Optional&lt;T&gt;&gt;,ClassMeta&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,Pattern) asMatcher(Mutable&lt;Matcher&gt;,Pattern)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *
+ * <p>
+ * Assertion methods are also provided for fluent-style calls:
+ *
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestResponseHeader}
+ * 	<ul>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link FluentIntegerAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link FluentLongAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link FluentDateAssertion}</c>
+ * 	</ul>
+ * <ul>
+ *
+ * <p>
+ * Note how in the following example, the fluent assertion returns control to the {@link RestResponse} object after
+ * the assertion has been completed:
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Assert the response content type is any sort of JSON.</jc>
+ * 	String body = c.get(<jsf>URI</jsf>)
+ * 		.run()
+ * 		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
+ * 		.getBody().asString();
+ * </p>
  *
  * <h4 class='topic'>Response Body</h4>
  *
@@ -651,61 +657,40 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'><c>{@link RestResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
  * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,Charset) pipeTo(Writer,String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,boolean) pipeTo(Writer,boolean)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#pipeTo(Writer,Charset,boolean) pipeTo(Writer,String,boolean)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(Mutable,Type,Type...) as(Mutable&lt;T&gt;,Type,Type...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(Mutable,Class) as(Mutable&lt;T&gt;,Class&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(ClassMeta) as(ClassMeta&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link RestResponseBody#as(Mutable,ClassMeta) as(Mutable&lt;T&gt;,ClassMeta&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Mutable,Class) asFuture(Mutable&lt;Future&lt;T&gt;&gt;,Class&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(ClassMeta) asFuture(ClassMeta&lt;T&gt;)} <jk>returns</jk>Future&lt;T&gt; </c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Mutable,ClassMeta) asFuture(Mutable&lt;Future&lt;T&gt;&gt;,ClassMeta&lt;T&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asFuture(Mutable,Type,Type...) asFuture(Mutable&lt;Future&lt;T&gt;&gt;,Type,Type...)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asString(Mutable) asString(Mutable&lt;String&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asStringFuture(Mutable) asStringFuture(Mutable&lt;Future&lt;String&gt;&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asAbbreviatedString(Mutable,int) asAbbreviatedString(Mutable&lt;String&gt;,int)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link PojoRest}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest(Mutable,Class) asPojoRest(Mutable&lt;PojoRest&gt;,Class&lt;?&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest() asPojoRest()} <jk>returns</jk> {@link PojoRest}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asPojoRest(Mutable) asPojoRest(Mutable&lt;PojoRest&gt;)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,Pattern) asMatcher(Mutable&lt;Matcher&gt;,Pattern)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String) asMatcher(Mutable&lt;Matcher&gt;,String)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(String,int) asMatcher(String,int)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#asMatcher(Mutable,String,int) asMatcher(Mutable&lt;Matcher&gt;,String,int)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link RestResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
  * 	</ul>
  * </ul>
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Parse into a linked-list of strings.</jc>
- * 	List&lt;String&gt; l = client.get(<jsf>URL</jsf>).run()
+ * 	List&lt;String&gt; l = client.get(<jsf>URI</jsf>).run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of beans.</jc>
- * 	List&lt;MyBean&gt; l = client.get(<jsf>URL</jsf>).run()
+ * 	List&lt;MyBean&gt; l = client.get(<jsf>URI</jsf>).run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
- * 	List&lt;List&lt;String&gt;&gt; l = client.get(<jsf>URL</jsf>).run()
+ * 	List&lt;List&lt;String&gt;&gt; l = client.get(<jsf>URI</jsf>).run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map of string keys/values.</jc>
- * 	Map&lt;String,String&gt; m = client.get(<jsf>URL</jsf>).run()
+ * 	Map&lt;String,String&gt; m = client.get(<jsf>URI</jsf>).run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
- * 	Map&lt;String,List&lt;MyBean&gt;&gt; m = client.get(<jsf>URL</jsf>).run()
+ * 	Map&lt;String,List&lt;MyBean&gt;&gt; m = client.get(<jsf>URI</jsf>).run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
@@ -713,84 +698,38 @@ import org.apache.http.client.CookieStore;
  * The response body can only be consumed once.  However, the {@link RestResponse#cacheBody()} and {@link RestResponseBody#cache()} methods are provided
  * to cache the response body in memory so that you can perform several operations against it.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <p>
+ * Assertion methods are also provided for fluent-style calls:
+ *
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestResponseBody}
+ * 	<ul>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertString() assertString()} <jk>returns</jk> {@link FluentStringAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link FluentObjectAssertion}</c>
+ * 		<li class='jm'><c>{@link RestResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link FluentByteArrayAssertion}</c>
+ * 	</ul>
+ * </ul>
+ *
+ * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Cache the response body so that you can perform multiple operations against it.</jc>
- * 	String body = client.get(<jsf>URL</jsf>).run()
- * 		.getBody().cache().assertValueContains(<js>"Success"</js>)
+ * 	String body = client.get(<jsf>URI</jsf>).run()
+ * 		.getBody().assertString().contains(<js>"Success"</js>)
  * 		.getBody().asString();
  * </p>
  *
+ * <p>
+ * Object assertions allow you to parse the response body into a POJO and then perform various tests on that resulting
+ * POJO.
  *
- * <h4 class='topic'>Customizing Apache HttpClient</h4>
- *
- * <p class='w900'>
- * Several methods are provided for customizing the underlying HTTP client and client builder classes:
- * <ul class='javatree'>
- * 	<li class='jc'>{@link RestClientBuilder}
- * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#httpClientBuilder(HttpClientBuilder) httpClientBuilder(HttpClientBuilder)}
- * 		<li class='jm'>{@link RestClientBuilder#createHttpClientBuilder() createHttpClientBuilder()}
- * 		<li class='jm'>{@link RestClientBuilder#createHttpClient() createHttpClient()}
- * 		<li class='jm'>{@link RestClientBuilder#createConnectionManager() createConnectionManager()}
- * 		<li class='jm'>{@link RestClientBuilder#pooled() pooled()}
- * 	</ul>
- * </ul>
- *
- * <p class='w900'>
- * Additionally, all methods on the <c>HttpClientBuilder</c> class are also exposed with fluent setters:
- * <ul class='javatree'>
- * 	<li class='jc'>{@link RestClientBuilder}
- * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#disableRedirectHandling() disableRedirectHandling()}
- * 		<li class='jm'>{@link RestClientBuilder#redirectStrategy(RedirectStrategy) redirectStrategy(RedirectStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultCookieSpecRegistry(Lookup) defaultCookieSpecRegistry(Lookup&lt;CookieSpecProvider>)}
- * 		<li class='jm'>{@link RestClientBuilder#requestExecutor(HttpRequestExecutor) requestExecutor(HttpRequestExecutor)}
- * 		<li class='jm'>{@link RestClientBuilder#sslHostnameVerifier(HostnameVerifier) sslHostnameVerifier(HostnameVerifier)}
- * 		<li class='jm'>{@link RestClientBuilder#publicSuffixMatcher(PublicSuffixMatcher) publicSuffixMatcher(PublicSuffixMatcher)}
- * 		<li class='jm'>{@link RestClientBuilder#sslContext(SSLContext) sslContext(SSLContext)}
- * 		<li class='jm'>{@link RestClientBuilder#sslSocketFactory(LayeredConnectionSocketFactory) sslSocketFactory(LayeredConnectionSocketFactory)}
- * 		<li class='jm'>{@link RestClientBuilder#maxConnTotal(int) maxConnTotal(int)}
- * 		<li class='jm'>{@link RestClientBuilder#maxConnPerRoute(int) maxConnPerRoute(int)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultSocketConfig(SocketConfig) defaultSocketConfig(SocketConfig)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultConnectionConfig(ConnectionConfig) defaultConnectionConfig(ConnectionConfig)}
- * 		<li class='jm'>{@link RestClientBuilder#connectionTimeToLive(long,TimeUnit) connectionTimeToLive(long,TimeUnit)}
- * 		<li class='jm'>{@link RestClientBuilder#connectionManager(HttpClientConnectionManager) connectionManager(HttpClientConnectionManager)}
- * 		<li class='jm'>{@link RestClientBuilder#connectionManagerShared(boolean) connectionManagerShared(boolean)}
- * 		<li class='jm'>{@link RestClientBuilder#connectionReuseStrategy(ConnectionReuseStrategy) connectionReuseStrategy(ConnectionReuseStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#keepAliveStrategy(ConnectionKeepAliveStrategy) keepAliveStrategy(ConnectionKeepAliveStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#targetAuthenticationStrategy(AuthenticationStrategy) targetAuthenticationStrategy(AuthenticationStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#proxyAuthenticationStrategy(AuthenticationStrategy) proxyAuthenticationStrategy(AuthenticationStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#userTokenHandler(UserTokenHandler) userTokenHandler(UserTokenHandler)}
- * 		<li class='jm'>{@link RestClientBuilder#disableConnectionState() disableConnectionState()}
- * 		<li class='jm'>{@link RestClientBuilder#schemePortResolver(SchemePortResolver) schemePortResolver(SchemePortResolver)}
- * 		<li class='jm'>{@link RestClientBuilder#userAgent(String) userAgent(String)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultHeaders(Collection) defaultHeaders(Collection&lt;? extends Header>)}
- * 		<li class='jm'>{@link RestClientBuilder#addInterceptorFirst(HttpResponseInterceptor) addInterceptorFirst(HttpResponseInterceptor)}
- * 		<li class='jm'>{@link RestClientBuilder#addInterceptorLast(HttpResponseInterceptor) addInterceptorLast(HttpResponseInterceptor)}
- * 		<li class='jm'>{@link RestClientBuilder#addInterceptorFirst(HttpRequestInterceptor) addInterceptorFirst(HttpRequestInterceptor)}
- * 		<li class='jm'>{@link RestClientBuilder#addInterceptorLast(HttpRequestInterceptor) addInterceptorLast(HttpRequestInterceptor)}
- * 		<li class='jm'>{@link RestClientBuilder#disableCookieManagement() disableCookieManagement()}
- * 		<li class='jm'>{@link RestClientBuilder#disableContentCompression() disableContentCompression()}
- * 		<li class='jm'>{@link RestClientBuilder#disableAuthCaching() disableAuthCaching()}
- * 		<li class='jm'>{@link RestClientBuilder#httpProcessor(HttpProcessor) httpProcessor(HttpProcessor)}
- * 		<li class='jm'>{@link RestClientBuilder#retryHandler(HttpRequestRetryHandler) retryHandler(HttpRequestRetryHandler)}
- * 		<li class='jm'>{@link RestClientBuilder#disableAutomaticRetries() disableAutomaticRetries()}
- * 		<li class='jm'>{@link RestClientBuilder#proxy(HttpHost proxy) proxy(HttpHost proxy)}
- * 		<li class='jm'>{@link RestClientBuilder#routePlanner(HttpRoutePlanner) routePlanner(HttpRoutePlanner)}
- * 		<li class='jm'>{@link RestClientBuilder#connectionBackoffStrategy(ConnectionBackoffStrategy) connectionBackoffStrategy(ConnectionBackoffStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#backoffManager(BackoffManager) backoffManager(BackoffManager)}
- * 		<li class='jm'>{@link RestClientBuilder#serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy) serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultCookieStore(CookieStore) defaultCookieStore(CookieStore)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultCredentialsProvider(CredentialsProvider) defaultCredentialsProvider(CredentialsProvider)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultAuthSchemeRegistry(Lookup) defaultAuthSchemeRegistry(Lookup&lt;AuthSchemeProvider>)}
- * 		<li class='jm'>{@link RestClientBuilder#contentDecoderRegistry(Map) contentDecoderRegistry(Map&lt;String,InputStreamFactory>)}
- * 		<li class='jm'>{@link RestClientBuilder#defaultRequestConfig(RequestConfig) defaultRequestConfig(RequestConfig)}
- * 		<li class='jm'>{@link RestClientBuilder#useSystemProperties() useSystemProperties()}
- * 		<li class='jm'>{@link RestClientBuilder#evictExpiredConnections() evictExpiredConnections()}
- * 		<li class='jm'>{@link RestClientBuilder#evictIdleConnections(long,TimeUnit) evictIdleConnections(long,TimeUnit)}
- * 	</ul>
- * </ul>
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Parse bean into POJO and then validate contents.</jc>
+ * 	MyBean b = client.get(<jsf>URI</jsf>)
+ * 		.run()
+ * 		.getBody().assertObject(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>)
+ * 		.getBody().as(MyBean.<jk>class</jk>);
+ * </p>
  *
  *
  * <h4 class='topic'>Custom Call Handlers</h4>
@@ -830,6 +769,45 @@ import org.apache.http.client.CookieStore;
  * 	</ul>
  * </ul>
  *
+ * <p>
+ * The following example shows the results of logging all requests that end with <c>/bean</c>.
+ *
+ * <h5 class='figure'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	MyBean b = RestClient
+ * 		.<jsm>create</jsm>()
+ * 		.simpleJson()
+ * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (req,res)-&gt;req.getUri().endsWith(<js>"/bean"</js>))
+ * 		.logToConsole()
+ * 		.build()
+ * 		.get("http://localhost/bean")
+ * 		.run()
+ * 		.getBody().as(MyBean.<jk>class</jk>);
+ * </p>
+ *
+ * <p>
+ * This produces the following console output:
+ *
+ * <p class='bcode w800 console'>
+ * 	=== HTTP Call (outgoing) ======================================================
+ * 	=== REQUEST ===
+ * 	POST http://localhost/bean
+ * 	---request headers---
+ * 		Accept: application/json+simple
+ * 	---request entity---
+ * 	Content-Type: application/json+simple
+ * 	---request content---
+ * 	{f:1}
+ * 	=== RESPONSE ===
+ * 	HTTP/1.1 200
+ * 	---response headers---
+ * 		Content-Type: application/json
+ * 	---response content---
+ * 	{f:1}
+ * === END =======================================================================",
+ * </p>
+ *
+ *
  * <p class='notes w900'>
  * It should be noted that if you enable request logging detail level {@link DetailLevel#FULL}, response bodies will be cached by default which may introduce
  * a performance penalty.
@@ -856,7 +834,8 @@ import org.apache.http.client.CookieStore;
  * <h4 class='topic'>Interceptors</h4>
  *
  * <p class='w900'>
- * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses.
+ * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
+ * the existing {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} APIs.
  *
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
@@ -874,10 +853,6 @@ import org.apache.http.client.CookieStore;
  * 		<li class='jm'>{@link RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
  * 	</ul>
  * </ul>
- *
- * <p class='w900'>
- * Note that the {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} classes can also be used for
- * intercepting requests.
  *
  *
  * <h4 class='topic'>REST Proxies</h4>
@@ -940,6 +915,60 @@ import org.apache.http.client.CookieStore;
  *
  * <br>
  * <hr class='w900'>
+ * <h4 class='topic'>Customizing Apache HttpClient</h4>
+ *
+ * <p class='w900'>
+ * Several methods are provided for customizing the underlying HTTP client and client builder classes:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestClientBuilder}
+ * 	<ul>
+ * 		<li class='jm'>{@link RestClientBuilder#httpClientBuilder(HttpClientBuilder) httpClientBuilder(HttpClientBuilder)} - Set the client builder yourself.
+ * 		<li class='jm'>{@link RestClientBuilder#createHttpClientBuilder() createHttpClientBuilder()} - Override to create the client builder.
+ * 		<li class='jm'>{@link RestClientBuilder#createHttpClient() createHttpClient()} - Override to create the client.
+ * 		<li class='jm'>{@link RestClientBuilder#createConnectionManager() createConnectionManager()} - Override to create the connection management.
+ * 	</ul>
+ * </ul>
+ *
+ * <p class='w900'>
+ * Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a client with customized HttpClient settings.</jc>
+ * 	MyBean b = RestClient.<jsm>create</jsm>()
+ * 		.disableRedirectHandling()
+ * 		.connectionManager(myConnectionManager)
+ * 		.addInterceptorFirst(myHttpRequestInterceptor)
+ * 		.build();
+ * </p>
+ *
+ *
+ * <h4 class='topic'>Extending RestClient</h4>
+ *
+ * <p>
+ * The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
+ * The following example that overrides the primary run method shows how this can be done.
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jk>public class<<jk>jk> MyRestClient <jk>extends</jk> RestClient {
+ *
+ * 		<jc>// Must provide this constructor!</jc>
+ * 		<jk>public</jk> MyRestClient(PropertyStore ps) {
+ * 			<jk>super</jk>(ps);
+ * 		}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+ * 			<jc>// Perform special handling of requests.</jc>
+ * 		}
+ * 	}
+ *
+ * 	<jc>// Instantiate your client.</jc>
+ * 	MyRestClient client = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
+ * </p>
+ *
+ *
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-client}
@@ -1103,7 +1132,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URL</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).runFuture();
 	 * 	<jc>// Do some other stuff</jc>
 	 * 	<jk>try</jk> {
 	 * 		String body = f.get().getBody().asString();
@@ -1111,7 +1140,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	}
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
 	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
+	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
 	 * </p>
@@ -1790,15 +1819,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#rootUrl(Object)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#rootUri(Object)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When set, relative URL strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
+	 * When set, relative URI strings passed in through the various rest call methods (e.g. {@link RestClient#get(Object)}
 	 * will be prefixed with the specified root.
-	 * <br>This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
+	 * <br>This root URI is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URI string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1874,7 +1903,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final RestCallHandler callHandler;
-	private final String rootUrl;
+	private final String rootUri;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
 	private final Logger logger;
@@ -1930,7 +1959,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
-		this.rootUrl = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
+		this.rootUri = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, isDebug());
 		this.ignoreErrors = getBooleanProperty(RESTCLIENT_ignoreErrors, false);
 		this.logger = getInstanceProperty(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
@@ -2099,10 +2128,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Perform a <c>GET</c> request against the specified URL.
+	 * Perform a <c>GET</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2116,12 +2145,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest get(Object url) throws RestCallException {
-		return request("GET", url, false);
+	public RestRequest get(Object uri) throws RestCallException {
+		return request("GET", uri, false);
 	}
 
 	/**
-	 * Perform a <c>GET</c> request against the root URL.
+	 * Perform a <c>GET</c> request against the root URI.
 	 *
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
@@ -2133,10 +2162,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Perform a <c>PUT</c> request against the specified URL.
+	 * Perform a <c>PUT</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2146,7 +2175,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	The object to serialize and transmit to the URI as the body of the request.
 	 * 	Can be of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>
@@ -2172,15 +2201,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest put(Object url, Object body) throws RestCallException {
-		return request("PUT", url, true).body(body);
+	public RestRequest put(Object uri, Object body) throws RestCallException {
+		return request("PUT", uri, true).body(body);
 	}
 
 	/**
-	 * Perform a <c>PUT</c> request against the specified URL using a plain text body bypassing the serializer.
+	 * Perform a <c>PUT</c> request against the specified URI using a plain text body bypassing the serializer.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2190,15 +2219,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
 	 * @param contentType The content type of the request.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest put(Object url, String body, String contentType) throws RestCallException {
-		return request("PUT", url, true).bodyString(body).contentType(contentType);
+	public RestRequest put(Object uri, String body, String contentType) throws RestCallException {
+		return request("PUT", uri, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2208,8 +2237,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * You must call either {@link RestRequest#body(Object)} or {@link RestRequest#formData(String, Object)}
 	 * to set the contents on the result object.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2223,19 +2252,19 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException REST call failed.
 	 */
-	public RestRequest put(Object url) throws RestCallException {
-		return request("PUT", url, true);
+	public RestRequest put(Object uri) throws RestCallException {
+		return request("PUT", uri, true);
 	}
 
 	/**
-	 * Perform a <c>POST</c> request against the specified URL.
+	 * Perform a <c>POST</c> request against the specified URI.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2245,7 +2274,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	The object to serialize and transmit to the URI as the body of the request.
 	 * 	Can be of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>
@@ -2271,15 +2300,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest post(Object url, Object body) throws RestCallException {
-		return request("POST", url, true).body(body);
+	public RestRequest post(Object uri, Object body) throws RestCallException {
+		return request("POST", uri, true).body(body);
 	}
 
 	/**
-	 * Perform a <c>POST</c> request against the specified URL as a plain text body bypassing the serializer.
+	 * Perform a <c>POST</c> request against the specified URI as a plain text body bypassing the serializer.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2289,7 +2318,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
 	 * @param contentType
 	 * 	The content type of the request.
 	 * @return
@@ -2297,8 +2326,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest post(Object url, String body, String contentType) throws RestCallException {
-		return request("POST", url, true).bodyString(body).contentType(contentType);
+	public RestRequest post(Object uri, String body, String contentType) throws RestCallException {
+		return request("POST", uri, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2312,8 +2341,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<li>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2327,15 +2356,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException REST call failed.
 	 */
-	public RestRequest post(Object url) throws RestCallException {
-		return request("POST", url, true);
+	public RestRequest post(Object uri) throws RestCallException {
+		return request("POST", uri, true);
 	}
 
 	/**
-	 * Perform a <c>DELETE</c> request against the specified URL.
+	 * Perform a <c>DELETE</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2349,15 +2378,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest delete(Object url) throws RestCallException {
-		return request("DELETE", url, false);
+	public RestRequest delete(Object uri) throws RestCallException {
+		return request("DELETE", uri, false);
 	}
 
 	/**
-	 * Perform an <c>OPTIONS</c> request against the specified URL.
+	 * Perform an <c>OPTIONS</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2371,15 +2400,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest options(Object url) throws RestCallException {
-		return request("OPTIONS", url, true);
+	public RestRequest options(Object uri) throws RestCallException {
+		return request("OPTIONS", uri, true);
 	}
 
 	/**
-	 * Perform a <c>HEAD</c> request against the specified URL.
+	 * Perform a <c>HEAD</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2393,16 +2422,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest head(Object url) throws RestCallException {
-		return request("HEAD", url, false);
+	public RestRequest head(Object uri) throws RestCallException {
+		return request("HEAD", uri, false);
 	}
 
 	/**
 	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URL.
+	 * against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2412,7 +2441,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	The object to serialize and transmit to the URI as the body of the request.
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link NameValuePair} - URL-encoded as a single name-value pair.
 	 * 		<li class='jc'>{@link NameValuePair} array - URL-encoded as name value pairs.
@@ -2427,8 +2456,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest formPost(Object url, Object body) throws RestCallException {
-		RestRequest req = request("POST", url, true);
+	public RestRequest formPost(Object uri, Object body) throws RestCallException {
+		RestRequest req = request("POST", uri, true);
 		try {
 			if (body instanceof Supplier)
 				body = ((Supplier<?>)body).get();
@@ -2471,8 +2500,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	/**
 	 * Same as {@link #formPost(Object, Object)} but doesn't specify the input yet.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2486,16 +2515,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest formPost(Object url) throws RestCallException {
-		return request("POST", url, true);
+	public RestRequest formPost(Object uri) throws RestCallException {
+		return request("POST", uri, true);
 	}
 
 	/**
 	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URL.
+	 * against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2513,15 +2542,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest formPostPairs(Object url, Object...parameters) throws RestCallException {
-		return formPost(url, NameValuePairSupplier.ofPairs(parameters));
+	public RestRequest formPostPairs(Object uri, Object...parameters) throws RestCallException {
+		return formPost(uri, NameValuePairSupplier.ofPairs(parameters));
 	}
 
 	/**
-	 * Perform a <c>PATCH</c> request against the specified URL.
+	 * Perform a <c>PATCH</c> request against the specified URI.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2531,7 +2560,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	The object to serialize and transmit to the URI as the body of the request.
 	 * 	Can be of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>
@@ -2557,15 +2586,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest patch(Object url, Object body) throws RestCallException {
-		return request("PATCH", url, true).body(body);
+	public RestRequest patch(Object uri, Object body) throws RestCallException {
+		return request("PATCH", uri, true).body(body);
 	}
 
 	/**
-	 * Perform a <c>PATCH</c> request against the specified URL as a plain text body bypassing the serializer.
+	 * Perform a <c>PATCH</c> request against the specified URI as a plain text body bypassing the serializer.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2575,7 +2604,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li class='jc'>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The object to serialize and transmit to the URL as the body of the request bypassing the serializer.
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
 	 * @param contentType
 	 * 	The content type of the request.
 	 * @return
@@ -2583,8 +2612,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest patch(Object url, String body, String contentType) throws RestCallException {
-		return request("PATCH", url, true).bodyString(body).contentType(contentType);
+	public RestRequest patch(Object uri, String body, String contentType) throws RestCallException {
+		return request("PATCH", uri, true).bodyString(body).contentType(contentType);
 	}
 
 	/**
@@ -2593,8 +2622,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <p>
 	 * You must call {@link RestRequest#body(Object)} to set the contents on the result object.
 	 *
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2608,8 +2637,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException REST call failed.
 	 */
-	public RestRequest patch(Object url) throws RestCallException {
-		return request("PATCH", url, true);
+	public RestRequest patch(Object uri) throws RestCallException {
+		return request("PATCH", uri, true);
 	}
 
 
@@ -2624,11 +2653,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * The call string can be any of the following formats:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"[method] [url]"</js> - e.g. <js>"GET http://localhost/callback"</js>
+	 * 		<js>"[method] [uri]"</js> - e.g. <js>"GET http://localhost/callback"</js>
 	 * 	<li>
-	 * 		<js>"[method] [url] [payload]"</js> - e.g. <js>"POST http://localhost/callback some text payload"</js>
+	 * 		<js>"[method] [uri] [payload]"</js> - e.g. <js>"POST http://localhost/callback some text payload"</js>
 	 * 	<li>
-	 * 		<js>"[method] [headers] [url] [payload]"</js> - e.g. <js>"POST {'Content-Type':'text/json'} http://localhost/callback {'some':'json'}"</js>
+	 * 		<js>"[method] [headers] [uri] [payload]"</js> - e.g. <js>"POST {'Content-Type':'text/json'} http://localhost/callback {'some':'json'}"</js>
 	 * </ul>
 	 * <p>
 	 * The payload will always be sent using a simple {@link StringEntity}.
@@ -2643,10 +2672,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		callString = emptyIfNull(callString);
 
 		// S01 - Looking for end of method.
-		// S02 - Found end of method, looking for beginning of URL or headers.
+		// S02 - Found end of method, looking for beginning of URI or headers.
 		// S03 - Found beginning of headers, looking for end of headers.
-		// S04 - Found end of headers, looking for beginning of URL.
-		// S05 - Found beginning of URL, looking for end of URL.
+		// S04 - Found end of headers, looking for beginning of URI.
+		// S05 - Found beginning of URI, looking for end of URI.
 
 		StateMachineState state = S01;
 
@@ -2706,8 +2735,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Perform a generic REST call.
 	 *
 	 * @param method The HTTP method.
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2744,8 +2773,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(HttpMethod method, Object url, Object body) throws RestCallException {
-		RestRequest rc = request(method.name(), url, method.hasContent());
+	public RestRequest request(HttpMethod method, Object uri, Object body) throws RestCallException {
+		RestRequest rc = request(method.name(), uri, method.hasContent());
 		if (method.hasContent())
 			rc.body(body);
 		return rc;
@@ -2755,8 +2784,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Perform a generic REST call.
 	 *
 	 * @param method The HTTP method.
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2770,8 +2799,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(HttpMethod method, Object url) throws RestCallException {
-		RestRequest rc = request(method.name(), url, method.hasContent());
+	public RestRequest request(HttpMethod method, Object uri) throws RestCallException {
+		RestRequest rc = request(method.name(), uri, method.hasContent());
 		return rc;
 	}
 
@@ -2783,8 +2812,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
 	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
-	 * @param url
-	 * 	The URL of the remote REST resource.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
 	 * 	Can be any of the following types:
 	 * 	<ul class='spaced-list'>
 	 * 		<li class='jc'>{@link URIBuilder}
@@ -2799,7 +2828,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(String method, Object url, boolean hasBody) throws RestCallException {
+	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
 		if (isClosed) {
 			Exception e2 = null;
 			if (closedStack != null) {
@@ -2810,7 +2839,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(url, rootUrl), method.toUpperCase(Locale.ENGLISH), hasBody);
+		RestRequest req = createRequest(toURI(uri, rootUri), method.toUpperCase(Locale.ENGLISH), hasBody);
 
 		for (Object o : headers)
 			req.header(BasicHeader.cast(o));
@@ -2863,29 +2892,29 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Create a new proxy interface against a 3rd-party REST interface.
 	 *
 	 * <p>
-	 * The URL to the REST interface is based on the following values:
+	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
+	 * 	<li>The {@link RestClientBuilder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
 	 * <p>
-	 * The URL calculation is as follows:
+	 * The URI calculation is as follows:
 	 * <ul>
 	 * 	<li><c>remote-path</c> - If remote path is absolute.
-	 * 	<li><c>root-url/remote-path</c> - If remote path is relative and root-url has been specified.
-	 * 	<li><c>root-url/class-name</c> - If remote path is not specified.
+	 * 	<li><c>root-uri/remote-path</c> - If remote path is relative and root-uri has been specified.
+	 * 	<li><c>root-uri/class-name</c> - If remote path is not specified.
 	 * </ul>
 	 *
 	 * <p>
-	 * If the information is not available to resolve to an absolute URL, a {@link RemoteMetadataException} is thrown.
+	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
-	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)
+	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturi/myinterface1"</js>)
 	 * 	<jk>public interface</jk> MyInterface1 { ... }
 	 *
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myinterface2"</js>)
@@ -2893,23 +2922,23 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
 	 *
-	 * 	<jc>// Resolves to "http://localhost/resturl/myinterface1"</jc>
+	 * 	<jc>// Resolves to "http://localhost/resturi/myinterface1"</jc>
 	 * 	MyInterface1 i1 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.build()
 	 * 		.getRemote(MyInterface1.<jk>class</jk>);
 	 *
-	 * 	<jc>// Resolves to "http://hostname/resturl/myinterface2"</jc>
+	 * 	<jc>// Resolves to "http://hostname/resturi/myinterface2"</jc>
 	 * 	MyInterface2 i2 = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
+	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface2.<jk>class</jk>);
 	 *
-	 * 	<jc>// Resolves to "http://hostname/resturl/org.apache.foo.MyInterface3"</jc>
+	 * 	<jc>// Resolves to "http://hostname/resturi/org.apache.foo.MyInterface3"</jc>
 	 * 	MyInterface3 i3 = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
+	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface3.<jk>class</jk>);
 	 * </p>
@@ -2933,18 +2962,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Same as {@link #getRemote(Class)} except explicitly specifies the URL of the REST interface.
+	 * Same as {@link #getRemote(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUrl The URL of the REST interface.
+	 * @param rootUri The URI of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl) {
-		return getRemote(interfaceClass, rootUrl, null, null);
+	public <T> T getRemote(Class<T> interfaceClass, Object rootUri) {
+		return getRemote(interfaceClass, rootUri, null, null);
 	}
 
 	/**
@@ -2955,18 +2984,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUrl The URL of the REST interface.
+	 * @param rootUri The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemote(final Class<T> interfaceClass, Object rootUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(final Class<T> interfaceClass, Object rootUri, final Serializer serializer, final Parser parser) {
 
-		if (rootUrl == null)
-			rootUrl = this.rootUrl;
+		if (rootUri == null)
+			rootUri = this.rootUri;
 
-		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
+		final String restUrl2 = trimSlashes(emptyIfNull(rootUri));
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -2979,16 +3008,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					RemoteMethodMeta rmm = rm.getMethodMeta(method);
 
-					String url = rmm.getFullPath();
-					if (url.indexOf("://") == -1)
-						url = restUrl2 + '/' + url;
-					if (url.indexOf("://") == -1)
+					String uri = rmm.getFullPath();
+					if (uri.indexOf("://") == -1)
+						uri = restUrl2 + '/' + uri;
+					if (uri.indexOf("://") == -1)
 						throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
 					String httpMethod = rmm.getHttpMethod();
 					HttpPartSerializerSession s = getPartSerializerSession();
 
-					RestRequest rc = request(httpMethod, url, hasContent(httpMethod));
+					RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
 
 					rc.serializer(serializer);
 					rc.parser(parser);
@@ -3127,15 +3156,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * or <c>RRPC</c> REST methods.
 	 *
 	 * <p>
-	 * The URL to the REST interface is based on the following values:
+	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
+	 * 	<li>The {@link RestClientBuilder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
 	 * <p>
-	 * The URL calculation is as follows:
+	 * The URI calculation is as follows:
 	 * <ul>
 	 * 	<li><c>remote-path</c> - If remote path is absolute.
 	 * 	<li><c>root-url/remote-path</c> - If remote path is relative and root-url has been specified.
@@ -3143,7 +3172,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * <p>
-	 * If the information is not available to resolve to an absolute URL, a {@link RemoteMetadataException} is thrown.
+	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -3164,18 +3193,18 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
-	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URL of the REST interface.
+	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc juneau-rest-server.restRPC}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param restUrl The URL of the REST interface.
+	 * @param uri The URI of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRrpcInterface(final Class<T> interfaceClass, final Object restUrl) {
-		return getRrpcInterface(interfaceClass, restUrl, null, null);
+	public <T> T getRrpcInterface(final Class<T> interfaceClass, final Object uri) {
+		return getRrpcInterface(interfaceClass, uri, null, null);
 	}
 
 	/**
@@ -3186,26 +3215,26 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param restUrl The URL of the REST interface.
+	 * @param uri The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object uri, final Serializer serializer, final Parser parser) {
 
-		if (restUrl == null) {
+		if (uri == null) {
 			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (isEmpty(rootUrl))
+				if (isEmpty(rootUri))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = trimSlashes(rootUrl) + '/' + path;
+				path = trimSlashes(rootUri) + '/' + path;
 			}
-			restUrl = path;
+			uri = path;
 		}
 
-		final String restUrl2 = stringify(restUrl);
+		final String restUrl2 = stringify(uri);
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -3218,10 +3247,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
-					String url = rim.getUrl();
+					String uri = rim.getUri();
 
 					try {
-						RestRequest rc = request("POST", url, true).serializer(serializer).body(args);
+						RestRequest rc = request("POST", uri, true).serializer(serializer).body(args);
 
 						Object v = rc.run().getBody().as(method.getGenericReturnType());
 						if (v == null && method.getReturnType().isPrimitive())
@@ -3607,20 +3636,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	URI toURI(Object url, String rootUrl) throws RestCallException {
+	URI toURI(Object x, String rootUri) throws RestCallException {
 		try {
-			if (url instanceof URI)
-				return (URI)url;
-			if (url instanceof URL)
-				((URL)url).toURI();
-			if (url instanceof URIBuilder)
-				return ((URIBuilder)url).build();
-			String s = url == null ? "" : url.toString();
-			if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
+			if (x instanceof URI)
+				return (URI)x;
+			if (x instanceof URL)
+				((URL)x).toURI();
+			if (x instanceof URIBuilder)
+				return ((URIBuilder)x).build();
+			String s = x == null ? "" : x.toString();
+			if (rootUri != null && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
-					s = rootUrl;
+					s = rootUri;
 				else {
-					StringBuilder sb = new StringBuilder(rootUrl);
+					StringBuilder sb = new StringBuilder(rootUri);
 					if (! s.startsWith("/"))
 						sb.append('/');
 					sb.append(s);
@@ -3630,7 +3659,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			s = fixUrl(s);
 			return new URI(s);
 		} catch (URISyntaxException e) {
-			throw new RestCallException(null, e, "Invalid URL encountered:  {0}", url);  // Shouldn't happen.
+			throw new RestCallException(null, e, "Invalid URI encountered:  {0}", x);  // Shouldn't happen.
 		}
 	}
 
@@ -3700,7 +3729,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				.a("partParser", partParser)
 				.a("partSerializer", partSerializer)
 				.a("query", query)
-				.a("rootUri", rootUrl)
+				.a("rootUri", rootUri)
 			);
 	}
 }

@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Used for fluent assertion calls.
+ * Used for fluent assertion calls against integers.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
