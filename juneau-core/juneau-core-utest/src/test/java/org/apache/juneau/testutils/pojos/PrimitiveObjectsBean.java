@@ -98,7 +98,7 @@ public class PrimitiveObjectsBean {
 	public List<BigInteger[]> polBigInteger;
 	public List<BigDecimal[]> polBigDecimal;
 
-	public PrimitiveObjectsBean init() {
+	private PrimitiveObjectsBean init() {
 		// primitive objects
 		poBoolean = true;
 		poByte = 1;
@@ -174,5 +174,9 @@ public class PrimitiveObjectsBean {
 		polBigDecimal.add(null);
 
 		return this;
+	}
+
+	public static PrimitiveObjectsBean get() {
+		return new PrimitiveObjectsBean().init();
 	}
 }

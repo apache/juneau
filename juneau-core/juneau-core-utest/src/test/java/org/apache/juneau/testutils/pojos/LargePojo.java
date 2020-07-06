@@ -23,7 +23,7 @@ public class LargePojo {
 	public A1List a1List;
 	public A1[] a1Array;
 
-	public static LargePojo create() {
+	public static LargePojo get() {
 		LargePojo a = new LargePojo();
 		a.a1Map = new A1Map();
 		a.a1List = new A1List();

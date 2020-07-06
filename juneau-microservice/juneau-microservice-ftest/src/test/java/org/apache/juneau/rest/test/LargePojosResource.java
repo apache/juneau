@@ -33,7 +33,7 @@ public class LargePojosResource extends BasicRestServletJena {
 	//====================================================================================================
 	@RestMethod(name=GET, path="/")
 	public LargePojo testGet() {
-		return LargePojo.create();
+		return LargePojo.get();
 	}
 
 	@RestMethod(name=PUT, path="/")

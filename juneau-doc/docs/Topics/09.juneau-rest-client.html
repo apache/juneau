@@ -43,7 +43,7 @@ juneau-rest-client
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
-	MyBean bean = RestClient.<jsm>create</jsm>()
+	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
 		.simpleJson()
 		.build()
 		.get(<jsf>URI</jsf>)
@@ -58,17 +58,17 @@ juneau-rest-client
 </p>
 
 <p class='bpcode w800'>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
-	RestClient client = builder.build();
-	RestRequest req = client.get(<jsf>URI</jsf>);
-	RestResponse res = req.run();
-	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
-	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
-	res = codeAssertion.is(200);
-	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
-	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
-	RestResponseBody body = res.getBody();
-	MyBean bean = body.as(MyBean.<jk>class</jk>);
+	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
+	RestResponse <jv>res</jv> = <jv>req</jv>.run();
+	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
+	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
+	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
+	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
+	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
+	RestResponseBody <jv>body</jv> = <jv>res</jv>.getBody();
+	MyBean <jv>bean</jv> = <jv>body</jv>.as(MyBean.<jk>class</jk>);
 </p>
 
 <p>
@@ -83,17 +83,18 @@ juneau-rest-client
 	
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		Pet addPet(
-			<ja>@Body</ja> CreatePet pet,
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		);
 	}
  
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build();
-	PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
-	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 </p>
 
 <p>
@@ -119,10 +120,10 @@ juneau-rest-client
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client where all URIs are relative to localhost.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
 
 	<jc>// Use relative paths.</jc>
-	String body = client.get(<js>"/subpath"</js>).run().getBody().asString();
+	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getBody().asString();
 </p>
 
 <p>
@@ -170,8 +171,8 @@ juneau-rest-client
 
 <p class='bpcode w800'>
 	<jc>// Consuming the response, so use run().</jc>
-	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
+	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
 
 	<jc>// Only interested in response status code, so use complete().</jc>
-	<jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+	<jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
 </p>

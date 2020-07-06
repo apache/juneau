@@ -23,7 +23,7 @@
 	<li class='ja'>{@link oaj.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
-		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - OpenAPI schema.
 	</ul>
 </ul>
 
@@ -34,7 +34,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
-		String addPet(<ja>@Body</ja> Pet pet);
+		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>;
 	}
 </p>
 <p class='bpcode w800'>
@@ -43,7 +43,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
-		String addPet(Pet pet);
+		String addPet(Pet <jv>pet</jv>);
 	}
 
 	<ja>@Body</ja>
@@ -64,7 +64,7 @@
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 		<br><c>Content-Type</c> is set to <js>"application/octet-stream"</js>.
 	<li>
-		<c>NameValuePairs</c> - Converted to a URL-encoded FORM post.
+		{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 		<br><c>Content-Type</c> is set to <js>"aplication/x-www-form-urlencoded"</js>.
 	<li>
 		<c>HttpEntity</c> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
@@ -93,7 +93,20 @@
 				)
 			)
 		)
-		<jk>int</jk>[][] input
+		<jk>int</jk>[][] <jv>input</jv>
+	);
+</p>
+<p class='bpcode w800'>
+	<jc>// Same as above but using free-form schema.</jc>
+	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	String addCommaDelimitedPipeDelimitedInts(
+		<ja>@Body</ja>(
+			serializer=OpenApiSerializer.<jk>class</jk>,
+			schema=<ja>@Schema</ja>(
+				<js>"type:'array,collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>
+			)
+		)
+		<jk>int</jk>[][] <jv>input</jv>
 	);
 </p>
 <p>

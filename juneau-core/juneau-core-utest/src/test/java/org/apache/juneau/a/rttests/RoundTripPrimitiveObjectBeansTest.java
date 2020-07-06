@@ -37,7 +37,7 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitiveObjectsBean() throws Exception {
-		PrimitiveObjectsBean t = new PrimitiveObjectsBean().init();
+		PrimitiveObjectsBean t = PrimitiveObjectsBean.get();
 		t = roundTrip(t, PrimitiveObjectsBean.class);
 		t = roundTrip(t, PrimitiveObjectsBean.class);
 
@@ -161,7 +161,7 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 		if (getSerializer() instanceof RdfSerializer)
 			return;
 
-		PrimitiveAtomicObjectsBean t = new PrimitiveAtomicObjectsBean().init();
+		PrimitiveAtomicObjectsBean t = PrimitiveAtomicObjectsBean.get();
 		t = roundTrip(t, PrimitiveAtomicObjectsBean.class);
 		t = roundTrip(t, PrimitiveAtomicObjectsBean.class);
 

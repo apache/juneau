@@ -50,6 +50,33 @@ Request Body
 		{@link java.util.function.Supplier} - A supplier of anything on this list.
 </ul>
 
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client with Simple-JSON support.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	
+	<jc>// Post a JSON-serialized bean.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jv>bean</jv>)
+		.complete()
+		.assertStatus().code().is(200);
+	
+	<jc>// Post contents from a reader.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
+		.complete()
+		.assertStatus().code().is(200);
+	
+	<jc>// Post contents from an Apache HttpEntity object.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
+		.complete()
+		.assertStatus().code().is(200);
+</p>
+
 <ul class='notes'>
 	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
 		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,

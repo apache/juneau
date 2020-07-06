@@ -55,8 +55,8 @@ POJO Marshalling
 </p>
 
 <p>
-	When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
-	with bodies to specify which serializer should be selected.
+	When using clients with multiple language support, the request language is selected by setting the <c>Content-Type</c> 
+	request header.
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a REST client with support for multiple languages.</jc>
@@ -87,8 +87,8 @@ POJO Marshalling
 	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
 
 	<jc>// Same, but using properties.</jc>
-	RestClient <jv>client</jv> = RestClient
-		.<jsm>create2</jsm>()
+	RestClient <jv>client2</jv> = RestClient
+		.<jsm>create</jsm>()
 		.json()
 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)

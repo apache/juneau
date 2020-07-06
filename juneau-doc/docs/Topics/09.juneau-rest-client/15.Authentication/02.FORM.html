@@ -24,14 +24,14 @@ FORM-based Authentication
 	authenticated client.
 </p>
 <p>
-	The following example shows how the <c>JazzRestClient</c> class provides FORM-based 
-	authentication support.
+	The following example shows an implementation of a client that performs FORM-based authentication against
+	the IBM Jazz platform.
 </p>
 <p class='bpcode w800'>
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI <jv>jazzUri</jv>, String <jv>user</jv>, String <jv>pw</jv>) <jk>throws</jk> IOException {
 		...
 	}
 
@@ -40,46 +40,47 @@ FORM-based Authentication
 	 */</jd>
 	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
-		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
-		formBasedAuthenticate(client);
-		visitAuthenticatedURL(client);
-		<jk>return</jk> client;
+		CloseableHttpClient <jv>client</jv> = <jk>super</jk>.createHttpClient();
+		formBasedAuthenticate(<jv>client</jv>);
+		visitAuthenticatedURL(<jv>client</jv>);
+		<jk>return</jk> <jv>client</jv>;
 	}
 
 	<jc>/*
 	 * Performs form-based authentication against the Jazz server.
 	 */</jc>
-	<jk>private void</jk> formBasedAuthenticate(HttpClient client) <jk>throws</jk> IOException {
+	<jk>private void</jk> formBasedAuthenticate(HttpClient <jv>client</jv>) <jk>throws</jk> IOException {
 
-		URI uri2 = <jf>jazzUri</jf>.resolve(<js>"j_security_check"</js>);
-		HttpPost request = <jk>new</jk> HttpPost(uri2);
-		request.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		URI <jv>uri2</jv> = <jf>jazzUri</jf>.resolve(<js>"j_security_check"</js>);
+		HttpPost <jv>request</jv> = <jk>new</jk> HttpPost(uri2);
+		<jv>request</jv>.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
 		
 		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
-		request.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+		<jv>request</jv>.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
 
-		NameValuePairs params = <jk>new</jk> NameValuePairs()
-			.append(<jk>new</jk> BasicNameValuePair(<js>"j_username""</js>, <jf>user</jf>))
-			.append(<jk>new</jk> BasicNameValuePair(<js>"j_password"</js>, <jf>pw</jf>));
-		request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
+		List&lt;NameValuePair&gt; <jv>params</jv> = AList.<jsm>of</jsm>(
+			BasicNameValuePair.<jsm>of</jsm>(<js>"j_username""</js>, <jf>user</jf>),
+			BasicNameValuePair.<jsm>of</jsm>(<js>"j_password"</js>, <jf>pw</jf>)
+		);
+		<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
 
-		HttpResponse response = client.execute(request);
+		HttpResponse <jv>response</jv> = <jv>client</jv>.execute(<jv>request</jv>);
 		<jk>try</jk> {
-			<jk>int</jk> rc = response.getStatusLine().getStatusCode();
+			<jk>int</jk> <jv>rc</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			Header authMsg = response.getFirstHeader(<js>"X-com-ibm-team-repository-web-auth-msg"</js>);
-			<jk>if</jk> (authMsg != <jk>null</jk>)
-				<jk>throw new</jk> IOException(authMsg.getValue());
+			Header <jv>authMsg</jv> = <jv>response</jv>.getFirstHeader(<js>"X-com-ibm-team-repository-web-auth-msg"</js>);
+			<jk>if</jk> (<jv>authMsg</jv> != <jk>null</jk>)
+				<jk>throw new</jk> IOException(<jv>authMsg</jv>.getValue());
 
 			<jc>// The form auth request should always respond with a 200 ok or 302 redirect code</jc>
-			<jk>if</jk> (rc == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
-				<jk>if</jk> (response.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
+			<jk>if</jk> (<jv>rc</jv> == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
+				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
 					<jk>throw new</jk> IOException(<js>"Invalid credentials."</js>);
-			} <jk>else if</jk> (rc != <jsf>SC_OK</jsf>) {
-				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + rc);
+			} <jk>else if</jk> (<jv>rc</jv> != <jsf>SC_OK</jsf>) {
+				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + <jv>rc</jv>);
 			}
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 
@@ -88,13 +89,13 @@ FORM-based Authentication
 	 * authenticated URL has been visited. This same URL must also be visited after authenticating with j_security_check
 	 * otherwise tomcat will not consider the session authenticated
 	 */</jc>
-	<jk>private int</jk> visitAuthenticatedURL(HttpClient httpClient) <jk>throws</jk> IOException {
-		HttpGet authenticatedURL = <jk>new</jk> HttpGet(<jf>jazzUri</jf>.resolve(<js>"authenticated/identity"</js>));
-		HttpResponse response = httpClient.execute(authenticatedURL);
+	<jk>private int</jk> visitAuthenticatedURL(HttpClient <jv>httpClient</jv>) <jk>throws</jk> IOException {
+		HttpGet <jv>authenticatedURL</jv> = <jk>new</jk> HttpGet(<jf>jazzUri</jf>.resolve(<js>"authenticated/identity"</js>));
+		HttpResponse <jv>response</jv> = <jv>httpClient</jv>.execute(<jv>authenticatedURL</jv>);
 		<jk>try</jk> {
-			<jk>return</jk> response.getStatusLine().getStatusCode();
+			<jk>return</jk> <jv>response</jv>.getStatusLine().getStatusCode();
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 </p>

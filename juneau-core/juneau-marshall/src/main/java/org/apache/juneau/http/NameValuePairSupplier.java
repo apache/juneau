@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -37,6 +38,8 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	public final class Null extends NameValuePairSupplier {}
 
 	private final List<Iterable<NameValuePair>> pairs = new CopyOnWriteArrayList<>();
+
+	private volatile VarResolver varResolver;
 
 	/**
 	 * Convenience creator.
@@ -76,12 +79,12 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @return A new instance.
 	 */
 	public static NameValuePairSupplier ofPairs(Object...parameters) {
-		List<NameValuePair> l = new ArrayList<>();
+		NameValuePairSupplier s = NameValuePairSupplier.create();
 		if (parameters.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into NameValuePairSupplier.ofPairs()");
 		for (int i = 0; i < parameters.length; i+=2)
-			l.add(new BasicNameValuePair(stringify(parameters[i]), parameters[i+1]));
-		return NameValuePairSupplier.of(l);
+			s.add(stringify(parameters[i]), parameters[i+1]);
+		return s;
 	}
 
 	/**
@@ -107,6 +110,47 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 				throw new BasicRuntimeException("Invalid type passed to NameValuePairSupplier.of(): {0}", v.getClass().getName());
 		}
 		return s;
+	}
+
+	/**
+	 * Allows values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #ofPairs(Object...) ofPairs(Object...)}
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartType, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartType,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public NameValuePairSupplier resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #ofPairs(Object...) ofPairs(Object...)}
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartType, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartType,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object (for method chaining).
+	 */
+	public NameValuePairSupplier resolving(VarResolver varResolver) {
+		this.varResolver = varResolver;
+		return this;
 	}
 
 	/**
@@ -159,7 +203,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairSupplier add(String name, Object value) {
-		return add(new BasicNameValuePair(name, value));
+		return add(new BasicNameValuePair(name, resolver(value)));
 	}
 
 	/**
@@ -176,7 +220,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairSupplier add(String name, Supplier<?> value) {
-		return add(new BasicNameValuePair(name, value));
+		return add(new BasicNameValuePair(name, resolver(value)));
 	}
 
 	/**
@@ -199,7 +243,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairSupplier add(String name, Object value, HttpPartType partType, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return add(new SerializedNameValuePair(name, value, partType, serializer, schema, skipIfEmpty));
+		return add(new SerializedNameValuePair(name, resolver(value), partType, serializer, schema, skipIfEmpty));
 	}
 
 	/**
@@ -247,5 +291,15 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 		for (NameValuePair p : this)
 			l.add(p);
 		return l.toArray(array);
+	}
+
+	private Supplier<Object> resolver(Object input) {
+		return ()->(varResolver == null ? unwrap(input) : varResolver.resolve(stringify(unwrap(input))));
+	}
+
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
 	}
 }

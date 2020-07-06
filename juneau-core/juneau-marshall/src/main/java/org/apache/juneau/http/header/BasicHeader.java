@@ -221,8 +221,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The unwrapped object.
 	 */
 	protected Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			return ((Supplier<?>)o).get();
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
 		return o;
 	}
 

@@ -33,9 +33,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.rest.testutils.DTOs;
-import org.apache.juneau.rest.testutils.DTOs2;
+import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.urlencoding.annotation.*;
@@ -849,11 +847,11 @@ public class BodyAnnotationTest {
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
 		@RestMethod(name=PUT, path="/B")
-		public DTOs.B testPojo1(@Body DTOs.B b) {
+		public XBeans.XB testPojo1(@Body XBeans.XB b) {
 			return b;
 		}
 		@RestMethod(name=PUT, path="/C")
-		public DTOs.C testPojo2(@Body DTOs.C c) {
+		public XBeans.XC testPojo2(@Body XBeans.XC c) {
 			return c;
 		}
 	}
@@ -862,28 +860,28 @@ public class BodyAnnotationTest {
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE), "application/json")
+		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), "application/json")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e02_complexPojos_B_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a")
+		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e03_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE), "application/json")
+		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), "application/json")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e04_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(DTOs.B.INSTANCE), "a")
+		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertBody().is(expected);
 	}
@@ -893,11 +891,11 @@ public class BodyAnnotationTest {
 	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class E2 {
 		@RestMethod(name=PUT, path="/B")
-		public DTOs2.B testPojo1(@Body DTOs2.B b) {
+		public XBeans.XE testPojo1(@Body XBeans.XE b) {
 			return b;
 		}
 		@RestMethod(name=PUT, path="/C")
-		public DTOs2.C testPojo2(@Body DTOs2.C c) {
+		public XBeans.XF testPojo2(@Body XBeans.XF c) {
 			return c;
 		}
 	}
@@ -906,28 +904,28 @@ public class BodyAnnotationTest {
 	@Test
 	public void e05_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE), "application/json")
+		e2.put("/B", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), "application/json")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e06_complexPojos_B_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a")
+		e2.put("/B?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e07_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().toString(DTOs2.B.INSTANCE), "application/json")
+		e2.put("/C", SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), "application/json")
 			.run()
 			.assertBody().is(expected);
 	}
 	@Test
 	public void e08_complexPojos_C_bodyParam() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(DTOs2.Annotations.class).build().serialize(DTOs2.B.INSTANCE), "a")
+		e2.put("/C?body=" + UonSerializer.DEFAULT.builder().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertBody().is(expected);
 	}
@@ -977,7 +975,7 @@ public class BodyAnnotationTest {
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
 		@RestMethod(name=POST,path="/")
-		public DTOs.C g(@Body DTOs.C content) throws Exception {
+		public XBeans.XC g(@Body XBeans.XC content) throws Exception {
 			return content;
 		}
 	}
@@ -1025,7 +1023,7 @@ public class BodyAnnotationTest {
 				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
 			}
 		)
-		public DTOs.B g(@Body DTOs.B content) throws Exception {
+		public XBeans.XB g(@Body XBeans.XB content) throws Exception {
 			return content;
 		}
 	}
@@ -1069,7 +1067,7 @@ public class BodyAnnotationTest {
 				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
 			}
 		)
-		public DTOs2.B g(@Body DTOs2.B content) throws Exception {
+		public XBeans.XE g(@Body XBeans.XE content) throws Exception {
 			return content;
 		}
 	}
@@ -1110,7 +1108,7 @@ public class BodyAnnotationTest {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestMethod(name=POST,path="/")
-		public DTOs.B g(@Body(r=true) DTOs.B content) throws Exception {
+		public XBeans.XB g(@Body(r=true) XBeans.XB content) throws Exception {
 			return content;
 		}
 	}
@@ -1132,7 +1130,7 @@ public class BodyAnnotationTest {
 		@RestMethod(name=POST,path="/")
 		@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
 		@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
-		public DTOs2.B g(@Body(r=true) DTOs2.B content) throws Exception {
+		public XBeans.XE g(@Body(r=true) XBeans.XE content) throws Exception {
 			return content;
 		}
 	}

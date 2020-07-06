@@ -14,6 +14,7 @@ package org.apache.juneau.svl;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.svl.vars.*;
 
@@ -177,5 +178,15 @@ public class VarResolver {
 	 */
 	public void resolveTo(String s, Writer w) throws IOException {
 		createSession(null).resolveTo(s, w);
+	}
+
+	/**
+	 * Returns a supplier for the specified string.
+	 *
+	 * @param s The string to resolve.
+	 * @return A supplier for the specified string.
+	 */
+	public Supplier<String> resolver(String s) {
+		return ()->resolve(s);
 	}
 }

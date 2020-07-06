@@ -10,8 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.testutils;
+package org.apache.juneau.testutils;
 
-@org.apache.juneau.annotation.Bean(dictionary={TypedBeanImpl.class})
-public interface TypedBean {
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
+
+/**
+ * Test serializer.
+ */
+public class XPartSerializer extends BaseHttpPartSerializer {
+
+	@Override
+	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new BaseHttpPartSerializerSession() {
+			@Override
+			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				return "x" + value + "x";
+			}
+		};
+	}
+
+	@Override
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession(null).serialize(partType, schema, value);
+	}
 }

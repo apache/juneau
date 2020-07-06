@@ -32,6 +32,35 @@ Custom Call Handlers
 	</ul>
 </ul>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our custom call handler.</jc>
+	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
+
+		<jk>private final</jk> RestClient <jf>client</jf>;
+
+		<jk>public</jk> MyRestCallHandler(RestClient <jv>client</jv>) {
+			<jk>this</jk>.<jf>client</jf> = <jv>client</jv>;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+			<jc>// Insert any special handling here.</jc>
+			<jc>// The following is the default behavior:</jc>
+			<jk>if</jk> (<jv>target</jv> == <jk>null</jk>)
+				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)<jv>request</jv>, <jv>context</jv>);
+			<jk>return</jk> <jf>client</jf>.execute(<jv>target</jv>, <jv>request</jv>, <jv>context</jv>);
+		}
+	}
+	
+	<jc>// Create a client that uses our custom handler.</jc>
+	RestClient <jv>client</jv> = RestClient()
+		.create()
+		.json()
+		.callHandler(MyCallHandler.<jk>class</jk>)
+		.build();
+</p>
+ 
 <p>
 	Note that there are other ways of accomplishing this such as extending the {@link oajr.client2.RestClient} class and overriding
 	the {@link oaj.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method

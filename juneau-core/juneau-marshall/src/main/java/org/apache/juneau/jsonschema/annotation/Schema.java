@@ -787,12 +787,7 @@ public @interface Schema {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Schema</ja>(
-	 * 		<js>"type: 'array',"</js>,
-	 * 		<js>"items: {"</js>,
-	 * 			<js>"$ref: '#/definitions/Pet'"</js>,
-	 * 		<js>"}"</js>
-	 * 	)
+	 * 	<ja>@Schema</ja>(<js>"type:'array',items:{$ref:'#/definitions/Pet'}"</js>)
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form using variables</jc>

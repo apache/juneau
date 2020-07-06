@@ -22,6 +22,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Contains the meta-data about a REST proxy class.
@@ -37,7 +38,7 @@ import org.apache.juneau.reflect.*;
 public class RemoteMeta {
 
 	private final Map<Method,RemoteMethodMeta> methods;
-	private final HeaderSupplier headerSupplier = HeaderSupplier.create();
+	private final HeaderSupplier headerSupplier = HeaderSupplier.create().resolving();
 
 	/**
 	 * Constructor.
@@ -55,13 +56,18 @@ public class RemoteMeta {
 		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotations(org.apache.juneau.http.remote.RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
+
+		String versionHeader = "X-Client-Version", clientVersion = null;
+
 		for (Remote r : ci.getAnnotations(Remote.class)) {
 			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
+				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headerSupplier.add(BasicHeader.ofPair(h));
+				headerSupplier.add(BasicHeader.ofPair(resolve(h)));
 			if (! r.version().isEmpty())
-				headerSupplier.add(ClientVersion.of(r.version()));
+				clientVersion = resolve(r.version());
+			if (! r.versionHeader().isEmpty())
+				versionHeader = resolve(r.versionHeader());
 			if (r.headerSupplier() != HeaderSupplier.Null.class) {
 				try {
 					headerSupplier.add(r.headerSupplier().newInstance());
@@ -70,6 +76,9 @@ public class RemoteMeta {
 				}
 			}
 		}
+
+		if (clientVersion != null)
+			headerSupplier.add(BasicStringHeader.of(versionHeader, clientVersion));
 
 		AMap<Method,RemoteMethodMeta> methods = AMap.of();
 		for (MethodInfo m : ci.getPublicMethods())
@@ -95,5 +104,13 @@ public class RemoteMeta {
 	 */
 	public Iterable<Header> getHeaders() {
 		return headerSupplier;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static String resolve(String s) {
+		return VarResolver.DEFAULT.resolve(s);
 	}
 }

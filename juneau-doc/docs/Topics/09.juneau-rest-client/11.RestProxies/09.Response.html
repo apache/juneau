@@ -47,15 +47,16 @@
 		UUID getUUID();
 		
 		<ja>@ResponseStatus</ja>
-		int getStatus();
+		<jk>int</jk> getStatus();
 	}
 </p>
 <p class='bpcode w800'>
-	PetStore store = restClient.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	CreatePetResponse response = store.postPet(...);
-	Pet pet = response.getBody();
-	UUID uuid = response.getUUID();
-	<jk>int</jk> status = response.getStatus();
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	
+	CreatePetResponse <jv>response</jv> = <jv>store</jv>.postPet(...);
+	Pet <jv>pet</jv> = <jv>response</jv>.getBody();
+	UUID <jv>uuid</jv> = <jv>response</jv>.getUUID();
+	<jk>int</jk> <jv>status</jv> = <jv>response</jv>.getStatus();
 </p>
 <p>
 	The annotated methods must be no-arg.  

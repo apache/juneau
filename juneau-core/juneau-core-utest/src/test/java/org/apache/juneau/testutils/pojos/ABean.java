@@ -16,9 +16,10 @@ public class ABean {
 	public int a;
 	public String b;
 
-	public ABean init() {
-		this.a = 1;
-		this.b = "foo";
-		return this;
+	public static ABean get() {
+		ABean x = new ABean();
+		x.a = 1;
+		x.b = "foo";
+		return x;
 	}
 }

@@ -49,8 +49,47 @@ Request Query Parameters
 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
 </p>
 
+<p>
+	{@link oajr.client2.RestClientBuilder#queries(Object...) queries(Object...)} allows you to pass in a variety
+	of query parameter objects, and {@link oajr.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)} allows
+	you to specify several query parameters in a compact fashion.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a bunch of query parameters to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.queries(
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
+		)
+		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.build();
+</p>
+
+<p>
+	The {@link oaj.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on query parameters.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a query parameter "foo=bar|baz" to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.query(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+		.build();
+</p>
+
+<p>
+	The methods with {@link oaj.AddFlag} parameters allow you to control whether new query parameters get appended, prepended, or
+	replace existing query parameters with the same name.
+</p>
+
 <ul class='notes'>
-	<li>Like header values, dynamic values and OpenAPI schemas are supported.
 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
 		objects use the values returned by that bean directly.
 </ul>

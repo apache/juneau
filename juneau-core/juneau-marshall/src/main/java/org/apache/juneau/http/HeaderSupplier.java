@@ -25,6 +25,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Specifies a dynamic supplier of {@link Header} objects.
@@ -37,6 +38,8 @@ public class HeaderSupplier implements Iterable<Header> {
 	public final class Null extends HeaderSupplier {}
 
 	private final List<Iterable<Header>> headers = new CopyOnWriteArrayList<>();
+
+	private volatile VarResolver varResolver;
 
 	/**
 	 * Convenience creator.
@@ -76,12 +79,12 @@ public class HeaderSupplier implements Iterable<Header> {
 	 * @return A new instance.
 	 */
 	public static HeaderSupplier ofPairs(Object...parameters) {
-		List<Header> l = new ArrayList<>();
+		HeaderSupplier s = HeaderSupplier.create();
 		if (parameters.length % 2 != 0)
 			throw new BasicRuntimeException("Odd number of parameters passed into HeaderSupplier.ofPairs()");
 		for (int i = 0; i < parameters.length; i+=2)
-			l.add(new BasicHeader(stringify(parameters[i]), parameters[i+1]));
-		return HeaderSupplier.of(l);
+			s.add(stringify(parameters[i]), parameters[i+1]);
+		return s;
 	}
 
 	/**
@@ -107,6 +110,47 @@ public class HeaderSupplier implements Iterable<Header> {
 				throw new BasicRuntimeException("Invalid type passed to HeaderSupplier.of(): {0}", v.getClass().getName());
 		}
 		return s;
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #ofPairs(Object...) ofPairs(Object...)}
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HeaderSupplier resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #ofPairs(Object...) ofPairs(Object...)}
+	 * 	<li class='jm'>{@link #add(String, Object) add(String,Object)}
+	 * 	<li class='jm'>{@link #add(String, Supplier) add(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #add(String, Object, HttpPartSerializerSession, HttpPartSchema, boolean) add(String,Object,HttpPartSerializerSession,HttpPartSchema,boolean)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object (for method chaining).
+	 */
+	public HeaderSupplier resolving(VarResolver varResolver) {
+		this.varResolver = varResolver;
+		return this;
 	}
 
 	/**
@@ -159,7 +203,7 @@ public class HeaderSupplier implements Iterable<Header> {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderSupplier add(String name, Object value) {
-		return add(new BasicHeader(name, value));
+		return add(new BasicHeader(name, resolver(value)));
 	}
 
 	/**
@@ -176,7 +220,7 @@ public class HeaderSupplier implements Iterable<Header> {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderSupplier add(String name, Supplier<?> value) {
-		return add(new BasicHeader(name, value));
+		return add(new BasicHeader(name, resolver(value)));
 	}
 
 	/**
@@ -195,7 +239,7 @@ public class HeaderSupplier implements Iterable<Header> {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderSupplier add(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return add(new SerializedHeader(name, value, serializer, schema, skipIfEmpty));
+		return add(new SerializedHeader(name, resolver(value), serializer, schema, skipIfEmpty));
 	}
 
 	/**
@@ -243,5 +287,15 @@ public class HeaderSupplier implements Iterable<Header> {
 		for (Header p : this)
 			l.add(p);
 		return l.toArray(array);
+	}
+
+	private Supplier<Object> resolver(Object input) {
+		return ()->(varResolver == null ? unwrap(input) : varResolver.resolve(stringify(unwrap(input))));
+	}
+
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
 	}
 }

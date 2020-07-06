@@ -17,9 +17,13 @@ public class TypedBeanImpl implements TypedBean {
 	public int a;
 	public String b;
 
-	public TypedBeanImpl init() {
+	private TypedBeanImpl init() {
 		this.a = 1;
 		this.b = "foo";
 		return this;
+	}
+
+	public static TypedBeanImpl get() {
+		return new TypedBeanImpl().init();
 	}
 }

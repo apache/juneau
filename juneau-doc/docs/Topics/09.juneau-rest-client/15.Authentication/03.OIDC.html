@@ -16,14 +16,14 @@
 OIDC Authentication
 
 <p>
-	The following example shows how the <c>JazzRestClient</c> class provides OIDC authentication 
-	support.
+	The following example shows an implementation of a client that performs OIDC authentication against
+	the IBM Jazz platform.
 </p>
 <p class='bpcode w800'>
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI <jv>jazzUri</jv>, String <jv>user</jv>, String <jv>pw</jv>) <jk>throws</jk> IOException {
 		...
 	}
 
@@ -32,108 +32,108 @@ OIDC Authentication
 	 */</jd>
 	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
-		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
-		oidcAuthenticate(client);
-			<jk>return</jk> client;
-		}
+		CloseableHttpClient <jv>client</jv> = <jk>super</jk>.createHttpClient();
+		oidcAuthenticate(<jv>client</jv>);
+		<jk>return</jk> <jv>client</jv>;
+	}
 
-	<jk>private void</jk> oidcAuthenticate(HttpClient client) <jk>throws</jk> IOException {
+	<jk>private void</jk> oidcAuthenticate(HttpClient <jv>client</jv>) <jk>throws</jk> IOException {
 
-		HttpGet request = <jk>new</jk> HttpGet(<jf>jazzUri</jf>);
-		request.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		HttpGet <jv>request</jv> = <jk>new</jk> HttpGet(<jf>jazzUri</jf>);
+		<jv>request</jv>.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
 		
 		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
-		request.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+		<jv>request</jv>.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
 
-		HttpResponse response = client.execute(request);
+		HttpResponse <jv>response</jv> = <jv>client</jv>.execute(<jv>request</jv>);
 		<jk>try</jk> {
-			<jk>int</jk> code = response.getStatusLine().getStatusCode();
+			<jk>int</jk> <jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
 			<jc>// Already authenticated</jc>
-			<jk>if</jk> (code == <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> == <jsf>SC_OK</jsf>)
 				<jk>return</jk>;
 
-			<jk>if</jk> (code != <jsf>SC_UNAUTHORIZED</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_UNAUTHORIZED</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// x-jsa-authorization-redirect</jc>
-			String redirectUri = getHeader(response, <js>"X-JSA-AUTHORIZATION-REDIRECT"</js>);
+			String <jv>redirectUri</jv> = getHeader(<jv>response</jv>, <js>"X-JSA-AUTHORIZATION-REDIRECT"</js>);
 
-			<jk>if</jk> (redirectUri == <jk>null</jk>)
+			<jk>if</jk> (<jv>redirectUri</jv> == <jk>null</jk>)
 				<jk>throw new</jk> RestCallException(<js>"Expected a redirect URI during OIDC authentication: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// Handle Bearer Challenge</jc>
-			HttpGet method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
-			addDefaultOidcHeaders(method);
+			HttpGet <jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv> + <js>"&amp;prompt=none"</js>);
+			addDefaultOidcHeaders(<jv>method</jv>);
 
-			response = client.execute(method);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 2: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			String loginRequired = getHeader(response, <js>"X-JSA-LOGIN-REQUIRED"</js>);
+			String <jv>loginRequired</jv> = getHeader(<jv>response</jv>, <js>"X-JSA-LOGIN-REQUIRED"</js>);
 
-			<jk>if</jk> (! <js>"true"</js>.equals(loginRequired))
+			<jk>if</jk> (! <js>"true"</js>.equals(<jv>loginRequired</jv>))
 				<jk>throw new</jk> RestCallException(<js>"X-JSA-LOGIN-REQUIRED header not found on response during OIDC authentication phase 2: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
+			<jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv> + <js>"&amp;prompt=none"</js>);
 
-			addDefaultOidcHeaders(method);
-			response = client.execute(method);
+			addDefaultOidcHeaders(<jv>method</jv>);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 3: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// Handle JAS Challenge</jc>
-			method = <jk>new</jk> HttpGet(redirectUri);
-			addDefaultOidcHeaders(method);
+			<jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv>);
+			addDefaultOidcHeaders(<jv>method</jv>);
 
-			response = client.execute(method);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 4: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			<jf>cookie</jf> = getHeader(response, <js>"Set-Cookie"</js>);
+			<jf>cookie</jf> = getHeader(<jv>response</jv>, <js>"Set-Cookie"</js>);
 
-			Header[] defaultHeaders = <jk>new</jk> Header[] {
-				<jk>new</jk> BasicHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>),
-				<jk>new</jk> BasicHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+			Header[] <jv>defaultHeaders</jv> = <jk>new</jk> Header[] {
+				BasicStringHeader.<jsm>of</jsm>(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>),
+				BasicStringHeader.<jsm>of</jsm>(<js>"X-com-ibm-team-configuration-versions"</js>, 
 					<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>),
-				<jk>new</jk> BasicHeader(<js>"Accept"</js>, <js>"text/json"</js>),
-				<jk>new</jk> BasicHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+				BasicStringHeader.<jsm>of</jsm>(<js>"Accept"</js>, <js>"text/json"</js>),
+				BasicStringHeader.<jsm>of</jsm>(<js>"Authorization"</js>, <js>"Basic "</js> 
 					+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>)),
-				<jk>new</jk> BasicHeader(<js>"Cookie"</js>, cookie)
+				BasicStringHeader.<jsm>of</jsm>(<js>"Cookie"</js>, <jf>cookie</jf>)
 			};
 
-			setDefaultHeaders(Arrays.<jsm>asList</jsm>(defaultHeaders));
+			setDefaultHeaders(AList.<jsm>of</jsm>(<jv>defaultHeaders</jv>));
 
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 
-	<jk>private void</jk> addDefaultOidcHeaders(HttpRequestBase method) {
-		method.addHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>);
-		method.addHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+	<jk>private void</jk> addDefaultOidcHeaders(HttpRequestBase <jv>method</jv>) {
+		<jv>method</jv>.addHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>);
+		<jv>method</jv>.addHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
 			<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>);
-		method.addHeader(<js>"Accept"</js>, <js>"text/json"</js>);
+		<jv>method</jv>.addHeader(<js>"Accept"</js>, <js>"text/json"</js>);
 
 		<jk>if</jk> (<jf>cookie</jf> != <jk>null</jk>) {
-			method.addHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+			<jv>method</jv>.addHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
 				+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>));
-			method.addHeader(<js>"Cookie"</js>, cookie);
+			<jv>method</jv>.addHeader(<js>"Cookie"</js>, <jf>cookie</jf>);
 		}
 	}
 </p>	

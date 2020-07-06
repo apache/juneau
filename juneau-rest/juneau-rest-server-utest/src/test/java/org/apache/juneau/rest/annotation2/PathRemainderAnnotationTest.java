@@ -22,7 +22,7 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.rest.testutils.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

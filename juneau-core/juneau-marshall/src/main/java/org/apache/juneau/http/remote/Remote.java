@@ -42,6 +42,12 @@ public @interface Remote {
 	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c>
 	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables}
+	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * </ul>
 	 */
 	String path() default "";
 
@@ -81,9 +87,9 @@ public @interface Remote {
 	 *
 	 * <p>
 	 * The format of this is a string of the format <c>#[.#[.#[...]]</c> (e.g. <js>"1.2.3"</js>).
-	 * 
+	 *
 	 * <p>
-	 * The server side then uses an OSGi-version matching pattern to identify which methods to call: 
+	 * The server side then uses an OSGi-version matching pattern to identify which methods to call:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
@@ -98,11 +104,26 @@ public @interface Remote {
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables}
+	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * </ul>
 	 */
 	String version() default "";
 
 	/**
 	 * Specifies the client version header name.
+	 *
+	 * <p>
+	 * The default value is <js>"X-Client-Version"</js>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables}
+	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * </ul>
 	 */
-	String versionHeader() default "X-Client-Version";
+	String versionHeader() default "";
 }

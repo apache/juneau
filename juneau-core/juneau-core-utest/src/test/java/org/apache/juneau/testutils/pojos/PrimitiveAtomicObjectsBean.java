@@ -48,7 +48,7 @@ public class PrimitiveAtomicObjectsBean {
 	public List<AtomicInteger[]> polAtomicInteger;
 	public List<AtomicLong[]> polAtomicLong;
 
-	public PrimitiveAtomicObjectsBean init() {
+	private PrimitiveAtomicObjectsBean init() {
 		// primitive objects
 		poAtomicInteger = new AtomicInteger(1);
 		poAtomicLong = new AtomicLong(2);
@@ -70,5 +70,9 @@ public class PrimitiveAtomicObjectsBean {
 		polAtomicLong.add(null);
 
 		return this;
+	}
+
+	public static PrimitiveAtomicObjectsBean get() {
+		return new PrimitiveAtomicObjectsBean().init();
 	}
 }

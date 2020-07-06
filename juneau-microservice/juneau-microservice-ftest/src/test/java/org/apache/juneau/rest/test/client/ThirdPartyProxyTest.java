@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.rest.testutils.Constants.*;
+import static org.apache.juneau.testutils.Constants.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -34,8 +34,8 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
-import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;

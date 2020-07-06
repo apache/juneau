@@ -16,7 +16,8 @@ import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.rest.testutils.Constants.*;
+import static org.apache.juneau.testutils.Constants.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -30,8 +31,8 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.testutils.pojos.*;
 
 /**
  * JUnit automated testcase resource.

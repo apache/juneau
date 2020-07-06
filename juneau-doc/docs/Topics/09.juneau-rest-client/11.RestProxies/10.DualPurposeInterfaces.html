@@ -46,13 +46,13 @@ Dual-purpose (end-to-end) interfaces
 				required=<jk>true</jk>,
 				example=<js>"foobar"</js>
 			)
-			String apiKey,
+			String <jv>apiKey</jv>,
 			<ja>@Path</ja>(
 				name=<js>"petId"</js>,
 				description=<js>"Pet id to delete"</js>,
 				example=<js>"123"</js>
 			)
-			<jk>long</jk> petId
+			<jk>long</jk> <jv>petId</jv>
 		) <jk>throws</jk> IdNotFound, NotAcceptable;
 		
 		...
@@ -88,8 +88,8 @@ Dual-purpose (end-to-end) interfaces
 			summary=<js>"Deletes a pet"</js>,
 			...
 		)
-		<jk>public</jk> Ok deletePet(String apiKey, long petId) <jk>throws</jk> IdNotFound, NotAcceptable {
-			<jsf>store</jsf>.removePet(petId);
+		<jk>public</jk> Ok deletePet(String <jv>apiKey</jv>, <jk>long</jk> <jv>petId</jv>) <jk>throws</jk> IdNotFound, NotAcceptable {
+			<jsf>store</jsf>.removePet(<jv>petId</jv>);
 			<jk>return</jk> <jsf>OK</jsf>;
 		}
 </p>
@@ -97,13 +97,12 @@ Dual-purpose (end-to-end) interfaces
 	Then use the interface as a remote resource like so:
 </p>
 <p class='bpcode w800'>
-	<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
-		PetStore ps = rc.getRemote(PetStore.<jk>class</jk>);
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
 
-		<jk>for</jk> (Pet x : ps.getPets()) {
-			ps.deletePet(<js>"my-special-key"</js>, x.getId());
-			System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + x.getId());
-		}
+	<jk>for</jk> (Pet <jv>x</jv> : <jv>store</jv>.getPets()) {
+		<jv>store</jv>.deletePet(<js>"my-special-key"</js>, <jv>x</jv>.getId());
+		System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + <jv>x</jv>.getId());
 	}
 </p>	
 <p>

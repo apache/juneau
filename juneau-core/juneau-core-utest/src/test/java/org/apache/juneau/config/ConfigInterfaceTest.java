@@ -157,7 +157,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean() throws Exception {
-		proxy.setBean(new ABean().init());
+		proxy.setBean(ABean.get());
 		assertObject(proxy.getBean()).json().is("{a:1,b:'foo'}");
 		assertEquals("{a:1,b:'foo'}", cf.get("A/bean"));
 		assertObject(proxy.getBean()).isType(ABean.class);
@@ -165,7 +165,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean3dArray() throws Exception {
-		proxy.setBean3dArray(new ABean[][][]{{{new ABean().init(),null},null},null});
+		proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null});
 		assertObject(proxy.getBean3dArray()).json().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertEquals("[[[{a:1,b:'foo'},null],null],null]", cf.get("A/bean3dArray"));
 		assertObject(proxy.getBean3dArray()[0][0][0]).isType(ABean.class);
@@ -173,7 +173,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanList() throws Exception {
-		proxy.setBeanList(Arrays.asList(new ABean().init()));
+		proxy.setBeanList(Arrays.asList(ABean.get()));
 		assertObject(proxy.getBeanList()).json().is("[{a:1,b:'foo'}]");
 		assertEquals("[{a:1,b:'foo'}]", cf.get("A/beanList"));
 		assertObject(proxy.getBeanList().get(0)).isType(ABean.class);
@@ -181,7 +181,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean1d3dList() throws Exception {
-		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null));
+		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
 		assertObject(proxy.getBean1d3dList()).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertEquals("[[[[{a:1,b:'foo'},null],null],null],null]", cf.get("A/bean1d3dList"));
 		assertObject(proxy.getBean1d3dList().get(0)[0][0][0]).isType(ABean.class);
@@ -189,7 +189,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanMap() throws Exception {
-		proxy.setBeanMap(AMap.of("foo",new ABean().init()));
+		proxy.setBeanMap(AMap.of("foo",ABean.get()));
 		assertObject(proxy.getBeanMap()).json().is("{foo:{a:1,b:'foo'}}");
 		assertEquals("{foo:{a:1,b:'foo'}}", cf.get("A/beanMap"));
 		assertObject(proxy.getBeanMap().get("foo")).isType(ABean.class);
@@ -197,7 +197,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanListMap() throws Exception {
-		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(new ABean().init())));
+		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(ABean.get())));
 		assertObject(proxy.getBeanListMap()).json().is("{foo:[{a:1,b:'foo'}]}");
 		assertEquals("{foo:[{a:1,b:'foo'}]}", cf.get("A/beanListMap"));
 		assertObject(proxy.getBeanListMap().get("foo").get(0)).isType(ABean.class);
@@ -205,7 +205,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBean1d3dListMap() throws Exception {
-		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{new ABean().init(),null},null},null},null)));
+		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 		assertObject(proxy.getBean1d3dListMap()).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", cf.get("A/bean1d3dListMap"));
 		assertObject(proxy.getBean1d3dListMap().get("foo").get(0)[0][0][0]).isType(ABean.class);
@@ -213,7 +213,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testBeanListMapIntegerKeys() throws Exception {
-		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(new ABean().init())));
+		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(ABean.get())));
 		assertObject(proxy.getBeanListMapIntegerKeys()).json().is("{'1':[{a:1,b:'foo'}]}");
 		assertEquals("{'1':[{a:1,b:'foo'}]}", cf.get("A/beanListMapIntegerKeys"));
 		assertObject(proxy.getBeanListMapIntegerKeys().get(1).get(0)).isType(ABean.class);
@@ -223,7 +223,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBean() throws Exception {
-		proxy.setTypedBean(new TypedBeanImpl().init());
+		proxy.setTypedBean(TypedBeanImpl.get());
 		assertObject(proxy.getTypedBean()).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
 		assertEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", cf.get("A/typedBean"));
 		assertObject(proxy.getTypedBean()).isType(TypedBeanImpl.class);
@@ -231,7 +231,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBean3dArray() throws Exception {
-		proxy.setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
+		proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null});
 		assertObject(proxy.getTypedBean3dArray()).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
 		assertEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", cf.get("A/typedBean3dArray"));
 		assertObject(proxy.getTypedBean3dArray()[0][0][0]).isType(TypedBeanImpl.class);
@@ -239,7 +239,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanList() throws Exception {
-		proxy.setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
+		proxy.setTypedBeanList(Arrays.asList((TypedBean)TypedBeanImpl.get()));
 		assertObject(proxy.getTypedBeanList()).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'}]");
 		assertEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", cf.get("A/typedBeanList"));
 		assertObject(proxy.getTypedBeanList().get(0)).isType(TypedBeanImpl.class);
@@ -247,7 +247,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBean1d3dList() throws Exception {
-		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null));
+		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 		assertObject(proxy.getTypedBean1d3dList()).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
 		assertEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", cf.get("A/typedBean1d3dList"));
 		assertObject(proxy.getTypedBean1d3dList().get(0)[0][0][0]).isType(TypedBeanImpl.class);
@@ -255,7 +255,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanMap() throws Exception {
-		proxy.setTypedBeanMap(AMap.of("foo",new TypedBeanImpl().init()));
+		proxy.setTypedBeanMap(AMap.of("foo",TypedBeanImpl.get()));
 		assertObject(proxy.getTypedBeanMap()).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
 		assertEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", cf.get("A/typedBeanMap"));
 		assertObject(proxy.getTypedBeanMap().get("foo")).isType(TypedBeanImpl.class);
@@ -263,7 +263,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanListMap() throws Exception {
-		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
 		assertObject(proxy.getTypedBeanListMap()).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
 		assertEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMap"));
 		assertObject(proxy.getTypedBeanListMap().get("foo").get(0)).isType(TypedBeanImpl.class);
@@ -271,7 +271,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBean1d3dListMap() throws Exception {
-		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 		assertObject(proxy.getTypedBean1d3dListMap()).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
 		assertEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", cf.get("A/typedBean1d3dListMap"));
 		assertObject(proxy.getTypedBean1d3dListMap().get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
@@ -279,7 +279,7 @@ public class ConfigInterfaceTest {
 
 	@Test
 	public void testTypedBeanListMapIntegerKeys() throws Exception {
-		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
 		assertObject(proxy.getTypedBeanListMapIntegerKeys()).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
 		assertEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", cf.get("A/typedBeanListMapIntegerKeys"));
 		assertObject(proxy.getTypedBeanListMapIntegerKeys().get(1).get(0)).isType(TypedBeanImpl.class);

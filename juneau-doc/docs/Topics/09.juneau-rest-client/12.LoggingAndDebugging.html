@@ -35,13 +35,16 @@ Logging and Debugging
 
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
-	MyBean <jv>bean</jv> = RestClient
+	<jc>// A simple bean we're going to round-trip.</jc>
+	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+	
+	<jv>bean</jv> = RestClient
 		.<jsm>create</jsm>()
 		.simpleJson()
-		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (req,res)-&gt;req.getUri().endsWith(<js>"/bean"</js>))
+		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
 		.logToConsole()
 		.build()
-		.post(<js>"http://localhost/bean"</js>, <jv>anotherBean</jv>)
+		.post(<js>"http://localhost/bean"</js>, <jv>bean</jv>)
 		.run()
 		.getBody().as(MyBean.<jk>class</jk>);
 </p>

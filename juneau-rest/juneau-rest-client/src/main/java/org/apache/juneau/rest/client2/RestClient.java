@@ -1202,7 +1202,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getBody().asString();
 	 *
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	Future&lt;MyBean&gtl <jv>myBeanFuture</jv> = <jv>client</jv>
+	 * 	Future&lt;MyBean&gt; <jv>myBeanFuture</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);

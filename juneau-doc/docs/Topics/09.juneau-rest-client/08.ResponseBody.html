@@ -54,10 +54,14 @@ Response Body
 	</ul>
 </ul>
 
-<br>
-
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
+	<jc>// Parse into a bean.</jc>
+	MyBean <jv>bean</jv> = <jv>client</jv>
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(MyBean.<jk>class</jk>);
+
 	<jc>// Parse into a linked-list of strings.</jc>
 	List&lt;String&gt; <jv>l1</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
@@ -119,8 +123,6 @@ Response Body
 		<li class='jm'><c>{@link oajr.client2.RestResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link oaj.assertions.FluentByteArrayAssertion}</c>
 	</ul>
 </ul>
-
-<br>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

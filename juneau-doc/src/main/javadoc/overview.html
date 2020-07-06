@@ -470,9 +470,9 @@
 		<li><p><a class='doclink' href='#juneau-rest-client.ResponseBody'>Response Body</a><span class='update'><b>8.1.4-new</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.CustomCallHandlers'>Custom Call Handlers</a><span class='update'><b>8.1.4-new</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.Interceptors'>Interceptors</a><span class='update'><b>8.1.4-new</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Remote'>@Remote</a><span class='update'>8.1.2-updated</span></p>
+			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Remote'>@Remote</a><span class='update'>8.1.2-updated,<b>8.1.4-updated</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Body'>@Body</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.FormData'>@FormData</a></p>
@@ -22579,7 +22579,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
-	MyBean bean = RestClient.<jsm>create</jsm>()
+	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
 		.simpleJson()
 		.build()
 		.get(<jsf>URI</jsf>)
@@ -22594,17 +22594,17 @@
 </p>
 
 <p class='bpcode w800'>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
-	RestClient client = builder.build();
-	RestRequest req = client.get(<jsf>URI</jsf>);
-	RestResponse res = req.run();
-	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
-	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
-	res = codeAssertion.is(200);
-	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
-	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
-	RestResponseBody body = res.getBody();
-	MyBean bean = body.as(MyBean.<jk>class</jk>);
+	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
+	RestResponse <jv>res</jv> = <jv>req</jv>.run();
+	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
+	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
+	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
+	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
+	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
+	RestResponseBody <jv>body</jv> = <jv>res</jv>.getBody();
+	MyBean <jv>bean</jv> = <jv>body</jv>.as(MyBean.<jk>class</jk>);
 </p>
 
 <p>
@@ -22619,17 +22619,18 @@
 	
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		Pet addPet(
-			<ja>@Body</ja> CreatePet pet,
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		);
 	}
  
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build();
-	PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
-	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 </p>
 
 <p>
@@ -22655,10 +22656,10 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client where all URIs are relative to localhost.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
 
 	<jc>// Use relative paths.</jc>
-	String body = client.get(<js>"/subpath"</js>).run().getBody().asString();
+	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getBody().asString();
 </p>
 
 <p>
@@ -22706,10 +22707,10 @@
 
 <p class='bpcode w800'>
 	<jc>// Consuming the response, so use run().</jc>
-	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
+	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
 
 	<jc>// Only interested in response status code, so use complete().</jc>
-	<jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+	<jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
 </p>
 
 <!-- ==================================================================================================== -->
@@ -22739,7 +22740,7 @@
 <p class='bpcode w800'>
 	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
 	<jc>// Typically easier to use when performing unit tests.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 </p>
 
 <p>
@@ -22748,21 +22749,21 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a REST client with support for multiple languages.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
+	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
 
 	<jc>// Create a REST client with support for all supported languages.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
 </p>
 
 <p>
-	When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
-	with bodies to specify which serializer should be selected.
+	When using clients with multiple language support, the request language is selected by setting the <c>Content-Type</c> 
+	request header.
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a REST client with support for multiple languages.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 
-	c.post(<jsf>URI</jsf>, myBean).contentType(<js>"application/json"</js>).complete().assertStatus().is(200);
+	<jv>client</jv>.post(<jsf>URI</jsf>, myBean).contentType(<js>"application/json"</js>).complete().assertStatus().is(200);
 </p>
 
 <p>
@@ -22770,10 +22771,10 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a REST client with no default languages supported.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
 
 	<jc>// Use JSON for this request.</jc>
-	c.post(<jsf>URI</jsf>, myBean).json().complete().assertStatus().is(200);
+	<jv>client</jv>.post(<jsf>URI</jsf>, myBean).json().complete().assertStatus().is(200);
 </p>
 
 <p>
@@ -22784,10 +22785,10 @@
 <p class='bpcode w800'>
 	<jc>// Create a basic REST client with JSON support.</jc>
 	<jc>// Use single-quotes and whitespace.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().json().sq().ws().build();
+	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
 
 	<jc>// Same, but using properties.</jc>
-	RestClient c = RestClient
+	RestClient <jv>client2</jv> = RestClient
 		.<jsm>create</jsm>()
 		.json()
 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
@@ -22852,6 +22853,38 @@
 	</ul>
 </ul>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a "Foo: bar" header to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Foo"</js>, <js>"bar"</js>).build();
+
+	<jc>// Or do it on every request.</jc>
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).header(<js>"Foo"</js>, <js>"bar"</js>).run().getBody().asString();
+</p>
+
+<p>
+	{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Object...) headers(Object...)} allows you to pass in a variety
+	of header objects, and {@link org.apache.juneau.rest.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)} allows
+	you to specify several headers in a compact fashion.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a bunch of headers to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.headers(
+			AMap.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
+			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>)  <jc>// A Header object.</jc>
+			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,()->getBar())  <jc>// A dynamic Header object.</jc>
+			Accept.<jsm>of</jsm>(<js>"application/json"</js>)  <jc>// Predefined Header objects.</jc>
+			HeaderSupplier.<jsm>ofPairs</jsm>(<js>"Foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of Header objects.</jc>
+			AList.<jsm>of</jsm>(ContentType.<jsm>of</jsm>(<js>"application/json"</js>))  <jc>// A list of anything else on this list.</jc>
+		)
+		.headerPairs(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
+		.build();
+</p>
+
 <p>
 	Additionally, methods are provided on the client builder and per request for all standard HTTP headers
 	such as {@link org.apache.juneau.rest.client2.RestClientBuilder#authorization(Object) authorization(Object)}.
@@ -22860,13 +22893,13 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that adds an Authorization header to every request.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
 
 	<jc>// Or do it per-request.</jc>
-	String response = client.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
 
 	<jc>// Or use an HttpHeader.</jc>
-	response = client.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
+	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
 </p>
 
 <p>
@@ -22877,18 +22910,18 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
 </p>
 
 <p>
-	The {@link org.apache.juneau.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on both requests
-	and responses.
+	The {@link org.apache.juneau.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on request headers.
 </p>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
-	RestClient c = RestClient.<jsm>create</jsm>()
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
 		.build();
 </p>
@@ -22900,6 +22933,9 @@
 <ul class='notes'>
 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
 		<c>NameValuePair</c> objects use the values returned by that bean directly.
+</ul>
+<ul class='seealso'>
+	<li class='jp'>{@link org.apache.juneau.http.header} - Predefined {@link org.apache.http.Header} beans.
 </ul>
 </div><!-- END: 9.2 - juneau-rest-client.RequestHeaders -->
 
@@ -22934,14 +22970,53 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
 
 	<jc>// Or do it on every request.</jc>
-	String response = client.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+</p>
+
+<p>
+	{@link org.apache.juneau.rest.client2.RestClientBuilder#queries(Object...) queries(Object...)} allows you to pass in a variety
+	of query parameter objects, and {@link org.apache.juneau.rest.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)} allows
+	you to specify several query parameters in a compact fashion.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a bunch of query parameters to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.queries(
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
+		)
+		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.build();
+</p>
+
+<p>
+	The {@link org.apache.juneau.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on query parameters.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a query parameter "foo=bar|baz" to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.query(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+		.build();
+</p>
+
+<p>
+	The methods with {@link org.apache.juneau.AddFlag} parameters allow you to control whether new query parameters get appended, prepended, or
+	replace existing query parameters with the same name.
 </p>
 
 <ul class='notes'>
-	<li>Like header values, dynamic values and OpenAPI schemas are supported.
 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
 		objects use the values returned by that bean directly.
 </ul>
@@ -22974,6 +23049,55 @@
 		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataCustom(Object) formDataCustom(Object)}
 	</ul>
 </ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a foo=bar form-data parameter to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().formData(<js>"foo"</js>, <js>"bar"</js>).build();
+
+	<jc>// Or do it on every request.</jc>
+	String <jv>response</jv> = <jv>client</jv>.formPost(<jsf>URI</jsf>).formData(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+</p>
+
+<p>
+	{@link org.apache.juneau.rest.client2.RestClientBuilder#formDatas(Object...) formDatas(Object...)} allows you to pass in a variety
+	of form-data parameter objects, and {@link org.apache.juneau.rest.client2.RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)} allows
+	you to specify several form-data parameters in a compact fashion.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a bunch of form-data parameters to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.formDatas(
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
+		)
+		.formDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.build();
+</p>
+
+<p>
+	The {@link org.apache.juneau.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on form-data parameters.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a form-data parameter "foo=bar|baz" to every request.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.formData(<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+		.build();
+</p>
+
+<p>
+	The methods with {@link org.apache.juneau.AddFlag} parameters allow you to control whether new form-data parameters get appended, prepended, or
+	replace existing form-data parameters with the same name.
+</p>
 
 <ul class='notes'>
 	<li>Like header values, dynamic values and OpenAPI schemas are supported.
@@ -23020,6 +23144,33 @@
 		{@link java.util.function.Supplier} - A supplier of anything on this list.
 </ul>
 
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client with Simple-JSON support.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	
+	<jc>// Post a JSON-serialized bean.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jv>bean</jv>)
+		.complete()
+		.assertStatus().code().is(200);
+	
+	<jc>// Post contents from a reader.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
+		.complete()
+		.assertStatus().code().is(200);
+	
+	<jc>// Post contents from an Apache HttpEntity object.</jc>
+	<jv>client</jv>
+		.post(<jsf>URI</jsf>)
+		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
+		.complete()
+		.assertStatus().code().is(200);
+</p>
+
 <ul class='notes'>
 	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
 		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
@@ -23048,7 +23199,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Only interested in status code.</jc>
-	<jk>int</jk> statusCode = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
 </p>
 
 <p>
@@ -23058,11 +23209,11 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Interested in multiple values.</jc>
-	Mutable&lt;Integer&gt; statusCode = Mutable.<jsm>create</jsm>();
-	Mutable&lt;String&gt; reasonPhrase = Mutable.<jsm>create</jsm>();
+	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
+	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
 	
-	client.get(<jsf>URI</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
-	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+statusCode.get()+<js>", reasonPhrase="</js>+reasonPhrase.get());
+	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
+	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
 </p>
 
 <ul class='notes'>
@@ -23078,15 +23229,15 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Status assertion using a static value.</jc>
-	String body = client.get(<jsf>URI</jsf>)
+	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
 		.assertStatus().code().isBetween(200,399)
 		.getBody().asString();
 
 	<jc>// Status assertion using a predicate.</jc>
-	String body = client.get(<jsf>URI</jsf>)
+	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().passes(x -&gt; x&lt;400)
+		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
 		.getBody().asString();
 </p>
 </div><!-- END: 9.6 - juneau-rest-client.ResponseStatus -->
@@ -23120,7 +23271,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// See if response contains Location header.</jc>
-	<jk>boolean</jk> hasLocationHeader = client.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
 </p>
 
 <p>
@@ -23161,7 +23312,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Parse the header "Foo: bar|baz".</jc>
-	List&lt;String&gt; fooHeader = client
+	List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.complete()
 		.getHeader(<js>"Foo"</js>).schema(<jsf>T_ARRAY_PIPES</jsf>).as(List.<jk>class</jk>, String.<jk>class</jk>);
@@ -23189,7 +23340,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Assert the response content type is any sort of JSON.</jc>
-	String body = client.get(<jsf>URI</jsf>)
+	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
 		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
 		.getBody().asString();
@@ -23238,36 +23389,40 @@
 	</ul>
 </ul>
 
-<br>
-
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
+	<jc>// Parse into a bean.</jc>
+	MyBean <jv>bean</jv> = <jv>client</jv>
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(MyBean.<jk>class</jk>);
+
 	<jc>// Parse into a linked-list of strings.</jc>
-	List&lt;String&gt; l = client
+	List&lt;String&gt; <jv>l1</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 
 	<jc>// Parse into a linked-list of beans.</jc>
-	List&lt;MyBean&gt; l = client
+	List&lt;MyBean&gt; <jv>l2</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 
 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	List&lt;List&lt;String&gt;&gt; l = client
+	List&lt;List&lt;String&gt;&gt; <jv>l3</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 
 	<jc>// Parse into a map of string keys/values.</jc>
-	Map&lt;String,String&gt; m = client
+	Map&lt;String,String&gt; <jv>m4</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 
 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	Map&lt;String,List&lt;MyBean&gt;&gt; m = client
+	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>m5</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -23283,11 +23438,11 @@
 
 <p class='bpcode w800'>
 	<jc>// Cache the response body so we can access it twice.</jc>
-	InputStream inputStream = client
+	InputStream <jv>inputStream</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.cacheBody()
-		.getBody().pipeTo(someOtherStream)
+		.getBody().pipeTo(<jv>someOtherStream</jv>)
 		.getBody().asInputStream();
 </p>
 
@@ -23304,12 +23459,10 @@
 	</ul>
 </ul>
 
-<br>
-
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Assert that the body contains the string "Success".</jc>
-	String body = client
+	String <jv>body</jv> = <jv>client</jv>
 		.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().assertString().contains(<js>"Success"</js>)
@@ -23324,7 +23477,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
-	MyBean bean = client.get(<jsf>URI</jsf>)
+	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
 		.getBody().assertObject(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>)
 		.getBody().as(MyBean.<jk>class</jk>);
@@ -23351,6 +23504,35 @@
 	</ul>
 </ul>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our custom call handler.</jc>
+	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
+
+		<jk>private final</jk> RestClient <jf>client</jf>;
+
+		<jk>public</jk> MyRestCallHandler(RestClient <jv>client</jv>) {
+			<jk>this</jk>.<jf>client</jf> = <jv>client</jv>;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+			<jc>// Insert any special handling here.</jc>
+			<jc>// The following is the default behavior:</jc>
+			<jk>if</jk> (<jv>target</jv> == <jk>null</jk>)
+				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)<jv>request</jv>, <jv>context</jv>);
+			<jk>return</jk> <jf>client</jf>.execute(<jv>target</jv>, <jv>request</jv>, <jv>context</jv>);
+		}
+	}
+	
+	<jc>// Create a client that uses our custom handler.</jc>
+	RestClient <jv>client</jv> = RestClient()
+		.create()
+		.json()
+		.callHandler(MyCallHandler.<jk>class</jk>)
+		.build();
+</p>
+ 
 <p>
 	Note that there are other ways of accomplishing this such as extending the {@link org.apache.juneau.rest.client2.RestClient} class and overriding
 	the {@link org.apache.juneau.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
@@ -23383,36 +23565,43 @@
 		<li class='jm'>{@link org.apache.juneau.rest.client2.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
 	</ul>
 </ul>
+
+<h5 class='section'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client with a customized interceptor.</jc>
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.interceptors(
+			<jk>new</jk> RestCallInterceptor() {
+
+				<ja>@Override</ja>
+				<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+					<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
+					// set on the request from the client.</jc>
+				}
+
+				<ja>@Override</ja>
+				<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+					<jc>// Intercept immediately after an HTTP response has been received.</jc>
+				}
+
+				<ja>@Override</ja>
+				<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
+					<jc>// Intercept when the response body is consumed.</jc>
+				}
+			}
+		)
+		.build();
+</p>
 </div><!-- END: 9.10 - juneau-rest-client.Interceptors -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.11 - REST Proxies</a><span class='update'><b>8.1.4-new</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.11 - REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></h3>
 <div class='topic'><!-- START: 9.11 - juneau-rest-client.RestProxies -->
 <p>
 	One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
-	arbitrary remote REST resources.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
-	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
-	<jk>public interface</jk> PetStore {
-		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
-		Pet addPet(
-			<ja>@Body</ja> CreatePet pet,
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
-		);
-	}
-
-	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
-		PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-		CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
-		Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
-	}
+	arbitrary 3rd party REST resources.
 </p>
 
 <p>
@@ -23425,46 +23614,9 @@
 		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class) getRemote(Class&lt;T&gt;)} <jk>returns</jk> T</c>
 		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object) getRemote(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
 		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
-		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class) getRrpcInterface(Class&lt;T&gt;)} <jk>returns</jk> T</c>
-		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class,Object) getRrpcInterface(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
-		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class,Object,Serializer,Parser) getRrpcInterface(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
 	</ul>
 </ul>
 
-<p>
-	Two basic types of remote interfaces are provided:
-</p>
-
-<ul class='spaced-list'>
-	<li>{@link org.apache.juneau.http.remote.Remote @Remote}-annotated interfaces.  These can be defined against arbitrary external REST resources.
-	<li>RPC-over-REST interfaces.  These are Java interfaces that allow you to make method calls on server-side POJOs.
-</ul>
-
-
-
-
-
-
-
-
-
-
-<p>
-	The <c>juneau-rest-client</c> library can also be used to define interface proxies against 3rd-party REST interfaces.
-	This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
-	virtually any REST interface.
-</p>
-<p>
-	Remote resources are instantiated using one of the following methods:
-</p>
-<ul class='javatree'>
-	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClient}
-	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class) getRemote(Class)}
-		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object) getRemote(Class,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class,Object,Serializer,Parser)}
-	</ul>
-</ul>
 <p>
 	Annotations are used on the interface and interface methods to specify how to convert input and output to HTTP headers, query parameters, form 
 	post parameters, or request/response bodies.
@@ -23493,24 +23645,30 @@
 	<jk>public interface</jk> PetStore {
 		
 		<ja>@RemoteMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/pets"</js>)
-		String addPet(
-			<ja>@Body</ja> CreatePet pet, 
-			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
-			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+		Pet addPet(
+			<ja>@Body</ja> CreatePet <jv>createPet</jv>, 
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		);
 	}
 </p>
+
 <p class='bpcode w800'>	
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
-		PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-		CreatePet pet = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
-		String response = store.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
-	}
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+	
+	<jc>// Instantiate our proxy interface.</jc>
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	
+	<jc>// Use it to create a pet.</jc>
+	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 </p>
+
 <p>
 	The call above translates to the following REST call:
 </p>
+
 <p class='bpcode w800'>
 	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
 	Accept: application/json
@@ -23540,18 +23698,24 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Remote' id='juneau-rest-client.RestProxies.Remote'>9.11.1 - @Remote</a><span class='update'>8.1.2-updated</span></h4>
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Remote' id='juneau-rest-client.RestProxies.Remote'>9.11.1 - @Remote</a><span class='update'>8.1.2-updated,<b>8.1.4-updated</b></span></h4>
 <div class='topic'><!-- START: 9.11.1 - juneau-rest-client.RestProxies.Remote -->
 <p>
 	The {@link org.apache.juneau.http.remote.Remote @Remote} annotation is used on your interface class
 	to identify it as a REST proxy interface.
 </p>
+
 <ul class='javatree'>
 	<li class='ja'>{@link org.apache.juneau.http.remote.Remote}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.remote.Remote#path path}
+		<li class='jf'>{@link org.apache.juneau.http.remote.Remote#headers headers}
+		<li class='jf'>{@link org.apache.juneau.http.remote.Remote#headerSupplier headerSupplier}
+		<li class='jf'>{@link org.apache.juneau.http.remote.Remote#version version}
+		<li class='jf'>{@link org.apache.juneau.http.remote.Remote#versionHeader versionHeader}
 	</ul>
 </ul>
+
 <p>
 	The <ja>@Remote</ja> annotation is optional, but often included for code readability.
 </p>
@@ -23561,41 +23725,139 @@
 	The {@link org.apache.juneau.http.remote.Remote#path @Remote(path)} annotation is used to define the
 	HTTP path of the REST service.
 </p>
+
 <p>
 	The path can be an absolute path to your REST service.
 </p>
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@Remote</ja>(path=<js>"http://localhost:10000/petstore"</js>)
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>	
-	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
 </p>
+
+<p>
+	{@doc DefaultSvlVariables} can also be used in the path.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<jc>// URL is specified via a system property.</jc>
+	<ja>@Remote</ja>(path=<js>"$P{PetStoreUrl}"</js>)
+	<jk>public interface</jk> PetStore {...}
+</p>
+
 <p>
 	When a relative path is specified, it's relative to the root-url defined on the <c>RestClient</c> used to instantiate the interface.
 </p>
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>
-	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();	
-	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.json()
+		.rootUrl(<js>"http://localhost:10000"</js>)
+		.build();
+			
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
 </p>
+
 <p>
 	When no path is specified, the root-url defined on the <c>RestClient</c> is used.
 </p>
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@Remote</ja>
 	<jk>public interface</jk> PetStore {...}
 </p>
 <p class='bpcode w800'>
-	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
-	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
+	RestClient <jv>client</jv> = RestClient
+		.<jsm>create</jsm>()
+		.json()
+		.rootUrl(<js>"http://localhost:10000/petstore"</js>)
+		.build();
+			
+	PetStore <jv>store</jv> = <jv>client<jv>.getRemote(PetStore.<jk>class</jk>);
 </p>
+
+
+<h5 class='topic'>@Remote(headers/headerSupplier)</h5>
+<p>
+	The {@link org.apache.juneau.http.remote.Remote#headers @Remote(headers)} and {@link org.apache.juneau.http.remote.Remote#headerSupplier @Remote(headerSupplier)} 
+	annotations are used to add headers on all requests.  
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@Remote</ja>(
+		path=<js>"/petstore"</js>,
+		headers={
+			<js>"Foo: bar"</js>,
+			<js>"Baz: $P{bazProperty}"</js>
+		},
+		headerSupplier=MyDynamicHeaderSupplier.<jk>class</jk>
+	)
+	<jk>public interface</jk> PetStore {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Our dynamic supplier.</jc>
+	<jk>public class</jk> MyHeaderSupplier <jk>extends</jk> HeaderSupplier {
+	
+		<jc>// Headers can be added here at runtime.</jc>
+		<jk>public static</jk> HeaderSupplier <jsf>DYNAMIC_HEADERS</jsf> = <jk>new</jk> HeaderSupplier();
+	
+		<jk>public</jk> MyHeaderSupplier() {
+			add(<js>"Qux"</js>,<js>"q2x"</js>);  
+			add(<jsf>DYNAMIC_HEADERS</jsf>);
+		}
+	}
+</p>
+
+
+<h5 class='topic'>@Remote(version/versionHeader)</h5>
+<p>
+	The {@link org.apache.juneau.http.remote.Remote#version @Remote(version)} and {@link org.apache.juneau.http.remote.Remote#versionHeader @Remote(versionHeader)} 
+	annotations are used to specify the client-side version of this interface that can be used on the server side
+	to perform version-specific handling.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@Remote</ja>(
+		path=<js>"/petstore"</js>,
+		version=<js>"1.2.3"</js>  <jc>// Adds "X-Client-Version: 1.2.3" header to all requests.</jc>
+	)
+	<jk>public interface</jk> PetStore {...}
+</p>
+
+<p>
+	This can be used in conjunction with the server-side client-versioning support.
+</p>
+<p class='bpcode w800'>
+	<jc>// Call this method if X-Client-Version is at least 2.0.
+	// Note that this also matches 2.0.1.</jc>
+	<ja>@RestMethod</ja>(clientVersion=<js>"2.0"</js>)
+	<jk>public</jk> Object getFoo()  {...}
+
+	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
+	<ja>@RestMethod</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
+	<jk>public</jk> Object getFoo()  {...}
+
+	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
+	<ja>@RestMethod</ja>(clientVersion=<js>"[0,1.1)"</js>)
+	<jk>public</jk> Object getFoo()  {...}
+</p>
+
+<ul class='seealso'>
+	<li class='doclink'>{@doc juneau-rest-server.ClientVersioning}
+</ul>
 </div><!-- END: 9.11.1 - juneau-rest-client.RestProxies.Remote -->
 
 <!-- ==================================================================================================== -->
@@ -23625,7 +23887,7 @@
 		
 		<jc>// GET /pets/{petId}</jc>
 		<ja>@RemoteMethod</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
-		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id);
+		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>id</jv>);
 	}
 </p>
 <p>
@@ -23767,7 +24029,7 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - OpenAPI schema.
 	</ul>
 </ul>
 
@@ -23778,7 +24040,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
-		String addPet(<ja>@Body</ja> Pet pet);
+		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>;
 	}
 </p>
 <p class='bpcode w800'>
@@ -23787,7 +24049,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
-		String addPet(Pet pet);
+		String addPet(Pet <jv>pet</jv>);
 	}
 
 	<ja>@Body</ja>
@@ -23837,7 +24099,20 @@
 				)
 			)
 		)
-		<jk>int</jk>[][] input
+		<jk>int</jk>[][] <jv>input</jv>
+	);
+</p>
+<p class='bpcode w800'>
+	<jc>// Same as above but using free-form schema.</jc>
+	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	String addCommaDelimitedPipeDelimitedInts(
+		<ja>@Body</ja>(
+			serializer=OpenApiSerializer.<jk>class</jk>,
+			schema=<ja>@Schema</ja>(
+				<js>"type:'array,collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>
+			)
+		)
+		<jk>int</jk>[][] <jv>input</jv>
 	);
 </p>
 <p>
@@ -23894,30 +24169,30 @@
 		<jc>// Explicit names specified for form data parameters.</jc>
 		<ja>@RemoteMethod</ja>
 		String postParameters(
-			<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
-			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo
+			<ja>@FormData</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>,
+			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>
 		);
 
 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
 		<jc>// Name "*" is inferred.</jc>
 		<ja>@RemoteMethod</ja>
-		String postNameValuePairs(<ja>@FormData</ja> NameValuePairs nameValuePairs);
+		String postNameValuePairs(<ja>@FormData</ja> NameValuePairs <jv>nameValuePairs</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<ja>@RemoteMethod</ja>
-		String postMap(<ja>@FormData</ja> Map&lt;String,Object&gt; map);
+		String postMap(<ja>@FormData</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<ja>@RemoteMethod</ja>
-		String postBean(<ja>@FormData</ja> MyBean bean);
+		String postBean(<ja>@FormData</ja> MyBean <jv>bean</jv>);
 
 		<jc>// An entire form-data HTTP body as a String.</jc>
 		<ja>@RemoteMethod</ja>
-		String postString(<ja>@FormData</ja> String string);
+		String postString(<ja>@FormData</ja> String <jv>string</jv>);
 
 		<jc>// An entire form-data HTTP body as a Reader.</jc>
 		<ja>@RemoteMethod</ja>
-		String postReader(<ja>@FormData</ja> Reader reader);
+		String postReader(<ja>@FormData</ja> Reader <jv>reader</jv>);
 	}
 </p>
 
@@ -24001,33 +24276,33 @@
 		<jc>// Explicit names specified for query parameters.</jc>
 		<ja>@RemoteMethod</ja>
 		String parameters(
-			<ja>@Query</ja>(<js>"foo"</js>)</ja> String foo,
-			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+			<ja>@Query</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>,
+			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
  
 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String nameValuePairs(<ja>@Query</ja> NameValuePairs nameValuePairs);
+		String nameValuePairs(<ja>@Query</ja> NameValuePairs <jv>nameValuePairs</jv>);
  
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String map(<ja>@Query</ja> Map&lt;String,Object&gt; map);
+		String map(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String bean(<ja>@Query</ja> MyBean myBean);
+		String bean(<ja>@Query</ja> MyBean <jv>myBean</jv>);
 
 		<jc>// An entire query string as a String.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String string(<ja>@Query</ja> String string);
+		String string(<ja>@Query</ja> String <jv>string</jv>);
 
 		<jc>// An entire query string as a Reader.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String reader(<ja>@Query</ja> Reader reader);
+		String reader(<ja>@Query</ja> Reader <jv>reader</jv>);
 	}
 </p>
 
@@ -24111,23 +24386,23 @@
 		<jc>// Explicit names specified for HTTP headers.</jc>
 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
-		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String foo,
-			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo pojo);
+		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String <jv>foo</jv>,
+			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
 		<jc>// Same as @Header("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
-		String myProxyMethod2(<ja>@Header</ja> NameValuePairs nameValuePairs);
+		String myProxyMethod2(<ja>@Header</ja> NameValuePairs <jv>nameValuePairs</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Header("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
-		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; map);
+		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Header("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
-		String myProxyMethod4(<ja>@Header</ja> MyBean myBean);
+		String myProxyMethod4(<ja>@Header</ja> MyBean <jv>myBean</jv>);
 	}
 </p>
 
@@ -24201,22 +24476,22 @@
 		<jc>// Explicit names specified for path parameters.</jc>
 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
-		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String foo, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
 		<jc>// Same as @Path("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod2(<ja>@Path</ja> NameValuePairs nameValuePairs);
+		String myProxyMethod2(<ja>@Path</ja> NameValuePairs <jv>nameValuePairs</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Path("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod3(<ja>@Path</ja> Map&lt;String,Object&gt; map);
+		String myProxyMethod3(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>map</jv>);
 
 		<jc>// Multiple values pulled from a bean.</jc>
 		<jc>// Same as @Path("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod4(<ja>@Path</ja> MyBean myBean);
+		String myProxyMethod4(<ja>@Path</ja> MyBean <jv>myBean</jv>);
 	}
 </p>
 
@@ -24275,7 +24550,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>
-		String postPet(CreatePetRequest bean);
+		String postPet(CreatePetRequest <jv>bean</jv>);
 	}
 </p>
 <p class='bpcode w800'>
@@ -24284,8 +24559,8 @@
 	
 		<jk>private</jk> CreatePet <jf>pet</jf>;
 	
-		<jk>public</jk> CreatePetRequest(String name, <jk>float</jk> price) {
-			<jk>this</jk>.<jf>pet</jf> = <jk>new</jk> CreatePet(name, price);
+		<jk>public</jk> CreatePetRequest(String <jv>name</jv>, <jk>float</jk> <jv>price</jv>) {
+			<jk>this</jk>.<jf>pet</jf> = <jk>new</jk> CreatePet(<jv>name</jv>, <jv>price</jv>);
 		}
 		
 		<ja>@Body</ja>
@@ -24295,7 +24570,7 @@
 	
 		<ja>@Query</ja>
 	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
-	 		<jk>return</jk> OMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
+	 		<jk>return</jk> AMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
 	 	}
 	 	
 	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
@@ -24305,9 +24580,10 @@
 	}
 </p>
 <p class='bpcode w800'>
-	PetStore store = restClient.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	CreatePetRequest requestBean = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
-	String response = store.postPet(requestBean);
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	
+	CreatePetRequest <jv>requestBean</jv> = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
+	String <jv>response</jv> = <jv>store</jv>.postPet(requestBean);
 </p>
 <p>
 	The <ja>@Request</ja> annotation can be applied to either the class or argument.
@@ -24351,7 +24627,7 @@
 <p class='bpcode w800'>
 	<jk>public class</jk> CreatePetRequestImpl <jk>implements</jk> CreatePetRequest {
 	
-		<jk>public</jk> CreatePetRequestImpl(String name, <jk>float</jk> price) {...}
+		<jk>public</jk> CreatePetRequestImpl(String <jv>name</jv>, <jk>float</jk> <jv>price</jv>) {...}
 
 		<ja>@Override</ja>
 		<jk>public</jk> CreatePet getBody() {
@@ -24407,15 +24683,16 @@
 		UUID getUUID();
 		
 		<ja>@ResponseStatus</ja>
-		int getStatus();
+		<jk>int</jk> getStatus();
 	}
 </p>
 <p class='bpcode w800'>
-	PetStore store = restClient.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
-	CreatePetResponse response = store.postPet(...);
-	Pet pet = response.getBody();
-	UUID uuid = response.getUUID();
-	<jk>int</jk> status = response.getStatus();
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	
+	CreatePetResponse <jv>response</jv> = <jv>store</jv>.postPet(...);
+	Pet <jv>pet</jv> = <jv>response</jv>.getBody();
+	UUID <jv>uuid</jv> = <jv>response</jv>.getUUID();
+	<jk>int</jk> <jv>status</jv> = <jv>response</jv>.getStatus();
 </p>
 <p>
 	The annotated methods must be no-arg.  
@@ -24468,13 +24745,13 @@
 				required=<jk>true</jk>,
 				example=<js>"foobar"</js>
 			)
-			String apiKey,
+			String <jv>apiKey</jv>,
 			<ja>@Path</ja>(
 				name=<js>"petId"</js>,
 				description=<js>"Pet id to delete"</js>,
 				example=<js>"123"</js>
 			)
-			<jk>long</jk> petId
+			<jk>long</jk> <jv>petId</jv>
 		) <jk>throws</jk> IdNotFound, NotAcceptable;
 		
 		...
@@ -24510,8 +24787,8 @@
 			summary=<js>"Deletes a pet"</js>,
 			...
 		)
-		<jk>public</jk> Ok deletePet(String apiKey, long petId) <jk>throws</jk> IdNotFound, NotAcceptable {
-			<jsf>store</jsf>.removePet(petId);
+		<jk>public</jk> Ok deletePet(String <jv>apiKey</jv>, <jk>long</jk> <jv>petId</jv>) <jk>throws</jk> IdNotFound, NotAcceptable {
+			<jsf>store</jsf>.removePet(<jv>petId</jv>);
 			<jk>return</jk> <jsf>OK</jsf>;
 		}
 </p>
@@ -24519,13 +24796,12 @@
 	Then use the interface as a remote resource like so:
 </p>
 <p class='bpcode w800'>
-	<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
-		PetStore ps = rc.getRemote(PetStore.<jk>class</jk>);
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
 
-		<jk>for</jk> (Pet x : ps.getPets()) {
-			ps.deletePet(<js>"my-special-key"</js>, x.getId());
-			System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + x.getId());
-		}
+	<jk>for</jk> (Pet <jv>x</jv> : <jv>store</jv>.getPets()) {
+		<jv>store</jv>.deletePet(<js>"my-special-key"</js>, <jv>x</jv>.getId());
+		System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + <jv>x</jv>.getId());
 	}
 </p>	
 <p>
@@ -24562,13 +24838,16 @@
 
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
-	MyBean bean = RestClient
+	<jc>// A simple bean we're going to round-trip.</jc>
+	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+	
+	<jv>bean</jv> = RestClient
 		.<jsm>create</jsm>()
 		.simpleJson()
-		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (req,res)-&gt;req.getUri().endsWith(<js>"/bean"</js>))
+		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
 		.logToConsole()
 		.build()
-		.post(<js>"http://localhost/bean"</js>, bean)
+		.post(<js>"http://localhost/bean"</js>, <jv>bean</jv>)
 		.run()
 		.getBody().as(MyBean.<jk>class</jk>);
 </p>
@@ -24648,16 +24927,16 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client with customized HttpClient settings.</jc>
-	MyBean bean = RestClient
+	MyBean <jv>bean</jv> = RestClient
 		.<jsm>create</jsm>()
 		.disableRedirectHandling()
-		.connectionManager(myConnectionManager)
-		.addInterceptorFirst(myHttpRequestInterceptor)
+		.connectionManager(<jv>myConnectionManager</jv>)
+		.addInterceptorFirst(<jv>myHttpRequestInterceptor</jv>)
 		.build();
 </p>
 
 <p>
-	Refer to the {@link org.apache.http.client.impl.HttpClientBuilder HTTP Client Builder API} for more information.
+	Refer to the {@link org.apache.http.client.impl.HttpClientBuilder HttpClientBuilder} docs for more information.
 </p>
 </div><!-- END: 9.13 - juneau-rest-client.CustomizingHttpClient -->
 
@@ -24675,18 +24954,18 @@
 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
 
 		<jc>// Must provide this constructor!</jc>
-		<jk>public</jk> MyRestClient(PropertyStore ps) {
-			<jk>super</jk>(ps);
+		<jk>public</jk> MyRestClient(PropertyStore <jv>ps</jv>) {
+			<jk>super</jk>(<jv>ps</jv>);
 		}
 
 		<ja>@Override</ja>
-		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
 			<jc>// Perform special handling of requests.</jc>
 		}
 	}
 
 	<jc>// Instantiate your client.</jc>
-	MyRestClient client = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
+	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
 </p>
 
 <p>
@@ -24719,7 +24998,7 @@
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that performs BASIC authentication using the specified user/pw.</jc>
-	RestClient restClient = RestClient.<jsm>create</jsm>() 
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>() 
 		.basicAuth(<jsf>HOST</jsf>, <jsf>PORT</jsf>, <jsf>USER</jsf>, <jsf>PW</jsf>)
 		.build();
 </p>
@@ -24727,12 +25006,12 @@
 	This is functionally equivalent to the following:
 </p>
 <p class='bpcode w800'>
-	RestClientBuilder builder = RestClient.<jsm>create</jsm>();
-	AuthScope scope = <jk>new</jk> AuthScope(<jsf>HOST</jsf>, <jsf>PORT</jsf>);
-	Credentials up = <jk>new</jk> UsernamePasswordCredentials(<jsf>USER</jsf>, <jsf>PW</jsf>);
-	CredentialsProvider p = <jk>new</jk> BasicCredentialsProvider();
-	p.setCredentials(scope, up);
-	builder.setDefaultCredentialsProvider(p);
+	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+	AuthScope <jv>scope</jv> = <jk>new</jk> AuthScope(<jsf>HOST</jsf>, <jsf>PORT</jsf>);
+	Credentials <jv>up</jv> = <jk>new</jk> UsernamePasswordCredentials(<jsf>USER</jsf>, <jsf>PW</jsf>);
+	CredentialsProvider <jv>p</jv> = <jk>new</jk> BasicCredentialsProvider();
+	<jv>p</jv>.setCredentials(<jv>scope</jv>, <jv>up</jv>);
+	<jv>builder</jv>.setDefaultCredentialsProvider(<jv>p</jv>);
 </p>
 </div><!-- END: 9.15.1 - juneau-rest-client.Authentication.BASIC -->
 
@@ -24749,14 +25028,14 @@
 	authenticated client.
 </p>
 <p>
-	The following example shows how the <c>JazzRestClient</c> class provides FORM-based 
-	authentication support.
+	The following example shows an implementation of a client that performs FORM-based authentication against
+	the IBM Jazz platform.
 </p>
 <p class='bpcode w800'>
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI <jv>jazzUri</jv>, String <jv>user</jv>, String <jv>pw</jv>) <jk>throws</jk> IOException {
 		...
 	}
 
@@ -24765,46 +25044,47 @@
 	 */</jd>
 	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
-		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
-		formBasedAuthenticate(client);
-		visitAuthenticatedURL(client);
-		<jk>return</jk> client;
+		CloseableHttpClient <jv>client</jv> = <jk>super</jk>.createHttpClient();
+		formBasedAuthenticate(<jv>client</jv>);
+		visitAuthenticatedURL(<jv>client</jv>);
+		<jk>return</jk> <jv>client</jv>;
 	}
 
 	<jc>/*
 	 * Performs form-based authentication against the Jazz server.
 	 */</jc>
-	<jk>private void</jk> formBasedAuthenticate(HttpClient client) <jk>throws</jk> IOException {
+	<jk>private void</jk> formBasedAuthenticate(HttpClient <jv>client</jv>) <jk>throws</jk> IOException {
 
-		URI uri2 = <jf>jazzUri</jf>.resolve(<js>"j_security_check"</js>);
-		HttpPost request = <jk>new</jk> HttpPost(uri2);
-		request.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		URI <jv>uri2</jv> = <jf>jazzUri</jf>.resolve(<js>"j_security_check"</js>);
+		HttpPost <jv>request</jv> = <jk>new</jk> HttpPost(uri2);
+		<jv>request</jv>.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
 		
 		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
-		request.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+		<jv>request</jv>.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
 
-		NameValuePairs params = <jk>new</jk> NameValuePairs()
-			.append(<jk>new</jk> BasicNameValuePair(<js>"j_username""</js>, <jf>user</jf>))
-			.append(<jk>new</jk> BasicNameValuePair(<js>"j_password"</js>, <jf>pw</jf>));
-		request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
+		List&lt;NameValuePair&gt; <jv>params</jv> = AList.<jsm>of</jsm>(
+			BasicNameValuePair.<jsm>of</jsm>(<js>"j_username""</js>, <jf>user</jf>),
+			BasicNameValuePair.<jsm>of</jsm>(<js>"j_password"</js>, <jf>pw</jf>)
+		);
+		<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
 
-		HttpResponse response = client.execute(request);
+		HttpResponse <jv>response</jv> = <jv>client</jv>.execute(<jv>request</jv>);
 		<jk>try</jk> {
-			<jk>int</jk> rc = response.getStatusLine().getStatusCode();
+			<jk>int</jk> <jv>rc</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			Header authMsg = response.getFirstHeader(<js>"X-com-ibm-team-repository-web-auth-msg"</js>);
-			<jk>if</jk> (authMsg != <jk>null</jk>)
-				<jk>throw new</jk> IOException(authMsg.getValue());
+			Header <jv>authMsg</jv> = <jv>response</jv>.getFirstHeader(<js>"X-com-ibm-team-repository-web-auth-msg"</js>);
+			<jk>if</jk> (<jv>authMsg</jv> != <jk>null</jk>)
+				<jk>throw new</jk> IOException(<jv>authMsg</jv>.getValue());
 
 			<jc>// The form auth request should always respond with a 200 ok or 302 redirect code</jc>
-			<jk>if</jk> (rc == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
-				<jk>if</jk> (response.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
+			<jk>if</jk> (<jv>rc</jv> == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
+				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
 					<jk>throw new</jk> IOException(<js>"Invalid credentials."</js>);
-			} <jk>else if</jk> (rc != <jsf>SC_OK</jsf>) {
-				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + rc);
+			} <jk>else if</jk> (<jv>rc</jv> != <jsf>SC_OK</jsf>) {
+				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + <jv>rc</jv>);
 			}
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 
@@ -24813,13 +25093,13 @@
 	 * authenticated URL has been visited. This same URL must also be visited after authenticating with j_security_check
 	 * otherwise tomcat will not consider the session authenticated
 	 */</jc>
-	<jk>private int</jk> visitAuthenticatedURL(HttpClient httpClient) <jk>throws</jk> IOException {
-		HttpGet authenticatedURL = <jk>new</jk> HttpGet(<jf>jazzUri</jf>.resolve(<js>"authenticated/identity"</js>));
-		HttpResponse response = httpClient.execute(authenticatedURL);
+	<jk>private int</jk> visitAuthenticatedURL(HttpClient <jv>httpClient</jv>) <jk>throws</jk> IOException {
+		HttpGet <jv>authenticatedURL</jv> = <jk>new</jk> HttpGet(<jf>jazzUri</jf>.resolve(<js>"authenticated/identity"</js>));
+		HttpResponse <jv>response</jv> = <jv>httpClient</jv>.execute(<jv>authenticatedURL</jv>);
 		<jk>try</jk> {
-			<jk>return</jk> response.getStatusLine().getStatusCode();
+			<jk>return</jk> <jv>response</jv>.getStatusLine().getStatusCode();
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 </p>
@@ -24830,14 +25110,14 @@
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.15.3 - OIDC Authentication</a></h4>
 <div class='topic'><!-- START: 9.15.3 - juneau-rest-client.Authentication.OIDC -->
 <p>
-	The following example shows how the <c>JazzRestClient</c> class provides OIDC authentication 
-	support.
+	The following example shows an implementation of a client that performs OIDC authentication against
+	the IBM Jazz platform.
 </p>
 <p class='bpcode w800'>
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI <jv>jazzUri</jv>, String <jv>user</jv>, String <jv>pw</jv>) <jk>throws</jk> IOException {
 		...
 	}
 
@@ -24846,108 +25126,108 @@
 	 */</jd>
 	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
-		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
-		oidcAuthenticate(client);
-			<jk>return</jk> client;
-		}
+		CloseableHttpClient <jv>client</jv> = <jk>super</jk>.createHttpClient();
+		oidcAuthenticate(<jv>client</jv>);
+		<jk>return</jk> <jv>client</jv>;
+	}
 
-	<jk>private void</jk> oidcAuthenticate(HttpClient client) <jk>throws</jk> IOException {
+	<jk>private void</jk> oidcAuthenticate(HttpClient <jv>client</jv>) <jk>throws</jk> IOException {
 
-		HttpGet request = <jk>new</jk> HttpGet(<jf>jazzUri</jf>);
-		request.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		HttpGet <jv>request</jv> = <jk>new</jk> HttpGet(<jf>jazzUri</jf>);
+		<jv>request</jv>.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
 		
 		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
-		request.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+		<jv>request</jv>.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
 
-		HttpResponse response = client.execute(request);
+		HttpResponse <jv>response</jv> = <jv>client</jv>.execute(<jv>request</jv>);
 		<jk>try</jk> {
-			<jk>int</jk> code = response.getStatusLine().getStatusCode();
+			<jk>int</jk> <jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
 			<jc>// Already authenticated</jc>
-			<jk>if</jk> (code == <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> == <jsf>SC_OK</jsf>)
 				<jk>return</jk>;
 
-			<jk>if</jk> (code != <jsf>SC_UNAUTHORIZED</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_UNAUTHORIZED</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// x-jsa-authorization-redirect</jc>
-			String redirectUri = getHeader(response, <js>"X-JSA-AUTHORIZATION-REDIRECT"</js>);
+			String <jv>redirectUri</jv> = getHeader(<jv>response</jv>, <js>"X-JSA-AUTHORIZATION-REDIRECT"</js>);
 
-			<jk>if</jk> (redirectUri == <jk>null</jk>)
+			<jk>if</jk> (<jv>redirectUri</jv> == <jk>null</jk>)
 				<jk>throw new</jk> RestCallException(<js>"Expected a redirect URI during OIDC authentication: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// Handle Bearer Challenge</jc>
-			HttpGet method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
-			addDefaultOidcHeaders(method);
+			HttpGet <jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv> + <js>"&amp;prompt=none"</js>);
+			addDefaultOidcHeaders(<jv>method</jv>);
 
-			response = client.execute(method);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 2: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			String loginRequired = getHeader(response, <js>"X-JSA-LOGIN-REQUIRED"</js>);
+			String <jv>loginRequired</jv> = getHeader(<jv>response</jv>, <js>"X-JSA-LOGIN-REQUIRED"</js>);
 
-			<jk>if</jk> (! <js>"true"</js>.equals(loginRequired))
+			<jk>if</jk> (! <js>"true"</js>.equals(<jv>loginRequired</jv>))
 				<jk>throw new</jk> RestCallException(<js>"X-JSA-LOGIN-REQUIRED header not found on response during OIDC authentication phase 2: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
+			<jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv> + <js>"&amp;prompt=none"</js>);
 
-			addDefaultOidcHeaders(method);
-			response = client.execute(method);
+			addDefaultOidcHeaders(<jv>method</jv>);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 3: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
 			<jc>// Handle JAS Challenge</jc>
-			method = <jk>new</jk> HttpGet(redirectUri);
-			addDefaultOidcHeaders(method);
+			<jv>method</jv> = <jk>new</jk> HttpGet(<jv>redirectUri</jv>);
+			addDefaultOidcHeaders(<jv>method</jv>);
 
-			response = client.execute(method);
+			<jv>response</jv> = <jv>client</jv>.execute(<jv>method</jv>);
 
-			code = response.getStatusLine().getStatusCode();
+			<jv>code</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
 
-			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+			<jk>if</jk> (<jv>code</jv> != <jsf>SC_OK</jsf>)
 				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 4: "</js> 
-					+ response.getStatusLine());
+					+ <jv>response</jv>.getStatusLine());
 
-			<jf>cookie</jf> = getHeader(response, <js>"Set-Cookie"</js>);
+			<jf>cookie</jf> = getHeader(<jv>response</jv>, <js>"Set-Cookie"</js>);
 
-			Header[] defaultHeaders = <jk>new</jk> Header[] {
-				<jk>new</jk> BasicHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>),
-				<jk>new</jk> BasicHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+			Header[] <jv>defaultHeaders</jv> = <jk>new</jk> Header[] {
+				BasicStringHeader.<jsm>of</jsm>(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>),
+				BasicStringHeader.<jsm>of</jsm>(<js>"X-com-ibm-team-configuration-versions"</js>, 
 					<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>),
-				<jk>new</jk> BasicHeader(<js>"Accept"</js>, <js>"text/json"</js>),
-				<jk>new</jk> BasicHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+				BasicStringHeader.<jsm>of</jsm>(<js>"Accept"</js>, <js>"text/json"</js>),
+				BasicStringHeader.<jsm>of</jsm>(<js>"Authorization"</js>, <js>"Basic "</js> 
 					+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>)),
-				<jk>new</jk> BasicHeader(<js>"Cookie"</js>, cookie)
+				BasicStringHeader.<jsm>of</jsm>(<js>"Cookie"</js>, <jf>cookie</jf>)
 			};
 
-			setDefaultHeaders(Arrays.<jsm>asList</jsm>(defaultHeaders));
+			setDefaultHeaders(AList.<jsm>of</jsm>(<jv>defaultHeaders</jv>));
 
 		} <jk>finally</jk> {
-			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
 		}
 	}
 
-	<jk>private void</jk> addDefaultOidcHeaders(HttpRequestBase method) {
-		method.addHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>);
-		method.addHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+	<jk>private void</jk> addDefaultOidcHeaders(HttpRequestBase <jv>method</jv>) {
+		<jv>method</jv>.addHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>);
+		<jv>method</jv>.addHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
 			<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>);
-		method.addHeader(<js>"Accept"</js>, <js>"text/json"</js>);
+		<jv>method</jv>.addHeader(<js>"Accept"</js>, <js>"text/json"</js>);
 
 		<jk>if</jk> (<jf>cookie</jf> != <jk>null</jk>) {
-			method.addHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+			<jv>method</jv>.addHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
 				+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>));
-			method.addHeader(<js>"Cookie"</js>, cookie);
+			<jv>method</jv>.addHeader(<js>"Cookie"</js>, <jf>cookie</jf>);
 		}
 	}
 </p>

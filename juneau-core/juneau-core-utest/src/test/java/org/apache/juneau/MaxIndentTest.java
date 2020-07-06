@@ -236,7 +236,7 @@ public class MaxIndentTest {
 
 	public static class List1dOfBeans extends LinkedList<ABean> {
 		public List1dOfBeans init1() {
-			add(new ABean().init());
+			add(ABean.get());
 			return this;
 		}
 	}
@@ -250,7 +250,7 @@ public class MaxIndentTest {
 
 	public static class Map1dOfBeans extends LinkedHashMap<String,ABean> {
 		public Map1dOfBeans init1() {
-			put("a", new ABean().init());
+			put("a", ABean.get());
 			return this;
 		}
 	}
