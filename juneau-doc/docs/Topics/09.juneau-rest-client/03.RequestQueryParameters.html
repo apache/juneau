@@ -1,0 +1,56 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.4-new} 
+Request Query Parameters
+
+<p>
+	Per-client or per-request query parameters can be specified using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#query(String,Object) query(String,Object)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#queries(Object...) queries(Object...)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
+	</ul>
+	<li class='jc'>{@link oajr.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestRequest#query(String,Object) query(String,Object)}
+		<li class='jm'>{@link oajr.client2.RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
+		<li class='jm'>{@link oajr.client2.RestRequest#queries(Object...) queries(Object...)}
+		<li class='jm'>{@link oajr.client2.RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
+		<li class='jm'>{@link oajr.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
+		<li class='jm'>{@link oajr.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
+
+	<jc>// Or do it on every request.</jc>
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+</p>
+
+<ul class='notes'>
+	<li>Like header values, dynamic values and OpenAPI schemas are supported.
+	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
+		objects use the values returned by that bean directly.
+</ul>

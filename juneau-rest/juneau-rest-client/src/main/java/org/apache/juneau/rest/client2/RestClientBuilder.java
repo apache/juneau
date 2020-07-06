@@ -171,7 +171,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses JSON marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().json().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -218,7 +218,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -261,7 +261,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses XML marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().xml().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -307,7 +307,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().html().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().html().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -353,7 +353,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML Doc marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlDoc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlDoc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -399,7 +399,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML Stripped Doc marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -446,7 +446,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().plainText().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -492,7 +492,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().msgPack().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -539,7 +539,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses UON marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().uon().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -584,7 +584,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().urlEnc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -633,7 +633,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().openApi().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -670,7 +670,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses universal marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -724,7 +724,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Instantiate.</jc>
-	 * 	RestClient c = <jk>new</jk> MyRestClientBuilder().build();
+	 * 	RestClient <jv>client</jv> = <jk>new</jk> MyRestClientBuilder().build();
 	 * </p>
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
@@ -742,7 +742,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses a customized HttpClientBuilder.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.httpClientBuilder(HttpClientBuilder.<jsm>create</jsm>())
 	 * 		.build();
@@ -793,7 +793,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Instantiate.</jc>
-	 * 	RestClient c = <jk>new</jk> MyRestClientBuilder().build();
+	 * 	RestClient <jv>client</jv> = <jk>new</jk> MyRestClientBuilder().build();
 	 * </p>
 	 *
 	 * @return The HTTP client to use.
@@ -816,7 +816,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses a customized HttpClient.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.httpClient(HttpClientBuilder.<jsm>create</jsm>().build())
 	 * 		.build();
@@ -854,7 +854,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.logger(Logger.<jsm>getLogger</jsm>(<js>"MyLogger"</js>))  <jc>// Log to MyLogger logger.</jc>
 	 * 		.logToConsole()  <jc>// Also log to console.</jc>
@@ -883,7 +883,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.logToConsole()
 	 * 		.logRequests(<jsf>FULL</jsf>, <jsf>INFO</jsf>)  <jc>// Level is ignored when logging to console.</jc>
@@ -987,7 +987,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Instantiate.</jc>
-	 * 	RestClient c = <jk>new</jk> MyRestClientBuilder().build();
+	 * 	RestClient <jv>client</jv> = <jk>new</jk> MyRestClientBuilder().build();
 	 * </p>
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
@@ -1004,7 +1004,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses pooled connections.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.pooled()
 	 * 		.build();
@@ -1024,7 +1024,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses BASIC authentication.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.basicAuth(<js>"http://localhost"</js>, 80, <js>"me"</js>, <js>"mypassword"</js>)
 	 * 		.build();
@@ -1055,12 +1055,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.header(<js>"Foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1091,12 +1091,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.header(<js>"Foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1127,12 +1127,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.header(<js>"Foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1159,12 +1159,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds header "Foo: foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.header(<js>"Foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.header(<js>"Foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1191,7 +1191,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
 	 * 		.build();
@@ -1219,7 +1219,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
 	 * 		.build();
@@ -1247,7 +1247,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -1266,7 +1266,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.headers(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -1315,7 +1315,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.headerPairs(<js>"Header1"</js>,<js>"val1"</js>,<js>"Header2"</js>,<js>"val2"</js>)
 	 * 		.build();
@@ -1808,12 +1808,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.query(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1844,12 +1844,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.query(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1880,12 +1880,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.query(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1912,12 +1912,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 *	<jc>// Adds query parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.query(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.query(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -1944,7 +1944,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.build();
@@ -1968,7 +1968,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -1987,7 +1987,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.query(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 	 * 		.build();
@@ -2011,7 +2011,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.queries(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -2060,7 +2060,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.queryPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.build();
@@ -2091,12 +2091,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.formData(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2127,12 +2127,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, myPartSerializer);
+	 * 		.formData(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>, <jv>myPartSerializer</jv>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2163,12 +2163,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.formData(<js>"foo"</js>, <jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2195,12 +2195,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	String[] value = {<js>"foo"</js>,<js>"bar"</js>};
+	 * 	String[] <jv>value</jv> = {<js>"foo"</js>,<js>"bar"</js>};
 	 *
 	 * 	<jc>// Adds form data parameter "foo=foo|bar" to all requests.</jc>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.formData(<js>"foo"</js>, ()-&gt;value, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
+	 * 		.formData(<js>"foo"</js>, ()-&gt;<jv>value</jv>, HttpPartSchema.<jsf>T_ARRAY_PIPES</jsf>);
 	 * 		.build();
 	 * </p>
 	 *
@@ -2227,7 +2227,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.build();
@@ -2251,7 +2251,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -2270,7 +2270,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 	 * 		.build();
@@ -2294,7 +2294,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.build();
@@ -2343,7 +2343,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	RestClient c = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.build();
@@ -2381,12 +2381,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+	 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
 	 * 			<jc>// Custom handle requests.</jc>
 	 * 		}
 	 * 	}
 	 *
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
 	 * 		.build();
@@ -2420,12 +2420,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.callHandler(
 	 * 			<jk>new</jk> RestCallHandler() {
 	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+	 * 				<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
 	 * 					<jc>// Custom handle requests.</jc>
 	 * 				}
 	 * 			}
@@ -2499,9 +2499,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.errorCodes(x -&gt; x &gt;= 300)
+	 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
 	 * 		.build();
 	 * </p>
 	 *
@@ -2540,21 +2540,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client with a customized executor service.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; responseFuture = client.get(<jsf>URI</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; <jv>responseFuture</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
 	 *
 	 * 	<jc>// Do some other stuff.</jc>
 	 *
 	 * 	<jc>// Now read the response.</jc>
-	 * 	String body = responseFuture.get().getBody().asString();
+	 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getBody().asString();
 	 *
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	Future&lt;MyBean&gtl myBeanFuture = client
+	 * 	Future&lt;MyBean&gtl <jv>myBeanFuture</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
@@ -2562,7 +2562,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jc>// Do some other stuff.</jc>
 	 *
 	 * 	<jc>// Now read the response.</jc>
-	 * 	MyBean bean = myBeanFuture.get();
+	 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2590,13 +2590,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.httpClient(myHttpClient)
+	 * 		.httpClient(<jv>myHttpClient</jv>)
 	 * 		.keepHttpClientOpen()
 	 * 		.build();
 	 *
-	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2687,24 +2687,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestRequest req) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
 	 *			// set on the request from the client.</jc>
 	 *		}
 	 *
 	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onConnect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *		}
 	 *
 	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onClose(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 * 			<jc>// Intercept when the response body is consumed.</jc>
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a client with a customized interceptor.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.interceptors(MyRestCallInterceptor.<jk>class</jk>)
 	 * 		.build();
@@ -2753,24 +2753,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client with a customized interceptor.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.interceptors(
 	 * 			<jk>new</jk> RestCallInterceptor() {
 	 *
 	 * 				<ja>@Override</ja>
-	 * 				<jk>public void</jk> onInit(RestRequest req) <jk>throws</jk> Exception {
+	 * 				<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 	 *					<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
 	 *					// set on the request from the client.</jc>
 	 *				}
 	 *
 	 *				<ja>@Override</ja>
-	 *				<jk>public void</jk> onConnect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *				<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 *					<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *				}
 	 *
 	 *				<ja>@Override</ja>
-	 *				<jk>public void</jk> onClose(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *				<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 * 					<jc>// Intercept when the response body is consumed.</jc>
 	 * 				}
 	 * 			}
@@ -2832,13 +2832,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that logs a message if </jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.leakDetection()
 	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
 	 * 		.build();
 	 *
-	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -2868,7 +2868,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshall.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.marshall(SimpleJson.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
@@ -2900,7 +2900,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport using existing marshalls.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.marshall(Json.<jsf>DEFAULT_READABLE</jsf>, Xml.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
@@ -2934,7 +2934,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.parser(JsonParser.<jk>class</jk>)
 	 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
@@ -2974,7 +2974,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
 	 * 		.build();
@@ -3015,7 +3015,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
 	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
@@ -3059,7 +3059,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
 	 * 		.build();
@@ -3091,7 +3091,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partParser(UonParser.<jk>class</jk>)
 	 * 		.build();
@@ -3123,7 +3123,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
 	 * 		.build();
@@ -3155,7 +3155,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
 	 * 		.build();
@@ -3187,7 +3187,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
 	 * 		.build();
@@ -3218,12 +3218,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
 	 * 		.build();
 	 *
-	 * 	Bar bar = client
+	 * 	Bar <jv>bar</jv> = <jv>client</jv>
 	 * 		.get(<js>"/bar"</js>)  <jc>// Relative to http://localhost:10000/foo</jc>
 	 * 		.run()
 	 * 		.getBody().as(Bar.<jk>class</jk>);
@@ -3261,7 +3261,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.serializer(JsonSerializer.<jk>class</jk>)
 	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
@@ -3301,7 +3301,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
@@ -3342,7 +3342,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
 	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
@@ -3386,7 +3386,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
 	 * 		.build();
@@ -3429,7 +3429,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.detectRecursions()
@@ -3439,15 +3439,15 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
+	 * 	A <jv>a</jv> = <jk>new</jk> A();
+	 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
 	 *
 	 *	<jk>try</jk> {
 	 * 		<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
-	 * 		client
-	 * 			.doPost(<js>"http://localhost:10000/foo"</js>, a)
+	 * 		<jv>client</jv>
+	 * 			.doPost(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
 	 * 			.run();
-	 *	} <jk>catch</jk> (RestCallException e} {
+	 *	} <jk>catch</jk> (RestCallException <jv>e</jv>} {
 	 *		<jc>// Handle exception.</jc>
 	 *	}
 	 * </p>
@@ -3485,7 +3485,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON client that ignores recursions.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.ignoreRecursions()
@@ -3495,12 +3495,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> Object <jf>f</jf>;
 	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
+	 * 	A <jv>a</jv> = <jk>new</jk> A();
+	 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
 	 *
 	 * 	<jc>// Produces request body "{f:null}"</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, a)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3527,7 +3527,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.ws()
@@ -3540,7 +3540,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -3574,7 +3574,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.maxDepth(20)
@@ -3621,7 +3621,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.addBeanTypes()
@@ -3632,11 +3632,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 	 * 	}
-	 * 	AMap map = AMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
+	 *
+	 * 	AMap <jv>map</jv> = AMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 	 *
 	 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3675,7 +3676,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.addRootType()
@@ -3688,7 +3689,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {"_type":"mybean","foo":"bar"}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -3717,7 +3718,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.keepNullProperties()
@@ -3729,7 +3730,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {foo:null}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -3757,18 +3758,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that sorts arrays and collections before serialization.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.sortCollections()
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted array</jc>
-	 * 	String[] array = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+	 * 	String[] <jv>array</jv> = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
 	 *
 	 * 	<jc>// Request body will contain:  ["bar","baz","foo"]</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, array)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>array</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3795,18 +3796,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that sorts maps before serialization.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.sortMaps()
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
-	 * 	AMap map = AMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+	 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 	 *
 	 * 	<jc>// Request body will contain:  {"bar":2,"baz":3,"foo":1}</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3839,7 +3840,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>s</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.trimEmptyCollections()
 	 * 		.build();
@@ -3850,7 +3851,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -3882,7 +3883,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that skips empty maps.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.trimEmptyMaps()
@@ -3894,7 +3895,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -3919,18 +3920,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that trims strings before serialization.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.trimStrings()
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
-	 * 	AMap map = AMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
+	 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Request body will contain:  {"foo":"bar"}</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, map)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -3954,29 +3955,29 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Our URI contextual information.</jc>
-	 * 	String authority = <js>"http://localhost:10000"</js>;
-	 * 	String contextRoot = <js>"/myContext"</js>;
-	 * 	String servletPath = <js>"/myServlet"</js>;
-	 * 	String pathInfo = <js>"/foo"</js>;
+	 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
+	 * 	String <jv>contextRoot</jv> = <js>"/myContext"</js>;
+	 * 	String <jv>servletPath</jv> = <js>"/myServlet"</js>;
+	 * 	String <jv>pathInfo</jv> = <js>"/foo"</js>;
 	 *
 	 * 	<jc>// Create a UriContext object.</jc>
-	 * 	UriContext uriContext = <jk>new</jk> UriContext(authority, contextRoot, servletPath, pathInfo);
+	 * 	UriContext <jv>uriContext</jv> = <jk>new</jk> UriContext(<jv>authority</jv>, <jv>contextRoot</jv>, <jv>servletPath</jv>, <jv>pathInfo</jv>);
 	 *
 	 * 	<jc>// Create a REST client with JSON serializer and associate our context.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
-	 * 		.uriContext(uriContext)
+	 * 		.uriContext(<jv>uriContext</jv>)
 	 * 		.uriRelativity(<jsf>RESOURCE</jsf>)  <jc>// Assume relative paths are relative to servlet.</jc>
 	 * 		.uriResolution(<jsf>ABSOLUTE</jsf>)  <jc>// Serialize URIs as absolute paths.</jc>
 	 * 		.build();
 	 *
 	 * 	<jc>// A relative URI</jc>
-	 * 	URI uri = <jk>new</jk> URI(<js>"bar"</js>);
+	 * 	URI <jv>uri</jv> = <jk>new</jk> URI(<js>"bar"</js>);
 	 *
 	 * 	<jc>// Request body will contain:  "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
-	 * 	client
-	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, uri)
+	 * 	<jv>client</jv>
+	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>uri</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -4088,7 +4089,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.ws()  <jc>// Enable whitespace</jc>
@@ -4123,7 +4124,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.quoteChar(<js>'\''</js>)
@@ -4135,7 +4136,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -4167,7 +4168,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.sq()
@@ -4179,7 +4180,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -4204,7 +4205,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.useWhitespace()
@@ -4216,7 +4217,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -4240,7 +4241,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.ws()
@@ -4252,7 +4253,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 	}
 	 *
 	 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 	 * 		.run();
 	 * </p>
@@ -4286,7 +4287,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
@@ -4295,12 +4296,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Try to parse some bad JSON.</jc>
 	 * 	<jk>try</jk> {
-	 * 		client
+	 * 		<jv>client</jv>
 	 * 			.get(<js>"/pathToBadJson"</js>)
 	 * 			.run()
 	 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
-	 * 	} <jk>catch</jk> (RestCallException e) {
-	 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+	 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
+	 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 	 * 	}
 	 * </p>
 	 *
@@ -4356,7 +4357,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.strict()
@@ -4364,11 +4365,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * 	<jc>// Try to parse some bad JSON.</jc>
 	 * 	<jk>try</jk> {
-	 * 		client
+	 * 		<jv>client</jv>
 	 * 			.get(<js>"/pathToBadJson"</js>)
 	 * 			.run()
 	 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
-	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 	 * 		<jc>// Handle exception.</jc>
 	 * 	}
 	 * </p>
@@ -4394,20 +4395,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.json()
 	 * 		.trimStringsOnRead()
 	 * 		.build();
 	 *
 	 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
-	 * 	Map&lt;String,String&gt; map = client
+	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jv>client</jv>
 	 * 		.get(<js>"/pathToJson"</js>)
 	 * 		.run()
 	 * 		.getBody().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Make sure strings are trimmed.</jc>
-	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, map.get(<js>"foo"</js>));
+	 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>map</jv>.get(<js>"foo"</js>));
 	 * </p>
 	 *
 	 * <ul class='seealso'>
@@ -4469,7 +4470,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * 		.build();
 	 *
 	 * 	<jc>// Set a header with a value in UON format.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/uri"</js>)
 	 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
 	 * 		.run();
@@ -4513,13 +4514,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.collectionFormat(<jsf>CSV</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	AList l = AList.<jsm>of</jsm>(
+	 * 	AList <jv>list</jv> = AList.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>,
 	 * 		<js>"bar"</js>,
 	 * 		AMap.<jsm>of</jsm>(
@@ -4528,9 +4529,9 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *	);
 	 *
 	 * 	<jc>// Set a header with a comma-separated list.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/uri"</js>)
-	 * 		.header(<js>"Foo"</js>, l)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
+	 * 		.header(<js>"Foo"</js>, <jv>list</jv>)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
 	 * 		.run();
 	 * </p>
 	 *
@@ -4571,21 +4572,21 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.urlEnc()
 	 * 		.paramFormat(<jsf>PLAINTEXT</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	AMap map = AMap.<jsm>of</jsm>(
+	 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);
 	 *
 	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
-	 * 	client
-	 * 		.post(<js>"/uri"</js>, map)
+	 * 	<jv>client</jv>
+	 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -4613,22 +4614,23 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.urlEnc()
 	 * 		.build();
 	 *
 	 * 	<jc>// An arbitrary data structure.</jc>
-	 * 	AMap map = AMap.<jsm>of</jsm>(
+	 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
 	 * 		<js>"foo"</js>, <js>"bar"</js>,
 	 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 	 * 	);
 	 *
 	 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
-	 * 	client
-	 * 		.post(<js>"/uri"</js>, map)
+	 * 	<jv>client</jv>
+	 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
 	 * 		.run();
 	 * </p>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
 	 * </ul>

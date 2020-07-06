@@ -195,7 +195,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -231,7 +231,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses XML marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().xml().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -270,7 +270,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().html().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().html().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -309,7 +309,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML Doc marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlDoc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlDoc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -348,7 +348,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses HTML Stripped Doc marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -388,7 +388,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().plainText().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -427,7 +427,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().msgPack().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -467,7 +467,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses UON marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().uon().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -505,7 +505,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().urlEnc().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -547,7 +547,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
-	 * 	RestClient c = RestClient.<jsm>create</jsm>().openApi().build();
+	 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
 	 * </p>
 	 *
 	 * @return This object (for method chaining).
@@ -852,7 +852,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/{foo}"</js>)
 	 * 		.path(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
@@ -877,7 +877,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/{foo}"</js>)
 	 * 		.path(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
@@ -897,7 +897,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/{foo}"</js>)
 	 * 		.path(
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -926,7 +926,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/baz/qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/{foo}/{bar}"</js>)
 	 * 		.paths(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"baz"</js>),
@@ -986,7 +986,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Sets path to "/baz/qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/{foo}/{bar}"</js>)
 	 * 		.pathPairs(
 	 * 			<js>"foo"</js>,<js>"baz"</js>,
@@ -1065,7 +1065,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<jsf>APPEND</jsf>,
@@ -1105,7 +1105,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
@@ -1130,7 +1130,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
@@ -1153,7 +1153,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates query parameter "foo=bar|baz"</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -1182,7 +1182,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.query(
 	 * 			<jsf>APPEND</jsf>,
@@ -1216,7 +1216,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queries(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
@@ -1253,7 +1253,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queries(
 	 * 			<jsf>APPEND</jsf>,
@@ -1320,7 +1320,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
 	 * 		.run();
@@ -1348,7 +1348,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds query parameter "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryCustom(<js>"foo=bar&baz=qux"</js>)
 	 * 		.run();
@@ -1451,7 +1451,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<jsf>APPEND</jsf>,
@@ -1490,7 +1490,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
 	 * 		.run();
@@ -1515,7 +1515,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>))
 	 * 		.run();
@@ -1538,7 +1538,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<js>"foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -1567,7 +1567,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formData(
 	 * 			<jsf>APPEND</jsf>,
@@ -1601,7 +1601,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDatas(
 	 * 			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),
@@ -1638,7 +1638,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds form data parameters "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDatas(
 	 * 			<jsf>APPEND</jsf>,
@@ -1705,7 +1705,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates form data "key1=val1&key2=val2".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
 	 * 		.run();
@@ -1733,19 +1733,19 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Creates form data "foo=bar&baz=qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataCustom(<js>"foo=bar&baz=qux"</js>)
 	 * 		.run();
 	 *
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataCustom(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 *
 	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity and body().</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.body(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
@@ -1880,12 +1880,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Sets the body of this request as straight text bypassing the serializer.
 	 *
 	 * <p class='bcode w800'>
-	 * 	client.put(<js>"/foo"</js>)
+	 * 	<jv>client</jv>
+	 * 		.put(<js>"/foo"</js>)
 	 * 		.body(<jk>new</jk> StringReader(<js>"foo"</js>))
 	 * 		.contentType(""
 	 * 		.run();
 	 *
-	 * client.put(<js>"/foo"</js>)
+	 * <jv>client</jv>
+	 * 		.put(<js>"/foo"</js>)
 	 * 		.bodyString(<js>"foo"</js>)
 	 * 		.run();
 	 * </p>
@@ -1893,7 +1895,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * Note that this is different than the following which will serialize <l>foo</l> as a JSON string <l>"foo"</l>.
 	 * <p class='bcode w800'>
-	 * 	client.put(<js>"/foo"</js>)
+	 * 	<jv>client</jv>
+	 * 		.put(<js>"/foo"</js>)
 	 * 		.json()
 	 * 		.body(<js>"foo"</js>)
 	 * 		.run();
@@ -1959,7 +1962,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<jsf>APPEND</jsf>,
@@ -1999,7 +2002,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(<js>"Foo"</js>, <js>"bar"</js>)
 	 * 		.run();
@@ -2027,7 +2030,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar|baz".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>),
@@ -2056,7 +2059,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(
 	 * 			<jsf>APPEND</jsf>,
@@ -2090,7 +2093,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.header(BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
 	 * 		.run();
@@ -2110,7 +2113,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(
 	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
@@ -2147,7 +2150,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(
 	 * 			<jsf>APPEND</jsf>,
@@ -2214,7 +2217,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.headers(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
 	 * 		.run();
@@ -2789,9 +2792,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>try</jk> {
-	 * 		<jk>int</jk> rc = client.get(<jsf>URI</jsf>).execute().getResponseStatus();
+	 * 		<jk>int</jk> <jv>rc</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).execute().getResponseStatus();
 	 * 		<jc>// Succeeded!</jc>
-	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 	 * 		<jc>// Failed!</jc>
 	 * 	}
 	 * </p>
@@ -2920,12 +2923,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; <jv>future</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
+	 *
 	 * 	<jc>// Do some other stuff</jc>
+	 *
 	 * 	<jk>try</jk> {
-	 * 		String body = f.get().getBody().asString();
+	 * 		String <jv>body</jv> = <jv>future</jv>.get().getBody().asString();
 	 * 		<jc>// Succeeded!</jc>
-	 * 	} <jk>catch</jk> (RestCallException e) {
+	 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 	 * 		<jc>// Failed!</jc>
 	 * 	}
 	 * </p>
@@ -2965,7 +2970,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bcode w800'>
 	 *  <jc>// Get the response code.
 	 *  // No need to call close() on the RestResponse object.</jc>
-	 *  <jk>int</jk> rc = client.get(<jsf>URI</jsf>).complete().getResponseCode();
+	 *  <jk>int</jk> <jv>rc</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getResponseCode();
 	 * </p>
 	 *
 	 * @return The response object.
@@ -2980,9 +2985,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	Future&lt;RestResponse&gt; f = client.get(<jsf>URI</jsf>).completeFuture();
+	 * 	Future&lt;RestResponse&gt; <jv>future</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).completeFuture();
+	 *
 	 * 	<jc>// Do some other stuff</jc>
-	 * 	<jk>int</jk> rc = f.get().getResponseStatus();
+	 *
+	 * 	<jk>int</jk> <jv>rc</jv> = <jv>future</jv>.get().getResponseStatus();
 	 * </p>
 	 *
 	 * <ul class='notes'>

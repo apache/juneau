@@ -1,0 +1,94 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.4-new} 
+Request Headers
+
+<p>
+	Per-client or per-request headers can be specified using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#header(Header) header(Header)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#headers(Object...) headers(Object...)}
+		<li class='jm'>{@link oajr.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
+	</ul>
+	<li class='jc'>{@link oajr.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestRequest#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link oajr.client2.RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
+		<li class='jm'>{@link oajr.client2.RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
+		<li class='jm'>{@link oajr.client2.RestRequest#header(Header) header(Header)}
+		<li class='jm'>{@link oajr.client2.RestRequest#headers(Object...) headers(Object...)}
+		<li class='jm'>{@link oajr.client2.RestRequest#headers(AddFlag,Object...) headers(AddFlag;Object...)}
+		<li class='jm'>{@link oajr.client2.RestRequest#headerPairs(Object...) headers(Object...)}
+	</ul>
+</ul>
+
+<p>
+	Additionally, methods are provided on the client builder and per request for all standard HTTP headers
+	such as {@link oajr.client2.RestClientBuilder#authorization(Object) authorization(Object)}.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds an Authorization header to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
+
+	<jc>// Or do it per-request.</jc>
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+
+	<jc>// Or use an HttpHeader.</jc>
+	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
+</p>
+
+<p>
+	The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
+	which may need to change every few minutes).
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+</p>
+
+<p>
+	The {@link oaj.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on both requests
+	and responses.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>()
+		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+		.build();
+</p>
+
+<p>
+	The methods with {@link oaj.AddFlag} parameters allow you to control whether new headers get appended, prepended, or
+	replace existing headers with the same name.
+</p>
+<ul class='notes'>
+	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
+		<c>NameValuePair</c> objects use the values returned by that bean directly.
+</ul>

@@ -13,22 +13,13 @@
  ***************************************************************************************************************************/
  -->
 
-Piping Response Output
+{8.1.4-updated} 
+Authentication
 
 <p>
-	The {@link oajrc.RestCall} class provides various convenience <c>pipeTo()</c> 
-	methods to pipe output to output streams and writers.
+	The Juneau REST client itself does not implement any support for authentication.  
+	Instead, it delegates it to the underlying Apache HTTP Client interface.
 </p>
 <p>
-	If you want to pipe output without any intermediate buffering, you can use the 
-	{@link oajrc.RestCall#byLines()} method.  
-	This will cause the output to be piped and flushed after every line.  
-	This can be useful if you want to display the results in real-time from a long running process producing
-	output on a REST call.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Pipe output from REST call to System.out in real-time.</jc>
-	restClient.doPost(<jsf>URL</jsf>).byLines().pipeTo(<jk>new</jk> PrintWriter(System.<jk>out</jk>)).run();
+	The following sections show how some common authentication mechanisms can be set up using HTTP Client APIs.
 </p>

@@ -460,7 +460,17 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a><span class='update'><b>8.1.4-updated</b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>Remote REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.PojoMarshalling'>POJO Marshalling</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RequestHeaders'>Request Headers</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RequestQueryParameters'>Request Query Parameters</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RequestFormData'>Request Form Data</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RequestBody'>Request Body</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.ResponseStatus'>Response Status</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.ResponseHeaders'>Response Headers</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.ResponseBody'>Response Body</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.CustomCallHandlers'>Custom Call Handlers</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.Interceptors'>Interceptors</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a><span class='update'><b>8.1.4-new</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Remote'>@Remote</a><span class='update'>8.1.2-updated</span></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></p>
@@ -473,18 +483,15 @@
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Response</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.RestProxies.DualPurposeInterfaces'>Dual-purpose (end-to-end) interfaces</a><span class='update'>8.0.0-new</span></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.LoggingAndDebugging'>Logging and Debugging</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.CustomizingHttpClient'>Customizing HttpClient</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.ExtendingRestClient'>Extending RestClient</a><span class='update'><b>8.1.4-new</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a><span class='update'><b>8.1.4-updated</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-rest-client.Authentication.BASIC'>BASIC Authentication</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.Authentication.FORM'>FORM-based Authentication</a></p>
 			<li><p><a class='doclink' href='#juneau-rest-client.Authentication.OIDC'>OIDC Authentication</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#juneau-rest-client.ResponsePatterns'></a><span class='update'>todo</span></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.PipingOutput'>Piping Response Output</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.Debugging'>Debugging</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.Logging'>Logging</a><span class='update'>todo</span></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.Interceptors'>Interceptors</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-client.Other'></a><span class='update'><b>8.1.4-updated</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a><span class='update'>8.1.0-new,<b>8.1.4-updated</b></span></p>
 	<ol>
@@ -22565,196 +22572,883 @@
 </p>	
 
 <p>
-	The REST client API provides the ability to access remote REST interfaces and transparently convert the input 
-	and output to and from POJOs using any of the provided serializers and parsers.
-</p>
-<p>
-	Built upon the Apache HttpClient libraries, it extends that API and provides specialized APIs for working with 
-	REST interfaces while maintaining all the functionality available in the HttpClient API.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a reusable JSON client.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
-	
-		<jc>// The address of the root resource.</jc>
-		String url = <js>"http://localhost:10000/addressBook"</js>;
-		
-		<jc>// Do a REST GET against a remote REST interface and convert
-		// the response to an unstructured OMap object.</jc>
-		OMap m1 = client.get(url).run().getBody().as(OMap.<jk>class</jk>);
-		
-		<jc>// Same as above, except parse the JSON as a bean.</jc>
-		AddressBook a2 = client.get(url).run().getBody().as(AddressBook.<jk>class</jk>);
-	}
-		
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().serializer(XmlSerializer.<jk>class</jk>).parser(XmlSerializer.<jk>class</jk>).build()) {
-		<jc>// Add a person to the address book.
-		// Use XML as the transport medium.</jc>
-		Person p = <jk>new</jk> Person(<js>"Joe Smith"</js>, 21);
-		<jk>int</jk> returnCode = client.post(url + <js>"/entries"</js>, p).execute().getStatusCode();
-	}
-</p>
-<p>
-	Juneau provides an HTTP client API that makes it extremely simple to connect to remote REST interfaces and 
-	seemlessly send and receive serialized POJOs in requests and responses.  
+	Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
+	REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
 </p>
 
-<h5 class='topic'>Features</h5>
-<ul class='spaced-list'>
-	<li>
-		Converts POJOs directly to HTTP request message bodies using {@link org.apache.juneau.serializer.Serializer} 
-		classes.
- 	<li>
- 		Converts HTTP response message bodies directly to POJOs using {@link org.apache.juneau.parser.Parser} 
- 		classes.
- 	<li>
- 		Serializes and parses HTTP request and response parts (query/form-data parameters, headers, path variables) 
- 		using OpenAPI marshalling and validation.
-	<li>
-		Exposes the full functionality of the Apache HttpClient API by exposing all methods defined on the 
-		{@link org.apache.http.impl.client.HttpClientBuilder} class.
-</ul>	
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+	MyBean bean = RestClient.<jsm>create</jsm>()
+		.simpleJson()
+		.build()
+		.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().code().is(200)
+		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+		.getBody().as(MyBean.<jk>class</jk>);
+</p>
+
 <p>
-	The client API is designed to work as a thin layer on top of the proven Apache HttpClient API.  
-	By leveraging the HttpClient library, details such as SSL certificate negotiation, proxies, encoding, etc...
-	are all handled in Apache code. 
+	Breaking apart the fluent call, we can see the classes being used:
+</p>
+
+<p class='bpcode w800'>
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient client = builder.build();
+	RestRequest req = client.get(<jsf>URI</jsf>);
+	RestResponse res = req.run();
+	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
+	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
+	res = codeAssertion.is(200);
+	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
+	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
+	RestResponseBody body = res.getBody();
+	MyBean bean = body.as(MyBean.<jk>class</jk>);
+</p>
+
+<p>
+	It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		Pet addPet(
+			<ja>@Body</ja> CreatePet pet,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+		);
+	}
+ 
+	<jc>// Use a RestClient with default Simple JSON support.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build();
+	PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+</p>
+
+<p>
+	The classes are closely tied to Apache HttpClient, yet provide lots of additional functionality:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClient} <jk>extends</jk> {@link org.apache.http.client.HttpClient}, creates {@link org.apache.juneau.rest.client2.RestRequest} objects.
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest} <jk>extends</jk> {@link org.apache.http.client.methods.HttpUriRequest}, creates {@link org.apache.juneau.rest.client2.RestResponse} objects.
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponse} <jk>extends</jk> {@link org.apache.http.HttpResponse}, creates {@link org.apache.juneau.rest.client2.RestResponseBody} and {@link org.apache.juneau.rest.client2.RestResponseHeader} objects.
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseBody} <jk>extends</jk> {@link org.apache.http.HttpEntity}
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseHeader} <jk>extends</jk> {@link org.apache.http.Header}
+</ul>
+
+<p>
+	Instances of this class are built using the {@link org.apache.juneau.rest.client2.RestClientBuilder} class which can be constructed using
+	the {@link org.apache.juneau.rest.client2.RestClient#create() RestClient.create()} method as shown above.
 </p>
 <p>
-	The Juneau client API prereq's Apache HttpClient 4.5+. 
-	At a minimum, the following jars are required:
+	Clients are typically created with a root URI so that relative URIs can be used when making requests.
+	This is done using the {@link org.apache.juneau.rest.client2.RestClientBuilder#rootUri(Object)} method.
 </p>
-<ul>
-	<li><c>httpclient-4.5.jar</c>
-	<li><c>httpcore-4.4.1.jar</c>
-	<li><c>httpmime-4.5.jar</c>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client where all URIs are relative to localhost.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+
+	<jc>// Use relative paths.</jc>
+	String body = client.get(<js>"/subpath"</js>).run().getBody().asString();
+</p>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestClient} class creates {@link org.apache.juneau.rest.client2.RestRequest} objects using the following methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#get(Object) get(uri)} / {@link org.apache.juneau.rest.client2.RestClient#get() get()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#put(Object,Object) put(uri,body)} / {@link org.apache.juneau.rest.client2.RestClient#put(Object) put(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#post(Object) post(uri,body)} / {@link org.apache.juneau.rest.client2.RestClient#post(Object) post(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#patch(Object,Object) patch(uri,body)} / {@link org.apache.juneau.rest.client2.RestClient#patch(Object) patch(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#delete(Object) delete(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#head(Object) head(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#options(Object) options(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#formPost(Object,Object) formPost(uri,body)} / {@link org.apache.juneau.rest.client2.RestClient#formPost(Object) formPost(uri)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClient#request(HttpMethod,Object,Object) request(method,uri,body)}
+	</ul>
+</ul>
+ 
+<p>
+	The {@link org.apache.juneau.rest.client2.RestRequest} class creates {@link org.apache.juneau.rest.client2.RestResponse} objects using the following methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#run() run()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#complete() complete()}
+	</ul>
+</ul>
+
+<p>
+	The distinction between the two methods is that {@link org.apache.juneau.rest.client2.RestRequest#complete() complete()} automatically consumes the response body and
+	{@link org.apache.juneau.rest.client2.RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
+	for reuse!  The {@link java.io.InputStream InputStreams} returned by the {@link org.apache.juneau.rest.client2.RestResponseBody} object are auto-closing once
+	they are exhausted, so it is often not necessary to explicitly close them.
+</p>
+
+<p>
+	The following examples show the distinction between the two calls:
+</p>
+
+<p class='bpcode w800'>
+	<jc>// Consuming the response, so use run().</jc>
+	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
+
+	<jc>// Only interested in response status code, so use complete().</jc>
+	<jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.PojoMarshalling' id='juneau-rest-client.PojoMarshalling'>9.1 - POJO Marshalling</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-client.PojoMarshalling -->
+<p>
+	By default, JSON support is provided for HTTP request and response bodies.
+	Other languages can be specified using any of the following builder methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#json() json()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#simpleJson() simpleJson()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#xml() xml()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#html() html()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#plainText() plainText()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#msgPack() msgPack()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#uon() uon()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#urlEnc() urlEnc()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#openApi() openApi()}
+	</ul>
 </ul>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Examples below use the Juneau Address Book resource example</jc>
-
-	<jc>// Create a reusable client with JSON support</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
-	
-		<jc>// GET request, ignoring output</jc>
-		<jk>try</jk> (RestResponse r = client.get(<js>"http://localhost:10000/addressBook"</js>).run()) {
-			<jk>int</jk> rc = r.getStatusCode();
-			<jc>// Succeeded!</jc>
-		} <jk>catch</jk> (RestCallException e) {
-			<jc>// Failed!</jc>
-			System.<jsf>err</jsf>.println(
-				String.<jsm>format</jsm>(<js>"status=%s, message=%s"</js>, e.getResponseStatus(), e.getResponseMessage())
-			);
-		}
-				
-		<jc>// Remaining examples ignore thrown exceptions.</jc>		
-				
-		<jc>// GET request, secure, ignoring output</jc>
-		client.get(<js>"https://localhost:9443/sample/addressBook"</js>).execute();
-				
-		<jc>// GET request, getting output as a String.  No POJO parsing is performed.
-		// Note that when calling one of the getX() methods, you don't need to call connect() or disconnect(), since
-		//	it's automatically called for you.</jc>
-		String output = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().asString();
-				
-		<jc>// GET request, getting output as a Reader</jc>
-		Reader r = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().asReader();
-				
-		<jc>// GET request, getting output as an untyped map</jc>
-		<jc>// Input must be an object (e.g. "{...}")</jc>
-		OMap m = client
-			.get(<js>"http://localhost:10000/addressBook/0"</js>)
-			.run()
-			.getBody().as(OMap.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as an untyped list</jc>
-		<jc>// Input must be an array (e.g. "[...]")</jc>
-		OList l = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(OList.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed bean</jc>
-		<jc>// Input must be an object (e.g. "{...}")</jc>
-		<jc>// Note that you don't have to do any casting!</jc>
-		Person p = client
-			.get(<js>"http://localhost:10000/addressBook/0"</js>)
-			.run()
-			.getBody().as(Person.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed bean</jc>
-		<jc>// Input must be an array of objects (e.g. "[{...},{...}]")</jc>
-		Person[] pa = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(Person[].<jk>class</jk>);
-				
-		<jc>// Same as above, except as a List&lt;Person&gt;</jc>
-		List&lt;Person&gt; pl = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(List.<jk>class</jk>, Person.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed string</jc>
-		<jc>// Input must be a string (e.g. "&lt;string&gt;foo&lt;/string&gt;" or "'foo'")</jc>
-		String name = client
-			.get(<js>"http://localhost:10000/addressBook/0/name"</js>)
-			.run()
-			.getBody().as(String.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed number</jc>
-		<jc>// Input must be a number (e.g. "&lt;number&gt;123&lt;/number&gt;" or "123")</jc>
-		<jk>int</jk> age = client
-			.get(<js>"http://localhost:10000/addressBook/0/age"</js>)
-			.run()
-			.getBody().as(Integer.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed boolean</jc>
-		<jc>// Input must be a boolean (e.g. "&lt;boolean&gt;true&lt;/boolean&gt;" or "true")</jc>
-		<jk>boolean</jk> isCurrent = client
-			.get(<js>"http://localhost:10000/addressBook/0/addresses/0/isCurrent"</js>)
-			.run()
-			.getBody().as(Boolean.<jk>class</jk>);
-	}
-				
-	<jc>// GET request, getting a filtered object</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().swaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
-		Calendar birthDate = client
-			.get(<js>"http://localhost:10000/addressBook/0/birthDate"</js>)
-			.run()
-			.getBody().as(GregorianCalendar.<jk>class</jk>);
-	
-		<jc>// PUT request on regular field</jc>
-		String newName = <js>"John Smith"</js>;
-		<jk>int</jk> rc = client.put(<js>"http://localhost:10000/addressBook/0/name"</js>, newName).execute().getStatusCode();
-		
-		<jc>// PUT request on filtered field</jc>
-		Calendar newBirthDate = <jk>new</jk> GregorianCalendar(1, 2, 3, 4, 5, 6);
-		rc = client.put(<js>"http://localhost:10000/addressBook/0/birthDate"</js>, newBirthDate).execute().getStatusCode();
-		
-		<jc>// POST of a new entry to a list</jc>
-		Address newAddress = <jk>new</jk> Address(<js>"101 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12121, <jk>false</jk>);
-		rc = client.post(<js>"http://localhost:10000/addressBook/0/addresses"</js>, newAddress).execute().getStatusCode();	
-	}
+	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
+	<jc>// Typically easier to use when performing unit tests.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
 </p>
 
-<ul class='notes'>
-	<li>
-		The {@link org.apache.juneau.rest.client.RestClient} class exposes all the builder methods on the Apache 
-		HttpClient {@link org.apache.http.impl.client.HttpClientBuilder} class.
-		<br>Use these methods to provide any customized HTTP client behavior.
+<p>
+	Clients can also support multiple languages:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a REST client with support for multiple languages.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
+
+	<jc>// Create a REST client with support for all supported languages.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+</p>
+
+<p>
+	When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
+	with bodies to specify which serializer should be selected.
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a REST client with support for multiple languages.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+
+	c.post(<jsf>URI</jsf>, myBean).contentType(<js>"application/json"</js>).complete().assertStatus().is(200);
+</p>
+
+<p>
+	Languages can also be specified per-request.
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a REST client with no default languages supported.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().build();
+
+	<jc>// Use JSON for this request.</jc>
+	c.post(<jsf>URI</jsf>, myBean).json().complete().assertStatus().is(200);
+</p>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestClientBuilder} class provides convenience methods for setting common serializer and parser
+	settings.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a basic REST client with JSON support.</jc>
+	<jc>// Use single-quotes and whitespace.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().json().sq().ws().build();
+
+	<jc>// Same, but using properties.</jc>
+	RestClient c = RestClient
+		.<jsm>create</jsm>()
+		.json()
+		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
+		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+		.build();
+</p>
+
+<p>
+	Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#serializer(Serializer) serializer(Serializer)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#parser(Parser) parser(Parser)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#marshall(Marshall) marshall(Marshall)}
+	</ul>
 </ul>
+
+<p>
+	HTTP parts (headers, query parameters, form data...) are serialized and parsed using the {@link org.apache.juneau.httppart.HttpPartSerializer}
+	and {@link org.apache.juneau.httppart.HttpPartParser} APIs.  By default, clients are configured to use {@link org.apache.juneau.oapi.OpenApiSerializer} and
+	{@link org.apache.juneau.oapi.OpenApiParser}.  These can be overridden using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#partSerializer(Class) partSerializer(Class&lt;? extends HttpPartSerializer>)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#partParser(Class) partParser(Class&lt;? extends HttpPartParser>)}
+	</ul>
+</ul>
+</div><!-- END: 9.1 - juneau-rest-client.PojoMarshalling -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.1 - Remote REST Proxies</a><span class='update'><b>8.1.4-updated</b></span></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-client.RestProxies -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RequestHeaders' id='juneau-rest-client.RequestHeaders'>9.2 - Request Headers</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.2 - juneau-rest-client.RequestHeaders -->
+<p>
+	Per-client or per-request headers can be specified using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#header(Header) header(Header)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headers(Object...) headers(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
+	</ul>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#header(Header) header(Header)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(Object...) headers(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headers(AddFlag,Object...) headers(AddFlag;Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#headerPairs(Object...) headers(Object...)}
+	</ul>
+</ul>
+
+<p>
+	Additionally, methods are provided on the client builder and per request for all standard HTTP headers
+	such as {@link org.apache.juneau.rest.client2.RestClientBuilder#authorization(Object) authorization(Object)}.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds an Authorization header to every request.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
+
+	<jc>// Or do it per-request.</jc>
+	String response = client.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+
+	<jc>// Or use an HttpHeader.</jc>
+	response = client.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
+</p>
+
+<p>
+	The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
+	which may need to change every few minutes).
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+</p>
+
+<p>
+	The {@link org.apache.juneau.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on both requests
+	and responses.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
+	RestClient c = RestClient.<jsm>create</jsm>()
+		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
+		.build();
+</p>
+
+<p>
+	The methods with {@link org.apache.juneau.AddFlag} parameters allow you to control whether new headers get appended, prepended, or
+	replace existing headers with the same name.
+</p>
+<ul class='notes'>
+	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
+		<c>NameValuePair</c> objects use the values returned by that bean directly.
+</ul>
+</div><!-- END: 9.2 - juneau-rest-client.RequestHeaders -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RequestQueryParameters' id='juneau-rest-client.RequestQueryParameters'>9.3 - Request Query Parameters</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.3 - juneau-rest-client.RequestQueryParameters -->
+<p>
+	Per-client or per-request query parameters can be specified using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Object) query(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#queries(Object...) queries(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
+	</ul>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(String,Object) query(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(Object...) queries(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
+
+	<jc>// Or do it on every request.</jc>
+	String response = client.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+</p>
+
+<ul class='notes'>
+	<li>Like header values, dynamic values and OpenAPI schemas are supported.
+	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
+		objects use the values returned by that bean directly.
+</ul>
+</div><!-- END: 9.3 - juneau-rest-client.RequestQueryParameters -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RequestFormData' id='juneau-rest-client.RequestFormData'>9.4 - Request Form Data</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.4 - juneau-rest-client.RequestFormData -->
+<p>
+	Per-client or per-request form-data parameters can be specified using the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formDatas(Object...) formDatas(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
+	</ul>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formData(AddFlag,String,Object) formData(AddFlag,String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(Object...) formDatas(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDatas(AddFlag,Object...) formDatas(AddFlag,Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#formDataCustom(Object) formDataCustom(Object)}
+	</ul>
+</ul>
+
+<ul class='notes'>
+	<li>Like header values, dynamic values and OpenAPI schemas are supported.
+	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
+		objects use the values returned by that bean directly.
+</ul>
+</div><!-- END: 9.4 - juneau-rest-client.RequestFormData -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RequestBody' id='juneau-rest-client.RequestBody'>9.5 - Request Body</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.5 - juneau-rest-client.RequestBody -->
+<p>
+	The request body can either be passed in with the client creator method (e.g. {@link org.apache.juneau.rest.client2.RestClient#post(Object,Object) post(uri,body)}),
+	or can be specified via the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#body(Object) body(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+	</ul>
+</ul>
+
+<p>
+	The request body can be any of the following types:
+</p>
+<ul class='javatree'>
+	<li class='jc'>
+		{@link java.lang.Object} - POJO to be converted to text using the {@link org.apache.juneau.serializer.Serializer} defined on the client or request.
+	<li class='jc'>
+		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	<li class='jc'>
+		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	<li class='jc'>
+		{@link org.apache.juneau.http.ReaderResource}/{@link org.apache.juneau.http.ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	<li class='jc'>
+		{@link org.apache.juneau.http.StreamResource}/{@link org.apache.juneau.http.StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	<li class='jc'>
+		{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	<li class='jc'>
+		{@link org.apache.juneau.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+	<li class='jc'>
+		{@link java.util.function.Supplier} - A supplier of anything on this list.
+</ul>
+
+<ul class='notes'>
+	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
+		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
+		POJOs will be converted to strings using {@link org.apache.juneau.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
+</ul>
+</div><!-- END: 9.5 - juneau-rest-client.RequestBody -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.ResponseStatus' id='juneau-rest-client.ResponseStatus'>9.6 - Response Status</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.6 - juneau-rest-client.ResponseStatus -->
+<p>
+	After execution using {@link org.apache.juneau.rest.client2.RestRequest#run()} or {@link org.apache.juneau.rest.client2.RestRequest#complete()}, the following methods can be used
+	to get the response status:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponse}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseStatusLineAssertion}</c>
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Only interested in status code.</jc>
+	<jk>int</jk> statusCode = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+</p>
+
+<p>
+	Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Interested in multiple values.</jc>
+	Mutable&lt;Integer&gt; statusCode = Mutable.<jsm>create</jsm>();
+	Mutable&lt;String&gt; reasonPhrase = Mutable.<jsm>create</jsm>();
+	
+	client.get(<jsf>URI</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
+	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+statusCode.get()+<js>", reasonPhrase="</js>+reasonPhrase.get());
+</p>
+
+<ul class='notes'>
+	<li>If you are only interested in the response status and not the response body, be sure to use {@link org.apache.juneau.rest.client2.RestRequest#complete()} instead
+		of {@link org.apache.juneau.rest.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
+		consume the response yourself.
+</ul>
+
+<p>
+	The assertion method is provided for quickly asserting status codes in fluent calls.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Status assertion using a static value.</jc>
+	String body = client.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().code().isBetween(200,399)
+		.getBody().asString();
+
+	<jc>// Status assertion using a predicate.</jc>
+	String body = client.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().code().passes(x -&gt; x&lt;400)
+		.getBody().asString();
+</p>
+</div><!-- END: 9.6 - juneau-rest-client.ResponseStatus -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.ResponseHeaders' id='juneau-rest-client.ResponseHeaders'>9.7 - Response Headers</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.7 - juneau-rest-client.ResponseHeaders -->
+<p>
+	Response headers are accessed through the following methods:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponse}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getHeader(String) getHeader(String)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseHeader}[]</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseHeader}[]</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getStringHeader(String) getStringHeader(String)} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#containsHeader(String) containsHeader(String)} <jk>returns</jk> <jk>boolean</jk></c>
+	</ul>
+</ul>
+
+<p>
+	Unlike {@link org.apache.juneau.rest.client2.RestResponse#getFirstHeader(String)} and {@link org.apache.juneau.rest.client2.RestResponse#getLastHeader(String)}, the {@link org.apache.juneau.rest.client2.RestResponse#getHeader(String)}
+	method returns an empty {@link org.apache.juneau.rest.client2.RestResponseHeader} object instead of returning <jk>null</jk>.
+	This allows it to be used more easily in fluent calls.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// See if response contains Location header.</jc>
+	<jk>boolean</jk> hasLocationHeader = client.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+</p>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestResponseHeader} class extends from the HttpClient {@link org.apache.http.Header} class and provides several convenience
+	methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseHeader}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asString() asString()} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicIntegerHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicStringHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicLongHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicDateHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicCsvArrayHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asEntityValidatorArrayHeader() asEntityValidatorArrayHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicEntityValidatorArrayHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicRangeArrayHeader}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link org.apache.juneau.http.header.BasicUriHeader}</c>
+	</ul>
+</ul>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
+	header parts.
+</p>
+	
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Parse the header "Foo: bar|baz".</jc>
+	List&lt;String&gt; fooHeader = client
+		.get(<jsf>URI</jsf>)
+		.complete()
+		.getHeader(<js>"Foo"</js>).schema(<jsf>T_ARRAY_PIPES</jsf>).as(List.<jk>class</jk>, String.<jk>class</jk>);
+</p>
+
+<p>
+	Assertion methods are also provided for fluent-style calls:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseHeader}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentStringAssertion}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentIntegerAssertion}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentLongAssertion}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentDateAssertion}</c>
+	</ul>
+</ul>
+
+<p>
+	Note how in the following example, the fluent assertion returns control to the {@link org.apache.juneau.rest.client2.RestResponse} object after
+	the assertion has been completed:
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Assert the response content type is any sort of JSON.</jc>
+	String body = client.get(<jsf>URI</jsf>)
+		.run()
+		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
+		.getBody().asString();
+</p>
+</div><!-- END: 9.7 - juneau-rest-client.ResponseHeaders -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.ResponseBody' id='juneau-rest-client.ResponseBody'>9.8 - Response Body</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.8 - juneau-rest-client.ResponseBody -->
+<p>
+	The response body is accessed through the following method:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponse}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponse#getBody() getBody()} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponseBody}</c>
+	</ul>
+</ul>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestResponseBody} class extends from the HttpClient {@link org.apache.http.HttpEntity} class and provides several convenience
+	methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseBody}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asReader() asReader()} <jk>returns</jk> Reader</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponse}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link org.apache.juneau.rest.client2.RestResponse}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asString() asString()} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link org.apache.juneau.utils.PojoRest}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asPojoRest() asPojoRest()} <jk>returns</jk> {@link org.apache.juneau.utils.PojoRest}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+	</ul>
+</ul>
+
+<br>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Parse into a linked-list of strings.</jc>
+	List&lt;String&gt; l = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+
+	<jc>// Parse into a linked-list of beans.</jc>
+	List&lt;MyBean&gt; l = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+
+	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	List&lt;List&lt;String&gt;&gt; l = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+
+	<jc>// Parse into a map of string keys/values.</jc>
+	Map&lt;String,String&gt; m = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+
+	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	Map&lt;String,List&lt;MyBean&gt;&gt; m = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+</p>
+
+<p>
+	The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
+	automatically cached when using the assertions methods or methods such as {@link org.apache.juneau.rest.client2.RestResponseBody#asString()}.
+	However, methods that involve reading directly from the input stream cannot be called twice.
+	In these cases, the {@link org.apache.juneau.rest.client2.RestResponse#cacheBody()} and {@link org.apache.juneau.rest.client2.RestResponseBody#cache()} methods are provided
+	to cache the response body in memory so that you can perform several operations against it.
+</p>
+
+<p class='bpcode w800'>
+	<jc>// Cache the response body so we can access it twice.</jc>
+	InputStream inputStream = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.cacheBody()
+		.getBody().pipeTo(someOtherStream)
+		.getBody().asInputStream();
+</p>
+
+<p>
+	Assertion methods are also provided for fluent-style calls:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestResponseBody}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#assertString() assertString()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentStringAssertion}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentObjectAssertion}</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestResponseBody#assertBytes() assertBytes()} <jk>returns</jk> {@link org.apache.juneau.assertions.FluentByteArrayAssertion}</c>
+	</ul>
+</ul>
+
+<br>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Assert that the body contains the string "Success".</jc>
+	String body = client
+		.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().assertString().contains(<js>"Success"</js>)
+		.getBody().asString();
+</p>
+
+<p>
+	Object assertions allow you to parse the response body into a POJO and then perform various tests on that resulting
+	POJO.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
+	MyBean bean = client.get(<jsf>URI</jsf>)
+		.run()
+		.getBody().assertObject(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>)
+		.getBody().as(MyBean.<jk>class</jk>);
+</p>
+</div><!-- END: 9.8 - juneau-rest-client.ResponseBody -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.CustomCallHandlers' id='juneau-rest-client.CustomCallHandlers'>9.9 - Custom Call Handlers</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.9 - juneau-rest-client.CustomCallHandlers -->
+<p>
+	The {@link org.apache.juneau.rest.client2.RestCallHandler} interface provides the ability to provide custom handling of requests.
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#callHandler(Class) callHandler(Class&lt;? extends RestCallHandler&gt;)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#callHandler(RestCallHandler) callHandler(RestCallHandler)}
+	</ul>
+	<li class='jic'>{@link org.apache.juneau.rest.client2.RestCallHandler}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestCallHandler#run(HttpHost,HttpRequest,HttpContext) run(HttpHost,HttpRequest,HttpContext)} <jk>returns</jk> HttpResponse</c>
+	</ul>
+</ul>
+
+<p>
+	Note that there are other ways of accomplishing this such as extending the {@link org.apache.juneau.rest.client2.RestClient} class and overriding
+	the {@link org.apache.juneau.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
+	or by defining your own {@link org.apache.http.protocol.HttpRequestExecutor}.  Using this interface is often simpler though.
+</p>
+</div><!-- END: 9.9 - juneau-rest-client.CustomCallHandlers -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.10 - Interceptors</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.10 - juneau-rest-client.Interceptors -->
+<p>
+	The {@link org.apache.juneau.rest.client2.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
+	the existing {@link org.apache.http.protocol.HttpRequestInterceptor} and {@link org.apache.http.protocol.HttpResponseInterceptor} APIs.
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(Object...) interceptors(Object...)}
+	</ul>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
+	</ul>
+	<li class='jic'>{@link org.apache.juneau.rest.client2.RestCallInterceptor}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
+	</ul>
+</ul>
+</div><!-- END: 9.10 - juneau-rest-client.Interceptors -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.11 - REST Proxies</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.11 - juneau-rest-client.RestProxies -->
+<p>
+	One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
+	arbitrary remote REST resources.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		Pet addPet(
+			<ja>@Body</ja> CreatePet pet,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+		);
+	}
+
+	<jc>// Use a RestClient with default Simple JSON support.</jc>
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
+		PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+		Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	}
+</p>
+
+<p>
+	The methods to retrieve remote interfaces are:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClient}
+	<ul>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class) getRemote(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object) getRemote(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class) getRrpcInterface(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class,Object) getRrpcInterface(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link org.apache.juneau.rest.client2.RestClient#getRrpcInterface(Class,Object,Serializer,Parser) getRrpcInterface(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
+	</ul>
+</ul>
+
+<p>
+	Two basic types of remote interfaces are provided:
+</p>
+
+<ul class='spaced-list'>
+	<li>{@link org.apache.juneau.http.remote.Remote @Remote}-annotated interfaces.  These can be defined against arbitrary external REST resources.
+	<li>RPC-over-REST interfaces.  These are Java interfaces that allow you to make method calls on server-side POJOs.
+</ul>
+
+
+
+
+
+
+
+
+
+
 <p>
 	The <c>juneau-rest-client</c> library can also be used to define interface proxies against 3rd-party REST interfaces.
 	This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
@@ -22846,8 +23540,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Remote' id='juneau-rest-client.RestProxies.Remote'>9.1.1 - @Remote</a><span class='update'>8.1.2-updated</span></h4>
-<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RestProxies.Remote -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Remote' id='juneau-rest-client.RestProxies.Remote'>9.11.1 - @Remote</a><span class='update'>8.1.2-updated</span></h4>
+<div class='topic'><!-- START: 9.11.1 - juneau-rest-client.RestProxies.Remote -->
 <p>
 	The {@link org.apache.juneau.http.remote.Remote @Remote} annotation is used on your interface class
 	to identify it as a REST proxy interface.
@@ -22902,12 +23596,12 @@
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
 	PetStore p = client.getRemote(PetStore.<jk>class</jk>);
 </p>
-</div><!-- END: 9.1.1 - juneau-rest-client.RestProxies.Remote -->
+</div><!-- END: 9.11.1 - juneau-rest-client.RestProxies.Remote -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.1.2 - @RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></h4>
-<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.11.2 - @RemoteMethod</a><span class='update'><b>8.1.4-updated</b></span></h4>
+<div class='topic'><!-- START: 9.11.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 <p>
 	The {@link org.apache.juneau.http.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
 	of <ja>@Remote</ja>-annotated interfaces to identify REST endpoints.
@@ -23059,12 +23753,12 @@
 	If your <c>RestClient</c> does not have a parser associated with it, then the value is converted directly from a String using
 	the rules defined in {@doc PojosConveribleToStrings}. 
 </p>
-</div><!-- END: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
+</div><!-- END: 9.11.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Body' id='juneau-rest-client.RestProxies.Body'>9.1.3 - @Body</a></h4>
-<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.RestProxies.Body -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Body' id='juneau-rest-client.RestProxies.Body'>9.11.3 - @Body</a></h4>
+<div class='topic'><!-- START: 9.11.3 - juneau-rest-client.RestProxies.Body -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
@@ -23154,12 +23848,12 @@
 	If your <c>RestClient</c> class does not have a serializer associated with it, the body will automatically be serialized to a 
 	string using the rules defined in {@doc PojosConveribleToStrings}.
 </p>
-</div><!-- END: 9.1.3 - juneau-rest-client.RestProxies.Body -->
+</div><!-- END: 9.11.3 - juneau-rest-client.RestProxies.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.FormData' id='juneau-rest-client.RestProxies.FormData'>9.1.4 - @FormData</a></h4>
-<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.FormData' id='juneau-rest-client.RestProxies.FormData'>9.11.4 - @FormData</a></h4>
+<div class='topic'><!-- START: 9.11.4 - juneau-rest-client.RestProxies.FormData -->
 <p>
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are form-data parameters on the request.
@@ -23261,12 +23955,12 @@
 <ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
+</div><!-- END: 9.11.4 - juneau-rest-client.RestProxies.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Query' id='juneau-rest-client.RestProxies.Query'>9.1.5 - @Query</a></h4>
-<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.RestProxies.Query -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Query' id='juneau-rest-client.RestProxies.Query'>9.11.5 - @Query</a></h4>
+<div class='topic'><!-- START: 9.11.5 - juneau-rest-client.RestProxies.Query -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are query parameters on the request.
@@ -23371,12 +24065,12 @@
 <ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.5 - juneau-rest-client.RestProxies.Query -->
+</div><!-- END: 9.11.5 - juneau-rest-client.RestProxies.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.1.6 - @Header</a></h4>
-<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.RestProxies.Header -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.11.6 - @Header</a></h4>
+<div class='topic'><!-- START: 9.11.6 - juneau-rest-client.RestProxies.Header -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are header parameters on the request.
@@ -23467,12 +24161,12 @@
 <ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.6 - juneau-rest-client.RestProxies.Header -->
+</div><!-- END: 9.11.6 - juneau-rest-client.RestProxies.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.1.7 - @Path</a></h4>
-<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.RestProxies.Path -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.11.7 - @Path</a></h4>
+<div class='topic'><!-- START: 9.11.7 - juneau-rest-client.RestProxies.Path -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are path parameters on the request.
@@ -23556,12 +24250,12 @@
 <ul class='seealso'>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.7 - juneau-rest-client.RestProxies.Path -->
+</div><!-- END: 9.11.7 - juneau-rest-client.RestProxies.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.1.8 - @Request</a></h4>
-<div class='topic'><!-- START: 9.1.8 - juneau-rest-client.RestProxies.Request -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.11.8 - @Request</a></h4>
+<div class='topic'><!-- START: 9.11.8 - juneau-rest-client.RestProxies.Request -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteMethod</ja>-annotated method 
 	to identify it as a bean for setting HTTP parts through a bean-like interface.
@@ -23675,12 +24369,12 @@
 	 	}
 	}
 </p>
-</div><!-- END: 9.1.8 - juneau-rest-client.RestProxies.Request -->
+</div><!-- END: 9.11.8 - juneau-rest-client.RestProxies.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Response</a></h4>
-<div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.11.9 - @Response</a></h4>
+<div class='topic'><!-- START: 9.11.9 - juneau-rest-client.RestProxies.Response -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
@@ -23738,12 +24432,12 @@
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
 </p>
-</div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+</div><!-- END: 9.11.9 - juneau-rest-client.RestProxies.Response -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.DualPurposeInterfaces' id='juneau-rest-client.RestProxies.DualPurposeInterfaces'>9.1.10 - Dual-purpose (end-to-end) interfaces</a><span class='update'>8.0.0-new</span></h4>
-<div class='topic'><!-- START: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.DualPurposeInterfaces' id='juneau-rest-client.RestProxies.DualPurposeInterfaces'>9.11.10 - Dual-purpose (end-to-end) interfaces</a><span class='update'>8.0.0-new</span></h4>
+<div class='topic'><!-- START: 9.11.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
 <p>
 	A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
 	The advantage to this approach is that changes that you make to your REST interface can be reflected in both places
@@ -23842,13 +24536,169 @@
 	Note how we didn't need to use the <ja>@Header</ja> and <ja>@Path</ja> annotations in our implementation since
 	the annotations were inherited from the interface.
 </p>
-</div><!-- END: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
-</div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
+</div><!-- END: 9.11.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
+</div><!-- END: 9.11 - juneau-rest-client.RestProxies -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.2 - Authentication</a></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-client.Authentication -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.LoggingAndDebugging' id='juneau-rest-client.LoggingAndDebugging'>9.12 - Logging and Debugging</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.12 - juneau-rest-client.LoggingAndDebugging -->
+<p>
+	The following methods provide logging of requests and responses:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logger(Logger) logger(Logger)}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logToConsole() logToConsole()}
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
+	</ul>
+</ul>
+
+<p>
+	The following example shows the results of logging all requests that end with <c>/bean</c>.
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	MyBean bean = RestClient
+		.<jsm>create</jsm>()
+		.simpleJson()
+		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (req,res)-&gt;req.getUri().endsWith(<js>"/bean"</js>))
+		.logToConsole()
+		.build()
+		.post(<js>"http://localhost/bean"</js>, bean)
+		.run()
+		.getBody().as(MyBean.<jk>class</jk>);
+</p>
+
+<p>
+	This produces the following console output:
+</p>
+
+<p class='bpcode w800 console'>
+	=== HTTP Call (outgoing) ======================================================
+	=== REQUEST ===
+	POST http://localhost/bean
+	---request headers---
+		Accept: application/json+simple
+	---request entity---
+	Content-Type: application/json+simple
+	---request content---
+	{f:1}
+	=== RESPONSE ===
+	HTTP/1.1 200
+	---response headers---
+		Content-Type: application/json
+	---response content---
+	{f:1}
+	=== END =======================================================================",
+</p>
+
+<p class='notes w900'>
+	It should be noted that if you enable request logging detail level {@link org.apache.juneau.DetailLevel#FULL}, response bodies will be cached by default which may introduce
+	a performance penalty.
+</p>
+
+<p>
+	Additionally, the following method is also provided for enabling debug mode:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#debug() debug()}
+	</ul>
+</ul>
+
+<p>
+	Enabling debug mode has the following effects:
+</p>
+
+<ul>
+	<li>{@link org.apache.juneau.Context#CONTEXT_debug} is enabled.
+	<li>{@link org.apache.juneau.rest.client2.RestClient#RESTCLIENT_leakDetection} is enabled.
+	<li>{@link org.apache.juneau.rest.client2.RestClientBuilder#logToConsole()} is called.
+</ul>
+</div><!-- END: 9.12 - juneau-rest-client.LoggingAndDebugging -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.CustomizingHttpClient' id='juneau-rest-client.CustomizingHttpClient'>9.13 - Customizing HttpClient</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.13 - juneau-rest-client.CustomizingHttpClient -->
+<p>
+	Several methods are provided for customizing the underlying HTTP client and client builder classes:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client2.RestClientBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#httpClientBuilder(HttpClientBuilder) httpClientBuilder(HttpClientBuilder)} - Set the client builder yourself.
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#createHttpClientBuilder() createHttpClientBuilder()} - Override to create the client builder.
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#createHttpClient() createHttpClient()} - Override to create the client.
+		<li class='jm'>{@link org.apache.juneau.rest.client2.RestClientBuilder#createConnectionManager() createConnectionManager()} - Override to create the connection management.
+	</ul>
+</ul>
+
+<p>
+	Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client with customized HttpClient settings.</jc>
+	MyBean bean = RestClient
+		.<jsm>create</jsm>()
+		.disableRedirectHandling()
+		.connectionManager(myConnectionManager)
+		.addInterceptorFirst(myHttpRequestInterceptor)
+		.build();
+</p>
+
+<p>
+	Refer to the {@link org.apache.http.client.impl.HttpClientBuilder HTTP Client Builder API} for more information.
+</p>
+</div><!-- END: 9.13 - juneau-rest-client.CustomizingHttpClient -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.ExtendingRestClient' id='juneau-rest-client.ExtendingRestClient'>9.14 - Extending RestClient</a><span class='update'><b>8.1.4-new</b></span></h3>
+<div class='topic'><!-- START: 9.14 - juneau-rest-client.ExtendingRestClient -->
+<p>
+	The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
+	The following example that overrides the primary run method shows how this can be done.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
+
+		<jc>// Must provide this constructor!</jc>
+		<jk>public</jk> MyRestClient(PropertyStore ps) {
+			<jk>super</jk>(ps);
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+			<jc>// Perform special handling of requests.</jc>
+		}
+	}
+
+	<jc>// Instantiate your client.</jc>
+	MyRestClient client = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
+</p>
+
+<p>
+	The {@link org.apache.juneau.rest.client2.RestRequest} and {@link org.apache.juneau.rest.client2.RestResponse} objects can also be extended and integrated by overriding the
+	{@link org.apache.juneau.rest.client2.RestClient#createRequest(URI, String, boolean)} and {@link org.apache.juneau.rest.client2.RestClient#createResponse(RestRequest, HttpResponse, Parser)} methods.
+</p>
+</div><!-- END: 9.14 - juneau-rest-client.ExtendingRestClient -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.15 - Authentication</a><span class='update'><b>8.1.4-updated</b></span></h3>
+<div class='topic'><!-- START: 9.15 - juneau-rest-client.Authentication -->
 <p>
 	The Juneau REST client itself does not implement any support for authentication.  
 	Instead, it delegates it to the underlying Apache HTTP Client interface.
@@ -23859,8 +24709,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>9.2.1 - BASIC Authentication</a></h4>
-<div class='topic'><!-- START: 9.2.1 - juneau-rest-client.Authentication.BASIC -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>9.15.1 - BASIC Authentication</a></h4>
+<div class='topic'><!-- START: 9.15.1 - juneau-rest-client.Authentication.BASIC -->
 <p>
 	The {@link org.apache.juneau.rest.client2.RestClientBuilder#basicAuth(String,int,String,String)} method 
 	can be used to quickly enable BASIC authentication support.
@@ -23884,12 +24734,12 @@
 	p.setCredentials(scope, up);
 	builder.setDefaultCredentialsProvider(p);
 </p>
-</div><!-- END: 9.2.1 - juneau-rest-client.Authentication.BASIC -->
+</div><!-- END: 9.15.1 - juneau-rest-client.Authentication.BASIC -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>9.2.2 - FORM-based Authentication</a></h4>
-<div class='topic'><!-- START: 9.2.2 - juneau-rest-client.Authentication.FORM -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>9.15.2 - FORM-based Authentication</a></h4>
+<div class='topic'><!-- START: 9.15.2 - juneau-rest-client.Authentication.FORM -->
 <p>
 	The {@link org.apache.juneau.rest.client2.RestClientBuilder} class does not itself provide FORM-based 
 	authentication since there is no standard way of providing such support. 
@@ -23973,12 +24823,12 @@
 		}
 	}
 </p>
-</div><!-- END: 9.2.2 - juneau-rest-client.Authentication.FORM -->
+</div><!-- END: 9.15.2 - juneau-rest-client.Authentication.FORM -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.2.3 - OIDC Authentication</a></h4>
-<div class='topic'><!-- START: 9.2.3 - juneau-rest-client.Authentication.OIDC -->
+<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.15.3 - OIDC Authentication</a></h4>
+<div class='topic'><!-- START: 9.15.3 - juneau-rest-client.Authentication.OIDC -->
 <p>
 	The following example shows how the <c>JazzRestClient</c> class provides OIDC authentication 
 	support.
@@ -24101,341 +24951,8 @@
 		}
 	}
 </p>
-</div><!-- END: 9.2.3 - juneau-rest-client.Authentication.OIDC -->
-</div><!-- END: 9.2 - juneau-rest-client.Authentication -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.ResponsePatterns' id='juneau-rest-client.ResponsePatterns'>9.3 - </a><span class='update'>todo</span></h3>
-<div class='topic'><!-- START: 9.3 - juneau-rest-client.ResponsePatterns -->
-<p>
-	One issue with REST (and HTTP in general) is that the HTTP response code must be set as a header before the 
-	body of the request is sent.  
-	This can be problematic when REST calls invoke long-running processes, pipes
-	the results through the connection, and then fails after an HTTP 200 has already been sent.
-</p>
-<p>
-	One common solution is to serialize some text at the end to indicate whether the long-running process 
-	succeeded (e.g. <js>"FAILED"</js> or <js>"SUCCEEDED"</js>).
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client.RestClient} class has convenience methods for scanning the 
-	response without interfering with the other methods used for retrieving output.  
-</p>
-<p>
-	The following example shows how the {@link org.apache.juneau.rest.client.RestCall#successPattern(String)} 
-	method can be used to look for a SUCCESS message in the output:
-</p>	
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
-	restClient.doPost(<jsf>URL</jsf>)
-		.successPattern(<js>"SUCCESS"</js>)
-		.run();
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client.RestCall#failurePattern(String)} method does the opposite.  
-	It throws an exception if a failure message is detected.
-</p>	
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
-	restClient.doPost(<jsf>URL</jsf>)
-		.failurePattern(<js>"FAILURE|ERROR"</js>)
-		.run();
-</p>
-<p>
-	These convenience methods are specialized methods that use the 
-	{@link org.apache.juneau.rest.client.RestCall#responsePattern(ResponsePattern)} method which uses regular 
-	expression matching against the response body.
-	This method can be used to search for arbitrary patterns in the response body.
-</p>
-<p>
-	The following example shows how to use a response pattern finder to find and capture patterns for 
-	<js>"x=number"</js> and <js>"y=string"</js> from a response body.
-</p>	
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
-	<jk>final</jk> List&lt;String&gt; yList = <jk>new</jk> ArrayList&lt;String&gt;();
-	
-	String responseText = restClient.doGet(<jsf>URL</jsf>)
-		.responsePattern(
-			<jk>new</jk> ResponsePattern(<js>"x=(\\d+)"</js>) {
-				<ja>@Override</ja>
-				<jk>public void</jk> onMatch(RestCall restCall, Matcher m) <jk>throws</jk> RestCallException {
-					xList.add(Integer.<jsm>parseInt</jsm>(m.group(1)));
-				}
-				<ja>@Override</ja>
-				<jk>public void</jk> onNoMatch(RestCall restCall) <jk>throws</jk> RestCallException {
-					<jk>throw new</jk> RestCallException(<js>"No X's found!"</js>);
-				}
-			}
-		)
-		.responsePattern(
-			<jk>new</jk> ResponsePattern(<js>"y=(\\S+)"</js>) {
-				<ja>@Override</ja>
-				<jk>public void</jk> onMatch(RestCall restCall, Matcher m) <jk>throws</jk> RestCallException {
-					yList.add(m.group(1));
-				}
-				<ja>@Override</ja>
-				<jk>public void</jk> onNoMatch(RestCall restCall) <jk>throws</jk> RestCallException {
-					<jk>throw new</jk> RestCallException(<js>"No Y's found!"</js>);
-				}
-			}
-		)
-		.getResponseAsString();
-</p>
-<p>
-	Using response patterns does not affect the functionality of any of the other methods
-	used to retrieve the response such as {@link org.apache.juneau.rest.client.RestCall#getResponseAsString()} 
-	or {@link org.apache.juneau.rest.client.RestCall#getResponse(Class)}.
-	HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
-	use {@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()} since this method will not absorb 
-	the response for those other methods.
-</p>
-</div><!-- END: 9.3 - juneau-rest-client.ResponsePatterns -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.PipingOutput' id='juneau-rest-client.PipingOutput'>9.4 - Piping Response Output</a></h3>
-<div class='topic'><!-- START: 9.4 - juneau-rest-client.PipingOutput -->
-<p>
-	The {@link org.apache.juneau.rest.client.RestCall} class provides various convenience <c>pipeTo()</c> 
-	methods to pipe output to output streams and writers.
-</p>
-<p>
-	If you want to pipe output without any intermediate buffering, you can use the 
-	{@link org.apache.juneau.rest.client.RestCall#byLines()} method.  
-	This will cause the output to be piped and flushed after every line.  
-	This can be useful if you want to display the results in real-time from a long running process producing
-	output on a REST call.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Pipe output from REST call to System.out in real-time.</jc>
-	restClient.doPost(<jsf>URL</jsf>).byLines().pipeTo(<jk>new</jk> PrintWriter(System.<jk>out</jk>)).run();
-</p>
-</div><!-- END: 9.4 - juneau-rest-client.PipingOutput -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Debugging' id='juneau-rest-client.Debugging'>9.5 - Debugging</a></h3>
-<div class='topic'><!-- START: 9.5 - juneau-rest-client.Debugging -->
-<p>
-	Use the {@link org.apache.juneau.rest.client2.RestClientBuilder#debug()} method to enable logging for HTTP requests
-	made from the client.
-</p>
-<p>
-	Under-the-covers, this is simply a shortcut for adding the {@link org.apache.juneau.rest.client.RestCallLogger#DEFAULT} 
-	interceptor to the client.  
-	This causes the following output to be generated by the Java <c>org.apache.juneau.rest.client</c> 
-	logger at <jsf>WARNING</jsf> level:
-</p>
-<p class='bpcode w800 console'>
-	=== HTTP Call (outgoing) =======================================================
-	=== REQUEST ===
-	POST http://localhost:10000/testUrl HTTP/1.1
-	---request headers---
-		Debug: true
-		No-Trace: true
-		Accept: application/json
-	---request entity---
-		Content-Type: application/json
-	---request content---
-	{"foo":"bar","baz":123}
-	=== RESPONSE ===
-	HTTP/1.1 200 OK
-	---response headers---
-		Content-Type: application/json;charset=utf-8
-		Content-Length: 21
-		Server: Jetty(8.1.0.v20120127)
-	---response content---
-	{"message":"OK then"}
-	=== END ========================================================================
-</p>
-<p>
-	This setting also causes a <c>Debug: true</c> header value to trigger logging of the request on the 
-	server side as well.
-</p>
-<p class='bpcode w800 console'>
-	=== HTTP Call (incoming) =======================================================
-	HTTP POST /testUrl
-	---Headers---
-		Host: localhost:10000
-		Transfer-Encoding: chunked
-		Accept: application/json
-		Content-Type: application/json
-		User-Agent: Apache-HttpClient/4.5 (Java/1.6.0_65)
-		Connection: keep-alive
-		Debug: true
-		Accept-Encoding: gzip,deflate
-	---Default Servlet Headers---
-	---Body---
-	{"foo":"bar","baz":123}
-	=== END ========================================================================
-</p>
-</div><!-- END: 9.5 - juneau-rest-client.Debugging -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.6 - Logging</a><span class='update'>todo</span></h3>
-<div class='topic'><!-- START: 9.6 - juneau-rest-client.Logging -->
-<p>
-	Use the <dc>org.apache.juneau.rest.client2.RestClientBuilder#logTo(Level,Logger)</dc> and 
-	<dc>org.apache.juneau.rest.client2.RestRequest#logTo(Level,Logger)</dc> methods to log HTTP calls.
-	These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Log the HTTP request/response to the specified logger.</jc>
-	<jk>int</jk> rc = restClient.get(<jsf>URL</jsf>).logTo(<jsf>INFO</jsf>, getLogger()).run().getStatusCode();
-</p>
-<p>
-	The method call is ignored if the logger level is below the specified level.
-</p>
-<p>
-	Customized logging can be handled by sub-classing the {@link org.apache.juneau.rest.client.RestCallLogger} 
-	class and using the  {@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} method.
-</p>
-</div><!-- END: 9.6 - juneau-rest-client.Logging -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.7 - Interceptors</a></h3>
-<div class='topic'><!-- START: 9.7 - juneau-rest-client.Interceptors -->
-<p>
-	The {@link org.apache.juneau.rest.client2.RestClientBuilder#interceptors(Object...)} method can be used to 
-	intercept responses during specific connection lifecycle events.
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client.RestCallLogger} class is an example of an interceptor that uses 
-	the various lifecycle methods to log HTTP requests.
-</p>
-<p class='bpcode w800'>
-	<jd>/**
-	 * Specialized interceptor for logging calls to a log file.
-	 */</jd>
-	<jk>public class</jk> RestCallLogger <jk>extends</jk> RestCallInterceptor {
-	
-		<jk>private</jk> Level <jf>level</jf>;
-		<jk>private</jk> Logger <jf>log</jf>;
-	
-		<jd>/**
-		 * Constructor.
-		 *
-		 * <ja>@param</ja> level The log level to log messages at.
-		 * <ja>@param</ja> log The logger to log to.
-		 */</jd>
-		<jk>protected</jk> RestCallLogger(Level level, Logger log) {
-			<jk>this</jk>.<jf>level</jf> = level;
-			<jk>this</jk>.<jf>log</jf> = log;
-		}
-	
-		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
-		<jk>public void</jk> onInit(RestCall restCall) {
-			<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>))
-				restCall.captureResponse();
-		}
-	
-		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
-		<jk>public void</jk> onConnect(RestCall restCall, <jk>int</jk> statusCode, HttpRequest req, HttpResponse res) {
-			<jc>// Do nothing.</jc>
-		}
-	
-		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
-		<jk>public void</jk> onRetry(RestCall restCall, <jk>int</jk> statusCode, HttpRequest req, HttpResponse res) {
-			<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>))
-				<jf>log</jf>.log(level, MessageFormat.<jsm>format</jsm>(<js>"Call to {0} returned {1}.  Will retry."</js>, req.getRequestLine().getUri(), statusCode)); 
-		}
-	
-		<ja>@Override</ja> <jc>/* RestCallInterceptor */</jc>
-		<jk>public void</jk> onClose(RestCall restCall) <jk>throws</jk> RestCallException {
-			<jk>try</jk> {
-				<jk>if</jk> (<jf>log</jf>.isLoggable(<jf>level</jf>)) {
-					String output = restCall.getCapturedResponse();
-					StringBuilder sb = <jk>new</jk> StringBuilder();
-					HttpUriRequest req = restCall.getRequest();
-					HttpResponse res = restCall.getResponse();
-					<jk>if</jk> (req != <jk>null</jk>) {
-						sb.append(<js>"\n=== HTTP Call (outgoing) ========================================================="</js>);
-	
-						sb.append(<js>"\n=== REQUEST ===\n"</js>).append(req);
-						sb.append(<js>"\n---request headers---"</js>);
-						<jk>for</jk> (Header h : req.getAllHeaders())
-							sb.append(<js>"\n"</js>).append(h);
-						<jk>if</jk> (req <jk>instanceof</jk> HttpEntityEnclosingRequestBase) {
-							sb.append(<js>"\n---request entity---"</js>);
-							HttpEntityEnclosingRequestBase req2 = (HttpEntityEnclosingRequestBase)req;
-							HttpEntity e = req2.getEntity();
-							<jk>if</jk> (e == <jk>null</jk>)
-								sb.append(<js>"\nEntity is null"</js>);
-							<jk>else</jk> {
-								<jk>if</jk> (e.getContentType() != <jk>null</jk>)
-									sb.append(<js>"\n"</js>).append(e.getContentType());
-								<jk>if</jk> (e.getContentEncoding() != <jk>null</jk>)
-									sb.append(<js>"\n"</js>).append(e.getContentEncoding());
-								<jk>if</jk> (e.isRepeatable()) {
-									<jk>try</jk> {
-										sb.append(<js>"\n---request content---\n"</js>).append(EntityUtils.<jsm>toString</jsm>(e));
-									} <jk>catch</jk> (Exception ex) {
-										<jk>throw new</jk> RuntimeException(ex);
-									}
-								}
-							}
-						}
-					}
-					<jk>if</jk> (res != <jk>null</jk>) {
-						sb.append(<js>"\n=== RESPONSE ===\n"</js>).append(res.getStatusLine());
-						sb.append(<js>"\n---response headers---"</js>);
-						<jk>for</jk> (Header h : res.getAllHeaders())
-							sb.append(<js>"\n"</js>).append(h);
-						sb.append(<js>"\n---response content---\n"</js>).append(output);
-						sb.append(<js>"\n=== END ========================================================================"</js>);
-					}
-					<jf>log</jf>.log(<jf>level</jf>, sb.toString());
-				}
-			} <jk>catch</jk> (IOException e) {
-				<jf>log</jf>.log(Level.<jsf>SEVERE</jsf>, e.getLocalizedMessage(), e);
-			}
-		}
-	}
-</p>
-</div><!-- END: 9.7 - juneau-rest-client.Interceptors -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.Other' id='juneau-rest-client.Other'>9.8 - </a><span class='update'><b>8.1.4-updated</b></span></h3>
-<div class='topic'><!-- START: 9.8 - juneau-rest-client.Other -->
-<p>
-	The {@link org.apache.juneau.rest.client2.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
-	root URL on all requests so that you don't have to use absolute paths on individual calls.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a rest client with a root URL</jc>
-	RestClient rc = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
-	String r = rc.get(<js>"/baz"</js>).run().getBody().asString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client2.RestClientBuilder#set(String,Object)} method can be used to 
-	set serializer and parser properties.
-	For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
-	POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a rest client that ignores unknown fields in the response</jc>
-	RestClient rc = RestClient.<jsm>create</jsm>()
-		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
-		<jc>// or .ignoreUnknownBeanProperties(true)</jc>
-		.build();
-	MyPojo myPojo = rc.get(<jsf>URL</jsf>).run().getBody().as(MyPojo.<jk>class</jk>);
-</p>
-</div><!-- END: 9.8 - juneau-rest-client.Other -->
+</div><!-- END: 9.15.3 - juneau-rest-client.Authentication.OIDC -->
+</div><!-- END: 9.15 - juneau-rest-client.Authentication -->
 </div><!-- END: 9 - juneau-rest-client -->
 
 <!-- ==================================================================================================== -->

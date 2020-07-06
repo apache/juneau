@@ -44,15 +44,15 @@ import org.apache.juneau.*;
  *
  * 		<jk>private final</jk> RestClient <jf>client</jf>;
  *
- * 		<jk>public</jk> BasicRestCallHandler(RestClient client) {
- * 			<jk>this</jk>.<jf>client</jf> = client;
+ * 		<jk>public</jk> BasicRestCallHandler(RestClient <jv>client</jv>) {
+ * 			<jk>this</jk>.<jf>client</jf> = <jv>client</jv>;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
- * 			<jk>if</jk> (target == <jk>null</jk>)
- * 				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)request, context);
- * 			<jk>return</jk> <jf>client</jf>.execute(target, request, context);
+ * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+ * 			<jk>if</jk> (<jv>target</jv> == <jk>null</jk>)
+ * 				<jk>return</jk> <jf>client</jf>.execute((HttpUriRequest)<jv>request</jv>, <jv>context</jv>);
+ * 			<jk>return</jk> <jf>client</jf>.execute(<jv>target</jv>, <jv>request</jv>, <jv>context</jv>);
  * 		}
  * 	}
  * </p>

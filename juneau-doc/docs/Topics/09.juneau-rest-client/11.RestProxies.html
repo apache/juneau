@@ -13,8 +13,69 @@
  ***************************************************************************************************************************/
  -->
 
-{8.1.4-updated} 
-Remote REST Proxies
+{8.1.4-new} 
+REST Proxies
+
+<p>
+	One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
+	arbitrary remote REST resources.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	
+	<jk>public interface</jk> PetStore {
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		Pet addPet(
+			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		);
+	}
+
+	<jc>// Use a RestClient with default Simple JSON support.</jc>
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build()) {
+	
+	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+</p>
+
+<p>
+	The methods to retrieve remote interfaces are:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestClient}
+	<ul>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRemote(Class) getRemote(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRemote(Class,Object) getRemote(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRrpcInterface(Class) getRrpcInterface(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRrpcInterface(Class,Object) getRrpcInterface(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
+		<li class='jm'><c>{@link oajr.client2.RestClient#getRrpcInterface(Class,Object,Serializer,Parser) getRrpcInterface(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
+	</ul>
+</ul>
+
+<p>
+	Two basic types of remote interfaces are provided:
+</p>
+
+<ul class='spaced-list'>
+	<li>{@link oaj.http.remote.Remote @Remote}-annotated interfaces.  These can be defined against arbitrary external REST resources.
+	<li>RPC-over-REST interfaces.  These are Java interfaces that allow you to make method calls on server-side POJOs.
+</ul>
+
+
+
+
+
+
+
+
+
 
 <p>
 	The <c>juneau-rest-client</c> library can also be used to define interface proxies against 3rd-party REST interfaces.

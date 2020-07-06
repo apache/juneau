@@ -74,7 +74,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
- * 	MyBean bean = RestClient.<jsm>create</jsm>()
+ * 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
  * 		.simpleJson()
  * 		.build()
  * 		.get(<jsf>URI</jsf>)
@@ -87,17 +87,17 @@ import org.apache.juneau.utils.*;
  * <p class='w900'>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bcode w800'>
- * 	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
- * 	RestClient client = builder.build();
- * 	RestRequest req = client.get(<jsf>URI</jsf>);
- * 	RestResponse res = req.run();
- * 	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
- * 	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
- * 	res = codeAssertion.is(200);
- * 	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
- * 	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
- * 	RestResponseBody body = res.getBody();
- * 	MyBean bean = body.as(MyBean.<jk>class</jk>);
+ * 	RestClientBuilder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
+ * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+ * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
+ * 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
+ * 	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
+ * 	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
+ * 	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
+ * 	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
+ * 	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
+ * 	RestResponseBody <jv>body</jv> = <jv>res</jv>.getBody();
+ * 	MyBean <jv>bean</jv> = <jv>body</jv>.as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -108,19 +108,21 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
+ *
  * 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
  * 		Pet addPet(
- * 			<ja>@Body</ja> CreatePet pet,
- * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
- * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+ * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+ * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+ * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
  * 		);
  * 	}
  *
  * 	<jc>// Use a RestClient with default Simple JSON support.</jc>
- * 	RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build();
- * 	PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
- * 	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
- * 	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+ *
+ * 	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+ * 	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+ * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -134,8 +136,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  *
- * <h4 class='topic'>Instantiation and Lifecycle</h4>
- *
  * <p class='w900'>
  * Instances of this class are built using the {@link RestClientBuilder} class which can be constructed using
  * the {@link #create() RestClient.create()} method as shown above.
@@ -147,10 +147,10 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
- * 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
  *
  * 	<jc>// Use relative paths.</jc>
- * 	String body = client.get(<js>"/subpath"</js>).run().getBody().asString();
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getBody().asString();
  * </p>
  *
  * <p class='w900'>
@@ -159,16 +159,16 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient}
  * 	<ul>
- * 		<li class='jm'>{@link RestClient#get(Object) get(Object uri)} / {@link RestClient#get() get()}
- * 		<li class='jm'>{@link RestClient#put(Object,Object) put(Object uri, Object body)} / {@link RestClient#put(Object) put(Object uri)}
- * 		<li class='jm'>{@link RestClient#post(Object) post(Object uri, Object body)} / {@link RestClient#post(Object) post(Object uri)}
- * 		<li class='jm'>{@link RestClient#patch(Object,Object) patch(Object uri, Object body)} / {@link RestClient#patch(Object) patch(Object uri)}
- * 		<li class='jm'>{@link RestClient#delete(Object) delete(Object uri)}
- * 		<li class='jm'>{@link RestClient#head(Object) head(Object uri)}
- * 		<li class='jm'>{@link RestClient#options(Object) options(Object uri)}
- * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(Object uri, Object body)} / {@link RestClient#formPost(Object) formPost(Object uri)}
- * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPostPairs(Object uri, Object...parameters)}
- * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(HttpMethod method, Object uri, Object body)}
+ * 		<li class='jm'>{@link RestClient#get(Object) get(uri)} / {@link RestClient#get() get()}
+ * 		<li class='jm'>{@link RestClient#put(Object,Object) put(uri,body)} / {@link RestClient#put(Object) put(uri)}
+ * 		<li class='jm'>{@link RestClient#post(Object) post(uri,body)} / {@link RestClient#post(Object) post(uri)}
+ * 		<li class='jm'>{@link RestClient#patch(Object,Object) patch(uri,body)} / {@link RestClient#patch(Object) patch(uri)}
+ * 		<li class='jm'>{@link RestClient#delete(Object) delete(uri)}
+ * 		<li class='jm'>{@link RestClient#head(Object) head(uri)}
+ * 		<li class='jm'>{@link RestClient#options(Object) options(uri)}
+ * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(uri,body)} / {@link RestClient#formPost(Object) formPost(uri)}
+ * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+ * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(method,uri,body)}
  * 	</ul>
  * </ul>
  *
@@ -194,10 +194,10 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Consuming the response, so use run().</jc>
- * 	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
  *
  * 	<jc>// Only interested in response status code, so use complete().</jc>
- *   <jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+ *   <jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
  *
@@ -225,7 +225,7 @@ import org.apache.juneau.utils.*;
  * <p class='bcode w800'>
  * 	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
  * 	<jc>// Typically easier to use when performing unit tests.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
  * </p>
  *
  * <p>
@@ -234,10 +234,10 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a REST client with support for multiple languages.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
+ * 	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
  *
  * 	<jc>// Create a REST client with support for all supported languages.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+ * 	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
  * </p>
  *
  * <p class='w900'>
@@ -246,9 +246,13 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Create a REST client with support for multiple languages.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().universal().build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
  *
- * 	c.post(<jsf>URI</jsf>, myBean).contentType(<js>"application/json"</js>).complete().assertStatus().is(200);
+ * 	<jv>client</jv>
+ * 		.post(<jsf>URI</jsf>, <jv>myBean</jv>)
+ * 		.contentType(<js>"application/json"</js>)
+ * 		.complete()
+ * 		.assertStatus().is(200);
  * </p>
  *
  * <p>
@@ -256,10 +260,14 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Create a REST client with no default languages supported.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
  *
  * 	<jc>// Use JSON for this request.</jc>
- * 	c.post(<jsf>URI</jsf>, myBean).json().complete().assertStatus().is(200);
+ * 	<jv>client</jv>
+ * 		.post(<jsf>URI</jsf>, <jv>myBean</jv>)
+ * 		.json()
+ * 		.complete()
+ * 		.assertStatus().is(200);
  * </p>
  *
  *
@@ -271,10 +279,10 @@ import org.apache.juneau.utils.*;
  * <p class='bcode w800'>
  * 	<jc>// Create a basic REST client with JSON support.</jc>
  * 	<jc>// Use single-quotes and whitespace.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().json().sq().ws().build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
  *
  * 	<jc>// Same, but using properties.</jc>
- * 	RestClient c = RestClient
+ * 	RestClient <jv>client2</jv> = RestClient
  * 		.<jsm>create</jsm>()
  * 		.json()
  * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
@@ -314,10 +322,8 @@ import org.apache.juneau.utils.*;
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Object,HttpPartSchema,HttpPartSerializer) header(String,Object,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#header(String,Supplier,HttpPartSchema,HttpPartSerializer) header(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#header(Header) header(Header)}
  * 		<li class='jm'>{@link RestClientBuilder#headers(Object...) headers(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#headerPairs(Object...) headerPairs(Object...)}
@@ -342,13 +348,13 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client that adds an Authorization header to every request.</jc>
- * 	RestClient client = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
  *
  * 	<jc>// Or do it per-request.</jc>
- * 	String response = client.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+ * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
  *
  * 	<jc>// Or use an HttpHeader.</jc>
- * 	response = client.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
+ * 	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
  * </p>
  *
  * <p class='w900'>
@@ -359,7 +365,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
  * </p>
  *
  * <p>
@@ -369,7 +375,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
- * 	RestClient c = RestClient.<jsm>create</jsm>()
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>()
  * 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
  * 		.build();
  * </p>
@@ -386,16 +392,14 @@ import org.apache.juneau.utils.*;
  *
  * <h4 class='topic'>Request Query Parameters</h4>
  * <p>
- * Per-client or per-request query parmameters can be specified using the following methods:
+ * Per-client or per-request query parameters can be specified using the following methods:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClientBuilder}
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object) query(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Object,HttpPartSchema,HttpPartSerializer) query(String,Object,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#query(String,Supplier,HttpPartSchema,HttpPartSerializer) query(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#queries(Object...) queries(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#queryPairs(Object...) queryPairs(Object...)}
  * 	</ul>
@@ -413,10 +417,10 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
- * 	RestClient client = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
  *
  * 	<jc>// Or do it on every request.</jc>
- * 	String response = client.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+ * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
  * </p>
  *
  * <ul class='notes'>
@@ -435,10 +439,8 @@ import org.apache.juneau.utils.*;
  * 	<ul>
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object) formData(String,Object)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Object,HttpPartSchema,HttpPartSerializer) formData(String,Object,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
- * 		<li class='jm'>{@link RestClientBuilder#formData(String,Supplier,HttpPartSchema,HttpPartSerializer) formData(String,Supplier&lt;?&gt;,HttpPartSchema,HttpPartSerializer)}
  * 		<li class='jm'>{@link RestClientBuilder#formDatas(Object...) formDatas(Object...)}
  * 		<li class='jm'>{@link RestClientBuilder#formDataPairs(Object...) formDataPairs(Object...)}
  * 	</ul>
@@ -463,7 +465,7 @@ import org.apache.juneau.utils.*;
  * <h4 class='topic'>Request Body</h4>
  *
  * <p class='w900'>
- * The request body can either be passed in with the client creator method (e.g. {@link RestClient#post(Object,Object)}),
+ * The request body can either be passed in with the client creator method (e.g. {@link RestClient#post(Object,Object) post(uri,body)}),
  * or can be specified via the following methods:
  *
  * <ul class='javatree'>
@@ -521,7 +523,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Only interested in status code.</jc>
- * 	<jk>int</jk> statusCode = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+ * 	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
  * <p class='w900'>
@@ -529,11 +531,12 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
- *   <jc>// Interested in multiple values.</jc>
- * 	Mutable&lt;Integer&gt; statusCode;
- * 	Mutable&lt;String&gt; reasonPhrase;
- * 	client.get(<jsf>URI</jsf>).complete().getStatusCode(statusCode).getReasonPhrase(reasonPhrase);
- * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+statusCode.get()+<js>", reasonPhrase="</js>+reasonPhrase.get());
+ * 	<jc>// Interested in multiple values.</jc>
+ * 	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
+ * 	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
+ *
+ * 	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
+ * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
  * </p>
  *
  * <ul class='notes'>
@@ -548,15 +551,15 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Status assertion using a static value.</jc>
- * 	String body = client.get(<jsf>URI</jsf>)
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.assertStatus().code().isBetween(200,399)
  * 		.getBody().asString();
  *
  * 	<jc>// Status assertion using a predicate.</jc>
- * 	String body = client.get(<jsf>URI</jsf>)
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().passes(x -&gt; x&lt;400)
+ * 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
  * 		.getBody().asString();
  * </p>
  *
@@ -587,7 +590,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// See if response contains Location header.</jc>
- * 	<jk>boolean</jk> hasLocationHeader = client.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+ * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = client.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
  * </p>
  *
  * <p class='w900'>
@@ -626,7 +629,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Parse the header "Foo: bar|baz".</jc>
- * 	List&lt;String&gt; fooHeader = client
+ * 	List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.complete()
  * 		.getHeader(<js>"Foo"</js>).schema(<jsf>T_ARRAY_PIPES</jsf>).as(List.<jk>class</jk>, String.<jk>class</jk>);
@@ -652,7 +655,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Assert the response content type is any sort of JSON.</jc>
- * 	String body = client.get(<jsf>URI</jsf>)
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
  * 		.getBody().asString();
@@ -702,31 +705,31 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Parse into a linked-list of strings.</jc>
- * 	List&lt;String&gt; l = client
+ * 	List&lt;String&gt; <jv>l1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of beans.</jc>
- * 	List&lt;MyBean&gt; l = client
+ * 	List&lt;MyBean&gt; <jv>l2</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
- * 	List&lt;List&lt;String&gt;&gt; l = client
+ * 	List&lt;List&lt;String&gt;&gt; <jv>l3</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map of string keys/values.</jc>
- * 	Map&lt;String,String&gt; m = client
+ * 	Map&lt;String,String&gt; <jv>m1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
- * 	Map&lt;String,List&lt;MyBean&gt;&gt; m = client
+ * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>m2<jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -740,14 +743,12 @@ import org.apache.juneau.utils.*;
  * to cache the response body in memory so that you can perform several operations against it.
  *
  * <p class='bcode w800'>
- * 	Mutable&lt;MyBean&gt; myBean = Mutable.<jsm>create</jsm>();
- *
- * 	<jc>// Cache the response body so we can parse it and also retrieve the raw input stream.</jc>
- * 	InputStream inputStream = client
+ * 	<jc>// Cache the response body so we can access it twice.</jc>
+ * 	InputStream <jv>inputStream</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.cacheBody()
- * 		.getBody().pipeTo(someOtherStream)
+ * 		.getBody().pipeTo(<jv>someOtherStream</jv>)
  * 		.getBody().asInputStream();
  * </p>
  *
@@ -767,8 +768,8 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Cache the response body so that you can perform multiple operations against it.</jc>
- * 	String body = client
+ * 	<jc>// Assert that the body contains the string "Success".</jc>
+ * 	String <jv>body</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().assertString().contains(<js>"Success"</js>)
@@ -782,7 +783,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
- * 	MyBean bean = client.get(<jsf>URI</jsf>)
+ * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().assertObject(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>)
  * 		.getBody().as(MyBean.<jk>class</jk>);
@@ -812,6 +813,30 @@ import org.apache.juneau.utils.*;
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
  *
  *
+ * <h4 class='topic'>Interceptors</h4>
+ *
+ * <p class='w900'>
+ * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
+ * the existing {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} APIs.
+ *
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RestClientBuilder}
+ * 	<ul>
+ * 		<li class='jm'>{@link RestClientBuilder#interceptors(Object...) interceptors(Object...)}
+ * 	</ul>
+ * 	<li class='jc'>{@link RestRequest}
+ * 	<ul>
+ * 		<li class='jm'>{@link RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
+ * 	</ul>
+ * 	<li class='jic'>{@link RestCallInterceptor}
+ * 	<ul>
+ * 		<li class='jm'>{@link RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
+ * 		<li class='jm'>{@link RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
+ * 		<li class='jm'>{@link RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
+ * 	</ul>
+ * </ul>
+ *
+ *
  * <h4 class='topic'>Logging / Debugging</h4>
  *
  * <p class='w900'>
@@ -831,13 +856,13 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bcode w800'>
- * 	MyBean bean = RestClient
+ * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
  * 		.simpleJson()
- * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (req,res)-&gt;req.getUri().endsWith(<js>"/bean"</js>))
+ * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
  * 		.logToConsole()
  * 		.build()
- * 		.post(<js>"http://localhost/bean"</js>, bean)
+ * 		.post(<js>"http://localhost/bean"</js>, <jv>anotherBean</jv>)
  * 		.run()
  * 		.getBody().as(MyBean.<jk>class</jk>);
  * </p>
@@ -888,30 +913,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  *
- * <h4 class='topic'>Interceptors</h4>
- *
- * <p class='w900'>
- * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
- * the existing {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} APIs.
- *
- * <ul class='javatree'>
- * 	<li class='jc'>{@link RestClientBuilder}
- * 	<ul>
- * 		<li class='jm'>{@link RestClientBuilder#interceptors(Object...) interceptors(Object...)}
- * 	</ul>
- * 	<li class='jc'>{@link RestRequest}
- * 	<ul>
- * 		<li class='jm'>{@link RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
- * 	</ul>
- * 	<li class='jic'>{@link RestCallInterceptor}
- * 	<ul>
- * 		<li class='jm'>{@link RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
- * 		<li class='jm'>{@link RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
- * 		<li class='jm'>{@link RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
- * 	</ul>
- * </ul>
- *
- *
  * <h4 class='topic'>REST Proxies</h4>
  *
  * <p class='w900'>
@@ -923,20 +924,21 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
+ *
  * 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
  * 		Pet addPet(
- * 			<ja>@Body</ja> CreatePet pet,
- * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
- * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+ * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+ * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+ * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
  * 		);
  * 	}
  *
  * 	<jc>// Use a RestClient with default Simple JSON support.</jc>
- * 	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
- * 		PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
- * 		CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
- * 		Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
- * 	}
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build())
+ *
+ * 	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+ * 	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+ * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -992,11 +994,11 @@ import org.apache.juneau.utils.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Create a client with customized HttpClient settings.</jc>
- * 	MyBean bean = RestClient
+ * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
  * 		.disableRedirectHandling()
- * 		.connectionManager(myConnectionManager)
- * 		.addInterceptorFirst(myHttpRequestInterceptor)
+ * 		.connectionManager(<jv>myConnectionManager</jv>)
+ * 		.addInterceptorFirst(<jv>myHttpRequestInterceptor</jv>)
  * 		.build();
  * </p>
  *
@@ -1015,18 +1017,18 @@ import org.apache.juneau.utils.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(PropertyStore ps) {
- * 			<jk>super</jk>(ps);
+ * 		<jk>public</jk> MyRestClient(PropertyStore <jv>ps</jv>) {
+ * 			<jk>super</jk>(<jv>ps</jv>);
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+ * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
  * 			<jc>// Perform special handling of requests.</jc>
  * 		}
  * 	}
  *
  * 	<jc>// Instantiate your client.</jc>
- * 	MyRestClient client = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
+ * 	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -1075,12 +1077,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.callHandler(
 	 * 			<jk>new</jk> RestCallHandler() {
 	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <jk>throws</jk> IOException {
+	 * 				<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
 	 * 					<jc>// Custom handle requests.</jc>
 	 * 				}
 	 * 			}
@@ -1140,9 +1142,9 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.errorCodes(x -&gt; x &gt;= 300)
+	 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv> &gt;= 300)
 	 * 		.build();
 	 * </p>
 	 */
@@ -1186,21 +1188,21 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client with a customized executor service.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it to asynchronously run a request.</jc>
-	 * 	Future&lt;RestResponse&gt; responseFuture = client.get(<jsf>URI</jsf>).runFuture();
+	 * 	Future&lt;RestResponse&gt; <jv>responseFuture</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
 	 *
 	 * 	<jc>// Do some other stuff.</jc>
 	 *
 	 * 	<jc>// Now read the response.</jc>
-	 * 	String body = responseFuture.get().getBody().asString();
+	 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getBody().asString();
 	 *
 	 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-	 * 	Future&lt;MyBean&gtl myBeanFuture = client
+	 * 	Future&lt;MyBean&gtl <jv>myBeanFuture</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
@@ -1208,7 +1210,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<jc>// Do some other stuff.</jc>
 	 *
 	 * 	<jc>// Now read the response.</jc>
-	 * 	MyBean bean = myBeanFuture.get();
+	 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
 	 * </p>
 	 */
 	public static final String RESTCLIENT_executorService = PREFIX + "executorService.o";
@@ -1435,23 +1437,23 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestRequest req) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after RestRequest object is created and all headers/query/form-data has been
 	 *			// set on the request from the client.</jc>
 	 *		}
 	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onConnect(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<jk>public void</jk> onConnect(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 *			<jc>// Intercept immediately after an HTTP response has been received.</jc>
 	 *		}
 	 *
 	 *		<ja>@Override</ja>
-	 *		<jk>public void</jk> onClose(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 *		<jk>public void</jk> onClose(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {
 	 * 			<jc>// Intercept when the response body is consumed.</jc>
 	 * 		}
 	 * 	}
 	 *
 	 * 	<jc>// Create a client with a customized interceptor.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.interceptors(MyRestCallInterceptor.<jk>class</jk>)
 	 * 		.build();
@@ -1488,13 +1490,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.httpClient(myHttpClient)
+	 * 		.httpClient(<jv>myHttpClient</jv>)
 	 * 		.keepHttpClientOpen()
 	 * 		.build();
 	 *
-	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 */
 	public static final String RESTCLIENT_keepHttpClientOpen = PREFIX + "keepHttpClientOpen.b";
@@ -1530,13 +1532,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that logs a message if </jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.leakDetection()
 	 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
 	 * 		.build();
 	 *
-	 * 	client.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
+	 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 	 * </p>
 	 */
 	public static final String RESTCLIENT_leakDetection = PREFIX + "leakDetection.b";
@@ -1741,7 +1743,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
 	 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
@@ -1780,7 +1782,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partParser(UonParser.<jk>class</jk>)
 	 * 		.build();
@@ -1818,7 +1820,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.partSerializer(UonSerializer.<jk>class</jk>)
 	 * 		.build();
@@ -1887,13 +1889,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
 	 * 		.build();
 	 *
-	 * 	Bar bar = client
-	 * 		.get(<js>"/bar"</js>)  // Relative to http://localhost:10000/foo
+	 * 	Bar <jv>bar</jv> = <jv>client</jv>
+	 * 		.get(<js>"/bar"</js>)  <jc>// Relative to http://localhost:10000/foo</jc>
 	 * 		.run()
 	 * 		.getBody().as(Bar.<jk>class</jk>);
 	 * </p>
@@ -1936,7 +1938,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
-	 * 	RestClient client = RestClient
+	 * 	RestClient <jv>client</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.serializers(JsonSerializer.<jk>class</jk>,XmlSerializer.<jk>class</jk>)
 	 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
@@ -2967,7 +2969,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>package</jk> org.apache.foo;
+	 * 	<jk>package</jk> <jk>org.apache.foo</jk>;
 	 *
 	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturi/myinterface1"</js>)
 	 * 	<jk>public interface</jk> MyInterface1 { ... }
@@ -2978,20 +2980,20 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
 	 *
 	 * 	<jc>// Resolves to "http://localhost/resturi/myinterface1"</jc>
-	 * 	MyInterface1 i1 = RestClient
+	 * 	MyInterface1 <jv>i1</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.build()
 	 * 		.getRemote(MyInterface1.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/myinterface2"</jc>
-	 * 	MyInterface2 i2 = RestClient
+	 * 	MyInterface2 <jv>i2</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/org.apache.foo.MyInterface3"</jc>
-	 * 	MyInterface3 i3 = RestClient
+	 * 	MyInterface3 <jv>i3</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()

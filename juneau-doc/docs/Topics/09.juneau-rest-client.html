@@ -1,15 +1,15 @@
 <!--
 /***************************************************************************************************************************
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *  
- *  http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations under the License.
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
  ***************************************************************************************************************************/
  -->
 
@@ -36,188 +36,142 @@ juneau-rest-client
 </p>	
 
 <p>
-	The REST client API provides the ability to access remote REST interfaces and transparently convert the input 
-	and output to and from POJOs using any of the provided serializers and parsers.
+	Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
+	REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
 </p>
-<p>
-	Built upon the Apache HttpClient libraries, it extends that API and provides specialized APIs for working with 
-	REST interfaces while maintaining all the functionality available in the HttpClient API.
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a reusable JSON client.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
-	
-		<jc>// The address of the root resource.</jc>
-		String url = <js>"http://localhost:10000/addressBook"</js>;
-		
-		<jc>// Do a REST GET against a remote REST interface and convert
-		// the response to an unstructured OMap object.</jc>
-		OMap m1 = client.get(url).run().getBody().as(OMap.<jk>class</jk>);
-		
-		<jc>// Same as above, except parse the JSON as a bean.</jc>
-		AddressBook a2 = client.get(url).run().getBody().as(AddressBook.<jk>class</jk>);
-	}
-		
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().serializer(XmlSerializer.<jk>class</jk>).parser(XmlSerializer.<jk>class</jk>).build()) {
-		<jc>// Add a person to the address book.
-		// Use XML as the transport medium.</jc>
-		Person p = <jk>new</jk> Person(<js>"Joe Smith"</js>, 21);
-		<jk>int</jk> returnCode = client.post(url + <js>"/entries"</js>, p).execute().getStatusCode();
-	}
-</p>
-<p>
-	Juneau provides an HTTP client API that makes it extremely simple to connect to remote REST interfaces and 
-	seemlessly send and receive serialized POJOs in requests and responses.  
-</p>
-
-<h5 class='topic'>Features</h5>
-<ul class='spaced-list'>
-	<li>
-		Converts POJOs directly to HTTP request message bodies using {@link oaj.serializer.Serializer} 
-		classes.
- 	<li>
- 		Converts HTTP response message bodies directly to POJOs using {@link oaj.parser.Parser} 
- 		classes.
- 	<li>
- 		Serializes and parses HTTP request and response parts (query/form-data parameters, headers, path variables) 
- 		using OpenAPI marshalling and validation.
-	<li>
-		Exposes the full functionality of the Apache HttpClient API by exposing all methods defined on the 
-		{@link org.apache.http.impl.client.HttpClientBuilder} class.
-</ul>	
-<p>
-	The client API is designed to work as a thin layer on top of the proven Apache HttpClient API.  
-	By leveraging the HttpClient library, details such as SSL certificate negotiation, proxies, encoding, etc...
-	are all handled in Apache code. 
-</p>
-<p>
-	The Juneau client API prereq's Apache HttpClient 4.5+. 
-	At a minimum, the following jars are required:
-</p>
-<ul>
-	<li><c>httpclient-4.5.jar</c>
-	<li><c>httpcore-4.4.1.jar</c>
-	<li><c>httpmime-4.5.jar</c>
-</ul>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Examples below use the Juneau Address Book resource example</jc>
-
-	<jc>// Create a reusable client with JSON support</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
-	
-		<jc>// GET request, ignoring output</jc>
-		<jk>try</jk> (RestResponse r = client.get(<js>"http://localhost:10000/addressBook"</js>).run()) {
-			<jk>int</jk> rc = r.getStatusCode();
-			<jc>// Succeeded!</jc>
-		} <jk>catch</jk> (RestCallException e) {
-			<jc>// Failed!</jc>
-			System.<jsf>err</jsf>.println(
-				String.<jsm>format</jsm>(<js>"status=%s, message=%s"</js>, e.getResponseStatus(), e.getResponseMessage())
-			);
-		}
-				
-		<jc>// Remaining examples ignore thrown exceptions.</jc>		
-				
-		<jc>// GET request, secure, ignoring output</jc>
-		client.get(<js>"https://localhost:9443/sample/addressBook"</js>).execute();
-				
-		<jc>// GET request, getting output as a String.  No POJO parsing is performed.
-		// Note that when calling one of the getX() methods, you don't need to call connect() or disconnect(), since
-		//	it's automatically called for you.</jc>
-		String output = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().asString();
-				
-		<jc>// GET request, getting output as a Reader</jc>
-		Reader r = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().asReader();
-				
-		<jc>// GET request, getting output as an untyped map</jc>
-		<jc>// Input must be an object (e.g. "{...}")</jc>
-		OMap m = client
-			.get(<js>"http://localhost:10000/addressBook/0"</js>)
-			.run()
-			.getBody().as(OMap.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as an untyped list</jc>
-		<jc>// Input must be an array (e.g. "[...]")</jc>
-		OList l = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(OList.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed bean</jc>
-		<jc>// Input must be an object (e.g. "{...}")</jc>
-		<jc>// Note that you don't have to do any casting!</jc>
-		Person p = client
-			.get(<js>"http://localhost:10000/addressBook/0"</js>)
-			.run()
-			.getBody().as(Person.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed bean</jc>
-		<jc>// Input must be an array of objects (e.g. "[{...},{...}]")</jc>
-		Person[] pa = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(Person[].<jk>class</jk>);
-				
-		<jc>// Same as above, except as a List&lt;Person&gt;</jc>
-		List&lt;Person&gt; pl = client
-			.get(<js>"http://localhost:10000/addressBook"</js>)
-			.run()
-			.getBody().as(List.<jk>class</jk>, Person.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed string</jc>
-		<jc>// Input must be a string (e.g. "&lt;string&gt;foo&lt;/string&gt;" or "'foo'")</jc>
-		String name = client
-			.get(<js>"http://localhost:10000/addressBook/0/name"</js>)
-			.run()
-			.getBody().as(String.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed number</jc>
-		<jc>// Input must be a number (e.g. "&lt;number&gt;123&lt;/number&gt;" or "123")</jc>
-		<jk>int</jk> age = client
-			.get(<js>"http://localhost:10000/addressBook/0/age"</js>)
-			.run()
-			.getBody().as(Integer.<jk>class</jk>);
-				
-		<jc>// GET request, getting output as a parsed boolean</jc>
-		<jc>// Input must be a boolean (e.g. "&lt;boolean&gt;true&lt;/boolean&gt;" or "true")</jc>
-		<jk>boolean</jk> isCurrent = client
-			.get(<js>"http://localhost:10000/addressBook/0/addresses/0/isCurrent"</js>)
-			.run()
-			.getBody().as(Boolean.<jk>class</jk>);
-	}
-				
-	<jc>// GET request, getting a filtered object</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().swaps(TemporalCalendarSwap.IsoInstant.<jk>class</jk>).build()) {
-		Calendar birthDate = client
-			.get(<js>"http://localhost:10000/addressBook/0/birthDate"</js>)
-			.run()
-			.getBody().as(GregorianCalendar.<jk>class</jk>);
-	
-		<jc>// PUT request on regular field</jc>
-		String newName = <js>"John Smith"</js>;
-		<jk>int</jk> rc = client.put(<js>"http://localhost:10000/addressBook/0/name"</js>, newName).execute().getStatusCode();
-		
-		<jc>// PUT request on filtered field</jc>
-		Calendar newBirthDate = <jk>new</jk> GregorianCalendar(1, 2, 3, 4, 5, 6);
-		rc = client.put(<js>"http://localhost:10000/addressBook/0/birthDate"</js>, newBirthDate).execute().getStatusCode();
-		
-		<jc>// POST of a new entry to a list</jc>
-		Address newAddress = <jk>new</jk> Address(<js>"101 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12121, <jk>false</jk>);
-		rc = client.post(<js>"http://localhost:10000/addressBook/0/addresses"</js>, newAddress).execute().getStatusCode();	
-	}
+	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+	MyBean bean = RestClient.<jsm>create</jsm>()
+		.simpleJson()
+		.build()
+		.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().code().is(200)
+		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+		.getBody().as(MyBean.<jk>class</jk>);
 </p>
 
-<ul class='notes'>
-	<li>
-		The {@link oajrc.RestClient} class exposes all the builder methods on the Apache 
-		HttpClient {@link org.apache.http.impl.client.HttpClientBuilder} class.
-		<br>Use these methods to provide any customized HTTP client behavior.
+<p>
+	Breaking apart the fluent call, we can see the classes being used:
+</p>
+
+<p class='bpcode w800'>
+	RestClientBuilder builder = RestClient.<jsm>create</jsm>().simpleJson();
+	RestClient client = builder.build();
+	RestRequest req = client.get(<jsf>URI</jsf>);
+	RestResponse res = req.run();
+	RestResponseStatusLineAssertion statusLineAssertion = res.assertStatus();
+	FluentIntegerAssertion&lt;RestResponse&gt; codeAssertion = statusLineAssertion.code();
+	res = codeAssertion.is(200);
+	FluentStringAssertion&lt;RestResponse&gt; headerAssertion = res.assertHeader(<js>"Content-Type"</js>);
+	res = headerAssertion.matchesSimple(<js>"application/json*"</js>);
+	RestResponseBody body = res.getBody();
+	MyBean bean = body.as(MyBean.<jk>class</jk>);
+</p>
+
+<p>
+	It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		Pet addPet(
+			<ja>@Body</ja> CreatePet pet,
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag,
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+		);
+	}
+ 
+	<jc>// Use a RestClient with default Simple JSON support.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build();
+	PetStore store = client.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePet cp = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+	Pet p = store.addPet(cp, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+</p>
+
+<p>
+	The classes are closely tied to Apache HttpClient, yet provide lots of additional functionality:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestClient} <jk>extends</jk> {@link org.apache.http.client.HttpClient}, creates {@link oajr.client2.RestRequest} objects.
+	<li class='jc'>{@link oajr.client2.RestRequest} <jk>extends</jk> {@link org.apache.http.client.methods.HttpUriRequest}, creates {@link oajr.client2.RestResponse} objects.
+	<li class='jc'>{@link oajr.client2.RestResponse} <jk>extends</jk> {@link org.apache.http.HttpResponse}, creates {@link oajr.client2.RestResponseBody} and {@link oajr.client2.RestResponseHeader} objects.
+	<li class='jc'>{@link oajr.client2.RestResponseBody} <jk>extends</jk> {@link org.apache.http.HttpEntity}
+	<li class='jc'>{@link oajr.client2.RestResponseHeader} <jk>extends</jk> {@link org.apache.http.Header}
 </ul>
+
+<p>
+	Instances of this class are built using the {@link oajr.client2.RestClientBuilder} class which can be constructed using
+	the {@link oajr.client2.RestClient#create() RestClient.create()} method as shown above.
+</p>
+<p>
+	Clients are typically created with a root URI so that relative URIs can be used when making requests.
+	This is done using the {@link oajr.client2.RestClientBuilder#rootUri(Object)} method.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Create a client where all URIs are relative to localhost.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+
+	<jc>// Use relative paths.</jc>
+	String body = client.get(<js>"/subpath"</js>).run().getBody().asString();
+</p>
+
+<p>
+	The {@link oajr.client2.RestClient} class creates {@link oajr.client2.RestRequest} objects using the following methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestClient}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestClient#get(Object) get(uri)} / {@link oajr.client2.RestClient#get() get()}
+		<li class='jm'>{@link oajr.client2.RestClient#put(Object,Object) put(uri,body)} / {@link oajr.client2.RestClient#put(Object) put(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#post(Object) post(uri,body)} / {@link oajr.client2.RestClient#post(Object) post(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#patch(Object,Object) patch(uri,body)} / {@link oajr.client2.RestClient#patch(Object) patch(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#delete(Object) delete(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#head(Object) head(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#options(Object) options(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#formPost(Object,Object) formPost(uri,body)} / {@link oajr.client2.RestClient#formPost(Object) formPost(uri)}
+		<li class='jm'>{@link oajr.client2.RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+		<li class='jm'>{@link oajr.client2.RestClient#request(HttpMethod,Object,Object) request(method,uri,body)}
+	</ul>
+</ul>
+ 
+<p>
+	The {@link oajr.client2.RestRequest} class creates {@link oajr.client2.RestResponse} objects using the following methods:
+</p>
+
+<ul class='javatree'>
+	<li class='jc'>{@link oajr.client2.RestRequest}
+	<ul>
+		<li class='jm'>{@link oajr.client2.RestRequest#run() run()}
+		<li class='jm'>{@link oajr.client2.RestRequest#complete() complete()}
+	</ul>
+</ul>
+
+<p>
+	The distinction between the two methods is that {@link oajr.client2.RestRequest#complete() complete()} automatically consumes the response body and
+	{@link oajr.client2.RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
+	for reuse!  The {@link java.io.InputStream InputStreams} returned by the {@link oajr.client2.RestResponseBody} object are auto-closing once
+	they are exhausted, so it is often not necessary to explicitly close them.
+</p>
+
+<p>
+	The following examples show the distinction between the two calls:
+</p>
+
+<p class='bpcode w800'>
+	<jc>// Consuming the response, so use run().</jc>
+	String body = client.get(<jsf>URI</jsf>).run().getBody().asString();
+
+	<jc>// Only interested in response status code, so use complete().</jc>
+	<jk>int</jk> status = client.get(<jsf>URI</jsf>).complete().getStatusCode();
+</p>

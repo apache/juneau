@@ -166,7 +166,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	MyBean bean = client
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertStatus().code().is(200)
@@ -185,7 +185,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	MyBean bean = client
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertCode().is(200)
@@ -268,37 +268,37 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
 	 *
 	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).passes(x -&gt; x.equals(<js>"application/json"</js>));
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
@@ -308,7 +308,7 @@ public class RestResponse implements HttpResponse {
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the header and converts it to a bean.</jc>
-	 * 	MediaType mediaType = client
+	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
@@ -330,7 +330,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content age is greater than 1.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertIntegerHeader(<js>"Age"</js>).isGreaterThan(1);
@@ -350,7 +350,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response body is not too large.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertLongHeader(<js>"Length"</js>).isLessThan(100000);
@@ -370,7 +370,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is not expired.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
@@ -390,7 +390,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertCharset().is(<js>"utf-8"</js>);
@@ -409,7 +409,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertContentType().is(<js>"application/json"</js>);
@@ -419,7 +419,7 @@ public class RestResponse implements HttpResponse {
 	 * Note that this is equivalent to the following code:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the response content is JSON.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
@@ -453,48 +453,48 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBody().equals(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBody().contains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(x -&gt; x.contains(<js>"OK"</js>));
+	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBody().matches(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBody().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
-	 * 	Pattern p = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
-	 * 	client
+	 * 	Pattern <jv>p</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(p);
+	 * 		.assertBody().matches(<jv>p</jv>);
 	 * </p>
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
-	 * 	MyBean bean = client
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBody().matches(<js>".*OK.*"</js>);
@@ -524,7 +524,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body equals the text "foo".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
@@ -557,7 +557,7 @@ public class RestResponse implements HttpResponse {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body bean is the expected value.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
 	 * 		.assertBody(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);

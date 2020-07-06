@@ -39,6 +39,8 @@
  *	<jsf> - Java static field
  *	<jsm> - Java static method
  *	<ja> - Java annotation
+ *	<jp> - Java parameter
+ *	<jv> - Java local variable
  * 	<xt> - XML tag
  * 	<xa> - XML attribute
  * 	<xc> - XML comment
@@ -59,7 +61,7 @@
 .code,
 .bcode,
 .bpcode,
-jc,jd,jt,jk,js,jf,jsf,jsm,ja, 
+jc,jd,jt,jk,js,jf,jsf,jsm,ja,jp,jv 
 xt,xa,xc,xs,
 mc,mk,mv,
 cc,cs,ck,ce,
@@ -125,6 +127,7 @@ jt { color: #7f9fbf; font-weight: bold; }
 jk { color: #7f0055; font-weight: 500; }
 js { color: #00B; }
 jf { color: DarkBlue; }
+jp,jv { color: #654040; }
 jsf { color: DarkBlue; font-style: italic; }
 jsm { font-style: italic; }
 ja { color: grey; }

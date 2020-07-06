@@ -21,7 +21,7 @@ import org.apache.juneau.assertions.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response status code is 200 or 404.</jc>
- * 	client
+ * 	<jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.assertStatus().code().isAny(200,404);

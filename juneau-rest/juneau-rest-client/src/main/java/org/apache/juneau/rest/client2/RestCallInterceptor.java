@@ -28,13 +28,13 @@ package org.apache.juneau.rest.client2;
  * 	<jc>// Specialized client that adds a header to every request.</jc>
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  * 		<ja>@Override</ja>
- * 		<jk>public void</jk> onInit(RestRequest req) {
- * 			req.header(<js>"Foo"</js>, <js>"bar"</js>);
+ * 		<jk>public void</jk> onInit(RestRequest <jv>req</jv>) {
+ * 			<jv>req</jv>.header(<js>"Foo"</js>, <js>"bar"</js>);
  * 		}
  * 	}
  *
  *	<jc>// Instantiate the client.</jc>
- *	MyRestClient c = RestClient
+ *	MyRestClient <jv>client</jv> = RestClient
  *		.<jsm>create</jsm>()
  *		.json()
  *		.build(MyRestClient.<jk>class</jk>);
