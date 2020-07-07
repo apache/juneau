@@ -184,7 +184,7 @@ public class NameValuePairSupplier implements Iterable<NameValuePair> {
 	 * @return This object(for method chaining).
 	 */
 	private NameValuePairSupplier addAll(Collection<NameValuePair> pairs) {
-		this.pairs.addAll(pairs.stream().map(x->Collections.singleton(x)).collect(Collectors.toList()));
+		this.pairs.addAll(pairs.stream().filter(x->x != null).map(x->Collections.singleton(x)).collect(Collectors.toList()));
 		return this;
 	}
 

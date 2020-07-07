@@ -2861,7 +2861,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					if (input2 instanceof ReaderResourceBuilder)
 						input2 = ((ReaderResourceBuilder)input2).build();
 					ReaderResource r = (ReaderResource)input2;
-					contentType(r.getContentType());
+					contentType(r.getMediaType());
 					headers(r.getHeaders());
 					entity = new StringEntity(IOUtils.read(r.getContents()), getRequestContentType(TEXT_PLAIN));
 				}
@@ -2869,7 +2869,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					if (input2 instanceof StreamResourceBuilder)
 						input2 = ((StreamResourceBuilder)input2).build();
 					StreamResource r = (StreamResource)input2;
-					contentType(r.getContentType());
+					contentType(r.getMediaType());
 					headers(r.getHeaders());
 					entity = new InputStreamEntity(r.getContents(), getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				}

@@ -842,7 +842,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
-	protected final Locale getLocale() {
+	protected final Locale getDefaultLocale() {
 		return locale;
 	}
 
@@ -853,7 +853,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
-	protected final MediaType getMediaType() {
+	protected final MediaType getDefaultMediaType() {
 		return mediaType;
 	}
 
@@ -864,7 +864,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */
-	protected final TimeZone getTimeZone() {
+	protected final TimeZone getDefaultTimeZone() {
 		return timeZone;
 	}
 

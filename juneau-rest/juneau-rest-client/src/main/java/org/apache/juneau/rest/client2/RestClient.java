@@ -2536,7 +2536,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				body = ((ReaderResourceBuilder)body).build();
 			if (body instanceof ReaderResource) {
 				ReaderResource r = (ReaderResource)body;
-				if (r.getContentType() == null)
+				if (r.getMediaType() == null)
 					req.contentType("application/x-www-form-urlencoded");
 				return req.body(r);
 			}
@@ -2544,7 +2544,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				body = ((StreamResourceBuilder)body).build();
 			if (body instanceof StreamResource) {
 				StreamResource r = (StreamResource)body;
-				if (r.getContentType() == null)
+				if (r.getMediaType() == null)
 					req.contentType("application/x-www-form-urlencoded");
 				return req.body(r);
 			}

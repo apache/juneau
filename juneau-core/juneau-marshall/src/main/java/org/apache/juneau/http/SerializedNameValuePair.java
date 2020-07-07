@@ -35,8 +35,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public class SerializedNameValuePair implements NameValuePair, Headerable {
-	private String name;
+public class SerializedNameValuePair extends BasicNameValuePair implements Headerable {
 	private Object value;
 	private HttpPartType type;
 	private HttpPartSerializerSession serializer;
@@ -68,7 +67,7 @@ public class SerializedNameValuePair implements NameValuePair, Headerable {
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
 	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		this.name = name;
+		super(name, null);
 		this.value = value;
 		this.type = type;
 		this.serializer = serializer;
@@ -78,20 +77,15 @@ public class SerializedNameValuePair implements NameValuePair, Headerable {
 
 	@Override /* Headerable */
 	public SerializedHeader asHeader() {
-		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);
 	}
 
 	SerializedNameValuePair(SerializedNameValuePairBuilder b) {
-		this.name = b.name;
+		super(b.name, null);
 		this.value = b.value;
 		this.type = b.type;
 		this.serializer = b.serializer;
 		this.schema = b.schema == null ? HttpPartSchema.DEFAULT : b.schema;
-	}
-
-	@Override /* NameValuePair */
-	public String getName() {
-		return name;
 	}
 
 	@Override /* NameValuePair */
@@ -108,17 +102,17 @@ public class SerializedNameValuePair implements NameValuePair, Headerable {
 			}
 			if (isEmpty(v) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(type, schema, v);
+			return serializer == null ? stringify(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
-			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, name, value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {
-			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, name);
+			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", type, getName());
 		}
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return name + "=" + getValue();
+		return getName() + "=" + getValue();
 	}
 
 	private Object unwrap(Object o) {

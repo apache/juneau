@@ -77,6 +77,9 @@ Request Body
 		.assertStatus().code().is(200);
 </p>
 
+TODO - Bodies with variables.
+
+
 <ul class='notes'>
 	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
 		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,

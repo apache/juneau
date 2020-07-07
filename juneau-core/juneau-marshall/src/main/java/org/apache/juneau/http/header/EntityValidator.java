@@ -10,45 +10,71 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http;
+package org.apache.juneau.http.header;
 
 /**
- * Category of headers that consist of a single entity validator value.
+ * Represents a validator value.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	ETag: "xyzzy"
+ * 	ETag: "123456789"    – A strong ETag validator
+ * 	ETag: W/"123456789"  – A weak ETag validator
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class HeaderEntityValidator {
+public class EntityValidator {
 
-	private final EntityValidator value;
+	private final String value;
+	private final boolean isWeak;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The raw header value.
+	 * @param value The validator string value.
 	 */
-	protected HeaderEntityValidator(String value) {
-		this.value = new EntityValidator(value);
+	public EntityValidator(String value) {
+		value = value.trim();
+		isWeak = value.startsWith("W/");
+		if (isWeak)
+			value = value.substring(2);
+		if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"')
+			value = value.substring(1, value.length()-1);
+		this.value = value;
 	}
 
 	/**
-	 * Returns this header value as a {@link EntityValidator} object.
+	 * Returns the validator value stripped of quotes and weak tag.
 	 *
-	 * @return this header value as a {@link EntityValidator} object.
+	 * @return The validator value.
 	 */
-	public EntityValidator asValidator() {
+	public String asString() {
 		return value;
 	}
 
-	@Override /* Object */
+	/**
+	 * Returns <jk>true</jk> if the weak flag is present in the value.
+	 *
+	 * @return <jk>true</jk> if the weak flag is present in the value.
+	 */
+	public boolean isWeak() {
+		return isWeak;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the validator string value is <c>*</c>.
+	 *
+	 * @return <jk>true</jk> if the validator string value is <c>*</c>.
+	 */
+	public boolean isAny() {
+		return "*".equals(value);
+	}
+
+	@Override
 	public String toString() {
-		return value.toString();
+		return (isWeak ? "W/" : "") + (isAny() ? "*" : ('"' + value + '"'));
 	}
 }

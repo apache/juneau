@@ -95,7 +95,7 @@ public class SerializedHeader extends BasicStringHeader implements NameValuePair
 			}
 			if (isEmpty(v) && skipIfEmpty && schema.getDefault() == null)
 				return null;
-			return serializer.serialize(HttpPartType.HEADER, schema, v);
+			return serializer == null ? stringify(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {
 			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {

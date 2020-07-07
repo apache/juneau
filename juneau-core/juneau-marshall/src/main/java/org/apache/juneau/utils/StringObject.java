@@ -15,7 +15,6 @@ package org.apache.juneau.utils;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -93,7 +92,7 @@ public class StringObject implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public MediaType getContentType() {
-		return s.getPrimaryMediaType();
+	public String getMediaType() {
+		return s.getPrimaryMediaType().toString();
 	}
 }

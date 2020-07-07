@@ -113,8 +113,8 @@ public class StreamResource implements Streamable {
 
 	@ResponseHeader("Content-Type")
 	@Override /* Streamable */
-	public MediaType getContentType() {
-		return mediaType;
+	public String getMediaType() {
+		return mediaType == null ? null : mediaType.toString();
 	}
 
 	/**

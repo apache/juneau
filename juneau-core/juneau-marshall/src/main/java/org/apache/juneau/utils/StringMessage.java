@@ -18,7 +18,6 @@ import java.io.*;
 import java.text.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 
 /**
  * An encapsulated MessageFormat-style string and arguments.
@@ -51,7 +50,7 @@ public class StringMessage implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public MediaType getContentType() {
+	public String getMediaType() {
 		return null;
 	}
 

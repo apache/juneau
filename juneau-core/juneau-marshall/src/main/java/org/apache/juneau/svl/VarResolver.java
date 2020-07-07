@@ -186,7 +186,7 @@ public class VarResolver {
 	 * @param s The string to resolve.
 	 * @return A supplier for the specified string.
 	 */
-	public Supplier<String> resolver(String s) {
+	public Supplier<String> supplier(String s) {
 		return ()->resolve(s);
 	}
 }

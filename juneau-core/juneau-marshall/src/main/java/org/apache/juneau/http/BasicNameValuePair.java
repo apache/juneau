@@ -19,8 +19,11 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
@@ -29,6 +32,7 @@ import org.apache.juneau.reflect.*;
  * The value is serialized using {@link Object#toString()} at the point of reading.  This allows the value to be modified
  * periodically by overriding the method to return different values.
  */
+@BeanIgnore
 public class BasicNameValuePair implements NameValuePair, Headerable {
 	private String name;
 	private Object value;
@@ -64,6 +68,9 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * <p>
 	 * Value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * <p>
+	 * Note that you can use {@link VarResolver#supplier(String)} to create pair values with auto-resolving embedded SVL variables.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
@@ -117,6 +124,24 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 		this.value = value;
 	}
 
+	/**
+	 * Provides an object for performing assertions against the name of this pair.
+	 *
+	 * @return An object for performing assertions against the name of this pair.
+	 */
+	public FluentStringAssertion<BasicNameValuePair> assertName() {
+		return new FluentStringAssertion<>(getName(), this);
+	}
+
+	/**
+	 * Provides an object for performing assertions against the value of this pair.
+	 *
+	 * @return An object for performing assertions against the value of this pair.
+	 */
+	public FluentStringAssertion<BasicNameValuePair> assertValue() {
+		return new FluentStringAssertion<>(getValue(), this);
+	}
+
 	@Override /* Headerable */
 	public BasicHeader asHeader() {
 		return BasicHeader.of(name, value);
@@ -132,9 +157,26 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 		return stringify(unwrap(value));
 	}
 
+	@Override /* Object */
+	public boolean equals(Object o) {
+		if (! (o instanceof NameValuePair))
+			return false;
+		return ObjectUtils.eq(this, (NameValuePair)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return HashCode.create().add(name).add(value).get();
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return urlEncode(getName()) + "=" + urlEncode(getValue());
+	}
+
 	private Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			return ((Supplier<?>)o).get();
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
 		return o;
 	}
 }

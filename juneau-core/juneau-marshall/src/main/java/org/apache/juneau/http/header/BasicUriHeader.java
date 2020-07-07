@@ -15,6 +15,8 @@ package org.apache.juneau.http.header;
 import java.net.*;
 import java.util.function.*;
 
+import org.apache.juneau.http.*;
+
 /**
  * Category of headers that consist of a single URL value.
  *

@@ -226,12 +226,12 @@ public class Remote_CommonInterfaces_Test {
 		assertEquals("foo",IOUtils.read(sr.getContents()));
 		assertEquals("foo",sr.getHeaders().get("Foo"));
 		assertEquals("bar",sr.getHeaders().get("ETag"));
-		assertEquals("text/foo",sr.getContentType().toString());
+		assertEquals("text/foo",sr.getMediaType().toString());
 		ReaderResource rr = x.readerResource();
 		assertEquals("foo",IOUtils.read(rr.getContents()));
 		assertEquals("foo",rr.getHeaders().get("Foo"));
 		assertEquals("bar",rr.getHeaders().get("ETag"));
-		assertEquals("text/foo",rr.getContentType().toString());
+		assertEquals("text/foo",rr.getMediaType().toString());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

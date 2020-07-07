@@ -21,9 +21,9 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.svl.*;
 
@@ -243,20 +243,11 @@ public class HeaderSupplier implements Iterable<Header> {
 	}
 
 	/**
-	 * Returns this list as a URL-encoded custom query.
+	 * Returns this list as a JSON list of strings.
 	 */
 	@Override /* Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (Header h : this) {
-			String v = h.getValue();
-			if (v != null) {
-				if (sb.length() > 0)
-					sb.append("&");
-				sb.append(urlEncode(h.getName())).append('=').append(urlEncode(h.getValue()));
-			}
-		}
-		return sb.toString();
+		return SimpleJson.DEFAULT.toString(toArray());
 	}
 
 	@Override

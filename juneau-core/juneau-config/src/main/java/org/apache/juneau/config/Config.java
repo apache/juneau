@@ -30,7 +30,6 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -1908,8 +1907,8 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	@Override /* Writable */
-	public MediaType getContentType() {
-		return MediaType.PLAIN;
+	public String getMediaType() {
+		return "text/plain";
 	}
 
 

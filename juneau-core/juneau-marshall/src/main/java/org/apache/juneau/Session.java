@@ -56,9 +56,9 @@ public abstract class Session {
 	protected Session(Context ctx, SessionArgs args) {
 		this.properties = args.properties == null ? OMap.EMPTY_MAP : args.properties;
 		debug = getProperty(CONTEXT_debug, Boolean.class, ctx.isDebug());
-		locale = getProperty(CONTEXT_locale, Locale.class, ctx.getLocale());
-		timeZone = getProperty(CONTEXT_timeZone, TimeZone.class, ctx.getTimeZone());
-		mediaType = getProperty(CONTEXT_mediaType, MediaType.class, ctx.getMediaType());
+		locale = getProperty(CONTEXT_locale, Locale.class, ctx.getDefaultLocale());
+		timeZone = getProperty(CONTEXT_timeZone, TimeZone.class, ctx.getDefaultTimeZone());
+		mediaType = getProperty(CONTEXT_mediaType, MediaType.class, ctx.getDefaultMediaType());
 	}
 
 	/**

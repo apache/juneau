@@ -1445,7 +1445,7 @@ public class ConfigTest {
 		cf.writeTo(sw);
 		assertString(sw).replaceAll("\\r?\\n", "|").is("a = b|");
 
-		assertEquals("text/plain", cf.getContentType().toString());
+		assertEquals("text/plain", cf.getMediaType().toString());
 	}
 
 

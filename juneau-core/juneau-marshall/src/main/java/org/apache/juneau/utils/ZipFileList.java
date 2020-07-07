@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.zip.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -40,8 +39,8 @@ public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements
 
 	@Header("Content-Type")
 	@Override /* Streamable */
-	public MediaType getContentType() {
-		return MediaType.forString("application/zip");
+	public String getMediaType() {
+		return "application/zip";
 	}
 
 	/**

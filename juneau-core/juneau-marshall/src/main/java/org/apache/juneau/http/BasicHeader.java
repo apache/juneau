@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
@@ -22,10 +22,9 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.BasicHeader;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -85,6 +84,9 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * <p>
+	 * Note that you can use {@link VarResolver#supplier(String)} to create headers with auto-resolving embedded SVL variables.
 	 *
 	 * @param name The parameter name.
 	 * @param value
@@ -183,7 +185,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	protected boolean eqIC(String compare) {
-		return getValue().equalsIgnoreCase(compare);
+		return isEqualsIc(getValue(), compare);
 	}
 
 	/**
@@ -228,7 +230,9 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof Header) && ObjectUtils.eq(this, (Header)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
+		if (! (o instanceof Header))
+			return false;
+		return ObjectUtils.eq(this, (Header)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
 	}
 
 	@Override /* Object */
