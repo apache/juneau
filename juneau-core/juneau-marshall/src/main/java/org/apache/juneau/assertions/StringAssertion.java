@@ -78,5 +78,17 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		return this;
 	}
 
+	@Override /* GENERATED - FluentStringAssertion */
+	public StringAssertion replace(String target, String replacement) {
+		super.replace(target, replacement);
+		return this;
+	}
+
+	@Override /* GENERATED - FluentStringAssertion */
+	public StringAssertion replaceAll(String regex, String replacement) {
+		super.replaceAll(regex, replacement);
+		return this;
+	}
+
 	// </FluentSetters>
 }

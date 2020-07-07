@@ -51,6 +51,18 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param creator The assertion that created this assertion.
+	 * @param value The value being tested.
+	 * @param returns The object to return after the test.
+	 */
+	public FluentDateAssertion(Assertion creator, Date value, R returns) {
+		super(creator, returns);
+		this.value = value;
+	}
+
+	/**
 	 * Asserts that the value equals the specified value.
 	 *
 	 * @param value The value to check against.

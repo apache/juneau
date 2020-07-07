@@ -62,7 +62,7 @@ specific language governing permissions and limitations under the License.
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<jc>// URL is specified via a system property.</jc>
-	<ja>@Remote</ja>(path=<js>"$P{PetStoreUrl}"</js>)
+	<ja>@Remote</ja>(path=<js>"$S{PetStoreUrl}"</js>)
 	<jk>public interface</jk> PetStore {...}
 </p>
 
@@ -117,7 +117,7 @@ specific language governing permissions and limitations under the License.
 		path=<js>"/petstore"</js>,
 		headers={
 			<js>"Foo: bar"</js>,
-			<js>"Baz: $P{bazProperty}"</js>
+			<js>"Baz: $S{bazProperty}"</js>
 		},
 		headerSupplier=MyDynamicHeaderSupplier.<jk>class</jk>
 	)

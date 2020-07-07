@@ -184,7 +184,7 @@ public class HeaderSupplier implements Iterable<Header> {
 	 * @return This object(for method chaining).
 	 */
 	private HeaderSupplier addAll(Collection<Header> headers) {
-		this.headers.addAll(headers.stream().map(x->Collections.singleton(x)).collect(Collectors.toList()));
+		this.headers.addAll(headers.stream().filter(x->x != null).map(x->Collections.singleton(x)).collect(Collectors.toList()));
 		return this;
 	}
 

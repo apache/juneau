@@ -24070,7 +24070,7 @@
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 		<br><c>Content-Type</c> is set to <js>"application/octet-stream"</js>.
 	<li>
-		<c>NameValuePairs</c> - Converted to a URL-encoded FORM post.
+		{@link org.apache.juneau.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 		<br><c>Content-Type</c> is set to <js>"aplication/x-www-form-urlencoded"</js>.
 	<li>
 		<c>HttpEntity</c> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
@@ -24173,10 +24173,10 @@
 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>
 		);
 
-		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
 		<jc>// Name "*" is inferred.</jc>
 		<ja>@RemoteMethod</ja>
-		String postNameValuePairs(<ja>@FormData</ja> NameValuePairs <jv>nameValuePairs</jv>);
+		String postNameValuePairs(<ja>@FormData</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<ja>@RemoteMethod</ja>
@@ -24213,7 +24213,7 @@
 	<li>
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	<li>
-		<c>NameValuePairs</c> - Converted to a URL-encoded FORM post.
+		{@link org.apache.juneau.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	<li>
 		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
@@ -24279,10 +24279,10 @@
 			<ja>@Query</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>,
 			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
  
-		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
 		<jc>// Same as @Query("*").</jc>
 		<ja>@RemoteMethod</ja>
-		String nameValuePairs(<ja>@Query</ja> NameValuePairs <jv>nameValuePairs</jv>);
+		String nameValuePairs(<ja>@Query</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
  
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Query("*").</jc>
@@ -24322,7 +24322,7 @@
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized directly a query string.
 	<li>
-		<c>NameValuePairs</c> - Serialized as individual query parameters.
+		{@link org.apache.juneau.http.NameValuePairSupplier} - Serialized as individual query parameters.
 	<li>
 		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
@@ -24389,10 +24389,10 @@
 		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String <jv>foo</jv>,
 			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
-		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Multiple values pulled from a HeaderSupplier object.</jc>
 		<jc>// Same as @Header("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
-		String myProxyMethod2(<ja>@Header</ja> NameValuePairs <jv>nameValuePairs</jv>);
+		String myProxyMethod2(<ja>@Header</ja> HeaderSupplier <jv>headerSupplier</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Header("*").</jc>
@@ -24420,7 +24420,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		<c>NameValuePairs</c> - Serialized as individual headers.
+		{@link org.apache.juneau.http.HeaderSupplier} - Serialized as individual headers.
 	<li>
 		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
@@ -24478,10 +24478,10 @@
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
 		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 
-		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
 		<jc>// Same as @Path("*").</jc>
 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod2(<ja>@Path</ja> NameValuePairs <jv>nameValuePairs</jv>);
+		String myProxyMethod2(<ja>@Path</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
 
 		<jc>// Multiple values pulled from a Map.</jc>
 		<jc>// Same as @Path("*").</jc>
@@ -24509,7 +24509,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		<c>NameValuePairs</c> - Serialized as individual query parameters.
+		{@link org.apache.juneau.http.NameValuePairSupplier} - Serialized as individual path parameters.
 	<li>
 		<c>Map</c> - Converted to key-value pairs.
 			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).

@@ -48,7 +48,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @return An assertion against the status code on the response status object.
 	 */
 	public FluentIntegerAssertion<RestResponse> code() {
-		return new FluentIntegerAssertion<>(statusLine.getStatusCode(), returns());
+		return new FluentIntegerAssertion<>(this, statusLine.getStatusCode(), returns());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @return An assertion against the reason phrase on the response status object.
 	 */
 	public FluentStringAssertion<RestResponse> reason() {
-		return new FluentStringAssertion<>(statusLine.getReasonPhrase(), returns());
+		return new FluentStringAssertion<>(this, statusLine.getReasonPhrase(), returns());
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @return An assertion against the protocol on the response status object.
 	 */
 	public FluentStringAssertion<RestResponse> protocol() {
-		return new FluentStringAssertion<>(statusLine.getProtocolVersion().getProtocol(), returns());
+		return new FluentStringAssertion<>(this, statusLine.getProtocolVersion().getProtocol(), returns());
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @return An assertion against the protocol major version on the response status object.
 	 */
 	public FluentIntegerAssertion<RestResponse> major() {
-		return new FluentIntegerAssertion<>(statusLine.getProtocolVersion().getMajor(), returns());
+		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMajor(), returns());
 	}
 
 	/**
@@ -84,6 +84,6 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @return An assertion against the protocol minor version on the response status object.
 	 */
 	public FluentIntegerAssertion<RestResponse> minor() {
-		return new FluentIntegerAssertion<>(statusLine.getProtocolVersion().getMinor(), returns());
+		return new FluentIntegerAssertion<>(this, statusLine.getProtocolVersion().getMinor(), returns());
 	}
 }

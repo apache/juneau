@@ -138,7 +138,7 @@ SVL Variables
 		<td class='code'>$SW{arg,p1:then1[,p2:then2...]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
-		<td class='code'>$SW{$P{os.name},*win*:Windows,*:Something else}</td>
+		<td class='code'>$SW{$S{os.name},*win*:Windows,*:Something else}</td>
 	</tr>
 	<tr class='dark'>
 		<td>{@link oaj.svl.vars.CoalesceVar}</td>
@@ -152,7 +152,7 @@ SVL Variables
 		<td class='code'>$PM{arg,pattern}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
-		<td class='code'>$PM{$P{os.name},*win*}</td>
+		<td class='code'>$PM{$S{os.name},*win*}</td>
 	</tr>
 	<tr class='dark'>
 		<td>{@link oaj.svl.vars.NotEmptyVar}</td>

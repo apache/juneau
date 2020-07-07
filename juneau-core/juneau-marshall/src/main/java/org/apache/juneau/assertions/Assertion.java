@@ -22,9 +22,25 @@ import org.apache.juneau.internal.*;
  */
 public class Assertion {
 
-	private String msg;
-	private Object[] msgArgs;
-	private boolean stdout, stderr;
+	String msg;
+	Object[] msgArgs;
+	boolean stdout, stderr;
+
+	/**
+	 * No-arg constructor.
+	 */
+	protected Assertion() {}
+
+	/**
+	 * Constructor used when this assertion is being created from within another assertion.
+	 * @param creator The creator of this assertion.
+	 */
+	protected Assertion(Assertion creator) {
+		this.msg = creator.msg;
+		this.msgArgs = creator.msgArgs;
+		this.stdout = creator.stdout;
+		this.stderr = creator.stderr;
+	}
 
 	/**
 	 * Allows to to specify the assertion failure message.

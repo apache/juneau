@@ -53,6 +53,18 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param creator The assertion that created this assertion.
+	 * @param text The text being tested.
+	 * @param returns The object to return after the test.
+	 */
+	public FluentStringAssertion(Assertion creator, String text, R returns) {
+		super(creator, returns);
+		this.text = text;
+	}
+
+	/**
 	 * When enabled, text in the message is converted to valid Java strings.
 	 *
 	 * <p class='bcode w800'>

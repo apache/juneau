@@ -66,6 +66,18 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param creator The assertion that created this assertion.
+	 * @param o The object being tested.
+	 * @param returns The object to return after the test.
+	 */
+	public FluentObjectAssertion(Assertion creator, Object o, R returns) {
+		super(creator, returns);
+		this.value = o;
+	}
+
+	/**
 	 * Asserts that the object is an instance of the specified class.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -101,7 +113,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public FluentStringAssertion<R> serialized(WriterSerializer ws) {
 		try {
 			String s = ws.serialize(this.value);
-			return new FluentStringAssertion<>(s, returns());
+			return new FluentStringAssertion<>(this, s, returns());
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
 		}
