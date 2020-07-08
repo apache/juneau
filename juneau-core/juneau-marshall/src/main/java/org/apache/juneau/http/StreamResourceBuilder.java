@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 public class StreamResourceBuilder {
-	ArrayList<Object> contents = new ArrayList<>();
+	Object contents = null;
 	MediaType mediaType;
 	Map<String,Object> headers = new LinkedHashMap<>();
 	boolean cached;
@@ -74,8 +74,8 @@ public class StreamResourceBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public StreamResourceBuilder contents(Object...contents) {
-		Collections.addAll(this.contents, contents);
+	public StreamResourceBuilder contents(Object contents) {
+		this.contents = contents;
 		return this;
 	}
 

@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  */
 public class ReaderResourceBuilder {
 
-	ArrayList<Object> contents = new ArrayList<>();
+	Object contents;
 	MediaType mediaType;
 	Map<String,Object> headers = new LinkedHashMap<>();
 	boolean cached;
@@ -74,8 +74,8 @@ public class ReaderResourceBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public ReaderResourceBuilder contents(Object...contents) {
-		Collections.addAll(this.contents, contents);
+	public ReaderResourceBuilder contents(Object contents) {
+		this.contents = contents;
 		return this;
 	}
 

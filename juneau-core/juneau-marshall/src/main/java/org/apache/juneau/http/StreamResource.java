@@ -15,10 +15,8 @@ package org.apache.juneau.http;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-import java.nio.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 
@@ -40,14 +38,14 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Response
-public class StreamResource implements Streamable {
+public class StreamResource {
 
 	private final MediaType mediaType;
-	private final Object[] contents;
+	private final Object contents;
 	private final Map<String,Object> headers;
 
 	StreamResource(StreamResourceBuilder b) throws IOException {
-		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
+		this(b.mediaType, b.headers, b.cached, b.contents);
 	}
 
 	/**
@@ -71,10 +69,10 @@ public class StreamResource implements Streamable {
 	 * 	</ul>
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
+	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object contents) throws IOException {
 		this.mediaType = mediaType;
 		this.headers = AMap.unmodifiable(headers);
-		this.contents = cached ? new Object[]{readBytes(contents)} : contents;
+		this.contents = cached ? readBytes(contents) : contents;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -103,16 +101,25 @@ public class StreamResource implements Streamable {
 		return headers;
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param os TODO
+	 * @throws IOException TODO
+	 */
 	@ResponseBody
-	@Override /* Streamable */
 	public void streamTo(OutputStream os) throws IOException {
-		for (Object c : contents)
-			pipe(c, os);
+		if (contents != null)
+			pipe(contents, os);
 		os.flush();
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
 	@ResponseHeader("Content-Type")
-	@Override /* Streamable */
 	public String getMediaType() {
 		return mediaType == null ? null : mediaType.toString();
 	}
@@ -124,40 +131,17 @@ public class StreamResource implements Streamable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public InputStream getContents() throws IOException {
-		if (contents.length == 1) {
-			Object c = contents[0];
-			if (c != null) {
-				if (c instanceof byte[])
-					return new ByteArrayInputStream((byte[])c);
-				else if (c instanceof InputStream)
-					return (InputStream)c;
-				else if (c instanceof File)
-					return new FileInputStream((File)c);
-				else if (c instanceof CharSequence)
-					return new ByteArrayInputStream((((CharSequence)c).toString().getBytes(UTF8)));
-			}
+		Object c = contents;
+		if (c != null) {
+			if (c instanceof byte[])
+				return new ByteArrayInputStream((byte[])c);
+			else if (c instanceof InputStream)
+				return (InputStream)c;
+			else if (c instanceof File)
+				return new FileInputStream((File)c);
+			else if (c instanceof CharSequence)
+				return new ByteArrayInputStream((((CharSequence)c).toString().getBytes(UTF8)));
 		}
-		byte[][] bc = new byte[contents.length][];
-		int c = 0;
-		for (int i = 0; i < contents.length; i++) {
-			Object o = contents[i];
-			if (o == null)
-				bc[i] = new byte[0];
-			else if (o instanceof byte[])
-				bc[i] = (byte[])o;
-			else if (o instanceof InputStream)
-				bc[i] = readBytes((InputStream)o, 1024);
-			else if (o instanceof Reader)
-				bc[i] = read((Reader)o).getBytes(UTF8);
-			else if (o instanceof File)
-				bc[i] = readBytes((File)o);
-			else if (o instanceof CharSequence)
-				bc[i] = ((CharSequence)o).toString().getBytes(UTF8);
-			c += bc[i].length;
-		}
-		ByteBuffer bb = ByteBuffer.allocate(c);
-		for (byte[] b : bc)
-			bb.put(b);
-		return new ByteArrayInputStream(bb.array());
+		return null;
 	}
 }

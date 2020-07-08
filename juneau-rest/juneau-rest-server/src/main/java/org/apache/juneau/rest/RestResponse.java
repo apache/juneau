@@ -22,6 +22,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
@@ -610,6 +611,21 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
+	 * Sets a header from a {@link NameValuePair}.
+	 *
+	 * <p>
+	 * Note that this bypasses the part serializer and set the header value directly.
+	 *
+	 * @param pair The header to set.  Nulls are ignored.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse header(NameValuePair pair) {
+		if (pair != null)
+			setHeader(pair.getName(), pair.getValue());
+		return this;
+	}
+
+	/**
 	 * Sets a header on the request.
 	 *
 	 * @param schema
@@ -659,7 +675,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws SerializeException Header part could not be serialized.
 	 */
 	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
-		setHeaderSafe(h.getName(), h.asString());
+		setHeaderSafe(h.getName(), h.getValue());
 	}
 
 	/**

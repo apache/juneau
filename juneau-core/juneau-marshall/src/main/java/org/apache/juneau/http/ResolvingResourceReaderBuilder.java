@@ -59,7 +59,7 @@ public class ResolvingResourceReaderBuilder extends ReaderResourceBuilder {
 	}
 
 	@Override /* GENERATED - ReaderResourceBuilder */
-	public ResolvingResourceReaderBuilder contents(Object...contents) {
+	public ResolvingResourceReaderBuilder contents(Object contents) {
 		super.contents(contents);
 		return this;
 	}

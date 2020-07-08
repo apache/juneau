@@ -19,12 +19,14 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.util.FinishablePrintWriter;
 import org.apache.juneau.rest.util.FinishableServletOutputStream;
 import org.apache.juneau.serializer.*;
@@ -88,16 +90,29 @@ public class DefaultHandler implements ResponseHandler {
 				try {
 					Object ho = hm.getGetter().invoke(o);
 					String n = hm.getPartName();
-					if ("*".equals(n) && ho instanceof Map) {
-						@SuppressWarnings("rawtypes") Map m = (Map)ho;
-						for (Object key : m.keySet()) {
-							String k = stringify(key);
-							Object v = m.get(key);
-							HttpPartSchema s = hm.getSchema().getProperty(k);
-							res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), v));
+					if ("*".equals(n)) {
+						for (Object ho2 : iterate(ho)) {
+							if (ho2 instanceof Map.Entry) {
+								@SuppressWarnings("rawtypes")
+								Map.Entry e = (Map.Entry)ho2;
+								String k = stringify(e.getKey());
+								Object v = e.getValue();
+								HttpPartSchema s = hm.getSchema().getProperty(k);
+								res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), v));
+							} else if (ho2 instanceof NameValuePair) {
+								NameValuePair p = (NameValuePair)ho2;
+								res.setHeader(p.getName(), p.getValue());
+							} else {
+								throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", hm.getPartName(), ho2 == null ? null : ho2.getClass().getName());
+							}
 						}
 					} else {
-						res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), ho));
+						if (ho instanceof NameValuePair) {
+							NameValuePair p = (NameValuePair)ho;
+							res.setHeader(p.getName(), p.getValue());
+						} else {
+							res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), ho));
+						}
 					}
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
@@ -125,6 +140,19 @@ public class DefaultHandler implements ResponseHandler {
 			}
 
 			schema = rm.getSchema();
+		}
+
+		if (o instanceof HttpEntity) {
+			HttpEntity e = (HttpEntity)o;
+			res.header(e.getContentType()).header(e.getContentEncoding());
+			long contentLength = e.getContentLength();
+			if (contentLength >= 0)
+				res.header(ContentLength.of(contentLength));
+			try (OutputStream os = res.getNegotiatedOutputStream()) {
+				e.writeTo(os);
+				os.flush();
+			}
+			return true;
 		}
 
 		if (sm != null) {
@@ -218,4 +246,16 @@ public class DefaultHandler implements ResponseHandler {
 			req.getHeaders().getString("Accept", ""), g.getSupportedMediaTypes()
 		);
 	}
-}
+
+	private Iterable<?> iterate(Object o) {
+		if (o == null)
+			return Collections.emptyList();
+		if (o instanceof Map)
+			return ((Map<?,?>)o).entrySet();
+		if (o.getClass().isArray())
+			return Arrays.asList(o);
+		if (o instanceof Collection)
+			return (Collection<?>)o;
+		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", o.getClass().getName());
+	}
+ }

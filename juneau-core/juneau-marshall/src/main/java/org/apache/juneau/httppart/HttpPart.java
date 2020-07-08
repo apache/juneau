@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
+import org.apache.http.*;
+import org.apache.juneau.parser.ParseException;
 
 /**
  * Represents an instance of an HTTP part.
@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Can be used to represent both request and response parts.
  */
-public class HttpPart {
+public class HttpPart implements NameValuePair {
 	private final String name;
 	private final Object opart;
 	private final String spart;
@@ -74,26 +74,20 @@ public class HttpPart {
 		this.opart = null;
 	}
 
-	/**
-	 * Returns the name of the part.
-	 *
-	 * @return The name of the part.
-	 */
+	@Override /* NameValuePair */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Returns the value of the part converted to a string.
-	 *
-	 * @return The value of the part converted to a string.
-	 * @throws SchemaValidationException HTTP part failed schema validation.
-	 * @throws SerializeException HTTP part could not be serialized.
-	 */
-	public String asString() throws SchemaValidationException, SerializeException {
+	@Override /* NameValuePair */
+	public String getValue() {
 		if (spart != null)
 			return spart;
-		return serializer.serialize(partType, schema, opart);
+		try {
+			return serializer.serialize(partType, schema, opart);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

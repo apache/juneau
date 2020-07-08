@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 
@@ -40,13 +39,13 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Response
-public class ReaderResource implements Writable {
+public class ReaderResource {
 
 	private final MediaType mediaType;
 	private final Map<String,Object> headers;
 
 	@SuppressWarnings("javadoc")
-	protected final Object[] contents;
+	protected final Object contents;
 
 	/**
 	 * Constructor.
@@ -55,7 +54,7 @@ public class ReaderResource implements Writable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected ReaderResource(ReaderResourceBuilder b) throws IOException {
-		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
+		this(b.mediaType, b.headers, b.cached, b.contents);
 	}
 
 	/**
@@ -78,10 +77,10 @@ public class ReaderResource implements Writable {
 	 * 	</ul>
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
+	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object contents) throws IOException {
 		this.mediaType = mediaType;
 		this.headers = AMap.unmodifiable(headers);
-		this.contents = cached ? new Object[]{readAll(contents)} : contents;
+		this.contents = cached ? read(contents) : contents;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -114,16 +113,26 @@ public class ReaderResource implements Writable {
 		return headers;
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param w - TODO
+	 * @return TODO
+	 * @throws IOException TODO
+	 */
 	@ResponseBody
-	@Override /* Writeable */
 	public Writer writeTo(Writer w) throws IOException {
-		for (Object o : contents)
-			pipe(o, w);
+		if (contents != null)
+			pipe(contents, w);
 		return w;
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
 	@ResponseHeader("Content-Type")
-	@Override /* Writeable */
 	public String getMediaType() {
 		return mediaType == null ? null : mediaType.toString();
 	}
@@ -131,8 +140,6 @@ public class ReaderResource implements Writable {
 	@Override /* Object */
 	public String toString() {
 		try {
-			if (contents.length == 1)
-				return read(contents[0]);
 			return writeTo(new StringWriter()).toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -145,8 +152,8 @@ public class ReaderResource implements Writable {
 	 * @return The contents of this resource.
 	 */
 	public Reader getContents() {
-		if (contents.length == 1 && contents[0] instanceof Reader) {
-			return (Reader)contents[0];
+		if (contents instanceof Reader) {
+			return (Reader)contents;
 		}
 		return new StringReader(toString());
 	}

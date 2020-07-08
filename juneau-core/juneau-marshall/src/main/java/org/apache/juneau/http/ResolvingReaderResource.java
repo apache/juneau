@@ -80,13 +80,11 @@ public class ResolvingReaderResource extends ReaderResource {
 	@ResponseBody
 	@Override /* Writeable */
 	public Writer writeTo(Writer w) throws IOException {
-		for (Object o : contents) {
-			if (o != null) {
-				if (varSession == null)
-					pipe(o, w);
-				else
-					varSession.resolveTo(read(o), w);
-			}
+		if (contents != null) {
+			if (varSession == null)
+				pipe(contents, w);
+			else
+				varSession.resolveTo(read(contents), w);
 		}
 		return w;
 	}
