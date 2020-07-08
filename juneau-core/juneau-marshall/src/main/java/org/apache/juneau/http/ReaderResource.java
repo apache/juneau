@@ -140,24 +140,6 @@ public class ReaderResource implements Writable {
 	}
 
 	/**
-	 * Same as {@link #toString()} but strips comments from the text before returning it.
-	 *
-	 * <p>
-	 * Supports stripping comments from the following media types: HTML, XHTML, XML, JSON, Javascript, CSS.
-	 *
-	 * @return The resource contents stripped of any comments.
-	 */
-	public String toCommentStrippedString() {
-		String s = toString();
-		String subType = mediaType.getSubType();
-		if ("html".equals(subType) || "xhtml".equals(subType) || "xml".equals(subType))
-			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-		else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
-			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-		return s;
-	}
-
-	/**
 	 * Returns the contents of this resource.
 	 *
 	 * @return The contents of this resource.

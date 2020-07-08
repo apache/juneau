@@ -25,9 +25,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -147,13 +145,15 @@ public class BasicRestCallHandler implements RestCallHandler {
 			context.setRequest(call.getRestRequest());
 			context.setResponse(call.getRestResponse());
 
-			StreamResource r = null;
+			StaticFile r = null;
 			if (call.getPathInfoUndecoded() != null) {
 				String p = call.getPathInfoUndecoded().substring(1);
 				if (context.isStaticFile(p)) {
-					StaticFile sf = context.resolveStaticFile(p);
-					r = sf.resource;
-					call.responseMeta(sf.meta);
+					r = context.resolveStaticFile(p);
+					if (! r.exists()) {
+						call.output(null);
+						r = null;
+					}
 				} else if (p.equals("favicon.ico")) {
 					call.output(null);
 				}

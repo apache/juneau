@@ -57,7 +57,7 @@ public class StatusStats implements Comparable<StatusStats> {
 		private java.lang.reflect.Method method;
 		private Set<Status> codes = new TreeSet<>();
 
-		private Method(java.lang.reflect.Method method) {
+		Method(java.lang.reflect.Method method) {
 			this.method = method;
 		}
 
@@ -85,6 +85,10 @@ public class StatusStats implements Comparable<StatusStats> {
 		@Override
 		public int compareTo(Status o) {
 			return Integer.compare(code, o.code);
+		}
+
+		public int getCount() {
+			return count;
 		}
 	}
 

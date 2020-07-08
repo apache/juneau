@@ -19,6 +19,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.zip.*;
 
 import javax.servlet.http.*;
 
@@ -769,9 +770,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
-		BasicHttpEntity e = new BasicHttpEntity();
-		e.setContent(new ByteArrayInputStream(sres.get().getBody()));
-		response.setEntity(e);
+		InputStream is = new ByteArrayInputStream(sres.get().getBody());
+		Header contentEncoding = response.getLastHeader("Content-Encoding");
+		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
+			is = new GZIPInputStream(is);
+		response.setEntity(new InputStreamEntity(is));
 	}
 
 	@Override /* HttpClientConnection */

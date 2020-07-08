@@ -1304,6 +1304,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The request bean session.
 	 */
 	public BeanSession getBeanSession() {
+		if (beanSession == null)
+			beanSession = context.createBeanSession();
 		return beanSession;
 	}
 
@@ -1465,6 +1467,32 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (cached)
 			b.cached();
 		return b.build();
+	}
+
+	/**
+	 * Returns a classpath resource as a string,
+	 *
+	 * @param name The resource name.
+	 * @return The resource contents, or <jk>null</jk> if they could not be found.
+	 * @throws IOException If a problem occurred reading the resource.
+	 */
+	public String getClasspathResourceAsString(String name) throws IOException {
+		return getClasspathResourceAsString(name, false);
+	}
+
+	/**
+	 * Returns a classpath resource as a string,
+	 *
+	 * @param name The resource name.
+	 * @param resolveVars Resolve any SVL variables in the string.
+	 * @return The resource contents, or <jk>null</jk> if they could not be found.
+	 * @throws IOException If a problem occurred reading the resource.
+	 */
+	public String getClasspathResourceAsString(String name, boolean resolveVars) throws IOException {
+		String s = context.getClasspathResourceAsString(name, getLocale());
+		if (resolveVars)
+			return varSession.resolve(s);
+		return s;
 	}
 
 	/**
@@ -1816,7 +1844,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return restJavaMethod == null ? null : restJavaMethod.getResponseBeanMeta(o);
+		return restJavaMethod == null ? this.context.getResponseBeanMeta(o) : restJavaMethod.getResponseBeanMeta(o);
 	}
 
 	/**

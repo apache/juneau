@@ -248,12 +248,16 @@ public class BasicRestCallLogger implements RestCallLogger {
 	}
 
 	private byte[] getRequestBody(HttpServletRequest req) {
+		if (req instanceof RestRequest)
+			req = ((RestRequest)req).getInner();
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getBody();
 		return castOrNull(req.getAttribute("RequestBody"), byte[].class);
 	}
 
 	private byte[] getResponseBody(HttpServletRequest req, HttpServletResponse res) {
+		if (res instanceof RestResponse)
+			res = ((RestResponse)res).getInner();
 		if (res instanceof CachingHttpServletResponse)
 			return ((CachingHttpServletResponse)res).getBody();
 		return castOrNull(req.getAttribute("ResponseBody"), byte[].class);

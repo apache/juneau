@@ -28,6 +28,7 @@ import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.util.FinishablePrintWriter;
 import org.apache.juneau.rest.util.FinishableServletOutputStream;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Response handler for POJOs not handled by other handlers.
@@ -191,11 +192,24 @@ public class DefaultHandler implements ResponseHandler {
 			String out = null;
 			if (isEmpty(res.getContentType()))
 				res.setContentType("text/plain");
-			out = req.getBeanSession().getClassMetaForObject(o).toString(o);
-			FinishablePrintWriter w = res.getNegotiatedWriter();
-			w.append(out);
-			w.flush();
-			w.finish();
+			if (o instanceof InputStream) {
+				try (OutputStream os = res.getNegotiatedOutputStream()) {
+					IOPipe.create(o, os).run();
+					os.flush();
+				}
+			} else if (o instanceof Reader) {
+				try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
+					IOPipe.create(o, w).run();
+					w.flush();
+					w.finish();
+				}
+			} else {
+				out = req.getBeanSession().getClassMetaForObject(o).toString(o);
+				FinishablePrintWriter w = res.getNegotiatedWriter();
+				w.append(out);
+				w.flush();
+				w.finish();
+			}
 			return true;
 		}
 

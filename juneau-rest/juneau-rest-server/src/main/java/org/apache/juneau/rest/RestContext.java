@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.Enablement.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.BasicIllegalArgumentException.*;
 
@@ -41,7 +42,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -3628,6 +3628,7 @@ public final class RestContext extends BeanContext {
 	private final UriRelativity uriRelativity;
 	private final ConcurrentHashMap<String,MethodExecStats> methodExecStats = new ConcurrentHashMap<>();
 	private final Instant startTime;
+	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 
 	// Lifecycle methods
 	private final MethodInvoker[]
@@ -3794,7 +3795,9 @@ public final class RestContext extends BeanContext {
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
 
 			Object clc = getProperty(REST_callLoggerConfig);
-			if (clc instanceof RestCallLoggerConfig)
+			if (this.debug == TRUE)
+				this.callLoggerConfig = RestCallLoggerConfig.DEFAULT_DEBUG;
+			else if (clc instanceof RestCallLoggerConfig)
 				this.callLoggerConfig = (RestCallLoggerConfig)clc;
 			else if (clc instanceof OMap)
 				this.callLoggerConfig = RestCallLoggerConfig.create().apply((OMap)clc).build();
@@ -4269,13 +4272,14 @@ public final class RestContext extends BeanContext {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
 				throw new NotFound("Invalid path");
-			StreamResource sr = null;
-			for (StaticFiles sf : staticFiles) {
-				sr = sf.resolve(p);
-				if (sr != null)
+			StaticFile sf = null;
+			for (StaticFiles sfs : staticFiles) {
+				sf = sfs.resolve(p);
+				if (sf != null)
 					break;
 			}
-			StaticFile sf = new StaticFile(sr);
+			if (sf == null)
+				sf = new StaticFile(null,null,null);
 			if (useClasspathResourceCaching) {
 				if (staticFilesCache.size() > 100)
 					staticFilesCache.clear();
@@ -4284,24 +4288,6 @@ public final class RestContext extends BeanContext {
 			return sf;
 		}
 		return staticFilesCache.get(pathInfo);
-	}
-
-	/**
-	 * A cached static file instance.
-	 */
-	class StaticFile {
-		StreamResource resource;
-		ResponseBeanMeta meta;
-
-		/**
-		 * Constructor.
-		 *
-		 * @param resource The inner resource.
-		 */
-		StaticFile(StreamResource resource) {
-			this.resource = resource;
-			this.meta = resource == null ? null : ResponseBeanMeta.create(resource.getClass(), getPropertyStore());
-		}
 	}
 
 	/**
@@ -5431,6 +5417,28 @@ public final class RestContext extends BeanContext {
 		if (this.res.get() != null)
 			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
+	}
+
+	/**
+	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
+	 *
+	 * @param o The object to check.
+	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
+	 */
+	public ResponseBeanMeta getResponseBeanMeta(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = o.getClass();
+		ResponseBeanMeta rbm = responseBeanMetas.get(c);
+		if (rbm == null) {
+			rbm = ResponseBeanMeta.create(c, serializers.getPropertyStore());
+			if (rbm == null)
+				rbm = ResponseBeanMeta.NULL;
+			responseBeanMetas.put(c, rbm);
+		}
+		if (rbm == ResponseBeanMeta.NULL)
+			return null;
+		return rbm;
 	}
 
 	Enablement getDebug() {

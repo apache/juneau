@@ -15,50 +15,71 @@ package org.apache.juneau.rest;
 import java.io.*;
 import java.util.*;
 
-import javax.activation.*;
-
-import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
- * The static file resource resolver for a single {@link StaticFileMapping}.
+ * Instance of a static file sent as an HTTP response.
  */
-class StaticFiles {
-	private final Class<?> resourceClass;
-	private final String path, location;
-	private final Map<String,Object> responseHeaders;
+@Response
+public class StaticFile {
 
-	private final ClasspathResourceManager staticResourceManager;
-	private final MimetypesFileTypeMap mimetypesFileTypeMap;
+	private final byte[] contents;
+	private final String mediaType;
+	private final Map<String,Object> headers;
 
-	StaticFiles(StaticFileMapping sfm, ClasspathResourceManager staticResourceManager, MimetypesFileTypeMap mimetypesFileTypeMap, Map<String,Object> staticFileResponseHeaders) {
-		this.resourceClass = sfm.resourceClass;
-		this.path = sfm.path;
-		this.location = sfm.location;
-		this.responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-		this.staticResourceManager = staticResourceManager;
-		this.mimetypesFileTypeMap = mimetypesFileTypeMap;
+	/**
+	 * Constructor.
+	 *
+	 * @param contents Contents of the file, or <jk>null</jk> if file does not exist.
+	 * @param mediaType The media type of the file.
+	 * @param headers Arbitrary response headers to set when sending this file as an HTTP response.
+	 */
+	public StaticFile(byte[] contents, String mediaType, Map<String,Object> headers) {
+		this.contents = contents;
+		this.mediaType = mediaType;
+		this.headers = headers;
 	}
 
-	String getPath() {
-		return path;
+	/**
+	 * Does this file exist?
+	 *
+	 * @return <jk>true</jk> if this file exists.
+	 */
+	public boolean exists() {
+		return contents != null;
 	}
 
-	StaticFile resolve(String p) throws IOException {
-		if (p.startsWith(path)) {
-			String remainder = (p.equals(path) ? "" : p.substring(path.length()));
-			if (remainder.isEmpty() || remainder.startsWith("/")) {
-				String p2 = location + remainder;
-				try (InputStream is = staticResourceManager.getStream(resourceClass, p2, null)) {
-					if (is != null) {
-						int i = p2.lastIndexOf('/');
-						String name = (i == -1 ? p2 : p2.substring(i+1));
-						String mediaType = mimetypesFileTypeMap.getContentType(name);
-						return new StaticFile(IOUtils.readBytes(is), mediaType, responseHeaders);
-					}
-				}
-			}
-		}
-		return null;
+	/**
+	 * Get the HTTP response headers.
+	 *
+	 * @return
+	 * 	The HTTP response headers.
+	 * 	<br>An unmodifiable map.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	@ResponseHeader("*")
+	public Map<String,Object> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Returns the contents of this static file as an input stream.
+	 *
+	 * @return This file as an input stream.
+	 * @throws IOException Should never happen.
+	 */
+	@ResponseBody
+	public InputStream getInputStream() throws IOException {
+		return new ByteArrayInputStream(contents);
+	}
+
+	/**
+	 * Returns the content type for this static file.
+	 *
+	 * @return The content type for this static file.
+	 */
+	@ResponseHeader("Content-Type")
+	public String getContentType() {
+		return mediaType == null ? null : mediaType.toString();
 	}
 }

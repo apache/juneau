@@ -1761,9 +1761,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -1853,9 +1853,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
@@ -1923,9 +1923,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource}/{@link ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource}/{@link StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
