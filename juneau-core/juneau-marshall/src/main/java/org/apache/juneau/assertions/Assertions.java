@@ -28,14 +28,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified date is after the current date.</jc>
-	 * 	<jsm>assertDate</jsm>(myDate).isAfterNow();
+	 * 	<jsm>assertDate</jsm>(<jv>myDate</jv>).isAfterNow();
 	 * </p>
 	 *
-	 * @param date The date being wrapped.
+	 * @param value The date being wrapped.
 	 * @return A new {@link DateAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static DateAssertion assertDate(Date date) {
-		return new DateAssertion(date);
+	public static DateAssertion assertDate(Date value) {
+		return new DateAssertion(value);
 	}
 
 	/**
@@ -44,14 +44,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response status code is 200 or 404.</jc>
-	 * 	<jsm>assertInteger</jsm>(httpReponse).isAny(200,404);
+	 * 	<jsm>assertInteger</jsm>(<jv>httpReponse<jv>).isAny(200,404);
 	 * </p>
 	 *
-	 * @param integer The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link IntegerAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static IntegerAssertion assertInteger(Integer integer) {
-		return new IntegerAssertion(integer);
+	public static IntegerAssertion assertInteger(Integer value) {
+		return new IntegerAssertion(value);
 	}
 
 	/**
@@ -60,14 +60,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response length isn't too long.</jc>
-	 * 	<jsm>assertLong</jsm>(responseLength).isLessThan(100000);
+	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
 	 * </p>
 	 *
-	 * @param l The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static LongAssertion assertLong(Long l) {
-		return new LongAssertion(l);
+	public static LongAssertion assertLong(Long value) {
+		return new LongAssertion(value);
 	}
 
 	/**
@@ -76,14 +76,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
-	 * 	<jsm>assertObject</jsm>(myPojo).instanceOf(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).instanceOf(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
-	 * @param object The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ObjectAssertion assertObject(Object object) {
-		return new ObjectAssertion(object);
+	public static ObjectAssertion assertObject(Object value) {
+		return new ObjectAssertion(value);
 	}
 
 	/**
@@ -92,14 +92,14 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	<jsm>assertString</jsm>(httpBody).is(<js>"OK"</js>);
+	 * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
 	 * </p>
 	 *
-	 * @param text The string being wrapped.
+	 * @param value The string being wrapped.
 	 * @return A new {@link StringAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static StringAssertion assertString(Object text) {
-		return new StringAssertion(text);
+	public static StringAssertion assertString(Object value) {
+		return new StringAssertion(value);
 	}
 
 	/**
@@ -108,14 +108,64 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
-	 * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+	 * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
 	 * </p>
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param value The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.  Never <jk>null</jk>.
 	 */
-	public static ThrowableAssertion assertThrowable(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static ThrowableAssertion assertThrowable(Throwable value) {
+		return new ThrowableAssertion(value);
+	}
+
+	/**
+	 * Used for assertion calls against arrays.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	String[] <jv>array</jv> = <jk>new</jk> String[]{<js>"foo"</js>};
+	 * 	<jsm>assertArray</jsm>(<jv>array</jv>).isSize(1);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static ArrayAssertion assertArray(Object value) {
+		return new ArrayAssertion(value);
+	}
+
+	/**
+	 * Used for assertion calls against {@link Collection} objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
+	 * 	<jsm>assertCollection</jsm>(<jv>list</jv>).isNotEmpty();
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static CollectionAssertion assertCollection(Collection value) {
+		return new CollectionAssertion(value);
+	}
+
+	/**
+	 * Used for assertion calls against {@link Collection} objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
+	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).isEquals(<js>"foo"</js>);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static ListAssertion assertList(List value) {
+		return new ListAssertion(value);
 	}
 
 	/**
@@ -124,7 +174,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "Foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(() -> {foo.getBar();})
+	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
 	 * 		.exists()
 	 * 		.isType(RuntimeException.<jk>class</jk>)
 	 * 		.contains(<js>"Foobar"</js>);
@@ -148,7 +198,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(myStream).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>).hex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param is The input stream being wrapped.
@@ -165,7 +215,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates that the byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes</jsm>(myBytes).hex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>).hex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @param bytes The byte array being wrapped.
@@ -181,7 +231,7 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
-	 * 	<jsm>assertReader</jsm>(myReader).is(<js>"foo"</js>);
+	 * 	<jsm>assertReader</jsm>(<jv>myReader</jv>).is(<js>"foo"</js>);
 	 * </p>
 	 *
 	 * @param r The reader being wrapped.

@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response status code is 200 or 404.</jc>
- * 	<jsm>assertInteger</jsm>(httpReponse).isAny(200,404);
+ * 	<jsm>assertInteger</jsm>(<jv>httpReponse</jv>).isAny(200,404);
  * </p>
  */
 @FluentSetters(returns="IntegerAssertion")
@@ -29,20 +29,20 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	/**
 	 * Creator.
 	 *
-	 * @param integer The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link IntegerAssertion} object.
 	 */
-	public static IntegerAssertion create(Integer integer) {
-		return new IntegerAssertion(integer);
+	public static IntegerAssertion create(Integer value) {
+		return new IntegerAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param integer The object being wrapped.
+	 * @param value The object being wrapped.
 	 */
-	public IntegerAssertion(Integer integer) {
-		super(integer, null);
+	public IntegerAssertion(Integer value) {
+		super(value, null);
 	}
 
 	@Override

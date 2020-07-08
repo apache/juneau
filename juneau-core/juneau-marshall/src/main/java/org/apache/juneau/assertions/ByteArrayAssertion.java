@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the byte array contains the string "foo".</jc>
- * 	<jsm>assertBytes</jsm>(myByteArray).hex().is(<js>"666F6F"</js>);
+ * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).hex().is(<js>"666F6F"</js>);
  * </p>
  */
 @FluentSetters(returns="ByteArrayAssertion")
@@ -29,20 +29,20 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	/**
 	 * Creator.
 	 *
-	 * @param contents The contents being wrapped.
+	 * @param value The contents being wrapped.
 	 * @return A new {@link ByteArrayAssertion} object.
 	 */
-	public static ByteArrayAssertion create(byte[] contents) {
-		return new ByteArrayAssertion(contents);
+	public static ByteArrayAssertion create(byte[] value) {
+		return new ByteArrayAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param contents The contents being wrapped.
+	 * @param value The contents being wrapped.
 	 */
-	public ByteArrayAssertion(byte[] contents) {
-		super(contents, null);
+	public ByteArrayAssertion(byte[] value) {
+		super(value, null);
 	}
 
 	@Override

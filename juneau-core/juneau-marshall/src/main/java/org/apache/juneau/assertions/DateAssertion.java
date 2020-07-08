@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the specified date is after the current date.</jc>
- * 	<jsm>assertDate</jsm>(myDate).isAfterNow();
+ * 	<jsm>assertDate</jsm>(<jv>myDate</jv>).isAfterNow();
  * </p>
  */
 @FluentSetters(returns="DateAssertion")
@@ -31,20 +31,20 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	/**
 	 * Creator.
 	 *
-	 * @param date The date being wrapped.
+	 * @param value The date being wrapped.
 	 * @return A new {@link DateAssertion} object.
 	 */
-	public static DateAssertion create(Date date) {
-		return new DateAssertion(date);
+	public static DateAssertion create(Date value) {
+		return new DateAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param date The date being wrapped.
+	 * @param value The date being wrapped.
 	 */
-	public DateAssertion(Date date) {
-		super(date, null);
+	public DateAssertion(Date value) {
+		super(value, null);
 	}
 
 	@Override

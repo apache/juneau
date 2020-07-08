@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response length isn't too long.</jc>
- * 	<jsm>assertLong</jsm>(responseLength).isLessThan(100000);
+ * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
  * </p>
  */
 @FluentSetters(returns="LongAssertion")
@@ -29,20 +29,20 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	/**
 	 * Creator.
 	 *
-	 * @param l The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link LongAssertion} object.
 	 */
-	public static LongAssertion create(Long l) {
-		return new LongAssertion(l);
+	public static LongAssertion create(Long value) {
+		return new LongAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param l The object being wrapped.
+	 * @param value The object being wrapped.
 	 */
-	public LongAssertion(Long l) {
-		super(l, null);
+	public LongAssertion(Long value) {
+		super(value, null);
 	}
 
 	@Override

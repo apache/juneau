@@ -363,7 +363,7 @@ public class RestClient_Response_Body_Test {
 	public void b02_head() throws Exception {
 		assertFalse(client().build().head("").run().getBody().isRepeatable());
 		assertFalse(client().build().head("").run().getBody().isChunked());
-		assertLong(client().build().head("").run().getBody().getContentLength()).is(-1);
+		assertLong(client().build().head("").run().getBody().getContentLength()).is(-1l);
 		client().build().head("").run().getBody().getContentType().assertString().isNull();
 		client().build().head("").run().getBody().getContentEncoding().assertString().isNull();
 		client().build().head("").run().getBody().writeTo(new ByteArrayOutputStream());

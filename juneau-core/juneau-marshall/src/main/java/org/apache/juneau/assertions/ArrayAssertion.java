@@ -12,63 +12,60 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against integers.
+ * Used for assertion calls against arrays.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the response status code is 200 or 404.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.assertStatus().isAny(200,404);
+ * 	String[] <jv>array</jv> = <jk>new</jk> String[]{<js>"foo"</js>};
+ * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
- *
- * @param <R> The return type.
  */
-@FluentSetters(returns="FluentIntegerAssertion<R>")
-public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
+@FluentSetters(returns="ArrayAssertion")
+public class ArrayAssertion extends FluentArrayAssertion<ArrayAssertion> {
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
+	 * @return A new {@link ArrayAssertion} object.
 	 */
-	public FluentIntegerAssertion(Integer value, R returns) {
-		super(value, returns);
+	public static ArrayAssertion create(Object value) {
+		return new ArrayAssertion(value);
 	}
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
 	 */
-	public FluentIntegerAssertion(Assertion creator, Integer value, R returns) {
-		super(creator, value, returns);
+	public ArrayAssertion(Object value) {
+		super(value, null);
+	}
+
+	@Override
+	protected ArrayAssertion returns() {
+		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> msg(String msg, Object...args) {
+	public ArrayAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stderr() {
+	public ArrayAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stdout() {
+	public ArrayAssertion stdout() {
 		super.stdout();
 		return this;
 	}

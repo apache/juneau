@@ -24,9 +24,9 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
-public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
+public class FluentByteArrayAssertion<R> extends FluentObjectAssertion<R> {
 
-	private byte[] contents;
+	private byte[] value;
 
 	/**
 	 * Constructor.
@@ -35,8 +35,8 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentByteArrayAssertion(byte[] contents, R returns) {
-		super(returns);
-		this.contents = contents;
+		super(contents, returns);
+		this.value = contents;
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentByteArrayAssertion(Assertion creator, byte[] contents, R returns) {
-		super(creator, returns);
-		this.contents = contents;
+		super(creator, contents, returns);
+		this.value = contents;
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> string(Charset cs) {
-		return new FluentStringAssertion<>(this, contents == null ? null : new String(contents, cs), returns());
+		return new FluentStringAssertion<>(this, value == null ? null : new String(value, cs), returns());
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringAssertion<R> base64() {
-		return new FluentStringAssertion<>(this, contents == null ? null : base64Encode(contents), returns());
+		return new FluentStringAssertion<>(this, value == null ? null : base64Encode(value), returns());
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> hex() {
-		return new FluentStringAssertion<>(this, contents == null ? null : toHex(contents), returns());
+		return new FluentStringAssertion<>(this, value == null ? null : toHex(value), returns());
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class FluentByteArrayAssertion<R> extends FluentAssertion<R> {
 	 * @return A new string consisting of hexadecimal characters.
 	 */
 	public FluentStringAssertion<R> spacedHex() {
-		return new FluentStringAssertion<>(this, contents == null ? null : toSpacedHex(contents), returns());
+		return new FluentStringAssertion<>(this, value == null ? null : toSpacedHex(value), returns());
 	}
 
 	// <FluentSetters>

@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
- * 	client
+ * 	<jv>client</jv>
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
  * 		.assertBody().is(<js>"OK"</js>);
@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentStringAssertion<R>")
-public class FluentStringAssertion<R> extends FluentAssertion<R> {
+public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 
 	private String text;
 	private boolean javaStrings;
@@ -48,7 +48,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentStringAssertion(String text, R returns) {
-		super(returns);
+		super(text, returns);
 		this.text = text;
 	}
 
@@ -60,7 +60,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentStringAssertion(Assertion creator, String text, R returns) {
-		super(creator, returns);
+		super(creator, text, returns);
 		this.text = text;
 	}
 
@@ -86,7 +86,6 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @param replacement The string to be substituted for each match.
 	 * @return This object (for method chaining).
 	 */
-	@FluentSetter
 	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
 		return apply(x -> x == null ? null : text.replaceAll(regex, replacement));
 	}
@@ -98,7 +97,6 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @param replacement The replacement sequence of char values.
 	 * @return This object (for method chaining).
 	 */
-	@FluentSetter
 	public FluentStringAssertion<R> replace(String target, String replacement) {
 		return apply(x -> x == null ? null : text.replace(target, replacement));
 	}
@@ -146,8 +144,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 */
 	public FluentStringAssertion<R> apply(Function<String,String> f) {
-		text = f.apply(text);
-		return this;
+		return new FluentStringAssertion<>(this, f.apply(text), returns());
 	}
 
 	/**
@@ -185,7 +182,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R equals(String...value) throws AssertionError {
 		String v = join(value, '\n');
-		if (! isEquals(v, text))
+		if (! StringUtils.isEquals(v, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
 		return returns();
 	}
@@ -302,7 +299,7 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
-		if (isEquals(value, text))
+		if (StringUtils.isEquals(value, text))
 			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value), fix(text));
 		return returns();
 	}
@@ -363,56 +360,6 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the text is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R exists() throws AssertionError {
-		return isNotNull();
-	}
-
-	/**
-	 * Asserts that the text is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotExist() throws AssertionError {
-		return isNull();
-	}
-
-	/**
-	 * Asserts that the text is not null.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNull() throws AssertionError {
-		if (text != null)
-			throw error("Text was not null.  Text=[{0}]", fix(text));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text is not null.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotNull() throws AssertionError {
-		if (text == null)
-			throw error("Text was null.");
-		return returns();
-	}
-
-	/**
 	 * Asserts that the text is not empty.
 	 *
 	 * @return The response object (for method chaining).
@@ -435,19 +382,6 @@ public class FluentStringAssertion<R> extends FluentAssertion<R> {
 			throw error("Text was null.");
 		if (text.isEmpty())
 			throw error("Text was empty.");
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<String> test) throws AssertionError {
-		if (! test.test(text))
-			throw error("Text did not pass predicate test.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
 

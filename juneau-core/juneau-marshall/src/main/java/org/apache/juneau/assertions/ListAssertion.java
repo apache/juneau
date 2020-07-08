@@ -12,63 +12,63 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.util.*;
 
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against integers.
+ * Used for assertion calls against lists.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// Validates the response status code is 200 or 404.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.assertStatus().isAny(200,404);
+ * 	<jc>// Validates the specified POJO is the specified type.</jc>
+ * 	<jsm>assertList</jsm>(<jv>myList</jv>).isNotEmpty();
  * </p>
- *
- * @param <R> The return type.
  */
-@FluentSetters(returns="FluentIntegerAssertion<R>")
-public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
+@FluentSetters(returns="ListAssertion")
+@SuppressWarnings("rawtypes")
+public class ListAssertion extends FluentListAssertion<ListAssertion> {
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
+	 * @return A new {@link ListAssertion} object.
 	 */
-	public FluentIntegerAssertion(Integer value, R returns) {
-		super(value, returns);
+	public static ListAssertion create(List value) {
+		return new ListAssertion(value);
 	}
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
-	 * @param returns The object to return after the test.
+	 * @param value The object being wrapped.
 	 */
-	public FluentIntegerAssertion(Assertion creator, Integer value, R returns) {
-		super(creator, value, returns);
+	public ListAssertion(List value) {
+		super(value, null);
+	}
+
+	@Override
+	protected ListAssertion returns() {
+		return this;
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> msg(String msg, Object...args) {
+	public ListAssertion msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stderr() {
+	public ListAssertion stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stdout() {
+	public ListAssertion stdout() {
 		super.stdout();
 		return this;
 	}

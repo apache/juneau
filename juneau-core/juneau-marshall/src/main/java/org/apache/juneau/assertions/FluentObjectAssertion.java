@@ -16,6 +16,7 @@ import java.util.function.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 
@@ -192,6 +193,97 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R equals(Integer value) throws AssertionError {
+		if (this.value == value)
+			return returns();
+		exists();
+		if (! this.value.equals(value))
+			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(Integer)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(Integer value) throws AssertionError {
+		return equals(value);
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotEqual(Integer value) throws AssertionError {
+		if (this.value != value)
+			return returns();
+		exists();
+		if (this.value.equals(value))
+			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
+		return returns();
+	}
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEquals(Object value) throws AssertionError {
+		if (this.value == value)
+			return returns();
+		exists();
+		if (! this.value.equals(value))
+			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #equals(Integer)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R is(Object value) throws AssertionError {
+		return isEquals(value);
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotEqual(Object value) throws AssertionError {
+		if (this.value != value)
+			return returns();
+		exists();
+		if (this.value.equals(value))
+			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
+		return returns();
+	}
+
+	/**
 	 * Asserts that the value passes the specified predicate test.
 	 *
 	 * @param test The predicate to use to test the value.
@@ -201,6 +293,122 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public R passes(Predicate<Object> test) throws AssertionError {
 		if (! test.test(value))
 			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value passes the specified predicate test.
+	 *
+	 * @param c The class type of the object being tested.
+	 * @param <T> The class type of the object being tested.
+	 * @param test The predicate to use to test the value.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> R passes(Class<T> c, Predicate<T> test) throws AssertionError {
+		if (! test.test((T)value))
+			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R exists() throws AssertionError {
+		return isNotNull();
+	}
+
+	/**
+	 * Asserts that the object is null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotExist() throws AssertionError {
+		return isNull();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotNull() throws AssertionError {
+		if (value == null)
+			throw error("Value was null.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object i null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNull() throws AssertionError {
+		if (value != null)
+			throw error("Value was not null.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value equals the specified value.
+	 *
+	 * <p>
+	 * Equivalent to {@link #doesNotEqual(Object)}.
+	 *
+	 * @param value The value to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNot(Object value) throws AssertionError {
+		return doesNotEqual(value);
+	}
+
+	/**
+	 * Asserts that the value is one of the specified values.
+	 *
+	 * @param values The values to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isAny(Object...values) throws AssertionError {
+		exists();
+		for (Object v : values)
+			if (this.value.equals(v))
+				return returns();
+		throw error("Expected value not found.\n\tExpected=[{0}]\n\tActual=[{1}]", SimpleJson.DEFAULT.toString(values), value);
+	}
+
+	/**
+	 * Asserts that the value is one of the specified values.
+	 *
+	 * @param values The values to check against.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotAny(Object...values) throws AssertionError {
+		exists();
+		for (Object v : values)
+			if (this.value.equals(v))
+				throw error("Unexpected value found.\n\tUnexpected=[{0}]\n\tActual=[{1}]", v, value);
 		return returns();
 	}
 

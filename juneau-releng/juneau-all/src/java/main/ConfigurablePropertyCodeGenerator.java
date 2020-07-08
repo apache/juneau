@@ -170,6 +170,10 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentStringAssertion.class,
 		FluentThrowableAssertion.class,
 		FluentObjectAssertion.class,
+		FluentComparableAssertion.class,
+		FluentArrayAssertion.class,
+		FluentCollectionAssertion.class,
+		FluentListAssertion.class,
 
 		DateAssertion.class,
 		IntegerAssertion.class,
@@ -177,6 +181,10 @@ public class ConfigurablePropertyCodeGenerator {
 		StringAssertion.class,
 		ThrowableAssertion.class,
 		ObjectAssertion.class,
+		ComparableAssertion.class,
+		ArrayAssertion.class,
+		CollectionAssertion.class,
+		ListAssertion.class,
 
 		BasicHttpResource.class,
 		StreamResource.class,

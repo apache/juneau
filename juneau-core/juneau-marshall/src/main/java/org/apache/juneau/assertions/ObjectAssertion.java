@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the specified POJO is the specified type.</jc>
- * 	<jsm>assertObject</jsm>(myPojo).instanceOf(MyBean.<jk>class</jk>);
+ * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).instanceOf(MyBean.<jk>class</jk>);
  * </p>
  */
 @FluentSetters(returns="ObjectAssertion")
@@ -29,20 +29,20 @@ public class ObjectAssertion extends FluentObjectAssertion<ObjectAssertion> {
 	/**
 	 * Creator.
 	 *
-	 * @param object The object being wrapped.
+	 * @param value The object being wrapped.
 	 * @return A new {@link ObjectAssertion} object.
 	 */
-	public static ObjectAssertion create(Object object) {
-		return new ObjectAssertion(object);
+	public static ObjectAssertion create(Object value) {
+		return new ObjectAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param object The object being wrapped.
+	 * @param value The object being wrapped.
 	 */
-	public ObjectAssertion(Object object) {
-		super(object, null);
+	public ObjectAssertion(Object value) {
+		super(value, null);
 	}
 
 	@Override

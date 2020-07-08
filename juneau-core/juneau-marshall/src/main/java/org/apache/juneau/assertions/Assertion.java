@@ -109,6 +109,23 @@ public class Assertion {
 		return ClassUtils.className(o);
 	}
 
+	/**
+	 * Casts the specified object to the specified type.
+	 *
+	 * @param <T> The type to cast the object to.
+	 * @param c The type to cast the object to.
+	 * @param o The object to cast.
+	 * @return The same object cast to the specified object.s
+	 */
+	@SuppressWarnings("unchecked")
+	protected static <T> T cast(Class<T> c, Object o) {
+		if (o == null)
+			return null;
+		if (c.isInstance(o))
+			return (T)o;
+		throw new BasicAssertionError("Object was not expected type.  Expected={0}, actual={1}.", c.getClass().getName(), o.getClass().getName());
+	}
+
 	// <FluentSetters>
 
 	// </FluentSetters>

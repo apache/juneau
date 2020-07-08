@@ -20,7 +20,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
- * 	<jsm>assertThrowable</jsm>(throwable).contains(<js>"Foobar"</js>);
+ * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
  * </p>
  */
 @FluentSetters(returns="ThrowableAssertion")
@@ -29,20 +29,20 @@ public class ThrowableAssertion extends FluentThrowableAssertion<ThrowableAssert
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param value The throwable being wrapped.
 	 * @return A new {@link ThrowableAssertion} object.
 	 */
-	public static ThrowableAssertion create(Throwable throwable) {
-		return new ThrowableAssertion(throwable);
+	public static ThrowableAssertion create(Throwable value) {
+		return new ThrowableAssertion(value);
 	}
 
 	/**
 	 * Creator.
 	 *
-	 * @param throwable The throwable being wrapped.
+	 * @param value The throwable being wrapped.
 	 */
-	public ThrowableAssertion(Throwable throwable) {
-		super(throwable, null);
+	public ThrowableAssertion(Throwable value) {
+		super(value, null);
 	}
 
 	@Override

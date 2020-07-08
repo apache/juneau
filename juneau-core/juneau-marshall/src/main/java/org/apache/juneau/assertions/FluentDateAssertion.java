@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.time.temporal.*;
 import java.util.*;
-import java.util.function.*;
 
 import org.apache.juneau.internal.*;
 
@@ -26,7 +25,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response expiration is after the current date.</jc>
- * 	client
+ * 	<jv>client</jv>
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
  * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
@@ -35,7 +34,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentDateAssertion<R>")
-public class FluentDateAssertion<R> extends FluentAssertion<R> {
+public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 
 	private final Date value;
 
@@ -46,7 +45,7 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentDateAssertion(Date value, R returns) {
-		super(returns);
+		super(value, returns);
 		this.value = value;
 	}
 
@@ -58,21 +57,8 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentDateAssertion(Assertion creator, Date value, R returns) {
-		super(creator, returns);
+		super(creator, value, returns);
 		this.value = value;
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R equals(Date value) throws AssertionError {
-		if (ne(this.value, value))
-			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns();
 	}
 
 	/**
@@ -86,97 +72,6 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	public R equals(Date value, ChronoUnit precision) throws AssertionError {
 		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(Date)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(Date value) throws AssertionError {
-		return equals(value);
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotEqual(Date value) throws AssertionError {
-		if (eq(this.value, value))
-			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #doesNotEqual(Date)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNot(Date value) throws AssertionError {
-		return doesNotEqual(value);
-	}
-
-	/**
-	 * Asserts that the date is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R exists() throws AssertionError {
-		return isNotNull();
-	}
-
-	/**
-	 * Asserts that the date is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNull()}.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotExist() throws AssertionError {
-		return isNull();
-	}
-
-	/**
-	 * Asserts that the date is not null.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNull() throws AssertionError {
-		if (value != null)
-			throw error("Value was not null.");
-		return returns();
-	}
-
-	/**
-	 * Asserts that the date is not null.
-	 *
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotNull() throws AssertionError {
-		if (value == null)
-			throw error("Value was null.");
 		return returns();
 	}
 
@@ -239,19 +134,6 @@ public class FluentDateAssertion<R> extends FluentAssertion<R> {
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		isBefore(upper);
 		isAfter(lower);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R passes(Predicate<Date> test) throws AssertionError {
-		if (! test.test(value))
-			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}
 

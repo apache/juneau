@@ -12,63 +12,100 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import java.util.*;
 
 import org.apache.juneau.internal.*;
 
 /**
- * Used for fluent assertion calls against integers.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Validates the response status code is 200 or 404.</jc>
- * 	<jv>client</jv>
- * 		.get(<jsf>URL</jsf>)
- * 		.run()
- * 		.assertStatus().isAny(200,404);
- * </p>
+ * Used for fluent assertion calls against collections objects.
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentIntegerAssertion<R>")
-public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
+@FluentSetters(returns="FluentCollectionAssertion<R>")
+@SuppressWarnings("rawtypes")
+public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
+
+	private Collection value;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The value being tested.
+	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentIntegerAssertion(Integer value, R returns) {
-		super(value, returns);
+	public FluentCollectionAssertion(Collection contents, R returns) {
+		super(contents, returns);
+		this.value = contents;
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param creator The assertion that created this assertion.
-	 * @param value The value being tested.
+	 * @param contents The byte array being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentIntegerAssertion(Assertion creator, Integer value, R returns) {
-		super(creator, value, returns);
+	public FluentCollectionAssertion(Assertion creator, Collection contents, R returns) {
+		super(creator, contents, returns);
+		this.value = contents;
+	}
+
+	/**
+	 * Asserts that the collection exists and is empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() throws AssertionError {
+		exists();
+		if (! value.isEmpty())
+			throw error("Collection was not empty.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection exists and is not empty.
+	 *
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		exists();
+		if (value.isEmpty())
+			throw error("Collection was empty.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection exists and is the specified size.
+	 *
+	 * @param size The expected size.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSize(int size) throws AssertionError {
+		exists();
+		if (value.size() != size)
+			throw error("Collection did not have the expected size.  Expected={0}, actual={0}.", size, value.size());
+		return returns();
 	}
 
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> msg(String msg, Object...args) {
+	public FluentCollectionAssertion<R> msg(String msg, Object...args) {
 		super.msg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stderr() {
+	public FluentCollectionAssertion<R> stderr() {
 		super.stderr();
 		return this;
 	}
 
 	@Override /* GENERATED - Assertion */
-	public FluentIntegerAssertion<R> stdout() {
+	public FluentCollectionAssertion<R> stdout() {
 		super.stdout();
 		return this;
 	}

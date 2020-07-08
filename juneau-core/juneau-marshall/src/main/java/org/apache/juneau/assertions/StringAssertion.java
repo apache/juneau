@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
- * 	<jsm>assertString</jsm>(httpBody).is(<js>"OK"</js>);
+ * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
  * </p>
  */
 @FluentSetters(returns="StringAssertion")
@@ -31,11 +31,11 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	/**
 	 * Creator.
 	 *
-	 * @param text The string being wrapped.
+	 * @param value The string being wrapped.
 	 * @return A new {@link StringAssertion} object.
 	 */
-	public static StringAssertion create(Object text) {
-		return new StringAssertion(text);
+	public static StringAssertion create(Object value) {
+		return new StringAssertion(value);
 	}
 
 	/**
@@ -75,18 +75,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	@Override /* GENERATED - FluentStringAssertion */
 	public StringAssertion javaStrings() {
 		super.javaStrings();
-		return this;
-	}
-
-	@Override /* GENERATED - FluentStringAssertion */
-	public StringAssertion replace(String target, String replacement) {
-		super.replace(target, replacement);
-		return this;
-	}
-
-	@Override /* GENERATED - FluentStringAssertion */
-	public StringAssertion replaceAll(String regex, String replacement) {
-		super.replaceAll(regex, replacement);
 		return this;
 	}
 
