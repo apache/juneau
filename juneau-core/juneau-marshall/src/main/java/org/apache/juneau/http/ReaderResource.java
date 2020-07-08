@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.IOUtils.*;
-
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.http.Header;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents the contents of a text file with convenience methods for resolving SVL variables and adding
@@ -31,130 +32,141 @@ import org.apache.juneau.http.annotation.*;
  * <l>ReaderResources</l> are meant to be thread-safe and reusable objects.
  * <br>The contents of the request passed into the constructor are immediately converted to read-only strings.
  *
- * <p>
- * Instances of this class can be built using {@link ReaderResourceBuilder}.
- *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
  * </ul>
  */
 @Response
-public class ReaderResource {
+public class ReaderResource extends BasicHttpResource {
 
-	private final MediaType mediaType;
-	private final Map<String,Object> headers;
-
-	@SuppressWarnings("javadoc")
-	protected final Object contents;
+	/**
+	 * Creator.
+	 *
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static ReaderResource create() {
+		return new ReaderResource();
+	}
 
 	/**
 	 * Constructor.
-	 *
-	 * @param b Builder containing values to initialize this object with.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected ReaderResource(ReaderResourceBuilder b) throws IOException {
-		this(b.mediaType, b.headers, b.cached, b.contents);
+	public ReaderResource() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mediaType The resource media type.
-	 * @param headers The HTTP response headers for this streamed resource.
-	 * @param cached
-	 * 	Identifies if this resource is cached in memory.
-	 * 	<br>If <jk>true</jk>, the contents will be loaded into a String for fast retrieval.
-	 * @param contents
-	 * 	The resource contents.
-	 * 	<br>If multiple contents are specified, the results will be concatenated.
-	 * 	<br>Contents can be any of the following:
+	 * @param contentType
+	 * 	The content type of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param contentEncoding
+	 * 	The content encoding of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>InputStream</c>
 	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
 	 * 	</ul>
-	 * @throws IOException Thrown by underlying stream.
+	 * </ul>
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object contents) throws IOException {
-		this.mediaType = mediaType;
-		this.headers = AMap.unmodifiable(headers);
-		this.contents = cached ? read(contents) : contents;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new instance of a {@link ReaderResourceBuilder} for this class.
-	 *
-	 * @return A new instance of a {@link ReaderResourceBuilder}.
-	 */
-	public static ReaderResourceBuilder create() {
-		return new ReaderResourceBuilder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Get the HTTP response headers.
-	 *
-	 * @return
-	 * 	The HTTP response headers.
-	 * 	<br>An unmodifiable map.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	@ResponseHeader("*")
-	public Map<String,Object> getHeaders() {
-		return headers;
+	public ReaderResource(ContentType contentType, ContentEncoding contentEncoding, Object content) {
+		super(contentType, contentEncoding, content);
 	}
 
 	/**
-	 * TODO
+	 * Converts the contents of this entity as a byte array.
 	 *
-	 * @param w - TODO
-	 * @return TODO
-	 * @throws IOException TODO
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	@ResponseBody
-	public Writer writeTo(Writer w) throws IOException {
-		if (contents != null)
-			pipe(contents, w);
-		return w;
+	public String asString() throws IOException {
+		return IOUtils.read(getRawContent());
 	}
 
 	/**
-	 * TODO
+	 * Returns an assertion on the contents of this resource.
 	 *
-	 * @return TODO
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	@ResponseHeader("Content-Type")
-	public String getMediaType() {
-		return mediaType == null ? null : mediaType.toString();
+	public FluentStringAssertion<ReaderResource> assertString() throws IOException {
+		return new FluentStringAssertion<>(asString(), this);
 	}
 
-	@Override /* Object */
-	public String toString() {
-		try {
-			return writeTo(new StringWriter()).toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	// <FluentSetters>
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource cache() {
+		super.cache();
+		return this;
 	}
 
-	/**
-	 * Returns the contents of this resource.
-	 *
-	 * @return The contents of this resource.
-	 */
-	public Reader getContents() {
-		if (contents instanceof Reader) {
-			return (Reader)contents;
-		}
-		return new StringReader(toString());
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource chunked() {
+		super.chunked();
+		return this;
 	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource content(Object value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource contentEncoding(String value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource contentEncoding(Header value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource contentType(String value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource contentType(Header value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource header(Header value) {
+		super.header(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource headers(Header...headers) {
+		super.headers(headers);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public ReaderResource headers(List<Header> headers) {
+		super.headers(headers);
+		return this;
+	}
+
+	// </FluentSetters>
 }

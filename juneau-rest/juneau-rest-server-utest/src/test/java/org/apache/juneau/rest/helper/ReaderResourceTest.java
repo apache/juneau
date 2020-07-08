@@ -17,7 +17,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.ReaderResource;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -31,37 +30,37 @@ public class ReaderResourceTest {
 
 		@RestMethod
 		public ReaderResource a01() throws Exception {
-			return ReaderResource.create().contents("foo").build();
+			return ReaderResource.create().content("foo");
 		}
 
 		@RestMethod
 		public ReaderResource a02() throws Exception {
-			return ReaderResource.create().header("Foo", "Bar").build();
+			return ReaderResource.create().header("Foo", "Bar");
 		}
 
 		@RestMethod
 		public ReaderResource a03() throws Exception {
-			return ReaderResource.create().mediaType(MediaType.JSON).build();
+			return ReaderResource.create().contentType("application/json");
 		}
 
 		@RestMethod
 		public ReaderResource a04(RestRequest req) throws Exception {
-			return ResolvingReaderResource.create().varResolver(req.getVarResolverSession()).contents("$RQ{foo}").build();
+			return ResolvingReaderResource.create().varResolver(req.getVarResolverSession()).content("$RQ{foo}");
 		}
 
 		@RestMethod
 		public ReaderResource a05() throws Exception {
-			return ReaderResource.create().contents(new ByteArrayInputStream("foo".getBytes())).build();
+			return ReaderResource.create().content(new ByteArrayInputStream("foo".getBytes()));
 		}
 
 		@RestMethod
 		public ReaderResource a06() throws Exception {
-			return ReaderResource.create().contents(new StringReader("foo")).build();
+			return ReaderResource.create().content(new StringReader("foo"));
 		}
 
 		@RestMethod
 		public ReaderResource a07() throws Exception {
-			return ReaderResource.create().contents(new StringBuilder("foo")).build();
+			return ReaderResource.create().content(new StringBuilder("foo"));
 		}
 	}
 

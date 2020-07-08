@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.IOUtils.*;
-
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.http.Header;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
@@ -30,118 +31,141 @@ import org.apache.juneau.http.annotation.*;
  * <l>StreamResources</l> are meant to be thread-safe and reusable objects.
  * <br>The contents of the request passed into the constructor are immediately converted to read-only byte arrays.
  *
- * <p>
- * Instances of this class can be built using {@link StreamResourceBuilder}.
- *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
  * </ul>
  */
 @Response
-public class StreamResource {
+public class StreamResource extends BasicHttpResource {
 
-	private final MediaType mediaType;
-	private final Object contents;
-	private final Map<String,Object> headers;
+	/**
+	 * Creator.
+	 *
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static StreamResource create() {
+		return new StreamResource();
+	}
 
-	StreamResource(StreamResourceBuilder b) throws IOException {
-		this(b.mediaType, b.headers, b.cached, b.contents);
+	/**
+	 * Constructor.
+	 */
+	public StreamResource() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mediaType The resource media type.
-	 * @param headers The HTTP response headers for this streamed resource.
-	 * @param cached
-	 * 	Identifies if this stream resource is cached in memory.
-	 * 	<br>If <jk>true</jk>, the contents will be loaded into a byte array for fast retrieval.
-	 * @param contents
-	 * 	The resource contents.
-	 * 	<br>If multiple contents are specified, the results will be concatenated.
-	 * 	<br>Contents can be any of the following:
+	 * @param contentType
+	 * 	The content type of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param contentEncoding
+	 * 	The content encoding of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li><c>InputStream</c>
 	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
 	 * 	</ul>
-	 * @throws IOException Thrown by underlying stream.
+	 * </ul>
 	 */
-	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object contents) throws IOException {
-		this.mediaType = mediaType;
-		this.headers = AMap.unmodifiable(headers);
-		this.contents = cached ? readBytes(contents) : contents;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new instance of a {@link StreamResourceBuilder} for this class.
-	 *
-	 * @return A new instance of a {@link StreamResourceBuilder}.
-	 */
-	public static StreamResourceBuilder create() {
-		return new StreamResourceBuilder();
+	public StreamResource(ContentType contentType, ContentEncoding contentEncoding, Object content) {
+		super(contentType, contentEncoding, content);
 	}
 
 	/**
-	 * Get the HTTP response headers.
+	 * Converts the contents of this entity as a byte array.
 	 *
-	 * @return
-	 * 	The HTTP response headers.
-	 * 	<br>An unmodifiable map.
-	 * 	<br>Never <jk>null</jk>.
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	@ResponseHeader("*")
-	public Map<String,Object> getHeaders() {
-		return headers;
+	public byte[] asBytes() throws IOException {
+		return IOUtils.readBytes(getRawContent());
 	}
 
 	/**
-	 * TODO
+	 * Returns an assertion on the contents of this resource.
 	 *
-	 * @param os TODO
-	 * @throws IOException TODO
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
-	@ResponseBody
-	public void streamTo(OutputStream os) throws IOException {
-		if (contents != null)
-			pipe(contents, os);
-		os.flush();
+	public FluentByteArrayAssertion<StreamResource> assertBytes() throws IOException {
+		return new FluentByteArrayAssertion<>(asBytes(), this);
 	}
 
-	/**
-	 * TODO
-	 *
-	 * @return TODO
-	 */
-	@ResponseHeader("Content-Type")
-	public String getMediaType() {
-		return mediaType == null ? null : mediaType.toString();
+	// <FluentSetters>
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource cache() {
+		super.cache();
+		return this;
 	}
 
-	/**
-	 * Returns the contents of this stream resource.
-	 *
-	 * @return The contents of this stream resource.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public InputStream getContents() throws IOException {
-		Object c = contents;
-		if (c != null) {
-			if (c instanceof byte[])
-				return new ByteArrayInputStream((byte[])c);
-			else if (c instanceof InputStream)
-				return (InputStream)c;
-			else if (c instanceof File)
-				return new FileInputStream((File)c);
-			else if (c instanceof CharSequence)
-				return new ByteArrayInputStream((((CharSequence)c).toString().getBytes(UTF8)));
-		}
-		return null;
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource chunked() {
+		super.chunked();
+		return this;
 	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource content(Object value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource contentEncoding(String value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource contentEncoding(Header value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource contentType(String value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource contentType(Header value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource header(Header value) {
+		super.header(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource header(String name, Object val) {
+		super.header(name, val);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource headers(Header...headers) {
+		super.headers(headers);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpResource */
+	public StreamResource headers(List<Header> headers) {
+		super.headers(headers);
+		return this;
+	}
+
+	// </FluentSetters>
 }

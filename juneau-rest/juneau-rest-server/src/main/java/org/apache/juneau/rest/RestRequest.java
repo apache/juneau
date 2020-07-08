@@ -56,6 +56,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.widget.*;
@@ -1461,12 +1462,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ResolvingResourceReaderBuilder b = ResolvingReaderResource.create().mediaType(mediaType).contents(s);
+		ResolvingReaderResource b = ResolvingReaderResource
+			.create()
+			.content(s)
+			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
 		if (resolveVars)
 			b.varResolver(getVarResolverSession());
 		if (cached)
-			b.cached();
-		return b.build();
+			b.cache();
+		return b;
 	}
 
 	/**
@@ -1542,10 +1546,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		InputStream is = context.getClasspathResource(name, getLocale());
 		if (is == null)
 			return null;
-		StreamResourceBuilder b = StreamResource.create().mediaType(mediaType).contents(is);
+		StreamResource b = StreamResource
+			.create()
+			.content(is)
+			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
 		if (cached)
-			b.cached();
-		return b.build();
+			b.cache();
+		return b;
 	}
 
 	/**

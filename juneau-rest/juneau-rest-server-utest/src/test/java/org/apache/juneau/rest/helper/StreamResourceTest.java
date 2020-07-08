@@ -16,7 +16,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
@@ -30,37 +29,37 @@ public class StreamResourceTest {
 
 		@RestMethod
 		public StreamResource a01() throws Exception {
-			return StreamResource.create().contents("foo").build();
+			return StreamResource.create().content("foo");
 		}
 
 		@RestMethod
 		public StreamResource a02() throws Exception {
-			return StreamResource.create().header("Foo", "Bar").build();
+			return StreamResource.create().header("Foo", "Bar");
 		}
 
 		@RestMethod
 		public StreamResource a03() throws Exception {
-			return StreamResource.create().mediaType(MediaType.JSON).build();
+			return StreamResource.create().contentType("application/json");
 		}
 
 		@RestMethod
 		public StreamResource a04() throws Exception {
-			return StreamResource.create().contents("foo".getBytes()).build();
+			return StreamResource.create().content("foo".getBytes());
 		}
 
 		@RestMethod
 		public StreamResource a05() throws Exception {
-			return StreamResource.create().contents(new ByteArrayInputStream("foo".getBytes())).build();
+			return StreamResource.create().content(new ByteArrayInputStream("foo".getBytes()));
 		}
 
 		@RestMethod
 		public StreamResource a06() throws Exception {
-			return StreamResource.create().contents(new StringReader("foo")).build();
+			return StreamResource.create().content(new StringReader("foo"));
 		}
 
 		@RestMethod
 		public StreamResource a07() throws Exception {
-			return StreamResource.create().contents(new StringBuilder("foo")).build();
+			return StreamResource.create().content(new StringBuilder("foo"));
 		}
 	}
 

@@ -163,10 +163,8 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().contents("{f:1}").build(),
-			ReaderResource.create().contents("{f:1}"),
-			StreamResource.create().contents("{f:1}").build(),
-			StreamResource.create().contents("{f:1}"),
+			ReaderResource.create().content("{f:1}"),
+			StreamResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -209,8 +207,8 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().contents("{f:1}").build(),
-			StreamResource.create().contents("{f:1}").build(),
+			ReaderResource.create().content("{f:1}"),
+			StreamResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -316,14 +314,14 @@ public class RestClient_BasicCalls_Test {
 			/*[ 3]*/ new StringEntity("f=1",org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
 			/*[ 4]*/ new StringEntity("f=1",(org.apache.http.entity.ContentType)null),
 			/*[ 5]*/ pair("f","1"),
-			/*[ 6]*/ ReaderResource.create().contents("f=1").build(),
-			/*[ 7]*/ ReaderResource.create().contents("f=1"),
-			/*[ 8]*/ ReaderResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
-			/*[ 9]*/ ReaderResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded"),
-			/*[10]*/ StreamResource.create().contents("f=1").build(),
-			/*[11]*/ StreamResource.create().contents("f=1"),
-			/*[12]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded").build(),
-			/*[13]*/ StreamResource.create().contents("f=1").mediaType("application/x-www-form-urlencoded"),
+			/*[ 6]*/ ReaderResource.create().content("f=1"),
+			/*[ 7]*/ ReaderResource.create().content("f=1"),
+			/*[ 8]*/ ReaderResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[ 9]*/ ReaderResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[10]*/ StreamResource.create().content("f=1"),
+			/*[11]*/ StreamResource.create().content("f=1"),
+			/*[12]*/ StreamResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[13]*/ StreamResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
@@ -331,15 +329,6 @@ public class RestClient_BasicCalls_Test {
 			client().header("Check","Content-Type").accept("application/json+simple").build().formPost("/checkHeader",bodies.get(i)).run().assertBody().msg("Body {0} failed",i).matchesSimple("['application/x-www-form-urlencoded*']");
 			client().build().formPost("/bean",bodies.get(i)).accept("application/json+simple").run().assertBody().msg("Body {0} failed","#"+i).is("{f:1}");
 		}
-
-		StreamResourceBuilder sr = new StreamResourceBuilder() {
-			@Override
-			public StreamResource build() throws IOException {
-				throw new IOException("Foo");
-			}
-		};
-
-		assertThrown(()->client().build().formPost("/bean",sr)).contains("Foo");
 	}
 
 	@Test
@@ -363,8 +352,8 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().contents("{f:1}").build(),
-			StreamResource.create().contents("{f:1}").build(),
+			ReaderResource.create().content("{f:1}"),
+			StreamResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -401,8 +390,8 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().contents("{f:1}").build(),
-			StreamResource.create().contents("{f:1}").build(),
+			ReaderResource.create().content("{f:1}"),
+			StreamResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)

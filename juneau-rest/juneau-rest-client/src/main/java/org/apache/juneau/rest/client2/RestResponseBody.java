@@ -758,18 +758,18 @@ public class RestResponseBody implements HttpEntity {
 			if (type.isType(HttpResponse.class))
 				return (T)response;
 
-			if (type.isType(ReaderResource.class) || type.isType(StreamResource.class)) {
-				String mediaType = null;
-				OMap headers = new OMap();
+			if (type.isType(HttpResource.class)) {
+				HttpResource r = (HttpResource)type.newInstance();
 				for (Header h : response.getAllHeaders()) {
 					if (h.getName().equalsIgnoreCase("Content-Type"))
-						mediaType = h.getValue();
+						r.contentType(h);
+					else if (h.getName().equalsIgnoreCase("Content-Encoding"))
+						r.contentEncoding(h);
 					else
-						headers.put(h.getName(), h.getValue());
+						r.header(h);
 				}
-				if (type.isType(ReaderResource.class))
-					return (T)ReaderResource.create().headers(headers).mediaType(mediaType).contents(asReader()).build();
-				return (T)StreamResource.create().headers(headers).mediaType(mediaType).contents(asInputStream()).build();
+				r.content(asInputStream());
+				return (T)r;
 			}
 
 			String ct = firstNonEmpty(response.getHeader("Content-Type").asStringOrElse("text/plain"));
@@ -824,7 +824,7 @@ public class RestResponseBody implements HttpEntity {
 				response.getStringHeader("Content-Type")
 			);
 
-		} catch (ParseException | IOException e) {
+		} catch (ParseException | IOException | ExecutableException e) {
 			response.close();
 			throw new RestCallException(response, e, "Could not parse response body.");
 		}

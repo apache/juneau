@@ -211,11 +211,11 @@ public class Remote_CommonInterfaces_Test {
 	public static class D1 implements D {
 		@Override
 		public StreamResource streamResource() throws IOException {
-			return StreamResource.create().mediaType("text/foo").contents("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar")).build();
+			return StreamResource.create().contentType("text/foo").content("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar"));
 		}
 		@Override
 		public ReaderResource readerResource() throws IOException {
-			return ReaderResource.create().mediaType("text/foo").contents("foo").header("Foo","foo").headers(ETag.of("bar")).build();
+			return ReaderResource.create().contentType("text/foo").content("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar"));
 		}
 	}
 
@@ -223,15 +223,15 @@ public class Remote_CommonInterfaces_Test {
 	public void d01_streamResource_readerResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
 		StreamResource sr = x.streamResource();
-		assertEquals("foo",IOUtils.read(sr.getContents()));
-		assertEquals("foo",sr.getHeaders().get("Foo"));
-		assertEquals("bar",sr.getHeaders().get("ETag"));
-		assertEquals("text/foo",sr.getMediaType().toString());
+		assertEquals("foo",IOUtils.read(sr.getContent()));
+		assertEquals("foo",sr.getStringHeader("Foo"));
+		assertEquals("bar",sr.getStringHeader("ETag"));
+		assertEquals("text/foo",sr.getContentType().getValue().toString());
 		ReaderResource rr = x.readerResource();
-		assertEquals("foo",IOUtils.read(rr.getContents()));
-		assertEquals("foo",rr.getHeaders().get("Foo"));
-		assertEquals("bar",rr.getHeaders().get("ETag"));
-		assertEquals("text/foo",rr.getMediaType().toString());
+		assertEquals("foo",IOUtils.read(rr.getContent()));
+		assertEquals("foo",rr.getStringHeader("Foo"));
+		assertEquals("bar",rr.getStringHeader("ETag"));
+		assertEquals("text/foo",rr.getContentType().getValue().toString());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

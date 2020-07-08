@@ -2851,28 +2851,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = new UrlEncodedFormEntity(formData);
 				else if (input2 instanceof NameValuePairSupplier)
 					entity = new UrlEncodedFormEntity((NameValuePairSupplier)input2);
+				else if (input2 instanceof HttpResource) {
+					HttpResource r = (HttpResource)input2;
+					headers(r.getHeaders());
+					entity = (HttpEntity)input2;
+				}
 				else if (input2 instanceof HttpEntity)
 					entity = (HttpEntity)input2;
 				else if (input2 instanceof Reader)
 					entity = new StringEntity(IOUtils.read((Reader)input2), getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream)
 					entity = new InputStreamEntity((InputStream)input2, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (input2 instanceof ReaderResource || input2 instanceof ReaderResourceBuilder) {
-					if (input2 instanceof ReaderResourceBuilder)
-						input2 = ((ReaderResourceBuilder)input2).build();
-					ReaderResource r = (ReaderResource)input2;
-					contentType(r.getMediaType());
-					headers(r.getHeaders());
-					entity = new StringEntity(IOUtils.read(r.getContents()), getRequestContentType(TEXT_PLAIN));
-				}
-				else if (input2 instanceof StreamResource || input2 instanceof StreamResourceBuilder) {
-					if (input2 instanceof StreamResourceBuilder)
-						input2 = ((StreamResourceBuilder)input2).build();
-					StreamResource r = (StreamResource)input2;
-					contentType(r.getMediaType());
-					headers(r.getHeaders());
-					entity = new InputStreamEntity(r.getContents(), getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				}
 				else if (serializer != null)
 					entity = new SerializedHttpEntity(input2, serializer, requestBodySchema, contentType);
 				else {

@@ -178,9 +178,10 @@ public class ConfigurablePropertyCodeGenerator {
 		ThrowableAssertion.class,
 		ObjectAssertion.class,
 
-		ReaderResourceBuilder.class,
-		StreamResourceBuilder.class,
-		ResolvingResourceReaderBuilder.class,
+		BasicHttpResource.class,
+		StreamResource.class,
+		ReaderResource.class,
+		ResolvingReaderResource.class,
 		ExecutableInfo.class,
 		ConstructorInfo.class,
 		MethodInfo.class
