@@ -15,9 +15,6 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.util.*;
-
-import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -50,15 +47,6 @@ public class ArrayAssertion_Test {
 		assertArray(null).item(0).doesNotExist();
 		assertArray(x1).item(0).doesNotExist();
 		assertArray(x2).item(0).exists();
-
-		assertArray(new String[]{"foo"}).stringItem(0).is("foo");
-		assertArray(new Date[]{new Date(0)}).dateItem(0).isBeforeNow();
-		assertArray(new Integer[]{1}).integerItem(0).is(1);
-		assertArray(new Long[]{1l}).longItem(0).is(1l);
-		assertArray(new List[]{AList.of("foo")}).listItem(0).stringItem(0).is("foo");
-		assertArray(new List[]{AList.of("foo")}).collectionItem(0).isSize(1);
-
-		assertThrown(()->assertArray(new Integer[]{1}).listItem(0)).is("Object was not expected type.  Expected=java.util.List, Actual=java.lang.Integer.");
 	}
 
 	@Test

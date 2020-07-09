@@ -38,7 +38,7 @@ public class RestResponseStatusLineAssertion extends FluentAssertion<RestRespons
 	 * @param returns The object to return after the test.
 	 */
 	public RestResponseStatusLineAssertion(StatusLine statusLine, RestResponse returns) {
-		super(returns);
+		super(null, returns);
 		this.statusLine = statusLine;
 	}
 

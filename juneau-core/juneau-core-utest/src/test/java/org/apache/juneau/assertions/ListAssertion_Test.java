@@ -23,7 +23,6 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class ListAssertion_Test {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void a01_basic() throws Exception {
 		List<String> x1 = AList.of(), x2 = AList.of("a","b");
@@ -51,15 +50,6 @@ public class ListAssertion_Test {
 		assertList(null).item(0).doesNotExist();
 		assertList(x1).item(0).doesNotExist();
 		assertList(x2).item(0).exists();
-
-		assertList(AList.of("foo")).stringItem(0).is("foo");
-		assertList(AList.of(new Date(0))).dateItem(0).isBeforeNow();
-		assertList(AList.of(1)).integerItem(0).is(1);
-		assertList(AList.of(1l)).longItem(0).is(1l);
-		assertList(AList.ofa(AList.of("foo"))).listItem(0).stringItem(0).is("foo");
-		assertList(AList.ofa(AList.of("foo"))).collectionItem(0).isSize(1);
-
-		assertThrown(()->assertList(AList.of(1)).listItem(0)).is("Object was not expected type.  Expected=java.util.List, Actual=java.lang.Integer.");
 	}
 
 	@Test

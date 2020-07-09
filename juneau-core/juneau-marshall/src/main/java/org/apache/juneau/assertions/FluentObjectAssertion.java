@@ -30,18 +30,6 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 
 	private final Object value;
 
-	private static JsonSerializer JSON_BEANCOMPARE = JsonSerializer.create()
-		.ssq()
-		.keepNullProperties()
-		.build();
-
-	private static JsonSerializer JSON_BEANCOMPARESORTED = JsonSerializer.create()
-		.ssq()
-		.sortCollections()
-		.sortMaps()
-		.keepNullProperties()
-		.build();
-
 	private static JsonSerializer JSON = JsonSerializer.create()
 		.ssq()
 		.build();
@@ -49,29 +37,30 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	private static JsonSerializer JSON_SORTED = JsonSerializer.create()
 		.ssq()
 		.sortProperties()
+		.sortCollections()
+		.sortMaps()
 		.build();
 
 	/**
 	 * Constructor.
 	 *
-	 * @param o The object being tested.
+	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentObjectAssertion(Object o, R returns) {
-		super(returns);
-		this.value = o;
+	public FluentObjectAssertion(Object value, R returns) {
+		this(null, value, returns);
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param creator The assertion that created this assertion.
-	 * @param o The object being tested.
+	 * @param value The object being tested.
 	 * @param returns The object to return after the test.
 	 */
-	public FluentObjectAssertion(Assertion creator, Object o, R returns) {
+	public FluentObjectAssertion(Assertion creator, Object value, R returns) {
 		super(creator, returns);
-		this.value = o;
+		this.value = value;
 	}
 
 	/**
@@ -154,7 +143,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R sameAs(Object o) throws AssertionError {
-		return sameAsSerialized(o, JSON_BEANCOMPARE);
+		return sameAsSerialized(o, JSON);
 	}
 
 	/**
@@ -165,7 +154,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R sameAsSorted(Object o) {
-		return sameAsSerialized(o, JSON_BEANCOMPARESORTED);
+		return sameAsSerialized(o, JSON_SORTED);
 	}
 
 	/**

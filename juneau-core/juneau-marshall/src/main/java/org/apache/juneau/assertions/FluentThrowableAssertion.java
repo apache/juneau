@@ -33,8 +33,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentThrowableAssertion(Throwable value, R returns) {
-		super(returns);
-		this.value = value;
+		this(null, value, returns);
 	}
 
 	/**

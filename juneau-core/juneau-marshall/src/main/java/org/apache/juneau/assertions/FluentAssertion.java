@@ -27,15 +27,6 @@ public abstract class FluentAssertion<R> extends Assertion {
 	/**
 	 * Constructor.
 	 *
-	 * @param returns The object to return after the test.
-	 */
-	protected FluentAssertion(R returns) {
-		this.returns = returns;
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param creator The assertion that created this assertion.
 	 * @param returns The object to return after the test.
 	 */

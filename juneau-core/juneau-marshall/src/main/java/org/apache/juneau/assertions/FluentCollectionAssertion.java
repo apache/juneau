@@ -34,8 +34,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentCollectionAssertion(Collection contents, R returns) {
-		super(contents, returns);
-		this.value = contents;
+		this(null, contents, returns);
 	}
 
 	/**

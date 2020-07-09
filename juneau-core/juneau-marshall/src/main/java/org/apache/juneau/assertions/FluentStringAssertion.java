@@ -48,8 +48,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentStringAssertion(String text, R returns) {
-		super(text, returns);
-		this.text = text;
+		this(null, text, returns);
 	}
 
 	/**

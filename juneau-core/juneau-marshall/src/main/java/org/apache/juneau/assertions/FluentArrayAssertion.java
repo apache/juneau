@@ -13,7 +13,6 @@
 package org.apache.juneau.assertions;
 
 import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.internal.*;
 
@@ -34,7 +33,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentArrayAssertion(Object contents, R returns) {
-		this((Assertion)null, contents, returns);
+		this(null, contents, returns);
 	}
 
 	/**
@@ -103,98 +102,10 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 		return new FluentObjectAssertion<>(this, getItem(index), returns());
 	}
 
-	/**
-	 * Returns a string assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentStringAssertion<R> stringItem(int index) {
-		return new FluentStringAssertion<>(this, StringUtils.stringify(getItem(index)), returns());
-	}
-
-	/**
-	 * Returns a date assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentDateAssertion<R> dateItem(int index) {
-		return new FluentDateAssertion<>(this, getItem(Date.class, index), returns());
-	}
-
-	/**
-	 * Returns an integer assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentIntegerAssertion<R> integerItem(int index) {
-		return new FluentIntegerAssertion<>(this, getItem(Integer.class, index), returns());
-	}
-
-	/**
-	 * Returns a long assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentLongAssertion<R> longItem(int index) {
-		return new FluentLongAssertion<>(this, getItem(Long.class, index), returns());
-	}
-
-	/**
-	 * Returns a list assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentListAssertion<R> listItem(int index) {
-		return new FluentListAssertion<>(this, getItem(List.class, index), returns());
-	}
-
-	/**
-	 * Returns a collection assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the array is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the array.
-	 * @return A new assertion.
-	 */
-	public FluentCollectionAssertion<R> collectionItem(int index) {
-		return new FluentCollectionAssertion<>(this, getItem(Collection.class, index), returns());
-	}
-
 	private Object getItem(int index) {
 		if (value != null && Array.getLength(value) > index)
 			return Array.get(value, index);
 		return null;
-	}
-
-	private <T> T getItem(Class<T> c, int index) {
-		return cast(c, getItem(index));
 	}
 
 	// <FluentSetters>
