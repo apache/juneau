@@ -665,49 +665,49 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void dc01_returnTypedBean() {
 		TypedBean x = proxy.returnTypedBean();
-		assertObject(x).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
+		assertObject(x).json().is("{a:1,b:'foo'}");
 		assertObject(x).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc02_returnTypedBean3dArray() {
 		TypedBean[][][] x = proxy.returnTypedBean3dArray();
-		assertObject(x).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
+		assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc03_returnTypedBeanList() {
 		List<TypedBean> x = proxy.returnTypedBeanList();
-		assertObject(x).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'}]");
+		assertObject(x).json().is("[{a:1,b:'foo'}]");
 		assertObject(x.get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc04_returnTypedBean1d3dList() {
 		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
-		assertObject(x).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
+		assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc05_returnTypedBeanMap() {
 		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
-		assertObject(x).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
+		assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
 		assertObject(x.get("foo")).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc06_returnTypedBeanListMap() {
 		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
-		assertObject(x).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
 		assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@Test
 	public void dc07_returnTypedBean1d3dListMap() {
 		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
-		assertObject(x).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
+		assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
@@ -715,7 +715,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void dc08_returnTypedBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
 		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
-		assertObject(x).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");
 		assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
 	}
 

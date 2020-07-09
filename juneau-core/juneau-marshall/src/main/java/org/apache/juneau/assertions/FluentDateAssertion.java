@@ -45,8 +45,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentDateAssertion(Date value, R returns) {
-		super(value, returns);
-		this.value = value;
+		this(null, value, returns);
 	}
 
 	/**
@@ -69,7 +68,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(Date value, ChronoUnit precision) throws AssertionError {
+	public R isEqual(Date value, ChronoUnit precision) throws AssertionError {
 		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -83,9 +82,10 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		if (this.value != null)
-			if (! (this.value.after(value)))
-				throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+		exists();
+		assertNotNull(value, "Parameter cannot be null.");
+		if (! (this.value.after(value)))
+			throw error("Value was not after expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -107,9 +107,10 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		if (this.value != null)
-			if (! (this.value.before(value)))
-				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+		exists();
+		assertNotNull(value, "Parameter cannot be null.");
+		if (! (this.value.before(value)))
+			throw error("Value was not before expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -132,6 +133,9 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {
+		exists();
+		assertNotNull(lower, "Parameter 'lower' cannot be null.");
+		assertNotNull(upper, "Parameter 'upper' cannot be null.");
 		isBefore(upper);
 		isAfter(lower);
 		return returns();

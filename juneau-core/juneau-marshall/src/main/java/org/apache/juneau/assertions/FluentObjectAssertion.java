@@ -33,7 +33,6 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	private static JsonSerializer JSON_BEANCOMPARE = JsonSerializer.create()
 		.ssq()
 		.keepNullProperties()
-		.addBeanTypes().addRootType()
 		.build();
 
 	private static JsonSerializer JSON_BEANCOMPARESORTED = JsonSerializer.create()
@@ -41,18 +40,15 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		.sortCollections()
 		.sortMaps()
 		.keepNullProperties()
-		.addBeanTypes().addRootType()
 		.build();
 
 	private static JsonSerializer JSON = JsonSerializer.create()
 		.ssq()
-		.addBeanTypes().addRootType()
 		.build();
 
 	private static JsonSerializer JSON_SORTED = JsonSerializer.create()
 		.ssq()
 		.sortProperties()
-		.addBeanTypes().addRootType()
 		.build();
 
 	/**
@@ -92,9 +88,9 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		if (value == null && parent == null)
-			return returns();
-		if (value == null && parent != null || value != null && parent == null || ! ClassInfo.of(value).isChildOf(parent))
+		exists();
+		assertNotNull(parent, "Parameter cannot be null.");
+		if (! ClassInfo.of(value).isChildOf(parent))
 			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(value));
 		return returns();
 	}
@@ -199,7 +195,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(Integer value) throws AssertionError {
+	public R isEqual(Object value) throws AssertionError {
 		if (this.value == value)
 			return returns();
 		exists();
@@ -212,59 +208,14 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * Asserts that the value equals the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #equals(Integer)}.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(Integer value) throws AssertionError {
-		return equals(value);
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R doesNotEqual(Integer value) throws AssertionError {
-		if (this.value != value)
-			return returns();
-		exists();
-		if (this.value.equals(value))
-			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns();
-	}
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * @param value The value to check against.
-	 * @return The response object (for method chaining).
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEquals(Object value) throws AssertionError {
-		if (this.value == value)
-			return returns();
-		exists();
-		if (! this.value.equals(value))
-			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value equals the specified value.
-	 *
-	 * <p>
-	 * Equivalent to {@link #equals(Integer)}.
+	 * Equivalent to {@link #isEqual(Object)}.
 	 *
 	 * @param value The value to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Object value) throws AssertionError {
-		return isEquals(value);
+		return isEqual(value);
 	}
 
 	/**

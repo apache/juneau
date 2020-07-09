@@ -32,8 +32,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentComparableAssertion(Comparable value, R returns) {
-		super(value, returns);
-		this.value = value;
+		this(null, value, returns);
 	}
 
 	/**
@@ -57,7 +56,8 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isGreaterThan(Comparable value) throws AssertionError {
 		exists();
-		if (value != null && this.value.compareTo(value) < 0)
+		assertNotNull(value, "Parameter cannot be null.");
+		if (compareTo(value) <= 0)
 			throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -83,9 +83,10 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isGreaterThanOrEquals(Comparable value) throws AssertionError {
+	public R isGreaterThanOrEqual(Comparable value) throws AssertionError {
 		exists();
-		if (value != null && this.value.compareTo(value) > 0)
+		assertNotNull(value, "Parameter cannot be null.");
+		if (compareTo(value) < 0)
 				throw error("Value was not greater than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -94,14 +95,14 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * Asserts that the value is greater than or equal to the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #isGreaterThanOrEquals(Comparable)}
+	 * Equivalent to {@link #isGreaterThanOrEqual(Comparable)}
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isGte(Comparable value) throws AssertionError {
-		return isGreaterThanOrEquals(value);
+		return isGreaterThanOrEqual(value);
 	}
 
 	/**
@@ -113,7 +114,8 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isLessThan(Comparable value) throws AssertionError {
 		exists();
-		if (value != null && this.value.compareTo(value) <= 0)
+		assertNotNull(value, "Parameter cannot be null.");
+		if (compareTo(value) >= 0)
 				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -139,9 +141,10 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isLessThanOrEquals(Comparable value) throws AssertionError {
+	public R isLessThanOrEqual(Comparable value) throws AssertionError {
 		exists();
-		if (value != null && this.value.compareTo(value) >= 0)
+		assertNotNull(value, "Parameter cannot be null.");
+		if (compareTo(value) > 0)
 				throw error("Value was not less than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -150,14 +153,14 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * Asserts that the value is less than or equals to the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #isLessThanOrEquals(Comparable)}
+	 * Equivalent to {@link #isLessThanOrEqual(Comparable)}
 	 *
 	 * @param value The values to check against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isLte(Comparable value) throws AssertionError {
-		return isLessThanOrEquals(value);
+		return isLessThanOrEqual(value);
 	}
 
 	/**
@@ -169,8 +172,21 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
-		isLessThanOrEquals(upper);
-		isGreaterThanOrEquals(lower);
+		exists();
+		assertNotNull(lower, "Parameter 'lower' cannot be null.");
+		assertNotNull(upper, "Parameter 'upper' cannot be null.");
+		isLessThanOrEqual(upper);
+		isGreaterThanOrEqual(lower);
 		return returns();
+	}
+
+	/**
+	 * Perform a comparison with the specified object.
+	 *
+	 * @param value The object to compare against.
+	 * @return The comparison value.
+	 */
+	protected int compareTo(Object value) {
+		return this.value.compareTo(value);
 	}
 }

@@ -96,7 +96,7 @@ public abstract class ComboSerializeTest {
 
 			if (isRdf) {
 				Object[] args = { comboInput.label, testName };
-				assertString(r).msg("{0}/{1} serialize-normal failed", args).equalsAfterSort(expected);
+				assertString(r).msg("{0}/{1} serialize-normal failed", args).isEqualAfterSort(expected);
 			} else
 				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 

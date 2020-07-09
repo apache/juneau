@@ -309,7 +309,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		try {
 			if (o == null)
 				return null;
-			PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getSwap(this) : type.getSwap(this));
+			PojoSwap f = (type == null || type.isObject() || type.isString() ? getClassMeta(o.getClass()).getSwap(this) : type.getSwap(this));
 			if (f == null)
 				return o;
 			return f.swap(this, o);

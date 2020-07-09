@@ -140,7 +140,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public R notExists() {
+	public R doesNotExist() {
 		if (value != null)
 			throw error("Exception was thrown.");
 		return returns();

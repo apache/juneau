@@ -167,7 +167,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equals(
+	 * 		.assertBody().isEqual(
 	 * 			<js>"Line 1"</js>,
 	 * 			<js>"Line 2"</js>,
 	 * 			<js>"Line 3"</js>
@@ -180,7 +180,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equals(String...value) throws AssertionError {
+	public R isEqual(String...value) throws AssertionError {
 		String v = join(value, '\n');
 		if (! StringUtils.isEquals(v, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
@@ -196,7 +196,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equalsAfterSort(<js>"OK"</js>);
+	 * 		.assertBody().isEqualAfterSort(<js>"OK"</js>);
 	 * </p>
 	 *
 	 * <p>
@@ -207,7 +207,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equalsAfterSort(
+	 * 		.assertBody().isEqualAfterSort(
 	 * 			<js>"Line 1"</js>,
 	 * 			<js>"Line 2"</js>,
 	 * 			<js>"Line 3"</js>
@@ -220,7 +220,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equalsAfterSort(String...expected) {
+	public R isEqualAfterSort(String...expected) {
 		exists();
 		// Must work for windows too.
 		String[] e = StringUtils.join(expected, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
@@ -242,7 +242,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * Asserts that the text equals the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #equals(String...)}.
+	 * Equivalent to {@link #isEqual(String...)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -275,7 +275,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(String...value) throws AssertionError {
-		return equals(value);
+		return isEqual(value);
 	}
 
 	/**
@@ -285,8 +285,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R equalsIc(String value) throws AssertionError {
-		if (! isEqualsIc(value, text))
+	public R isEqualsIc(String value) throws AssertionError {
+		if (! StringUtils.isEqualsIc(value, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
 		return returns();
 	}
@@ -326,7 +326,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
-		if (isEqualsIc(value, text))
+		if (StringUtils.isEqualsIc(value, text))
 			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value));
 		return returns();
 	}

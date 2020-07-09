@@ -379,7 +379,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(ba1);
 		BA b = p.parse(r, BA.class);
 		assertTrue(b instanceof BA1);
-		assertObject(b).json().is("{_type:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}");
+		assertObject(b).json().is("{f0a:'f0a',f0b:'f0b',f1:'f1'}");
 	}
 
 	@Bean(dictionary={BA1.class,BA2.class})

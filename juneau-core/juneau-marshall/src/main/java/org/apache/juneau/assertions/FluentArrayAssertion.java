@@ -34,8 +34,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentArrayAssertion(Object contents, R returns) {
-		super(contents, returns);
-		this.value = contents;
+		this((Assertion)null, contents, returns);
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	public R isEmpty() throws AssertionError {
 		exists();
 		if (Array.getLength(value) != 0)
-			throw error("Collection was not empty.");
+			throw error("Array was not empty.");
 		return returns();
 	}
 
@@ -72,7 +71,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	public R isNotEmpty() throws AssertionError {
 		exists();
 		if (Array.getLength(value) == 0)
-			throw error("Collection was empty.");
+			throw error("Array was empty.");
 		return returns();
 	}
 
@@ -85,8 +84,8 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isSize(int size) throws AssertionError {
 		exists();
-		if (Array.getLength(value) == size)
-			throw error("Array did not have the expected size.  Expected={0}, actual={0}.", size, Array.getLength(value));
+		if (Array.getLength(value) != size)
+			throw error("Array did not have the expected size.  Expected={0}, Actual={1}.", size, Array.getLength(value));
 		return returns();
 	}
 

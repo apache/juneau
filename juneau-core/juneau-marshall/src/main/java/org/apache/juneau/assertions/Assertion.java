@@ -36,10 +36,12 @@ public class Assertion {
 	 * @param creator The creator of this assertion.
 	 */
 	protected Assertion(Assertion creator) {
-		this.msg = creator.msg;
-		this.msgArgs = creator.msgArgs;
-		this.stdout = creator.stdout;
-		this.stderr = creator.stderr;
+		if (creator != null) {
+			this.msg = creator.msg;
+			this.msgArgs = creator.msgArgs;
+			this.stdout = creator.stdout;
+			this.stderr = creator.stderr;
+		}
 	}
 
 	/**
@@ -110,6 +112,19 @@ public class Assertion {
 	}
 
 	/**
+	 * Asserts the specified value is not null.
+	 *
+	 * @param value The value to check.
+	 * @param msg The message.
+	 * @param args The message arguments.
+	 */
+	protected void assertNotNull(Object value, String msg, Object...args) {
+		if (value == null)
+			throw new BasicAssertionError(format(msg, args));
+	}
+
+
+	/**
 	 * Casts the specified object to the specified type.
 	 *
 	 * @param <T> The type to cast the object to.
@@ -123,7 +138,7 @@ public class Assertion {
 			return null;
 		if (c.isInstance(o))
 			return (T)o;
-		throw new BasicAssertionError("Object was not expected type.  Expected={0}, actual={1}.", c.getClass().getName(), o.getClass().getName());
+		throw new BasicAssertionError("Object was not expected type.  Expected={0}, Actual={1}.", c.getName(), className(o));
 	}
 
 	// <FluentSetters>

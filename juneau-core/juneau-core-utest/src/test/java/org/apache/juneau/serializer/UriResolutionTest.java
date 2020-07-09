@@ -566,7 +566,7 @@ public class UriResolutionTest {
 
 			if (isRdf) {
 				Object[] args = { label, s.getClass().getSimpleName() };
-				assertString(r).msg("{0}/{1} serialize-normal failed", args).equalsAfterSort(expected);
+				assertString(r).msg("{0}/{1} serialize-normal failed", args).isEqualAfterSort(expected);
 			} else
 				assertString(r).msg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
 

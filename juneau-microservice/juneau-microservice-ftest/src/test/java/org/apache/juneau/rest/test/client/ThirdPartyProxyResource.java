@@ -200,15 +200,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			@Header(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObject(a).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
+		assertObject(a).json().is("{a:1,b:'foo'}");
 		assertNull(an);
-		assertObject(b).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
-		assertObject(c).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]");
-		assertObject(d).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
-		assertObject(e).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
-		assertObject(f).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
-		assertObject(g).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
-		assertObject(h).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(b).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(c).json().is("[{a:1,b:'foo'},null]");
+		assertObject(d).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(e).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(f).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(g).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(h).json().is("{'1':[{a:1,b:'foo'}]}");
 
 		assertObject(a).isType(TypedBeanImpl.class);
 		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
@@ -512,15 +512,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			@Query(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObject(a).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
+		assertObject(a).json().is("{a:1,b:'foo'}");
 		assertNull(an);
-		assertObject(b).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
-		assertObject(c).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]");
-		assertObject(d).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
-		assertObject(e).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
-		assertObject(f).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
-		assertObject(g).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
-		assertObject(h).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(b).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(c).json().is("[{a:1,b:'foo'},null]");
+		assertObject(d).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(e).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(f).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(g).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(h).json().is("{'1':[{a:1,b:'foo'}]}");
 
 		assertObject(a).isType(TypedBeanImpl.class);
 		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
@@ -846,15 +846,15 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			@FormData(n="h",cf="uon") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObject(a).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
+		assertObject(a).json().is("{a:1,b:'foo'}");
 		assertNull(an);
-		assertObject(b).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
-		assertObject(c).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]");
-		assertObject(d).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
-		assertObject(e).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
-		assertObject(f).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
-		assertObject(g).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
-		assertObject(h).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(b).json().is("[[[{a:1,b:'foo'},null],null],null]");
+		assertObject(c).json().is("[{a:1,b:'foo'},null]");
+		assertObject(d).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
+		assertObject(e).json().is("{foo:{a:1,b:'foo'}}");
+		assertObject(f).json().is("{foo:[{a:1,b:'foo'}]}");
+		assertObject(g).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
+		assertObject(h).json().is("{'1':[{a:1,b:'foo'}]}");
 
 		assertObject(a).isType(TypedBeanImpl.class);
 		assertObject(b[0][0][0]).isType(TypedBeanImpl.class);
@@ -1578,49 +1578,49 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 
 	@RestMethod(name=POST, path="/setTypedBean")
 	public void setTypedBean(@Body TypedBean x) {
-		assertObject(x).json().is("{_type:'TypedBeanImpl',a:1,b:'foo'}");
+		assertObject(x).json().is("{a:1,b:'foo'}");
 		assertObject(x).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBean3dArray")
 	public void setTypedBean3dArray(@Body TypedBean[][][] x) {
-		assertObject(x).json().is("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]");
+		assertObject(x).json().is("[[[{a:1,b:'foo'},null],null],null]");
 		assertObject(x[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBeanList")
 	public void setTypedBeanList(@Body List<TypedBean> x) {
-		assertObject(x).json().is("[{_type:'TypedBeanImpl',a:1,b:'foo'}]");
+		assertObject(x).json().is("[{a:1,b:'foo'}]");
 		assertObject(x.get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBean1d3dList")
 	public void setTypedBean1d3dList(@Body List<TypedBean[][][]> x) {
-		assertObject(x).json().is("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]");
+		assertObject(x).json().is("[[[[{a:1,b:'foo'},null],null],null],null]");
 		assertObject(x.get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBeanMap")
 	public void setTypedBeanMap(@Body Map<String,TypedBean> x) {
-		assertObject(x).json().is("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}");
+		assertObject(x).json().is("{foo:{a:1,b:'foo'}}");
 		assertObject(x.get("foo")).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBeanListMap")
 	public void setTypedBeanListMap(@Body Map<String,List<TypedBean>> x) {
-		assertObject(x).json().is("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");
+		assertObject(x).json().is("{foo:[{a:1,b:'foo'}]}");
 		assertObject(x.get("foo").get(0)).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBean1d3dListMap")
 	public void setTypedBean1d3dListMap(@Body Map<String,List<TypedBean[][][]>> x) {
-		assertObject(x).json().is("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}");
+		assertObject(x).json().is("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}");
 		assertObject(x.get("foo").get(0)[0][0][0]).isType(TypedBeanImpl.class);
 	}
 
 	@RestMethod(name=POST, path="/setTypedBeanListMapIntegerKeys")
 	public void setTypedBeanListMapIntegerKeys(@Body Map<Integer,List<TypedBean>> x) {
-		assertObject(x).json().is("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
+		assertObject(x).json().is("{'1':[{a:1,b:'foo'}]}");  // Note: JsonSerializer serializes key as string.
 		assertObject(x.get(1).get(0)).isType(TypedBeanImpl.class);
 	}
 

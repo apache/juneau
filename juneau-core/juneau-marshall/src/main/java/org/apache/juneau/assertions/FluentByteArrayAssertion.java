@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentByteArrayAssertion<R>")
-public class FluentByteArrayAssertion<R> extends FluentObjectAssertion<R> {
+public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 
 	private byte[] value;
 
@@ -35,8 +35,7 @@ public class FluentByteArrayAssertion<R> extends FluentObjectAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentByteArrayAssertion(byte[] contents, R returns) {
-		super(contents, returns);
-		this.value = contents;
+		this(null, contents, returns);
 	}
 
 	/**

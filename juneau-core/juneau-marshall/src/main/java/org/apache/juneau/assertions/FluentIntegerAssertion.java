@@ -32,6 +32,8 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="FluentIntegerAssertion<R>")
 public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
 
+	private final Integer value;
+
 	/**
 	 * Constructor.
 	 *
@@ -39,7 +41,7 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
 	 * @param returns The object to return after the test.
 	 */
 	public FluentIntegerAssertion(Integer value, R returns) {
-		super(value, returns);
+		this(null, value, returns);
 	}
 
 	/**
@@ -51,6 +53,12 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
 	 */
 	public FluentIntegerAssertion(Assertion creator, Integer value, R returns) {
 		super(creator, value, returns);
+		this.value = value;
+	}
+
+	@Override
+	protected int compareTo(Object value) {
+		return this.value.compareTo(((Number)value).intValue());
 	}
 
 	// <FluentSetters>

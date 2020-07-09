@@ -71,6 +71,22 @@ public class Assertions {
 	}
 
 	/**
+	 * Used for assertion calls against longs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response length isn't too long.</jc>
+	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
+	 * </p>
+	 *
+	 * @param value The object being wrapped.
+	 * @return A new {@link LongAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static ComparableAssertion assertComparable(Comparable<?> value) {
+		return new ComparableAssertion(value);
+	}
+
+	/**
 	 * Used for assertion calls against arbitrary POJOs.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -146,8 +162,7 @@ public class Assertions {
 	 * @param value The object being wrapped.
 	 * @return A new {@link CollectionAssertion} object.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static CollectionAssertion assertCollection(Collection value) {
+	public static CollectionAssertion assertCollection(Collection<?> value) {
 		return new CollectionAssertion(value);
 	}
 
@@ -157,14 +172,13 @@ public class Assertions {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	List=&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>);
-	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).isEquals(<js>"foo"</js>);
+	 * 	<jsm>assertList</jsm>(<jv>list</jv>).item(0).isEqual(<js>"foo"</js>);
 	 * </p>
 	 *
 	 * @param value The object being wrapped.
 	 * @return A new {@link ListAssertion} object.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static ListAssertion assertList(List value) {
+	public static ListAssertion assertList(List<?> value) {
 		return new ListAssertion(value);
 	}
 

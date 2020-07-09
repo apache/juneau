@@ -86,7 +86,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 	public R isSize(int size) throws AssertionError {
 		exists();
 		if (value.size() != size)
-			throw error("Collection did not have the expected size.  Expected={0}, actual={0}.", size, value.size());
+			throw error("Collection did not have the expected size.  Expected={0}, Actual={1}.", size, value.size());
 		return returns();
 	}
 
