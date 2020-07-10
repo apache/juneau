@@ -49,6 +49,26 @@ public class ReaderResource extends BasicHttpResource {
 	}
 
 	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static ReaderResource of(Object content) {
+		return new ReaderResource().content(content);
+	}
+
+	/**
 	 * Constructor.
 	 */
 	public ReaderResource() {

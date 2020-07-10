@@ -48,6 +48,24 @@ public class StreamResource extends BasicHttpResource {
 	}
 
 	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>File</c>
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static StreamResource of(Object content) {
+		return new StreamResource().content(content);
+	}
+
+	/**
 	 * Constructor.
 	 */
 	public StreamResource() {

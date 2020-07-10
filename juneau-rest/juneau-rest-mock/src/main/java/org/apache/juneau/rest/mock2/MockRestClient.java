@@ -737,7 +737,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
-		sreq.get().body(request.getEntity() == null ? "" : IOUtils.readBytes(request.getEntity().getContent(), 1024));
+		byte[] body = new byte[0];
+		HttpEntity entity = request.getEntity();
+		if (entity != null) {
+			long length = entity.getContentLength();
+			if (length < 0)
+				length = 1024;
+			try (InputStream is = entity.getContent()) {
+				if (is != null)
+					body = IOUtils.readBytes(is, (int)Math.min(length, 1024));
+			}
+		}
+		sreq.get().body(body);
 	}
 
 	@Override /* HttpClientConnection */

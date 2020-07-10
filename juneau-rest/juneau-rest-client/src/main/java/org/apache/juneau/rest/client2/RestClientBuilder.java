@@ -5775,11 +5775,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return (Map<Object,Object>)o;
 	}
 
-	private static SerializedNameValuePairBuilder serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return key == null ? null : SerializedNameValuePair.create().name(stringify(key)).value(value).type(type).serializer(serializer).schema(schema);
+	private static SerializedNameValuePair serializedNameValuePair(Object key, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema) {
+		return key == null ? null : SerializedNameValuePair.of(stringify(key),value).type(type).serializer(serializer).schema(schema);
 	}
 
-	private static SerializedHeaderBuilder serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
-		return key == null ? null : SerializedHeader.create().name(stringify(key)).value(value).serializer(serializer).schema(schema);
+	private static SerializedHeader serializedHeader(Object key, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
+		return key == null ? null : SerializedHeader.of(stringify(key),value).serializer(serializer).schema(schema);
 	}
 }

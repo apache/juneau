@@ -101,7 +101,7 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(pair(null,"foo")).run().assertBody().is("null=foo");
 		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
 
-		client().formDatas(SerializedHeader.create().name("foo").value("bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(SerializedHeader.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
 
 		assertThrown(()->client().build().post("/formData").formDatas("bad")).is("Invalid type passed to formDatas(): java.lang.String");
 		assertThrown(()->client().formDatas(pair("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");

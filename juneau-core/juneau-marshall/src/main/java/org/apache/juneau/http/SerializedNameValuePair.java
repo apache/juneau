@@ -36,19 +36,28 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  */
 public class SerializedNameValuePair extends BasicNameValuePair implements Headerable {
-	private Object value;
+	private final Object value;
 	private HttpPartType type;
 	private HttpPartSerializerSession serializer;
-	private HttpPartSchema schema;
+	private HttpPartSchema schema = HttpPartSchema.DEFAULT;
 	private boolean skipIfEmpty;
 
 	/**
-	 * Instantiates a new builder for this object.
+	 * Instantiates a new instance of this object.
 	 *
-	 * @return A new builder for this object.
+	 * @return A new instance of this object.
 	 */
-	public static SerializedNameValuePairBuilder create() {
-		return new SerializedNameValuePairBuilder();
+	public static SerializedNameValuePair of(String name, Object value) {
+		return new SerializedNameValuePair(name, value, null, null, null, false);
+	}
+
+	/**
+	 * Instantiates a new instance of this object.
+	 *
+	 * @return A new instance of this object.
+	 */
+	public static SerializedNameValuePair of(String name, Supplier<?> value) {
+		return new SerializedNameValuePair(name, value, null, null, null, false);
 	}
 
 	/**
@@ -67,7 +76,7 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
 	 */
 	public SerializedNameValuePair(String name, Object value, HttpPartType type, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		super(name, null);
+		super(name, value);
 		this.value = value;
 		this.type = type;
 		this.serializer = serializer;
@@ -75,17 +84,67 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 		this.skipIfEmpty = skipIfEmpty;
 	}
 
+	/**
+	 * Sets the HTTP part type.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair type(HttpPartType value) {
+		this.type = value;
+		return this;
+	}
+
+	/**
+	 * Sets the serializer to use for serializing the value to a string value.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair serializer(HttpPartSerializer value) {
+		if (value != null)
+			return serializer(value.createPartSession(null));
+		return this;
+	}
+
+	/**
+	 * Sets the serializer to use for serializing the value to a string value.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair serializer(HttpPartSerializerSession value) {
+		return serializer(value, true);
+	}
+
+	/**
+	 * Sets the serializer to use for serializing the value to a string value.
+	 *
+	 * @param value The new value for this property.
+	 * @param overwrite If <jk>true</jk>, overwrites the existing value if the old value is <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair serializer(HttpPartSerializerSession value, boolean overwrite) {
+		if (overwrite || serializer == null)
+			this.serializer = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema object that defines the format of the output.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair schema(HttpPartSchema value) {
+		this.schema = value;
+		return this;
+	}
+
+
 	@Override /* Headerable */
 	public SerializedHeader asHeader() {
 		return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);
-	}
-
-	SerializedNameValuePair(SerializedNameValuePairBuilder b) {
-		super(b.name, null);
-		this.value = b.value;
-		this.type = b.type;
-		this.serializer = b.serializer;
-		this.schema = b.schema == null ? HttpPartSchema.DEFAULT : b.schema;
 	}
 
 	@Override /* NameValuePair */

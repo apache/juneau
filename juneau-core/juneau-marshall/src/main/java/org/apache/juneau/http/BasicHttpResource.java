@@ -41,6 +41,26 @@ public class BasicHttpResource extends AbstractHttpEntity implements HttpResourc
 	}
 
 	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static BasicHttpResource of(Object content) {
+		return new BasicHttpResource().content(content);
+	}
+
+	/**
 	 * Constructor.
 	 */
 	public BasicHttpResource() {
@@ -181,7 +201,7 @@ public class BasicHttpResource extends AbstractHttpEntity implements HttpResourc
 	 * @return The header value or <jk>null</jk> if header was not found.
 	 */
 	public String getStringHeader(String name) {
-		Header h = getFirstHeader(name);
+		Header h = getLastHeader(name);
 		return h == null ? null : h.getValue();
 	}
 
@@ -240,10 +260,8 @@ public class BasicHttpResource extends AbstractHttpEntity implements HttpResourc
 	@Override
 	public long getContentLength() {
 		try {
-			doCache();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+			tryCache();
+		} catch (IOException e) {}
 		if (content instanceof byte[])
 			return ((byte[])content).length;
 		if (content instanceof File)
@@ -255,6 +273,7 @@ public class BasicHttpResource extends AbstractHttpEntity implements HttpResourc
 
 	@Override
 	public InputStream getContent() throws IOException, UnsupportedOperationException {
+		tryCache();
 		if (content == null)
 			return null;
 		if (content instanceof File)
@@ -280,7 +299,7 @@ public class BasicHttpResource extends AbstractHttpEntity implements HttpResourc
 		return (content instanceof InputStream || content instanceof Reader);
 	}
 
-	private void doCache() throws IOException {
+	private void tryCache() throws IOException {
 		if (cache)
 			if (content instanceof File || content instanceof InputStream || content instanceof Reader)
 				content = IOUtils.readBytes(content);

@@ -13,34 +13,23 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.BasicHttpResource.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
-import static org.apache.juneau.http.ReaderResource.*;
 
 import java.io.*;
 
 import org.junit.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class ReaderResource_Test {
-
+public class BasicHttpResource_Test {
 	@Test
 	public void a01_basic() throws Exception {
-		ReaderResource x = create();
-		File f = File.createTempFile("test","txt");
+		BasicHttpResource x = create();
+		File f = File.createTempFile("test", "txt");
 
 		assertNull(x.getContentType());
 		assertNull(x.getContent());
 		assertNull(x.getContentEncoding());
 		assertList(x.getHeaders()).isSize(0);
-
-		of("foo").assertString().is("foo");
-		of(new StringReader("foo")).assertString().is("foo");
-		of("foo".getBytes()).assertString().is("foo");
-		of(new ByteArrayInputStream("foo".getBytes())).assertString().is("foo");
-		of(null).assertString().doesNotExist();
-		of(f).assertString().isEmpty();
 
 		x = of("foo");
 		assertStream(x.getContent()).string().is("foo");

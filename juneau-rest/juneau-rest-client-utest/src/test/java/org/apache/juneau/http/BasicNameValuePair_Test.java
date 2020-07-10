@@ -59,9 +59,9 @@ public class BasicNameValuePair_Test {
 	@Test
 	public void a03_cast() {
 		BasicNameValuePair x1 = pair("X1","1");
-		SerializedNameValuePairBuilder x2 = SerializedNameValuePair.create().name("X2").value("2");
+		SerializedNameValuePair x2 = SerializedNameValuePair.of("X2","2");
 		Header x3 = header("X3","3");
-		SerializedHeaderBuilder x4 = SerializedHeader.create().name("X4").value("4");
+		SerializedHeader x4 = SerializedHeader.of("X4","4");
 		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = new NameValuePairable() {

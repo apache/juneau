@@ -34,8 +34,8 @@ import org.apache.juneau.svl.*;
  */
 @BeanIgnore
 public class BasicNameValuePair implements NameValuePair, Headerable {
-	private String name;
-	private Object value;
+	private final String name;
+	private final Object value;
 
 	/**
 	 * Convenience creator.

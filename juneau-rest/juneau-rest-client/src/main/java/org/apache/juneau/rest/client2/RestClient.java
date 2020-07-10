@@ -2098,10 +2098,10 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	private static Object buildBuilders(Object o, HttpPartSerializerSession ss) {
-		if (o instanceof SerializedHeaderBuilder)
-			return ((SerializedHeaderBuilder)o).serializer(ss, false).build();
-		if (o instanceof SerializedNameValuePairBuilder)
-			return ((SerializedNameValuePairBuilder)o).serializer(ss, false).build();
+		if (o instanceof SerializedHeader)
+			return ((SerializedHeader)o).serializer(ss, false);
+		if (o instanceof SerializedNameValuePair)
+			return ((SerializedNameValuePair)o).serializer(ss, false);
 		return o;
 	}
 
