@@ -28,8 +28,10 @@ timestamps {
 					sh "mvn clean install deploy javadoc:aggregate"
 				}
 				
-				// JUnit Results
 				junit '**/target/surefire-reports/*.xml' 
+				jacoco()
+				publishCoverage sourceFileResolver: sourceFiles('NEVER_STORE')
+				publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 			}
 		}
 		
