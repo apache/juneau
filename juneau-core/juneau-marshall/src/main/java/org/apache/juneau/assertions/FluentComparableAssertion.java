@@ -56,7 +56,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isGreaterThan(Comparable value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (compareTo(value) <= 0)
 			throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -85,7 +85,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isGreaterThanOrEqual(Comparable value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (compareTo(value) < 0)
 				throw error("Value was not greater than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -114,7 +114,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isLessThan(Comparable value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (compareTo(value) >= 0)
 				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -143,7 +143,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isLessThanOrEqual(Comparable value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (compareTo(value) > 0)
 				throw error("Value was not less than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -173,8 +173,8 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
 		exists();
-		assertNotNull(lower, "Parameter 'lower' cannot be null.");
-		assertNotNull(upper, "Parameter 'upper' cannot be null.");
+		assertNotNull("lower", lower);
+		assertNotNull("upper", upper);
 		isLessThanOrEqual(upper);
 		isGreaterThanOrEqual(lower);
 		return returns();

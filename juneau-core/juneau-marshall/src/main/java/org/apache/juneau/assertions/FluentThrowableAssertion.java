@@ -62,6 +62,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R isType(Class<?> type) {
+		assertNotNull("type", type);
 		if (! type.isInstance(value))
 			throw error("Exception was not expected type.\n\tExpected=[{0}]\n\tActual=[{1}]", className(type), className(value));
 		return returns();
@@ -80,16 +81,19 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public R contains(String...substrings) {
+		assertNotNull("substrings", substrings);
 		exists();
 		for (String substring : substrings) {
-			Throwable e2 = value;
-			boolean found = false;
-			while (e2 != null && ! found) {
-				found |= StringUtils.contains(e2.getMessage(), substring);
-				e2 = e2.getCause();
-			}
-			if (! found) {
-				throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value.getMessage());
+			if (substring != null) {
+				Throwable e2 = value;
+				boolean found = false;
+				while (e2 != null && ! found) {
+					found |= StringUtils.contains(e2.getMessage(), substring);
+					e2 = e2.getCause();
+				}
+				if (! found) {
+					throw error("Exception message did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", substring, value.getMessage());
+				}
 			}
 		}
 		return returns();
@@ -152,8 +156,25 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R passes(Predicate<Object> test) throws AssertionError {
+	public R passes(Predicate<Throwable> test) throws AssertionError {
 		if (! test.test(value))
+			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value passes the specified predicate test.
+	 *
+	 * @param c The class to cast to for the predicate.
+	 * @param <T> The class to cast to for the predicate.
+	 * @param test The predicate to use to test the value.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Throwable> R passes(Class<T> c, Predicate<T> test) throws AssertionError {
+		isType(c);
+		if (! test.test((T) value))
 			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();
 	}

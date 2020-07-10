@@ -74,11 +74,11 @@ public class Verify {
 	 * @return An error message if the object is not of the specified type, otherwise <jk>null</jk>.
 	 */
 	public String isType(Class<?> type) {
-		if (type.isInstance(o))
+		if (type == null && o == null)
 			return null;
-		if (msg == null)
-			msg = () -> StringUtils.format("Expected type {0} but was {1}", type, (o == null ? null : o.getClass()));
-		return msg.get();
+		if (type != null && type.isInstance(o))
+			return null;
+		return msg != null ? msg.get() : StringUtils.format("Expected type [{0}] but was [{1}].", type, (o == null ? null : o.getClass()));
 	}
 
 	/**
@@ -91,9 +91,9 @@ public class Verify {
 		if (expected == o)
 			return null;
 		if (expected == null || o == null)
-			return StringUtils.format("Expected {0} but was {1}", expected, o);
+			return msg != null ? msg.get() : StringUtils.format("Expected [{0}] but was [{1}].", expected, o);
 		if (! expected.equals(o))
-			return StringUtils.format("Expected {0} but was {1}", expected, o);
+			return msg != null ? msg.get() : StringUtils.format("Expected [{0}] but was [{1}].", expected, o);
 		return null;
 	}
 

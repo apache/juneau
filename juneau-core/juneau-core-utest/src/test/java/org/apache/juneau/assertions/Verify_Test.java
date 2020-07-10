@@ -12,43 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.assertions.Verify.*;
+
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class Assertions_Test {
+public class Verify_Test {
 
 	@Test
-	public void a01_basic() throws Exception {
-		assertDate(new Date()).isAfter(new Date(0));
-		assertInteger(2).isGt(1);
-		assertLong(2l).isGt(1l);
-		assertObject("foo").json().is("'foo'");
-		assertString("foo").is("foo");
-		assertThrowable(null).doesNotExist();
-		assertArray(new String[0]).isEmpty();
-		assertCollection(AList.of()).isEmpty();
-		assertList(AList.of()).isEmpty();
-		assertStream(new ByteArrayInputStream("foo".getBytes())).string().is("foo");
-		assertStream(null).string().doesNotExist();
-		assertBytes("foo".getBytes()).string().is("foo");
-		assertBytes(null).string().doesNotExist();
-		assertReader(new StringReader("foo")).is("foo");
-		assertReader(null).doesNotExist();
-		assertThrown(()->{throw new RuntimeException("foo");}).is("foo");
-		assertThrown(()->{}).doesNotExist();
+	public void a01_basic() {
+		Verify x1 = verify("foo"), x2 = verify(null), x3 = verify(new Date(0));
 
-		new Assertions();
-	}
+		assertString(x1.is("foo")).doesNotExist();
+		assertString(x1.is("bar")).is("Expected [bar] but was [foo].");
+		assertString(x1.is(null)).is("Expected [null] but was [foo].");
+		assertString(x2.is(null)).doesNotExist();
+		assertString(x2.is("foo")).is("Expected [foo] but was [null].");
+		assertString(x3.is(new Date(0))).doesNotExist();
 
-	@Test
-	public void a02_stdout_stderr() throws Exception {
-		assertThrown(()->assertObject(null).msg("Test message").stderr().stdout().exists()).exists();
+		assertString(x1.isType(String.class)).doesNotExist();
+		assertString(x1.isType(Integer.class)).is("Expected type [java.lang.Integer] but was [java.lang.String].");
+		assertString(x2.isType(null)).doesNotExist();
+		assertString(x2.isType(String.class)).is("Expected type [java.lang.String] but was [null].");
+		assertString(x1.isType(null)).is("Expected type [null] but was [java.lang.String].");
+
+
+		assertString(verify(true).isTrue()).doesNotExist();
+		assertString(verify(false).isFalse()).doesNotExist();
+		assertString(verify(null).isTrue()).is("Expected [true] but was [null].");
+		assertString(verify(null).isFalse()).is("Expected [false] but was [null].");
+		assertString(verify(Boolean.TRUE).isTrue()).doesNotExist();
+		assertString(verify(Boolean.FALSE).isFalse()).doesNotExist();
+		assertString(x1.is("foo")).doesNotExist();
+
+		assertString(verify("foo").msg("bar{0}", "baz").is("foo")).doesNotExist();
+		assertString(verify("foo").msg("bar{0}", "baz").is("bar")).is("barbaz");
+		assertString(verify("foo").msg("bar{0}", "baz").isType(Integer.class)).is("barbaz");
+		assertString(verify(null).msg("bar{0}", "baz").is("bar")).is("barbaz");
+		assertString(verify("foo").msg("bar{0}", "baz").is(null)).is("barbaz");
 	}
 }

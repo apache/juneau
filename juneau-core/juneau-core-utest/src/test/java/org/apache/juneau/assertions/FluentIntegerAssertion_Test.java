@@ -36,49 +36,49 @@ public class FluentIntegerAssertion_Test {
 		assertInteger(null).isEqual(null);
 
 		assertThrown(()->assertInteger(null).isGreaterThan(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGreaterThan(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isGreaterThan(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(2).isGreaterThan(1);
 		assertThrown(()->assertInteger(1).isGreaterThan(2)).is("Value was not greater than expected.\n\tExpected=[2]\n\tActual=[1]");
 		assertThrown(()->assertInteger(1).isGreaterThan(1)).is("Value was not greater than expected.\n\tExpected=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertInteger(null).isGt(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGt(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isGt(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(2).isGt(1);
 		assertThrown(()->assertInteger(1).isGt(2)).is("Value was not greater than expected.\n\tExpected=[2]\n\tActual=[1]");
 		assertThrown(()->assertInteger(1).isGt(1)).is("Value was not greater than expected.\n\tExpected=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertInteger(null).isGreaterThanOrEqual(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGreaterThanOrEqual(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isGreaterThanOrEqual(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(2).isGreaterThanOrEqual(1);
 		assertThrown(()->assertInteger(1).isGreaterThanOrEqual(2)).is("Value was not greater than or equals to expected.\n\tExpected=[2]\n\tActual=[1]");
 		assertInteger(1).isGreaterThanOrEqual(1);
 
 		assertThrown(()->assertInteger(null).isGte(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isGte(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isGte(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(2).isGte(1);
 		assertThrown(()->assertInteger(1).isGte(2)).is("Value was not greater than or equals to expected.\n\tExpected=[2]\n\tActual=[1]");
 		assertInteger(1).isGte(1);
 
 		assertThrown(()->assertInteger(null).isLessThan(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLessThan(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isLessThan(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(1).isLessThan(2);
 		assertThrown(()->assertInteger(2).isLessThan(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[2]");
 		assertThrown(()->assertInteger(1).isLessThan(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertInteger(null).isLt(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLt(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isLt(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(1).isLt(2);
 		assertThrown(()->assertInteger(2).isLt(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[2]");
 		assertThrown(()->assertInteger(1).isLt(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertInteger(null).isLessThanOrEqual(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLessThanOrEqual(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isLessThanOrEqual(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(1).isLessThanOrEqual(2);
 		assertThrown(()->assertInteger(2).isLessThanOrEqual(1)).is("Value was not less than or equals to expected.\n\tExpected=[1]\n\tActual=[2]");
 		assertInteger(1).isLessThanOrEqual(1);
 
 		assertThrown(()->assertInteger(null).isLte(1)).is("Value was null.");
-		assertThrown(()->assertInteger(1).isLte(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertInteger(1).isLte(null)).is("Parameter 'value' cannot be null.");
 		assertInteger(1).isLte(2);
 		assertThrown(()->assertInteger(2).isLte(1)).is("Value was not less than or equals to expected.\n\tExpected=[1]\n\tActual=[2]");
 		assertInteger(1).isLte(1);

@@ -78,7 +78,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
 		exists();
-		assertNotNull(parent, "Parameter cannot be null.");
+		assertNotNull("parent", parent);
 		if (! ClassInfo.of(value).isChildOf(parent))
 			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(value));
 		return returns();
@@ -149,6 +149,9 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	/**
 	 * Verifies that two objects are equivalent after converting them both to sorted JSON.
 	 *
+	 * <p>
+	 * Properties, maps, and collections are all sorted on both objects before comparison.
+	 *
 	 * @param o The object to compare against.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
@@ -215,10 +218,9 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotEqual(Object value) throws AssertionError {
-		if (this.value != value)
+		if (this.value == null && value != null || this.value != null && value == null)
 			return returns();
-		exists();
-		if (this.value.equals(value))
+		if (this.value == null || this.value.equals(value))
 			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -247,6 +249,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> R passes(Class<T> c, Predicate<T> test) throws AssertionError {
+		isType(c);
 		if (! test.test((T)value))
 			throw error("Value did not pass predicate test.\n\tValue=[{0}]", value);
 		return returns();

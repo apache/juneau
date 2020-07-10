@@ -86,6 +86,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public FluentStringAssertion<R> replaceAll(String regex, String replacement) {
+		assertNotNull("regex", regex);
+		assertNotNull("replacement", replacement);
 		return apply(x -> x == null ? null : text.replaceAll(regex, replacement));
 	}
 
@@ -97,6 +99,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return This object (for method chaining).
 	 */
 	public FluentStringAssertion<R> replace(String target, String replacement) {
+		assertNotNull("target", target);
+		assertNotNull("replacement", replacement);
 		return apply(x -> x == null ? null : text.replace(target, replacement));
 	}
 
@@ -149,28 +153,16 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	/**
 	 * Asserts that the text equals the specified value.
 	 *
+	 * <p>
+	 * Similar to {@link #is(String)} except error message states diff position.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equals(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * Multiple values can be passed in to represent multiple lines of output like so:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.assertBody().isEqual(
-	 * 			<js>"Line 1"</js>,
-	 * 			<js>"Line 2"</js>,
-	 * 			<js>"Line 3"</js>
-	 * 		);
+	 * 		.assertBody().isEquals(<js>"OK"</js>);
 	 * </p>
 	 *
 	 * @param value
@@ -179,8 +171,37 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqual(String...value) throws AssertionError {
-		String v = join(value, '\n');
+	public R isEqual(String value) throws AssertionError {
+		if (! StringUtils.isEquals(value, text))
+			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(text));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the lines of text equals the specified value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.assertBody().isEqualLines(
+	 * 			<js>"Line 1"</js>,
+	 * 			<js>"Line 2"</js>,
+	 * 			<js>"Line 3"</js>
+	 * 		);
+	 * </p>
+	 *
+	 * @param lines
+	 * 	The value to check against.
+	 * 	<br>If multiple values are specified, they are concatenated with newlines.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEqualLines(String...lines) throws AssertionError {
+		assertNotNull("lines", lines);
+		String v = join(lines, '\n');
 		if (! StringUtils.isEquals(v, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
 		return returns();
@@ -195,44 +216,35 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isEqualAfterSort(<js>"OK"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * Multiple values can be passed in to represent multiple lines of output like so:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.assertBody().isEqualAfterSort(
+	 * 		.assertBody().isEqualSortedLines(
 	 * 			<js>"Line 1"</js>,
 	 * 			<js>"Line 2"</js>,
 	 * 			<js>"Line 3"</js>
 	 * 		);
 	 * </p>
 	 *
-	 * @param expected
+	 * @param lines
 	 * 	The value to check against.
 	 * 	<br>If multiple values are specified, they are concatenated with newlines.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualAfterSort(String...expected) {
+	public R isEqualSortedLines(String...lines) {
+		assertNotNull("lines", lines);
 		exists();
+
 		// Must work for windows too.
-		String[] e = StringUtils.join(expected, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
+		String[] e = StringUtils.join(lines, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
 
 		if (e.length != a.length)
-			throw error("Expected text had different numbers of lines.\n\tExpected=[{0}]\n\tActual={1}]", e.length, a.length);
+			throw error("Expected text had different numbers of lines.\n\tExpected=[{0}]\n\tActual=[{1}]", e.length, a.length);
 
 		Arrays.sort(e);
 		Arrays.sort(a);
 
 		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
-				throw error("Expected text had different values at line {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", i, e[i], a[i]);
+				throw error("Expected text had different values at line {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", i+1, e[i], a[i]);
 
 		return returns();
 	}
@@ -241,7 +253,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * Asserts that the text equals the specified value.
 	 *
 	 * <p>
-	 * Equivalent to {@link #isEqual(String...)}.
+	 * Similar to {@link #isEqual(String)} except error message doesn't state diff position.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -252,28 +264,15 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * 		.assertBody().is(<js>"OK"</js>);
 	 * </p>
 	 *
-	 * <p>
-	 * Multiple values can be passed in to represent multiple lines of output like so:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.assertBody().is(
-	 * 			<js>"Line 1"</js>,
-	 * 			<js>"Line 2"</js>,
-	 * 			<js>"Line 3"</js>
-	 * 		);
-	 * </p>
-	 *
 	 * @param value
 	 * 	The value to check against.
 	 * 	<br>If multiple values are specified, they are concatenated with newlines.
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R is(String...value) throws AssertionError {
+	public R is(String value) throws AssertionError {
+		if (! StringUtils.isEquals(value, text))
+			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
 		return isEqual(value);
 	}
 
@@ -284,7 +283,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The response object (for method chaining).
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEqualsIc(String value) throws AssertionError {
+	public R isEqualIc(String value) throws AssertionError {
 		if (! StringUtils.isEqualsIc(value, text))
 			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
 		return returns();
@@ -299,7 +298,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R doesNotEqual(String value) throws AssertionError {
 		if (StringUtils.isEquals(value, text))
-			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value), fix(text));
+			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
 
@@ -326,7 +325,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R doesNotEqualIc(String value) throws AssertionError {
 		if (StringUtils.isEqualsIc(value, text))
-			throw error("Text equaled unexpected.\n\tText=[{1}]", fix(value));
+			throw error("Text equaled unexpected.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
 
@@ -338,8 +337,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(String...values) throws AssertionError {
+		assertNotNull("values", values);
 		for (String substring : values)
-			if (! StringUtils.contains(text, substring))
+			if (substring != null && ! StringUtils.contains(text, substring))
 				throw error("Text did not contain expected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
 		return returns();
 	}
@@ -352,8 +352,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(String...values) throws AssertionError {
+		assertNotNull("values", values);
 		for (String substring : values)
-			if (StringUtils.contains(text, substring))
+			if (substring != null && StringUtils.contains(text, substring))
 				throw error("Text contained unexpected substring.\n\tSubstring=[{0}]\n\tText=[{1}]", fix(substring), fix(text));
 		return returns();
 	}
@@ -365,8 +366,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (! text.isEmpty())
-			throw error("Text was not empty.");
+		if (text != null && ! text.isEmpty())
+			throw error("Text was not empty.\n\tText=[{0}]", fix(text));
 		return returns();
 	}
 
@@ -406,6 +407,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R matchesSimple(String searchPattern) throws AssertionError {
+		assertNotNull("searchPattern", searchPattern);
 		return matches(getMatchPattern(searchPattern));
 	}
 
@@ -417,6 +419,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotMatch(String regex) throws AssertionError {
+		assertNotNull("regex", regex);
 		return doesNotMatch(regex, 0);
 	}
 
@@ -429,6 +432,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R matches(String regex, int flags) throws AssertionError {
+		assertNotNull("regex", regex);
+		exists();
 		Pattern p = Pattern.compile(regex, flags);
 		if (! p.matcher(text).matches())
 			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(text));
@@ -444,10 +449,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotMatch(String regex, int flags) throws AssertionError {
-		Pattern p = Pattern.compile(regex, flags);
-		if (p.matcher(text).matches())
-			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(regex), fix(text));
-		return returns();
+		assertNotNull("regex", regex);
+		return doesNotMatch(Pattern.compile(regex, flags));
 	}
 
 	/**
@@ -458,6 +461,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R matches(Pattern pattern) throws AssertionError {
+		assertNotNull("pattern", pattern);
+		exists();
 		if (! pattern.matcher(text).matches())
 			throw error("Text did not match expected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
 		return returns();
@@ -471,7 +476,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotMatch(Pattern pattern) throws AssertionError {
-		if (pattern.matcher(text).matches())
+		assertNotNull("pattern", pattern);
+		if (text != null && pattern.matcher(text).matches())
 			throw error("Text matched unexpected pattern.\n\tPattern=[{0}]\n\tText=[{1}]", fix(pattern.pattern()), fix(text));
 		return returns();
 	}

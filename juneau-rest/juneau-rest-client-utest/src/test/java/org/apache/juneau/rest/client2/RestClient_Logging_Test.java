@@ -70,7 +70,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
-		c.assertContents().is(
+		c.assertContents().isEqualLines(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -93,7 +93,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().get("/bean").complete();
-		c.assertContents().is(
+		c.assertContents().isEqualLines(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -112,7 +112,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 
 		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(new ByteArrayInputStream("foo".getBytes()))).complete();
-		c.assertContents().is(
+		c.assertContents().isEqualLines(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -154,7 +154,7 @@ public class RestClient_Logging_Test {
 
 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
-		l.assertLastMessage().is(
+		l.assertLastMessage().isEqualLines(
 			"",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -173,7 +173,7 @@ public class RestClient_Logging_Test {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
-		l.assertContents().stderr().javaStrings().is(
+		l.assertContents().stderr().javaStrings().isEqualLines(
 			"WARNING: ",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",

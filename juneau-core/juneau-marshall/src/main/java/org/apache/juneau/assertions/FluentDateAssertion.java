@@ -83,7 +83,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 */
 	public R isAfter(Date value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (! (this.value.after(value)))
 			throw error("Value was not after expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -108,7 +108,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 */
 	public R isBefore(Date value) throws AssertionError {
 		exists();
-		assertNotNull(value, "Parameter cannot be null.");
+		assertNotNull("value", value);
 		if (! (this.value.before(value)))
 			throw error("Value was not before expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
@@ -134,8 +134,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		exists();
-		assertNotNull(lower, "Parameter 'lower' cannot be null.");
-		assertNotNull(upper, "Parameter 'upper' cannot be null.");
+		assertNotNull("lower", lower);
+		assertNotNull("upper", upper);
 		isBefore(upper);
 		isAfter(lower);
 		return returns();

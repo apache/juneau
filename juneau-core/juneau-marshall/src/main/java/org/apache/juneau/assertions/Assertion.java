@@ -27,11 +27,6 @@ public class Assertion {
 	boolean stdout, stderr;
 
 	/**
-	 * No-arg constructor.
-	 */
-	protected Assertion() {}
-
-	/**
 	 * Constructor used when this assertion is being created from within another assertion.
 	 * @param creator The creator of this assertion.
 	 */
@@ -117,28 +112,23 @@ public class Assertion {
 	 * @param value The value to check.
 	 * @param msg The message.
 	 * @param args The message arguments.
+	 * @return The value.
 	 */
-	protected void assertNotNull(Object value, String msg, Object...args) {
+	protected Object assertNotNull(Object value, String msg, Object...args) {
 		if (value == null)
 			throw new BasicAssertionError(format(msg, args));
+		return value;
 	}
 
-
 	/**
-	 * Casts the specified object to the specified type.
+	 * Asserts the specified parameter is not null.
 	 *
-	 * @param <T> The type to cast the object to.
-	 * @param c The type to cast the object to.
-	 * @param o The object to cast.
-	 * @return The same object cast to the specified object.s
+	 * @param parameter The parameter name.
+	 * @param value The value to check.
+	 * @return The value.
 	 */
-	@SuppressWarnings("unchecked")
-	protected static <T> T cast(Class<T> c, Object o) {
-		if (o == null)
-			return null;
-		if (c.isInstance(o))
-			return (T)o;
-		throw new BasicAssertionError("Object was not expected type.  Expected={0}, Actual={1}.", c.getName(), className(o));
+	protected Object assertNotNull(String parameter, Object value) {
+		return assertNotNull(value, "Parameter ''{0}'' cannot be null.", parameter);
 	}
 
 	// <FluentSetters>

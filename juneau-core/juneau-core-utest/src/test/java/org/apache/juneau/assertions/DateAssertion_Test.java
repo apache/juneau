@@ -44,12 +44,12 @@ public class DateAssertion_Test {
 		assertThrown(()->assertDate(x2).isEqual(x1, ChronoUnit.DAYS)).contains("Unexpected value.");
 
 		assertThrown(()->assertDate(null).isBefore(x1)).is("Value was null.");
-		assertThrown(()->assertDate(x1).isBefore(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertDate(x1).isBefore(null)).is("Parameter 'value' cannot be null.");
 		assertDate(x1).isBefore(x2);
 		assertThrown(()->assertDate(x2).isBefore(x1)).contains("Value was not before expected.");
 
 		assertThrown(()->assertDate(null).isAfter(x1)).is("Value was null.");
-		assertThrown(()->assertDate(x1).isAfter(null)).is("Parameter cannot be null.");
+		assertThrown(()->assertDate(x1).isAfter(null)).is("Parameter 'value' cannot be null.");
 		assertDate(x2).isAfter(x1);
 		assertThrown(()->assertDate(x1).isAfter(x2)).contains("Value was not after expected.");
 
