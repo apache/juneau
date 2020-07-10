@@ -476,6 +476,14 @@ public class RestClient_Test {
 		assertNotNull(client().build().get("/bean").toString());
 	}
 
+	@Test
+	public void e17_getHttpMethod() throws Exception {
+		RestClient x = client().build();
+		assertString(x.get().getHttpMethod()).is("GET");
+		assertString(x.request("FOO",null,false).getHttpMethod()).is("OTHER");
+		assertString(x.request(null,null,false).getHttpMethod()).is("GET");
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------

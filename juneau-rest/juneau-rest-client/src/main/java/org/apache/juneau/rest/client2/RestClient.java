@@ -2867,6 +2867,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
+		if (method == null)
+			method = "GET";
 		if (isClosed) {
 			Exception e2 = null;
 			if (closedStack != null) {

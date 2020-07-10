@@ -92,7 +92,7 @@ public enum HttpMethod {
 	 * @param key The HTTP method name.
 	 * @return The HttpMethod enum, or {@link #OTHER} if it's not a standard method name.
 	 */
-	public static HttpMethod forString(String key) {
+	public static HttpMethod of(String key) {
 		HttpMethod m = cache.get(key);
 		return m == null ? OTHER : m;
 	}

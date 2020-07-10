@@ -1193,7 +1193,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The HTTP method.
 	 */
 	public HttpMethod getHttpMethod() {
-		return HttpMethod.forString(method);
+		return HttpMethod.of(method);
 	}
 
 	@Override /* ServletRequest */
