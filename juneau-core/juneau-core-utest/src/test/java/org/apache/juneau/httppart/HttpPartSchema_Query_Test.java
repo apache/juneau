@@ -27,7 +27,7 @@ import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class HttpPartSchemaTest_Header {
+public class HttpPartSchema_Query_Test {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic test
@@ -38,19 +38,19 @@ public class HttpPartSchemaTest_Header {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Header
+	// @Query
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Header("x")
+	@Query("x")
 	public static class A01 {}
 
 	@Test
 	public void a01_value() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, A01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, A01.class).build();
 		assertEquals("x", s.getName());
 	}
 
-	@Header(
+	@Query(
 		n="x",
 		t="number",
 		f="int32",
@@ -79,7 +79,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void a02_basic_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, A02.class).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, A02.class).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
 		assertEquals(HttpPartFormat.INT32, s.getFormat());
@@ -103,7 +103,7 @@ public class HttpPartSchemaTest_Header {
 
 	public static class A03 {
 		public void a(
-				@Header(
+				@Query(
 					n="x",
 					t="number",
 					f="int32",
@@ -136,7 +136,7 @@ public class HttpPartSchemaTest_Header {
 	@Test
 	public void a03_basic_onParameter() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, mpi).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartDataType.NUMBER, s.getType());
 		assertEquals(HttpPartFormat.INT32, s.getFormat());
@@ -160,7 +160,7 @@ public class HttpPartSchemaTest_Header {
 
 	public static class A04 {
 		public void a(
-				@Header(
+				@Query(
 					n="y",
 					t="integer",
 					f="int64",
@@ -193,7 +193,7 @@ public class HttpPartSchemaTest_Header {
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
 		ParamInfo mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, mpi).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartDataType.INTEGER, s.getType());
 		assertEquals(HttpPartFormat.INT64, s.getFormat());
@@ -215,7 +215,7 @@ public class HttpPartSchemaTest_Header {
 		assertEquals("c3\nc4", s.getDefault());
 	}
 
-	@Header(
+	@Query(
 		n="x",
 		items=@Items(
 			t="number",
@@ -294,7 +294,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void a05_basic_nestedItems_onClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, A05.class).noValidate().build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, A05.class).noValidate().build();
 		assertEquals("x", s.getName());
 
 		HttpPartSchema items = s.getItems();
@@ -374,36 +374,61 @@ public class HttpPartSchemaTest_Header {
 	// String input validations.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Header(r=true)
-	public static class B01 {}
+	@Query(r=true)
+	public static class B01a {}
 
 	@Test
-	public void b01_required() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B01.class).build();
+	public void b01a_required() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B01a.class).build();
+
 		s.validateInput("x");
+
 		assertThrown(()->s.validateInput(null)).is("No value specified.");
-		assertThrown(()->s.validateInput("") /*Empty headers are never allowed*/ ).is("Empty value not allowed.");
+		assertThrown(()->s.validateInput("")).is("Empty value not allowed.");
 	}
 
-	@Header(p="x.*")
+	@Query(aev=true)
+	public static class B01b {}
+
+	@Test
+	public void b01b_allowEmptyValue() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B01b.class).build();
+
+		s.validateInput("");
+		s.validateInput(null);
+	}
+
+	@Query(r=true,aev=true)
+	public static class B01c {}
+
+	@Test
+	public void b01b_required_allowEmptyValue() throws Exception {
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B01c.class).build();
+
+		s.validateInput("");
+
+		assertThrown(()->s.validateInput(null)).is("No value specified.");
+	}
+
+	@Query(p="x.*")
 	public static class B02a {}
 
 	@Test
 	public void b02a_pattern() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B02a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B02a.class).build();
 		s.validateInput("x");
 		s.validateInput("xx");
 		assertThrown(()->s.validateInput("y")).is("Value does not match expected pattern.  Must match pattern: x.*");
 		assertThrown(()->s.validateInput("yx")).is("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->s.validateInput("") /*Empty headers are never allowed*/).is("Empty value not allowed.");
+		assertThrown(()->s.validateInput("")).is("Empty value not allowed.");
 	}
 
-	@Header(minl=2, maxl=3)
+	@Query(minl=2, maxl=3)
 	public static class B03a {}
 
 	@Test
 	public void b03a_length() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B03a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B03a.class).build();
 		s.validateInput("12");
 		s.validateInput("123");
 		s.validateInput(null);
@@ -411,7 +436,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateInput("1234")).is("Maximum length of value exceeded.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			minl=2, maxl=3,
 			items=@SubItems(
@@ -427,7 +452,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void b03b_length_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B03b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B03b.class).build();
 
 		s.getItems().validateInput("12");
 		s.getItems().getItems().validateInput("123");
@@ -455,43 +480,43 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("1234567")).is("Maximum length of value exceeded.");
 	}
 
-	@Header(e="X,Y")
+	@Query(e="X,Y")
 	public static class B04a {}
 
 	@Test
 	public void b04a_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B04a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B04a.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
 		assertThrown(()->s.validateInput("Z")).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
-	@Header(e=" X , Y ")
+	@Query(e=" X , Y ")
 	public static class B04b {}
 
 	@Test
 	public void b04b_enum() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B04b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B04b.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
 		assertThrown(()->s.validateInput("Z")).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
-	@Header(e="['X','Y']")
+	@Query(e="['X','Y']")
 	public static class B04c {}
 
 	@Test
 	public void b04c_enum_json() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B04c.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B04c.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
 		assertThrown(()->s.validateInput("Z")).is("Value does not match one of the expected values.  Must be one of the following: ['X','Y']");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			e="['W']",
 			items=@SubItems(
@@ -507,7 +532,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void b04d_enum_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, B04d.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, B04d.class).build();
 
 		s.getItems().validateInput("W");
 		s.getItems().getItems().validateInput("X");
@@ -524,12 +549,12 @@ public class HttpPartSchemaTest_Header {
 	// Numeric validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Header(min="10", max="100")
+	@Query(min="10", max="100")
 	public static class C01a {}
 
 	@Test
 	public void c01a_minmax_ints() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C01a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C01a.class).build();
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -537,7 +562,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(101, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			min="10", max="100",
 			items=@SubItems(
@@ -553,7 +578,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c01b_minmax_ints_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C01b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C01b.class).build();
 
 		s.getItems().validateOutput(10, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
@@ -576,12 +601,12 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(min="10", max="100", emin=true, emax=true)
+	@Query(min="10", max="100", emin=true, emax=true)
 	public static class C02a {}
 
 	@Test
 	public void c02a_minmax_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C02a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C02a.class).build();
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -589,7 +614,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(100, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			min="10", max="100", emin=true, emax=true,
 			items=@SubItems(
@@ -605,7 +630,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c02b_minmax_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C02b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C02b.class).build();
 
 		s.getItems().validateOutput(11, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
@@ -628,12 +653,12 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(min="10.1", max="100.1")
+	@Query(min="10.1", max="100.1")
 	public static class C03a {}
 
 	@Test
 	public void c03_minmax_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C03a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C03a.class).build();
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -641,7 +666,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(100.2f, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			min="10.1", max="100.1",
 			items=@SubItems(
@@ -657,7 +682,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c03b_minmax_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C03b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C03b.class).build();
 
 		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
@@ -680,12 +705,12 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(min="10.1", max="100.1", emin=true, emax=true)
+	@Query(min="10.1", max="100.1", emin=true, emax=true)
 	public static class C04a {}
 
 	@Test
 	public void c04a_minmax_floats_exclusive() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C04a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C04a.class).build();
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
@@ -693,7 +718,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(100.1f, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			min="10.1", max="100.1", emin=true, emax=true,
 			items=@SubItems(
@@ -709,7 +734,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c04b_minmax_floats_exclusive_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C04b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C04b.class).build();
 
 		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
@@ -732,12 +757,12 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT)).is("Maximum value exceeded.");
 	}
 
-	@Header(mo="10")
+	@Query(mo="10")
 	public static class C05a {}
 
 	@Test
 	public void c05a_multipleOf() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C05a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C05a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(20, BeanContext.DEFAULT);
@@ -747,7 +772,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(11, BeanContext.DEFAULT)).is("Multiple-of not met.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			mo="10",
 			items=@SubItems(
@@ -763,7 +788,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c05b_multipleOf_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C05b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C05b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -796,12 +821,12 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT)).is("Multiple-of not met.");
 	}
 
-	@Header(mo="10.1")
+	@Query(mo="10.1")
 	public static class C06a {}
 
 	@Test
 	public void c06a_multipleOf_floats() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C06a.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C06a.class).build();
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
@@ -809,7 +834,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.validateOutput(10.2f, BeanContext.DEFAULT)).is("Multiple-of not met.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			mo="10.1",
 			items=@SubItems(
@@ -825,7 +850,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void c06b_multipleOf_floats_items() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, C06b.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, C06b.class).build();
 
 		s.getItems().validateOutput(0, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
@@ -852,7 +877,7 @@ public class HttpPartSchemaTest_Header {
 	// Collections/Array validations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Header(
+	@Query(
 		items=@Items(
 			ui=true,
 			items=@SubItems(
@@ -869,7 +894,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void d01a_uniqueItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, D01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, D01.class).build();
 
 		String[] good = split("a,b"), bad = split("a,a");
 
@@ -887,7 +912,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void d01b_uniqueItems_collections() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, D01.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, D01.class).build();
 
 		AList<String>
 			good = AList.of(split("a,b")),
@@ -905,7 +930,7 @@ public class HttpPartSchemaTest_Header {
 		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).is("Duplicate items not allowed.");
 	}
 
-	@Header(
+	@Query(
 		items=@Items(
 			mini=1, maxi=2,
 			items=@SubItems(
@@ -922,7 +947,7 @@ public class HttpPartSchemaTest_Header {
 
 	@Test
 	public void d02a_minMaxItems_arrays() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Header.class, D02.class).build();
+		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, D02.class).build();
 
 		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);

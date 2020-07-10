@@ -26,7 +26,7 @@ import org.junit.*;
 
 @SuppressWarnings({"rawtypes"})
 @FixMethodOrder(NAME_ASCENDING)
-public class UonPartParserTest {
+public class UonPartParser_Test {
 
 	private static UonParserSession p = UonParser.DEFAULT.createSession();
 	private static BeanSession bs = p;

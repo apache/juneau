@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class OpenApiPartSerializerTest {
+public class OpenApiPartSerializer_Test {
 
 	static OpenApiSerializerSession s = OpenApiSerializer.DEFAULT.createSession();
 

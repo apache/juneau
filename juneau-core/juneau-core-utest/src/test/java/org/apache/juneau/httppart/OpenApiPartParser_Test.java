@@ -30,7 +30,7 @@ import org.apache.juneau.parser.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class OpenApiPartParserTest {
+public class OpenApiPartParser_Test {
 
 	static OpenApiParserSession p = OpenApiParser.DEFAULT.createSession();
 

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.https;
+package org.apache.juneau.http.header;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
@@ -18,7 +18,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -29,7 +28,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @FixMethodOrder(NAME_ASCENDING)
-public class ContentTypeTest {
+public class ContentType2Test {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -77,7 +76,7 @@ public class ContentTypeTest {
 	private String label, contentType, mediaTypes;
 	private int expected;
 
-	public ContentTypeTest(String label, String contentType, String mediaTypes, int expected) {
+	public ContentType2Test(String label, String contentType, String mediaTypes, int expected) {
 		this.label = label;
 		this.contentType = contentType;
 		this.mediaTypes = mediaTypes;
