@@ -36,7 +36,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public class SerializedHeader extends BasicStringHeader implements NameValuePairable {
+public class SerializedHeader extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 
 	private final Object value;
@@ -149,10 +149,5 @@ public class SerializedHeader extends BasicStringHeader implements NameValuePair
 		} catch (SerializeException e) {
 			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
-	}
-
-	@Override /* NameValuePairable */
-	public NameValuePair asNameValuePair() {
-		return new SerializedNameValuePair(getName(), value, HttpPartType.HEADER, serializer, schema, skipIfEmpty);
 	}
 }

@@ -45,6 +45,8 @@ public class NameValuePairSupplier_Test {
 		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
 		x.add((NameValuePairSupplier)null);
 		assertObject(x.iterator()).json().is("['Foo=bar','Foo=baz','Foo=qux','Foo=q2x','Foo=q3x','Foo=q4x','Foo=q5x']");
+
+		assertObject(new NameValuePairSupplier.Null().iterator()).json().is("[]");
 	}
 
 	@Test

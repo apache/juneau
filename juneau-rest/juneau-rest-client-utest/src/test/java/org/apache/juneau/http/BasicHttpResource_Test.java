@@ -85,12 +85,13 @@ public class BasicHttpResource_Test {
 		assertStream(x.getContent()).string().doesNotExist();
 		assertStream(x.getContent()).string().doesNotExist();
 		assertTrue(x.isRepeatable());
+		x.writeTo(new ByteArrayOutputStream());
 
 		assertLong(of("foo").getContentLength()).is(3l);
 		assertLong(of("foo".getBytes()).getContentLength()).is(3l);
 		assertLong(of(f).getContentLength()).is(0l);
 
-		x = of("foo").header("Foo","bar").header("Foo","baz");
+		x = of("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).header(null);
 		assertString(x.getStringHeader("Foo")).is("baz");
 		assertString(x.getStringHeader("Bar")).doesNotExist();
 		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");

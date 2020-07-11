@@ -77,6 +77,7 @@ public class BasicHeader_Test {
 				return header("X8","8");
 			}
 		};
+		SerializedNameValuePair x9 = SerializedNameValuePair.of("X9",()->"9");
 
 		assertObject(BasicHeader.cast(x1)).isType(Header.class).json().is("'X1: 1'");
 		assertObject(BasicHeader.cast(x2)).isType(Header.class).json().is("'X2: 2'");
@@ -86,6 +87,7 @@ public class BasicHeader_Test {
 		assertObject(BasicHeader.cast(x6)).isType(Header.class).json().is("'X6: 6'");
 		assertObject(BasicHeader.cast(x7)).isType(Header.class).json().is("'X7: 7'");
 		assertObject(BasicHeader.cast(x8)).isType(Header.class).json().is("'X8: 8'");
+		assertObject(BasicHeader.cast(x9)).isType(Header.class).json().is("'X9: 9'");
 
 		assertThrown(()->BasicHeader.cast("X")).is("Object of type java.lang.String could not be converted to a Header.");
 		assertThrown(()->BasicHeader.cast(null)).is("Object of type null could not be converted to a Header.");
@@ -98,6 +100,7 @@ public class BasicHeader_Test {
 		assertTrue(BasicHeader.canCast(x6));
 		assertTrue(BasicHeader.canCast(x7));
 		assertTrue(BasicHeader.canCast(x8));
+		assertTrue(BasicHeader.canCast(x9));
 
 		assertFalse(BasicHeader.canCast("X"));
 		assertFalse(BasicHeader.canCast(null));

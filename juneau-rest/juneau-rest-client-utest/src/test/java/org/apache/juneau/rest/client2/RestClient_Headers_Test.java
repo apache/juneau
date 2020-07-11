@@ -112,6 +112,7 @@ public class RestClient_Headers_Test {
 		checkFooClient().headers(pair("Foo","bar")).build().get("/headers").headers(pair("Foo","baz")).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(SerializedNameValuePair.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedNameValuePair.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).debug().run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers(SerializedHeader.of("Foo","Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedHeader.of("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).debug().run().assertBody().is("['Bar','Baz']");
+		checkFooClient().headers(SerializedHeader.of("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(SerializedHeader.of("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).debug().run().assertBody().is("['Bar','Baz']");
 		checkFooClient().headers((Object)new Header[]{header("Foo","bar")}).build().get("/headers").headers((Object)new Header[]{header("Foo","baz")}).debug().run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(HeaderSupplier.of(header("Foo","bar"))).build().get("/headers").headers(HeaderSupplier.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(AList.of(header("Foo","bar"))).build().get("/headers").headers(AList.of(header("Foo","baz"))).run().assertBody().is("['bar','baz']");
