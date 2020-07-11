@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

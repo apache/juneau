@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

@@ -1184,18 +1184,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return method;
 	}
 
-	/**
-	 * Returns the HTTP 1.1 method name of the request as an enum.
-	 *
-	 * <p>
-	 * Note that non-RFC2616 method names resolve as {@link HttpMethod#OTHER}.
-	 *
-	 * @return The HTTP method.
-	 */
-	public HttpMethod getHttpMethod() {
-		return HttpMethod.of(method);
-	}
-
 	@Override /* ServletRequest */
 	public int getContentLength() {
 		return getBody().getContentLength();

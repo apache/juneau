@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.remote;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;

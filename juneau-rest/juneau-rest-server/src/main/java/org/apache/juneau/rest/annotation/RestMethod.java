@@ -448,7 +448,7 @@ public @interface RestMethod {
 	 * Method names are case-insensitive (always folded to upper-case).
 	 *
 	 * <p>
-	 * Note that you can use {@link org.apache.juneau.http.HttpMethodName} for constant values.
+	 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
 	 *
 	 * <p>
 	 * Besides the standard HTTP method names, the following can also be specified:

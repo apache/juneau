@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;

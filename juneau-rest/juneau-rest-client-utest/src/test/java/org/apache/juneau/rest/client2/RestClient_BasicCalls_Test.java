@@ -381,8 +381,8 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a26_request_PATCH() throws Exception {
-		client().build().request(HttpMethod.PATCH,"/bean",bean).run().assertBody().is("{f:1}");
-		client().build().request(HttpMethod.PATCH,"/bean").body(bean).run().assertBody().is("{f:1}");
+		client().build().request("patch","/bean",bean).run().assertBody().is("{f:1}");
+		client().build().request("patch","/bean").body(bean).run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -398,7 +398,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request(HttpMethod.PATCH,"/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
+			x.request("patch","/bean",body).contentType(body instanceof NameValuePairSupplier ? "application/x-www-form-urlencoded" : "application/json").run().assertBody().is("{f:1}");
 		}
 	}
 
@@ -413,14 +413,14 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.request(HttpMethod.PATCH,url,bean).accept("application/json+simple").run().assertBody().is("{f:1}");
+			x.request("patch",url,bean).accept("application/json+simple").run().assertBody().is("{f:1}");
 		}
 	}
 
 	@Test
 	public void a29_request_GET() throws Exception {
-		client().build().request(HttpMethod.GET,"/bean",null).run().assertBody().is("{f:1}");
-		client().build().request(HttpMethod.GET,"/bean").run().assertBody().is("{f:1}");
+		client().build().request("get","/bean",null).run().assertBody().is("{f:1}");
+		client().build().request("get","/bean").run().assertBody().is("{f:1}");
 	}
 
 	@Test
@@ -434,7 +434,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.request(HttpMethod.GET,url).accept("application/json+simple").run().assertBody().is("{f:1}");
+			x.request("get",url).accept("application/json+simple").run().assertBody().is("{f:1}");
 		}
 	}
 

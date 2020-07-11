@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.config.rest;
 
-import static org.apache.juneau.http.HttpMethodName.GET;
+import static org.apache.juneau.http.HttpMethod.GET;
 
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.JsonSerializer;

@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import java.io.*;
 import java.util.Map;

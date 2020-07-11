@@ -34,7 +34,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -114,14 +113,14 @@ public class RestClient_Test {
 	public void a04_request_whenClosed() throws Exception {
 		RestClient rc = client().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request(HttpMethod.GET,"/bean",null)).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).contains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a05_request_whenClosed_withStackCreation() throws Exception {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request(HttpMethod.GET,"/bean",null)).contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).contains("RestClient.close() has already been called");
 	}
 
 	@Test
@@ -474,14 +473,6 @@ public class RestClient_Test {
 	public void e16_toMap() throws Exception {
 		assertNotNull(client().build().toString());
 		assertNotNull(client().build().get("/bean").toString());
-	}
-
-	@Test
-	public void e17_getHttpMethod() throws Exception {
-		RestClient x = client().build();
-		assertString(x.get().getHttpMethod()).is("GET");
-		assertString(x.request("FOO",null,false).getHttpMethod()).is("OTHER");
-		assertString(x.request(null,null,false).getHttpMethod()).is("GET");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

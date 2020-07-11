@@ -28,7 +28,6 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -546,12 +545,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest request(HttpMethod method, Object url, Object body) throws RestCallException {
+	public MockRestRequest request(String method, Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.request(method, url, body);
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest request(HttpMethod method, Object url) throws RestCallException {
+	public MockRestRequest request(String method, Object url) throws RestCallException {
 		return (MockRestRequest)super.request(method, url);
 	}
 

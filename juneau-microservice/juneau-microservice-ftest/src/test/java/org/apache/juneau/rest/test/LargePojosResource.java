@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.*;

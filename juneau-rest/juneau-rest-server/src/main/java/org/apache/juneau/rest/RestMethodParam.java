@@ -22,7 +22,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.parser.*;
@@ -82,7 +81,6 @@ import org.apache.juneau.utils.*;
  * 	<li><b>Other objects</b>
  * 	<ul>
  * 		<li class='jc'>{@link Config}
- * 		<li class='jc'>{@link HttpMethod}
  * 		<li class='jc'>{@link InputStream}
  * 		<li class='jc'>{@link Locale}
  * 		<li class='jc'>{@link MessageBundle}

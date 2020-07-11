@@ -12,88 +12,68 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
+import org.apache.juneau.collections.*;
+
 /**
- * Represents valid HTTP 1.1 method names per the RFC 2616 spec.
+ * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public enum HttpMethod {
+public class HttpMethod {
 
 	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
-	OPTIONS(false),
+	public static final String OPTIONS = "OPTIONS";
 
 	/** {@doc RFC2616.section9#sec9.3 GET} */
-	GET(false),
+	public static final String GET = "GET";
 
 	/** {@doc RFC2616.section9#sec9.4 HEAD} */
-	HEAD(false),
+	public static final String HEAD = "HEAD";
 
 	/** {@doc RFC2616.section9#sec9.5 POST} */
-	POST(true),
+	public static final String POST = "POST";
 
 	/** {@doc RFC2616.section9#sec9.6 PUT} */
-	PUT(true),
-
-	/** PATH */
-	PATCH(true),
+	public static final String PUT = "PUT";
 
 	/** {@doc RFC2616.section9#sec9.7 DELETE} */
-	DELETE(false),
+	public static final String DELETE = "DELETE";
 
 	/** {@doc RFC2616.section9#sec9.8 TRACE} */
-	TRACE(false),
+	public static final String TRACE = "TRACE";
 
 	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
-	CONNECT(false),
+	public static final String CONNECT = "CONNECT";
 
-	/** HTTP MOVE */
-	MOVE(false),
+	/** {@doc https://tools.ietf.org/html/rfc5789 PATCH} */
+	public static final String PATCH = "PATCH";
+
+	/** Special case for a REST method that implements a REST-RPC interface. */
+	public static final String RRPC = "RRPC";
 
 	/** A non-standard value. */
-	OTHER(true);
+	public static final String OTHER = "OTHER";
 
-	private boolean hasContent;
+	/** Represents any HTTP method. */
+	public static final String ANY = "*";
 
-	HttpMethod(boolean hasContent) {
-		this.hasContent = hasContent;
-	}
-
-	private static final Map<String,HttpMethod> cache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-	static {
-		cache.put("OPTIONS", OPTIONS);
-		cache.put("GET", GET);
-		cache.put("HEAD", HEAD);
-		cache.put("POST", POST);
-		cache.put("PUT", PUT);
-		cache.put("DELETE", DELETE);
-		cache.put("TRACE", TRACE);
-		cache.put("CONNECT", CONNECT);
-	}
+	private static final Set<String> NO_BODY_METHODS = ASet.unmodifiable("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE");
 
 	/**
-	 * Returns whether this HTTP method normally has content.
-	 *
-	 * @return <jk>true</jk> if this HTTP method normally has content.
-	 */
-	public boolean hasContent() {
-		return hasContent;
-	}
-
-	/**
-	 * Returns the enum for the specified key.
-	 *
+	 * Returns <jk>true</jk> if specified http method has content.
 	 * <p>
-	 * Case is ignored.
+	 * By default, anything not in this list can have content:  <c>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</c>.
 	 *
-	 * @param key The HTTP method name.
-	 * @return The HttpMethod enum, or {@link #OTHER} if it's not a standard method name.
+	 * @param name The HTTP method.
+	 * @return <jk>true</jk> if specified http method has content.
 	 */
-	public static HttpMethod of(String key) {
-		HttpMethod m = cache.get(key);
-		return m == null ? OTHER : m;
+	public static boolean hasContent(String name) {
+		return ! NO_BODY_METHODS.contains(emptyIfNull(name).toUpperCase());
 	}
 }

@@ -3108,15 +3108,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Returns the HTTP method this request uses, such as GET, PUT, POST, or other.
-	 *
-	 * @return The HTTP method this request uses, such as GET, PUT, POST, or other.
-	 */
-	public HttpMethod getHttpMethod() {
-		return HttpMethod.of(request.getMethod());
-	}
-
-	/**
 	 * Returns the original request URI.
 	 *
 	 * <ul class='notes'>

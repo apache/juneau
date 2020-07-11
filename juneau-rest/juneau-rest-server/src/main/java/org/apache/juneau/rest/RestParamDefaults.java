@@ -26,7 +26,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -91,7 +90,6 @@ class RestParamDefaults {
 			RequestAttributesObject.class,
 			RequestQueryObject.class,
 			RequestFormDataObject.class,
-			HttpMethodObject.class,
 			RestLoggerObject.class,
 			RestContextObject.class,
 			ParserObject.class,
@@ -717,18 +715,6 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getFormData();
-		}
-	}
-
-	static final class HttpMethodObject extends RestMethodParam {
-
-		protected HttpMethodObject() {
-			super(OTHER, HttpMethod.class);
-		}
-
-		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getHttpMethod();
 		}
 	}
 

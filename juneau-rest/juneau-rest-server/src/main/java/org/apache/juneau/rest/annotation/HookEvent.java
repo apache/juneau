@@ -22,7 +22,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
@@ -156,7 +155,6 @@ public enum HookEvent {
 	 * 			<li>{@link RequestHeaders}
 	 * 			<li>{@link RequestQuery}
 	 * 			<li>{@link RequestFormData}
-	 * 			<li>{@link HttpMethod}
 	 * 			<li>{@link Logger}
 	 * 			<li>{@link RestContext}
 	 * 			<li>{@link org.apache.juneau.parser.Parser}

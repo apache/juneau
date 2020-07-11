@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty.resources;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
 import java.io.*;
 

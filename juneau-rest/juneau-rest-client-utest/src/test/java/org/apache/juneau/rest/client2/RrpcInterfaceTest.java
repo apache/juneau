@@ -14,7 +14,7 @@ package org.apache.juneau.rest.client2;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.testutils.Constants.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -23,7 +23,6 @@ import javax.servlet.*;
 
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -85,8 +84,8 @@ public class RestParamsTest {
 			return t != null;
 		}
 		@RestMethod
-		public String a12(HttpMethod t) {
-			return t.toString();
+		public String a12(@Method String t) {
+			return t;
 		}
 		@SuppressWarnings("deprecation")
 		@RestMethod

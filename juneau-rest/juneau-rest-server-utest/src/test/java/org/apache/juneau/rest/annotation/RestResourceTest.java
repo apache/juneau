@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
@@ -235,7 +234,7 @@ public class RestResourceTest {
 		c1.put("/", "").run().assertBody().is("PUT");
 		c1.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c1.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c1.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c1.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -244,7 +243,7 @@ public class RestResourceTest {
 		c2.put("/", "").run().assertBody().is("PUT");
 		c2.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c2.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c2.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c2.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -253,7 +252,7 @@ public class RestResourceTest {
 		c3.put("/", "").run().assertBody().is("PUT");
 		c3.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c3.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c3.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c3.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -262,7 +261,7 @@ public class RestResourceTest {
 		c4.put("/", "").run().assertBody().is("PUT");
 		c4.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c4.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c4.request(GET,"/").header("X-Method","FOO").run().assertBody().is("FOO");
+		c4.request("get","/").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -271,7 +270,7 @@ public class RestResourceTest {
 		c5.put("/", "").run().assertBody().is("PUT");
 		c5.get("/").header("X-Method", "PUT").run().assertBody().is("PUT");
 		c5.put("/", "").header("X-Method", "GET").run().assertBody().is("GET");
-		c5.request(GET,"/").header("X-Method","FOO").run().assertBody().is("FOO");
+		c5.request("get","/").header("X-Method","FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -280,7 +279,7 @@ public class RestResourceTest {
 		c6.put("/", "").run().assertBody().is("PUT");
 		c6.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c6.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c6.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c6.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -289,7 +288,7 @@ public class RestResourceTest {
 		c7.put("/", "").run().assertBody().is("PUT");
 		c7.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c7.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c7.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c7.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -298,7 +297,7 @@ public class RestResourceTest {
 		c8.put("/", "").run().assertBody().is("PUT");
 		c8.get("/").header("X-Method", "PUT").run().assertBody().is("GET");
 		c8.put("/", "").header("X-Method", "GET").run().assertBody().is("PUT");
-		c8.request(GET,"/").header("X-Method","FOO").run().assertBody().is("GET");
+		c8.request("get","/").header("X-Method","FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -384,7 +383,7 @@ public class RestResourceTest {
 		d1.put("/?method=GET", "").run().assertBody().is("PUT");
 		d1.get("/?method=HEAD").run().assertBody().is("HEAD");
 		d1.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
-		d1.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d1.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -397,7 +396,7 @@ public class RestResourceTest {
 		d2.put("/?method=GET", "").run().assertBody().is("GET");
 		d2.get("/?method=HEAD").run().assertBody().is("GET");
 		d2.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d2.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d2.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -410,7 +409,7 @@ public class RestResourceTest {
 		d3.put("/?method=GET", "").run().assertBody().is("GET");
 		d3.get("/?method=HEAD").run().assertBody().is("GET");
 		d3.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d3.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d3.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -423,7 +422,7 @@ public class RestResourceTest {
 		d4.put("/?method=GET", "").run().assertBody().is("PUT");
 		d4.get("/?method=HEAD").run().assertBody().is("GET");
 		d4.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d4.request(GET,"/?method=FOO").run().assertBody().is("FOO");
+		d4.request("get","/?method=FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -436,7 +435,7 @@ public class RestResourceTest {
 		d5.put("/?method=GET", "").run().assertBody().is("GET");
 		d5.get("/?method=HEAD").run().assertBody().is("HEAD");
 		d5.get("/?method=OPTIONS").run().assertBody().is("OPTIONS");
-		d5.request(GET,"/?method=FOO").run().assertBody().is("FOO");
+		d5.request("get","/?method=FOO").run().assertBody().is("FOO");
 	}
 
 	@Test
@@ -449,7 +448,7 @@ public class RestResourceTest {
 		d6.put("/?method=GET", "").run().assertBody().is("PUT");
 		d6.get("/?method=HEAD").run().assertBody().is("GET");
 		d6.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d6.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d6.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -462,7 +461,7 @@ public class RestResourceTest {
 		d7.put("/?method=GET", "").run().assertBody().is("PUT");
 		d7.get("/?method=HEAD").run().assertBody().is("GET");
 		d7.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d7.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d7.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test
@@ -475,7 +474,7 @@ public class RestResourceTest {
 		d8.put("/?method=GET", "").run().assertBody().is("PUT");
 		d8.get("/?method=HEAD").run().assertBody().is("GET");
 		d8.get("/?method=OPTIONS").run().assertBody().is("GET");
-		d8.request(GET,"/?method=FOO").run().assertBody().is("GET");
+		d8.request("get","/?method=FOO").run().assertBody().is("GET");
 	}
 
 	@Test

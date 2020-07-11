@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client2;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.AddFlag.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.http.HttpMethod.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
@@ -168,7 +169,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jm'>{@link RestClient#options(Object) options(uri)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(uri,body)} / {@link RestClient#formPost(Object) formPost(uri)}
  * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
- * 		<li class='jm'>{@link RestClient#request(HttpMethod,Object,Object) request(method,uri,body)}
+ * 		<li class='jm'>{@link RestClient#request(String,Object,Object) request(method,uri,body)}
  * 	</ul>
  * </ul>
  *
@@ -1950,8 +1951,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	static final String RESTCLIENT_httpClient = PREFIX + "httpClient.o";
 	static final String RESTCLIENT_httpClientBuilder= PREFIX + "httpClientBuilder.o";
 
-	private static final Set<String> NO_BODY_METHODS = ASet.unmodifiable("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE");
-
 	private final HeaderSupplier headers;
 	private final NameValuePairSupplier query, formData;
 	final CloseableHttpClient httpClient;
@@ -2103,18 +2102,6 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 		if (o instanceof SerializedNameValuePair)
 			return ((SerializedNameValuePair)o).serializer(ss, false);
 		return o;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified http method has content.
-	 * <p>
-	 * By default, anything not in this list can have content:  <c>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</c>.
-	 *
-	 * @param httpMethod The HTTP method.  Must be upper-case.
-	 * @return <jk>true</jk> if specified http method has content.
-	 */
-	protected boolean hasContent(String httpMethod) {
-		return ! NO_BODY_METHODS.contains(httpMethod);
 	}
 
 	/**
@@ -2805,15 +2792,16 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>
 	 * 			{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
-	 * 	This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
+	 * 	This parameter is IGNORED if the method type normally does not have content.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(HttpMethod method, Object uri, Object body) throws RestCallException {
-		RestRequest rc = request(method.name(), uri, method.hasContent());
-		if (method.hasContent())
+	public RestRequest request(String method, Object uri, Object body) throws RestCallException {
+		boolean b = hasContent(method);
+		RestRequest rc = request(method, uri, b);
+		if (b)
 			rc.body(body);
 		return rc;
 	}
@@ -2837,8 +2825,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(HttpMethod method, Object uri) throws RestCallException {
-		RestRequest rc = request(method.name(), uri, method.hasContent());
+	public RestRequest request(String method, Object uri) throws RestCallException {
+		RestRequest rc = request(method, uri, hasContent(method));
 		return rc;
 	}
 
@@ -2846,7 +2834,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Perform a generic REST call.
 	 *
 	 * <p>
-	 * Typically you're going to use {@link #request(HttpMethod, Object)} or {@link #request(HttpMethod, Object, Object)},
+	 * Typically you're going to use {@link #request(String, Object)} or {@link #request(String, Object, Object)},
 	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
 	 *
 	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).

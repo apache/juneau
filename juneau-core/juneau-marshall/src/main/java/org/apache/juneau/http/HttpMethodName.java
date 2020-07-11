@@ -18,7 +18,10 @@ package org.apache.juneau.http;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
+ *
+ * @deprecated Use {@link HttpMethod}.
  */
+@Deprecated
 public class HttpMethodName {
 
 	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
