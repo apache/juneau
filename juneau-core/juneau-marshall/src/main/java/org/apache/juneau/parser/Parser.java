@@ -123,7 +123,7 @@ public abstract class Parser extends BeanContext {
 	/**
 	 * Represents no Parser.
 	 */
-	public abstract class Null extends Parser {
+	public static abstract class Null extends Parser {
 		private Null(PropertyStore ps, String[] consumes) {
 			super(ps, consumes);
 		}

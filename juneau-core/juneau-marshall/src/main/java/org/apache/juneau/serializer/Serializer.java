@@ -45,7 +45,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	/**
 	 * Represents no Serializer.
 	 */
-	public abstract class Null extends Serializer {
+	public static abstract class Null extends Serializer {
 		private Null(PropertyStore ps, String produces, String accept) {
 			super(ps, produces, accept);
 		}

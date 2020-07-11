@@ -22,5 +22,5 @@ public abstract class XmlResolver implements XMLResolver {
 	/**
 	 * Represents the absence of this class.
 	 */
-	public abstract class Null extends XmlResolver {}
+	public static abstract class Null extends XmlResolver {}
 }

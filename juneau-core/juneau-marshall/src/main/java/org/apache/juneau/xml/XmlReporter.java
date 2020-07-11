@@ -22,5 +22,5 @@ public abstract class XmlReporter implements XMLReporter {
 	/**
 	 * Represents the absence of this class.
 	 */
-	public abstract class Null extends XmlReporter {}
+	public static abstract class Null extends XmlReporter {}
 }

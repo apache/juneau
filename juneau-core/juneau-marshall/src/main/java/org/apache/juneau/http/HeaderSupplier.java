@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
 public class HeaderSupplier implements Iterable<Header> {
 
 	/** Represents no header supplier */
-	public final class Null extends HeaderSupplier {}
+	public static final class Null extends HeaderSupplier {}
 
 	private final List<Iterable<Header>> headers = new CopyOnWriteArrayList<>();
 

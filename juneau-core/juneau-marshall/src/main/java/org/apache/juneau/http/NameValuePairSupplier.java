@@ -35,7 +35,7 @@ import org.apache.juneau.urlencoding.*;
 public class NameValuePairSupplier implements Iterable<NameValuePair> {
 
 	/** Represents no header supplier */
-	public final class Null extends NameValuePairSupplier {}
+	public static final class Null extends NameValuePairSupplier {}
 
 	private final List<Iterable<NameValuePair>> pairs = new CopyOnWriteArrayList<>();
 
