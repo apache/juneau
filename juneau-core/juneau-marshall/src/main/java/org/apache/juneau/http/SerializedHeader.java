@@ -131,6 +131,26 @@ public class SerializedHeader extends BasicStringHeader {
 		return this;
 	}
 
+	/**
+	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public SerializedHeader skipIfEmpty() {
+		return skipIfEmpty(true);
+	}
+
+	/**
+	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @param value The new value of this setting.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedHeader skipIfEmpty(boolean value) {
+		this.skipIfEmpty = value;
+		return this;
+	}
+
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {

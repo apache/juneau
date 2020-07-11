@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.Header;
 import org.apache.juneau.assertions.*;
@@ -41,7 +42,7 @@ public class StreamResource extends BasicHttpResource {
 	/**
 	 * Creator.
 	 *
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link StreamResource} object.
 	 */
 	public static StreamResource create() {
 		return new StreamResource();
@@ -55,13 +56,37 @@ public class StreamResource extends BasicHttpResource {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
 	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link StreamResource} object.
 	 */
 	public static StreamResource of(Object content) {
+		return new StreamResource().content(content);
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link StreamResource} object.
+	 */
+	public static StreamResource of(Supplier<?> content) {
 		return new StreamResource().content(content);
 	}
 
@@ -90,6 +115,7 @@ public class StreamResource extends BasicHttpResource {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
 	 */
@@ -119,43 +145,67 @@ public class StreamResource extends BasicHttpResource {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource cache() {
 		super.cache();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public StreamResource cache(boolean value) {
+		super.cache(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource chunked() {
 		super.chunked();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public StreamResource chunked(boolean value) {
+		super.chunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource content(Object value) {
 		super.content(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public StreamResource content(Supplier<?> value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource contentEncoding(Header value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public StreamResource contentLength(long value) {
+		super.contentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource contentType(String value) {
 		super.contentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public StreamResource contentType(Header value) {
 		super.contentType(value);
 		return this;

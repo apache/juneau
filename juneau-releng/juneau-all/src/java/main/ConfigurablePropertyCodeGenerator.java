@@ -186,6 +186,7 @@ public class ConfigurablePropertyCodeGenerator {
 		CollectionAssertion.class,
 		ListAssertion.class,
 
+		BasicHttpEntity.class,
 		BasicHttpResource.class,
 		StreamResource.class,
 		ReaderResource.class,

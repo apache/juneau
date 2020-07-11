@@ -27,10 +27,10 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.RestClient_Test.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
+import org.apache.juneau.testutils.pojos.ABean;
 import org.apache.juneau.uon.*;
 import org.junit.*;
 
@@ -89,7 +89,7 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(AList.of(pair("foo","bar"),pair("foo","baz"))).run().assertBody().is("foo=bar&foo=baz");
 		client().build().post("/formData").formDatas((Object)new NameValuePair[]{pair("foo","bar")}).run().assertBody().is("foo=bar");
 
-		client().build().post("/formData").formDatas(ABean.get()).run().assertBody().is("f=1");
+		client().build().post("/formData").formDatas(ABean.get()).run().assertBody().is("a=1&b=foo");
 
 		client().formDatas(pair("foo","bar"),null).build().post("/formData").run().assertBody().is("foo=bar");
 		client().build().post("/formData").formDatas(pair("foo","bar"),null).run().assertBody().is("foo=bar");
@@ -102,6 +102,9 @@ public class RestClient_FormData_Test {
 		client().build().post("/formData").formDatas(pair(null,null)).run().assertBody().is("");
 
 		client().formDatas(SerializedHeader.of("foo","bar")).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(SerializedNameValuePair.of("foo","bar").schema(null)).build().post("/formData").run().assertBody().is("foo=bar");
+		client().formDatas(SerializedNameValuePair.of("foo",null).schema(null)).build().post("/formData").run().assertBody().is("");
+		client().formDatas(SerializedNameValuePair.of("foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertBody().is("foo=bar");
 
 		assertThrown(()->client().build().post("/formData").formDatas("bad")).is("Invalid type passed to formDatas(): java.lang.String");
 		assertThrown(()->client().formDatas(pair("foo","bar"),"baz")).is("Invalid type passed to formData():  java.lang.String");
@@ -195,6 +198,23 @@ public class RestClient_FormData_Test {
 		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=foo|bar");
 		s.set(l2);
 		x2.post("/formData").formData("foo",s,T_ARRAY_PIPES).run().assertBody().urlDecode().is("foo=bar|baz");
+	}
+
+	public static class A12 implements HttpPartSerializer {
+		@Override
+		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new HttpPartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+					throw new SerializeException("bad");
+				}
+			};
+		}
+	}
+
+	@Test
+	public void a12_formData_BadSerialization() throws Exception {
+		assertThrown(()->client().formData(SerializedNameValuePair.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

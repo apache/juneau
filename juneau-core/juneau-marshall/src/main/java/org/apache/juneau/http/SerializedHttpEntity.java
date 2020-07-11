@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -27,36 +26,72 @@ import org.apache.juneau.utils.*;
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  */
 public class SerializedHttpEntity extends BasicHttpEntity {
-	final Object output;
-	final Serializer serializer;
-	final HttpPartSchema schema;
-	byte[] outputBytes;
+	private Serializer serializer;
+	private HttpPartSchema schema;
+	private byte[] cache;
+
+	/**
+	 * Creator.
+	 *
+	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
+	 * @return A new {@link SerializedHttpEntity} with uninitialized serializer and schema.
+	 */
+	public static SerializedHttpEntity of(Object content) {
+		return new SerializedHttpEntity(content, null, null, null);
+	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param input The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
+	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
 	 * @param schema The optional schema information about the serialized part.
 	 * @param contentType Override the content type defined on the serializer.
 	 */
-	public SerializedHttpEntity(Object input, Serializer serializer, HttpPartSchema schema, String contentType) {
-		this.output = input;
+	public SerializedHttpEntity(Object content, Serializer serializer, HttpPartSchema schema, String contentType) {
+		content(content);
 		this.serializer = serializer;
 		this.schema = schema;
 		if (serializer != null && serializer.getResponseContentType() != null)
 			setContentType(new BasicHeader("Content-Type", contentType != null ? contentType : serializer.getResponseContentType().toString()));
 	}
 
+	/**
+	 * Sets the serializer to use to serialize the content.
+	 *
+	 * <p>
+	 * Value is ignored if the content is a stream or reader.
+	 *
+	 * @param value The serializer.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SerializedHttpEntity serializer(Serializer value) {
+		this.serializer = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema to use to serialize the content.
+	 *
+	 * <p>
+	 * Value is ignored if the serializer is not schema-aware.
+	 *
+	 * @param value The schema.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public SerializedHttpEntity schema(HttpPartSchema value) {
+		this.schema = value;
+		return this;
+	}
+
 	@Override /* BasicHttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
 		os = new NoCloseOutputStream(os);
-		if (output instanceof InputStream) {
-			IOPipe.create(output, os).run();
-		} else if (output instanceof Reader) {
-			try (OutputStreamWriter osw = new OutputStreamWriter(os, UTF8)) {
-				IOPipe.create(output, osw).run();
-			}
+		Object content = getRawContent();
+		if (content instanceof InputStream || content instanceof Reader || content instanceof File) {
+			IOPipe.create(content, os).run();
 		} else {
 			try {
 				if (serializer == null) {
@@ -66,7 +101,7 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 					SerializerSessionArgs sArgs = SerializerSessionArgs.create().schema(schema);
 					SerializerSession session = serializer.createSession(sArgs);
 					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
-						session.serialize(output, c);
+						session.serialize(content, c);
 					}
 				}
 			} catch (SerializeException e) {
@@ -77,19 +112,25 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 
 	@Override /* BasicHttpEntity */
 	public boolean isRepeatable() {
-		return true;
+		Object content = getRawContent();
+		return (! (content instanceof InputStream || content instanceof Reader));
+	}
+
+	@Override
+	public long getContentLength() {
+		return -1;
 	}
 
 	@Override /* BasicHttpEntity */
 	public InputStream getContent() {
-		if (outputBytes == null) {
+		if (cache == null) {
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 				writeTo(baos);
-				outputBytes = baos.toByteArray();
+				cache = baos.toByteArray();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return new ByteArrayInputStream(outputBytes);
+		return new ByteArrayInputStream(cache);
 	}
 }

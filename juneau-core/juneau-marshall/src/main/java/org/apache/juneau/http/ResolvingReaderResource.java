@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.svl.*;
  */
 public class ResolvingReaderResource extends ReaderResource {
 
+	private VarResolver varResolver;
 	private VarResolverSession varSession;
 
 	/**
@@ -34,6 +36,48 @@ public class ResolvingReaderResource extends ReaderResource {
 	 */
 	public static ResolvingReaderResource create() {
 		return new ResolvingReaderResource();
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ResolvingReaderResource} object.
+	 */
+	public static ResolvingReaderResource of(Object content) {
+		return new ResolvingReaderResource().content(content);
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ResolvingReaderResource} object.
+	 */
+	public static ResolvingReaderResource of(Supplier<?> content) {
+		return new ResolvingReaderResource().content(content);
 	}
 
 	/**
@@ -52,7 +96,12 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * @param contentEncoding
 	 * 	The content encoding of the contents.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @param varSession Var resolver session for resolving SVL variables.
+	 * @param varResolver
+	 * 	The var resolver for resolving SVL variables.
+	 * 	<br>Only one of <c>varResolver</c> and <c>varSession</c> needs to be specified.
+	 * @param varSession
+	 * 	Var resolver session for resolving SVL variables.
+	 * 	<br>Only one of <c>varResolver</c> and <c>varSession</c> needs to be specified.
 	 * @param content
 	 * 	The content.
 	 * 	<br>Can be any of the following:
@@ -62,11 +111,13 @@ public class ResolvingReaderResource extends ReaderResource {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
 	 */
-	public ResolvingReaderResource(ContentType contentType, ContentEncoding contentEncoding, VarResolverSession varSession, Object content) {
+	public ResolvingReaderResource(ContentType contentType, ContentEncoding contentEncoding, VarResolver varResolver, VarResolverSession varSession, Object content) {
 		super(contentType, contentEncoding, content);
+		this.varResolver = varResolver;
 		this.varSession = varSession;
 	}
 
@@ -78,22 +129,24 @@ public class ResolvingReaderResource extends ReaderResource {
 	 */
 	@Override
 	public String asString() throws IOException {
-		if (varSession == null)
+		VarResolverSession vr = getVarSession();
+		if (vr == null)
 			return super.asString();
 		StringWriter sw = new StringWriter();
 		String s = IOUtils.read(getRawContent());
-		varSession.resolveTo(s, sw);
+		vr.resolveTo(s, sw);
 		return sw.toString();
 	}
 
 	@Override
 	public void writeTo(OutputStream os) throws IOException {
-		if (varSession == null)
+		VarResolverSession vr = getVarSession();
+		if (vr == null)
 			super.writeTo(os);
 		else {
 			try (OutputStreamWriter osw = new OutputStreamWriter(os, IOUtils.UTF8)) {
 				String s = IOUtils.read(getRawContent());
-				varSession.resolveTo(s, osw);
+				vr.resolveTo(s, osw);
 				osw.flush();
 			}
 		}
@@ -102,6 +155,18 @@ public class ResolvingReaderResource extends ReaderResource {
 
 	/**
 	 * Sets the var resolver for resolving SVL variables.
+	 *
+	 * @param varResolver - The var resolver.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ResolvingReaderResource varResolver(VarResolver varResolver) {
+		this.varResolver = varResolver;
+		return this;
+	}
+
+	/**
+	 * Sets the var resolver session for resolving SVL variables.
 	 *
 	 * @param varSession - The var resolver session.
 	 * @return This object (for method chaining).
@@ -112,45 +177,77 @@ public class ResolvingReaderResource extends ReaderResource {
 		return this;
 	}
 
+	private VarResolverSession getVarSession() {
+		if (varSession != null)
+			return varSession;
+		if (varResolver != null)
+			return varResolver.createSession();
+		return null;
+	}
+
 	// <FluentSetters>
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource cache() {
 		super.cache();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ResolvingReaderResource cache(boolean value) {
+		super.cache(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource chunked() {
 		super.chunked();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ResolvingReaderResource chunked(boolean value) {
+		super.chunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource content(Object value) {
 		super.content(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ResolvingReaderResource content(Supplier<?> value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource contentEncoding(Header value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ResolvingReaderResource contentLength(long value) {
+		super.contentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource contentType(String value) {
 		super.contentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ResolvingReaderResource contentType(Header value) {
 		super.contentType(value);
 		return this;

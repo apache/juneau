@@ -87,6 +87,12 @@ public class BasicHttpResource_Test {
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
+		x = of(f).cache();
+		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).string().isEmpty();
+		assertTrue(x.isRepeatable());
+		x.writeTo(new ByteArrayOutputStream());
+
 		assertLong(of("foo").getContentLength()).is(3l);
 		assertLong(of("foo".getBytes()).getContentLength()).is(3l);
 		assertLong(of(f).getContentLength()).is(0l);
@@ -99,5 +105,15 @@ public class BasicHttpResource_Test {
 		assertObject(x.getFirstHeader("Bar")).doesNotExist();
 		assertObject(x.getLastHeader("Bar")).doesNotExist();
 		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz']");
+
+		BasicHttpResource x2 = new BasicHttpResource() {
+			@Override
+			protected byte[] readBytes(Object o) throws IOException {
+				throw new IOException("bad");
+			}
+		};
+		x2.cache().content(new StringReader("foo"));
+		assertLong(x2.getContentLength()).is(-1l);
+		assertThrown(()->x2.writeTo(new ByteArrayOutputStream())).contains("bad");
 	}
 }

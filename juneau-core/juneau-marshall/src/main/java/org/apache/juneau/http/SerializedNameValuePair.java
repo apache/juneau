@@ -141,6 +141,25 @@ public class SerializedNameValuePair extends BasicNameValuePair implements Heade
 		return this;
 	}
 
+	/**
+	 * Don't serialize this pair if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair skipIfEmpty() {
+		return skipIfEmpty(true);
+	}
+
+	/**
+	 * Don't serialize this pair if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @param value The new value of this setting.
+	 * @return This object (for method chaining).
+	 */
+	public SerializedNameValuePair skipIfEmpty(boolean value) {
+		this.skipIfEmpty = value;
+		return this;
+	}
 
 	@Override /* Headerable */
 	public SerializedHeader asHeader() {

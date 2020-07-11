@@ -120,6 +120,8 @@ public class RestClient_Headers_Test {
 		checkClient("f").build().get("/headers").headers((Object)null).debug().run().assertBody().is("null");
 		assertThrown(()->client().headers("Foo")).contains("Invalid type");
 		assertThrown(()->client().build().get("").headers("Foo")).contains("Invalid type");
+
+		checkFooClient().headers(SerializedHeader.of("Foo",null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().get("/headers").run().assertBody().is("['bar']");
 	}
 
 	@Test
@@ -183,6 +185,23 @@ public class RestClient_Headers_Test {
 	public void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
 		TestSupplier s = TestSupplier.of(new String[]{"foo","bar"});
 		checkFooClient().header("Foo",s,T_ARRAY_PIPES,UonSerializer.DEFAULT).build().get("/headers").run().assertBody().is("['@(foo,bar)']");
+	}
+
+	public static class A12 implements HttpPartSerializer {
+		@Override
+		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new HttpPartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+					throw new SerializeException("bad");
+				}
+			};
+		}
+	}
+
+	@Test
+	public void a12_headers_BadSerialization() throws Exception {
+		assertThrown(()->checkFooClient().header(SerializedHeader.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

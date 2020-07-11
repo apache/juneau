@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.Header;
 import org.apache.juneau.assertions.*;
@@ -60,11 +61,33 @@ public class ReaderResource extends BasicHttpResource {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
 	 * @return A new empty {@link ReaderResource} object.
 	 */
 	public static ReaderResource of(Object content) {
+		return new ReaderResource().content(content);
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link ReaderResource} object.
+	 */
+	public static ReaderResource of(Supplier<?> content) {
 		return new ReaderResource().content(content);
 	}
 
@@ -93,6 +116,7 @@ public class ReaderResource extends BasicHttpResource {
 	 * 		<li><c>File</c>
 	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
 	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
 	 */
@@ -122,43 +146,67 @@ public class ReaderResource extends BasicHttpResource {
 
 	// <FluentSetters>
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource cache() {
 		super.cache();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ReaderResource cache(boolean value) {
+		super.cache(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource chunked() {
 		super.chunked();
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ReaderResource chunked(boolean value) {
+		super.chunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource content(Object value) {
 		super.content(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ReaderResource content(Supplier<?> value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource contentEncoding(Header value) {
 		super.contentEncoding(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
+	public ReaderResource contentLength(long value) {
+		super.contentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource contentType(String value) {
 		super.contentType(value);
 		return this;
 	}
 
-	@Override /* GENERATED - BasicHttpResource */
+	@Override /* GENERATED - BasicHttpEntity */
 	public ReaderResource contentType(Header value) {
 		super.contentType(value);
 		return this;
