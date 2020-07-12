@@ -1416,7 +1416,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns an instance of a {@link ReaderResource} that represents the contents of a resource text file from the
+	 * Returns an instance of a {@link BasicHttpResource} that represents the contents of a resource text file from the
 	 * classpath.
 	 *
 	 * <p>
@@ -1432,8 +1432,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String, boolean)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathHttpResource(String, boolean)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathHttpResource(String)}
 	 * </ul>
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
@@ -1446,16 +1446,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType, boolean cached) throws IOException {
+	public BasicHttpResource getClasspathHttpResource(String name, boolean resolveVars, MediaType mediaType, boolean cached) throws IOException {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ResolvingReaderResource b = ResolvingReaderResource
+		BasicHttpResource b = BasicHttpResource
 			.create()
 			.content(s)
 			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
 		if (resolveVars)
-			b.varResolver(getVarResolverSession());
+			b.resolving(getVarResolverSession());
 		if (cached)
 			b.cache();
 		return b;
@@ -1488,7 +1488,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getClasspathReaderResource(String, boolean, MediaType, boolean)} except uses the resource mime-type map
+	 * Same as {@link #getClasspathHttpResource(String, boolean, MediaType, boolean)} except uses the resource mime-type map
 	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
@@ -1499,60 +1499,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars) throws IOException {
-		return getClasspathReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)), false);
+	public BasicHttpResource getClasspathHttpResource(String name, boolean resolveVars) throws IOException {
+		return getClasspathHttpResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)), false);
 	}
 
 	/**
-	 * Same as {@link #getClasspathReaderResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
+	 * Same as {@link #getClasspathHttpResource(String, boolean)} with <code>resolveVars == <jk>false</jk></code>
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ReaderResource getClasspathReaderResource(String name) throws IOException {
-		return getClasspathReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)), false);
-	}
-
-	/**
-	 * Returns an instance of a {@link StreamResource} that represents the contents of a resource binary file from the
-	 * classpath.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathStreamResource(String)}
-	 * </ul>
-	 *
-	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
-	 * @param cached If <jk>true</jk>, the resource will be read into a byte array for fast serialization.
-	 * @return A new stream resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	@SuppressWarnings("resource")
-	public StreamResource getClasspathStreamResource(String name, MediaType mediaType, boolean cached) throws IOException {
-		InputStream is = context.getClasspathResource(name, getLocale());
-		if (is == null)
-			return null;
-		StreamResource b = StreamResource
-			.create()
-			.content(is)
-			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
-		if (cached)
-			b.cache();
-		return b;
-	}
-
-	/**
-	 * Same as {@link #getClasspathStreamResource(String, MediaType, boolean)} except uses the resource mime-type map
-	 * constructed using {@link RestContextBuilder#mimeTypes(String...)} to determine the media type.
-	 *
-	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @return A new stream resource, or <jk>null</jk> if resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public StreamResource getClasspathStreamResource(String name) throws IOException {
-		return getClasspathStreamResource(name, MediaType.forString(context.getMediaTypeForName(name)), false);
+	public BasicHttpResource getClasspathHttpResource(String name) throws IOException {
+		return getClasspathHttpResource(name, false, MediaType.forString(context.getMediaTypeForName(name)), false);
 	}
 
 	/**

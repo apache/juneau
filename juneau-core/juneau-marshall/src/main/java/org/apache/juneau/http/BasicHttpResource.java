@@ -18,11 +18,28 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.ContentType;
 
 /**
  * An extension of an {@link HttpEntity} with support for arbitrary headers.
+ * 
+ * Provides the following features:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Default support for various streams and readers.
+ * 	<li>
+ * 		Content from {@link Supplier Suppliers}.
+ * 	<li>
+ * 		Caching.
+ * 	<li>
+ * 		Fluent setters.
+ * 	<li>
+ * 		Fluent assertions.
+ * 	<li>
+ * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
+ * </ul>
  */
 public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 
@@ -52,7 +69,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link BasicHttpResource} object.
 	 */
 	public static BasicHttpResource of(Object content) {
 		return new BasicHttpResource().content(content);
@@ -73,7 +90,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link BasicHttpResource} object.
 	 */
 	public static BasicHttpResource of(Supplier<?> content) {
 		return new BasicHttpResource().content(content);
@@ -88,13 +105,6 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param contentType
-	 * 	The content type of the contents.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param contentEncoding
-	 * 	The content encoding of the contents.
-	 * 	<br>Can be <jk>null</jk>.
 	 * @param content
 	 * 	The content.
 	 * 	<br>Can be any of the following:
@@ -107,8 +117,14 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
+	 * @param contentType
+	 * 	The content type of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param contentEncoding
+	 * 	The content encoding of the contents.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public BasicHttpResource(ContentType contentType, ContentEncoding contentEncoding, Object content) {
+	public BasicHttpResource(Object content, ContentType contentType, ContentEncoding contentEncoding) {
 		super();
 		content(content);
 		contentType(contentType);
@@ -270,6 +286,18 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	@Override /* GENERATED - BasicHttpEntity */
 	public BasicHttpResource contentType(Header value) {
 		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public BasicHttpResource resolving(VarResolver varResolver) {
+		super.resolving(varResolver);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public BasicHttpResource resolving(VarResolverSession varSession) {
+		super.resolving(varSession);
 		return this;
 	}
 

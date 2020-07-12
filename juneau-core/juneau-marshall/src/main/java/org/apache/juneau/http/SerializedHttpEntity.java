@@ -15,8 +15,11 @@ package org.apache.juneau.http;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -34,26 +37,38 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 	 * Creator.
 	 *
 	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
+	 * @param serializer The serializer to use to serialize this response.
 	 * @return A new {@link SerializedHttpEntity} with uninitialized serializer and schema.
 	 */
-	public static SerializedHttpEntity of(Object content) {
-		return new SerializedHttpEntity(content, null, null, null);
+	public static SerializedHttpEntity of(Object content, Serializer serializer) {
+		return new SerializedHttpEntity(content, serializer);
 	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
+	 * @param serializer The serializer to use to serialize this response.
+	 * @return A new {@link SerializedHttpEntity} with uninitialized serializer and schema.
+	 */
+	public static SerializedHttpEntity of(Supplier<?> content, Serializer serializer) {
+		return new SerializedHttpEntity(content, serializer);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public SerializedHttpEntity() {}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
-	 * @param schema The optional schema information about the serialized part.
-	 * @param contentType Override the content type defined on the serializer.
 	 */
-	public SerializedHttpEntity(Object content, Serializer serializer, HttpPartSchema schema, String contentType) {
-		content(content);
+	public SerializedHttpEntity(Object content, Serializer serializer) {
+		super(content);
 		this.serializer = serializer;
-		this.schema = schema;
-		if (serializer != null && serializer.getResponseContentType() != null)
-			setContentType(new BasicHeader("Content-Type", contentType != null ? contentType : serializer.getResponseContentType().toString()));
 	}
 
 	/**
@@ -89,9 +104,9 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 	@Override /* BasicHttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
 		os = new NoCloseOutputStream(os);
-		Object content = getRawContent();
-		if (content instanceof InputStream || content instanceof Reader || content instanceof File) {
-			IOPipe.create(content, os).run();
+		Object o = getRawContent();
+		if (o instanceof InputStream || o instanceof Reader || o instanceof File) {
+			IOPipe.create(o, os).run();
 		} else {
 			try {
 				if (serializer == null) {
@@ -101,7 +116,7 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 					SerializerSessionArgs sArgs = SerializerSessionArgs.create().schema(schema);
 					SerializerSession session = serializer.createSession(sArgs);
 					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
-						session.serialize(content, c);
+						session.serialize(o, c);
 					}
 				}
 			} catch (SerializeException e) {
@@ -112,13 +127,26 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 
 	@Override /* BasicHttpEntity */
 	public boolean isRepeatable() {
-		Object content = getRawContent();
-		return (! (content instanceof InputStream || content instanceof Reader));
+		Object o = getRawContent();
+		return (! (o instanceof InputStream || o instanceof Reader));
 	}
 
-	@Override
+	@Override /* BasicHttpEntity */
 	public long getContentLength() {
 		return -1;
+	}
+
+	@Override /* BasicHttpEntity */
+	public Header getContentType() {
+		Header x = super.getContentType();
+		if (x != null)
+			return x;
+		Object o = getRawContent();
+		if (o instanceof InputStream || o instanceof Reader || o instanceof File)
+			return null;
+		if (serializer != null)
+			return ContentType.of(serializer.getResponseContentType());
+		return null;
 	}
 
 	@Override /* BasicHttpEntity */

@@ -163,8 +163,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().content("{f:1}"),
-			StreamResource.create().content("{f:1}"),
+			BasicHttpResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -207,8 +206,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().content("{f:1}"),
-			StreamResource.create().content("{f:1}"),
+			BasicHttpResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -314,14 +312,10 @@ public class RestClient_BasicCalls_Test {
 			/*[ 3]*/ new StringEntity("f=1",org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED),
 			/*[ 4]*/ new StringEntity("f=1",(org.apache.http.entity.ContentType)null),
 			/*[ 5]*/ pair("f","1"),
-			/*[ 6]*/ ReaderResource.create().content("f=1"),
-			/*[ 7]*/ ReaderResource.create().content("f=1"),
-			/*[ 8]*/ ReaderResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
-			/*[ 9]*/ ReaderResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
-			/*[10]*/ StreamResource.create().content("f=1"),
-			/*[11]*/ StreamResource.create().content("f=1"),
-			/*[12]*/ StreamResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
-			/*[13]*/ StreamResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[ 6]*/ BasicHttpResource.create().content("f=1"),
+			/*[ 7]*/ BasicHttpResource.create().content("f=1"),
+			/*[ 8]*/ BasicHttpResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
+			/*[ 9]*/ BasicHttpResource.create().content("f=1").contentType("application/x-www-form-urlencoded"),
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
@@ -352,8 +346,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().content("{f:1}"),
-			StreamResource.create().content("{f:1}"),
+			BasicHttpResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)
@@ -390,8 +383,7 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = AList.<Object>of(
 			new StringReader("{f:1}"),
 			new ByteArrayInputStream("{f:1}".getBytes()),
-			ReaderResource.create().content("{f:1}"),
-			StreamResource.create().content("{f:1}"),
+			BasicHttpResource.create().content("{f:1}"),
 			bean,
 			new StringEntity("{f:1}"),
 			pairs("f",1)

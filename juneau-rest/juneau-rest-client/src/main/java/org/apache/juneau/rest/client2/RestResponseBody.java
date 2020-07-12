@@ -513,8 +513,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
-	 * 			<li>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
+	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
@@ -625,8 +624,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 			<li>{@link RestResponseBody}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link ReaderResource} - Returns access as a reader wrapped in a reader resource.
-	 * 			<li>{@link StreamResource} - Returns access as an input stream wrapped in a stream resource.
+	 * 			<li>{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		</ul>
 	 * 	<li>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with

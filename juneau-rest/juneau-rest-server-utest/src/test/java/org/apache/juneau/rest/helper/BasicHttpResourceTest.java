@@ -16,50 +16,51 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.StreamResource;
+import org.apache.juneau.http.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class StreamResourceTest {
+public class BasicHttpResourceTest {
 
 	@Rest
 	public static class A {
 
 		@RestMethod
-		public StreamResource a01() throws Exception {
-			return StreamResource.create().content("foo");
+		public BasicHttpResource a01() throws Exception {
+			return BasicHttpResource.create().content("foo");
 		}
 
 		@RestMethod
-		public StreamResource a02() throws Exception {
-			return StreamResource.create().header("Foo", "Bar");
+		public BasicHttpResource a02() throws Exception {
+			return BasicHttpResource.create().header("Foo", "Bar");
 		}
 
 		@RestMethod
-		public StreamResource a03() throws Exception {
-			return StreamResource.create().contentType("application/json");
+		public BasicHttpResource a03() throws Exception {
+			return BasicHttpResource.create().contentType("application/json");
 		}
 
 		@RestMethod
-		public StreamResource a04() throws Exception {
-			return StreamResource.create().content("foo".getBytes());
+		public BasicHttpResource a04(RestRequest req) throws Exception {
+			return BasicHttpResource.create().resolving(req.getVarResolverSession()).content("$RQ{foo}");
 		}
 
 		@RestMethod
-		public StreamResource a05() throws Exception {
-			return StreamResource.create().content(new ByteArrayInputStream("foo".getBytes()));
+		public BasicHttpResource a05() throws Exception {
+			return BasicHttpResource.create().content(new ByteArrayInputStream("foo".getBytes()));
 		}
 
 		@RestMethod
-		public StreamResource a06() throws Exception {
-			return StreamResource.create().content(new StringReader("foo"));
+		public BasicHttpResource a06() throws Exception {
+			return BasicHttpResource.create().content(new StringReader("foo"));
 		}
 
 		@RestMethod
-		public StreamResource a07() throws Exception {
-			return StreamResource.create().content(new StringBuilder("foo"));
+		public BasicHttpResource a07() throws Exception {
+			return BasicHttpResource.create().content(new StringBuilder("foo"));
 		}
 	}
 
@@ -87,10 +88,10 @@ public class StreamResourceTest {
 	}
 
 	@Test
-	public void a04_byteArray() throws Exception {
-		a.get("/a04")
+	public void a04_withVars() throws Exception {
+		a.get("/a04?foo=bar")
 			.run()
-			.assertBody().is("foo");
+			.assertBody().is("bar");
 	}
 
 	@Test

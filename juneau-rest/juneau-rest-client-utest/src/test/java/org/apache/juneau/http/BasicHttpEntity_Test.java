@@ -13,34 +13,23 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.BasicHttpEntity.*;
 import static org.junit.Assert.*;
-import static org.junit.runners.MethodSorters.*;
-
-import static org.apache.juneau.http.StreamResource.*;
 
 import java.io.*;
 
 import org.junit.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class StreamResource_Test {
-
+public class BasicHttpEntity_Test {
 	@Test
 	public void a01_basic() throws Exception {
-		StreamResource x = create();
-		File f = File.createTempFile("test","txt");
+		BasicHttpEntity x = create();
+		File f = File.createTempFile("test", "txt");
 
 		assertNull(x.getContentType());
 		assertNull(x.getContent());
 		assertNull(x.getContentEncoding());
-		assertList(x.getHeaders()).isSize(0);
 
-		of("foo").assertBytes().string().is("foo");
-		of(new StringReader("foo")).assertBytes().string().is("foo");
-		of("foo".getBytes()).assertBytes().string().is("foo");
-		of(new ByteArrayInputStream("foo".getBytes())).assertBytes().string().is("foo");
-		of(null).assertBytes().string().isEmpty();
-		of(f).assertBytes().string().isEmpty();
 
 		x = of("foo");
 		assertStream(x.getContent()).string().is("foo");
@@ -72,6 +61,38 @@ public class StreamResource_Test {
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
+
+		x = of(()->"foo");
+		assertStream(x.getContent()).string().is("foo");
+		assertTrue(x.isRepeatable());
+		assertFalse(x.isStreaming());
+
+		x = of(()->new StringReader("foo"));
+		assertStream(x.getContent()).string().is("foo");
+		assertFalse(x.isRepeatable());
+		assertTrue(x.isStreaming());
+
+		x = of(()->"foo".getBytes());
+		assertStream(x.getContent()).string().is("foo");
+		assertTrue(x.isRepeatable());
+		assertFalse(x.isStreaming());
+
+		x = of(()->new ByteArrayInputStream("foo".getBytes()));
+		assertStream(x.getContent()).string().is("foo");
+		assertFalse(x.isRepeatable());
+		assertTrue(x.isStreaming());
+
+		x = of(()->null);
+		assertStream(x.getContent()).string().doesNotExist();
+		assertFalse(x.isRepeatable());
+		assertFalse(x.isStreaming());
+
+		x = of(()->f);
+		assertStream(x.getContent()).string().isEmpty();
+		assertTrue(x.isRepeatable());
+		assertFalse(x.isStreaming());
+
+
 		x = of("foo").cache();
 		assertStream(x.getContent()).string().is("foo");
 		assertStream(x.getContent()).string().is("foo");
@@ -96,18 +117,31 @@ public class StreamResource_Test {
 		assertStream(x.getContent()).string().doesNotExist();
 		assertStream(x.getContent()).string().doesNotExist();
 		assertTrue(x.isRepeatable());
+		x.writeTo(new ByteArrayOutputStream());
+
+		x = of(f).cache();
+		assertStream(x.getContent()).string().isEmpty();
+		assertStream(x.getContent()).string().isEmpty();
+		assertTrue(x.isRepeatable());
+		x.writeTo(new ByteArrayOutputStream());
 
 		assertLong(of("foo").getContentLength()).is(3l);
 		assertLong(of("foo".getBytes()).getContentLength()).is(3l);
 		assertLong(of(f).getContentLength()).is(0l);
 
-		x = of("foo").header("Foo","bar").header("Foo","baz");
-		assertString(x.getStringHeader("Foo")).is("baz");
-		assertString(x.getStringHeader("Bar")).doesNotExist();
-		assertString(x.getFirstHeader("Foo").toString()).is("Foo: bar");
-		assertString(x.getLastHeader("Foo").toString()).is("Foo: baz");
-		assertObject(x.getFirstHeader("Bar")).doesNotExist();
-		assertObject(x.getLastHeader("Bar")).doesNotExist();
-		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz']");
+		assertLong(of(new StringReader("foo")).getContentLength()).is(-1l);
+		assertLong(of(new StringReader("foo")).contentLength(3).getContentLength()).is(3l);
+
+		BasicHttpEntity x2 = new BasicHttpEntity() {
+			@Override
+			protected byte[] readBytes(Object o) throws IOException {
+				throw new IOException("bad");
+			}
+		};
+		x2.cache().content(new StringReader("foo"));
+		assertLong(x2.getContentLength()).is(-1l);
+
+		assertThrown(()->x2.writeTo(new ByteArrayOutputStream())).contains("bad");
+		assertThrown(()->x2.getContent()).contains("bad");
 	}
 }

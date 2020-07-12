@@ -204,34 +204,24 @@ public class Remote_CommonInterfaces_Test {
 	@Remote
 	@Rest
 	public static interface D extends BasicSimpleJsonRest {
-		StreamResource streamResource() throws IOException ;
-		ReaderResource readerResource() throws IOException ;
+		BasicHttpResource httpResource() throws IOException ;
 	}
 
 	public static class D1 implements D {
 		@Override
-		public StreamResource streamResource() throws IOException {
-			return StreamResource.create().contentType("text/foo").content("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar"));
-		}
-		@Override
-		public ReaderResource readerResource() throws IOException {
-			return ReaderResource.create().contentType("text/foo").content("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar"));
+		public BasicHttpResource httpResource() throws IOException {
+			return BasicHttpResource.create().contentType("text/foo").content("foo".getBytes()).header("Foo","foo").headers(ETag.of("bar"));
 		}
 	}
 
 	@Test
-	public void d01_streamResource_readerResource() throws Exception {
+	public void d01_httpResource() throws Exception {
 		D x = MockRestClient.build(D1.class).getRemote(D.class);
-		StreamResource sr = x.streamResource();
+		BasicHttpResource sr = x.httpResource();
 		assertEquals("foo",IOUtils.read(sr.getContent()));
 		assertEquals("foo",sr.getStringHeader("Foo"));
 		assertEquals("bar",sr.getStringHeader("ETag"));
 		assertEquals("text/foo",sr.getContentType().getValue().toString());
-		ReaderResource rr = x.readerResource();
-		assertEquals("foo",IOUtils.read(rr.getContent()));
-		assertEquals("foo",rr.getStringHeader("Foo"));
-		assertEquals("bar",rr.getStringHeader("ETag"));
-		assertEquals("text/foo",rr.getContentType().getValue().toString());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

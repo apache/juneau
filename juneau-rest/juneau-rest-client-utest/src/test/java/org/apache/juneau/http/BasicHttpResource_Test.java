@@ -97,6 +97,9 @@ public class BasicHttpResource_Test {
 		assertLong(of("foo".getBytes()).getContentLength()).is(3l);
 		assertLong(of(f).getContentLength()).is(0l);
 
+		assertLong(of(new StringReader("foo")).getContentLength()).is(-1l);
+		assertLong(of(new StringReader("foo")).contentLength(3).getContentLength()).is(3l);
+
 		x = of("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).header(null);
 		assertString(x.getStringHeader("Foo")).is("baz");
 		assertString(x.getStringHeader("Bar")).doesNotExist();

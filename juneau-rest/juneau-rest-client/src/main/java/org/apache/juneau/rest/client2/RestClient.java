@@ -41,6 +41,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.conn.*;
 import org.apache.http.entity.*;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.client.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
@@ -487,11 +488,9 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>
  * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
  * 		<li class='jc'>
- * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+ * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
  * 		<li class='jc'>
- * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
- * 		<li class='jc'>
- * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+ * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 		<li class='jc'>
  * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
  * 		<li class='jc'>
@@ -2483,8 +2482,8 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>{@link NameValuePair} array - URL-encoded as name value pairs.
 	 * 		<li>{@link NameValuePairSupplier} - URL-encoded as name value pairs.
 	 * 		<li>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
-	 * 		<li>{@link ReaderResource}/{@link StreamResource}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
-	 * 		<li>{@link HttpEntity}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js> if not already specified on the entity.
+	 * 		<li>{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li>{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>{@link Object} - Converted to a {@link SerializedHttpEntity} using {@link UrlEncodingSerializer} to serialize.
 	 * 		<li>{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
@@ -2516,7 +2515,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.contentType("application/x-www-form-urlencoded").body(body);
-			return req.body(new SerializedHttpEntity(body, urlEncodingSerializer, null, null));
+			return req.body(SerializedHttpEntity.of(body, urlEncodingSerializer));
 		} catch (IOException e) {
 			throw new RestCallException(null, e, "Could not read form post body.");
 		}
@@ -2593,14 +2592,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>
@@ -2779,14 +2776,12 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>

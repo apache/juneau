@@ -28,14 +28,25 @@ import org.apache.juneau.svl.*;
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
  *
- * <p>
- * The value is serialized using {@link Object#toString()} at the point of reading.  This allows the value to be modified
- * periodically by overriding the method to return different values.
+ * Provides the following features:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Values from {@link Supplier Suppliers}.
+ * 	<li>
+ * 		Caching.
+ * 	<li>
+ * 		Fluent setters.
+ * 	<li>
+ * 		Fluent assertions.
+ * 	<li>
+ * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
+ * </ul>
  */
 @BeanIgnore
 public class BasicNameValuePair implements NameValuePair, Headerable {
 	private final String name;
 	private final Object value;
+	private VarResolverSession varSession;
 
 	/**
 	 * Convenience creator.
@@ -68,9 +79,6 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 *
 	 * <p>
 	 * Value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * <p>
-	 * Note that you can use {@link VarResolver#supplier(String)} to create pair values with auto-resolving embedded SVL variables.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
@@ -125,6 +133,32 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	}
 
 	/**
+	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
+	 *
+	 * @param varResolver
+	 * 	The variable resolver to use for resolving SVL variables.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicNameValuePair resolving(VarResolver varResolver) {
+		this.varSession = varResolver == null ? null : varResolver.createSession();
+		return this;
+	}
+
+	/**
+	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
+	 *
+	 * @param varSession
+	 * 	The variable resolver session to use for resolving SVL variables.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicNameValuePair resolving(VarResolverSession varSession) {
+		this.varSession = varSession;
+		return this;
+	}
+
+	/**
 	 * Provides an object for performing assertions against the name of this pair.
 	 *
 	 * @return An object for performing assertions against the name of this pair.
@@ -154,12 +188,17 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return stringify(unwrap(value));
+		String s = stringify(unwrap(value));
+		if (varSession != null)
+			s = varSession.resolve(s);
+		return s;
 	}
 
 	@Override /* Object */
 	public boolean equals(Object o) {
 		if (! (o instanceof NameValuePair))
+			return false;
+		if (varSession != null)
 			return false;
 		return ObjectUtils.eq(this, (NameValuePair)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
 	}

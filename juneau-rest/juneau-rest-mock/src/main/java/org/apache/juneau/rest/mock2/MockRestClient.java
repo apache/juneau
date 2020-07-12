@@ -29,7 +29,6 @@ import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestCallHandler;
@@ -742,10 +741,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			long length = entity.getContentLength();
 			if (length < 0)
 				length = 1024;
-			try (InputStream is = entity.getContent()) {
-				if (is != null)
-					body = IOUtils.readBytes(is, (int)Math.min(length, 1024));
-			}
+			ByteArrayOutputStream baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
+			entity.writeTo(baos);
+			body = baos.toByteArray();
 		}
 		sreq.get().body(body);
 	}

@@ -808,9 +808,9 @@ public final class RestContext extends BeanContext {
 	 * 	</ul>
 	 * 	<li class='jc'>{@link RestRequest}
 	 * 	<ul>
-	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
-	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
-	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType,boolean) getClasspathReaderResource(String,boolean,MediaType,boolean)}
+	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String) getClasspathHttpResource(String)}
+	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean) getClasspathHttpResource(String,boolean)}
+	 * 		<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean,MediaType,boolean) getClasspathHttpResource(String,boolean,MediaType,boolean)}
 	 * 	</ul>
 	 * </ul>
 	 *
@@ -1664,9 +1664,9 @@ public final class RestContext extends BeanContext {
 	 * Used for specifying the content type on file resources retrieved through the following methods:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#resolveStaticFile(String) RestContext.resolveStaticFile(String)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType,boolean)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean,MediaType,boolean)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String)}
 	 * </ul>
 	 *
 	 * <p>

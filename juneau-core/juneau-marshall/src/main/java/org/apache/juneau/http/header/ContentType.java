@@ -72,6 +72,18 @@ public class ContentType extends BasicParameterizedHeader {
 		return ct;
 	}
 
+	/**
+	 * Returns a parsed and cached <c>Content-Type</c> header.
+	 *
+	 * @param value The <c>Content-Type</c> header value.
+	 * @return The parsed <c>Content-Type</c> header, or <jk>null</jk> if the string was null.
+	 */
+	public static ContentType of(MediaType value) {
+		if (value == null)
+			return null;
+		return of(value.toString());
+	}
+
 	private final MediaType mediaType;
 
 	/**

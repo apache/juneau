@@ -1339,7 +1339,7 @@ public @interface RestResource {
 	 * Configuration property:  Use classpath resource caching.
 	 *
 	 * <p>
-	 * When enabled, resources retrieved via {@link RestRequest#getClasspathReaderResource(String, boolean)} (and related
+	 * When enabled, resources retrieved via {@link RestRequest#getClasspathHttpResource(String, boolean)} (and related
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 *
 	 * <ul class='notes'>

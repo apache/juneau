@@ -16,37 +16,41 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.svl.*;
 
 /**
- * An extension of {@link org.apache.http.entity.BasicHttpEntity} with fluent setters.
+ * An extension of {@link org.apache.http.entity.BasicHttpEntity} with additional features.
  * 
- * <p>
- * Includes automatic support for a variety of content types.
+ * Provides the following features:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Default support for various streams and readers.
+ * 	<li>
+ * 		Content from {@link Supplier Suppliers}.
+ * 	<li>
+ * 		Caching.
+ * 	<li>
+ * 		Fluent setters.
+ * 	<li>
+ * 		Fluent assertions.
+ * 	<li>
+ * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
+ * </ul>
  */
 public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;
+	private VarResolverSession varSession;
 
 	/**
 	 * Creator.
 	 *
-	 * @param content
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link BasicHttpEntity} object.
 	 */
-	public static BasicHttpEntity of(Object content) {
-		return new BasicHttpEntity().content(content);
+	public static BasicHttpEntity create() {
+		return new BasicHttpEntity();
 	}
 
 	/**
@@ -64,19 +68,62 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * </ul>
-	 * @return A new empty {@link ReaderResource} object.
+	 * @return A new empty {@link BasicHttpEntity} object.
+	 */
+	public static BasicHttpEntity of(Object content) {
+		return new BasicHttpEntity(content);
+	}
+
+	/**
+	 * Creator.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @return A new empty {@link BasicHttpEntity} object.
 	 */
 	public static BasicHttpEntity of(Supplier<?> content) {
-		return new BasicHttpEntity().content(content);
+		return new BasicHttpEntity(content);
 	}
 
 	/**
 	 * Creates a new basic entity.
+	 * 
 	 * The content is initially missing, the content length
 	 * is set to a negative number.
 	 */
 	public BasicHttpEntity() {
 		super();
+	}
+
+	/**
+	 * Creates a new basic entity.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 */
+	public BasicHttpEntity(Object content) {
+		super();
+		content(content);
 	}
 
 	/**
@@ -188,16 +235,25 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	/**
 	 * Shortcut for calling {@link #setChunked(boolean)} with <jk>true</jk>.
 	 *
+	 * <ul class='notes'>
+	 * 	<li>If the {@link #getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BasicHttpEntity chunked() {
-		super.setChunked(true);
-		return this;
+		return chunked(true);
 	}
 
 	/**
 	 * Shortcut for calling {@link #setChunked(boolean)}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>If the {@link #getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
 	 *
 	 * @param value The new value for this flag.
 	 * @return This object (for method chaining).
@@ -232,22 +288,93 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 		return this;
 	}
 
+	/**
+	 * Allows SVL variables to be resolved in the entity body.
+	 *
+	 * @param varResolver
+	 * 	The variable resolver to use for resolving SVL variables.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicHttpEntity resolving(VarResolver varResolver) {
+		this.varSession = varResolver == null ? null : varResolver.createSession();
+		return this;
+	}
+
+	/**
+	 * Allows SVL variables to be resolved in the entity body.
+	 *
+	 * @param varSession
+	 * 	The variable resolver session to use for resolving SVL variables.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public BasicHttpEntity resolving(VarResolverSession varSession) {
+		this.varSession = varSession;
+		return this;
+	}
+
+	/**
+	 * Converts the contents of this entity as a byte array.
+	 *
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public String asString() throws IOException {
+		return IOUtils.read(getRawContent());
+	}
+
+	/**
+	 * Converts the contents of this entity as a byte array.
+	 *
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public byte[] asBytes() throws IOException {
+		return IOUtils.readBytes(getRawContent());
+	}
+
+	/**
+	 * Returns an assertion on the contents of this entity.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentStringAssertion<BasicHttpEntity> assertString() throws IOException {
+		return new FluentStringAssertion<>(asString(), this);
+	}
+
+	/**
+	 * Returns an assertion on the contents of this entity.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentByteArrayAssertion<BasicHttpEntity> assertBytes() throws IOException {
+		return new FluentByteArrayAssertion<>(asBytes(), this);
+	}
+
 	@Override
 	public boolean isRepeatable() {
-		return cache || content instanceof File || content instanceof CharSequence || content instanceof byte[];
+		Object o = getRawContent();
+		return cache || o instanceof File || o instanceof CharSequence || o instanceof byte[];
 	}
 
 	@Override
 	public long getContentLength() {
+		long x = super.getContentLength();
+		if (x != -1)
+			return x;
 		try {
 			tryCache();
 		} catch (IOException e) {}
-		if (content instanceof byte[])
-			return ((byte[])content).length;
-		if (content instanceof File)
-			return ((File)content).length();
-		if (content instanceof CharSequence)
-			return ((CharSequence)content).length();
+		Object o = getRawContent();
+		if (o instanceof byte[])
+			return ((byte[])o).length;
+		if (o instanceof File)
+			return ((File)o).length();
+		if (o instanceof CharSequence)
+			return ((CharSequence)o).length();
 		return -1;
 	}
 
@@ -255,17 +382,18 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	public InputStream getContent() {
 		try {
 			tryCache();
-			if (content == null)
+			Object o = getRawContent();
+			if (o == null)
 				return null;
-			if (content instanceof File)
-				return new FileInputStream((File)content);
-			if (content instanceof byte[])
-				return new ByteArrayInputStream((byte[])content);
-			if (content instanceof Reader)
-				return new ReaderInputStream((Reader)content, IOUtils.UTF8);
-			if (content instanceof InputStream)
-				return (InputStream)content;
-			return new ReaderInputStream(new StringReader(content.toString()),IOUtils.UTF8);
+			if (o instanceof File)
+				return new FileInputStream((File)o);
+			if (o instanceof byte[])
+				return new ByteArrayInputStream((byte[])o);
+			if (o instanceof Reader)
+				return new ReaderInputStream((Reader)o, IOUtils.UTF8);
+			if (o instanceof InputStream)
+				return (InputStream)o;
+			return new ReaderInputStream(new StringReader(o.toString()),IOUtils.UTF8);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -274,14 +402,24 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	@Override
 	public void writeTo(OutputStream os) throws IOException {
 		tryCache();
-		if (content != null)
-			IOUtils.pipe(content, os);
+		Object o = getRawContent();
+		if (o != null) {
+			if (varSession != null) {
+				Writer osw = new OutputStreamWriter(os, IOUtils.UTF8);
+				String s = IOUtils.read(o);
+				varSession.resolveTo(s, osw);
+				osw.flush();
+			} else {
+				IOUtils.pipe(o, os);
+			}
+		}
 		os.flush();
 	}
 
 	@Override
 	public boolean isStreaming() {
-		return (content instanceof InputStream || content instanceof Reader);
+		Object o = getRawContent();
+		return (o instanceof InputStream || o instanceof Reader);
 	}
 
 	/**
@@ -294,8 +432,9 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	}
 
 	private void tryCache() throws IOException {
-		if (cache && isCacheable(content))
-			content = readBytes(content);
+		Object o = getRawContent();
+		if (cache && isCacheable(o))
+			this.content = readBytes(o);
 	}
 
 	/**

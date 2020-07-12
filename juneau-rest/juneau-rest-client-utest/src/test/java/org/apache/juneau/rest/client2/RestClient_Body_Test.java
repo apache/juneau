@@ -20,9 +20,12 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -31,8 +34,12 @@ public class RestClient_Body_Test {
 	@Rest
 	public static class A extends BasicRest {
 		@RestMethod
-		public Reader post(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return new StringReader(req.toString());
+		public Reader post(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
+			for (Map.Entry<String,String[]> e : req.getHeaders().entrySet()) {
+				for (String v : e.getValue())
+					res.addHeader("X-" + e.getKey(), v);
+			}
+			return req.getReader();
 		}
 	}
 
@@ -41,96 +48,129 @@ public class RestClient_Body_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void a01_ReaderResource() throws Exception {
-		ReaderResource x1 = ReaderResource.create().content("foo");
+	public void a01_BasicHttpResource() throws Exception {
+		BasicHttpResource x1 = httpResource("foo");
 		client().build().post("/", x1).run()
-			.getBody().assertString().contains("foo", "Content-Length: 3")
-			.getBody().assertString().doesNotContain("Content-Encoding","Content-Type","Transfer-Encoding")
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		ReaderResource x2 = ReaderResource.create().content("foo").contentType("text/plain").contentEncoding("identity");
+		BasicHttpResource x2 = httpResource("foo").contentType("text/plain").contentEncoding("identity");
 		client().build().post("/",x2).run()
-			.getBody().assertString().contains("foo","Content-Length: 3","Content-Encoding: identity","Content-Type: text/plain")
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		ReaderResource x3 = ReaderResource.create().content("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
+		BasicHttpResource x3 = httpResource("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
 		client().build().post("/",x3).run()
-			.getBody().assertString().contains("foo","Content-Encoding: identity","Content-Type: text/plain","Transfer-Encoding: chunked")
+			.assertIntegerHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		ReaderResource x4 = new ReaderResource(contentType("text/plain"), contentEncoding("identity"), "foo");
+		BasicHttpResource x4 = new BasicHttpResource("foo", contentType("text/plain"), contentEncoding("identity"));
 		client().build().post("/",x4).run()
-			.getBody().assertString().contains("foo","Content-Length: 3","Content-Encoding: identity","Content-Type: text/plain")
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
 		;
 
-		ReaderResource x5 = ReaderResource.of("foo").header("Foo","bar").header(header("Baz","qux"));
+		BasicHttpResource x5 = httpResource("foo").header("Foo","bar").header(header("Baz","qux"));
 		client().build().post("/",x5).run()
-			.getBody().assertString().contains("Foo: bar","Baz: qux")
+			.assertHeader("X-Foo").is("bar")
+			.assertHeader("X-Baz").is("qux")
 		;
 
-		ReaderResource x6 = ReaderResource.of("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux")));
+		BasicHttpResource x6 = httpResource("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux")));
 		client().build().post("/",x6).run()
-			.getBody().assertString().contains("Foo: bar","Baz: qux")
+			.assertHeader("X-Foo").is("bar")
+			.assertHeader("X-Baz").is("qux")
 		;
 
-		ReaderResource x7 = ReaderResource.of(new StringReader("foo"));
-		client().build().post("/",x7).run().getBody().assertString().contains("foo");
+		BasicHttpResource x7 = httpResource(new StringReader("foo"));
+		client().build().post("/",x7).run().getBody().assertString().is("foo");
 
-		ReaderResource x8 = ReaderResource.of(new StringReader("foo")).cache();
-		client().build().post("/",x8).run().getBody().assertString().contains("foo");
-		client().build().post("/",x8).run().getBody().assertString().contains("foo");
+		BasicHttpResource x8 = httpResource(new StringReader("foo")).cache();
+		client().build().post("/",x8).run().getBody().assertString().is("foo");
+		client().build().post("/",x8).run().getBody().assertString().is("foo");
 
-		ReaderResource x9 = ReaderResource.of(null);
-		client().build().post("/",x9).run().getBody().assertString().contains("HTTP POST");
+		BasicHttpResource x9 = httpResource(null);
+		client().build().post("/",x9).run().getBody().assertString().isEmpty();
 	}
 
 	@Test
-	public void a02_StreamResource() throws Exception {
-		StreamResource x1 = StreamResource.create().content("foo");
-		client().build().post("/", x1).run()
-			.getBody().assertString().contains("foo", "Content-Length: 3")
-			.getBody().assertString().doesNotContain("Content-Encoding","Content-Type","Transfer-Encoding")
+	public void a03_SerializedHttpEntity() throws Exception {
+		Serializer js = JsonSerializer.DEFAULT;
+		File f = File.createTempFile("test", "txt");
+
+		SerializedHttpEntity x = serializedHttpEntity(ABean.get(),null);
+		client().debug().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
-		StreamResource x2 = StreamResource.create().content("foo").contentType("text/plain").contentEncoding("identity");
-		client().build().post("/",x2).run()
-			.getBody().assertString().contains("foo","Content-Length: 3","Content-Encoding: identity","Content-Type: text/plain")
-		;
+		x.serializer(js);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").is("application/json")
+			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
-		StreamResource x3 = StreamResource.create().content("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
-		client().build().post("/",x3).run()
-			.getBody().assertString().contains("foo","Content-Encoding: identity","Content-Type: text/plain","Transfer-Encoding: chunked")
-		;
+		x = serializedHttpEntity(ABean.get(),js);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").is("application/json")
+			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
-		StreamResource x4 = new StreamResource(contentType("text/plain"), contentEncoding("identity"), "foo");
-		client().build().post("/",x4).run()
-			.getBody().assertString().contains("foo","Content-Length: 3","Content-Encoding: identity","Content-Type: text/plain")
-		;
+		x = SerializedHttpEntity.of(()->ABean.get(),js);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").is("application/json")
+			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
-		StreamResource x5 = StreamResource.of("foo").header("Foo","bar").header(header("Baz","qux"));
-		client().build().post("/",x5).run()
-			.getBody().assertString().contains("Foo: bar","Baz: qux")
-		;
+		x = serializedHttpEntity(new StringReader("{a:1,b:'foo'}"),null);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
-		StreamResource x6 = StreamResource.of("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux")));
-		client().build().post("/",x6).run()
-			.getBody().assertString().contains("Foo: bar","Baz: qux")
-		;
+		x = serializedHttpEntity(new ByteArrayInputStream("{a:1,b:'foo'}".getBytes()),null);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
-		StreamResource x7 = StreamResource.of(new StringReader("foo"));
-		client().build().post("/",x7).run().getBody().assertString().contains("foo");
-
-		StreamResource x8 = StreamResource.of(new StringReader("foo")).cache();
-		client().build().post("/",x8).run().getBody().assertString().contains("foo");
-		client().build().post("/",x8).run().getBody().assertString().contains("foo");
-
-		StreamResource x9 = StreamResource.of(null);
-		client().build().post("/",x9).run().getBody().assertString().contains("HTTP POST");
+		x = serializedHttpEntity(f,null);
+		client().build().post("/",x).run()
+			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.getBody().assertObject(ABean.class).json().is("{a:0}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
+
+	private static BasicHttpResource httpResource(Object val) {
+		return BasicHttpResource.of(val);
+	}
+
+	private static SerializedHttpEntity serializedHttpEntity(Object val, Serializer s) {
+		return SerializedHttpEntity.of(val, s);
+	}
 
 	private static RestClientBuilder client() {
 		return MockRestClient.create(A.class).simpleJson();

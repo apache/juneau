@@ -33,6 +33,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.entity.*;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
@@ -1761,14 +1762,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 	</ul>
@@ -1853,14 +1852,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>
@@ -1923,14 +1920,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>
 	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 		<li>
-	 * 			{@link ReaderResource} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpResource}/{@link BasicHttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
 	 * 		<li>
-	 * 			{@link StreamResource} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 			{@link HttpEntity}/{@link BasicHttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
 	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	 * 		<li>
 	 * 			{@link NameValuePairSupplier} - Converted to a URL-encoded FORM post.
 	 * 		<li>
@@ -2863,7 +2858,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof InputStream)
 					entity = new InputStreamEntity((InputStream)input2, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)
-					entity = new SerializedHttpEntity(input2, serializer, requestBodySchema, contentType);
+					entity = SerializedHttpEntity.of(input2, serializer).schema(requestBodySchema).contentType(contentType);
 				else {
 					if (input2 == null)
 						input2 = "";
