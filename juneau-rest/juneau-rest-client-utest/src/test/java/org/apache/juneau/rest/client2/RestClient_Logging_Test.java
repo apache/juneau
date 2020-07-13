@@ -173,7 +173,7 @@ public class RestClient_Logging_Test {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
-		l.assertContents().stderr().javaStrings().isEqualLines(
+		l.assertContents().stderr().javaStrings().contains(
 			"WARNING: ",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
