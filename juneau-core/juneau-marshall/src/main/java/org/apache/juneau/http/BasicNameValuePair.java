@@ -21,9 +21,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
@@ -38,15 +36,12 @@ import org.apache.juneau.svl.*;
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
- * 	<li>
- * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
  * </ul>
  */
 @BeanIgnore
 public class BasicNameValuePair implements NameValuePair, Headerable {
 	private final String name;
 	private final Object value;
-	private VarResolverSession varSession;
 
 	/**
 	 * Convenience creator.
@@ -133,31 +128,6 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	}
 
 	/**
-	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
-	 *
-	 * @param varResolver
-	 * 	The variable resolver to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicNameValuePair resolving(VarResolver varResolver) {
-		return resolving(varResolver == null ? null : varResolver.createSession());
-	}
-
-	/**
-	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
-	 *
-	 * @param varSession
-	 * 	The variable resolver session to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicNameValuePair resolving(VarResolverSession varSession) {
-		this.varSession = varSession;
-		return this;
-	}
-
-	/**
 	 * Provides an object for performing assertions against the name of this pair.
 	 *
 	 * @return An object for performing assertions against the name of this pair.
@@ -187,10 +157,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		String s = stringify(unwrap(value));
-		if (varSession != null)
-			s = varSession.resolve(s);
-		return s;
+		return stringify(unwrap(value));
 	}
 
 	@Override /* Object */

@@ -45,7 +45,7 @@ public class BasicHttpResourceTest {
 
 		@RestMethod
 		public BasicHttpResource a04(RestRequest req) throws Exception {
-			return BasicHttpResource.of("$RQ{foo}").resolving(req.getVarResolverSession());
+			return BasicHttpResource.of(()->req.getVarResolverSession().resolve("$RQ{foo}"));
 		}
 
 		@RestMethod

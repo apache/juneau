@@ -19,7 +19,6 @@ import org.apache.http.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.svl.*;
 
 /**
  * An extension of {@link org.apache.http.entity.BasicHttpEntity} with additional features.
@@ -36,14 +35,11 @@ import org.apache.juneau.svl.*;
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
- * 	<li>
- * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
  * </ul>
  */
 public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;
-	private VarResolverSession varSession;
 
 	/**
 	 * Creator.
@@ -253,31 +249,6 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	}
 
 	/**
-	 * Allows SVL variables to be resolved in the entity body.
-	 *
-	 * @param varResolver
-	 * 	The variable resolver to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity resolving(VarResolver varResolver) {
-		return resolving(varResolver == null ? null : varResolver.createSession());
-	}
-
-	/**
-	 * Allows SVL variables to be resolved in the entity body.
-	 *
-	 * @param varSession
-	 * 	The variable resolver session to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity resolving(VarResolverSession varSession) {
-		this.varSession = varSession;
-		return this;
-	}
-
-	/**
 	 * Converts the contents of this entity as a byte array.
 	 *
 	 * @return The contents of this entity as a byte array.
@@ -367,14 +338,7 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 		tryCache();
 		Object o = getRawContent();
 		if (o != null) {
-			if (varSession != null) {
-				Writer osw = new OutputStreamWriter(os, IOUtils.UTF8);
-				String s = IOUtils.read(o);
-				varSession.resolveTo(s, osw);
-				osw.flush();
-			} else {
-				IOUtils.pipe(o, os);
-			}
+			IOUtils.pipe(o, os);
 		}
 		os.flush();
 	}

@@ -23,8 +23,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.
@@ -87,7 +85,7 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 		os = new NoCloseOutputStream(os);
 		Object o = getRawContent();
 		if (o instanceof InputStream || o instanceof Reader || o instanceof File) {
-			IOPipe.create(o, os).run();
+			super.writeTo(os);
 		} else {
 			try {
 				if (serializer == null) {
@@ -130,6 +128,9 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 
 	@Override /* BasicHttpEntity */
 	public InputStream getContent() {
+		Object o = getRawContent();
+		if (o instanceof InputStream || o instanceof Reader || o instanceof File)
+			return super.getContent();
 		if (cache == null) {
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 				writeTo(baos);
@@ -194,18 +195,6 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 	@Override /* GENERATED - BasicHttpEntity */
 	public SerializedHttpEntity contentType(Header value) {
 		super.contentType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity resolving(VarResolver varResolver) {
-		super.resolving(varResolver);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public SerializedHttpEntity resolving(VarResolverSession varSession) {
-		super.resolving(varSession);
 		return this;
 	}
 

@@ -32,7 +32,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -203,16 +202,6 @@ public class RestClient_Headers_Test {
 	@Test
 	public void a12_badSerialization() throws Exception {
 		assertThrown(()->checkFooClient().header(SerializedHeader.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
-	}
-
-	@Test
-	public void a13_svlVars() throws Exception {
-		System.setProperty("Test", "bar");
-		Header x = BasicHeader.of("Foo","$S{Test}").resolving(VarResolver.DEFAULT);
-		checkFooClient().header(x).build().get("/headers").run().assertBody().is("['bar']");
-		x = BasicHeader.of("Foo","$S{Test}").resolving((VarResolver)null);
-		checkFooClient().header(x).build().get("/headers").run().assertBody().is("['$S{Test}']");
-		System.clearProperty("Test");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

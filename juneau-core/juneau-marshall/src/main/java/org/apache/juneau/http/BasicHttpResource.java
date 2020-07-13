@@ -18,7 +18,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.ContentType;
 
@@ -37,8 +36,6 @@ import org.apache.juneau.http.header.ContentType;
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
- * 	<li>
- * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
  * </ul>
  */
 public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
@@ -281,18 +278,6 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	@Override /* GENERATED - BasicHttpEntity */
 	public BasicHttpResource contentType(Header value) {
 		super.contentType(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public BasicHttpResource resolving(VarResolver varResolver) {
-		super.resolving(varResolver);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public BasicHttpResource resolving(VarResolverSession varSession) {
-		super.resolving(varSession);
 		return this;
 	}
 

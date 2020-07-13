@@ -1450,10 +1450,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		BasicHttpResource b = BasicHttpResource.of(s)
+		BasicHttpResource b = BasicHttpResource.of(()->resolveVars ? getVarResolverSession().resolve(s) : s)
 			.contentType(mediaType == null ? null : ContentType.of(mediaType.toString()));
-		if (resolveVars)
-			b.resolving(getVarResolverSession());
 		if (cached)
 			b.cache();
 		return b;

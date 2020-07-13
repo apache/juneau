@@ -21,7 +21,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -172,18 +171,6 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	// <FluentSetters>
-
-	@Override /* GENERATED - BasicHeader */
-	public SerializedHeader resolving(VarResolver varResolver) {
-		super.resolving(varResolver);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHeader */
-	public SerializedHeader resolving(VarResolverSession varSession) {
-		super.resolving(varSession);
-		return this;
-	}
 
 	// </FluentSetters>
 }

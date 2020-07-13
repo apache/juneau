@@ -24,9 +24,7 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -43,8 +41,6 @@ import org.apache.juneau.svl.*;
  * 		Fluent setters.
  * 	<li>
  * 		Fluent assertions.
- * 	<li>
- * 		{@doc juneau-marshall.SimpleVariableLanguage.SvlVariables SVL variables}.
  * </ul>
  */
 @BeanIgnore
@@ -56,7 +52,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	private final String name;
 	private final Object value;
 	private HeaderElement[] elements;
-	private VarResolverSession varSession;
 
 	/**
 	 * Convenience creator.
@@ -163,31 +158,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.value = value;
 	}
 
-	/**
-	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
-	 *
-	 * @param varResolver
-	 * 	The variable resolver to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHeader resolving(VarResolver varResolver) {
-		return resolving(varResolver == null ? null : varResolver.createSession());
-	}
-
-	/**
-	 * Allows SVL variables to be resolved when calling {@link #getValue()}.
-	 *
-	 * @param varSession
-	 * 	The variable resolver session to use for resolving SVL variables.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHeader resolving(VarResolverSession varSession) {
-		this.varSession = varSession;
-		return this;
-	}
-
 	@Override /* Header */
 	public String getName() {
 		return name;
@@ -195,8 +165,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Header */
 	public String getValue() {
-		String s = stringify(getRawValue());
-		return varSession == null ? s : varSession.resolve(s);
+		return stringify(getRawValue());
 	}
 
 	/**
