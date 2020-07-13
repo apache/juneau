@@ -197,7 +197,7 @@ public class RestClient_Body_Test {
 
 		SerializedHttpEntity x6 = serializedHttpEntity(f,null);
 		client().build().post("/",x6).run()
-			.assertHeader("X-Content-Length").doesNotExist()
+			.assertHeader("X-Content-Length").is("0")
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").doesNotExist()
 			.getBody().assertObject(ABean.class).json().is("{a:0}");
@@ -211,6 +211,36 @@ public class RestClient_Body_Test {
 
 		SerializedHttpEntity x8 = new SerializedHttpEntity(x7, null).cache();
 		assertThrown(()->x8.getContent()).contains("bad");
+
+		SerializedHttpEntity x9 = serializedHttpEntity(new StringReader("foo"), null);
+		assertStream(x9.getContent()).string().is("foo");
+
+		SerializedHttpEntity x10 = serializedHttpEntity(new ByteArrayInputStream("foo".getBytes()), null);
+		assertStream(x10.getContent()).string().is("foo");
+
+		SerializedHttpEntity x11 = serializedHttpEntity(f, null);
+		assertStream(x11.getContent()).string().is("");
+
+		SerializedHttpEntity x12 = new SerializedHttpEntity(ABean.get(), null) {
+			@Override
+			public void writeTo(OutputStream os) throws IOException {
+				throw new IOException("bad");
+			}
+		};
+
+		assertThrown(()->x12.getContent()).contains("bad");
+
+		SerializedHttpEntity x13 = serializedHttpEntity(new StringReader("foo"), null).chunked();
+		client().build().post("/",x13).run()
+			.assertHeader("X-Transfer-Encoding").is("chunked");
+
+		SerializedHttpEntity x14 = serializedHttpEntity(new StringReader("foo"), null).contentEncoding("identity");
+		client().build().post("/",x14).run()
+			.assertHeader("X-Content-Encoding").is("identity");
+
+		SerializedHttpEntity x15 = serializedHttpEntity(new StringReader("foo"), null).contentLength(3l);
+		client().debug().build().post("/",x15).run()
+			.assertHeader("X-Content-Length").is("3");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

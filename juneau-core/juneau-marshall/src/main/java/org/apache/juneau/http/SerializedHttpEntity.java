@@ -30,7 +30,6 @@ import org.apache.juneau.serializer.*;
 public class SerializedHttpEntity extends BasicHttpEntity {
 	private final Serializer serializer;
 	private HttpPartSchema schema;
-	private byte[] cache;
 
 	/**
 	 * Creator.
@@ -82,12 +81,10 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 
 	@Override /* BasicHttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
-		os = new NoCloseOutputStream(os);
-		Object o = getRawContent();
-		if (o instanceof InputStream || o instanceof Reader || o instanceof File) {
-			super.writeTo(os);
-		} else {
+		if (isSerializable()) {
 			try {
+				os = new NoCloseOutputStream(os);
+				Object o = getRawContent();
 				if (serializer == null) {
 					// If no serializer specified, just close the stream.
 					os.close();
@@ -101,45 +98,41 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 			} catch (SerializeException e) {
 				throw new BasicRuntimeException(e, "Serialization error on request body.");
 			}
+		} else {
+			super.writeTo(os);
 		}
 	}
 
 	@Override /* BasicHttpEntity */
 	public boolean isRepeatable() {
-		Object o = getRawContent();
-		return (! (o instanceof InputStream || o instanceof Reader));
+		if (isSerializable())
+			return true;
+		return super.isRepeatable();
 	}
 
 	@Override /* BasicHttpEntity */
 	public long getContentLength() {
-		return -1;
-	}
-
-	@Override /* BasicHttpEntity */
-	public Header getContentType() {
-		Header x = super.getContentType();
-		if (x != null)
-			return x;
-		Object o = getRawContent();
-		if (o instanceof InputStream || o instanceof Reader || o instanceof File)
-			return null;
-		return null;
+		if (isSerializable())
+			return -1;
+		return super.getContentLength();
 	}
 
 	@Override /* BasicHttpEntity */
 	public InputStream getContent() {
-		Object o = getRawContent();
-		if (o instanceof InputStream || o instanceof Reader || o instanceof File)
-			return super.getContent();
-		if (cache == null) {
+		if (isSerializable()) {
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 				writeTo(baos);
-				cache = baos.toByteArray();
+				return new ByteArrayInputStream(baos.toByteArray());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return new ByteArrayInputStream(cache);
+		return super.getContent();
+	}
+
+	private boolean isSerializable() {
+		Object o = getRawContent();
+		return ! (o instanceof InputStream || o instanceof Reader || o instanceof File);
 	}
 
 	// <FluentSetters>
