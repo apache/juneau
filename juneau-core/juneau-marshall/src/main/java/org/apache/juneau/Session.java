@@ -312,7 +312,7 @@ public abstract class Session {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	protected final boolean isDebug() {
+	public boolean isDebug() {
 		return debug;
 	}
 

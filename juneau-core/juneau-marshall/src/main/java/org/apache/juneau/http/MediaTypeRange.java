@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 import java.util.Map.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -34,8 +34,7 @@ import org.apache.juneau.internal.*;
 public class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
 	private static final MediaTypeRange[] DEFAULT = new MediaTypeRange[]{new MediaTypeRange("*/*")};
-	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");
-	private static final ConcurrentHashMap<String,MediaTypeRange[]> CACHE = new ConcurrentHashMap<>();
+	private static final Cache<String,MediaTypeRange[]> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	private final MediaType mediaType;
 	private final Float qValue;
@@ -92,10 +91,7 @@ public class MediaTypeRange implements Comparable<MediaTypeRange>  {
 			}
 			mtr = ranges.toArray(new MediaTypeRange[ranges.size()]);
 		}
-		if (NOCACHE)
-			return mtr;
-		CACHE.putIfAbsent(value, mtr);
-		return CACHE.get(value);
+		return CACHE.put(value, mtr);
 	}
 
 	private MediaTypeRange(String token) {

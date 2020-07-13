@@ -998,10 +998,10 @@ public class RestResponse implements HttpResponse {
 		isClosed = true;
 		EntityUtils.consumeQuietly(response.getEntity());
 
-		if (client.logRequestsPredicate.test(request, this)) {
+		if (request.isDebug() || client.logRequestsPredicate.test(request, this)) {
 			if (client.logRequests == DetailLevel.SIMPLE) {
 				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
-			} else if (client.logRequests == DetailLevel.FULL) {
+			} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
 				String output = getBody().asString();
 				StringBuilder sb = new StringBuilder();
 				sb.append("\n=== HTTP Call (outgoing) ======================================================");

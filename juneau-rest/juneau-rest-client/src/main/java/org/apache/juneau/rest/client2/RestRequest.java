@@ -702,6 +702,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
+	 * Returns <jk>true</jk> if debug mode is currently enabled.
+	 */
+	@Override
+	public boolean isDebug() {
+		return getHeader("Debug", "false").equalsIgnoreCase("true");
+	}
+
+	/**
 	 * Specifies the target host for the request.
 	 *
 	 * @param target The target host for the request.
@@ -2874,7 +2882,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				throw e;
 			}
 
-			if (client.logRequests == DetailLevel.FULL)
+			if (isDebug() || client.logRequests == DetailLevel.FULL)
 				response.cacheBody();
 
 			for (RestCallInterceptor rci : interceptors)

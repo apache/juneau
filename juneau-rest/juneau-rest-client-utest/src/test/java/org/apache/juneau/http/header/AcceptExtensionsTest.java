@@ -37,7 +37,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json");
 		assertString(mr.getMediaType()).is("text/json");
-		assertObject(mr.getMediaType().getParameters()).json().is("{}");
+		assertObject(mr.getMediaType().getParameters()).json().is("[]");
 		assertString(mr.getQValue()).is("1.0");
 		assertObject(mr.getExtensions()).json().is("{}");
 
@@ -45,7 +45,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("foo");
 		assertString(mr.getMediaType()).is("foo");
-		assertObject(mr.getMediaType().getParameters()).json().is("{}");
+		assertObject(mr.getMediaType().getParameters()).json().is("[]");
 		assertString(mr.getQValue()).is("1.0");
 		assertObject(mr.getExtensions()).json().is("{}");
 
@@ -53,7 +53,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("foo");
 		assertString(mr.getMediaType()).is("foo");
-		assertObject(mr.getMediaType().getParameters()).json().is("{}");
+		assertObject(mr.getMediaType().getParameters()).json().is("[]");
 		assertString(mr.getQValue()).is("1.0");
 		assertObject(mr.getExtensions()).json().is("{}");
 
@@ -61,7 +61,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json;a=1;q=0.9;b=2");
 		assertString(mr.getMediaType()).is("text/json;a=1");
-		assertObject(mr.getMediaType().getParameters()).json().is("{a:['1']}");
+		assertObject(mr.getMediaType().getParameters()).json().is("['a=1']");
 		assertString(mr.getQValue()).is("0.9");
 		assertObject(mr.getExtensions()).json().is("{b:['2']}");
 
@@ -69,7 +69,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		assertString(mr.getMediaType()).is("text/json;a=1;a=2");
-		assertObject(mr.getMediaType().getParameters()).json().is("{a:['1','2']}");
+		assertObject(mr.getMediaType().getParameters()).json().is("['a=1','a=2']");
 		assertString(mr.getQValue()).is("0.9");
 		assertObject(mr.getExtensions()).json().is("{b:['3','4']}");
 
@@ -77,15 +77,15 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json;a=1");
 		assertString(mr.getMediaType()).is("text/json;a=1");
-		assertObject(mr.getMediaType().getParameters()).json().is("{a:['1']}");
+		assertObject(mr.getMediaType().getParameters()).json().is("['a=1']");
 		assertString(mr.getQValue()).is("1.0");
 		assertObject(mr.getExtensions()).json().is("{}");
 
 		accept = Accept.of("text/json;a=1;");
 		mr = accept.asRanges().get(0);
-		assertString(mr).is("text/json;a=1");
-		assertString(mr.getMediaType()).is("text/json;a=1");
-		assertObject(mr.getMediaType().getParameters()).json().is("{a:['1']}");
+		assertString(mr).is("text/json;a=1;");
+		assertString(mr.getMediaType()).is("text/json;a=1;");
+		assertObject(mr.getMediaType().getParameters()).json().is("['a=1']");
 		assertString(mr.getQValue()).is("1.0");
 		assertObject(mr.getExtensions()).json().is("{}");
 
@@ -93,7 +93,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json;q=0.9");
 		assertString(mr.getMediaType()).is("text/json");
-		assertObject(mr.getMediaType().getParameters()).json().is("{}");
+		assertObject(mr.getMediaType().getParameters()).json().is("[]");
 		assertString(mr.getQValue()).is("0.9");
 		assertObject(mr.getExtensions()).json().is("{}");
 
@@ -101,7 +101,7 @@ public class AcceptExtensionsTest {
 		mr = accept.asRanges().get(0);
 		assertString(mr).is("text/json;q=0.9");
 		assertString(mr.getMediaType()).is("text/json");
-		assertObject(mr.getMediaType().getParameters()).json().is("{}");
+		assertObject(mr.getMediaType().getParameters()).json().is("[]");
 		assertString(mr.getQValue()).is("0.9");
 		assertObject(mr.getExtensions()).json().is("{}");
 	}

@@ -17,8 +17,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.http.*;
+import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -35,6 +36,8 @@ import org.apache.juneau.json.*;
 public class MediaType implements Comparable<MediaType>  {
 
 	private static final Cache<String,MediaType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+
+	private static final HeaderElement DEFAULT_ELEMENT = new BasicHeaderElement("", "");
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
@@ -56,15 +59,15 @@ public class MediaType implements Comparable<MediaType>  {
 		N3 = of("text/n3")
 	;
 
-	private final String mediaType;
-	private final String type;								     // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
+	private final String value;                          // The entire unparsed value.
+	private final String mediaType;                      // The "type/subtype" portion of the media type..
+	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final String[] subTypes;                     // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final String[] subTypesSorted;               // Same as subTypes, but sorted so that it can be used for comparison.
-	private final List<String> subTypesList;             // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
-	private final Map<String,Set<String>> parameters;    // The media type parameters (e.g. "text/html;level=1").  Does not include q!
 	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
-	private String asString;
+
+	private final NameValuePair[] parameters;            // The media type parameters (e.g. "text/html;level=1").  Does not include q!
 
 	/**
 	 * Returns the media type for the specified string.
@@ -119,61 +122,30 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @param mt The media type string.
 	 */
 	public MediaType(String mt) {
-		Builder b = new Builder(mt);
-		this.mediaType = b.mediaType;
-		this.type = b.type;
-		this.subType = b.subType;
-		this.subTypes = b.subTypes;
-		this.subTypesSorted = b.subTypesSorted;
-		this.subTypesList = AList.unmodifiable(subTypes);
-		this.parameters = AMap.unmodifiable(b.parameters);
-		this.hasSubtypeMeta = b.hasSubtypeMeta;
-	}
+		mt = trim(mt);
+		value = mt;
 
-	static final class Builder {
-		String mediaType, type, subType;
-		String[] subTypes, subTypesSorted;
-		Map<String,Set<String>> parameters;
-		boolean hasSubtypeMeta;
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(mt, null);
+		HeaderElement element = (elements.length > 0 ? elements[0] : DEFAULT_ELEMENT);
 
-		Builder(String mt) {
-			mt = mt.trim();
-			int i = mt.indexOf(',');
-			if (i != -1)
-				mt = mt.substring(0, i);
+		mediaType = element.getName();
+		parameters = element.getParameters();
 
-			i = mt.indexOf(';');
-			if (i == -1) {
-				this.parameters = Collections.emptyMap();
-			} else {
-				this.parameters = new TreeMap<>();
-				String[] tokens = mt.substring(i+1).split(";");
-
-				for (int j = 0; j < tokens.length; j++) {
-					String[] parm = tokens[j].split("=");
-					if (parm.length == 2) {
-						String k = parm[0].trim(), v = parm[1].trim();
-						if (! parameters.containsKey(k))
-							parameters.put(k, new TreeSet<String>());
-						parameters.get(k).add(v);
-					}
-				}
-
-				mt = mt.substring(0, i);
-			}
-
-			this.mediaType = mt;
-			if (mt != null) {
-				mt = mt.replace(' ', '+');
-				i = mt.indexOf('/');
-				type = (i == -1 ? mt : mt.substring(0, i));
-				subType = (i == -1 ? "*" : mt.substring(i+1));
-			}
-			this.subTypes = StringUtils.split(subType, '+');
-			this.subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
-			Arrays.sort(this.subTypesSorted);
-			hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);
+		// Convert the parameters to BasicNameValuePair.
+		for (int j = 0; j < parameters.length; j++) {
+			NameValuePair p = parameters[j];
+			parameters[j] = BasicNameValuePair.of(p.getName(), p.getValue());
 		}
+
+		String x = mediaType.replace(' ', '+');
+		int i = x.indexOf('/');
+		type = (i == -1 ? x : x.substring(0, i));
+		subType = (i == -1 ? "*" : x.substring(i+1));
+
+		subTypes = StringUtils.split(subType, '+');
+		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
+		Arrays.sort(this.subTypesSorted);
+		hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);
 	}
 
 	/**
@@ -220,7 +192,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return subTypesList;
+		return Collections.unmodifiableList(Arrays.asList(subTypes));
 	}
 
 	/**
@@ -328,24 +300,13 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public final Map<String,Set<String>> getParameters() {
+	public NameValuePair[] getParameters() {
 		return parameters;
 	}
 
 	@Override /* Object */
 	public final String toString() {
-		if (asString == null) {
-			if (parameters.isEmpty())
-				asString = mediaType;
-			else {
-				StringBuilder sb = new StringBuilder(mediaType);
-				for (Map.Entry<String,Set<String>> e : parameters.entrySet())
-					for (String value : e.getValue())
-						sb.append(';').append(e.getKey()).append('=').append(value);
-				asString = sb.toString();
-			}
-		}
-		return asString;
+		return value;
 	}
 
 	@Override /* Object */
