@@ -113,16 +113,6 @@ public class BasicHeader_Test {
 	}
 
 	@Test
-	public void a06_hashSet() {
-		Set<BasicHeader> x = ASet.of(header("X1","1"),header("X1","1"),header("X1","2"),header("X2","1"),header("X2","2"),header("X3","3"),null);
-		assertObject(x).json().stderr().is("['X1: 1','X1: 2','X2: 1','X2: 2','X3: 3',null]");
-		assertFalse(header("X1","1").equals(null));
-		assertFalse(header("X1","1").equals(header("X1","2")));
-		assertFalse(header("X1","1").equals(header("X2","1")));
-		assertTrue(header("X1","1").equals(header("X1","1")));
-	}
-
-	@Test
 	public void a07_eqIC() {
 		BasicHeader x = header("X1","1");
 		assertTrue(x.eqIC("1"));

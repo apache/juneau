@@ -24,7 +24,7 @@ import org.apache.juneau.http.header.ContentType;
 
 /**
  * An extension of an {@link HttpEntity} with support for arbitrary headers.
- * 
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -48,15 +48,6 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	/**
 	 * Creator.
 	 *
-	 * @return A new empty {@link BasicHttpResource} object.
-	 */
-	public static BasicHttpResource create() {
-		return new BasicHttpResource();
-	}
-
-	/**
-	 * Creator.
-	 *
 	 * @param content
 	 * 	The content.
 	 * 	<br>Can be any of the following:
@@ -72,7 +63,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * @return A new empty {@link BasicHttpResource} object.
 	 */
 	public static BasicHttpResource of(Object content) {
-		return new BasicHttpResource().content(content);
+		return new BasicHttpResource(content);
 	}
 
 	/**
@@ -93,18 +84,32 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * @return A new empty {@link BasicHttpResource} object.
 	 */
 	public static BasicHttpResource of(Supplier<?> content) {
-		return new BasicHttpResource().content(content);
+		return new BasicHttpResource(content);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
 	 */
-	public BasicHttpResource() {
-		super();
+	public BasicHttpResource(Object content) {
+		super(content);
 	}
 
 	/**
 	 * Constructor.
+	 *
 	 * @param content
 	 * 	The content.
 	 * 	<br>Can be any of the following:
@@ -125,10 +130,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public BasicHttpResource(Object content, ContentType contentType, ContentEncoding contentEncoding) {
-		super();
-		content(content);
-		contentType(contentType);
-		contentEncoding(contentEncoding);
+		super(content, contentType, contentEncoding);
 	}
 
 	/**
@@ -145,7 +147,12 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 		return this;
 	}
 
-	@Override
+	/**
+	 * Adds an arbitrary header to this resource.
+	 *
+	 * @param value The header.
+	 * @return This object (for method chaining).
+	 */
 	@FluentSetter
 	public BasicHttpResource header(Header value) {
 		if (value != null)
@@ -244,18 +251,6 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	@Override /* GENERATED - BasicHttpEntity */
 	public BasicHttpResource chunked(boolean value) {
 		super.chunked(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public BasicHttpResource content(Object value) {
-		super.content(value);
-		return this;
-	}
-
-	@Override /* GENERATED - BasicHttpEntity */
-	public BasicHttpResource content(Supplier<?> value) {
-		super.content(value);
 		return this;
 	}
 

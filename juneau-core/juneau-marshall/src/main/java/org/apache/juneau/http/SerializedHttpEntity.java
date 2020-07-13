@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  */
 public class SerializedHttpEntity extends BasicHttpEntity {
-	private Serializer serializer;
+	private final Serializer serializer;
 	private HttpPartSchema schema;
 	private byte[] cache;
 
@@ -57,33 +57,13 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 
 	/**
 	 * Constructor.
-	 */
-	public SerializedHttpEntity() {}
-
-	/**
-	 * Constructor.
 	 *
 	 * @param content The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
 	 */
 	public SerializedHttpEntity(Object content, Serializer serializer) {
-		super(content);
+		super(content, ContentType.of(serializer == null ? null : serializer.getResponseContentType()), null);
 		this.serializer = serializer;
-	}
-
-	/**
-	 * Sets the serializer to use to serialize the content.
-	 *
-	 * <p>
-	 * Value is ignored if the content is a stream or reader.
-	 *
-	 * @param value The serializer.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public SerializedHttpEntity serializer(Serializer value) {
-		this.serializer = value;
-		return this;
 	}
 
 	/**
@@ -144,8 +124,6 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 		Object o = getRawContent();
 		if (o instanceof InputStream || o instanceof Reader || o instanceof File)
 			return null;
-		if (serializer != null)
-			return ContentType.of(serializer.getResponseContentType());
 		return null;
 	}
 

@@ -23,7 +23,7 @@ import org.junit.*;
 public class BasicHttpResource_Test {
 	@Test
 	public void a01_basic() throws Exception {
-		BasicHttpResource x = create();
+		BasicHttpResource x = of(null);
 		File f = File.createTempFile("test", "txt");
 
 		assertNull(x.getContentType());
@@ -109,13 +109,13 @@ public class BasicHttpResource_Test {
 		assertObject(x.getLastHeader("Bar")).doesNotExist();
 		assertObject(x.getHeaders()).json().is("['Foo: bar','Foo: baz']");
 
-		BasicHttpResource x2 = new BasicHttpResource() {
+		BasicHttpResource x2 = new BasicHttpResource(new StringReader("foo")) {
 			@Override
 			protected byte[] readBytes(Object o) throws IOException {
 				throw new IOException("bad");
 			}
 		};
-		x2.cache().content(new StringReader("foo"));
+		x2.cache();
 		assertLong(x2.getContentLength()).is(-1l);
 		assertThrown(()->x2.writeTo(new ByteArrayOutputStream())).contains("bad");
 	}

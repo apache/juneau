@@ -17,7 +17,6 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * An extension of an {@link HttpEntity} that also includes arbitrary headers.
@@ -32,68 +31,4 @@ public interface HttpResource extends HttpEntity {
 	 */
 	@ResponseHeader("*")
 	List<Header> getHeaders();
-
-	/**
-	 * Shortcut for calling {@link #chunked()} with <jk>true</jk>.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource chunked();
-
-	/**
-	 * Shortcut for calling {@link #contentType(Header)}.
-	 *
-	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource contentType(Header value);
-
-	/**
-	 * Shortcut for calling {@link #contentEncoding(Header)}.
-	 *
-	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource contentEncoding(Header value);
-
-	/**
-	 * Adds an arbitrary header to this resource.
-	 *
-	 * @param value The header.  Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource header(Header value);
-
-	/**
-	 * Sets the content of this resource.
-	 *
-	 * <p>
-	 * Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 	</ul>
-	 * </ul>
-	 *
-	 * @param value The new contents of this resource.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource content(Object value);
-
-	/**
-	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
-	 * be read multiple times.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public HttpResource cache();
 }

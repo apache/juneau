@@ -757,7 +757,7 @@ public class RestResponseBody implements HttpEntity {
 				return (T)response;
 
 			if (type.isType(HttpResource.class)) {
-				HttpResource r = (HttpResource)type.newInstance();
+				BasicHttpResource r = BasicHttpResource.of(asInputStream());
 				for (Header h : response.getAllHeaders()) {
 					if (h.getName().equalsIgnoreCase("Content-Type"))
 						r.contentType(h);
@@ -766,7 +766,6 @@ public class RestResponseBody implements HttpEntity {
 					else
 						r.header(h);
 				}
-				r.content(asInputStream());
 				return (T)r;
 			}
 
@@ -822,7 +821,7 @@ public class RestResponseBody implements HttpEntity {
 				response.getStringHeader("Content-Type")
 			);
 
-		} catch (ParseException | IOException | ExecutableException e) {
+		} catch (ParseException | IOException e) {
 			response.close();
 			throw new RestCallException(response, e, "Could not parse response body.");
 		}

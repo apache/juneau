@@ -114,16 +114,6 @@ public class BasicNameValuePair_Test {
 		x.assertName().is("X1").assertValue().is("1");
 	}
 
-	@Test
-	public void a06_hashSet() {
-		Set<BasicNameValuePair> x = ASet.of(pair("X1","1"),pair("X1","1"),pair("X1","2"),pair("X2","1"),pair("X2","2"),pair("X3","3"),null);
-		assertObject(x).json().stderr().is("['X1=1','X1=2','X2=1','X2=2','X3=3',null]");
-		assertFalse(pair("X1","1").equals(null));
-		assertFalse(pair("X1","1").equals(pair("X1","2")));
-		assertFalse(pair("X1","1").equals(pair("X2","1")));
-		assertTrue(pair("X1","1").equals(pair("X1","1")));
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------

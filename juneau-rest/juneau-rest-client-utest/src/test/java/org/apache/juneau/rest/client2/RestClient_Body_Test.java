@@ -105,6 +105,51 @@ public class RestClient_Body_Test {
 	}
 
 	@Test
+	public void a02_BasicHttpEntity() throws Exception {
+		BasicHttpEntity x1 = httpEntity("foo");
+		client().build().post("/", x1).run()
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").doesNotExist()
+			.assertHeader("X-Content-Type").doesNotExist()
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
+		;
+
+		BasicHttpEntity x2 = httpEntity("foo").contentType("text/plain").contentEncoding("identity");
+		client().build().post("/",x2).run()
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
+		;
+
+		BasicHttpEntity x3 = httpEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked();
+		client().build().post("/",x3).run()
+			.assertIntegerHeader("X-Content-Length").doesNotExist()  // Missing when chunked.
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").is("chunked")
+		;
+
+		BasicHttpEntity x4 = new BasicHttpEntity("foo", contentType("text/plain"), contentEncoding("identity"));
+		client().build().post("/",x4).run()
+			.assertIntegerHeader("X-Content-Length").is(3)
+			.assertHeader("X-Content-Encoding").is("identity")
+			.assertHeader("X-Content-Type").is("text/plain")
+			.assertHeader("X-Transfer-Encoding").doesNotExist()
+		;
+
+		BasicHttpEntity x7 = httpEntity(new StringReader("foo"));
+		client().build().post("/",x7).run().getBody().assertString().is("foo");
+
+		BasicHttpEntity x8 = httpEntity(new StringReader("foo")).cache();
+		client().build().post("/",x8).run().getBody().assertString().is("foo");
+		client().build().post("/",x8).run().getBody().assertString().is("foo");
+
+		BasicHttpEntity x9 = httpEntity(null);
+		client().build().post("/",x9).run().getBody().assertString().isEmpty();
+	}
+
+	@Test
 	public void a03_SerializedHttpEntity() throws Exception {
 		Serializer js = JsonSerializer.DEFAULT;
 		File f = File.createTempFile("test", "txt");
@@ -116,13 +161,6 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Type").doesNotExist()
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
-
-		x.serializer(js);
-		client().build().post("/",x).run()
-			.assertHeader("X-Content-Length").doesNotExist()
-			.assertHeader("X-Content-Encoding").doesNotExist()
-			.assertHeader("X-Content-Type").is("application/json")
-			.getBody().assertObject(ABean.class).json().is("{a:1,b:'foo'}");
 
 		x = serializedHttpEntity(ABean.get(),js);
 		client().build().post("/",x).run()
@@ -166,6 +204,10 @@ public class RestClient_Body_Test {
 
 	private static BasicHttpResource httpResource(Object val) {
 		return BasicHttpResource.of(val);
+	}
+
+	private static BasicHttpEntity httpEntity(Object val) {
+		return BasicHttpEntity.of(val);
 	}
 
 	private static SerializedHttpEntity serializedHttpEntity(Object val, Serializer s) {

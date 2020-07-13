@@ -13,6 +13,8 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -28,7 +30,7 @@ import org.apache.juneau.svl.*;
 
 /**
  * Superclass of all headers defined in this package.
- * 
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -170,8 +172,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	@FluentSetter
 	public BasicHeader resolving(VarResolver varResolver) {
-		this.varSession = varResolver == null ? null : varResolver.createSession();
-		return this;
+		return resolving(varResolver == null ? null : varResolver.createSession());
 	}
 
 	/**
@@ -271,16 +272,16 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
+		// Functionality provided for HttpRequest.removeHeader().
+		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		if (varSession != null)
-			return false;
-		return ObjectUtils.eq(this, (Header)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
+		return eq(this, (Header)o, (x,y)->eq(x.name,y.getName()) && eq(x.getValue(),y.getValue()));
 	}
 
 	@Override /* Object */
 	public int hashCode() {
-		return HashCode.create().add(name).add(value).get();
+		return super.hashCode();
 	}
 
 	@Override /* Object */

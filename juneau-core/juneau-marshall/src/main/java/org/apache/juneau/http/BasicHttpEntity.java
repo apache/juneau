@@ -17,12 +17,13 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
  * An extension of {@link org.apache.http.entity.BasicHttpEntity} with additional features.
- * 
+ *
  * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>
@@ -43,15 +44,6 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	private Object content;
 	private boolean cache;
 	private VarResolverSession varSession;
-
-	/**
-	 * Creator.
-	 *
-	 * @return A new empty {@link BasicHttpEntity} object.
-	 */
-	public static BasicHttpEntity create() {
-		return new BasicHttpEntity();
-	}
 
 	/**
 	 * Creator.
@@ -97,16 +89,6 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 
 	/**
 	 * Creates a new basic entity.
-	 * 
-	 * The content is initially missing, the content length
-	 * is set to a negative number.
-	 */
-	public BasicHttpEntity() {
-		super();
-	}
-
-	/**
-	 * Creates a new basic entity.
 	 *
 	 * @param content
 	 * 	The content.
@@ -122,54 +104,36 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 * </ul>
 	 */
 	public BasicHttpEntity(Object content) {
+		this(content, null, null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param content
+	 * 	The content.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>InputStream</c>
+	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
+	 * 		<li><c>File</c>
+	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
+	 * 		<li><c><jk>byte</jk>[]</c>.
+	 * 		<li>A {@link Supplier} of anything on this list.
+	 * 	</ul>
+	 * </ul>
+	 * @param contentType
+	 * 	The content type of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param contentEncoding
+	 * 	The content encoding of the contents.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public BasicHttpEntity(Object content, ContentType contentType, ContentEncoding contentEncoding) {
 		super();
-		content(content);
-	}
-
-	/**
-	 * Sets the content on this entity.
-	 *
-	 * @param value
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity content(Object value) {
-		this.content = value;
-		return this;
-	}
-
-	/**
-	 * Sets the content on this entity.
-	 *
-	 * @param value
-	 * 	The content.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>InputStream</c>
-	 * 		<li><c>Reader</c> - Converted to UTF-8 bytes.
-	 * 		<li><c>File</c>
-	 * 		<li><c>CharSequence</c> - Converted to UTF-8 bytes.
-	 * 		<li><c><jk>byte</jk>[]</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 * </ul>
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public BasicHttpEntity content(Supplier<?> value) {
-		this.content = value;
-		return this;
+		this.content = content;
+		contentType(contentType);
+		contentEncoding(contentEncoding);
 	}
 
 	/**
@@ -297,8 +261,7 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 */
 	@FluentSetter
 	public BasicHttpEntity resolving(VarResolver varResolver) {
-		this.varSession = varResolver == null ? null : varResolver.createSession();
-		return this;
+		return resolving(varResolver == null ? null : varResolver.createSession());
 	}
 
 	/**

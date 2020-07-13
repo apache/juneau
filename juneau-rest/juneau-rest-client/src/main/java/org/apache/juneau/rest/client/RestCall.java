@@ -2258,23 +2258,6 @@ public final class RestCall extends BeanSession implements Closeable {
 				return (T)getReader();
 			if (ic.equals(InputStream.class))
 				return (T)getInputStream();
-			if (type.isType(HttpResource.class)) {
-				HttpResource r;
-				try {
-					r = (HttpResource)type.newInstance();
-					for (Header h : response.getAllHeaders()) {
-						if (h.getName().equalsIgnoreCase("Content-Type"))
-							r.contentType(h);
-						else if (h.getName().equalsIgnoreCase("Content-Encoding"))
-							r.contentEncoding(h);
-						else
-							r.header(h);
-					}
-					return (T)r;
-				} catch (ExecutableException e) {
-					throw new IOException(e);
-				}
-			}
 
 			connect(type);
 			Header h = response.getFirstHeader("Content-Type");

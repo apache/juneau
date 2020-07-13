@@ -30,37 +30,37 @@ public class BasicHttpResourceTest {
 
 		@RestMethod
 		public BasicHttpResource a01() throws Exception {
-			return BasicHttpResource.create().content("foo");
+			return BasicHttpResource.of("foo");
 		}
 
 		@RestMethod
 		public BasicHttpResource a02() throws Exception {
-			return BasicHttpResource.create().header("Foo", "Bar");
+			return BasicHttpResource.of(null).header("Foo", "Bar");
 		}
 
 		@RestMethod
 		public BasicHttpResource a03() throws Exception {
-			return BasicHttpResource.create().contentType("application/json");
+			return BasicHttpResource.of(null).contentType("application/json");
 		}
 
 		@RestMethod
 		public BasicHttpResource a04(RestRequest req) throws Exception {
-			return BasicHttpResource.create().resolving(req.getVarResolverSession()).content("$RQ{foo}");
+			return BasicHttpResource.of("$RQ{foo}").resolving(req.getVarResolverSession());
 		}
 
 		@RestMethod
 		public BasicHttpResource a05() throws Exception {
-			return BasicHttpResource.create().content(new ByteArrayInputStream("foo".getBytes()));
+			return BasicHttpResource.of(new ByteArrayInputStream("foo".getBytes()));
 		}
 
 		@RestMethod
 		public BasicHttpResource a06() throws Exception {
-			return BasicHttpResource.create().content(new StringReader("foo"));
+			return BasicHttpResource.of(new StringReader("foo"));
 		}
 
 		@RestMethod
 		public BasicHttpResource a07() throws Exception {
-			return BasicHttpResource.create().content(new StringBuilder("foo"));
+			return BasicHttpResource.of(new StringBuilder("foo"));
 		}
 	}
 

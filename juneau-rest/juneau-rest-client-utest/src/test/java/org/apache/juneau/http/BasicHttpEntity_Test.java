@@ -23,7 +23,7 @@ import org.junit.*;
 public class BasicHttpEntity_Test {
 	@Test
 	public void a01_basic() throws Exception {
-		BasicHttpEntity x = create();
+		BasicHttpEntity x = of(null);
 		File f = File.createTempFile("test", "txt");
 
 		assertNull(x.getContentType());
@@ -132,13 +132,13 @@ public class BasicHttpEntity_Test {
 		assertLong(of(new StringReader("foo")).getContentLength()).is(-1l);
 		assertLong(of(new StringReader("foo")).contentLength(3).getContentLength()).is(3l);
 
-		BasicHttpEntity x2 = new BasicHttpEntity() {
+		BasicHttpEntity x2 = new BasicHttpEntity(new StringReader("foo")) {
 			@Override
 			protected byte[] readBytes(Object o) throws IOException {
 				throw new IOException("bad");
 			}
 		};
-		x2.cache().content(new StringReader("foo"));
+		x2.cache();
 		assertLong(x2.getContentLength()).is(-1l);
 
 		assertThrown(()->x2.writeTo(new ByteArrayOutputStream())).contains("bad");

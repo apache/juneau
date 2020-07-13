@@ -29,6 +29,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.testutils.pojos.ABean;
 import org.apache.juneau.uon.*;
@@ -213,8 +214,18 @@ public class RestClient_FormData_Test {
 	}
 
 	@Test
-	public void a12_formData_BadSerialization() throws Exception {
+	public void a12_badSerialization() throws Exception {
 		assertThrown(()->client().formData(SerializedNameValuePair.of("Foo","bar").serializer(new A12())).build().get()).contains("bad");
+	}
+
+	@Test
+	public void a13_svlVars() throws Exception {
+		System.setProperty("Test", "bar");
+		NameValuePair x = BasicNameValuePair.of("foo","$S{Test}").resolving(VarResolver.DEFAULT);
+		client().formData(x).build().post("/formData").run().assertBody().urlDecode().is("foo=bar");
+		x = BasicNameValuePair.of("foo","$S{Test}").resolving((VarResolver)null);
+		client().formData(x).build().post("/formData").run().assertBody().urlDecode().is("foo=$S{Test}");
+		System.clearProperty("Test");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

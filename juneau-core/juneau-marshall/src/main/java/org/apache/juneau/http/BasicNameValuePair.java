@@ -141,8 +141,7 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 	 */
 	@FluentSetter
 	public BasicNameValuePair resolving(VarResolver varResolver) {
-		this.varSession = varResolver == null ? null : varResolver.createSession();
-		return this;
+		return resolving(varResolver == null ? null : varResolver.createSession());
 	}
 
 	/**
@@ -192,20 +191,6 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 		if (varSession != null)
 			s = varSession.resolve(s);
 		return s;
-	}
-
-	@Override /* Object */
-	public boolean equals(Object o) {
-		if (! (o instanceof NameValuePair))
-			return false;
-		if (varSession != null)
-			return false;
-		return ObjectUtils.eq(this, (NameValuePair)o, (x,y)->isEquals(x.name, y.getName()) && isEquals(x.getValue(), y.getValue()));
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return HashCode.create().add(name).add(value).get();
 	}
 
 	@Override /* Object */
