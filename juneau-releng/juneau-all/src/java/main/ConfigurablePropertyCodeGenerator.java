@@ -190,9 +190,19 @@ public class ConfigurablePropertyCodeGenerator {
 		BasicNameValuePair.class,
 		BasicHttpEntity.class,
 		BasicHttpResource.class,
+		SerializedNameValuePair.class,
+		SerializedHeader.class,
+		SerializedHttpEntity.class,
+
+		ExecutableInfo.class,
 		ConstructorInfo.class,
 		MethodInfo.class
 	};
+
+	static Set<Class<?>> ignoreClasses = ASet.of(
+		org.apache.http.entity.AbstractHttpEntity.class,
+		org.apache.http.entity.BasicHttpEntity.class
+	);
 
 	private static String[] SOURCE_PATHS = {
 		"juneau-core/juneau-config",
@@ -219,7 +229,7 @@ public class ConfigurablePropertyCodeGenerator {
 
 		for (Class<?> c : classes) {
 			File f = findClassFile(c);
-			System.err.println("Processing " + f.getName());
+			System.out.println("Processing " + f.getName());
 			String s = IOUtils.read(f);
 
 			int i1 = s.indexOf("<FluentSetters>"), i2 = s.indexOf("</FluentSetters>");
@@ -310,7 +320,8 @@ public class ConfigurablePropertyCodeGenerator {
 					} else if (pc.isAny(Throwable.class, RuntimeException.class, Exception.class)) {
 						// Ignore
 					} else {
-						System.err.println(pc.inner().getSimpleName() + " not found.");
+						if (! ignoreClasses.contains(pc.inner()))
+							System.err.println(pc.inner().getSimpleName() + " not found in " + c.getName());
 					}
 				}
 			}
@@ -319,7 +330,7 @@ public class ConfigurablePropertyCodeGenerator {
 			IOUtils.write(f, new StringReader(s));
 		}
 
-		System.err.println("DONE");
+		System.out.println("DONE");
 	}
 
 	private static String getArgs(Method m) {

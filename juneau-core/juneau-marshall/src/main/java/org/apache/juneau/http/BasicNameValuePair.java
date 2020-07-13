@@ -203,4 +203,8 @@ public class BasicNameValuePair implements NameValuePair, Headerable {
 			o = ((Supplier<?>)o).get();
 		return o;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

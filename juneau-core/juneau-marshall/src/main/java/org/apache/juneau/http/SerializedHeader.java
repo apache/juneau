@@ -18,10 +18,10 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.juneau.urlencoding.*;
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
  */
-public class SerializedHeader extends BasicStringHeader {
+public class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
 	private final Object value;
@@ -170,4 +170,20 @@ public class SerializedHeader extends BasicStringHeader {
 			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - BasicHeader */
+	public SerializedHeader resolving(VarResolver varResolver) {
+		super.resolving(varResolver);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHeader */
+	public SerializedHeader resolving(VarResolverSession varSession) {
+		super.resolving(varSession);
+		return this;
+	}
+
+	// </FluentSetters>
 }

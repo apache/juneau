@@ -288,4 +288,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public String toString() {
 		return name + ": " + getValue();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

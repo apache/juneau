@@ -189,4 +189,26 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	protected int compareTo(Object value) {
 		return this.value.compareTo(value);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public FluentComparableAssertion<R> msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentComparableAssertion<R> stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public FluentComparableAssertion<R> stdout() {
+		super.stdout();
+		return this;
+	}
+
+	// </FluentSetters>
 }

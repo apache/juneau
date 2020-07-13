@@ -23,6 +23,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -139,4 +140,74 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 		}
 		return new ByteArrayInputStream(cache);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity cache() {
+		super.cache();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity cache(boolean value) {
+		super.cache(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity chunked() {
+		super.chunked();
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity chunked(boolean value) {
+		super.chunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity contentEncoding(String value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity contentEncoding(Header value) {
+		super.contentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity contentLength(long value) {
+		super.contentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity contentType(String value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity contentType(Header value) {
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity resolving(VarResolver varResolver) {
+		super.resolving(varResolver);
+		return this;
+	}
+
+	@Override /* GENERATED - BasicHttpEntity */
+	public SerializedHttpEntity resolving(VarResolverSession varSession) {
+		super.resolving(varSession);
+		return this;
+	}
+
+	// </FluentSetters>
 }
