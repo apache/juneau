@@ -210,7 +210,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 	}
 
 	private MediaType mediaType(String in) {
-		return MediaType.forString(string(in));
+		return MediaType.of(string(in));
 	}
 
 	private TimeZone timeZone(String in) {

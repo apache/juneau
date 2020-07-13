@@ -730,7 +730,7 @@ public final class ClassMeta<T> implements Type {
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (s.mediaTypes().length > 0)
-					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
+					ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 				if (! s.template().isEmpty())
 					ps.withTemplate(s.template());
 				return ps;

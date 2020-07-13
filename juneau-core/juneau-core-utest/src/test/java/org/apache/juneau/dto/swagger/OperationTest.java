@@ -168,7 +168,7 @@ public class OperationTest {
 	public void testSetConsumes() {
 		Operation t = new Operation();
 
-		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
+		t.setConsumes(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertObject(t.getConsumes()).isType(List.class);
 
@@ -187,7 +187,7 @@ public class OperationTest {
 	public void testAddConsumes() {
 		Operation t = new Operation();
 
-		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
+		t.addConsumes(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertObject(t.getConsumes()).isType(List.class);
 
@@ -207,8 +207,8 @@ public class OperationTest {
 	public void testConsumes() {
 		Operation t = new Operation();
 
-		t.consumes(ASet.of(MediaType.forString("text/foo")));
-		t.consumes(MediaType.forString("text/bar"));
+		t.consumes(ASet.of(MediaType.of("text/foo")));
+		t.consumes(MediaType.of("text/bar"));
 		t.consumes("text/baz");
 		t.consumes(new StringBuilder("text/qux"));
 		t.consumes((Object)new String[]{"text/quux"});
@@ -229,7 +229,7 @@ public class OperationTest {
 	public void testSetProduces() {
 		Operation t = new Operation();
 
-		t.setProduces(ASet.of(MediaType.forString("text/foo")));
+		t.setProduces(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertObject(t.getProduces()).isType(List.class);
 
@@ -248,7 +248,7 @@ public class OperationTest {
 	public void testAddProduces() {
 		Operation t = new Operation();
 
-		t.addProduces(ASet.of(MediaType.forString("text/foo")));
+		t.addProduces(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertObject(t.getProduces()).isType(List.class);
 
@@ -268,8 +268,8 @@ public class OperationTest {
 	public void testProduces() {
 		Operation t = new Operation();
 
-		t.produces(ASet.of(MediaType.forString("text/foo")));
-		t.produces(MediaType.forString("text/bar"));
+		t.produces(ASet.of(MediaType.of("text/foo")));
+		t.produces(MediaType.of("text/bar"));
 		t.produces("text/baz");
 		t.produces(new StringBuilder("text/qux"));
 		t.produces((Object)new String[]{"text/quux"});
@@ -580,13 +580,13 @@ public class OperationTest {
 		Operation t = new Operation();
 
 		t
-			.set("consumes", ASet.of(MediaType.forString("text/a")))
+			.set("consumes", ASet.of(MediaType.of("text/a")))
 			.set("deprecated", true)
 			.set("description", "b")
 			.set("externalDocs", externalDocumentation("c"))
 			.set("operationId", "d")
 			.set("parameters", ASet.of(parameterInfo("e1","e2")))
-			.set("produces", ASet.of(MediaType.forString("text/f")))
+			.set("produces", ASet.of(MediaType.of("text/f")))
 			.set("responses", AMap.of(1,responseInfo("g")))
 			.set("schemes", ASet.of("h"))
 			.set("security", ASet.of(AMap.of("i1",AList.of("i2"))))

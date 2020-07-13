@@ -1496,7 +1496,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public BasicHttpResource getClasspathHttpResource(String name, boolean resolveVars) throws IOException {
-		return getClasspathHttpResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)), false);
+		return getClasspathHttpResource(name, resolveVars, MediaType.of(context.getMediaTypeForName(name)), false);
 	}
 
 	/**
@@ -1507,7 +1507,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public BasicHttpResource getClasspathHttpResource(String name) throws IOException {
-		return getClasspathHttpResource(name, false, MediaType.forString(context.getMediaTypeForName(name)), false);
+		return getClasspathHttpResource(name, false, MediaType.of(context.getMediaTypeForName(name)), false);
 	}
 
 	/**

@@ -2264,7 +2264,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			int sc = response.getStatusLine().getStatusCode();
 			String ct = firstNonEmpty(h == null ? null : h.getValue(), "text/plain");
 
-			MediaType mt = MediaType.forString(ct);
+			MediaType mt = MediaType.of(ct);
 
 			if (parser == null || (mt.toString().equals("text/plain") && ! parser.canHandle(ct))) {
 				if (type.hasStringMutater())

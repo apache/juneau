@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.http.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -34,27 +34,26 @@ import org.apache.juneau.json.*;
 @BeanIgnore
 public class MediaType implements Comparable<MediaType>  {
 
-	private static final boolean NOCACHE = Boolean.getBoolean("juneau.nocache");
-	private static final ConcurrentHashMap<String,MediaType> CACHE = new ConcurrentHashMap<>();
+	private static final Cache<String,MediaType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
 	public static final MediaType
-		CSV = forString("text/csv"),
-		HTML = forString("text/html"),
-		JSON = forString("application/json"),
-		MSGPACK = forString("octal/msgpack"),
-		PLAIN = forString("text/plain"),
-		UON = forString("text/uon"),
-		URLENCODING = forString("application/x-www-form-urlencoded"),
-		XML = forString("text/xml"),
-		XMLSOAP = forString("text/xml+soap"),
+		CSV = of("text/csv"),
+		HTML = of("text/html"),
+		JSON = of("application/json"),
+		MSGPACK = of("octal/msgpack"),
+		PLAIN = of("text/plain"),
+		UON = of("text/uon"),
+		URLENCODING = of("application/x-www-form-urlencoded"),
+		XML = of("text/xml"),
+		XMLSOAP = of("text/xml+soap"),
 
-		RDF = forString("text/xml+rdf"),
-		RDFABBREV = forString("text/xml+rdf+abbrev"),
-		NTRIPLE = forString("text/n-triple"),
-		TURTLE = forString("text/turtle"),
-		N3 = forString("text/n3")
+		RDF = of("text/xml+rdf"),
+		RDFABBREV = of("text/xml+rdf+abbrev"),
+		NTRIPLE = of("text/n-triple"),
+		TURTLE = of("text/turtle"),
+		N3 = of("text/n3")
 	;
 
 	private final String mediaType;
@@ -82,39 +81,35 @@ public class MediaType implements Comparable<MediaType>  {
 	 * 		Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
 	 * </ul>
 	 *
-	 * @param s
+	 * @param value
 	 * 	The media type string.
 	 * 	Will be lowercased.
 	 * 	Returns <jk>null</jk> if input is null or empty.
 	 * @return A cached media type object.
 	 */
-	public static MediaType forString(String s) {
-		if (isEmpty(s))
+	public static MediaType of(String value) {
+		if (isEmpty(value))
 			return null;
-		MediaType mt = CACHE.get(s);
-		if (mt != null)
-			return mt;
-		mt = new MediaType(s);
-		if (NOCACHE)
-			return mt;
-		CACHE.putIfAbsent(s, mt);
-		return CACHE.get(s);
+		MediaType x = CACHE.get(value);
+		if (x == null)
+			x = CACHE.put(value, new MediaType(value));
+		return x;
 	}
 
 	/**
-	 * Same as {@link #forString(String)} but allows you to construct an array of <c>MediaTypes</c> from an
+	 * Same as {@link #of(String)} but allows you to construct an array of <c>MediaTypes</c> from an
 	 * array of strings.
 	 *
-	 * @param s
+	 * @param values
 	 * 	The media type strings.
 	 * @return
 	 * 	An array of <c>MediaType</c> objects.
 	 * 	<br>Always the same length as the input string array.
 	 */
-	public static MediaType[] forStrings(String...s) {
-		MediaType[] mt = new MediaType[s.length];
-		for (int i = 0; i < s.length; i++)
-			mt[i] = forString(s[i]);
+	public static MediaType[] ofAll(String...values) {
+		MediaType[] mt = new MediaType[values.length];
+		for (int i = 0; i < values.length; i++)
+			mt[i] = of(values[i]);
 		return mt;
 	}
 
@@ -360,11 +355,9 @@ public class MediaType implements Comparable<MediaType>  {
 
 	@Override /* Object */
 	public final boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null)
-			return false;
-		return toString().equals(o.toString());
+		if (o instanceof MediaType)
+			return ObjectUtils.eq(mediaType, ((MediaType)o).mediaType);
+		return false;
 	}
 
 	@Override

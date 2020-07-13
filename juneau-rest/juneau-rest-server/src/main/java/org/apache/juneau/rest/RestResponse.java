@@ -516,7 +516,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
 	 */
 	public MediaType getMediaType() {
-		return MediaType.forString(getContentType());
+		return MediaType.of(getContentType());
 	}
 
 	/**

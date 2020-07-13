@@ -707,7 +707,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapJson extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/json");
+			return MediaType.ofAll("*/json");
 		}
 		@Override
 		public String withTemplate() {
@@ -717,7 +717,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapXml extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/xml");
+			return MediaType.ofAll("*/xml");
 		}
 		@Override
 		public String withTemplate() {
@@ -727,7 +727,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapHtml extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/html");
+			return MediaType.ofAll("*/html");
 		}
 		@Override
 		public String withTemplate() {
@@ -737,7 +737,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapUon extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/uon");
+			return MediaType.ofAll("*/uon");
 		}
 		@Override
 		public String withTemplate() {
@@ -747,7 +747,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapUrlEncoding extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/x-www-form-urlencoded");
+			return MediaType.ofAll("*/x-www-form-urlencoded");
 		}
 		@Override
 		public String withTemplate() {
@@ -757,7 +757,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapMsgPack extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/msgpack");
+			return MediaType.ofAll("*/msgpack");
 		}
 		@Override
 		public String withTemplate() {
@@ -767,7 +767,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	public static class TemplateSwapRdfXml extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/xml+rdf");
+			return MediaType.ofAll("*/xml+rdf");
 		}
 		@Override
 		public String withTemplate() {
@@ -798,7 +798,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/json");
+			return MediaType.ofAll("*/json");
 		}
 		@Override
 		public String withTemplate() {
@@ -812,7 +812,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/xml");
+			return MediaType.ofAll("*/xml");
 		}
 		@Override
 		public String withTemplate() {
@@ -826,7 +826,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/html");
+			return MediaType.ofAll("*/html");
 		}
 		@Override
 		public String withTemplate() {
@@ -840,7 +840,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/uon");
+			return MediaType.ofAll("*/uon");
 		}
 		@Override
 		public String withTemplate() {
@@ -854,7 +854,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/x-www-form-urlencoded");
+			return MediaType.ofAll("*/x-www-form-urlencoded");
 		}
 		@Override
 		public String withTemplate() {
@@ -868,7 +868,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/msgpack");
+			return MediaType.ofAll("*/msgpack");
 		}
 		@Override
 		public String withTemplate() {
@@ -882,7 +882,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/xml+rdf");
+			return MediaType.ofAll("*/xml+rdf");
 		}
 		@Override
 		public String withTemplate() {

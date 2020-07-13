@@ -36,7 +36,7 @@ public class PojoSwapTest {
 
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/json");
+			return MediaType.ofAll("*/json");
 		}
 
 		@Override
@@ -49,7 +49,7 @@ public class PojoSwapTest {
 
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/xml");
+			return MediaType.ofAll("*/xml");
 		}
 
 		@Override
@@ -62,7 +62,7 @@ public class PojoSwapTest {
 
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.forStrings("*/*");
+			return MediaType.ofAll("*/*");
 		}
 
 		@Override

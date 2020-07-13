@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http;
 
 import org.apache.juneau.http.annotation.*;
 
@@ -23,6 +23,10 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Constants")
 public class Constants {
-	static boolean NOCACHE = Boolean.getBoolean("juneau.http.cache.disable");
-	static int CACHE_MAX_SIZE = Integer.getInteger("juneau.http.cache.maxSize", 1000);
+
+	/** Use caching of HTTP artifacts. */
+	public static boolean NOCACHE = Boolean.getBoolean("juneau.http.cache.disable");
+
+	/** Maximum cache size of HTTP artifacts. */
+	public static int CACHE_MAX_SIZE = Integer.getInteger("juneau.http.cache.maxSize", 1000);
 }

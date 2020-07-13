@@ -893,9 +893,9 @@ public abstract class Serializer extends BeanTraverseContext {
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
 
-		this.produces = MediaType.forString(produces);
+		this.produces = MediaType.of(produces);
 		this.accept = accept == null ? MediaTypeRange.parse(produces) : MediaTypeRange.parse(accept);
-		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.forStrings(StringUtils.split(accept, ','));
+		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.ofAll(StringUtils.split(accept, ','));
 	}
 
 	@Override /* Context */

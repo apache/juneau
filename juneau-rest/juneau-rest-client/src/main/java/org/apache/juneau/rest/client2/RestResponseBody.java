@@ -774,7 +774,7 @@ public class RestResponseBody implements HttpEntity {
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
 
-			MediaType mt = MediaType.forString(ct);
+			MediaType mt = MediaType.of(ct);
 
 			if (parser == null || (mt.toString().equals("text/plain") && ! parser.canHandle(ct))) {
 				if (type.hasStringMutater())

@@ -547,7 +547,7 @@ public abstract class Parser extends BeanContext {
 		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
-			this.consumes[i] = MediaType.forString(consumes[i]);
+			this.consumes[i] = MediaType.of(consumes[i]);
 		}
 	}
 

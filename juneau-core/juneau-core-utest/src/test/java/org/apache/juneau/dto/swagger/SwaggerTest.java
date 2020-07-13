@@ -166,7 +166,7 @@ public class SwaggerTest {
 	public void testSetConsumes() {
 		Swagger t = new Swagger();
 
-		t.setConsumes(ASet.of(MediaType.forString("text/foo")));
+		t.setConsumes(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertObject(t.getConsumes()).isType(List.class);
 
@@ -185,7 +185,7 @@ public class SwaggerTest {
 	public void testAddConsumes() {
 		Swagger t = new Swagger();
 
-		t.addConsumes(ASet.of(MediaType.forString("text/foo")));
+		t.addConsumes(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getConsumes()).json().is("['text/foo']");
 		assertObject(t.getConsumes()).isType(List.class);
 
@@ -205,8 +205,8 @@ public class SwaggerTest {
 	public void testConsumes() {
 		Swagger t = new Swagger();
 
-		t.consumes(ASet.of(MediaType.forString("text/foo")));
-		t.consumes(MediaType.forString("text/bar"));
+		t.consumes(ASet.of(MediaType.of("text/foo")));
+		t.consumes(MediaType.of("text/bar"));
 		t.consumes("text/baz");
 		t.consumes(new StringBuilder("text/qux"));
 		t.consumes((Object)new String[]{"text/quux"});
@@ -227,7 +227,7 @@ public class SwaggerTest {
 	public void testSetProduces() {
 		Swagger t = new Swagger();
 
-		t.setProduces(ASet.of(MediaType.forString("text/foo")));
+		t.setProduces(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertObject(t.getProduces()).isType(List.class);
 
@@ -246,7 +246,7 @@ public class SwaggerTest {
 	public void testAddProduces() {
 		Swagger t = new Swagger();
 
-		t.addProduces(ASet.of(MediaType.forString("text/foo")));
+		t.addProduces(ASet.of(MediaType.of("text/foo")));
 		assertObject(t.getProduces()).json().is("['text/foo']");
 		assertObject(t.getProduces()).isType(List.class);
 
@@ -266,8 +266,8 @@ public class SwaggerTest {
 	public void testProduces() {
 		Swagger t = new Swagger();
 
-		t.produces(ASet.of(MediaType.forString("text/foo")));
-		t.produces(MediaType.forString("text/bar"));
+		t.produces(ASet.of(MediaType.of("text/foo")));
+		t.produces(MediaType.of("text/bar"));
 		t.produces("text/baz");
 		t.produces(new StringBuilder("text/qux"));
 		t.produces((Object)new String[]{"text/quux"});
@@ -797,14 +797,14 @@ public class SwaggerTest {
 
 		t
 			.set("basePath", "a")
-			.set("consumes", ASet.of(MediaType.forString("text/b")))
+			.set("consumes", ASet.of(MediaType.of("text/b")))
 			.set("definitions", AMap.of("c",schemaInfo().type("c1")))
 			.set("externalDocs", externalDocumentation("d"))
 			.set("host", "e")
 			.set("info", info("f1", "f2"))
 			.set("parameters", AMap.of("g",parameterInfo("g1", "g2")))
 			.set("paths", AMap.of("h",AMap.of("h1",operation().operationId("h2"))))
-			.set("produces", ASet.of(MediaType.forString("text/i")))
+			.set("produces", ASet.of(MediaType.of("text/i")))
 			.set("responses", AMap.of("j",responseInfo("j1")))
 			.set("schemes", ASet.of("k1"))
 			.set("security", ASet.of(AMap.of("l1",AList.of("l2"))))

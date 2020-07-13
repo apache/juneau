@@ -117,11 +117,11 @@ public class MediaTypeRange implements Comparable<MediaTypeRange>  {
 			int i = token.indexOf(";q=");
 
 			if (i == -1) {
-				mediaType = MediaType.forString(token);
+				mediaType = MediaType.of(token);
 				return;
 			}
 
-			mediaType = MediaType.forString(token.substring(0, i));
+			mediaType = MediaType.of(token.substring(0, i));
 
 			String[] tokens = token.substring(i+1).split(";");
 
