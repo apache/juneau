@@ -454,9 +454,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public Locale getLocale() {
 		String h = headers.getString("Accept-Language");
 		if (h != null) {
-			MediaRanges mr = MediaRanges.of(h);
-			if (! mr.getRanges().isEmpty())
-				return toLocale(mr.getRange(0).getType());
+			StringRanges sr = StringRanges.of(h);
+			if (! sr.getRanges().isEmpty())
+				return toLocale(sr.getRange(0).getName());
 		}
 		return super.getLocale();
 	}
@@ -465,11 +465,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public Enumeration<Locale> getLocales() {
 		String h = headers.getString("Accept-Language");
 		if (h != null) {
-			MediaRanges mr = MediaRanges.of(h);
+			StringRanges mr = StringRanges.of(h);
 			if (! mr.getRanges().isEmpty()) {
 				List<Locale> l = new ArrayList<>(mr.getRanges().size());
-				for (MediaRange r : mr.getRanges())
-					l.add(toLocale(r.getType()));
+				for (StringRange r : mr.getRanges())
+					l.add(toLocale(r.getName()));
 				return enumeration(l);
 			}
 		}

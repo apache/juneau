@@ -160,7 +160,7 @@ public class RestClient_Body_Test {
 		File f = File.createTempFile("test", "txt");
 
 		SerializedHttpEntity x1 = serializedHttpEntity(ABean.get(),null);
-		client().debug().build().post("/",x1).run()
+		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").doesNotExist()
 			.assertHeader("X-Content-Encoding").doesNotExist()
 			.assertHeader("X-Content-Type").doesNotExist()
@@ -239,7 +239,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Encoding").is("identity");
 
 		SerializedHttpEntity x15 = serializedHttpEntity(new StringReader("foo"), null).contentLength(3l);
-		client().debug().build().post("/",x15).run()
+		client().build().post("/",x15).run()
 			.assertHeader("X-Content-Length").is("3");
 	}
 

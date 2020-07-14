@@ -115,12 +115,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		String charset = null;
 		if (h == null)
 			charset = rjm.defaultCharset;
-		else for (MediaRange r : MediaRanges.of(h).getRanges()) {
+		else for (StringRange r : StringRanges.of(h).getRanges()) {
 			if (r.getQValue() > 0) {
-				if (r.getType().equals("*"))
+				if (r.getName().equals("*"))
 					charset = rjm.defaultCharset;
-				else if (Charset.isSupported(r.getType()))
-					charset = r.getType();
+				else if (Charset.isSupported(r.getName()))
+					charset = r.getName();
 				if (charset != null)
 					break;
 			}
