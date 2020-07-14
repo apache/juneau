@@ -34,7 +34,7 @@ public class MediaRange extends MediaType {
 
 	private final NameValuePair[] extensions;
 	private final Float qValue;
-	private final String value;
+	private final String string;
 
 	/**
 	 * Constructor.
@@ -85,7 +85,7 @@ public class MediaRange extends MediaType {
 			for (NameValuePair p : extensions)
 				sb.append(';').append(p.getName()).append('=').append(p.getValue());
 		}
-		value = sb.toString();
+		string = sb.toString();
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class MediaRange extends MediaType {
 	 */
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof MediaRange) && eq(this, (MediaRange)o, (x,y)->eq(x.value, y.value));
+		return (o instanceof MediaRange) && eq(this, (MediaRange)o, (x,y)->eq(x.string, y.string));
 	}
 
 	/**
@@ -134,11 +134,11 @@ public class MediaRange extends MediaType {
 	 */
 	@Override /* Object */
 	public int hashCode() {
-		return value.hashCode();
+		return string.hashCode();
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return value;
+		return string;
 	}
 }

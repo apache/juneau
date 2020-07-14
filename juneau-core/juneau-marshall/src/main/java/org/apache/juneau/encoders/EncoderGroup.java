@@ -63,8 +63,7 @@ public final class EncoderGroup {
 	// Maps Accept-Encoding headers to matching encoders.
 	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
 
-	private final String[] encodings;
-	private final List<String> encodingsList;
+	private final List<String> encodings;
 	private final Encoder[] encodingsEncoders;
 	private final List<Encoder> encoders;
 
@@ -106,8 +105,7 @@ public final class EncoderGroup {
 			}
 		}
 
-		this.encodings = lc.asArrayOf(String.class);
-		this.encodingsList = lc.unmodifiable();
+		this.encodings = lc.unmodifiable();
 		this.encodingsEncoders = l.asArrayOf(Encoder.class);
 	}
 
@@ -133,7 +131,7 @@ public final class EncoderGroup {
 		int match = ae.findMatch(encodings);
 
 		if (match >= 0) {
-			em = new EncoderMatch(encodings[match], encodingsEncoders[match]);
+			em = new EncoderMatch(encodings.get(match), encodingsEncoders[match]);
 			cache.putIfAbsent(acceptEncoding, em);
 		}
 
@@ -157,7 +155,7 @@ public final class EncoderGroup {
 	 * @return An unmodifiable list of codings supported by all encoders in this group.  Never <jk>null</jk>.
 	 */
 	public List<String> getSupportedEncodings() {
-		return encodingsList;
+		return encodings;
 	}
 
 	/**

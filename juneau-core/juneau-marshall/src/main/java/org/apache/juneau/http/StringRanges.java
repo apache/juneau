@@ -24,93 +24,95 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
- * A parsed <c>Accept</c> or similar header value.
+ * A parsed <c>Accept-Encoding</c> or similar header value.
  *
  * <p>
- * The returned media ranges are sorted such that the most acceptable media is available at ordinal position
+ * The returned ranges are sorted such that the most acceptable value is available at ordinal position
  * <js>'0'</js>, and the least acceptable at position n-1.
  *
- * <p>
- * The syntax expected to be found in the referenced <c>value</c> complies with the syntax described in
- * RFC2616, Section 14.1, as described below:
- * <p class='bcode w800'>
- * 	Accept         = "Accept" ":"
- * 	                  #( media-range [ accept-params ] )
+ * <h5 class='topic'>RFC2616 Specification</h5>
  *
- * 	media-range    = ( "*\/*"
- * 	                  | ( type "/" "*" )
- * 	                  | ( type "/" subtype )
- * 	                  ) *( ";" parameter )
- * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
- * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
+ * The Accept-Encoding request-header field is similar to Accept, but restricts the content-codings (section 3.5) that
+ * are acceptable in the response.
+ *
+ * <p class='bcode w800'>
+ * 	Accept-Encoding  = "Accept-Encoding" ":"
+ * 	                   1#( codings [ ";" "q" "=" qvalue ] )
+ * 	codings          = ( content-coding | "*" )
+ * </p>
+ *
+ * <p>
+ * Examples of its use are:
+ * <p class='bcode w800'>
+ * 	Accept-Encoding: compress, gzip
+ * 	Accept-Encoding:
+ * 	Accept-Encoding: *
+ * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
+ * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
  * </p>
  */
 @BeanIgnore
-public class MediaRanges {
+public class StringRanges {
 
-	private static final MediaRanges DEFAULT = new MediaRanges("*/*");
-	private static final Cache<String,MediaRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
+	private static final StringRanges DEFAULT = new StringRanges("*");
+	private static final Cache<String,StringRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
-	private final MediaRange[] ranges;
-	private final String string;
+	private final StringRange[] ranges;
+	private final String value;
 
 	/**
-	 * Returns a parsed <c>Accept</c> header value.
+	 * Returns a parsed string range header value.
 	 *
-	 * @param value The raw <c>Accept</c> header value.
-	 * @return A parsed <c>Accept</c> header value.
+	 * @param value The raw string range header value.
+	 * @return A parsed string range header value.
 	 */
-	public static MediaRanges of(String value) {
+	public static StringRanges of(String value) {
 		if (value == null || value.length() == 0)
 			return DEFAULT;
 
-		MediaRanges mr = CACHE.get(value);
+		StringRanges mr = CACHE.get(value);
 		if (mr == null)
-			mr = CACHE.put(value, new MediaRanges(value));
+			mr = CACHE.put(value, new StringRanges(value));
 		return mr;
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param value The <c>Accept</c> header value.
+	 * @param value The string range header value.
 	 */
-	public MediaRanges(String value) {
+	public StringRanges(String value) {
 		this(parse(value));
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param e The parsed <c>Accept</c> header value.
+	 * @param e The parsed string range header value.
 	 */
-	public MediaRanges(HeaderElement[] e) {
+	public StringRanges(HeaderElement[] e) {
 
-		List<MediaRange> l = AList.of();
+		List<StringRange> l = AList.of();
 		for (HeaderElement e2 : e)
-			l.add(new MediaRange(e2));
+			l.add(new StringRange(e2));
 
 		l.sort(RANGE_COMPARATOR);
-		ranges = l.toArray(new MediaRange[l.size()]);
+		ranges = l.toArray(new StringRange[l.size()]);
 
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
+		this.value = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
 	}
 
 	/**
-	 * Compares two MediaRanges for equality.
+	 * Compares two StringRanges for equality.
 	 *
 	 * <p>
 	 * The values are first compared according to <c>qValue</c> values.
 	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
-	 * <c>MediaRanges</c> with the same type but different sub-types are compared - a more specific subtype is
-	 * promoted over the 'wildcard' subtype.
-	 * <c>MediaRanges</c> with the same types but with extensions are promoted over those same types with no
-	 * extensions.
 	 */
-	private static final Comparator<MediaRange> RANGE_COMPARATOR = new Comparator<MediaRange>() {
+	private static final Comparator<StringRange> RANGE_COMPARATOR = new Comparator<StringRange>() {
 		@Override
-		public int compare(MediaRange o1, MediaRange o2) {
+		public int compare(StringRange o1, StringRange o2) {
 			// Compare q-values.
 			int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
 			if (qCompare != 0)
@@ -124,12 +126,12 @@ public class MediaRanges {
 	};
 
 	/**
-	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
+	 * Given a list of media types, returns the best match for this string range header.
 	 *
 	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <c>Accept</c> header may
+	 * Note that fuzzy matching is allowed on the media types where the string range header may
 	 * contain additional subtype parts.
-	 * <br>For example, given identical q-values and an <c>Accept</c> value of <js>"text/json+activity"</js>,
+	 * <br>For example, given identical q-values and an string range value of <js>"text/json+activity"</js>,
 	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
 	 * isn't found.
 	 * <br>The purpose for this is to allow serializers to match when artifacts such as <c>id</c> properties are
@@ -138,24 +140,24 @@ public class MediaRanges {
 	 * <p>
 	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
 	 *
-	 * @param mediaTypes The media types to match against.
+	 * @param names The names to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(List<? extends MediaType> mediaTypes) {
+	public int findMatch(List<String> names) {
 		int matchQuant = 0, matchIndex = -1;
 		float q = 0f;
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
-		for (MediaRange mr : ranges) {
+		for (StringRange mr : ranges) {
 			float q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)
 				break;
 
-			for (int i = 0; i < mediaTypes.size(); i++) {
-				MediaType mt = mediaTypes.get(i);
-				int matchQuant2 = mr.match(mt, false);
+			for (int i = 0; i < names.size(); i++) {
+				String mt = names.get(i);
+				int matchQuant2 = mr.match(mt);
 
 				if (matchQuant2 > matchQuant) {
 					matchIndex = i;
@@ -169,51 +171,15 @@ public class MediaRanges {
 	}
 
 	/**
-	 * Same as {@link #findMatch(List)} but matching against media type ranges.
-	 *
-	 * <p>
-	 * Note that the q-types on both the <c>mediaTypeRanges</c> parameter and this header
-	 * are taken into account when trying to find the best match.
-	 * <br>When both this header and the matching range have q-values, the q-value for the match is the result of multiplying them.
-	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<c>0.81</c>).
-	 *
-	 * @param mediaRanges The media type ranges to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int findMatch(MediaRanges mediaRanges) {
-		return findMatch(mediaRanges.getRanges());
-	}
-
-	/**
 	 * Returns the {@link MediaRange} at the specified index.
 	 *
 	 * @param index The index position of the media range.
 	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
-	public MediaRange getRange(int index) {
+	public StringRange getRange(int index) {
 		if (index < 0 || index >= ranges.length)
 			return null;
 		return ranges[index];
-	}
-
-	/**
-	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
-	 * presence of a subtype fragment.
-	 *
-	 * <p>
-	 * For example, given the header <js>"text/json+activity"</js>, calling
-	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
-	 *
-	 * @param part The media type subtype fragment.
-	 * @return <jk>true</jk> if subtype fragment exists.
-	 */
-	public boolean hasSubtypePart(String part) {
-
-		for (MediaRange mr : ranges)
-			if (mr.getQValue() > 0 && mr.getSubTypes().indexOf(part) >= 0)
-				return true;
-
-		return false;
 	}
 
 	/**
@@ -227,16 +193,16 @@ public class MediaRanges {
 	}
 
 	/**
-	 * Returns the media ranges that make up this object.
+	 * Returns the string ranges that make up this object.
 	 *
-	 * @return The media ranges that make up this object.
+	 * @return The string ranges that make up this object.
 	 */
-	public List<MediaRange> getRanges() {
+	public List<StringRange> getRanges() {
 		return Collections.unmodifiableList(Arrays.asList(ranges));
 	}
 
 	@Override /* Object */
 	public String toString() {
-		return string;
+		return value;
 	}
 }

@@ -35,7 +35,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<StringRange> parsed;
+	private StringRanges ranges;
 
 	/**
 	 * Convenience creator.
@@ -44,7 +44,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
@@ -64,7 +64,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicLongHeader} object.
@@ -81,7 +81,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
@@ -89,7 +89,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	public BasicRangeArrayHeader(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
-			parsed = getParsedValue();
+			ranges = getRanges();
 	}
 
 	@Override /* Header */
@@ -108,13 +108,13 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * @param types The types to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(String[] types) {
+	public int findMatch(List<String> types) {
 
 		// Type ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
-		for (StringRange mr : getParsedValue())
-			for (int i = 0; i < types.length; i++)
-				if (mr.matches(types[i]))
+		for (StringRange mr : getRanges().getRanges())
+			for (int i = 0; i < types.size(); i++)
+				if (mr.match(types.get(i)) > 0)
 					return i;
 
 		return -1;
@@ -128,17 +128,16 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 *
 	 * @return An unmodifiable list of type ranges.
 	 */
-	public List<StringRange> asRanges() {
-		return getParsedValue();
+	public StringRanges asRanges() {
+		return getRanges();
 	}
 
-	private List<StringRange> getParsedValue() {
-		if (parsed != null)
-			return parsed;
+	private StringRanges getRanges() {
+		if (ranges != null)
+			return ranges;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		return Collections.unmodifiableList(Arrays.asList(StringRange.parse(o.toString())));
+		return StringRanges.of(o.toString());
 	}
-
 }

@@ -16,6 +16,7 @@ import static org.apache.juneau.http.Constants.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -119,7 +120,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
@@ -139,7 +140,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * 	The parameter value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
@@ -156,7 +157,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * 	The parameter value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String} - Converted using {@link StringRange#parse(String)}.
+	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
 	 * 		<li><c>StringRange[]</c> - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.

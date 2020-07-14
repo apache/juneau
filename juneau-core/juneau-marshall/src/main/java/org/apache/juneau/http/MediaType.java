@@ -61,7 +61,7 @@ public class MediaType implements Comparable<MediaType>  {
 		N3 = of("text/n3")
 	;
 
-	private final String value;                          // The entire unparsed value.
+	private final String string;                          // The entire unparsed value.
 	private final String mediaType;                      // The "type/subtype" portion of the media type..
 	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
@@ -157,7 +157,7 @@ public class MediaType implements Comparable<MediaType>  {
 		sb.append(mediaType);
 		for (NameValuePair p : parameters)
 			sb.append(';').append(p.getName()).append('=').append(p.getValue());
-		this.value = sb.toString();
+		this.string = sb.toString();
 	}
 
 	/**
@@ -329,17 +329,17 @@ public class MediaType implements Comparable<MediaType>  {
 
 	@Override /* Object */
 	public String toString() {
-		return value;
+		return string;
 	}
 
 	@Override /* Object */
 	public int hashCode() {
-		return value.hashCode();
+		return string.hashCode();
 	}
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.value, y.value));
+		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.string, y.string));
 	}
 
 	@Override
