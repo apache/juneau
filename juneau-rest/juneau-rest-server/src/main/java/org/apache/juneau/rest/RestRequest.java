@@ -452,13 +452,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* ServletRequest */
 	public Locale getLocale() {
+		Locale best = super.getLocale();
 		String h = headers.getString("Accept-Language");
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
-			if (! sr.getRanges().isEmpty())
-				return toLocale(sr.getRange(0).getName());
+			float qValue = 0;
+			for (StringRange r : sr.getRanges()) {
+				if (r.getQValue() > qValue) {
+					best = toLocale(r.getName());
+					qValue = r.getQValue();
+				}
+			}
 		}
-		return super.getLocale();
+		return best;
 	}
 
 	@Override /* ServletRequest */
@@ -469,7 +475,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (! mr.getRanges().isEmpty()) {
 				List<Locale> l = new ArrayList<>(mr.getRanges().size());
 				for (StringRange r : mr.getRanges())
-					l.add(toLocale(r.getName()));
+					if (r.getQValue() > 0)
+						l.add(toLocale(r.getName()));
 				return enumeration(l);
 			}
 		}

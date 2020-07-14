@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @FixMethodOrder(NAME_ASCENDING)
-public class AcceptTest {
+public class MediaRanges_FindMatch_Test {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -154,7 +154,7 @@ public class AcceptTest {
 	private String label, accept, mediaTypes;
 	private int expected, expectedReverse;
 
-	public AcceptTest(String label, String accept, String mediaTypes, int expected, int expectedReverse) {
+	public MediaRanges_FindMatch_Test(String label, String accept, String mediaTypes, int expected, int expectedReverse) {
 		this.label = label;
 		this.accept = accept;
 		this.mediaTypes = mediaTypes;

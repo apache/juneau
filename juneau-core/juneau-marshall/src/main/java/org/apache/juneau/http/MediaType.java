@@ -39,8 +39,6 @@ public class MediaType implements Comparable<MediaType>  {
 
 	private static final Cache<String,MediaType> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
-	private static final HeaderElement DEFAULT_ELEMENT = new BasicHeaderElement("", "");
-
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
 	public static final MediaType
@@ -158,17 +156,6 @@ public class MediaType implements Comparable<MediaType>  {
 		for (NameValuePair p : parameters)
 			sb.append(';').append(p.getName()).append('=').append(p.getValue());
 		this.string = sb.toString();
-	}
-
-	/**
-	 * Parses the specified header element part.
-	 *
-	 * @param value The header element part.
-	 * @return Thew parsed header element part.  Never <jk>null</jk>.
-	 */
-	protected static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-		return (elements.length > 0 ? elements[0] : DEFAULT_ELEMENT);
 	}
 
 	/**
@@ -325,6 +312,11 @@ public class MediaType implements Comparable<MediaType>  {
 	 */
 	public List<NameValuePair> getParameters() {
 		return Collections.unmodifiableList(Arrays.asList(parameters));
+	}
+
+	private static HeaderElement parse(String value) {
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
 
 	@Override /* Object */

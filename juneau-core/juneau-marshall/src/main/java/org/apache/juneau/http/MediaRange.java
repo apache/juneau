@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
-
 import java.util.*;
 
 import org.apache.http.*;
@@ -24,7 +22,7 @@ import org.apache.juneau.collections.*;
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
- * 
+ *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
@@ -35,15 +33,6 @@ public class MediaRange extends MediaType {
 	private final NameValuePair[] extensions;
 	private final Float qValue;
 	private final String string;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value The raw media range string.
-	 */
-	public MediaRange(String value) {
-		this(parse(value));
-	}
 
 	/**
 	 * Constructor.
@@ -114,27 +103,6 @@ public class MediaRange extends MediaType {
 	 */
 	public List<NameValuePair> getExtensions() {
 		return Collections.unmodifiableList(Arrays.asList(extensions));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is also a <c>MediaType</c>, and has the same qValue, type,
-	 * parameters, and extensions.
-	 *
-	 * @return <jk>true</jk> if object is equivalent.
-	 */
-	@Override /* Object */
-	public boolean equals(Object o) {
-		return (o instanceof MediaRange) && eq(this, (MediaRange)o, (x,y)->eq(x.string, y.string));
-	}
-
-	/**
-	 * Returns a hash based on this instance's <c>media-type</c>.
-	 *
-	 * @return A hash based on this instance's <c>media-type</c>.
-	 */
-	@Override /* Object */
-	public int hashCode() {
-		return string.hashCode();
 	}
 
 	@Override /* Object */

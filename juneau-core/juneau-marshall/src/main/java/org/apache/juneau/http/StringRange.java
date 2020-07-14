@@ -40,8 +40,6 @@ import org.apache.juneau.collections.*;
 @BeanIgnore
 public class StringRange {
 
-	private static final HeaderElement DEFAULT_ELEMENT = new BasicHeaderElement("", "");
-
 	private final NameValuePair[] extensions;
 	private final Float qValue;
 	private final String name;
@@ -94,17 +92,6 @@ public class StringRange {
 				sb.append(';').append(p.getName()).append('=').append(p.getValue());
 		}
 		string = sb.toString();
-	}
-
-	/**
-	 * Parses the specified header element part.
-	 *
-	 * @param value The header element part.
-	 * @return Thew parsed header element part.  Never <jk>null</jk>.
-	 */
-	protected static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-		return (elements.length > 0 ? elements[0] : DEFAULT_ELEMENT);
 	}
 
 	/**
@@ -183,6 +170,11 @@ public class StringRange {
 		if (this.name.equals("*"))
 			return 50;
 		return 0;
+	}
+
+	private static HeaderElement parse(String value) {
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
 
 	@Override /* Object */

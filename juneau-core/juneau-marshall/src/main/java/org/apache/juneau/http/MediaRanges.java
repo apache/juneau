@@ -169,22 +169,6 @@ public class MediaRanges {
 	}
 
 	/**
-	 * Same as {@link #findMatch(List)} but matching against media type ranges.
-	 *
-	 * <p>
-	 * Note that the q-types on both the <c>mediaTypeRanges</c> parameter and this header
-	 * are taken into account when trying to find the best match.
-	 * <br>When both this header and the matching range have q-values, the q-value for the match is the result of multiplying them.
-	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<c>0.81</c>).
-	 *
-	 * @param mediaRanges The media type ranges to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int findMatch(MediaRanges mediaRanges) {
-		return findMatch(mediaRanges.getRanges());
-	}
-
-	/**
 	 * Returns the {@link MediaRange} at the specified index.
 	 *
 	 * @param index The index position of the media range.
@@ -217,22 +201,16 @@ public class MediaRanges {
 	}
 
 	/**
-	 * Parses the specified header element part.
-	 *
-	 * @param value The header element part.
-	 * @return Thew parsed header element part.  Never <jk>null</jk>.
-	 */
-	protected static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-	}
-
-	/**
 	 * Returns the media ranges that make up this object.
 	 *
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> getRanges() {
 		return Collections.unmodifiableList(Arrays.asList(ranges));
+	}
+
+	private static HeaderElement[] parse(String value) {
+		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 	}
 
 	@Override /* Object */

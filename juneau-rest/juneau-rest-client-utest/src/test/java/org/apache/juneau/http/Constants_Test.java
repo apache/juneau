@@ -12,18 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-/**
- * Constants used by classes in this package.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
- * </ul>
- */
-public class Constants {
+import static org.junit.runners.MethodSorters.*;
 
-	/** Use caching of HTTP artifacts. */
-	public static boolean NOCACHE = Boolean.getBoolean("juneau.http.cache.disable");
+import org.junit.*;
 
-	/** Maximum cache size of HTTP artifacts. */
-	public static int CACHE_MAX_SIZE = Integer.getInteger("juneau.http.cache.maxSize", 1000);
+@FixMethodOrder(NAME_ASCENDING)
+public class Constants_Test {
+
+	@Test
+	public void a01_basic() {
+		new Constants();
+	}
 }
