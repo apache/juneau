@@ -176,9 +176,9 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 		if (headers.containsKey("Accept-Language") && headers.get("Accept-Language") != null) {
 			String h = String.valueOf(headers.get("Accept-Language"));
 			if (h != null) {
-				MediaTypeRange[] mr = MediaTypeRange.parse(h);
-				if (mr.length > 0)
-					return toLocale(mr[0].getMediaType().getType());
+				MediaRanges mr = MediaRanges.of(h);
+				if (! mr.getRanges().isEmpty())
+					return toLocale(mr.getRange(0).getType());
 			}
 		}
 		return null;

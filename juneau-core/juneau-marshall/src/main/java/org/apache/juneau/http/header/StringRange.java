@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * comparison and extension parameters.
  *
  * <p>
- * Similar in concept to {@link MediaTypeRange} except instead of media types (e.g. <js>"text/json"</js>),
+ * Similar in concept to {@link MediaRanges} except instead of media types (e.g. <js>"text/json"</js>),
  * it's a simple type (e.g. <js>"iso-8601"</js>).
  *
  * <p>

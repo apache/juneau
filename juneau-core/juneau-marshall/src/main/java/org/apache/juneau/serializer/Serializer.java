@@ -847,7 +847,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	private final UriRelativity uriRelativity;
 	private final Class<? extends SerializerListener> listener;
 
-	private final MediaTypeRange[] accept;
+	private final MediaRanges accept;
 	private final MediaType[] accepts;
 	private final MediaType produces;
 
@@ -894,7 +894,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
 
 		this.produces = MediaType.of(produces);
-		this.accept = accept == null ? MediaTypeRange.parse(produces) : MediaTypeRange.parse(accept);
+		this.accept = accept == null ? MediaRanges.of(produces) : MediaRanges.of(accept);
 		this.accepts = accept == null ? new MediaType[] {this.produces} : MediaType.ofAll(StringUtils.split(accept, ','));
 	}
 
@@ -1015,7 +1015,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final MediaTypeRange[] getMediaTypeRanges() {
+	public final MediaRanges getMediaTypeRanges() {
 		return accept;
 	}
 

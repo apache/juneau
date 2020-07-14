@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
@@ -165,7 +166,7 @@ public class AcceptTest {
 	public void test() throws Exception {
 		Accept accept = Accept.of(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		int r = accept.findMatch(mt);
+		int r = accept.findMatch(AList.ofa(mt));
 		assertInteger(r).msg("{0} failed", label).is(expected);
 	}
 
@@ -174,7 +175,7 @@ public class AcceptTest {
 		Accept accept = Accept.of(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		Collections.reverse(Arrays.asList(mt));
-		int r = accept.findMatch(mt);
+		int r = accept.findMatch(AList.ofa(mt));
 		int expected2 = expectedReverse == -1 ? -1 : mt.length-expectedReverse-1;
 		assertInteger(r).msg("{0} failed", label).is(expected2);
 	}

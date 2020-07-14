@@ -17,7 +17,6 @@ import static org.apache.juneau.http.Constants.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -206,7 +205,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 		return new Accept(value);
 	}
 
-	private List<MediaTypeRange> parsed;
+	private MediaRanges ranges;
 
 	/**
 	 * Constructor
@@ -223,7 +222,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 	public Accept(Object value) {
 		super("Accept", value);
 		if (! isSupplier(value))
-			parsed = getParsedValue();
+			ranges = getRanges();
 	}
 
 	/**
@@ -244,8 +243,18 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 *
 	 * @return An unmodifiable list of media ranges.
 	 */
-	public List<MediaTypeRange> asRanges() {
-		return getParsedValue();
+	public MediaRanges asRanges() {
+		return getRanges();
+	}
+
+	/**
+	 * Returns the {@link MediaRange} at the specified index.
+	 *
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
+	 */
+	public MediaRange getRange(int index) {
+		return getRanges().getRange(index);
 	}
 
 	/**
@@ -266,100 +275,16 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 * @param mediaTypes The media types to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(MediaType[] mediaTypes) {
-		int matchQuant = 0, matchIndex = -1;
-		float q = 0f;
-
-		// Media ranges are ordered by 'q'.
-		// So we only need to search until we've found a match.
-		for (MediaTypeRange mr : getParsedValue()) {
-			float q2 = mr.getQValue();
-
-			if (q2 < q || q2 == 0)
-				break;
-
-			for (int i = 0; i < mediaTypes.length; i++) {
-				MediaType mt = mediaTypes[i];
-				int matchQuant2 = mr.getMediaType().match(mt, false);
-
-				if (matchQuant2 > matchQuant) {
-					matchIndex = i;
-					matchQuant = matchQuant2;
-					q = q2;
-				}
-			}
-		}
-
-		return matchIndex;
+	public int findMatch(List<? extends MediaType> mediaTypes) {
+		return getRanges().findMatch(mediaTypes);
 	}
 
-	/**
-	 * Same as {@link #findMatch(MediaType[])} but matching against media type ranges.
-	 *
-	 * <p>
-	 * Note that the q-types on both the <c>mediaTypeRanges</c> parameter and this header
-	 * are taken into account when trying to find the best match.
-	 * <br>When both this header and the matching range have q-values, the q-value for the match is the result of multiplying them.
-	 * <br>(e.g. Accept=<js>"text/html;q=0.9"</js> and mediaTypeRange=<js>"text/html;q=0.9"</js> ==>, q-value=<c>0.81</c>).
-	 *
-	 * @param mediaTypeRanges The media type ranges to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int findMatch(MediaTypeRange[] mediaTypeRanges) {
-		float matchQuant = 0;
-		int matchIndex = -1;
-		float q = 0f;
-
-		// Media ranges are ordered by 'q'.
-		// So we only need to search until we've found a match.
-		for (MediaTypeRange mr : getParsedValue()) {
-			float q2 = mr.getQValue();
-
-			if (q2 < q || q2 == 0)
-				break;
-
-			for (int i = 0; i < mediaTypeRanges.length; i++) {
-				MediaTypeRange mt = mediaTypeRanges[i];
-				float matchQuant2 = mr.getMediaType().match(mt.getMediaType(), false) * mt.getQValue();
-
-				if (matchQuant2 > matchQuant) {
-					matchIndex = i;
-					matchQuant = matchQuant2;
-					q = q2;
-				}
-			}
-		}
-
-		return matchIndex;
-	}
-
-
-	/**
-	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
-	 * presence of a subtype fragment.
-	 *
-	 * <p>
-	 * For example, given the header <js>"text/json+activity"</js>, calling
-	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
-	 *
-	 * @param part The media type subtype fragment.
-	 * @return <jk>true</jk> if subtype fragment exists.
-	 */
-	public boolean hasSubtypePart(String part) {
-
-		for (MediaTypeRange mr : this.getParsedValue())
-			if (mr.getQValue() > 0 && mr.getMediaType().getSubTypes().indexOf(part) >= 0)
-				return true;
-
-		return false;
-	}
-
-	private List<MediaTypeRange> getParsedValue() {
-		if (parsed != null)
-			return parsed;
+	private MediaRanges getRanges() {
+		if (ranges != null)
+			return ranges;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		return AList.of(MediaTypeRange.parse(o.toString())).unmodifiable();
+		return MediaRanges.of(o.toString());
 	}
 }

@@ -32,23 +32,23 @@ public class MediaRangeTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
-			{ "0", "text/json", "['text/json']" },
-			{ "1", "text/json,text/*", "['text/json','text/*']" },
-			{ "2", "text/*,text/json", "['text/json','text/*']" },
-			{ "3", "text/*,text/*", "['text/*']" },
-			{ "4", "*/text,text/*", "['text/*','*/text']" },
-			{ "5", "text/*,*/text", "['text/*','*/text']" },
-			{ "6", "a;q=0.9,b;q=0.1", "['a;q=0.9','b;q=0.1']" },
-			{ "7", "b;q=0.9,a;q=0.1", "['b;q=0.9','a;q=0.1']" },
-			{ "8", "a,b;q=0.9,c;q=0.1,d;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "9", "d;q=0,c;q=0.1,b;q=0.9,a", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "10", "a;q=1,b;q=0.9,c;q=0.1,d;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "11", "d;q=0,c;q=0.1,b;q=0.9,a;q=1", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "12", "a;q=0,b;q=0.1,c;q=0.9,d;q=1", "['d','c;q=0.9','b;q=0.1','a;q=0.0']" },
-			{ "13", "*", "['*']" },
-			{ "14", "", "['*/*']" },
-			{ "15", null, "['*/*']" },
-			{ "16", "foo/bar/baz", "['foo/bar/baz']" },
+			{ "0", "text/json", "'text/json'" },
+			{ "1", "text/json,text/*", "'text/json,text/*'" },
+			{ "2", "text/*,text/json", "'text/json,text/*'" },
+			{ "3", "text/*,text/*", "'text/*,text/*'" },
+			{ "4", "*/text,text/*", "'text/*,*/text'" },
+			{ "5", "text/*,*/text", "'text/*,*/text'" },
+			{ "6", "a;q=0.9,b;q=0.1", "'a;q=0.9,b;q=0.1'" },
+			{ "7", "b;q=0.9,a;q=0.1", "'b;q=0.9,a;q=0.1'" },
+			{ "8", "a,b;q=0.9,c;q=0.1,d;q=0", "'a,b;q=0.9,c;q=0.1,d;q=0.0'" },
+			{ "9", "d;q=0,c;q=0.1,b;q=0.9,a", "'a,b;q=0.9,c;q=0.1,d;q=0.0'" },
+			{ "10", "a;q=1,b;q=0.9,c;q=0.1,d;q=0", "'a,b;q=0.9,c;q=0.1,d;q=0.0'" },
+			{ "11", "d;q=0,c;q=0.1,b;q=0.9,a;q=1", "'a,b;q=0.9,c;q=0.1,d;q=0.0'" },
+			{ "12", "a;q=0,b;q=0.1,c;q=0.9,d;q=1", "'d,c;q=0.9,b;q=0.1,a;q=0.0'" },
+			{ "13", "*", "'*'" },
+			{ "14", "", "'*/*'" },
+			{ "15", null, "'*/*'" },
+			{ "16", "foo/bar/baz", "'foo/bar/baz'" },
 		});
 	}
 
@@ -62,7 +62,7 @@ public class MediaRangeTest {
 
 	@Test
 	public void test() {
-		MediaTypeRange[] r = MediaTypeRange.parse(mediaRange);
+		MediaRanges r = MediaRanges.of(mediaRange);
 		assertEquals(label + " failed", expected, SimpleJsonSerializer.DEFAULT.toString(r));
 	}
 }

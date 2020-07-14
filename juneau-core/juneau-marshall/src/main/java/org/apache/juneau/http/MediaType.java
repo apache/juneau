@@ -14,12 +14,14 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
@@ -122,20 +124,24 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @param mt The media type string.
 	 */
 	public MediaType(String mt) {
-		mt = trim(mt);
-		value = mt;
+		this(parse(mt));
+	}
 
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(mt, null);
-		HeaderElement element = (elements.length > 0 ? elements[0] : DEFAULT_ELEMENT);
+	/**
+	 * Constructor.
+	 *
+	 * @param e The parsed media type string.
+	 */
+	public MediaType(HeaderElement e) {
+		mediaType = e.getName();
 
-		mediaType = element.getName();
-		parameters = element.getParameters();
-
-		// Convert the parameters to BasicNameValuePair.
-		for (int j = 0; j < parameters.length; j++) {
-			NameValuePair p = parameters[j];
-			parameters[j] = BasicNameValuePair.of(p.getName(), p.getValue());
+		List<NameValuePair> parameters = AList.of();
+		for (NameValuePair p : e.getParameters()) {
+			if (p.getName().equals("q"))
+				break;
+			parameters.add(BasicNameValuePair.of(p.getName(), p.getValue()));
 		}
+		this.parameters= parameters.toArray(new NameValuePair[parameters.size()]);
 
 		String x = mediaType.replace(' ', '+');
 		int i = x.indexOf('/');
@@ -146,6 +152,23 @@ public class MediaType implements Comparable<MediaType>  {
 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
 		Arrays.sort(this.subTypesSorted);
 		hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(mediaType);
+		for (NameValuePair p : parameters)
+			sb.append(';').append(p.getName()).append('=').append(p.getValue());
+		this.value = sb.toString();
+	}
+
+	/**
+	 * Parses the specified header element part.
+	 *
+	 * @param value The header element part.
+	 * @return Thew parsed header element part.  Never <jk>null</jk>.
+	 */
+	protected static HeaderElement parse(String value) {
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return (elements.length > 0 ? elements[0] : DEFAULT_ELEMENT);
 	}
 
 	/**
@@ -300,29 +323,27 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public NameValuePair[] getParameters() {
-		return parameters;
+	public List<NameValuePair> getParameters() {
+		return Collections.unmodifiableList(Arrays.asList(parameters));
 	}
 
 	@Override /* Object */
-	public final String toString() {
+	public String toString() {
 		return value;
 	}
 
 	@Override /* Object */
-	public final int hashCode() {
-		return mediaType.hashCode();
+	public int hashCode() {
+		return value.hashCode();
 	}
 
 	@Override /* Object */
-	public final boolean equals(Object o) {
-		if (o instanceof MediaType)
-			return ObjectUtils.eq(mediaType, ((MediaType)o).mediaType);
-		return false;
+	public boolean equals(Object o) {
+		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.value, y.value));
 	}
 
 	@Override
 	public final int compareTo(MediaType o) {
-		return mediaType.compareTo(o.mediaType);
+		return toString().compareTo(o.toString());
 	}
 }

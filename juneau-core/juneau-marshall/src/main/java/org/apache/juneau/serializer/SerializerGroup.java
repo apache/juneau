@@ -75,7 +75,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 
-	private final MediaTypeRange[] mediaTypeRanges;
+	private final List<MediaRange> mediaTypeRanges;
 	private final Serializer[] mediaTypeRangeSerializers;
 
 	private final List<MediaType> mediaTypesList;
@@ -118,11 +118,11 @@ public final class SerializerGroup extends BeanTraverseContext {
 		super(ps);
 		this.serializers = AList.unmodifiable(serializers);
 
-		AList<MediaTypeRange> lmtr = AList.of();
+		AList<MediaRange> lmtr = AList.of();
 		ASet<MediaType> lmt = ASet.of();
 		AList<Serializer> l = AList.of();
 		for (Serializer s : serializers) {
-			for (MediaTypeRange m: s.getMediaTypeRanges()) {
+			for (MediaRange m: s.getMediaTypeRanges().getRanges()) {
 				lmtr.add(m);
 				l.add(s);
 			}
@@ -130,7 +130,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 				lmt.add(mt);
 		}
 
-		this.mediaTypeRanges = lmtr.asArrayOf(MediaTypeRange.class);
+		this.mediaTypeRanges = lmtr.unmodifiable();
 		this.mediaTypesList = AList.of(lmt).unmodifiable();
 		this.mediaTypeRangeSerializers = l.asArrayOf(Serializer.class);
 	}
@@ -168,7 +168,7 @@ public final class SerializerGroup extends BeanTraverseContext {
 		Accept a = Accept.of(acceptHeader);
 		int match = a.findMatch(mediaTypeRanges);
 		if (match >= 0) {
-			sm = new SerializerMatch(mediaTypeRanges[match].getMediaType(), mediaTypeRangeSerializers[match]);
+			sm = new SerializerMatch(mediaTypeRanges.get(match), mediaTypeRangeSerializers[match]);
 			cache.putIfAbsent(acceptHeader, sm);
 		}
 
