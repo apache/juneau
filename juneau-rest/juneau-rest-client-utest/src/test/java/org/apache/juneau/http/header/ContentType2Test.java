@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
@@ -87,6 +88,6 @@ public class ContentType2Test {
 	public void test() throws Exception {
 		ContentType ct = ContentType.of(this.contentType);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		assertInteger(ct.findMatch(mt)).msg("{0} failed", label).is(expected);
+		assertInteger(ct.match(AList.ofa(mt))).msg("{0} failed", label).is(expected);
 	}
 }

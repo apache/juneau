@@ -83,9 +83,8 @@ public final class ParserGroup extends BeanContext {
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 
-	private final MediaType[] mediaTypes;            // List of media types
-	private final List<MediaType> mediaTypesList;
-	private final Parser[] mediaTypeParsers;
+	private final List<MediaType> mediaTypes;
+	private final List<Parser> mediaTypeParsers;
 	private final List<Parser> parsers;
 
 	/**
@@ -134,9 +133,8 @@ public final class ParserGroup extends BeanContext {
 			}
 		}
 
-		this.mediaTypes = lmt.asArrayOf(MediaType.class);
-		this.mediaTypesList = lmt.unmodifiable();
-		this.mediaTypeParsers = l.asArrayOf(Parser.class);
+		this.mediaTypes = lmt.unmodifiable();
+		this.mediaTypeParsers = l.unmodifiable();
 	}
 
 	/**
@@ -154,10 +152,10 @@ public final class ParserGroup extends BeanContext {
 			return pm;
 
 		ContentType ct = ContentType.of(contentTypeHeader);
-		int match = ct.findMatch(mediaTypes);
+		int match = ct.match(mediaTypes);
 
 		if (match >= 0) {
-			pm = new ParserMatch(mediaTypes[match], mediaTypeParsers[match]);
+			pm = new ParserMatch(mediaTypes.get(match), mediaTypeParsers.get(match));
 			cache.putIfAbsent(contentTypeHeader, pm);
 		}
 
@@ -205,7 +203,7 @@ public final class ParserGroup extends BeanContext {
 	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return mediaTypesList;
+		return mediaTypes;
 	}
 
 	/**

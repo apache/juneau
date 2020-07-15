@@ -14,6 +14,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.Constants.*;
 
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
@@ -111,11 +113,11 @@ public class ContentType extends BasicParameterizedHeader {
 	 * @param mediaTypes The media types to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(MediaType[] mediaTypes) {
+	public int match(List<MediaType> mediaTypes) {
 		int matchQuant = 0, matchIndex = -1;
 
-		for (int i = 0; i < mediaTypes.length; i++) {
-			MediaType mt = mediaTypes[i];
+		for (int i = 0; i < mediaTypes.size(); i++) {
+			MediaType mt = mediaTypes.get(i);
 			int matchQuant2 = mt.match(mediaType, true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
