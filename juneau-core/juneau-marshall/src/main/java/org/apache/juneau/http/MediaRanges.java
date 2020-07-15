@@ -141,7 +141,7 @@ public class MediaRanges {
 	 * @param mediaTypes The media types to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(List<? extends MediaType> mediaTypes) {
+	public int match(List<? extends MediaType> mediaTypes) {
 		int matchQuant = 0, matchIndex = -1;
 		float q = 0f;
 

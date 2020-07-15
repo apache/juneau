@@ -130,10 +130,10 @@ public class RequestBeanMeta {
 
 		Builder apply(Request a) {
 			if (a != null) {
-				if (a.partSerializer() != HttpPartSerializer.Null.class)
-					serializer = a.partSerializer();
-				if (a.partParser() != HttpPartParser.Null.class)
-					parser = a.partParser();
+				if (a.serializer() != HttpPartSerializer.Null.class)
+					serializer = a.serializer();
+				if (a.parser() != HttpPartParser.Null.class)
+					parser = a.parser();
 			}
 			return this;
 		}

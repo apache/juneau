@@ -72,15 +72,16 @@ public class StringRange {
 				extensions.add(BasicNameValuePair.of(p.getName(), p.getValue()));
 			}
 		}
-
+		
 		this.qValue = qValue;
 		this.extensions = extensions.toArray(new NameValuePair[extensions.size()]);
 		this.name = e.getName();
 
 		StringBuffer sb = new StringBuffer();
+		sb.append(name);
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.
-		if (qValue.floatValue() == 1.0) {
+		if (Float.compare(qValue.floatValue(), 1f) == 0) {
 			if (this.extensions.length > 0) {
 				sb.append(";q=").append(qValue);
 				for (NameValuePair p : extensions)
@@ -135,7 +136,7 @@ public class StringRange {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is also a <c>MediaType</c>, and has the same qValue, type,
+	 * Returns <jk>true</jk> if the specified object is also a <c>StringRange</c>, and has the same qValue, type,
 	 * parameters, and extensions.
 	 *
 	 * @return <jk>true</jk> if object is equivalent.
@@ -174,7 +175,7 @@ public class StringRange {
 
 	private static HeaderElement parse(String value) {
 		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
+		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
 
 	@Override /* Object */

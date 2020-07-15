@@ -103,6 +103,11 @@ public class SchemaAnnotation implements Schema {
 		this.on = on;
 	}
 
+	/**
+	 * Constructor.
+	 */
+	public SchemaAnnotation() {}
+
 	@Override
 	public Class<? extends Annotation> annotationType() {
 		return Schema.class;

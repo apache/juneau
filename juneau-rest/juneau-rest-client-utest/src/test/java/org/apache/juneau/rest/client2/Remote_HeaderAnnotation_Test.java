@@ -689,7 +689,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Remote(path="/")
 	public static interface K1 {
 		@RemoteMethod(path="/") String getX1(@Request K1a rb);
-		@RemoteMethod(path="/") String getX2(@Request(partSerializer=XSerializer.class) K1a rb);
+		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K1a rb);
 	}
 
 	public static class K1a {
@@ -751,7 +751,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Remote(path="/")
 	public static interface K2 {
 		@RemoteMethod(path="/") String getX1(@Request K2a rb);
-		@RemoteMethod(path="/") String getX2(@Request(partSerializer=XSerializer.class) K2a rb);
+		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -789,7 +789,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Remote(path="/")
 	public static interface K3 {
 		@RemoteMethod(path="/") String getX1(@Request K3a rb);
-		@RemoteMethod(path="/") String getX2(@Request(partSerializer=XSerializer.class) K3a rb);
+		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -835,7 +835,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Remote(path="/")
 	public static interface K4 {
 		@RemoteMethod(path="/") String getX1(@Request K4a rb);
-		@RemoteMethod(path="/") String getX2(@Request(partSerializer=XSerializer.class) K4a rb);
+		@RemoteMethod(path="/") String getX2(@Request(serializer=XSerializer.class) K4a rb);
 	}
 
 	public static class K4a {

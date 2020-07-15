@@ -724,7 +724,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K1 {
 		@RemoteMethod(path="/") String postX1(@Request K1a rb);
-		@RemoteMethod(path="/") String postX2(@Request(partSerializer=XSerializer.class) K1a rb);
+		@RemoteMethod(path="/") String postX2(@Request(serializer=XSerializer.class) K1a rb);
 	}
 
 	public static class K1a {
@@ -786,7 +786,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K2 {
 		@RemoteMethod(path="/") String postX1(@Request K2a rb);
-		@RemoteMethod(path="/") String postX2(@Request(partSerializer=XSerializer.class) K2a rb);
+		@RemoteMethod(path="/") String postX2(@Request(serializer=XSerializer.class) K2a rb);
 	}
 
 	public static class K2a {
@@ -824,7 +824,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K3 {
 		@RemoteMethod(path="/") String postX1(@Request K3a rb);
-		@RemoteMethod(path="/") String postX2(@Request(partSerializer=XSerializer.class) K3a rb);
+		@RemoteMethod(path="/") String postX2(@Request(serializer=XSerializer.class) K3a rb);
 	}
 
 	public static class K3a {
@@ -914,7 +914,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Remote(path="/")
 	public static interface K6 {
 		@RemoteMethod(path="/") String postX1(@Request K6a rb);
-		@RemoteMethod(path="/") String postX2(@Request(partSerializer=XSerializer.class) K6a rb);
+		@RemoteMethod(path="/") String postX2(@Request(serializer=XSerializer.class) K6a rb);
 	}
 
 	public static class K6a {

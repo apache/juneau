@@ -270,8 +270,8 @@ public class HttpPartSchemaBuilder {
 		codes(a.code());
 		required(false);
 		allowEmptyValue(true);
-		serializer(a.partSerializer());
-		parser(a.partParser());
+		serializer(a.serializer());
+		parser(a.parser());
 		apply(a.schema());
 		return this;
 	}

@@ -259,7 +259,7 @@ public class Remote_RequestAnnotation_Test {
 		}
 	}
 
-	@Request(partSerializer=XPartSerializer.class)
+	@Request(serializer=XPartSerializer.class)
 	public static class E1 {
 		@Body
 		public String getBody() {

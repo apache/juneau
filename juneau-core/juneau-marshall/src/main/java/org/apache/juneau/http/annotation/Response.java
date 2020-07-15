@@ -61,7 +61,7 @@ public @interface Response {
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
-	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
@@ -69,7 +69,7 @@ public @interface Response {
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
 	 */
-	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * The HTTP response code.

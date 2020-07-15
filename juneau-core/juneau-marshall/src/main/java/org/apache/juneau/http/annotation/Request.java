@@ -147,7 +147,7 @@ public @interface Request {
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
 	 */
-	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
@@ -155,5 +155,5 @@ public @interface Request {
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
-	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

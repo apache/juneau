@@ -276,7 +276,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int findMatch(List<? extends MediaType> mediaTypes) {
-		return getRanges().findMatch(mediaTypes);
+		return getRanges().match(mediaTypes);
 	}
 
 	private MediaRanges getRanges() {

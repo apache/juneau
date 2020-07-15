@@ -182,10 +182,10 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (a != null) {
-				if (a.partSerializer() != HttpPartSerializer.Null.class)
-					partSerializer = a.partSerializer();
-				if (a.partParser() != HttpPartParser.Null.class)
-					partParser = a.partParser();
+				if (a.serializer() != HttpPartSerializer.Null.class)
+					partSerializer = a.serializer();
+				if (a.parser() != HttpPartParser.Null.class)
+					partParser = a.parser();
 				if (a.value().length > 0)
 					code = a.value()[0];
 				if (a.code().length > 0)

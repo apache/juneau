@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import org.apache.juneau.httppart.*;
+
 /**
  * Various reusable utility methods when working with annotations.
  */
@@ -31,11 +33,14 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.description(), a.d(), a._default(), a.df(), a.example(), a.ex(), a.api())
+			allEmpty(a.description(), a.d(), a._default(), a.df(), a.example(), a.ex(), a.api(), a._enum(), a.e())
 			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
-			&& allFalse(a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allFalse(a.multi(), a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui(), a.skipIfEmpty(), a.sie())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+			&& a.parser() == HttpPartParser.Null.class
+			&& a.serializer() == HttpPartSerializer.Null.class
+		;
 	}
 
 	/**
@@ -50,9 +55,12 @@ public class AnnotationUtils {
 		return
 			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
 			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
-			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allFalse(a.multi(), a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui(), a.skipIfEmpty(), a.sie())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+			&& a.parser() == HttpPartParser.Null.class
+			&& a.serializer() == HttpPartSerializer.Null.class
+		;
 	}
 
 	/**
@@ -67,9 +75,12 @@ public class AnnotationUtils {
 		return
 			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
 			&& allEmpty(a.name(), a.value(), a.n(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.collectionFormat(), a.cf(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
-			&& allFalse(a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui())
+			&& allFalse(a.multi(), a.allowEmptyValue(), a.aev(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.required(), a.r(), a.uniqueItems(), a.ui(), a.skipIfEmpty(), a.sie())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+			&& a.parser() == HttpPartParser.Null.class
+			&& a.serializer() == HttpPartSerializer.Null.class
+		;
 	}
 
 	/**
@@ -83,8 +94,12 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.description(), a.d(), a.example(), a.ex(), a.examples(), a.exs(), a.api())
+			&& a.code().length == 0
+			&& a.value().length == 0
 			&& a.headers().length == 0
 			&& empty(a.schema())
+			&& a.parser() == HttpPartParser.Null.class
+			&& a.serializer() == HttpPartSerializer.Null.class
 		;
 	}
 
@@ -99,10 +114,13 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.example(), a.ex(), a.api())
-			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
+			&& allEmpty(a.name(), a.n(), a.value(), a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo(), a.pattern(), a.p())
 			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+			&& a.code().length == 0
+			&& a.serializer() == HttpPartSerializer.Null.class
+		;
 	}
 
 	/**
@@ -116,12 +134,13 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.value(), a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.ex(), a.examples(), a.exs())
-			&& allEmpty(a.$ref(), a.format(), a.f(), a.title(), a.multipleOf(), a.mo(), a.maximum(), a.max(), a.minimum(), a.min(), a.pattern(), a.p(), a.type(), a.t(), a.discriminator())
+			&& allEmpty(a.$ref(), a.format(), a.f(), a.title(), a.multipleOf(), a.mo(), a.maximum(), a.max(), a.minimum(), a.min(), a.pattern(), a.p(), a.type(), a.t(), a.discriminator(), a.collectionFormat(), a.cf(), a.on())
 			&& allMinusOne(a.maxProperties(), a.maxp(), a.minProperties(), a.minp())
 			&& allFalse(a.ignore(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.readOnly(), a.ro(), a.required(), a.r(), a.uniqueItems(), a.ui())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
 			&& empty(a.items())
-			&& empty(a.externalDocs());
+			&& empty(a.externalDocs())
+		;
 	}
 
 	/**
@@ -135,7 +154,8 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.value(), a.description())
-			&& allEmpty(a.url());
+			&& allEmpty(a.url())
+		;
 	}
 
 	/**
@@ -150,7 +170,8 @@ public class AnnotationUtils {
 		return
 			allEmpty(a.description(), a.d(), a.example(), a.ex(), a.examples(), a.exs(), a.api(), a.value())
 			&& allFalse(a.required(), a.r())
-			&& empty(a.schema());
+			&& empty(a.schema())
+		;
 	}
 
 	/**
@@ -164,7 +185,8 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.value())
-			&& allEmpty(a.name(), a.url(), a.email());
+			&& allEmpty(a.name(), a.url(), a.email())
+		;
 	}
 
 	/**
@@ -178,7 +200,8 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.value())
-			&& allEmpty(a.name(), a.url());
+			&& allEmpty(a.name(), a.url())
+		;
 	}
 
 	/**
@@ -195,7 +218,8 @@ public class AnnotationUtils {
 			&& allEmpty(a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.pattern(), a.p(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
 			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+		;
 	}
 
 	/**
@@ -211,7 +235,8 @@ public class AnnotationUtils {
 			allEmpty(a.value(), a._default(), a.df(), a._enum(), a.e(), a.items())
 			&& allEmpty(a.type(), a.t(), a.format(), a.f(), a.collectionFormat(), a.cf(), a.pattern(), a.p(), a.$ref(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
 			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
-			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini());
+			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
+		;
 	}
 
 	/**
@@ -225,11 +250,14 @@ public class AnnotationUtils {
 			return true;
 		return
 			allEmpty(a.description(), a.d(), a._enum(), a.e(), a.example(), a.ex(), a.api())
-			&& allEmpty(a.name(), a.value(), a.n(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo())
-			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui())
+			&& allEmpty(a.name(), a.value(), a.n(), a.type(), a.t(), a.format(), a.f(), a.pattern(), a.p(), a.maximum(), a.max(), a.minimum(), a.min(), a.multipleOf(), a.mo(), a.collectionFormat(), a.cf())
+			&& allFalse(a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.uniqueItems(), a.ui(), a.allowEmptyValue(), a.aev())
 			&& allTrue(a.required(), a.r())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())
-			&& empty(a.items());
+			&& empty(a.items())
+			&& a.parser() == HttpPartParser.Null.class
+			&& a.serializer() == HttpPartSerializer.Null.class
+		;
 	}
 
 	/**

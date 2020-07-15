@@ -143,7 +143,7 @@ public class StringRanges {
 	 * @param names The names to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int findMatch(List<String> names) {
+	public int match(List<String> names) {
 		int matchQuant = 0, matchIndex = -1;
 		float q = 0f;
 
@@ -183,22 +183,16 @@ public class StringRanges {
 	}
 
 	/**
-	 * Parses the specified header element part.
-	 *
-	 * @param value The header element part.
-	 * @return Thew parsed header element part.  Never <jk>null</jk>.
-	 */
-	protected static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-	}
-
-	/**
 	 * Returns the string ranges that make up this object.
 	 *
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> getRanges() {
 		return Collections.unmodifiableList(Arrays.asList(ranges));
+	}
+
+	private static HeaderElement[] parse(String value) {
+		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 	}
 
 	@Override /* Object */
