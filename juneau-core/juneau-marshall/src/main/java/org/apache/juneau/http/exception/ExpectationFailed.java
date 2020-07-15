@@ -51,8 +51,7 @@ public class ExpectationFailed extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public ExpectationFailed(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

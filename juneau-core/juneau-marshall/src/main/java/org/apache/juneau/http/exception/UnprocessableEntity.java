@@ -51,8 +51,7 @@ public class UnprocessableEntity extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public UnprocessableEntity(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

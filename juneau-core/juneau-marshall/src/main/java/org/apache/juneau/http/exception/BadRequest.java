@@ -51,8 +51,7 @@ public class BadRequest extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public BadRequest(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

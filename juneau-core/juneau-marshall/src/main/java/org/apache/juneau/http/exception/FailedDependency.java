@@ -51,8 +51,7 @@ public class FailedDependency extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public FailedDependency(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

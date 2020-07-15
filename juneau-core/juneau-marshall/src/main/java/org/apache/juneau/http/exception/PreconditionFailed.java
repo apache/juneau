@@ -58,8 +58,7 @@ public class PreconditionFailed extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public PreconditionFailed(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

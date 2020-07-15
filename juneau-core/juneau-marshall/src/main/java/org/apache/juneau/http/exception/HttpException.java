@@ -31,6 +31,7 @@ import org.apache.juneau.internal.*;
  * REST methods on subclasses of <c>RestServlet</c> can throw this exception to trigger an HTTP status other than the
  * automatically-generated <c>404</c>, <c>405</c>, and <c>500</c> statuses.
  */
+@Response
 public class HttpException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
@@ -57,13 +58,7 @@ public class HttpException extends BasicRuntimeException {
 	 * @param msg The status message.
 	 */
 	public HttpException(String msg) {
-		super((Throwable)null, msg);
-	}
-
-	private static String message(Throwable cause, String msg, Object...args) {
-		if (msg == null && cause != null)
-			return firstNonEmpty(cause.getLocalizedMessage(), cause.getClass().getName());
-		return format(msg, args);
+		this((Throwable)null, 0, msg);
 	}
 
 	/**
@@ -101,9 +96,9 @@ public class HttpException extends BasicRuntimeException {
 	public Throwable getRootCause() {
 		Throwable t = this;
 		while(t != null) {
-			t = t.getCause();
 			if (! (t instanceof HttpException || t instanceof InvocationTargetException))
 				return t;
+			t = t.getCause();
 		}
 		return null;
 	}
@@ -160,7 +155,7 @@ public class HttpException extends BasicRuntimeException {
 	 * @param status The status code.
 	 * @return This object (for method chaining).
 	 */
-	protected HttpException setStatus(int status) {
+	public HttpException setStatus(int status) {
 		this.status = status;
 		return this;
 	}
@@ -170,6 +165,7 @@ public class HttpException extends BasicRuntimeException {
 	 *
 	 * @return The HTTP status code.
 	 */
+	@ResponseStatus
 	public int getStatus() {
 		return status;
 	}
@@ -196,6 +192,12 @@ public class HttpException extends BasicRuntimeException {
 	@BeanIgnore
 	public Map<String,Object> getHeaders() {
 		return headers;
+	}
+
+	private static String message(Throwable cause, String msg, Object...args) {
+		if (msg == null && cause != null)
+			return firstNonEmpty(cause.getLocalizedMessage(), cause.getClass().getName());
+		return format(msg, args);
 	}
 
 	// When serialized, just serialize the message itself.

@@ -51,8 +51,7 @@ public class HttpVersionNotSupported extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public HttpVersionNotSupported(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

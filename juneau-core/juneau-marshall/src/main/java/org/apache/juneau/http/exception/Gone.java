@@ -55,8 +55,7 @@ public class Gone extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public Gone(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

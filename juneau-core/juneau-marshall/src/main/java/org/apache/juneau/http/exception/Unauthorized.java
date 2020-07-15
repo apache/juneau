@@ -54,8 +54,7 @@ public class Unauthorized extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public Unauthorized(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

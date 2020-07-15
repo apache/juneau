@@ -51,8 +51,7 @@ public class LengthRequired extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public LengthRequired(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

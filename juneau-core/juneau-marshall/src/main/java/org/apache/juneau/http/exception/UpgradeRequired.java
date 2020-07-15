@@ -51,8 +51,7 @@ public class UpgradeRequired extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public UpgradeRequired(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

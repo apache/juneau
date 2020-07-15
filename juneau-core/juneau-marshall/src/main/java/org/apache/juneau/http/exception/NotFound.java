@@ -52,8 +52,7 @@ public class NotFound extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public NotFound(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

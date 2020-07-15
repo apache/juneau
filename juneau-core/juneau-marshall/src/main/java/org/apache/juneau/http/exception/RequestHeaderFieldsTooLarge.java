@@ -51,8 +51,7 @@ public class RequestHeaderFieldsTooLarge extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public RequestHeaderFieldsTooLarge(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

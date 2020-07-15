@@ -52,8 +52,7 @@ public class UriTooLong extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public UriTooLong(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

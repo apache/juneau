@@ -51,8 +51,7 @@ public class Locked extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public Locked(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

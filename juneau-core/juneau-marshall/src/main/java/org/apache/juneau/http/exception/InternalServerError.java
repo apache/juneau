@@ -51,8 +51,7 @@ public class InternalServerError extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public InternalServerError(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**

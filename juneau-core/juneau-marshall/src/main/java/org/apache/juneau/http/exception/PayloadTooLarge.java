@@ -51,8 +51,7 @@ public class PayloadTooLarge extends HttpException {
 	 * @param msg The message.  Can be <jk>null</jk>.
 	 */
 	public PayloadTooLarge(String msg) {
-		super(msg);
-		setStatus(CODE);
+		this((Throwable)null, msg);
 	}
 
 	/**
