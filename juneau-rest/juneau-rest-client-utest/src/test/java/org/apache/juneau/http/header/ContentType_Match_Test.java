@@ -29,7 +29,7 @@ import org.junit.runners.*;
  */
 @RunWith(Parameterized.class)
 @FixMethodOrder(NAME_ASCENDING)
-public class ContentType2Test {
+public class ContentType_Match_Test {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
@@ -77,7 +77,7 @@ public class ContentType2Test {
 	private String label, contentType, mediaTypes;
 	private int expected;
 
-	public ContentType2Test(String label, String contentType, String mediaTypes, int expected) {
+	public ContentType_Match_Test(String label, String contentType, String mediaTypes, int expected) {
 		this.label = label;
 		this.contentType = contentType;
 		this.mediaTypes = mediaTypes;
