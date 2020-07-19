@@ -90,7 +90,7 @@ public class Expires extends BasicDateHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
@@ -113,7 +113,7 @@ public class Expires extends BasicDateHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
@@ -133,7 +133,7 @@ public class Expires extends BasicDateHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
@@ -148,12 +148,12 @@ public class Expires extends BasicDateHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public Expires(String value) {
-		super("Expires", value);
+		this((Object)value);
 	}
 }

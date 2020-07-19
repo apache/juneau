@@ -77,7 +77,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -101,7 +101,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -122,7 +122,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -138,12 +138,12 @@ public class Allow extends BasicCsvArrayHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public Allow(String value) {
-		super("Allow", value);
+		this((Object)value);
 	}
 }

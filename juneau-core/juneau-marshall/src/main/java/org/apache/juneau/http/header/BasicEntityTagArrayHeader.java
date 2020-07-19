@@ -37,27 +37,29 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class BasicEntityValidatorArrayHeader extends BasicHeader {
+public class BasicEntityTagArrayHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicEntityValidatorArrayHeader} object.
+	 * @return A new {@link BasicEntityTagArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicEntityValidatorArrayHeader of(String name, Object value) {
-		return new BasicEntityValidatorArrayHeader(name, value);
+	public static BasicEntityTagArrayHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicEntityTagArrayHeader(name, value);
 	}
 
 	/**
@@ -66,40 +68,42 @@ public class BasicEntityValidatorArrayHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicEntityValidatorArrayHeader} object.
+	 * @return A new {@link BasicEntityTagArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicEntityValidatorArrayHeader of(String name, Supplier<?> value) {
-		return new BasicEntityValidatorArrayHeader(name, value);
+	public static BasicEntityTagArrayHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicEntityTagArrayHeader(name, value);
 	}
 
-	private List<EntityValidator> parsed;
+	private List<EntityTag> parsed;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicEntityValidatorArrayHeader(String name, Object value) {
+	public BasicEntityTagArrayHeader(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
 			parsed = getParsedValue();
@@ -108,50 +112,40 @@ public class BasicEntityValidatorArrayHeader extends BasicHeader {
 	@Override /* Header */
 	public String getValue() {
 		Object o = getRawValue();
-		if (o == null)
-			return null;
 		if (o instanceof String)
 			return (String)o;
-		return StringUtils.join(getParsedValue(), ',');
+		return StringUtils.join(asEntityTags(), ',');
 	}
 
 	/**
-	 * Returns this header value as an array of {@link EntityValidator} objects.
+	 * Returns this header value as an array of {@link EntityTag} objects.
 	 *
-	 * @return this header value as an array of {@link EntityValidator} objects.
+	 * @return this header value as an array of {@link EntityTag} objects.
 	 */
-	public List<EntityValidator> asValidators() {
+	public List<EntityTag> asEntityTags() {
 		return getParsedValue();
 	}
 
-	private List<EntityValidator> getParsedValue() {
+	private List<EntityTag> getParsedValue() {
 		if (parsed != null)
 			return parsed;
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		if (o instanceof EntityValidator[])
-			return AList.of((EntityValidator[])o).unmodifiable();
+		if (o instanceof EntityTag[])
+			return AList.of((EntityTag[])o).unmodifiable();
 
-		AList<EntityValidator> l = AList.of();
+		AList<EntityTag> l = AList.of();
 		if (o instanceof Collection) {
 			for (Object o2 : (Collection<?>)o)
-				l.add(convert(o2));
+				l.add(EntityTag.of(o2));
 		} else if (o.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(convert(Array.get(o, i)));
+				l.add(EntityTag.of(Array.get(o, i)));
 		} else {
 			for (String s : split(o.toString()))
-				l.add(convert(s));
+				l.add(EntityTag.of(s));
 		}
 		return l.unmodifiable();
-	}
-
-	private EntityValidator convert(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof EntityValidator)
-			return (EntityValidator)o;
-		return new EntityValidator(o.toString());
 	}
 }

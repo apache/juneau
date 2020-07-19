@@ -69,7 +69,7 @@ public class ContentLength extends BasicLongHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -91,7 +91,7 @@ public class ContentLength extends BasicLongHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -110,7 +110,7 @@ public class ContentLength extends BasicLongHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -124,12 +124,12 @@ public class ContentLength extends BasicLongHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public ContentLength(String value) {
-		super("Content-Length", value);
+		this((Object)value);
 	}
 }

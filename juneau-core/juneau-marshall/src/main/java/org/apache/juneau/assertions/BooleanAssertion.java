@@ -10,71 +10,59 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.assertions;
+
+import org.apache.juneau.internal.*;
 
 /**
- * Represents a validator value.
- *
- * <p>
- * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
- * 	ETag: "123456789"    – A strong ETag validator
- * 	ETag: W/"123456789"  – A weak ETag validator
- * </p>
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
- * </ul>
+ * Used for assertion calls against booleans.
  */
-public class EntityValidator {
-
-	private final String value;
-	private final boolean isWeak;
+@FluentSetters(returns="BooleanAssertion")
+public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 
 	/**
-	 * Constructor.
+	 * Creator.
 	 *
-	 * @param value The validator string value.
+	 * @param value The object being wrapped.
+	 * @return A new {@link BooleanAssertion} object.
 	 */
-	public EntityValidator(String value) {
-		value = value.trim();
-		isWeak = value.startsWith("W/");
-		if (isWeak)
-			value = value.substring(2);
-		if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"')
-			value = value.substring(1, value.length()-1);
-		this.value = value;
+	public static BooleanAssertion create(Boolean value) {
+		return new BooleanAssertion(value);
 	}
 
 	/**
-	 * Returns the validator value stripped of quotes and weak tag.
+	 * Creator.
 	 *
-	 * @return The validator value.
+	 * @param value The object being wrapped.
 	 */
-	public String asString() {
-		return value;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the weak flag is present in the value.
-	 *
-	 * @return <jk>true</jk> if the weak flag is present in the value.
-	 */
-	public boolean isWeak() {
-		return isWeak;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the validator string value is <c>*</c>.
-	 *
-	 * @return <jk>true</jk> if the validator string value is <c>*</c>.
-	 */
-	public boolean isAny() {
-		return "*".equals(value);
+	public BooleanAssertion(Boolean value) {
+		super(value, null);
 	}
 
 	@Override
-	public String toString() {
-		return (isWeak ? "W/" : "") + (isAny() ? "*" : ('"' + value + '"'));
+	protected BooleanAssertion returns() {
+		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public BooleanAssertion msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public BooleanAssertion stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public BooleanAssertion stdout() {
+		super.stdout();
+		return this;
+	}
+
+	// </FluentSetters>
 }

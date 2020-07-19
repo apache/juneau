@@ -74,7 +74,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Charset")
-public class AcceptCharset extends BasicRangeArrayHeader {
+public class AcceptCharset extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,7 +84,7 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link AcceptCharset} object.
 	 */
 	public static AcceptCharset of(String value) {
@@ -100,7 +100,7 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -110,6 +110,8 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * @return A new {@link AcceptCharset} object.
 	 */
 	public static AcceptCharset of(Object value) {
+		if (value == null)
+			return null;
 		return new AcceptCharset(value);
 	}
 
@@ -120,7 +122,7 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -130,6 +132,8 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * @return A new {@link AcceptCharset} object.
 	 */
 	public static AcceptCharset of(Supplier<?> value) {
+		if (value == null)
+			return null;
 		return new AcceptCharset(value);
 	}
 
@@ -137,7 +141,7 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -154,9 +158,9 @@ public class AcceptCharset extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public AcceptCharset(String value) {
-		super("Accept-Charset", value);
+		this((Object)value);
 	}
 }

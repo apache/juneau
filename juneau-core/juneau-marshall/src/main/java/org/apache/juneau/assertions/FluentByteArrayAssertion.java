@@ -61,6 +61,7 @@ public class FluentByteArrayAssertion<R> extends FluentArrayAssertion<R> {
 	 *
 	 * @return A new fluent string assertion.
 	 */
+	@Override
 	public FluentStringAssertion<R> string() {
 		return string(IOUtils.UTF8);
 	}

@@ -50,7 +50,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("ETag")
-public class ETag extends BasicStringHeader {
+public class ETag extends BasicEntityTagHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,7 @@ public class ETag extends BasicStringHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -79,7 +79,7 @@ public class ETag extends BasicStringHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -97,7 +97,7 @@ public class ETag extends BasicStringHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -110,12 +110,12 @@ public class ETag extends BasicStringHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public ETag(String value) {
-		super("ETag", value);
+		this((Object)value);
 	}
 }

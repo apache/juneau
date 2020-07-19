@@ -30,7 +30,7 @@ public class StringRanges_Test {
 	public void a01_basic() throws Exception {
 		List<String> x = AList.of("foo","bar","baz");
 
-		assertInteger(of(null).match(x)).is(0);
+		assertInteger(of(null).match(x)).is(-1);
 
 		assertInteger(of("foo;q=0.5,bar").match(x)).is(1);
 		assertInteger(of("foo;q=0.6,bar;q=0.5").match(x)).is(0);
@@ -39,8 +39,8 @@ public class StringRanges_Test {
 		assertInteger(of("qux,q2x;q=0").match(x)).is(-1);
 		assertInteger(of("foo;q=0").match(x)).is(-1);
 
-		assertString(of(null).getRange(0)).is("*");
-		assertString(of("").getRange(0)).is("*");
+		assertString(of(null).getRange(0)).isNull();
+		assertString(of("").getRange(0)).isNull();
 		assertString(of(null).getRange(-1)).doesNotExist();
 		assertString(of(null).getRange(1)).doesNotExist();
 

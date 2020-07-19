@@ -12,42 +12,50 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.function.*;
 
-import org.apache.http.*;
+import org.apache.juneau.http.*;
 
 /**
- * Category of headers that consist of a single parameterized string value.
+ * Category of headers that consist of a single entity validator value.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	Content-Type: application/json;charset=utf-8
+ * 	ETag: "xyzzy"
+ * 	ETag: W/"xyzzy"
+ * 	ETag: ""
  * </p>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
-*/
-public class BasicParameterizedHeader extends BasicStringHeader {
+ */
+public class BasicEntityTagHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 		<li>A collection or array of {@link EntityTag} objects.
+	 * 		<li>A collection or array of anything else - Converted to Strings.
+	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicParameterizedHeader} object.
+	 * @return A new {@link BasicEntityTagHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicParameterizedHeader of(String name, Object value) {
-		return new BasicParameterizedHeader(name, value);
+	public static BasicEntityTagHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicEntityTagHeader(name, value);
 	}
 
 	/**
@@ -56,52 +64,62 @@ public class BasicParameterizedHeader extends BasicStringHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 		<li><c>String</c> - A raw entity validator values (e.g. <js>"\"xyzzy\""</js>).
+	 * 		<li>An {@link EntityTag} object.
 	 * 	</ul>
-	 * @return A new {@link BasicParameterizedHeader} object.
+	 * @return A new {@link BasicEntityTagHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicParameterizedHeader of(String name, Supplier<?> value) {
-		return new BasicParameterizedHeader(name, value);
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @param name The parameter name.
-	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
-	 */
-	public BasicParameterizedHeader(String name, Object value) {
-		super(name, value);
-	}
-
-	/**
-	 * Returns a parameterized value of the header.
-	 *
-	 * <p class='bcode w800'>
-	 * 	ContentType ct = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
-	 * 	assertEquals(<js>"foo"</js>, ct.getParameter(<js>"charset"</js>);
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or <jk>null</jk> if the parameter is not present.
-	 */
-	public String getParameter(String name) {
-		HeaderElement[] elements = getElements();
-		if (elements.length == 0)
+	public static BasicEntityTagHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
 			return null;
-		NameValuePair p = elements[0].getParameterByName(name);
-		return p == null ? null : p.getValue();
+		return new BasicEntityTagHeader(name, value);
+	}
+
+	private EntityTag parsed;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>String</c> - A raw entity validator values (e.g. <js>"\"xyzzy\""</js>).
+	 * 		<li>An {@link EntityTag} object.
+	 * 	</ul>
+	 */
+	public BasicEntityTagHeader(String name, Object value) {
+		super(name, value);
+		if (! isSupplier(value))
+			parsed = getParsedValue();
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		Object o = getRawValue();
+		if (o instanceof String)
+			return (String)o;
+		return stringify(asEntityTag());
+	}
+
+	/**
+	 * Returns this header as an {@link EntityTag}.
+	 *
+	 * @return This header as an {@link EntityTag}.
+	 */
+	public EntityTag asEntityTag() {
+		return getParsedValue();
+	}
+
+	private EntityTag getParsedValue() {
+		if (parsed != null)
+			return parsed;
+		return EntityTag.of(getRawValue());
 	}
 }

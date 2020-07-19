@@ -621,9 +621,9 @@ public class RestHookTest {
 	@Test
 	public void h01_postCall() throws Exception {
 		h.get("/").run()
-			.assertHeader("post1-called").is("true")
-			.assertHeader("post2-called").is("true")
-			.assertHeader("post3-called").is("true")
-			.assertHeader("post4-called").is("true");
+			.assertStringHeader("post1-called").is("true")
+			.assertStringHeader("post2-called").is("true")
+			.assertStringHeader("post3-called").is("true")
+			.assertStringHeader("post4-called").is("true");
 	}
 }

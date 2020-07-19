@@ -174,6 +174,8 @@ public class ConfigurablePropertyCodeGenerator {
 		FluentArrayAssertion.class,
 		FluentCollectionAssertion.class,
 		FluentListAssertion.class,
+		FluentZonedDateTimeAssertion.class,
+		FluentBooleanAssertion.class,
 
 		DateAssertion.class,
 		IntegerAssertion.class,
@@ -185,6 +187,8 @@ public class ConfigurablePropertyCodeGenerator {
 		ArrayAssertion.class,
 		CollectionAssertion.class,
 		ListAssertion.class,
+		ZonedDateTimeAssertion.class,
+		BooleanAssertion.class,
 
 		BasicHeader.class,
 		BasicNameValuePair.class,

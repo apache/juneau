@@ -550,7 +550,7 @@ public class ResponseAnnotationTest {
 			.run()
 			.assertCode().is(200)
 			.assertBody().is("foo")
-			.assertHeader("Content-Type").is("text/plain");
+			.assertStringHeader("Content-Type").is("text/plain");
 	}
 
 

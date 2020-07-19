@@ -182,7 +182,7 @@ public class HeadersTest {
 	}
 	@Test
 	public void a01b_accept_qValues() throws Exception {
-		a.get("/accept").accept("text/foo;q=1.0").run().assertBody().is("text/foo;q=1.0");
+		a.get("/accept").accept("text/foo;q=1.0").run().assertBody().is("text/foo");
 		a.get("/accept").accept("text/foo;q=0.9").run().assertBody().is("text/foo;q=0.9");
 		a.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").run().assertBody().is("text/foo;x=X;q=0.9;y=Y");
 	}
@@ -288,14 +288,13 @@ public class HeadersTest {
 	}
 	@Test
 	public void a14a_ifMatch() throws Exception {
-		a.get("/ifMatch").ifMatch("foo").run().assertBody().is("foo");
 		a.get("/ifMatch").ifMatch("\"foo\"").run().assertBody().is("\"foo\"");
 		a.get("/ifMatch").ifMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
 		a.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 	}
 	@Test
 	public void a14b_ifMatch_query() throws Exception {
-		a.get("/ifMatch?If-Match=foo").run().assertBody().is("foo");
+		a.get("/ifMatch?If-Match=\"foo\"").run().assertBody().is("\"foo\"");
 	}
 	@Test
 	public void a15a_ifModifiedSince() throws Exception {
@@ -307,22 +306,21 @@ public class HeadersTest {
 	}
 	@Test
 	public void a16a_ifNoneMatch() throws Exception {
-		a.get("/ifNoneMatch").ifNoneMatch("foo").run().assertBody().is("foo");
 		a.get("/ifNoneMatch").ifNoneMatch("\"foo\"").run().assertBody().is("\"foo\"");
 		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").run().assertBody().is("W/\"foo\"");
 		a.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").run().assertBody().is("W/\"foo\",\"bar\"");
 	}
 	@Test
 	public void a16b_ifNoneMatch_query() throws Exception {
-		a.get("/ifNoneMatch?If-None-Match=foo").run().assertBody().is("foo");
+		a.get("/ifNoneMatch?If-None-Match=\"foo\"").run().assertBody().is("\"foo\"");
 	}
 	@Test
 	public void a17a_ifRange() throws Exception {
-		a.get("/ifRange").ifRange("foo").run().assertBody().is("foo");
+		a.get("/ifRange").ifRange("\"foo\"").run().assertBody().is("\"foo\"");
 	}
 	@Test
 	public void a17b_ifRange_query() throws Exception {
-		a.get("/ifRange?If-Range=foo").run().assertBody().is("foo");
+		a.get("/ifRange?If-Range=\"foo\"").run().assertBody().is("\"foo\"");
 	}
 	@Test
 	public void a18a_ifUnmodifiedSince() throws Exception {

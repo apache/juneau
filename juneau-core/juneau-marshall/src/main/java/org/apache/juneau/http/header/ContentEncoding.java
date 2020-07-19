@@ -77,7 +77,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -98,7 +98,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -116,7 +116,7 @@ public class ContentEncoding extends BasicStringHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -129,12 +129,12 @@ public class ContentEncoding extends BasicStringHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public ContentEncoding(String value) {
-		super("Content-Encoding", value);
+		this((Object)value);
 	}
 }

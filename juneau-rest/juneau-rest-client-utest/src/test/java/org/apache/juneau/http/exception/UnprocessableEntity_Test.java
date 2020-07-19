@@ -68,6 +68,6 @@ public class UnprocessableEntity_Test {
 		c.get("/f5").run()
 			.assertStatus().code().is(CODE)
 			.assertBody().is(MESSAGE)
-			.assertHeader("Foo").is("bar");
+			.assertStringHeader("Foo").is("bar");
 	}
 }

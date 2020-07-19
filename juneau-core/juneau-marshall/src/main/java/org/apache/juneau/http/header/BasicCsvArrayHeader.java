@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 
@@ -41,9 +42,9 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -52,9 +53,11 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicCsvArrayHeader} object.
+	 * @return A new {@link BasicCsvArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicCsvArrayHeader(name, value);
 	}
 
@@ -64,9 +67,9 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -75,9 +78,11 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicCsvArrayHeader} object.
+	 * @return A new {@link BasicCsvArrayHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicCsvArrayHeader(name, value);
 	}
 
@@ -86,9 +91,9 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -108,8 +113,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	@Override /* Header */
 	public String getValue() {
 		Object o = getRawValue();
-		if (o == null)
-			return null;
 		if (o instanceof String)
 			return (String)o;
 		return joine(getParsedValue(), ',');
@@ -125,7 +128,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 		List<String> vv = getParsedValue();
 		if (val != null && vv != null)
 			for (String v : vv)
-				if (val.equals(v))
+				if (isEquals(v, val))
 					return true;
 		return false;
 	}
@@ -136,13 +139,42 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param val The value to check for.
 	 * @return <jk>true</jk> if this header contains the specified value.
 	 */
-	public boolean containsIC(String val) {
+	public boolean containsIc(String val) {
 		List<String> vv = getParsedValue();
 		if (val != null && vv != null)
 			for (String v : vv)
-				if (val.equalsIgnoreCase(v))
+				if (isEqualsIc(v, val))
 					return true;
 		return false;
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the response body content is not expired.</jc>
+	 * 	client
+	 * 		.get(<jsf>URL</jsf>)
+	 * 		.run()
+	 * 		.(<js>"Expires"</js>).assertThat().isLessThan(<jk>new</jk> Date());
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentListAssertion<BasicCsvArrayHeader> assertList() {
+		return new FluentListAssertion<>(asList(), this);
+	}
+
+	/**
+	 * Returns the contents of this header as a list of strings.
+	 *
+	 * @return The contents of this header as an unmodifiable list of strings, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public List<String> asList() {
+		List<String> l = getParsedValue();
+		return l == null ? null : Collections.unmodifiableList(l);
 	}
 
 	private List<String> getParsedValue() {

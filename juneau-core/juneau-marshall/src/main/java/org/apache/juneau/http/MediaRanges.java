@@ -48,7 +48,7 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class MediaRanges {
 
-	private static final MediaRanges DEFAULT = new MediaRanges("*/*");
+	private static final MediaRanges DEFAULT = new MediaRanges("");
 	private static final Cache<String,MediaRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	private final MediaRange[] ranges;
@@ -142,6 +142,9 @@ public class MediaRanges {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<? extends MediaType> mediaTypes) {
+		if (string.isEmpty())
+			return -1;
+
 		int matchQuant = 0, matchIndex = -1;
 		float q = 0f;
 

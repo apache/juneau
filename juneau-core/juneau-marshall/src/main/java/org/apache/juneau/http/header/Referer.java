@@ -66,7 +66,7 @@ public class Referer extends BasicUriHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -87,7 +87,7 @@ public class Referer extends BasicUriHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -105,7 +105,7 @@ public class Referer extends BasicUriHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -121,9 +121,9 @@ public class Referer extends BasicUriHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public Referer(String value) {
-		super("Referer", value);
+		this((Object)value);
 	}
 }

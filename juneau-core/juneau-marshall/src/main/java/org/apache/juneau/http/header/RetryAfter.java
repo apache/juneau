@@ -14,10 +14,11 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.time.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Retry-After</l> HTTP response header.
@@ -60,15 +61,17 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Retry-After")
-public class RetryAfter extends BasicStringHeader {
+public class RetryAfter extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
+
+	private final Object value;  // Only set if value is an integer.
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -89,7 +92,7 @@ public class RetryAfter extends BasicStringHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -107,38 +110,60 @@ public class RetryAfter extends BasicStringHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
+	 * 		<li>{@link ZonedDateTime}
+	 * 		<li>{@link Calendar}
+	 * 		<li>{@link Number}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
 	public RetryAfter(Object value) {
-		super("Retry-After", value);
+		super("Retry-After", dateValue(value));
+		this.value = intValue(value);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public RetryAfter(String value) {
-		super("Retry-After", value);
+		this((Object)value);
 	}
 
-	/**
-	 * Returns this header value as a {@link java.util.Date} object.
-	 *
-	 * @return This header value as a {@link java.util.Date} object, or <jk>null</jk> if the value is not a date.
-	 */
-	public java.util.Date asDate() {
-		char c0 = charAt(getValue(), 0);
-		if (c0 >= '0' && c0 <= '9')
+	private static Object dateValue(Object o) {
+		Object o2 = unwrap(o);
+		if (o2 == null || isInt(o2))
 			return null;
-		return DateUtils.parseDate(toString());
+		return o;
+	}
+
+	private static Object intValue(Object o) {
+		Object o2 = unwrap(o);
+		if (o2 == null || isInt(o2))
+			return o;
+		return null;
+	}
+
+	private static boolean isInt(Object o) {
+		if (o instanceof Number)
+			return true;
+		String s = o.toString();
+		char c0 = charAt(s, 0);
+		return Character.isDigit(c0);
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		if (value == null)
+			return super.getValue();
+		Object o = unwrap(value);
+		return (o == null ? null : o.toString());
 	}
 
 	/**
@@ -147,13 +172,9 @@ public class RetryAfter extends BasicStringHeader {
 	 * @return This header value as a integer, or <c>-1</c> if the value is not an integer.
 	 */
 	public int asInt() {
-		char c0 = charAt(getValue(), 0);
-		if (c0 >= '0' && c0 <= '9') {
-			try {
-				return Integer.parseInt(getValue());
-			} catch (NumberFormatException e) {
-				return -1;
-			}
+		if (value != null) {
+			Object o = unwrap(value);
+			return o == null ? -1 : Integer.parseInt(o.toString());
 		}
 		return -1;
 	}

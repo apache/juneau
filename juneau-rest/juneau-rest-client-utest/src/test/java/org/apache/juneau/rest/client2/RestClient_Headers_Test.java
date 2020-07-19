@@ -301,7 +301,7 @@ public class RestClient_Headers_Test {
 		checkClient("If-Modified-Since").header(new IfModifiedSince(CALENDAR)).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 		checkClient("If-Modified-Since").header(new IfModifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 		checkClient("If-None-Match").header(new IfNoneMatch("\"foo\"")).build().get("/headers").run().assertBody().is("['\"foo\"']");
-		checkClient("If-Range").header(new IfRange("foo")).build().get("/headers").run().assertBody().is("['foo']");
+		checkClient("If-Range").header(new IfRange("\"foo\"")).build().get("/headers").run().assertBody().is("['\"foo\"']");
 		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince(CALENDAR)).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 		checkClient("If-Unmodified-Since").header(new IfUnmodifiedSince("Sun, 31 Dec 2000 12:34:56 GMT")).build().get("/headers").run().assertBody().is("['Sun, 31 Dec 2000 12:34:56 GMT']");
 		checkClient("Max-Forwards").header(new MaxForwards(10)).build().get("/headers").run().assertBody().is("['10']");

@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -91,7 +92,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 @Header("If-Match")
-public class IfMatch extends BasicEntityValidatorArrayHeader {
+public class IfMatch extends BasicEntityTagArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -99,11 +100,11 @@ public class IfMatch extends BasicEntityValidatorArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
@@ -122,11 +123,11 @@ public class IfMatch extends BasicEntityValidatorArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
@@ -142,11 +143,11 @@ public class IfMatch extends BasicEntityValidatorArrayHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 		<li>A collection or array of {@link EntityValidator} objects.
+	 * 		<li>A collection or array of {@link EntityTag} objects.
 	 * 		<li>A collection or array of anything else - Converted to Strings.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 		<li>A {@link Supplier} of anything on this list.
@@ -157,12 +158,12 @@ public class IfMatch extends BasicEntityValidatorArrayHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public IfMatch(String value) {
-		super("If-Match", value);
+		this((Object)value);
 	}
 }

@@ -165,7 +165,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a CSV array header, never <jk>null</jk>.
 	 */
 	public BasicCsvArrayHeader asCsvArrayHeader() {
-		return BasicCsvArrayHeader.of(getName(), getValue());
+		return new BasicCsvArrayHeader(getName(), getValue());
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a date header, never <jk>null</jk>.
 	 */
 	public BasicDateHeader asDateHeader() {
-		return BasicDateHeader.of(getName(), getValue());
+		return new BasicDateHeader(getName(), getValue());
 	}
 
 	/**
@@ -182,8 +182,17 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @return The value of this header as an entity validator array header, never <jk>null</jk>.
 	 */
-	public BasicEntityValidatorArrayHeader asEntityValidatorArrayHeader() {
-		return BasicEntityValidatorArrayHeader.of(getName(), getValue());
+	public BasicEntityTagArrayHeader asEntityTagArrayHeader() {
+		return new BasicEntityTagArrayHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as an entity validator header.
+	 *
+	 * @return The value of this header as an entity validator array, never <jk>null</jk>.
+	 */
+	public BasicEntityTagHeader asEntityTagHeader() {
+		return new BasicEntityTagHeader(getName(), getValue());
 	}
 
 	/**
@@ -192,7 +201,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as an integer header, never <jk>null</jk>.
 	 */
 	public BasicIntegerHeader asIntegerHeader() {
-		return BasicIntegerHeader.of(getName(), getValue());
+		return new BasicIntegerHeader(getName(), getValue());
 	}
 
 	/**
@@ -201,7 +210,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a long header, never <jk>null</jk>.
 	 */
 	public BasicLongHeader asLongHeader() {
-		return BasicLongHeader.of(getName(), getValue());
+		return new BasicLongHeader(getName(), getValue());
 	}
 
 	/**
@@ -209,8 +218,8 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a range array header, never <jk>null</jk>.
 	 */
-	public BasicRangeArrayHeader asRangeArrayHeader() {
-		return BasicRangeArrayHeader.of(getName(), getValue());
+	public BasicStringRangeArrayHeader asRangeArrayHeader() {
+		return new BasicStringRangeArrayHeader(getName(), getValue());
 	}
 
 	/**
@@ -219,7 +228,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a string header, never <jk>null</jk>.
 	 */
 	public BasicStringHeader asStringHeader() {
-		return BasicStringHeader.of(getName(), getValue());
+		return new BasicStringHeader(getName(), getValue());
 	}
 
 	/**
@@ -228,7 +237,7 @@ public class RestResponseHeader implements Header {
 	 * @return The value of this header as a URI header, never <jk>null</jk>.
 	 */
 	public BasicUriHeader asUriHeader() {
-		return BasicUriHeader.of(getName(), getValue());
+		return new BasicUriHeader(getName(), getValue());
 	}
 
 	/**
@@ -612,7 +621,7 @@ public class RestResponseHeader implements Header {
 	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
 	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertHeader(String)} method to instantiate a fluent assertions object.
+	 * This method is called directly from the {@link RestResponse#assertStringHeader(String)} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -666,10 +675,8 @@ public class RestResponseHeader implements Header {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
-	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertString() throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertString() {
 		return new FluentStringAssertion<>(asString(), response);
 	}
 
@@ -689,9 +696,8 @@ public class RestResponseHeader implements Header {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertInteger() throws RestCallException {
+	public FluentIntegerAssertion<RestResponse> assertInteger() {
 		return new FluentIntegerAssertion<>(asIntegerHeader().asInt(), response);
 	}
 
@@ -711,9 +717,8 @@ public class RestResponseHeader implements Header {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentLongAssertion<RestResponse> assertLong() throws RestCallException {
+	public FluentLongAssertion<RestResponse> assertLong() {
 		return new FluentLongAssertion<>(asLongHeader().asLong(), response);
 	}
 
@@ -729,14 +734,34 @@ public class RestResponseHeader implements Header {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertDateHeader(<js>"Expires"</js>).isAfterNow();
+	 * 		.getHeader(<js>"Expires"</js>).assertDate().isAfterNow();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentDateAssertion<RestResponse> assertDate() throws RestCallException {
-		return new FluentDateAssertion<>(asDateHeader().asDate(), response);
+	public FluentZonedDateTimeAssertion<RestResponse> assertDate() {
+		return new FluentZonedDateTimeAssertion<>(asDateHeader().asZonedDateTime(), response);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on comma-separated string headers.
+	 *
+	 * <p>
+	 * This method is called directly from the {@link RestResponse#assertCsvArrayHeader(String)} method to instantiate a fluent assertions object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getHeader(<js>"Allow"</js>).assertCsvArray().contains(<js>"GET"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentListAssertion<RestResponse> assertCsvArray() {
+		return new FluentListAssertion<>(asCsvArrayHeader().asList(), response);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

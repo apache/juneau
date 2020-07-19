@@ -232,28 +232,28 @@ public class BasicTest {
 		b.get("/movedPermanently")
 			.run()
 			.assertCode().is(301)
-			.assertBody().is("Moved Permanently").assertHeader("Location").is("/foo");
+			.assertBody().is("Moved Permanently").assertStringHeader("Location").is("/foo");
 	}
 	@Test
 	public void b02_permanentRedirect() throws Exception {
 		b.get("/permanentRedirect")
 			.run()
 			.assertCode().is(308)
-			.assertBody().is("Permanent Redirect").assertHeader("Location").is("/foo");
+			.assertBody().is("Permanent Redirect").assertStringHeader("Location").is("/foo");
 	}
 	@Test
 	public void b03_seeOther() throws Exception {
 		b.get("/seeOther")
 			.run()
 			.assertCode().is(303)
-			.assertBody().is("See Other").assertHeader("Location").is("/foo");
+			.assertBody().is("See Other").assertStringHeader("Location").is("/foo");
 	}
 	@Test
 	public void b04_temporaryRedirect() throws Exception {
 		b.get("/temporaryRedirect")
 			.run()
 			.assertCode().is(307)
-			.assertBody().is("Temporary Redirect").assertHeader("Location").is("/foo");
+			.assertBody().is("Temporary Redirect").assertStringHeader("Location").is("/foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -318,9 +318,8 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertHeader(String name) throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertStringHeader(String name) {
 		return getHeader(name).assertString();
 	}
 
@@ -338,9 +337,8 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertIntegerHeader(String name) throws RestCallException {
+	public FluentIntegerAssertion<RestResponse> assertIntegerHeader(String name) {
 		return getHeader(name).assertInteger();
 	}
 
@@ -358,9 +356,8 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentLongAssertion<RestResponse> assertLongHeader(String name) throws RestCallException {
+	public FluentLongAssertion<RestResponse> assertLongHeader(String name) {
 		return getHeader(name).assertLong();
 	}
 
@@ -378,10 +375,28 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @param name The header name.
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentDateAssertion<RestResponse> assertDateHeader(String name) throws RestCallException {
+	public FluentZonedDateTimeAssertion<RestResponse> assertDateHeader(String name) {
 		return getHeader(name).assertDate();
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on a date response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the response content is not expired.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertCsvArrayHeader(<js>"Allow"</js>).contains(<js>"GET"</js>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentListAssertion<RestResponse> assertCsvArrayHeader(String name) {
+		return getHeader(name).assertCsvArray();
 	}
 
 	/**
@@ -426,9 +441,8 @@ public class RestResponse implements HttpResponse {
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentStringAssertion<RestResponse> assertContentType() throws RestCallException {
+	public FluentStringAssertion<RestResponse> assertContentType() {
 		return getHeader("Content-Type").assertString();
 	}
 

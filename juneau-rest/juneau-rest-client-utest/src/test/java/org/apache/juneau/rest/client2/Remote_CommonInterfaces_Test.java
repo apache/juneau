@@ -210,7 +210,7 @@ public class Remote_CommonInterfaces_Test {
 	public static class D1 implements D {
 		@Override
 		public BasicHttpResource httpResource() throws IOException {
-			return BasicHttpResource.of("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(ETag.of("bar"));
+			return BasicHttpResource.of("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(ETag.of("\"bar\""));
 		}
 	}
 
@@ -220,7 +220,7 @@ public class Remote_CommonInterfaces_Test {
 		BasicHttpResource sr = x.httpResource();
 		assertEquals("foo",IOUtils.read(sr.getContent()));
 		assertEquals("foo",sr.getStringHeader("Foo"));
-		assertEquals("bar",sr.getStringHeader("ETag"));
+		assertEquals("\"bar\"",sr.getStringHeader("ETag"));
 		assertEquals("text/foo",sr.getContentType().getValue().toString());
 	}
 

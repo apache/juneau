@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -39,18 +42,20 @@ public class BasicIntegerHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
 	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * @return A new {@link BasicIntegerHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicIntegerHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicIntegerHeader(name, value);
 	}
 
@@ -60,18 +65,20 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
 	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicIntegerHeader} object.
+	 * @return A new {@link BasicIntegerHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicIntegerHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicIntegerHeader(name, value);
 	}
 
@@ -80,9 +87,9 @@ public class BasicIntegerHeader extends BasicHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
@@ -99,10 +106,7 @@ public class BasicIntegerHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return o.toString();
+		return stringify(asInt());
 	}
 
 	/**
@@ -114,10 +118,6 @@ public class BasicIntegerHeader extends BasicHeader {
 		return getParsedValue();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions.
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
@@ -127,7 +127,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * 	client
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getIntegerHeader(<js>"Age"</js>).assertThat().isGreaterThan(1);
+	 * 		.getHeader(<js>"Age"</js>).asIntegerHeader().assertInteger().isGreaterThan(1);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -155,7 +155,7 @@ public class BasicIntegerHeader extends BasicHeader {
 				Long.parseLong(s);
 				return Integer.MAX_VALUE;
 			} catch (NumberFormatException e2) {
-				throw new RuntimeException(e2);
+				throw new BasicIllegalArgumentException("Value could not be parsed as an int: {0}", o);
 			}
 		}
 	}

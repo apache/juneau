@@ -272,13 +272,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a05_interceptors() throws Exception {
-		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertStringHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertStringHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertBody().is("['f1','f2','f3']").assertStringHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
 		assertThrown(()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader")).isType(RuntimeException.class).is("foo");
@@ -457,13 +457,13 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a12_partSerializer_partParser() throws Exception {
 		RestClient x = client(A12.class).header("Foo",bean).partSerializer(A12a.class).partParser(A12b.class).build();
-		ABean b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		ABean b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
-		b = x.get().header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		b = x.get().header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
 
 		x = client(A12.class).header("Foo",bean).partSerializer(new A12a()).partParser(new A12b()).build();
-		b = x.get("/").header("Foo",bean).run().assertHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
+		b = x.get("/").header("Foo",bean).run().assertStringHeader("Foo").is("x{f:1}").getHeader("Foo").as(ABean.class);
 		assertEquals("{f:1}",b.toString());
 	}
 

@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Used for fluent assertion calls against collections objects.
@@ -59,6 +62,36 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		if (! value.isEmpty())
 			throw error("Collection was not empty.");
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection contains the expected value.
+	 *
+	 * @param value The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R contains(Object value) throws AssertionError {
+		exists();
+		for (Object o : this.value)
+			if (eq(o, value))
+				return returns();
+		throw error("Collection did not contain expected value.\nContents: {0}\nExpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+	}
+
+	/**
+	 * Asserts that the collection contains the expected value.
+	 *
+	 * @param value The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotContain(Object value) throws AssertionError {
+		exists();
+		for (Object o : this.value)
+			if (eq(o, value))
+				throw error("Collection contained unexpected value.\nContents: {0}\nUnexpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
 		return returns();
 	}
 

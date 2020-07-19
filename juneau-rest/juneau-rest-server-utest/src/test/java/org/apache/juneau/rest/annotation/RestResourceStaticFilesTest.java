@@ -97,8 +97,8 @@ public class RestResourceStaticFilesTest {
 	public void b01() throws Exception {
 		b.get("/xdocs/test.txt")
 			.run()
-			.assertHeader("Foo").is("Bar")
-			.assertHeader("Baz").is("Qux")
+			.assertStringHeader("Foo").is("Bar")
+			.assertStringHeader("Baz").is("Qux")
 			.assertBody().contains("OK-1");
 	}
 

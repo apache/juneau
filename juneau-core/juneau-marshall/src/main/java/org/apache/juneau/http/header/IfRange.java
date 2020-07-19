@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>If-Range</l> HTTP request header.
@@ -64,15 +62,17 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("If-Range")
-public class IfRange extends BasicStringHeader {
+public class IfRange extends BasicDateHeader {
 
 	private static final long serialVersionUID = 1L;
+
+	private final Object value;  // Only set if value is an entity tag.
 
 	/**
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -93,7 +93,7 @@ public class IfRange extends BasicStringHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -111,7 +111,7 @@ public class IfRange extends BasicStringHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -120,42 +120,53 @@ public class IfRange extends BasicStringHeader {
 	 * 	</ul>
 	 */
 	public IfRange(Object value) {
-		super("If-Range", value);
+		super("If-Range", dateValue(value));
+		this.value = etagValue(value);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public IfRange(String value) {
-		super("If-Range", value);
+		this((Object)value);
 	}
 
-	/**
-	 * Returns this header value as a {@link java.util.Date} object.
-	 *
-	 * @return This header value as a {@link java.util.Date} object, or <jk>null</jk> if the value is not a date.
-	 */
-	public java.util.Date asDate() {
-		char c0 = charAt(getValue(), 0), c1 = charAt(getValue(), 1);
-		if (c0 == '*' || c0 == '"' || (c0 == 'W' && c1 == '/'))
+	private static Object dateValue(Object o) {
+		Object o2 = unwrap(o);
+		if (o2 == null || isEtag(o2))
 			return null;
-		return DateUtils.parseDate(getValue());
+		return o;
+	}
+
+	private static Object etagValue(Object o) {
+		Object o2 = unwrap(o);
+		if (o2 == null || isEtag(o2))
+			return o;
+		return null;
+	}
+
+	private static boolean isEtag(Object o) {
+		String s = o.toString();
+		return s.startsWith("\"") || s.startsWith("W/");
+	}
+
+	@Override /* Header */
+	public String getValue() {
+		if (value == null)
+			return super.getValue();
+		Object o = unwrap(value);
+		return (o == null ? null : o.toString());
 	}
 
 	/**
-	 * Returns this header value as an {@link EntityValidator} object.
+	 * Returns this header as an {@link EntityTag}.
 	 *
-	 * @return
-	 * 	This header value as a {@link EntityValidator} object, or <jk>null</jk> if the value is not an entity
-	 * 	validator.
+	 * @return This header as an {@link EntityTag}.
 	 */
-	public EntityValidator asValidator() {
-		char c0 = charAt(getValue(), 0), c1 = charAt(getValue(), 1);
-		if (c0 == '*' || c0 == '"' || (c0 == 'W' && c1 == '/'))
-			return new EntityValidator(getValue());
-		return null;
+	public EntityTag asEntityTag() {
+		return (value == null ? null : EntityTag.of(value));
 	}
 }

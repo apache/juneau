@@ -515,6 +515,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	<T> T getAllInner(HttpPartParserSession parser, HttpPartSchema schema, String name, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		String[] p = get(name);
+		if (p == null)
+			p = new String[0];
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
 		try {

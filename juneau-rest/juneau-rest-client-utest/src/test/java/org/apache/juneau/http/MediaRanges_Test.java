@@ -132,8 +132,8 @@ public class MediaRanges_Test {
 		assertString(of("d;q=0,c;q=0.1,b;q=0.9,a;q=1")).is("a,b;q=0.9,c;q=0.1,d;q=0.0");
 		assertString(of("a;q=0,b;q=0.1,c;q=0.9,d;q=1")).is("d,c;q=0.9,b;q=0.1,a;q=0.0");
 		assertString(of("*")).is("*");
-		assertString(of("")).is("*/*");
-		assertString(of(null)).is("*/*");
+		assertString(of("")).is("");
+		assertString(of(null)).is("");
 		assertString(of("foo/bar/baz")).is("foo/bar/baz");
 	}
 }

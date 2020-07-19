@@ -90,7 +90,7 @@ public class Connection extends BasicStringHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link Connection} object.
 	 */
 	public static Connection of(String value) {
@@ -106,7 +106,7 @@ public class Connection extends BasicStringHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -127,7 +127,7 @@ public class Connection extends BasicStringHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -145,7 +145,7 @@ public class Connection extends BasicStringHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -158,13 +158,13 @@ public class Connection extends BasicStringHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public Connection(String value) {
-		super("Connection", value);
+		this((Object)value);
 	}
 
 	/**

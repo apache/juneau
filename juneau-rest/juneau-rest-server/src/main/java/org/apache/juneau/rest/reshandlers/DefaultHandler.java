@@ -55,7 +55,7 @@ public class DefaultHandler implements ResponseHandler {
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res) throws IOException, InternalServerError, NotAcceptable {
 		SerializerGroup g = res.getSerializers();
-		String accept = req.getHeaders().getString("Accept", "");
+		String accept = req.getHeaders().getString("Accept", "*/*");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 		HttpPartSchema schema = null;
 
@@ -216,7 +216,7 @@ public class DefaultHandler implements ResponseHandler {
 		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
-		if (o != null && (isEmpty(accept) || accept.startsWith("text/plain"))) {
+		if (o != null && (isEmpty(accept) || accept.startsWith("text/plain") || accept.equals("*/*"))) {
 			String out = null;
 			if (isEmpty(res.getContentType()))
 				res.setContentType("text/plain");

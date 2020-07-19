@@ -14,10 +14,8 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.Constants.*;
 
-import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -144,7 +142,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept")
-public class Accept extends BasicParameterizedArrayHeader {
+public class Accept extends BasicMediaRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -154,7 +152,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link AcceptCharset} object.
 	 */
 	public static Accept of(String value) {
@@ -170,7 +168,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -191,7 +189,7 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -205,13 +203,11 @@ public class Accept extends BasicParameterizedArrayHeader {
 		return new Accept(value);
 	}
 
-	private MediaRanges ranges;
-
 	/**
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -221,70 +217,15 @@ public class Accept extends BasicParameterizedArrayHeader {
 	 */
 	public Accept(Object value) {
 		super("Accept", value);
-		if (! isSupplier(value))
-			ranges = getRanges();
 	}
 
 	/**
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public Accept(String value) {
 		this((Object)value);
-	}
-
-	/**
-	 * Returns the list of the media ranges that make up this header.
-	 *
-	 * <p>
-	 * The media ranges in the list are sorted by their q-value in descending order.
-	 *
-	 * @return An unmodifiable list of media ranges.
-	 */
-	public MediaRanges asRanges() {
-		return getRanges();
-	}
-
-	/**
-	 * Returns the {@link MediaRange} at the specified index.
-	 *
-	 * @param index The index position of the media range.
-	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
-	 */
-	public MediaRange getRange(int index) {
-		return getRanges().getRange(index);
-	}
-
-	/**
-	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
-	 *
-	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <c>Accept</c> header may
-	 * contain additional subtype parts.
-	 * <br>For example, given identical q-values and an <c>Accept</c> value of <js>"text/json+activity"</js>,
-	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
-	 * isn't found.
-	 * <br>The purpose for this is to allow serializers to match when artifacts such as <c>id</c> properties are
-	 * present in the header.
-	 *
-	 * <p>
-	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
-	 *
-	 * @param mediaTypes The media types to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int match(List<? extends MediaType> mediaTypes) {
-		return getRanges().match(mediaTypes);
-	}
-
-	private MediaRanges getRanges() {
-		if (ranges != null)
-			return ranges;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return MediaRanges.of(o.toString());
 	}
 }

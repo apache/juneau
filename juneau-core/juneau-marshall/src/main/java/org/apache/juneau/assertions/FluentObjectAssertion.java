@@ -106,6 +106,56 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Converts this object to a string using {@link Object#toString} and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).string().is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> string() {
+		return new FluentStringAssertion<>(this, value == null ? null : value.toString(), returns());
+	}
+
+	/**
+	 * Converts this object to a string using the specified function and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).string(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param function The conversion function.
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> string(Function<Object,String> function) {
+		return new FluentStringAssertion<>(this, function.apply(value), returns());
+	}
+
+	/**
+	 * Converts this object to a string using the specified function and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject<jsm>(myPojo).string(MyBean.<jk>class</jk>,<jv>x</jv>-><jv>x</jv>.myBeanMethod()).is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param c The class of the object being converted.
+	 * @param function The conversion function.
+	 * @param <T> The class of the object being converted.
+	 * @return A new fluent string assertion.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> FluentStringAssertion<R> string(Class<T> c, Function<T,String> function) {
+		return new FluentStringAssertion<>(this, function.apply((T)value), returns());
+	}
+
+	/**
 	 * Converts this object to simplified JSON and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>

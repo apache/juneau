@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Used for fluent assertion calls against array objects.
@@ -85,6 +88,36 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		if (Array.getLength(value) != size)
 			throw error("Array did not have the expected size.  Expected={0}, Actual={1}.", size, Array.getLength(value));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the array contains the expected value.
+	 *
+	 * @param value The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R contains(Object value) throws AssertionError {
+		exists();
+		for (int i = 0; i < Array.getLength(this.value); i++)
+			if (eq(Array.get(this.value, i), value))
+				return returns();
+		throw error("Array did not contain expected value.\nContents: {0}\nExpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+	}
+
+	/**
+	 * Asserts that the array does not contain the expected value.
+	 *
+	 * @param value The value to check for.
+	 * @return The object to return after the test.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R doesNotContain(Object value) throws AssertionError {
+		exists();
+		for (int i = 0; i < Array.getLength(this.value); i++)
+			if (eq(Array.get(this.value, i), value))
+				throw error("Array contain unexpected value.\nContents: {0}\nUnexpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
 		return returns();
 	}
 

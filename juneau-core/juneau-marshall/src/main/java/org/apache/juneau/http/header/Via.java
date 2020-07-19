@@ -127,7 +127,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -151,7 +151,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -172,7 +172,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - A comma-delimited string.
@@ -188,21 +188,12 @@ public class Via extends BasicCsvArrayHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * 	The header value.
 	 */
 	public Via(String value) {
-		super("Via", value);
+		this((Object)value);
 	}
 }

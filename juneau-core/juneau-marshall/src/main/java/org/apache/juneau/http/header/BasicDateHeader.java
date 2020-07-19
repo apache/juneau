@@ -13,6 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;
 import java.util.*;
@@ -43,9 +45,9 @@ public class BasicDateHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
@@ -53,9 +55,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * 		<li>{@link Calendar}
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicDateHeader} object.
+	 * @return A new {@link BasicDateHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicDateHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicDateHeader(name, value);
 	}
 
@@ -65,9 +69,9 @@ public class BasicDateHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
@@ -75,9 +79,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * 		<li>{@link Calendar}
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicDateHeader} object.
+	 * @return A new {@link BasicDateHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicDateHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicDateHeader(name, value);
 	}
 
@@ -86,13 +92,13 @@ public class BasicDateHeader extends BasicHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
+	 * @param name The header name.
+	 * @param value The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li><c>String</c> - An RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
+	 * 		<li>{@link ZonedDateTime} - Will be truncated to seconds.
+	 * 		<li>{@link Calendar} - Will be truncated to seconds.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
@@ -142,11 +148,6 @@ public class BasicDateHeader extends BasicHeader {
 		return getParsedValue();
 	}
 
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions.
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
@@ -162,8 +163,8 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public FluentDateAssertion<BasicDateHeader> assertThat() {
-		return new FluentDateAssertion<>(asDate(), this);
+	public FluentZonedDateTimeAssertion<BasicDateHeader> assertZonedDateTime() {
+		return new FluentZonedDateTimeAssertion<>(asZonedDateTime(), this);
 	}
 
 	private ZonedDateTime getParsedValue() {
@@ -173,17 +174,9 @@ public class BasicDateHeader extends BasicHeader {
 		if (o == null)
 			return null;
 		if (o instanceof ZonedDateTime)
-			return (ZonedDateTime)o;
-		if (o instanceof Calendar)
-			return asZdt((Calendar)o);
-		return ZonedDateTime.from(RFC_1123_DATE_TIME.parse(getValue()));
-	}
-
-	private static ZonedDateTime asZdt(Calendar o) {
-		if (o == null)
-			return null;
+			return ((ZonedDateTime)o).truncatedTo(SECONDS);
 		if (o instanceof GregorianCalendar)
-			return ((GregorianCalendar)o).toZonedDateTime();
-		return o.toInstant().atZone(ZoneId.systemDefault());
+			return ((GregorianCalendar)o).toZonedDateTime().truncatedTo(SECONDS);
+		return ZonedDateTime.from(RFC_1123_DATE_TIME.parse(o.toString())).truncatedTo(SECONDS);
 	}
 }

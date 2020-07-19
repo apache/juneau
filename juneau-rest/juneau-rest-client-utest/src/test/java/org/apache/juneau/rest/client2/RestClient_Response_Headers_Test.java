@@ -69,14 +69,14 @@ public class RestClient_Response_Headers_Test {
 		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertValue().is("bar");
 		assertTrue(h instanceof BasicStringHeader);
 
-		h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("bar");
+		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("NumberFormatException");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).contains("Value could not be parsed");
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).contains("Could not determine a method to construct type");
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityValidatorArrayHeader().assertName().is("Foo").assertValue().is("*");
+		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertValue().is("bar");

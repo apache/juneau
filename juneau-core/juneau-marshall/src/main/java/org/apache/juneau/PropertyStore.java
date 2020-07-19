@@ -733,6 +733,12 @@ public final class PropertyStore {
 		public String toString() {
 			return "[hash="+hashCode()+"]" + (SimpleJson.DEFAULT == null ? "" : SimpleJson.DEFAULT.toString(properties));
 		}
+
+		void hashCodes(StringBuilder sb) {
+			for (Map.Entry<String,Property> e : this.properties.entrySet()) {
+				sb.append("\n\t\t["+Integer.toHexString(e.hashCode())+"] - " + e.getKey());
+			}
+		}
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -1016,5 +1022,15 @@ public final class PropertyStore {
 	@Override /* Object */
 	public String toString() {
 		return SimpleJsonSerializer.DEFAULT.toString(this);
+	}
+
+	String hashCodes() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n["+Integer.toHexString(hashCode)+"]");
+		for (Map.Entry<String,PropertyGroup> e : groups.entrySet()) {
+			sb.append("\n\t["+Integer.toHexString(e.hashCode())+"] - " + e.getKey());
+			e.getValue().hashCodes(sb);
+		}
+		return sb.toString();
 	}
 }

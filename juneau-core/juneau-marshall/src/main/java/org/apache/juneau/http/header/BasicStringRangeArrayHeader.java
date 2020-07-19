@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
@@ -31,11 +32,9 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
-public class BasicRangeArrayHeader extends BasicHeader {
+public class BasicStringRangeArrayHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	private StringRanges ranges;
 
 	/**
 	 * Convenience creator.
@@ -45,13 +44,15 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
-	 * 		<li><c>StringRange[]</c> - Left as-is.
+	 * 		<li>{@link StringRanges} - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicLongHeader} object.
 	 */
-	public static BasicRangeArrayHeader of(String name, Object value) {
-		return new BasicRangeArrayHeader(name, value);
+	public static BasicStringRangeArrayHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicStringRangeArrayHeader(name, value);
 	}
 
 	/**
@@ -65,13 +66,18 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
+	 * 		<li>{@link StringRanges} - Left as-is.
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
 	 * @return A new {@link BasicLongHeader} object.
 	 */
-	public static BasicRangeArrayHeader of(String name, Supplier<?> value) {
-		return new BasicRangeArrayHeader(name, value);
+	public static BasicStringRangeArrayHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
+		return new BasicStringRangeArrayHeader(name, value);
 	}
+
+	private StringRanges parsed;
 
 	/**
 	 * Constructor.
@@ -86,10 +92,10 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * 		<li>A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 */
-	public BasicRangeArrayHeader(String name, Object value) {
+	public BasicStringRangeArrayHeader(String name, Object value) {
 		super(name, value);
 		if (! isSupplier(value))
-			ranges = getRanges();
+			parsed = parse();
 	}
 
 	@Override /* Header */
@@ -97,27 +103,7 @@ public class BasicRangeArrayHeader extends BasicHeader {
 		Object o = getRawValue();
 		if (o == null)
 			return null;
-		if (o instanceof StringRange[])
-			return StringUtils.join((Object[])o, ',');
-		return o.toString();
-	}
-
-	/**
-	 * Given a list of type values, returns the best match for this header.
-	 *
-	 * @param types The types to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int findMatch(List<String> types) {
-
-		// Type ranges are ordered by 'q'.
-		// So we only need to search until we've found a match.
-		for (StringRange mr : getRanges().getRanges())
-			for (int i = 0; i < types.size(); i++)
-				if (mr.match(types.get(i)) > 0)
-					return i;
-
-		return -1;
+		return stringify(asRanges());
 	}
 
 	/**
@@ -129,15 +115,56 @@ public class BasicRangeArrayHeader extends BasicHeader {
 	 * @return An unmodifiable list of type ranges.
 	 */
 	public StringRanges asRanges() {
-		return getRanges();
+		return parse();
 	}
 
-	private StringRanges getRanges() {
-		if (ranges != null)
-			return ranges;
+	/**
+	 * Given a list of media types, returns the best match for this string range header.
+	 *
+	 * <p>
+	 * Note that fuzzy matching is allowed on the media types where the string range header may
+	 * contain additional subtype parts.
+	 * <br>For example, given identical q-values and an string range value of <js>"text/json+activity"</js>,
+	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
+	 * isn't found.
+	 * <br>The purpose for this is to allow serializers to match when artifacts such as <c>id</c> properties are
+	 * present in the header.
+	 *
+	 * <p>
+	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
+	 *
+	 * @param names The names to match against.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
+	 */
+	public int match(List<String> names) {
+		return asRanges().match(names);
+	}
+
+	/**
+	 * Returns the {@link MediaRange} at the specified index.
+	 *
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
+	 */
+	public StringRange getRange(int index) {
+		return asRanges().getRange(index);
+	}
+
+	/**
+	 * Returns the string ranges that make up this object.
+	 *
+	 * @return The string ranges that make up this object.
+	 */
+	public List<StringRange> getRanges() {
+		return asRanges().getRanges();
+	}
+
+	private StringRanges parse() {
+		if (parsed != null)
+			return parsed;
 		Object o = getRawValue();
 		if (o == null)
-			return null;
+			o = "";
 		return StringRanges.of(o.toString());
 	}
 }

@@ -220,14 +220,14 @@ public class AcceptEncodingTest {
 		c.get("/c01")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
-			.assertHeader("Content-Type").is("text/direct")
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
 		c.get("/c01")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
-			.assertHeader("Content-Type").is("text/direct")
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Type").is("text/direct")
 			.assertBody().is("foo");
 	}
 	@Test
@@ -235,12 +235,12 @@ public class AcceptEncodingTest {
 		c.get("/c02")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 		c.get("/c02")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 	}
 	@Test
@@ -249,13 +249,13 @@ public class AcceptEncodingTest {
 		body = c.get("/c03")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").is("mycoding")
+			.assertStringHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
 		assertEquals("foo", StringUtils.decompress(body));
 		body = c.get("/c03")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").is("mycoding")
+			.assertStringHeader("Content-Encoding").is("mycoding")
 			.getBody().asBytes();
 		assertEquals("foo", StringUtils.decompress(body));
 	}
@@ -264,12 +264,12 @@ public class AcceptEncodingTest {
 		c.get("/c04")
 			.acceptEncoding("mycoding")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 		c.get("/c04")
 			.acceptEncoding("*")
 			.run()
-			.assertHeader("Content-Encoding").doesNotExist() // Should not be set
+			.assertStringHeader("Content-Encoding").doesNotExist() // Should not be set
 			.assertBody().is("foo");
 	}
 }

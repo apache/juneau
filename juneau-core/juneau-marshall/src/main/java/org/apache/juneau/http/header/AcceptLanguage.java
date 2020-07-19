@@ -106,7 +106,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Accept-Language")
-public class AcceptLanguage extends BasicRangeArrayHeader {
+public class AcceptLanguage extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -116,7 +116,7 @@ public class AcceptLanguage extends BasicRangeArrayHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link AcceptLanguage} object.
 	 */
 	public static AcceptLanguage of(String value) {
@@ -132,7 +132,7 @@ public class AcceptLanguage extends BasicRangeArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -152,7 +152,7 @@ public class AcceptLanguage extends BasicRangeArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -169,7 +169,7 @@ public class AcceptLanguage extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -186,9 +186,9 @@ public class AcceptLanguage extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public AcceptLanguage(String value) {
-		super("Accept-Language", value);
+		this((Object)value);
 	}
 }

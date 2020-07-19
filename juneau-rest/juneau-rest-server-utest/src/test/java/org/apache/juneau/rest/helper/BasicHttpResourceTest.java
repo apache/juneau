@@ -77,14 +77,14 @@ public class BasicHttpResourceTest {
 	public void a02_headers() throws Exception {
 		a.get("/a02")
 			.run()
-			.assertHeader("Foo").is("Bar");
+			.assertStringHeader("Foo").is("Bar");
 	}
 
 	@Test
 	public void a03_contentType() throws Exception {
 		a.get("/a03")
 			.run()
-			.assertHeader("Content-Type").is("application/json");
+			.assertStringHeader("Content-Type").is("application/json");
 	}
 
 	@Test

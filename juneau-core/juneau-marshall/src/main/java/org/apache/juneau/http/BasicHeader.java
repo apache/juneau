@@ -24,6 +24,7 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -233,10 +234,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param o The object to unwrap.
 	 * @return The unwrapped object.
 	 */
-	protected Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
-		return o;
+	protected static Object unwrap(Object o) {
+		return ObjectUtils.unwrap(o);
 	}
 
 	@Override /* Object */

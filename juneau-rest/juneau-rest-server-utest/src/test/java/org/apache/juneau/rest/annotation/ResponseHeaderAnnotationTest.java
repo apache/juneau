@@ -58,21 +58,21 @@ public class ResponseHeaderAnnotationTest {
 		a.get("/a01")
 			.run()
 			.assertCode().is(200)
-			.assertHeader("Foo").is("foo");
+			.assertStringHeader("Foo").is("foo");
 	}
 	@Test
 	public void a02_valueOnParameterString() throws Exception {
 		a.get("/a02")
 			.run()
 			.assertCode().is(200)
-			.assertHeader("Foo").is("foo");
+			.assertStringHeader("Foo").is("foo");
 	}
 	@Test
 	public void a03_valueOnParameterOverrideName() throws Exception {
 		a.get("/a03")
 			.run()
 			.assertCode().is(200)
-			.assertHeader("Bar").is("foo");
+			.assertStringHeader("Bar").is("foo");
 	}
 
 	//=================================================================================================================

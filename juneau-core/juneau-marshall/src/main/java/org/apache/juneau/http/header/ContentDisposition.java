@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("Content-Disposition")
-public class ContentDisposition extends BasicParameterizedHeader {
+public class ContentDisposition extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,7 +60,7 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link ContentDisposition} object.
 	 */
 	public static ContentDisposition of(String value) {
@@ -76,7 +76,7 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -97,7 +97,7 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -115,7 +115,7 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
@@ -128,12 +128,12 @@ public class ContentDisposition extends BasicParameterizedHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public ContentDisposition(String value) {
-		super("Content-Disposition", value);
+		this((Object)value);
 	}
 }

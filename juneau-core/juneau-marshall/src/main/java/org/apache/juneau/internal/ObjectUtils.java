@@ -16,6 +16,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.utils.*;
+
 /**
  * Various generic object utility methods.
  */
@@ -175,6 +177,20 @@ public class ObjectUtils {
 	 */
 	public static boolean ne(Object o1, Object o2) {
 		return ! Objects.equals(o1, o2);
+	}
+
+	/**
+	 * If the specified object is a {@link Supplier} or {@link Mutable}, returns the inner value, otherwise the same value.
+	 *
+	 * @param o The object to unwrap.
+	 * @return The unwrapped object.
+	 */
+	public static Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		while (o instanceof Mutable)
+			o = ((Mutable<?>)o).get();
+		return o;
 	}
 
 	/**

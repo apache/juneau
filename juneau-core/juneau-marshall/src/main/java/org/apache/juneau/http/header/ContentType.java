@@ -14,7 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.Constants.*;
 
-import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
@@ -53,7 +53,7 @@ import org.apache.juneau.internal.*;
  */
 @Header("Content-Type")
 @BeanIgnore
-public class ContentType extends BasicParameterizedHeader {
+public class ContentType extends BasicMediaTypeHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -86,7 +86,51 @@ public class ContentType extends BasicParameterizedHeader {
 		return of(value.toString());
 	}
 
-	private final MediaType mediaType;
+	/**
+	 * Convenience creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
+	 * 		<li>{@link MediaType}.
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link AcceptEncoding} object.
+	 */
+	public static ContentType of(Object value) {
+		return new ContentType(value);
+	}
+
+	/**
+	 * Convenience creator using supplier.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param value
+	 * 	The header value supplier.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String} - Converted using {@link MediaType#of(String)}.
+	 * 		<li>{@link MediaType}.
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link AcceptEncoding} object.
+	 */
+	public static ContentType of(Supplier<?> value) {
+		return new ContentType(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The value for this header.
+	 */
+	public ContentType(Object value) {
+		super("Content-Type", value);
+	}
 
 	/**
 	 * Constructor.
@@ -94,45 +138,6 @@ public class ContentType extends BasicParameterizedHeader {
 	 * @param value The value for this header.
 	 */
 	public ContentType(String value) {
-		super("Content-Type", value);
-		this.mediaType = new MediaType(value);
-	}
-
-	/**
-	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
-	 *
-	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <c>Content-Types</c> header may
-	 * contain additional subtype parts.
-	 * <br>For example, given a <c>Content-Type</c> value of <js>"text/json+activity"</js>,
-	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
-	 * isn't found.
-	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
-	 * present in the header.
-	 *
-	 * @param mediaTypes The media types to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int match(List<MediaType> mediaTypes) {
-		int matchQuant = 0, matchIndex = -1;
-
-		for (int i = 0; i < mediaTypes.size(); i++) {
-			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(mediaType, true);
-			if (matchQuant2 > matchQuant) {
-				matchQuant = matchQuant2;
-				matchIndex = i;
-			}
-		}
-		return matchIndex;
-	}
-
-	/**
-	 * Returns this header as a {@link MediaType} object.
-	 *
-	 * @return This header as a {@link MediaType} object.
-	 */
-	public MediaType asMediaType() {
-		return mediaType;
+		this((Object)value);
 	}
 }

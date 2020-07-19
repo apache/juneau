@@ -72,7 +72,7 @@ public class PropertyStoreBuilder {
 		if (ps == null)
 			CACHE.put(propertyStore.hashCode(), propertyStore);
 		else if (! ps.equals(propertyStore))
-			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+propertyStore.hashCode()+"]\n---PS#1---\n" + ps + "\n---PS#2---\n" + propertyStore);
+			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+propertyStore.hashCode()+"]\n---PS#1---\n" + ps.hashCodes() + "\n---PS#2---\n" + propertyStore.hashCodes());
 		else
 			propertyStore = ps;
 

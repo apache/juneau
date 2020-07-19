@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -39,18 +42,20 @@ public class BasicLongHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
 	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object.
+	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicLongHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicLongHeader(name, value);
 	}
 
@@ -60,18 +65,20 @@ public class BasicLongHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
 	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
 	 * 		<li>Anything else - Converted to <c>String</c>.
 	 * 	</ul>
-	 * @return A new {@link BasicLongHeader} object.
+	 * @return A new {@link BasicLongHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicLongHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicLongHeader(name, value);
 	}
 
@@ -80,9 +87,9 @@ public class BasicLongHeader extends BasicHeader {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
@@ -99,10 +106,7 @@ public class BasicLongHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return o.toString();
+		return stringify(asLong());
 	}
 
 	/**
@@ -113,10 +117,6 @@ public class BasicLongHeader extends BasicHeader {
 	public Long asLong() {
 		return getParsedValue();
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions.
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
@@ -134,7 +134,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentLongAssertion<BasicLongHeader> assertLong() {
-		return new FluentLongAssertion<>(getParsedValue(), this);
+		return new FluentLongAssertion<>(asLong(), this);
 	}
 
 	private Long getParsedValue() {
@@ -149,7 +149,7 @@ public class BasicLongHeader extends BasicHeader {
 		try {
 			return Long.parseLong(s);
 		} catch (NumberFormatException e) {
-			throw new RuntimeException(e);
+			throw new BasicIllegalArgumentException("Value could not be parsed as a long: {0}", o);
 		}
 	}
 }

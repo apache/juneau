@@ -54,11 +54,11 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public class StringRanges {
 
-	private static final StringRanges DEFAULT = new StringRanges("*");
+	private static final StringRanges DEFAULT = new StringRanges("");
 	private static final Cache<String,StringRanges> CACHE = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	private final StringRange[] ranges;
-	private final String value;
+	private final String string;
 
 	/**
 	 * Returns a parsed string range header value.
@@ -99,7 +99,7 @@ public class StringRanges {
 		l.sort(RANGE_COMPARATOR);
 		ranges = l.toArray(new StringRange[l.size()]);
 
-		this.value = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
+		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
 	}
 
 	/**
@@ -144,6 +144,9 @@ public class StringRanges {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<String> names) {
+		if (string.isEmpty())
+			return -1;
+
 		int matchQuant = 0, matchIndex = -1;
 		float q = 0f;
 
@@ -197,6 +200,6 @@ public class StringRanges {
 
 	@Override /* Object */
 	public String toString() {
-		return value;
+		return string;
 	}
 }

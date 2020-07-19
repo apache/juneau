@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Header("TE")
-public class TE extends BasicRangeArrayHeader {
+public class TE extends BasicStringRangeArrayHeader {
 
 	private static final long serialVersionUID = 1L;
 
@@ -101,7 +101,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * Returns a parsed and cached header.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * @return A cached {@link TE} object.
 	 */
 	public static TE of(String value) {
@@ -117,7 +117,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -137,7 +137,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -154,7 +154,7 @@ public class TE extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String} - Converted using {@link StringRanges#of(String)}.
@@ -171,9 +171,9 @@ public class TE extends BasicRangeArrayHeader {
 	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public TE(String value) {
-		super("TE", value);
+		this((Object)value);
 	}
 }

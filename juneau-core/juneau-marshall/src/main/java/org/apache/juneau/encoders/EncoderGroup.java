@@ -128,7 +128,7 @@ public final class EncoderGroup {
 			return em;
 
 		AcceptEncoding ae = AcceptEncoding.of(acceptEncoding);
-		int match = ae.findMatch(encodings);
+		int match = ae.match(encodings);
 
 		if (match >= 0) {
 			em = new EncoderMatch(encodings.get(match), encodingsEncoders[match]);

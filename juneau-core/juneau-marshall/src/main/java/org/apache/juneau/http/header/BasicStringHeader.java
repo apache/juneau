@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
@@ -37,17 +39,19 @@ public class BasicStringHeader extends BasicHeader {
 	/**
 	 * Convenience creator.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicStringHeader} object.
+	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicStringHeader of(String name, Object value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicStringHeader(name, value);
 	}
 
@@ -57,17 +61,19 @@ public class BasicStringHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link String}
 	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
 	 * 	</ul>
-	 * @return A new {@link BasicStringHeader} object.
+	 * @return A new {@link BasicStringHeader} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicStringHeader of(String name, Supplier<?> value) {
+		if (isEmpty(name) || value == null)
+			return null;
 		return new BasicStringHeader(name, value);
 	}
 
@@ -76,7 +82,7 @@ public class BasicStringHeader extends BasicHeader {
 	/**
 	 * Constructor
 	 *
-	 * @param name The parameter name.
+	 * @param name The header name.
 	 * @param value
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
@@ -90,10 +96,6 @@ public class BasicStringHeader extends BasicHeader {
 		if (! isSupplier(value))
 			parsed = getParsedValue();
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions.
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
@@ -114,12 +116,14 @@ public class BasicStringHeader extends BasicHeader {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 
+	@Override /* Header */
+	public String getValue() {
+		return getParsedValue();
+	}
+
 	private String getParsedValue() {
 		if (parsed != null)
 			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		return o.toString();
+		return stringify(getRawValue());
 	}
 }

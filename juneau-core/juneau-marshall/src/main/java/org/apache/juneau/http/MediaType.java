@@ -314,6 +314,19 @@ public class MediaType implements Comparable<MediaType>  {
 		return Collections.unmodifiableList(Arrays.asList(parameters));
 	}
 
+	/**
+	 * Returns the additional parameter on this media type.
+	 *
+	 * @param name The additional parameter name.
+	 * @return The parameter value, or <jk>null</jk> if not found.
+	 */
+	public String getParameter(String name) {
+		for (NameValuePair p : parameters)
+			if (eq(name, p.getName()))
+				return p.getValue();
+		return null;
+	}
+
 	private static HeaderElement parse(String value) {
 		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));

@@ -13,6 +13,7 @@
 package org.apache.juneau.assertions;
 
 import java.io.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -36,6 +37,22 @@ public class Assertions {
 	 */
 	public static DateAssertion assertDate(Date value) {
 		return new DateAssertion(value);
+	}
+
+	/**
+	 * Used for assertion calls against {@link ZonedDateTime} objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates the specified date is after the current date.</jc>
+	 * 	<jsm>assertZonedDateTime</jsm>(<jv>byZdt</jv>).isAfterNow();
+	 * </p>
+	 *
+	 * @param value The date being wrapped.
+	 * @return A new {@link ZonedDateTimeAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static ZonedDateTimeAssertion assertZonedDateTimeAssertion(ZonedDateTime value) {
+		return new ZonedDateTimeAssertion(value);
 	}
 
 	/**
@@ -116,6 +133,22 @@ public class Assertions {
 	 */
 	public static StringAssertion assertString(Object value) {
 		return new StringAssertion(value);
+	}
+
+	/**
+	 * Used for assertion calls against boolean objects.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Validates that the specified boolean object exists and is true.</jc>
+	 * 	<jsm>assertBoolean</jsm>(<jv>myBoolean</jv>).exists().isTrue();
+	 * </p>
+	 *
+	 * @param value The boolean being wrapped.
+	 * @return A new {@link BooleanAssertion} object.  Never <jk>null</jk>.
+	 */
+	public static BooleanAssertion assertBoolean(Boolean value) {
+		return new BooleanAssertion(value);
 	}
 
 	/**

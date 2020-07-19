@@ -10,45 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.header;
+package org.apache.juneau.assertions;
+
+import java.time.*;
+
+import org.apache.juneau.internal.*;
 
 /**
- * Category of headers that consist of a single entity validator value.
+ * Used for assertion calls against {@link ZonedDateTime} objects.
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	ETag: "xyzzy"
+ * 	<jc>// Validates the specified date is after the current date.</jc>
+ * 	<jsm>assertZonedDateTime</jsm>(<jv>myZdt</jv>).isAfterNow();
  * </p>
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
- * </ul>
  */
-public class HeaderEntityValidator {
-
-	private final EntityValidator value;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value The raw header value.
-	 */
-	protected HeaderEntityValidator(String value) {
-		this.value = new EntityValidator(value);
-	}
+@FluentSetters(returns="ZonedDateTimeAssertion")
+public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDateTimeAssertion> {
 
 	/**
-	 * Returns this header value as a {@link EntityValidator} object.
+	 * Creator.
 	 *
-	 * @return this header value as a {@link EntityValidator} object.
+	 * @param value The date being wrapped.
+	 * @return A new {@link ZonedDateTimeAssertion} object.
 	 */
-	public EntityValidator asValidator() {
-		return value;
+	public static ZonedDateTimeAssertion create(ZonedDateTime value) {
+		return new ZonedDateTimeAssertion(value);
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return value.toString();
+	/**
+	 * Creator.
+	 *
+	 * @param value The date being wrapped.
+	 */
+	public ZonedDateTimeAssertion(ZonedDateTime value) {
+		super(value, null);
 	}
+
+	@Override
+	protected ZonedDateTimeAssertion returns() {
+		return this;
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - Assertion */
+	public ZonedDateTimeAssertion msg(String msg, Object...args) {
+		super.msg(msg, args);
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ZonedDateTimeAssertion stderr() {
+		super.stderr();
+		return this;
+	}
+
+	@Override /* GENERATED - Assertion */
+	public ZonedDateTimeAssertion stdout() {
+		super.stdout();
+		return this;
+	}
+
+	// </FluentSetters>
 }

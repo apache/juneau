@@ -67,7 +67,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * Convenience creator.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
@@ -89,7 +89,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
 	 * @param value
-	 * 	The parameter value supplier.
+	 * 	The header value supplier.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
@@ -108,7 +108,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * Constructor.
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 * 	<br>Can be any of the following:
 	 * 	<ul>
 	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
@@ -122,12 +122,12 @@ public class MaxForwards extends BasicIntegerHeader {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param value
-	 * 	The parameter value.
+	 * 	The header value.
 	 */
 	public MaxForwards(String value) {
-		super("Max-Forwards", value);
+		this((Object)value);
 	}
 }

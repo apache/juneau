@@ -18,7 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ContentTypeTest {
+public class ContentType_Other_Test {
 
 	@Test
 	public void a01_basic() {
