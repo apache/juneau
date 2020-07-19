@@ -13,10 +13,8 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.SeeOther.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
-import java.text.*;
 
 import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
@@ -76,31 +74,10 @@ public class SeeOther extends HttpResponse {
 	/**
 	 * Constructor.
 	 *
-	 * @param message Message to send as the response.
-	 * @param uri URI containing {@link MessageFormat}-style arguments.
-	 * @param uriArgs {@link MessageFormat}-style arguments.
-	 */
-	public SeeOther(String message, String uri, Object uriArgs) {
-		this(message, toURI(format(uri.toString(), uriArgs)));
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param location <c>Location</c> header value.
 	 */
 	public SeeOther(URI location) {
 		this(MESSAGE, location);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param uri URI containing {@link MessageFormat}-style arguments.
-	 * @param uriArgs {@link MessageFormat}-style arguments.
-	 */
-	public SeeOther(String uri, Object uriArgs) {
-		this(toURI(format(uri.toString(), uriArgs)));
 	}
 
 	/**
