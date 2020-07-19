@@ -185,8 +185,8 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 *
 	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
-	public final boolean isMeta() {
-		return asMediaType().isMeta();
+	public final boolean isMetaSubtype() {
+		return asMediaType().isMetaSubtype();
 	}
 
 	/**
@@ -278,6 +278,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 			o = "";
 		if (o instanceof MediaType)
 			return (MediaType)o;
-		return MediaType.of(o.toString());
+		return new MediaType(o.toString());
 	}
 }

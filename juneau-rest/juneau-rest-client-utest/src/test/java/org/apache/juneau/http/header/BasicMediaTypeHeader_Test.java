@@ -17,6 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -24,12 +25,12 @@ import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.BasicStringRangeArrayHeader.of;
+import static org.apache.juneau.http.header.BasicMediaTypeHeader.of;
 
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BasicStringRangeArrayHeader_Test {
+public class BasicMediaTypeHeader_Test {
 
 
 	private static final String HEADER = "Foo";
@@ -60,22 +61,63 @@ public class BasicStringRangeArrayHeader_Test {
 		c.get().header(of(null,(Supplier<?>)null)).run().assertBody().isEmpty();
 		c.get().header(of(HEADER,()->null)).run().assertBody().isEmpty();
 
-		c.get().header(new BasicStringRangeArrayHeader(HEADER,null)).run().assertBody().isEmpty();
-		c.get().header(new BasicStringRangeArrayHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
+		c.get().header(new BasicMediaTypeHeader(HEADER,null)).run().assertBody().isEmpty();
+		c.get().header(new BasicMediaTypeHeader(HEADER,((Supplier<?>)()->null))).run().assertBody().isEmpty();
 
-		c.get().header(of(HEADER,"foo")).run().assertBody().is("foo");
-		c.get().header(of(HEADER,"foo,bar")).run().assertBody().is("foo,bar");
-
+		c.get().header(of(HEADER,"foo/bar;x=1")).run().assertBody().is("foo/bar;x=1");
 	}
 
 	@Test
-	public void a02_getRange() throws Exception {
-		assertString(of(HEADER,"foo,bar").getRange(0)).is("foo");
+	public void a02_getType() throws Exception {
+		assertString(ContentType.of("text/foo").getType()).is("text");
+		assertString(new ContentType((String)null).getType()).isEmpty();
 	}
 
 	@Test
-	public void a03_getRanges() throws Exception {
-		assertObject(of(HEADER,"foo,bar").getRanges()).json().is("['foo','bar']");
+	public void a03_getSubType() throws Exception {
+		assertString(ContentType.of("text/foo").getSubType()).is("foo");
+		assertString(new ContentType((String)null).getSubType()).is("*");
+	}
+
+	@Test
+	public void a04_hasSubType() throws Exception {
+		assertBoolean(ContentType.of("text/foo+bar").hasSubType("bar")).isTrue();
+		assertBoolean(ContentType.of("text/foo+bar").hasSubType("baz")).isFalse();
+		assertBoolean(ContentType.of("text/foo+bar").hasSubType(null)).isFalse();
+		assertBoolean(new ContentType((String)null).hasSubType("bar")).isFalse();
+	}
+
+	@Test
+	public void a05_getSubTypes() throws Exception {
+		assertObject(ContentType.of("text/foo+bar").getSubTypes()).json().is("['foo','bar']");
+		assertObject(new ContentType((String)null).getSubTypes()).json().is("['*']");
+	}
+
+	@Test
+	public void a06_isMeta() throws Exception {
+		assertBoolean(ContentType.of("text/foo+bar").isMetaSubtype()).isFalse();
+		assertBoolean(ContentType.of("text/*").isMetaSubtype()).isTrue();
+		assertBoolean(new ContentType((String)null).isMetaSubtype()).isTrue();
+	}
+
+	@Test
+	public void a07_match() throws Exception {
+		assertInteger(ContentType.of("text/foo").match(MediaType.of("text/foo"),true)).is(100000);
+		assertInteger(new ContentType((String)null).match(MediaType.of("text/foo"),true)).is(0);
+	}
+
+	@Test
+	public void a08_getParameters() throws Exception {
+		assertObject(ContentType.of("text/foo;x=1;y=2").getParameters()).json().is("['x=1','y=2']");
+		assertObject(new ContentType((String)null).getParameters()).json().is("[]");
+	}
+
+	@Test
+	public void a09_getParameter() throws Exception {
+		assertString(ContentType.of("text/foo;x=1;y=2").getParameter("x")).is("1");
+		assertString(ContentType.of("text/foo;x=1;y=2").getParameter("z")).isNull();
+		assertString(ContentType.of("text/foo;x=1;y=2").getParameter(null)).isNull();
+		assertObject(new ContentType((String)null).getParameter("x")).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

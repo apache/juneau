@@ -206,11 +206,11 @@ public class MediaType implements Comparable<MediaType>  {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
+	 * Returns <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.
 	 *
-	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
+	 * @return <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.
 	 */
-	public final boolean isMeta() {
+	public final boolean isMetaSubtype() {
 		return hasSubtypeMeta;
 	}
 
@@ -256,6 +256,9 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return <jk>true</jk> if the media types match.
 	 */
 	public final int match(MediaType o, boolean allowExtraSubTypes) {
+
+		if (o == null)
+			return -1;
 
 		// Perfect match
 		if (this == o || (type.equals(o.type) && subType.equals(o.subType)))

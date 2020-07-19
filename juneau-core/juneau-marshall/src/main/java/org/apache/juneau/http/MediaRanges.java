@@ -142,7 +142,7 @@ public class MediaRanges {
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
 	public int match(List<? extends MediaType> mediaTypes) {
-		if (string.isEmpty())
+		if (string.isEmpty() || mediaTypes == null)
 			return -1;
 
 		int matchQuant = 0, matchIndex = -1;

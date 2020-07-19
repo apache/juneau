@@ -37,7 +37,7 @@ public class MediaType_Test {
 		assertString(x2.getType()).isEmpty();
 		assertString(x2.getSubType()).is("*");
 		assertObject(x2.getSubTypes()).json().is("['*']");
-		assertTrue(x2.isMeta());
+		assertTrue(x2.isMetaSubtype());
 
 		MediaType x3 = MediaType.of("text/foo+bar");
 		assertTrue(x3.hasSubType("bar"));
