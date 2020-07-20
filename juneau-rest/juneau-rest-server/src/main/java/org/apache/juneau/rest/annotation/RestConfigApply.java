@@ -22,6 +22,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -31,7 +32,6 @@ import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Applies {@link Rest} annotations to a {@link PropertyStoreBuilder}.

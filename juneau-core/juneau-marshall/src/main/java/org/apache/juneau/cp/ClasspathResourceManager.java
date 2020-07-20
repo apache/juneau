@@ -10,8 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
@@ -19,13 +20,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Class for retrieving and caching resource files from the classpath.
- *
- * @deprecated Use {@link org.apache.juneau.cp.ClasspathResourceManager}.
  */
-@Deprecated
 public final class ClasspathResourceManager {
 
 	// Maps resource names+locales to found resources.
@@ -60,12 +59,12 @@ public final class ClasspathResourceManager {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses default {@link ClasspathResourceFinderBasic} for finding resources.
+	 * Uses default {@link BasicClasspathResourceFinder} for finding resources.
 	 *
 	 * @param baseClass The default class to use for retrieving resources from the classpath.
 	 */
 	public ClasspathResourceManager(Class<?> baseClass) {
-		this(baseClass, new ClasspathResourceFinderBasic(), false);
+		this(baseClass, new BasicClasspathResourceFinder(), false);
 	}
 
 	/**
@@ -194,6 +193,49 @@ public final class ClasspathResourceManager {
 		}
 
 		return stringCache.get(key);
+	}
+
+	/**
+	 * Reads the input stream and parses it into a POJO using the specified parser.
+	 *
+	 * @param c The class type of the POJO to create.
+	 * @param parser The parser to use to parse the stream.
+	 * @param name The resource name (e.g. "htdocs/styles.css").
+	 * @param locale
+	 * 	Optional locale.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
+	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException If stream could not be parsed using the specified parser.
+	 */
+	public <T> T getResource(Class<T> c, Parser parser, String name, Locale locale) throws IOException, ParseException {
+		return getResource(null, c, parser, name, locale);
+	}
+
+	/**
+	 * Same as {@link #getResource(Class, Parser, String, Locale)}, except overrides the class used
+	 * for retrieving the classpath resource.
+	 *
+	 * @param baseClass
+	 * 	Overrides the default class to use for retrieving the classpath resource.
+	 * 	<br>If <jk>null</jk>, uses the REST resource class.
+	 * @param c The class type of the POJO to create.
+	 * @param parser The parser to use to parse the stream.
+	 * @param name The resource name (e.g. "htdocs/styles.css").
+	 * @param locale
+	 * 	Optional locale.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
+	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException If stream could not be parsed using the specified parser.
+	 */
+	public <T> T getResource(Class<?> baseClass, Class<T> c, Parser parser, String name, Locale locale) throws IOException, ParseException {
+		InputStream is = getStream(baseClass, name, locale);
+		if (is == null)
+			return null;
+		try (Closeable in = parser.isReaderParser() ? new InputStreamReader(is, UTF8) : is) {
+			return parser.parse(in, c);
+		}
 	}
 
 	private class ResourceKey {

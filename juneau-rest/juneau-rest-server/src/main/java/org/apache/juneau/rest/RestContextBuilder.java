@@ -28,6 +28,7 @@ import javax.servlet.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
@@ -45,7 +46,6 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.
@@ -745,7 +745,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link ClasspathResourceFinderBasic}.
+	 * 	<br>The default is {@link BasicClasspathResourceFinder}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
@@ -765,7 +765,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link ClasspathResourceFinderBasic}.
+	 * 	<br>The default is {@link BasicClasspathResourceFinder}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter

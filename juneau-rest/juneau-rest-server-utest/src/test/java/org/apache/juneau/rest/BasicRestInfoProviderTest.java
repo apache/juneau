@@ -26,6 +26,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -36,7 +37,6 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -60,7 +60,7 @@ public class BasicRestInfoProviderTest {
 		return ip.getSwagger(req);
 	}
 
-	public static class TestClasspathResourceFinder extends ClasspathResourceFinderBasic {
+	public static class TestClasspathResourceFinder extends BasicClasspathResourceFinder {
 		@Override
 		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))

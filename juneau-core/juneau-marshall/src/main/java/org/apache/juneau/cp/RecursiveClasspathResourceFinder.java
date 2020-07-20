@@ -10,25 +10,20 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.cp;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.cp.*;
-
 /**
- * Same as {@link ClasspathResourceFinderBasic} but searches for resources up the parent class hierarchy chain.
- *
- * @deprecated Use {@link BasicClasspathResourceFinder}.
+ * Same as {@link BasicClasspathResourceFinder} but searches for resources up the parent class hierarchy chain.
  */
-@Deprecated
-public class ClasspathResourceFinderRecursive extends ClasspathResourceFinderBasic {
+public class RecursiveClasspathResourceFinder extends BasicClasspathResourceFinder {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final ClasspathResourceFinderRecursive INSTANCE = new ClasspathResourceFinderRecursive();
+	public static final RecursiveClasspathResourceFinder INSTANCE = new RecursiveClasspathResourceFinder();
 
 	@Override /* ResourceFinder2 */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {

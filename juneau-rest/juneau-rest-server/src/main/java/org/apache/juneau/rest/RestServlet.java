@@ -31,7 +31,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.exception.*;
 
@@ -101,7 +101,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 		callHandler = new BasicRestCallHandler(context);
 		infoProvider = new BasicRestInfoProvider(context);
 		callLogger = new BasicRestCallLogger(context);
-		resourceFinder = new ClasspathResourceFinderBasic();
+		resourceFinder = new BasicClasspathResourceFinder();
 		context.postInit();
 	}
 

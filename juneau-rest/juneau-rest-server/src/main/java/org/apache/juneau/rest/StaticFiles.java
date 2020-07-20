@@ -17,8 +17,8 @@ import java.util.*;
 
 import javax.activation.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * The static file resource resolver for a single {@link StaticFileMapping}.

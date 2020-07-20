@@ -10,15 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.cp;
 
 import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.ResourceBundle.*;
-
-import org.apache.juneau.cp.*;
 
 /**
  * Utility class for finding resources for a class.
@@ -35,16 +33,13 @@ import org.apache.juneau.cp.*;
  * 	<li><js>"MyResource_ja.txt"</js>
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
- *
- * @deprecated Use {@link SimpleClasspathResourceFinder}.
  */
-@Deprecated
-public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
+public class SimpleClasspathResourceFinder implements ClasspathResourceFinder {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final ClasspathResourceFinderSimple INSTANCE = new ClasspathResourceFinderSimple();
+	public static final SimpleClasspathResourceFinder INSTANCE = new SimpleClasspathResourceFinder();
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);

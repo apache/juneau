@@ -15,6 +15,8 @@ package org.apache.juneau.utils;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.cp.*;
+
 /**
  * Utility class for finding resources for a class.
  *
@@ -22,7 +24,10 @@ import java.util.*;
  * Same as {@link ClasspathResourceFinderSimple}, but first searches the working directory for the file before
  * looking in the classpath.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
+ *
+ * @deprecated Use {@link SimpleClasspathResourceFinder}.
  */
+@Deprecated
 public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple {
 
 	/**

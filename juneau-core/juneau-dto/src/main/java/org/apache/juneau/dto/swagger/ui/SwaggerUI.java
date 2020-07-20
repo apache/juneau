@@ -19,12 +19,12 @@ import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Generates a Swagger-UI interface from a Swagger document.
@@ -70,7 +70,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
 
 
-	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class, ClasspathResourceFinderBasic.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
+	static final ClasspathResourceManager RESOURCES = new ClasspathResourceManager(SwaggerUI.class, BasicClasspathResourceFinder.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
 
 	private static final Set<String> STANDARD_METHODS = ASet.of("get", "put", "post", "delete", "options");
 

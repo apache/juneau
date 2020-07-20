@@ -20,10 +20,10 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -213,13 +213,13 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default resource finder if not specified is {@link ClasspathResourceFinderBasic}.
+	 * 		The default resource finder if not specified is {@link BasicClasspathResourceFinder}.
 	 * 	<li>
 	 * 		The resource class itself will be used if it implements the {@link ClasspathResourceFinder} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
 	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ClasspathResourceFinder} interface with the same
-	 * 		functionality as {@link ClasspathResourceFinderBasic} that gets used if not overridden by this annotation.
+	 * 		functionality as {@link BasicClasspathResourceFinder} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding this method.
 	 * 	<li>
 	 * 		The implementation must have one of the following constructors:

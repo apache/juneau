@@ -38,6 +38,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.cp.ClasspathResourceFinder;
+import org.apache.juneau.cp.ClasspathResourceManager;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
@@ -775,8 +778,8 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.utils.ClasspathResourceFinder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.utils.ClasspathResourceFinderBasic}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.ClasspathResourceFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.cp.BasicClasspathResourceFinder}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -854,9 +857,9 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default value is {@link ClasspathResourceFinderBasic} which provides basic support for finding localized
+	 * 		The default value is {@link BasicClasspathResourceFinder} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
-	 * 		<br>The {@link ClasspathResourceFinderRecursive} is another option that also recursively searches for resources
+	 * 		<br>The {@link RecursiveClasspathResourceFinder} is another option that also recursively searches for resources
 	 * 		up the class-hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
 	 * 	<li>
@@ -864,7 +867,7 @@ public final class RestContext extends BeanContext {
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
 	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ClasspathResourceFinder} interface with the same
-	 * 		functionality as {@link ClasspathResourceFinderBasic} that gets used if not overridden by this annotation.
+	 * 		functionality as {@link BasicClasspathResourceFinder} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
@@ -3832,7 +3835,7 @@ public final class RestContext extends BeanContext {
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 
-			Object defaultResourceFinder = resource instanceof ClasspathResourceFinder ? resource : ClasspathResourceFinderBasic.class;
+			Object defaultResourceFinder = resource instanceof ClasspathResourceFinder ? resource : BasicClasspathResourceFinder.class;
 			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, defaultResourceFinder, resourceResolver, this);
 
 			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);

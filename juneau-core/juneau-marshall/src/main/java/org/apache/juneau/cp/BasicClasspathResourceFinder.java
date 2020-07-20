@@ -10,55 +10,56 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.cp;
 
 import java.io.*;
 import java.util.*;
 
 /**
- * Interface for finding classpath resources.
+ * Utility class for finding resources for a class.
  *
  * <p>
- * Essentially a wrapper around {@link Class#getResourceAsStream(String)}, but with support for looking up resources
- * with localized names (e.g. <js>"myfile_ja_JP.txt"</js>).
- *
- * <p>
- * The following predefined implementations are provided:
- * <ul>
- * 	<li>{@link ClasspathResourceFinderSimple} - Simple searching of classpath.
- * 	<li>{@link ClasspathResourceFinderBasic} - Same as above, but looks in local JVM working directory if resource
- * 		can't be found on classpath.
- * 	<li>{@link ClasspathResourceFinderRecursive} - Same as above, except if the resource can't be found on the
- * 		classpath relative to the base class, recursively searches up the parent class hierarchy.
- * </ul>
- *
- * @deprecated Use {@link org.apache.juneau.cp.ClasspathResourceFinder}.
+ * Same as {@link SimpleClasspathResourceFinder}, but first searches the working directory for the file before
+ * looking in the classpath.
+ * <br>Path traversals outside the working directory are not allowed for security reasons.
  */
-@Deprecated
-public interface ClasspathResourceFinder {
+public class BasicClasspathResourceFinder extends SimpleClasspathResourceFinder {
 
 	/**
-	 * Represents "no" classpath resource finder.
+	 * Reusable instance.
 	 */
-	public static final class Null implements ClasspathResourceFinder {
-		@Override
-		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-			throw new NoSuchMethodError();
-		}
+	public static final BasicClasspathResourceFinder INSTANCE = new BasicClasspathResourceFinder();
+
+	@Override /* ClasspathResourceFinder */
+	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
+		InputStream is = findFileSystemResource(name, locale);
+		if (is != null)
+			return is;
+		return findClasspathResource(baseClass, name, locale);
 	}
 
 	/**
-	 * Returns the contents of the resource with the specified name.
+	 * Workhorse method for retrieving a resource from the file system.
 	 *
-	 * @param baseClass
-	 * 	The class to use to retrieve the resource.
+	 * <p>
+	 * This method can be overridden by subclasses to provide customized handling of resource retrieval from file systems.
+	 *
 	 * @param name The resource name.
-	 * 	See {@link Class#getResource(String)} for format.
 	 * @param locale
-	 * 	The locale of the resource to retrieve.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
+	 * 	The resource locale.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException;
+	protected InputStream findFileSystemResource(String name, Locale locale) throws IOException {
+		if (name.indexOf("..") == -1) {
+			for (String n2 : getCandidateFileNames(name, locale)) {
+				File f = new File(n2);
+				if (f.exists() && f.canRead() && ! f.isAbsolute()) {
+					return new FileInputStream(f);
+				}
+			}
+		}
+		return null;
+	}
 }

@@ -24,12 +24,13 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.cp.*;
+import org.apache.juneau.cp.ClasspathResourceFinder;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.http.exception.*;
 
 /**
@@ -278,7 +279,7 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 		this.callHandler = new BasicRestCallHandler(context);
 		this.infoProvider = new BasicRestInfoProvider(context);
 		this.callLogger = new BasicRestCallLogger(context);
-		this.resourceFinder = new ClasspathResourceFinderBasic();
+		this.resourceFinder = new BasicClasspathResourceFinder();
 	}
 
 	/**

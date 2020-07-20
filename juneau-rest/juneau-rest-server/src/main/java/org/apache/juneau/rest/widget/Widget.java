@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 
 /**
@@ -39,7 +39,7 @@ import org.apache.juneau.html.*;
  */
 public abstract class Widget implements HtmlWidget {
 
-	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass(), ClasspathResourceFinderRecursive.INSTANCE, false);
+	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass(), RecursiveClasspathResourceFinder.INSTANCE, false);
 
 	private static final String SESSION_req = "req";
 	private static final String SESSION_res = "res";

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.cp;
 
 import java.io.*;
 import java.util.*;
@@ -25,16 +25,13 @@ import java.util.*;
  * <p>
  * The following predefined implementations are provided:
  * <ul>
- * 	<li>{@link ClasspathResourceFinderSimple} - Simple searching of classpath.
- * 	<li>{@link ClasspathResourceFinderBasic} - Same as above, but looks in local JVM working directory if resource
+ * 	<li>{@link SimpleClasspathResourceFinder} - Simple searching of classpath.
+ * 	<li>{@link BasicClasspathResourceFinder} - Same as above, but looks in local JVM working directory if resource
  * 		can't be found on classpath.
- * 	<li>{@link ClasspathResourceFinderRecursive} - Same as above, except if the resource can't be found on the
+ * 	<li>{@link RecursiveClasspathResourceFinder} - Same as above, except if the resource can't be found on the
  * 		classpath relative to the base class, recursively searches up the parent class hierarchy.
  * </ul>
- *
- * @deprecated Use {@link org.apache.juneau.cp.ClasspathResourceFinder}.
  */
-@Deprecated
 public interface ClasspathResourceFinder {
 
 	/**
