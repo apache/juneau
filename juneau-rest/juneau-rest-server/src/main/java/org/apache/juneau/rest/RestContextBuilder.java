@@ -136,7 +136,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				.defaultVars()
 				.vars(ConfigVar.class)
 				.vars(FileVar.class)
-				.contextObject("crm", new ClasspathResourceManager(resourceClass));
+				.contextObject("crm", new ResourceManager(resourceClass));
 
 			VarResolver vr = varResolverBuilder.build();
 
@@ -745,11 +745,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicClasspathResourceFinder}.
+	 * 	<br>The default is {@link BasicResourceFinder}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder classpathResourceFinder(Class<? extends ClasspathResourceFinder> value) {
+	public RestContextBuilder classpathResourceFinder(Class<? extends ResourceFinder> value) {
 		return set(REST_classpathResourceFinder, value);
 	}
 
@@ -757,7 +757,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Classpath resource finder.
 	 *
 	 * <p>
-	 * Same as {@link #classpathResourceFinder(ClasspathResourceFinder)} except input is a pre-constructed instance.
+	 * Same as {@link #classpathResourceFinder(ResourceFinder)} except input is a pre-constructed instance.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
@@ -765,11 +765,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicClasspathResourceFinder}.
+	 * 	<br>The default is {@link BasicResourceFinder}.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder classpathResourceFinder(ClasspathResourceFinder value) {
+	public RestContextBuilder classpathResourceFinder(ResourceFinder value) {
 		return set(REST_classpathResourceFinder, value);
 	}
 

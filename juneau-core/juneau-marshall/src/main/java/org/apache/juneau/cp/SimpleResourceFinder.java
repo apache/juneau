@@ -10,44 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.console;
-
-import java.io.*;
-import java.util.*;
-
-import org.apache.juneau.collections.*;
-import org.apache.juneau.microservice.*;
-import org.apache.juneau.cp.*;
+package org.apache.juneau.cp;
 
 /**
- * Implements the 'exit' console command to gracefully shut down the microservice and JVM.
+ * Utility class for finding resources for a class.
+ *
+ * Same as {@link BasicResourceFinder} but doesn't search the file system for files.
  */
-public class ExitCommand extends ConsoleCommand {
+public class SimpleResourceFinder extends BasicResourceFinder {
 
-	private final MessageBundle mb = MessageBundle.create(ExitCommand.class, "Messages");
+	/**
+	 * Reusable instance.
+	 */
+	public static final SimpleResourceFinder INSTANCE = new SimpleResourceFinder();
 
-	@Override /* ConsoleCommand */
-	public String getName() {
-		return "exit";
-	}
-
-	@Override /* ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
-
-	@Override /* ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
-
-	@Override /* ConsoleCommand */
-	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		try {
-			Microservice.getInstance().stop().exit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return true;
+	/**
+	 * Constructor.
+	 */
+	public SimpleResourceFinder() {
+		super(false, false);
 	}
 }

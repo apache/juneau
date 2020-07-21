@@ -77,7 +77,7 @@ public class RestClient_Response_Headers_Test {
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringHeader().assertName().is("Foo").assertValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertValue().is("bar");
 	}

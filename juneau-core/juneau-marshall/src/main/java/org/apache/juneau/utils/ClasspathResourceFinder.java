@@ -32,7 +32,7 @@ import java.util.*;
  * 		classpath relative to the base class, recursively searches up the parent class hierarchy.
  * </ul>
  *
- * @deprecated Use {@link org.apache.juneau.cp.ClasspathResourceFinder}.
+ * @deprecated Use {@link org.apache.juneau.cp.ResourceFinder}.
  */
 @Deprecated
 public interface ClasspathResourceFinder {

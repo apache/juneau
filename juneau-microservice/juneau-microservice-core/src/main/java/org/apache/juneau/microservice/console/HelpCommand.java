@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Implements the 'restart' console command to gracefully shut down and restart the microservice.

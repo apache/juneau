@@ -25,7 +25,7 @@ import org.apache.juneau.cp.*;
  * looking in the classpath.
  * <br>Path traversals outside the working directory are not allowed for security reasons.
  *
- * @deprecated Use {@link SimpleClasspathResourceFinder}.
+ * @deprecated Use {@link SimpleResourceFinder}.
  */
 @Deprecated
 public class ClasspathResourceFinderBasic extends ClasspathResourceFinderSimple {

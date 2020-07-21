@@ -18,7 +18,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Implements the 'config' console command to get or set configuration.
@@ -31,7 +31,7 @@ public class ConfigCommand extends ConsoleCommand {
 	public String getName() {
 		return "config";
 	}
-	
+
 	@Override /* ConsoleCommand */
 	public String getSynopsis() {
 		return "config [get|set]";
@@ -60,7 +60,7 @@ public class ConfigCommand extends ConsoleCommand {
 					if (val != null)
 						out.println(val);
 					else
-						out.println(mb.getString("KeyNotFound", key));	
+						out.println(mb.getString("KeyNotFound", key));
 				} else {
 					out.println(mb.getString("TooManyArguments"));
 				}

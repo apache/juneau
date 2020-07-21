@@ -39,8 +39,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.ClasspathResourceFinder;
-import org.apache.juneau.cp.ClasspathResourceManager;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
@@ -778,8 +777,8 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
-	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.ClasspathResourceFinder}
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.cp.BasicClasspathResourceFinder}
+	 * 	<li><b>Data type:</b>  {@link org.apache.juneau.cp.ResourceFinder}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.cp.BasicResourceFinder}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -788,7 +787,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(ClasspathResourceFinder)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#classpathResourceFinder(ResourceFinder)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -857,17 +856,17 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default value is {@link BasicClasspathResourceFinder} which provides basic support for finding localized
+	 * 		The default value is {@link BasicResourceFinder} which provides basic support for finding localized
 	 * 		resources on the classpath and JVM working directory.
-	 * 		<br>The {@link RecursiveClasspathResourceFinder} is another option that also recursively searches for resources
+	 * 		<br>The {@link RecursiveResourceFinder} is another option that also recursively searches for resources
 	 * 		up the class-hierarchy.
 	 * 		<br>Each of these classes can be extended to provide customized handling of resource retrieval.
 	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link ClasspathResourceFinder} interface and not
+	 * 		The resource class itself will be used if it implements the {@link ResourceFinder} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ClasspathResourceFinder} interface with the same
-	 * 		functionality as {@link BasicClasspathResourceFinder} that gets used if not overridden by this annotation.
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ResourceFinder} interface with the same
+	 * 		functionality as {@link BasicResourceFinder} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
@@ -3655,7 +3654,7 @@ public final class RestContext extends BeanContext {
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
 	private final Map<String,StaticFile> staticFilesCache = new ConcurrentHashMap<>();
 
-	private final ClasspathResourceManager staticResourceManager;
+	private final ResourceManager staticResourceManager;
 	@Deprecated private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
 	private final ThreadLocal<RestRequest> req = new ThreadLocal<>();
@@ -3835,11 +3834,11 @@ public final class RestContext extends BeanContext {
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 
-			Object defaultResourceFinder = resource instanceof ClasspathResourceFinder ? resource : BasicClasspathResourceFinder.class;
-			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, defaultResourceFinder, resourceResolver, this);
+			Object defaultResourceFinder = resource instanceof ResourceFinder ? resource : BasicResourceFinder.class;
+			ResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ResourceFinder.class, defaultResourceFinder, resourceResolver, this);
 
 			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
-			staticResourceManager = new ClasspathResourceManager(rci.inner(), rf, useClasspathResourceCaching);
+			staticResourceManager = new ResourceManager(rci.inner(), rf, useClasspathResourceCaching);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 			produces = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());

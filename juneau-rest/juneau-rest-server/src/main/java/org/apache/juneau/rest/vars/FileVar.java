@@ -26,10 +26,10 @@ import org.apache.juneau.svl.*;
  * <p>
  * File variables resolve to the contents of resource files located on the classpath or local JVM directory.
  * They use the {@link RestRequest#getClasspathResourceAsString(String)} method to retrieve the contents of the file.
- * That in turn uses the {@link ClasspathResourceFinder} associated with the servlet class to find the file.
+ * That in turn uses the {@link ResourceFinder} associated with the servlet class to find the file.
  *
  * <p>
- * The {@link ClasspathResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
+ * The {@link ResourceFinder} is similar to {@link Class#getResourceAsStream(String)} except if it doesn't find the
  * resource on this class, it searches up the parent hierarchy chain.
  *
  * <p>
@@ -95,7 +95,7 @@ public class FileVar extends DefaultingVar {
 			return s;
 		}
 
-		ClasspathResourceManager crm = session.getSessionObject(ClasspathResourceManager.class, SESSION_crm, false);
+		ResourceManager crm = session.getSessionObject(ResourceManager.class, SESSION_crm, false);
 		if (crm != null)
 			return crm.getString(key);
 

@@ -13,6 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
+{8.1.4-updated}
 @Body
 
 <p>
@@ -22,7 +23,7 @@
 <ul class='javatree'>
 	<li class='ja'>{@link oaj.http.annotation.Body}
 	<ul>
-		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
+		<li class='jf'>{@link oaj.http.annotation.Body#required() required}, {@link oaj.http.annotation.Body#r() r} - Input validation.  Body must be present.
 		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - OpenAPI schema.
 	</ul>
 </ul>
@@ -34,7 +35,7 @@
 	<jk>public interface</jk> PetStore {
 
 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
-		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>;
+		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>);
 	}
 </p>
 <p class='bpcode w800'>
@@ -98,12 +99,13 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Same as above but using free-form schema.</jc>
+	<jc>// Format is simplified-JSON (outer {} brackets are optional).</jc>
 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
 			serializer=OpenApiSerializer.<jk>class</jk>,
 			schema=<ja>@Schema</ja>(
-				<js>"type:'array,collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>
+				<js>"type:'array',collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>
 			)
 		)
 		<jk>int</jk>[][] <jv>input</jv>

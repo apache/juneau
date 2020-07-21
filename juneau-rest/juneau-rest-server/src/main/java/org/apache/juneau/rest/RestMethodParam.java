@@ -21,12 +21,12 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * REST java method parameter resolver.

@@ -25,7 +25,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.ClasspathResourceFinder;
+import org.apache.juneau.cp.ResourceFinder;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.internal.*;
@@ -52,14 +52,14 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
+public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
 	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
-	private ClasspathResourceFinder resourceFinder;
+	private ResourceFinder resourceFinder;
 	private RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 
 	/**
@@ -279,7 +279,7 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 		this.callHandler = new BasicRestCallHandler(context);
 		this.infoProvider = new BasicRestInfoProvider(context);
 		this.callLogger = new BasicRestCallLogger(context);
-		this.resourceFinder = new BasicClasspathResourceFinder();
+		this.resourceFinder = new BasicResourceFinder();
 	}
 
 	/**

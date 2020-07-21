@@ -22,12 +22,12 @@ import java.util.*;
 import javax.servlet.*;
 
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

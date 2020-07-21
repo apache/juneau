@@ -26,6 +26,7 @@ import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -47,7 +48,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Default implementation of {@link RestInfoProvider}.

@@ -45,7 +45,7 @@ import org.apache.juneau.rest.annotation.*;
  * </p>
  *
  * <p>
- * Static files are found by using the {@link ClasspathResourceFinder} defined on the resource.
+ * Static files are found by using the {@link ResourceFinder} defined on the resource.
  *
  * <p>
  * In the example above, given a GET request to <l>/myresource/htdocs/foobar.html</l>, the servlet will attempt to find

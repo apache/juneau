@@ -20,7 +20,7 @@ import org.apache.juneau.cp.*;
 /**
  * Same as {@link ClasspathResourceFinderBasic} but searches for resources up the parent class hierarchy chain.
  *
- * @deprecated Use {@link BasicClasspathResourceFinder}.
+ * @deprecated Use {@link BasicResourceFinder}.
  */
 @Deprecated
 public class ClasspathResourceFinderRecursive extends ClasspathResourceFinderBasic {

@@ -39,10 +39,6 @@ Request Body
 	<li class='jc'>
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	<li class='jc'>
-		{@link oaj.http.ReaderResource}/{@link oaj.http.ReaderResourceBuilder} - Raw contents of {@code Reader} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	<li class='jc'>
-		{@link oaj.http.StreamResource}/{@link oaj.http.StreamResourceBuilder} - Raw contents of {@code InputStream} will be serialized to remote resource.  Additional headers and media type will be set on request.
-	<li class='jc'>
 		{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 	<li class='jc'>
 		{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
@@ -76,9 +72,6 @@ Request Body
 		.complete()
 		.assertStatus().code().is(200);
 </p>
-
-TODO - Bodies with variables.
-
 
 <ul class='notes'>
 	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings

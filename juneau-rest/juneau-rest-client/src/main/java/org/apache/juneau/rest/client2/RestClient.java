@@ -617,7 +617,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jm'><c>{@link RestResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link BasicDateHeader}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link BasicCsvArrayHeader}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asEntityTagArrayHeader() asEntityValidatorArrayHeader()} <jk>returns</jk> {@link BasicEntityTagArrayHeader}</c>
- * 		<li class='jm'><c>{@link RestResponseHeader#asRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link BasicStringRangeArrayHeader}</c>
+ * 		<li class='jm'><c>{@link RestResponseHeader#asStringRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link BasicStringRangeArrayHeader}</c>
  * 		<li class='jm'><c>{@link RestResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link BasicUriHeader}</c>
  * 	</ul>
  * </ul>

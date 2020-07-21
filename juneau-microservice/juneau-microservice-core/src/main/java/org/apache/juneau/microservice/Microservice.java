@@ -39,6 +39,7 @@ import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.ManifestFileVar;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.cp.MessageBundle;
 
 /**
  * Parent class for all microservices.

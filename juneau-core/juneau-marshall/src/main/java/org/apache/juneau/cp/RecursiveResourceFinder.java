@@ -12,54 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import java.io.*;
-import java.util.*;
-
 /**
  * Utility class for finding resources for a class.
  *
- * <p>
- * Same as {@link SimpleClasspathResourceFinder}, but first searches the working directory for the file before
- * looking in the classpath.
- * <br>Path traversals outside the working directory are not allowed for security reasons.
+ * Same as {@link BasicResourceFinder} but searches for resources up the parent class hierarchy chain.
  */
-public class BasicClasspathResourceFinder extends SimpleClasspathResourceFinder {
+public class RecursiveResourceFinder extends BasicResourceFinder {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final BasicClasspathResourceFinder INSTANCE = new BasicClasspathResourceFinder();
-
-	@Override /* ClasspathResourceFinder */
-	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		InputStream is = findFileSystemResource(name, locale);
-		if (is != null)
-			return is;
-		return findClasspathResource(baseClass, name, locale);
-	}
+	public static final RecursiveResourceFinder INSTANCE = new RecursiveResourceFinder();
 
 	/**
-	 * Workhorse method for retrieving a resource from the file system.
-	 *
-	 * <p>
-	 * This method can be overridden by subclasses to provide customized handling of resource retrieval from file systems.
-	 *
-	 * @param name The resource name.
-	 * @param locale
-	 * 	The resource locale.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
-	 * @throws IOException Thrown by underlying stream.
+	 * Constructor.
 	 */
-	protected InputStream findFileSystemResource(String name, Locale locale) throws IOException {
-		if (name.indexOf("..") == -1) {
-			for (String n2 : getCandidateFileNames(name, locale)) {
-				File f = new File(n2);
-				if (f.exists() && f.canRead() && ! f.isAbsolute()) {
-					return new FileInputStream(f);
-				}
-			}
-		}
-		return null;
+	public RecursiveResourceFinder() {
+		super(true, true);
 	}
 }

@@ -42,7 +42,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ClasspathResourceFinder {
+public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
-	private ClasspathResourceFinder resourceFinder;
+	private ResourceFinder resourceFinder;
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
@@ -101,7 +101,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 		callHandler = new BasicRestCallHandler(context);
 		infoProvider = new BasicRestInfoProvider(context);
 		callLogger = new BasicRestCallLogger(context);
-		resourceFinder = new BasicClasspathResourceFinder();
+		resourceFinder = new BasicResourceFinder();
 		context.postInit();
 	}
 

@@ -21,11 +21,11 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Identifies servlet and REST call lifecycle events which cause {@link RestHook @RestHook}-annotated Java methods

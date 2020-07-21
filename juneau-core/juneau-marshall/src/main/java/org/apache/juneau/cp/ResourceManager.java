@@ -25,14 +25,14 @@ import org.apache.juneau.parser.*;
 /**
  * Class for retrieving and caching resource files from the classpath.
  */
-public final class ClasspathResourceManager {
+public final class ResourceManager {
 
 	// Maps resource names+locales to found resources.
 	private final ConcurrentHashMap<ResourceKey,byte[]> byteCache;
 	private final ConcurrentHashMap<ResourceKey,String> stringCache;
 
 	private final Class<?> baseClass;
-	private final ClasspathResourceFinder resourceFinder;
+	private final ResourceFinder resourceFinder;
 	private final boolean useCache;
 
 	/**
@@ -42,7 +42,7 @@ public final class ClasspathResourceManager {
 	 * @param resourceFinder The resource finder implementation.
 	 * @param useCache If <jk>true</jk>, retrieved resources are stored in an in-memory cache for fast lookup.
 	 */
-	public ClasspathResourceManager(Class<?> baseClass, ClasspathResourceFinder resourceFinder, boolean useCache) {
+	public ResourceManager(Class<?> baseClass, ResourceFinder resourceFinder, boolean useCache) {
 		this.baseClass = baseClass;
 		this.resourceFinder = resourceFinder;
 		this.useCache = useCache;
@@ -59,12 +59,12 @@ public final class ClasspathResourceManager {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses default {@link BasicClasspathResourceFinder} for finding resources.
+	 * Uses default {@link BasicResourceFinder} for finding resources.
 	 *
 	 * @param baseClass The default class to use for retrieving resources from the classpath.
 	 */
-	public ClasspathResourceManager(Class<?> baseClass) {
-		this(baseClass, new BasicClasspathResourceFinder(), false);
+	public ResourceManager(Class<?> baseClass) {
+		this(baseClass, new BasicResourceFinder(), false);
 	}
 
 	/**

@@ -218,7 +218,7 @@ public class RestResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a range array header, never <jk>null</jk>.
 	 */
-	public BasicStringRangeArrayHeader asRangeArrayHeader() {
+	public BasicStringRangeArrayHeader asStringRangeArrayHeader() {
 		return new BasicStringRangeArrayHeader(getName(), getValue());
 	}
 

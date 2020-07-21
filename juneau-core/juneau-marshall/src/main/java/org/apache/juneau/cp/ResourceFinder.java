@@ -16,23 +16,46 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Same as {@link BasicClasspathResourceFinder} but searches for resources up the parent class hierarchy chain.
+ * Interface for finding classpath resources.
+ *
+ * <p>
+ * Essentially a wrapper around {@link Class#getResourceAsStream(String)}, but with support for looking up resources
+ * with localized names (e.g. <js>"myfile_ja_JP.txt"</js>).
+ *
+ * <p>
+ * The following predefined implementations are provided:
+ * <ul>
+ * 	<li>{@link SimpleResourceFinder} - Simple searching of classpath.
+ * 	<li>{@link BasicResourceFinder} - Same as above, but looks in local JVM working directory if resource
+ * 		can't be found on classpath.
+ * 	<li>{@link RecursiveResourceFinder} - Same as above, except if the resource can't be found on the
+ * 		classpath relative to the base class, recursively searches up the parent class hierarchy.
+ * </ul>
  */
-public class RecursiveClasspathResourceFinder extends BasicClasspathResourceFinder {
+public interface ResourceFinder {
 
 	/**
-	 * Reusable instance.
+	 * Represents "no" classpath resource finder.
 	 */
-	public static final RecursiveClasspathResourceFinder INSTANCE = new RecursiveClasspathResourceFinder();
-
-	@Override /* ResourceFinder2 */
-	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		while (baseClass != null) {
-			InputStream is = findClasspathResource(baseClass, name, locale);
-			if (is != null)
-				return is;
-			baseClass = baseClass.getSuperclass();
+	public static final class Null implements ResourceFinder {
+		@Override
+		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
+			throw new NoSuchMethodError();
 		}
-		return findFileSystemResource(name, locale);
 	}
+
+	/**
+	 * Returns the contents of the resource with the specified name.
+	 *
+	 * @param baseClass
+	 * 	The class to use to retrieve the resource.
+	 * @param name The resource name.
+	 * 	See {@link Class#getResource(String)} for format.
+	 * @param locale
+	 * 	The locale of the resource to retrieve.
+	 * 	<br>If <jk>null</jk>, won't look for localized file names.
+	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException;
 }

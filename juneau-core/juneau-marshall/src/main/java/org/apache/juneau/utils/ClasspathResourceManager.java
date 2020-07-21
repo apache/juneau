@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * Class for retrieving and caching resource files from the classpath.
  *
- * @deprecated Use {@link org.apache.juneau.cp.ClasspathResourceManager}.
+ * @deprecated Use {@link org.apache.juneau.cp.ResourceManager}.
  */
 @Deprecated
 public final class ClasspathResourceManager {

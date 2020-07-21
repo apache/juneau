@@ -25,6 +25,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.cp.MessageBundle;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -43,7 +44,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Default REST method parameter resolvers.

@@ -213,13 +213,13 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The default resource finder if not specified is {@link BasicClasspathResourceFinder}.
+	 * 		The default resource finder if not specified is {@link BasicResourceFinder}.
 	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link ClasspathResourceFinder} interface and not
+	 * 		The resource class itself will be used if it implements the {@link ResourceFinder} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ClasspathResourceFinder} interface with the same
-	 * 		functionality as {@link BasicClasspathResourceFinder} that gets used if not overridden by this annotation.
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link ResourceFinder} interface with the same
+	 * 		functionality as {@link BasicResourceFinder} that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding this method.
 	 * 	<li>
 	 * 		The implementation must have one of the following constructors:
@@ -237,7 +237,7 @@ public @interface Rest {
 	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
 	 * </ul>
 	 */
-	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
+	Class<? extends ResourceFinder> classpathResourceFinder() default ResourceFinder.Null.class;
 
 	/**
 	 * Client version header.

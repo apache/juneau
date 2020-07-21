@@ -36,7 +36,7 @@ import org.apache.juneau.cp.*;
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
  *
- * @deprecated Use {@link SimpleClasspathResourceFinder}.
+ * @deprecated Use {@link SimpleResourceFinder}.
  */
 @Deprecated
 public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {

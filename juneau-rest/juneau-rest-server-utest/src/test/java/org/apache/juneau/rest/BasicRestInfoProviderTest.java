@@ -60,7 +60,7 @@ public class BasicRestInfoProviderTest {
 		return ip.getSwagger(req);
 	}
 
-	public static class TestClasspathResourceFinder extends BasicClasspathResourceFinder {
+	public static class TestClasspathResourceFinder extends BasicResourceFinder {
 		@Override
 		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))

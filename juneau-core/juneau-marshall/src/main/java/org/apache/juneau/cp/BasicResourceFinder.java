@@ -22,9 +22,6 @@ import java.util.ResourceBundle.*;
  * Utility class for finding resources for a class.
  *
  * <p>
- * Same as {@link Class#getResourceAsStream(String)} except looks for resources with localized file names.
- *
- * <p>
  * If the <c>locale</c> is specified, then we look for resources whose name matches that locale.
  * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will look for
  * files in the following order:
@@ -33,21 +30,58 @@ import java.util.ResourceBundle.*;
  * 	<li><js>"MyResource_ja.txt"</js>
  * 	<li><js>"MyResource.txt"</js>
  * </ol>
+ *
+ * <p>
+ * The default behavior first searches the working filesystem directory for matching files.
+ * <br>Path traversals outside the working directory are not allowed for security reasons.
+ *
+ * <p>
+ * Support is provided for recursively searching for files up the class hierarchy chain.
  */
-public class SimpleClasspathResourceFinder implements ClasspathResourceFinder {
+public class BasicResourceFinder implements ResourceFinder {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final SimpleClasspathResourceFinder INSTANCE = new SimpleClasspathResourceFinder();
+	public static final BasicResourceFinder INSTANCE = new BasicResourceFinder();
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 	private static final List<Locale> ROOT_LOCALE = Arrays.asList(Locale.ROOT);
 
+	private final boolean includeFileSystem, recursive;
 
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Same as calling <c>new BasicClasspathResourceFinder(<jk>true</jk>, <jk>false</jk>.
+	 */
+	public BasicResourceFinder() {
+		this(true, false);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param includeFileSystem Search the working filesystem directory for matching resources first.  The default is <jk>true</jk>.
+	 * @param recursive Recursively search up the parent class hierarchy for resources.
+	 */
+	public BasicResourceFinder(boolean includeFileSystem, boolean recursive) {
+		this.includeFileSystem = includeFileSystem;
+		this.recursive = recursive;
+	}
+
+	@SuppressWarnings("resource")
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		return findClasspathResource(baseClass, name, locale);
+		InputStream is = null;
+		if (includeFileSystem)
+			is = findFileSystemResource(name, locale);
+		while (is == null && baseClass != null) {
+			is = findClasspathResource(baseClass, name, locale);
+			baseClass = recursive ? baseClass.getSuperclass() : null;
+		}
+		return is;
 	}
 
 	/**
@@ -67,21 +101,42 @@ public class SimpleClasspathResourceFinder implements ClasspathResourceFinder {
 	protected InputStream findClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
 
 		if (locale == null)
-			return getResourceAsStream(baseClass, name);
+			return baseClass.getResourceAsStream(name);
 
 		for (String n : getCandidateFileNames(name, locale)) {
-			InputStream is = getResourceAsStream(baseClass, n);
+			InputStream is = baseClass.getResourceAsStream(n);
 			if (is != null)
 				return is;
 		}
 		return null;
 	}
 
-	private InputStream getResourceAsStream(Class<?> baseClass, String name) {
-		return baseClass.getResourceAsStream(name);
+	/**
+	 * Workhorse method for retrieving a resource from the file system.
+	 *
+	 * <p>
+	 * This method can be overridden by subclasses to provide customized handling of resource retrieval from file systems.
+	 *
+	 * @param name The resource name.
+	 * @param locale
+	 * 	The resource locale.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return The resource stream, or <jk>null</jk> if it couldn't be found.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	protected InputStream findFileSystemResource(String name, Locale locale) throws IOException {
+		if (name.indexOf("..") == -1) {
+			for (String n2 : getCandidateFileNames(name, locale)) {
+				File f = new File(n2);
+				if (f.exists() && f.canRead() && ! f.isAbsolute()) {
+					return new FileInputStream(f);
+				}
+			}
+		}
+		return null;
 	}
 
-	/**
+	/*
 	 * Returns the candidate file names for the specified file name in the specified locale.
 	 *
 	 * <p>
@@ -102,7 +157,7 @@ public class SimpleClasspathResourceFinder implements ClasspathResourceFinder {
 	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return An iterator of file names to look at.
 	 */
-	protected static Iterable<String> getCandidateFileNames(final String fileName, final Locale l) {
+	Iterable<String> getCandidateFileNames(final String fileName, final Locale l) {
 		return new Iterable<String>() {
 			@Override
 			public Iterator<String> iterator() {
@@ -135,7 +190,7 @@ public class SimpleClasspathResourceFinder implements ClasspathResourceFinder {
 		};
 	}
 
-	/**
+	/*
 	 * Returns the candidate locales for the specified locale.
 	 *
 	 * <p>

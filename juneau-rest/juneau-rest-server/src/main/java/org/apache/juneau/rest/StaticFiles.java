@@ -28,10 +28,10 @@ class StaticFiles {
 	private final String path, location;
 	private final Map<String,Object> responseHeaders;
 
-	private final ClasspathResourceManager staticResourceManager;
+	private final ResourceManager staticResourceManager;
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 
-	StaticFiles(StaticFileMapping sfm, ClasspathResourceManager staticResourceManager, MimetypesFileTypeMap mimetypesFileTypeMap, Map<String,Object> staticFileResponseHeaders) {
+	StaticFiles(StaticFileMapping sfm, ResourceManager staticResourceManager, MimetypesFileTypeMap mimetypesFileTypeMap, Map<String,Object> staticFileResponseHeaders) {
 		this.resourceClass = sfm.resourceClass;
 		this.path = sfm.path;
 		this.location = sfm.location;
