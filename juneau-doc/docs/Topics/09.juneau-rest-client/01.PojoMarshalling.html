@@ -62,7 +62,10 @@ POJO Marshalling
 	<jc>// Create a REST client with support for multiple languages.</jc>
 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 
-	<jv>client</jv>.post(<jsf>URI</jsf>, myBean).contentType(<js>"application/json"</js>).complete().assertStatus().is(200);
+	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
+		.contentType(<js>"application/json"</js>)
+		.complete()
+		.assertStatus().code().is(200);
 </p>
 
 <p>
@@ -73,7 +76,10 @@ POJO Marshalling
 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
 
 	<jc>// Use JSON for this request.</jc>
-	<jv>client</jv>.post(<jsf>URI</jsf>, myBean).json().complete().assertStatus().is(200);
+	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
+		.json()
+		.complete()
+		.assertStatus().code().is(200);
 </p>
 
 <p>

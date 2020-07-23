@@ -43,10 +43,10 @@ Request Query Parameters
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>,<js>"bar"</js>).build();
 
 	<jc>// Or do it on every request.</jc>
-	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>,<js>"bar"</js>).run().getBody().asString();
 </p>
 
 <p>
