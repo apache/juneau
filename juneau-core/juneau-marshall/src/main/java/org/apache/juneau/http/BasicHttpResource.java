@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -133,6 +135,9 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	/**
 	 * Adds an arbitrary header to this resource.
 	 *
+	 * <p>
+	 * Header is not added if name or value is null.
+	 *
 	 * @param name The header name.
 	 * @param val The header value.
 	 * @return This object (for method chaining).
@@ -152,8 +157,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 */
 	@FluentSetter
 	public BasicHttpResource header(Header value) {
-		if (value != null)
-			headers.add(value);
+		headers.add(value);
 		return this;
 	}
 
@@ -200,7 +204,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	 */
 	public Header getFirstHeader(String name) {
 		for (Header h : headers)
-			if (h.getName().equals(name))
+			if (h != null && eq(name, h.getName()))
 				return h;
 		return null;
 	}
@@ -214,7 +218,7 @@ public class BasicHttpResource extends BasicHttpEntity implements HttpResource {
 	public Header getLastHeader(String name) {
 		for (ListIterator<Header> li = headers.listIterator(headers.size()); li.hasPrevious();) {
 			Header h = li.previous();
-			if (h.getName().equals(name))
+			if (h != null && eq(name, h.getName()))
 				return h;
 		}
 		return null;

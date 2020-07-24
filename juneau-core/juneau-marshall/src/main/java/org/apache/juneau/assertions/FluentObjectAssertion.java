@@ -241,7 +241,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		if (this.value == value)
 			return returns();
 		exists();
-		if (! this.value.equals(value))
+		if (! this.value.equals(equivalent(value)))
 			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -257,7 +257,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Object value) throws AssertionError {
-		return isEqual(value);
+		return isEqual(equivalent(value));
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public R doesNotEqual(Object value) throws AssertionError {
 		if (this.value == null && value != null || this.value != null && value == null)
 			return returns();
-		if (this.value == null || this.value.equals(value))
+		if (this.value == null || this.value.equals(equivalent(value)))
 			throw error("Unexpected value.\n\tExpected not=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
@@ -372,7 +372,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNot(Object value) throws AssertionError {
-		return doesNotEqual(value);
+		return doesNotEqual(equivalent(value));
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public R isAny(Object...values) throws AssertionError {
 		exists();
 		for (Object v : values)
-			if (this.value.equals(v))
+			if (this.value.equals(equivalent(v)))
 				return returns();
 		throw error("Expected value not found.\n\tExpected=[{0}]\n\tActual=[{1}]", SimpleJson.DEFAULT.toString(values), value);
 	}
@@ -400,9 +400,19 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 	public R isNotAny(Object...values) throws AssertionError {
 		exists();
 		for (Object v : values)
-			if (this.value.equals(v))
+			if (this.value.equals(equivalent(v)))
 				throw error("Unexpected value found.\n\tUnexpected=[{0}]\n\tActual=[{1}]", v, value);
 		return returns();
+	}
+
+	/**
+	 * Subclasses can override this method to provide special conversions on objects being compared.
+	 *
+	 * @param o The object to cast.
+	 * @return The cast object.
+	 */
+	protected Object equivalent(Object o) {
+		return o;
 	}
 
 	// <FluentSetters>

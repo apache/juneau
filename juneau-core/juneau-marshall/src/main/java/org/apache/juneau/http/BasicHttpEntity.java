@@ -255,7 +255,7 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
 	public String asString() throws IOException {
-		return IOUtils.read(getRawContent());
+		return IOUtils.read(getContent());
 	}
 
 	/**
@@ -265,7 +265,9 @@ public class BasicHttpEntity extends org.apache.http.entity.BasicHttpEntity {
 	 * @throws IOException If a problem occurred while trying to read the byte array.
 	 */
 	public byte[] asBytes() throws IOException {
-		return IOUtils.readBytes(getRawContent());
+		try (InputStream o = getContent()) {
+			return o == null ? null : IOUtils.readBytes(o);
+		}
 	}
 
 	/**

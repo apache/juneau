@@ -70,6 +70,13 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<R> {
 		return this.value.compareTo(((Number)value).longValue());
 	}
 
+	@Override
+	protected Object equivalent(Object o) {
+		if (o instanceof Number)
+			return ((Number)o).longValue();
+		return o;
+	}
+
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

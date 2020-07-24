@@ -61,6 +61,13 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<R> {
 		return this.value.compareTo(((Number)value).intValue());
 	}
 
+	@Override
+	protected Object equivalent(Object o) {
+		if (o instanceof Number)
+			return ((Number)o).intValue();
+		return o;
+	}
+
 	// <FluentSetters>
 
 	@Override /* GENERATED - Assertion */

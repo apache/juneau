@@ -10,23 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.testutils.pojos;
+package org.apache.juneau.http;
 
-import org.apache.juneau.marshall.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpMethod.*;
 
-public class ABean {
-	public int a;
-	public String b;
+import static org.junit.runners.MethodSorters.*;
 
-	public static ABean get() {
-		ABean x = new ABean();
-		x.a = 1;
-		x.b = "foo";
-		return x;
-	}
+import org.junit.*;
 
-	@Override
-	public String toString() {
-		return SimpleJson.DEFAULT.toString(this);
+@FixMethodOrder(NAME_ASCENDING)
+public class HttpMethod_Test {
+
+	@Test
+	public void a01_hasContent() throws Exception {
+		assertBoolean(hasContent(OPTIONS)).isFalse();
+		assertBoolean(hasContent(GET)).isFalse();
+		assertBoolean(hasContent(HEAD)).isFalse();
+		assertBoolean(hasContent(POST)).isTrue();
+		assertBoolean(hasContent(PUT)).isTrue();
+		assertBoolean(hasContent(DELETE)).isFalse();
+		assertBoolean(hasContent(TRACE)).isFalse();
+		assertBoolean(hasContent(CONNECT)).isFalse();
+		assertBoolean(hasContent(PATCH)).isTrue();
+		assertBoolean(hasContent(RRPC)).isTrue();
+		assertBoolean(hasContent(OTHER)).isTrue();
+		assertBoolean(hasContent(ANY)).isTrue();
 	}
 }

@@ -187,7 +187,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 	 * @return The comparison value.
 	 */
 	protected int compareTo(Object value) {
-		return this.value.compareTo(value);
+		return this.value.compareTo(equivalent(value));
 	}
 
 	// <FluentSetters>

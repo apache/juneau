@@ -249,6 +249,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Object */
 	public int hashCode() {
+		// Implemented since we override equals(Object).
 		return super.hashCode();
 	}
 

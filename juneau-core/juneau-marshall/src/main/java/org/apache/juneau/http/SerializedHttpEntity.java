@@ -86,7 +86,7 @@ public class SerializedHttpEntity extends BasicHttpEntity {
 				os = new NoCloseOutputStream(os);
 				Object o = getRawContent();
 				if (serializer == null) {
-					// If no serializer specified, just close the stream.
+					os.write(o.toString().getBytes());
 					os.close();
 				} else {
 					SerializerSessionArgs sArgs = SerializerSessionArgs.create().schema(schema);

@@ -48,7 +48,9 @@ public class StringRange {
 	/**
 	 * Constructor.
 	 *
-	 * @param value The raw string range string.
+	 * @param value
+	 * 	The raw string range string.
+	 * 	<br>A value of <jk>null</jk> gets interpreted as matching anything (e.g. <js>"*"</js>).
 	 */
 	public StringRange(String value) {
 		this(parse(value));
@@ -72,7 +74,7 @@ public class StringRange {
 				extensions.add(BasicNameValuePair.of(p.getName(), p.getValue()));
 			}
 		}
-		
+
 		this.qValue = qValue;
 		this.extensions = extensions.toArray(new NameValuePair[extensions.size()]);
 		this.name = e.getName();
@@ -166,9 +168,9 @@ public class StringRange {
 	public int match(String name) {
 		if (qValue == 0)
 			return 0;
-		if (this.name.equals(name))
+		if (eq(this.name, name))
 			return 100;
-		if (this.name.equals("*"))
+		if (eq(this.name, "*"))
 			return 50;
 		return 0;
 	}
