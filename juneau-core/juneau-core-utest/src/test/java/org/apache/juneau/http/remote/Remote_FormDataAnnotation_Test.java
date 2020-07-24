@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client2;
+package org.apache.juneau.http.remote;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.http.remote.*;
+import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
