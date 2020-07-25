@@ -111,7 +111,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 
-	final MessageBundle messages = MessageBundle.create(Microservice.class);
+	final MessageBundle messages = MessageBundle.of(Microservice.class);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties set in constructor

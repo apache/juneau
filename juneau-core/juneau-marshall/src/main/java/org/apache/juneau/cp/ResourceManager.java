@@ -64,7 +64,7 @@ public final class ResourceManager {
 	 * @param baseClass The default class to use for retrieving resources from the classpath.
 	 */
 	public ResourceManager(Class<?> baseClass) {
-		this(baseClass, new BasicResourceFinder(), false);
+		this(baseClass, BasicResourceFinder.INSTANCE, false);
 	}
 
 	/**
@@ -87,24 +87,9 @@ public final class ResourceManager {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public InputStream getStream(String name, Locale locale) throws IOException {
-		return getStream(baseClass, name, locale);
-	}
 
-	/**
-	 * Finds the resource with the given name for the specified locale and returns it as an input stream.
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
-	 * @param name Name of the desired resource.
-	 * @param locale The locale.  Can be <jk>null</jk>.
-	 * @return An input stream to the object, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public InputStream getStream(Class<?> baseClass, String name, Locale locale) throws IOException {
-
-		if (baseClass == null)
-			baseClass = this.baseClass;
+		if (isEmpty(name))
+			return null;
 
 		if (! useCache)
 			return resourceFinder.findResource(baseClass, name, locale);
@@ -131,21 +116,7 @@ public final class ResourceManager {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public String getString(String name) throws IOException {
-		return getString(baseClass, name, null);
-	}
-
-	/**
-	 * Finds the resource with the given name and converts it to a simple string.
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
-	 * @param name Name of the desired resource.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public String getString(Class<?> baseClass, String name) throws IOException {
-		return getString(baseClass, name, null);
+		return getString(name, null);
 	}
 
 	/**
@@ -157,24 +128,9 @@ public final class ResourceManager {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public String getString(String name, Locale locale) throws IOException {
-		return getString(baseClass, name, locale);
-	}
 
-	/**
-	 * Finds the resource with the given name and converts it to a simple string.
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the base class passed in through the constructor of this class.
-	 * @param name Name of the desired resource.
-	 * @param locale The locale.  Can be <jk>null</jk>.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public String getString(Class<?> baseClass, String name, Locale locale) throws IOException {
-
-		if (baseClass == null)
-			baseClass = this.baseClass;
+		if (isEmpty(name))
+			return null;
 
 		if (! useCache) {
 			try (InputStream is = resourceFinder.findResource(baseClass, name, locale)) {
@@ -201,24 +157,17 @@ public final class ResourceManager {
 	 * @param c The class type of the POJO to create.
 	 * @param parser The parser to use to parse the stream.
 	 * @param name The resource name (e.g. "htdocs/styles.css").
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
 	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException If stream could not be parsed using the specified parser.
 	 */
-	public <T> T getResource(Class<T> c, Parser parser, String name, Locale locale) throws IOException, ParseException {
-		return getResource(null, c, parser, name, locale);
+	public <T> T getResource(Class<T> c, Parser parser, String name) throws IOException, ParseException {
+		return getResource(c, parser, name, null);
 	}
 
 	/**
-	 * Same as {@link #getResource(Class, Parser, String, Locale)}, except overrides the class used
-	 * for retrieving the classpath resource.
+	 * Reads the input stream and parses it into a POJO using the specified parser.
 	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
 	 * @param c The class type of the POJO to create.
 	 * @param parser The parser to use to parse the stream.
 	 * @param name The resource name (e.g. "htdocs/styles.css").
@@ -229,8 +178,9 @@ public final class ResourceManager {
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException If stream could not be parsed using the specified parser.
 	 */
-	public <T> T getResource(Class<?> baseClass, Class<T> c, Parser parser, String name, Locale locale) throws IOException, ParseException {
-		InputStream is = getStream(baseClass, name, locale);
+	public <T> T getResource(Class<T> c, Parser parser, String name, Locale locale) throws IOException, ParseException {
+
+		InputStream is = getStream(name, locale);
 		if (is == null)
 			return null;
 		try (Closeable in = parser.isReaderParser() ? new InputStreamReader(is, UTF8) : is) {
@@ -254,7 +204,7 @@ public final class ResourceManager {
 
 		@Override
 		public boolean equals(Object o) {
-			return (o instanceof ResourceKey) && eq(this, (ResourceKey)o, (x,y)->eq(x.name, y.name) && eq(x.locale, y.locale));
+			return eq(this, (ResourceKey)o, (x,y)->eq(x.name, y.name) && eq(x.locale, y.locale));
 		}
 	}
 }

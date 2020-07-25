@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -74,6 +75,8 @@ public class BasicResourceFinder implements ResourceFinder {
 	@SuppressWarnings("resource")
 	@Override /* ClasspathResourceFinder */
 	public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
+		if (isInvalidName(name))
+			return null;
 		InputStream is = null;
 		if (includeFileSystem)
 			is = findFileSystemResource(name, locale);
@@ -125,12 +128,10 @@ public class BasicResourceFinder implements ResourceFinder {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected InputStream findFileSystemResource(String name, Locale locale) throws IOException {
-		if (name.indexOf("..") == -1) {
-			for (String n2 : getCandidateFileNames(name, locale)) {
-				File f = new File(n2);
-				if (f.exists() && f.canRead() && ! f.isAbsolute()) {
-					return new FileInputStream(f);
-				}
+		for (String n2 : getCandidateFileNames(name, locale)) {
+			File f = new File(n2);
+			if (f.exists() && f.isFile() && f.canRead() && ! f.isAbsolute()) {
+				return new FileInputStream(f);
 			}
 		}
 		return null;
@@ -208,5 +209,9 @@ public class BasicResourceFinder implements ResourceFinder {
 		if (locale == null)
 			return ROOT_LOCALE;
 		return RB_CONTROL.getCandidateLocales("", locale);
+	}
+
+	private static boolean isInvalidName(String name) {
+		return isEmpty(name) || name.contains("..");
 	}
 }

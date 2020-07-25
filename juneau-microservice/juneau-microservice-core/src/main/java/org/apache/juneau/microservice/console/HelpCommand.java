@@ -24,7 +24,7 @@ import org.apache.juneau.cp.*;
  */
 public class HelpCommand extends ConsoleCommand {
 
-	private final MessageBundle mb = MessageBundle.create(HelpCommand.class, "Messages");
+	private final MessageBundle mb = MessageBundle.of(HelpCommand.class, "Messages");
 
 	@Override /* ConsoleCommand */
 	public String getName() {

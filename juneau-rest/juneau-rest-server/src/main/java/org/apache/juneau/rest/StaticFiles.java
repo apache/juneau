@@ -24,7 +24,6 @@ import org.apache.juneau.internal.*;
  * The static file resource resolver for a single {@link StaticFileMapping}.
  */
 class StaticFiles {
-	private final Class<?> resourceClass;
 	private final String path, location;
 	private final Map<String,Object> responseHeaders;
 
@@ -32,7 +31,6 @@ class StaticFiles {
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 
 	StaticFiles(StaticFileMapping sfm, ResourceManager staticResourceManager, MimetypesFileTypeMap mimetypesFileTypeMap, Map<String,Object> staticFileResponseHeaders) {
-		this.resourceClass = sfm.resourceClass;
 		this.path = sfm.path;
 		this.location = sfm.location;
 		this.responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
@@ -49,7 +47,7 @@ class StaticFiles {
 			String remainder = (p.equals(path) ? "" : p.substring(path.length()));
 			if (remainder.isEmpty() || remainder.startsWith("/")) {
 				String p2 = location + remainder;
-				try (InputStream is = staticResourceManager.getStream(resourceClass, p2, null)) {
+				try (InputStream is = staticResourceManager.getStream(p2, null)) {
 					if (is != null) {
 						int i = p2.lastIndexOf('/');
 						String name = (i == -1 ? p2 : p2.substring(i+1));

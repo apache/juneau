@@ -88,7 +88,7 @@ public class JettyMicroservice extends Microservice {
 			.join();
 	}
 
-	final MessageBundle messages = MessageBundle.create(JettyMicroservice.class);
+	final MessageBundle messages = MessageBundle.of(JettyMicroservice.class);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties set in constructor

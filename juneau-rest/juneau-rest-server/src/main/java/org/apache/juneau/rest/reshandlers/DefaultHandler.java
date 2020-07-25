@@ -216,7 +216,7 @@ public class DefaultHandler implements ResponseHandler {
 		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
-		if (o != null && (isEmpty(accept) || accept.startsWith("text/plain") || accept.equals("*/*"))) {
+		if (o != null && (isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*"))) {
 			String out = null;
 			if (isEmpty(res.getContentType()))
 				res.setContentType("text/plain");

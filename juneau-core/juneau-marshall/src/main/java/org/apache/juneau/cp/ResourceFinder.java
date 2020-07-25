@@ -40,7 +40,7 @@ public interface ResourceFinder {
 	public static final class Null implements ResourceFinder {
 		@Override
 		public InputStream findResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-			throw new NoSuchMethodError();
+			return null;
 		}
 	}
 

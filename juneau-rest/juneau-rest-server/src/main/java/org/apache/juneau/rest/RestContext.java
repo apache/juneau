@@ -801,11 +801,8 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jc'>{@link RestContext}
 	 * 	<ul>
 	 * 		<li class='jm'>{@link #getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
-	 * 		<li class='jm'>{@link #getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}
 	 * 		<li class='jm'>{@link #getClasspathResource(Class,MediaType,String,Locale) getClasspathResource(Class,MediaType,String,Locale)}
-	 * 		<li class='jm'>{@link #getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}
 	 * 		<li class='jm'>{@link #getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
-	 * 		<li class='jm'>{@link #getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}
 	 * 		<li class='jm'>{@link #resolveStaticFile(String) resolveStaticFile(String)}
 	 * 	</ul>
 	 * 	<li class='jc'>{@link RestRequest}
@@ -3855,9 +3852,9 @@ public final class RestContext extends BeanContext {
 
 			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
 			if (mbl.length == 0)
-				msgs = new MessageBundle(rci.inner(), "");
+				msgs = new MessageBundle(rci.inner(), "", null);
 			else {
-				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath);
+				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath, null);
 				for (int i = 1; i < mbl.length; i++)
 					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : rci.inner(), mbl[i].bundlePath);
 			}
@@ -4335,38 +4332,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Same as {@link #getClasspathResource(String, Locale)}, but allows you to override the class used for looking
-	 * up the classpath resource.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> Object myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResource(SomeOtherClass.<jk>class</jk>, file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
-	 * @param name The resource name.
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return An input stream of the resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public InputStream getClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		return staticResourceManager.getStream(baseClass, name, locale);
-	}
-
-	/**
 	 * Reads the input stream from {@link #getClasspathResource(String, Locale)} into a String.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -4394,37 +4359,6 @@ public final class RestContext extends BeanContext {
 		return staticResourceManager.getString(name, locale);
 	}
 
-	/**
-	 * Same as {@link #getClasspathResourceAsString(String, Locale)}, but allows you to override the class used for looking
-	 * up the classpath resource.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> String myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResourceAsString(SomeOtherClass.<jk>class</jk>, file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
-	 * @param name The resource name.
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The contents of the stream as a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException If resource could not be found.
-	 */
-	public String getClasspathResourceAsString(Class<?> baseClass, String name, Locale locale) throws IOException {
-		return staticResourceManager.getString(baseClass, name, locale);
-	}
 
 	/**
 	 * Reads the input stream from {@link #getClasspathResource(String, Locale)} and parses it into a POJO using the parser
@@ -4458,42 +4392,7 @@ public final class RestContext extends BeanContext {
 	 * @throws ServletException If the media type was unknown or the input could not be parsed into a POJO.
 	 */
 	public <T> T getClasspathResource(Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
-		return getClasspathResource(null, c, mediaType, name, locale);
-	}
-
-	/**
-	 * Same as {@link #getClasspathResource(Class, MediaType, String, Locale)}, except overrides the class used
-	 * for retrieving the classpath resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_classpathResourceFinder}
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
-	 *	<jc>// from the classpath parsed as an array of beans.</jc>
-	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
-	 * 	<jk>public</jk> MyBean[] myMethod(RestRequest req, <ja>@Query</ja>(<js>"file"</js>) String file) {
-	 * 		<jk>return</jk> getContext().getClasspathResource(SomeOtherClass.<jk>class</jk>, MyBean[].<jk>class</jk>, <jsf>JSON</jsf>, file, req.getLocale());
-	 * 	}
-	 * </p>
-	 *
-	 * @param baseClass
-	 * 	Overrides the default class to use for retrieving the classpath resource.
-	 * 	<br>If <jk>null</jk>, uses the REST resource class.
-	 * @param c The class type of the POJO to create.
-	 * @param mediaType The media type of the data in the stream (e.g. <js>"text/json"</js>)
-	 * @param name The resource name (e.g. "htdocs/styles.css").
-	 * @param locale
-	 * 	Optional locale.
-	 * 	<br>If <jk>null</jk>, won't look for localized file names.
-	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 * @throws ServletException If the media type was unknown or the input could not be parsed into a POJO.
-	 */
-	public <T> T getClasspathResource(Class<?> baseClass, Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
-		InputStream is = getClasspathResource(baseClass, name, locale);
+		InputStream is = getClasspathResource(name, locale);
 		if (is == null)
 			return null;
 		try {

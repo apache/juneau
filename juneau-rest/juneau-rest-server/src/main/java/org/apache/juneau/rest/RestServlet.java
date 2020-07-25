@@ -101,7 +101,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 		callHandler = new BasicRestCallHandler(context);
 		infoProvider = new BasicRestInfoProvider(context);
 		callLogger = new BasicRestCallLogger(context);
-		resourceFinder = new BasicResourceFinder();
+		resourceFinder = new RecursiveResourceFinder();
 		context.postInit();
 	}
 

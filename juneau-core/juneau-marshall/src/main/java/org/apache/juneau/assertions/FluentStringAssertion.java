@@ -482,6 +482,36 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 		return returns();
 	}
 
+	/**
+	 * Asserts that the text starts with the specified string.
+	 *
+	 * @param string The string to test for.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R startsWith(String string) {
+		exists();
+		assertNotNull("string", string);
+		if (! text.startsWith(string))
+			throw error("Text did not start with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(text));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text ends with the specified string.
+	 *
+	 * @param string The string to test for.
+	 * @return The response object (for method chaining).
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R endsWith(String string) {
+		exists();
+		assertNotNull("string", string);
+		if (! text.endsWith(string))
+			throw error("Text did not end with expected string.\n\tString=[{0}]\n\tText=[{1}]", fix(string), fix(text));
+		return returns();
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------

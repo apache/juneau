@@ -88,57 +88,22 @@ public class MessageBundle extends ResourceBundle {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * When this method is used, the bundle path is determined by searching for the resource bundle
-	 * in the following locations:
-	 * <ul>
-	 * 	<li><c>[package].ForClass.properties</c>
-	 * 	<li><c>[package].nls.ForClass.properties</c>
-	 * 	<li><c>[package].i18n.ForClass.properties</c>
-	 * </ul>
-	 *
 	 * @param forClass The class
 	 * @return A new message bundle belonging to the class.
 	 */
-	public static final MessageBundle create(Class<?> forClass) {
-		return create(forClass, findBundlePath(forClass));
+	public static final MessageBundle of(Class<?> forClass) {
+		return new MessageBundle(forClass, null, null);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * A shortcut for calling <c>new MessageBundle(forClass, bundlePath)</c>.
-	 *
 	 * @param forClass The class
 	 * @param bundlePath The location of the resource bundle.
 	 * @return A new message bundle belonging to the class.
 	 */
-	public static final MessageBundle create(Class<?> forClass, String bundlePath) {
-		return new MessageBundle(forClass, bundlePath);
-	}
-
-	private static final String findBundlePath(Class<?> forClass) {
-		String path = forClass.getName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		path = forClass.getPackage().getName() + ".nls." + forClass.getSimpleName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		path = forClass.getPackage().getName() + ".i18n." + forClass.getSimpleName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		return null;
-	}
-
-	private static final boolean tryBundlePath(Class<?> c, String path) {
-		try {
-			path = c.getName();
-			ResourceBundle.getBundle(path, Locale.getDefault(), c.getClassLoader());
-			return true;
-		} catch (MissingResourceException e) {
-			return false;
-		}
+	public static final MessageBundle of(Class<?> forClass, String bundlePath) {
+		return new MessageBundle(forClass, bundlePath, null);
 	}
 
 	/**
@@ -147,21 +112,32 @@ public class MessageBundle extends ResourceBundle {
 	 * @param forClass The class using this resource bundle.
 	 * @param bundlePath
 	 * 	The path of the resource bundle to wrap.
-	 * 	This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path relative to the package of the
+	 * 	<br>This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path relative to the package of the
 	 * 	<l>forClass</l> (e.g. <js>"MyMessages"</js> if <l>forClass</l> is <js>"com.foo.MyClass"</js>).
+	 * 	<br>If <jk>null</jk>, searches for the following locations:
+	 * 	<ul>
+	 * 		<li><c>[package].ForClass.properties</c>
+	 * 		<li><c>[package].nls.ForClass.properties</c>
+	 * 		<li><c>[package].i18n.ForClass.properties</c>
+	 * 	</ul>
+	 * @param locale
+	 * 	The locale.
+	 * 	<br>If <jk>null</jk>, uses the default locale.
+	 * @throws MissingResourceException If resource bundle could not be found.
 	 */
-	public MessageBundle(Class<?> forClass, String bundlePath) {
-		this(forClass, bundlePath, Locale.getDefault());
-	}
-
-	private MessageBundle(Class<?> forClass, String bundlePath, Locale locale) {
+	public MessageBundle(Class<?> forClass, String bundlePath, Locale locale) throws MissingResourceException {
 		this.forClass = forClass;
 		this.className = forClass.getSimpleName();
+
 		if (bundlePath == null)
-			throw new RuntimeException("Bundle path was null.");
+			bundlePath = findBundlePath(forClass);
 		if (bundlePath.endsWith(".properties"))
 			throw new RuntimeException("Bundle path should not end with '.properties'");
 		this.bundlePath = bundlePath;
+
+		if (locale == null)
+			locale = Locale.getDefault();
+
 		this.creationThreadId = Thread.currentThread().getId();
 		ClassLoader cl = forClass.getClassLoader();
 		ResourceBundle trb = null;
@@ -214,7 +190,7 @@ public class MessageBundle extends ResourceBundle {
 	 */
 	public MessageBundle addSearchPath(Class<?> forClass, String bundlePath) {
 		assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
-		MessageBundle srb = new MessageBundle(forClass, bundlePath);
+		MessageBundle srb = new MessageBundle(forClass, bundlePath, null);
 		if (srb.rb != null) {
 			allKeys.addAll(srb.keySet());
 			searchBundles.add(srb);
@@ -372,10 +348,15 @@ public class MessageBundle extends ResourceBundle {
 	/**
 	 * Returns the resource bundle for the specified locale.
 	 *
-	 * @param locale The client locale.
+	 * @param locale
+	 * 	The client locale.
+	 * 	<br>If <jk>null</jk>, assumes the default locale.
 	 * @return The resource bundle for the specified locale.  Never <jk>null</jk>.
 	 */
 	public MessageBundle getBundle(Locale locale) {
+		if (locale == null)
+			locale = Locale.getDefault();
+
 		MessageBundle mb = localizedBundles.get(locale);
 		if (mb != null)
 			return mb;
@@ -390,5 +371,28 @@ public class MessageBundle extends ResourceBundle {
 		mb.searchBundles.addAll(l);
 		localizedBundles.putIfAbsent(locale, mb);
 		return localizedBundles.get(locale);
+	}
+
+	private static final String findBundlePath(Class<?> forClass) {
+		String path = forClass.getName();
+		if (tryBundlePath(forClass, path))
+			return path;
+		path = forClass.getPackage().getName() + ".nls." + forClass.getSimpleName();
+		if (tryBundlePath(forClass, path))
+			return path;
+		path = forClass.getPackage().getName() + ".i18n." + forClass.getSimpleName();
+		if (tryBundlePath(forClass, path))
+			return path;
+		throw new MissingResourceException("Could not find bundle path for class ", forClass.getName(), null);
+	}
+
+	private static final boolean tryBundlePath(Class<?> c, String path) {
+		try {
+			path = c.getName();
+			ResourceBundle.getBundle(path, Locale.getDefault(), c.getClassLoader());
+			return true;
+		} catch (MissingResourceException e) {
+			return false;
+		}
 	}
 }

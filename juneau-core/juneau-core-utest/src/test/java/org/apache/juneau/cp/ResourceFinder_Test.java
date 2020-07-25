@@ -10,44 +10,17 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.console;
+package org.apache.juneau.cp;
 
-import java.io.*;
-import java.util.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.junit.runners.MethodSorters.*;
+import org.junit.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.microservice.*;
-import org.apache.juneau.cp.*;
+@FixMethodOrder(NAME_ASCENDING)
+public class ResourceFinder_Test {
 
-/**
- * Implements the 'exit' console command to gracefully shut down the microservice and JVM.
- */
-public class ExitCommand extends ConsoleCommand {
-
-	private final MessageBundle mb = MessageBundle.of(ExitCommand.class, "Messages");
-
-	@Override /* ConsoleCommand */
-	public String getName() {
-		return "exit";
-	}
-
-	@Override /* ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
-
-	@Override /* ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
-
-	@Override /* ConsoleCommand */
-	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		try {
-			Microservice.getInstance().stop().exit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return true;
+	@Test
+	public void a01_basic_Null() throws Exception {
+		assertObject(new ResourceFinder.Null().findResource(null, null, null)).isNull();
 	}
 }
