@@ -285,7 +285,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		VarResolverSession vr = req.getVarResolverSession();
 		if (siteName != null)
 			return vr.resolve(siteName);
-		String siteName = context.getMessages().findFirstString(req.getLocale(), "siteName");
+		String siteName = context.getMessages().forLocale(req.getLocale()).findFirstString("siteName");
 		if (siteName != null)
 			return vr.resolve(siteName);
 		return null;
@@ -338,7 +338,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		VarResolverSession vr = req.getVarResolverSession();
 		if (title != null)
 			return vr.resolve(title);
-		String title = context.getMessages().findFirstString(req.getLocale(), "title");
+		String title = context.getMessages().forLocale(req.getLocale()).findFirstString("title");
 		if (title != null)
 			return vr.resolve(title);
 		return null;
@@ -391,7 +391,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		VarResolverSession vr = req.getVarResolverSession();
 		if (description != null)
 			return vr.resolve(description);
-		String description = context.getMessages().findFirstString(req.getLocale(), "description");
+		String description = context.getMessages().forLocale(req.getLocale()).findFirstString("description");
 		if (description != null)
 			return vr.resolve(description);
 		return null;

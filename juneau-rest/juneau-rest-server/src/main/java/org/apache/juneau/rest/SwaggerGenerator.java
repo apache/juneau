@@ -86,7 +86,7 @@ final class SwaggerGenerator {
 		this.js = context.getJsonSchemaGenerator().createSession();
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
-		this.mb = context.getMessages();
+		this.mb = context.getMessages().forLocale(locale);
 	}
 
 	/**
@@ -233,18 +233,17 @@ final class SwaggerGenerator {
 				);
 		}
 
-
-		omSwagger.ase("externalDocs", parseMap(mb.findFirstString(locale, "externalDocs"), "Messages/externalDocs on class {0}", c));
+		omSwagger.ase("externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
 
 		OMap info = omSwagger.getMap("info", true);
 
 		info
-			.ase("title", resolve(mb.findFirstString(locale, "title")))
-			.ase("description", resolve(mb.findFirstString(locale, "description")))
-			.ase("version", resolve(mb.findFirstString(locale, "version")))
-			.ase("termsOfService", resolve(mb.findFirstString(locale, "termsOfService")))
-			.ase("contact", parseMap(mb.findFirstString(locale, "contact"), "Messages/contact on class {0}", c))
-			.ase("license", parseMap(mb.findFirstString(locale, "license"), "Messages/license on class {0}", c));
+			.ase("title", resolve(mb.findFirstString("title")))
+			.ase("description", resolve(mb.findFirstString("description")))
+			.ase("version", resolve(mb.findFirstString("version")))
+			.ase("termsOfService", resolve(mb.findFirstString("termsOfService")))
+			.ase("contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
+			.ase("license", parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
 
 		if (info.isEmpty())
 			omSwagger.remove("info");
@@ -267,7 +266,7 @@ final class SwaggerGenerator {
 			}
 		}
 
-		String s = mb.findFirstString(locale, "tags");
+		String s = mb.findFirstString("tags");
 		if (s != null) {
 			for (OMap m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(OMap.class)) {
 				String name = m.getString("name");
@@ -312,7 +311,7 @@ final class SwaggerGenerator {
 			op.ase("summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
-					resolve(mb.findFirstString(locale, mn + ".summary")),
+					resolve(mb.findFirstString(mn + ".summary")),
 					op.getString("summary"),
 					resolve(rm.summary())
 				)
@@ -320,7 +319,7 @@ final class SwaggerGenerator {
 			op.ase("description",
 				firstNonEmpty(
 					resolve(ms.description()),
-					resolve(mb.findFirstString(locale, mn + ".description")),
+					resolve(mb.findFirstString(mn + ".description")),
 					op.getString("description"),
 					resolve(rm.description())
 				)
@@ -333,44 +332,44 @@ final class SwaggerGenerator {
 			);
 			op.ase("tags",
 				merge(
-					parseListOrCdl(mb.findFirstString(locale, mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
+					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
 					parseListOrCdl(ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("schemes",
 				merge(
-					parseListOrCdl(mb.findFirstString(locale, mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
+					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("consumes",
 				firstNonEmpty(
-					parseListOrCdl(mb.findFirstString(locale, mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
+					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("produces",
 				firstNonEmpty(
-					parseListOrCdl(mb.findFirstString(locale, mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
+					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
 					parseListOrCdl(ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("parameters",
 				merge(
-					parseList(mb.findFirstString(locale, mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
+					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
 					parseList(ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("responses",
 				merge(
-					parseMap(mb.findFirstString(locale, mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
+					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
 					parseMap(ms.responses(), "@MethodSwagger(responses) on class {0} method {1}", c, m)
 				)
 			);
 			op.ase("externalDocs",
 				merge(
 					op.getMap("externalDocs"),
-					parseMap(mb.findFirstString(locale, mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
+					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
 					toMap(ms.externalDocs(), "@MethodSwagger(externalDocs) on class {0} method {1}", c, m)
 				)
 			);

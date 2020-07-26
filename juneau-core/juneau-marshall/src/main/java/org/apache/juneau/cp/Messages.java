@@ -23,16 +23,87 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * A wrapper around a {@link ResourceBundle}.
+ * An enhanced {@link ResourceBundle}.
  *
  * <p>
- * Adds support for non-existent resource bundles and associating class loaders.
+ * Wraps a ResourceBundle to provide some useful additional functionality.
+ *
+ * <ul>
+ * 	<li>
+ * 		Instead of throwing {@link MissingResourceException}, the {@link ResourceBundle#getString(String)} method
+ * 		will return <js>"{!key}"</js> if the message could not be found.
+ * 	<li>
+ * 		Supported hierarchical lookup of resources from parent parent classes.
+ * 	<li>
+ * 		Support for easy retrieval of localized bundles.
+ * 	<li>
+ * 		Support for generalized resource bundles (e.g. properties files containing keys for several classes).
+ * </ul>
+ *
+ * <p>
+ * The following example shows the basic usage of this class for retrieving localized messages:
+ *
+ * <p class='bcode w800'>
+ * 	<cc># Contents of MyClass.properties</cc>
+ * 	<ck>foo</ck> = <cv>foo {0}</cv>
+ * 	<ck>MyClass.bar</ck> = <cv>bar {0}</cv>
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> MyClass {
+ * 		<jk>private static final</jk> Messages <jsf>MESSAGES</jsf> = Messages.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ *
+ * 		<jk>public void</jk> doFoo() {
+ *
+ *			<jc>// A normal property.</jc>
+ * 			String <jv>foo</jv> = <jsf>MESSAGES</jsf>.getString(<js>"foo"</js>,<js>"x"</js>);  <jc>// == "foo x"</jc>
+ *
+ * 			<jc>// A property prefixed by class name.</jc>
+ * 			String <jv>bar</jv> = <jsf>MESSAGES</jsf>.getString(<js>"bar"</js>,<js>"x"</js>);  <jc>// == "bar x"</jc>
+ *
+ * 			<jc>// A non-existent property.</jc>
+ * 			String <jv>baz</jv> = <jsf>MESSAGES</jsf>.getString(<js>"baz"</js>,<js>"x"</js>);  <jc>// == "{!baz}"</jc>
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	The ability to resolve keys prefixed by class name allows you to place all your messages in a single file such
+ * 	as a common <js>"Messages.properties"</js> file along with those for other classes.
+ * <p>
+ * 	The following shows how to retrieve messages from a common bundle:
+ *
+ * <p class='bcode w800'>
+ * 	<jk>public class</jk> MyClass {
+ * 		<jk>private static final</jk> Messages <jsf>MESSAGES</jsf> = Messages.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"Messages"</js>);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Resource bundles are searched using the following base name patterns:
+ * 	<ul>
+ * 		<li><js>"{package}.{name}"</js>
+ * 		<li><js>"{package}.i18n.{name}"</js>
+ * 		<li><js>"{package}.nls.{name}"</js>
+ * 		<li><js>"{package}.messages.{name}"</js>
+ * 	</ul>
+ *
+ * <p>
+ * 	These patterns can be customized using the {@link MessagesBuilder#baseNames(String...)} method.
+ *
+ * <p>
+ * 	Localized messages can be retrieved in the following way:
+ *
+* <p class='bcode w800'>
+* 	<jc>// Return value from Japan locale bundle.</jc>
+* 	String <jv>foo</jv> = <jsf>MESSAGES</jsf>.forLocale(Locale.<jsf>JAPAN</jsf>).getString(<js>"foo"</js>);
+ * </p>
  */
 public class Messages extends ResourceBundle {
 
 	private ResourceBundle rb;
 	private Class<?> c;
 	private Messages parent;
+	private Locale locale;
 
 	// Cache of message bundles per locale.
 	private final ConcurrentHashMap<Locale,Messages> localizedMessages = new ConcurrentHashMap<>();
@@ -86,15 +157,17 @@ public class Messages extends ResourceBundle {
 	 * 	The class we're creating this object for.
 	 * @param rb
 	 * 	The resource bundle we're encapsulating.  Can be <jk>null</jk>.
+	 * @param locale The locale of these messages.
 	 * @param parent
 	 * 	The parent resource.  Can be <jk>null</jk>.
 	 */
-	public Messages(Class<?> forClass, ResourceBundle rb, Messages parent) {
+	public Messages(Class<?> forClass, ResourceBundle rb, Locale locale, Messages parent) {
 		this.c = forClass;
 		this.rb = rb;
 		this.parent = parent;
 		if (parent != null)
 			setParent(parent);
+		this.locale = locale == null ? Locale.getDefault() : locale;
 
 		Map<String,String> keyMap = new TreeMap<>();
 
@@ -131,11 +204,13 @@ public class Messages extends ResourceBundle {
 	public Messages forLocale(Locale locale) {
 		if (locale == null)
 			locale = Locale.getDefault();
+		if (this.locale.equals(locale))
+			return this;
 		Messages mb = localizedMessages.get(locale);
 		if (mb == null) {
 			Messages parent = this.parent == null ? null : this.parent.forLocale(locale);
 			ResourceBundle rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
-			mb = new Messages(c, rb, parent);
+			mb = new Messages(c, rb, locale, parent);
 			localizedMessages.put(locale, mb);
 		}
 		return mb;
@@ -176,23 +251,6 @@ public class Messages extends ResourceBundle {
 	}
 
 	/**
-	 * Same as {@link #getString(String, Object...)} but allows you to specify the locale.
-	 *
-	 * @param locale The locale of the resource bundle to retrieve message from.
-	 * @param key The resource bundle key.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @return
-	 * 	The resolved value.  Never <jk>null</jk>.
-	 * 	<js>"{!!key}"</js> if the bundle is missing.
-	 * 	<js>"{!key}"</js> if the key is missing.
-	 */
-	public String getString(Locale locale, String key, Object...args) {
-		if (locale == null)
-			return getString(key, args);
-		return forLocale(locale).getString(key, args);
-	}
-
-	/**
 	 * Looks for all the specified keys in the resource bundle and returns the first value that exists.
 	 *
 	 * @param keys The list of possible keys.
@@ -204,18 +262,6 @@ public class Messages extends ResourceBundle {
 				return getString(k);
 		}
 		return null;
-	}
-
-	/**
-	 * Same as {@link #findFirstString(String...)}, but uses the specified locale.
-	 *
-	 * @param locale The locale of the resource bundle to retrieve message from.
-	 * @param keys The list of possible keys.
-	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
-	 */
-	public String findFirstString(Locale locale, String...keys) {
-		Messages srb = forLocale(locale);
-		return srb.findFirstString(keys);
 	}
 
 	@Override /* ResourceBundle */

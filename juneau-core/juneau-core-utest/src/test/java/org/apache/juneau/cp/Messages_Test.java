@@ -30,7 +30,6 @@ public class Messages_Test {
 	public void a01_sameDirectory() throws Exception {
 		Messages x1 = Messages.of(MessageBundleTest1.class);
 		assertString(x1.getString("file")).is("MessageBundleTest1.properties");
-		assertString(x1.getString(JAPANESE, "file")).is("MessageBundleTest1_ja.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x1.forLocale(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");
 		assertString(x1.forLocale(CHINA).getString("file")).is("MessageBundleTest1.properties");
@@ -41,7 +40,6 @@ public class Messages_Test {
 	public void a02_customName() throws Exception {
 		Messages x1 = Messages.of(MessageBundleTest1.class, "files/Test1");
 		assertString(x1.getString("file")).is("files/Test1.properties");
-		assertString(x1.getString(JAPANESE, "file")).is("files/Test1_ja.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("files/Test1_ja.properties");
 		assertString(x1.forLocale(JAPAN).getString("file")).is("files/Test1_ja_JP.properties");
 		assertString(x1.forLocale(CHINA).getString("file")).is("files/Test1.properties");
@@ -49,7 +47,6 @@ public class Messages_Test {
 
 		Messages x2 = Messages.create(MessageBundleTest1.class).name(null).build();
 		assertString(x2.getString("file")).is("MessageBundleTest1.properties");
-		assertString(x2.getString(JAPANESE, "file")).is("MessageBundleTest1_ja.properties");
 		assertString(x2.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x2.forLocale(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");
 		assertString(x2.forLocale(CHINA).getString("file")).is("MessageBundleTest1.properties");
@@ -60,7 +57,6 @@ public class Messages_Test {
 	public void a03_customSearchPaths() throws Exception {
 		Messages x = Messages.create(MessageBundleTest1.class).name("Test1").baseNames("{package}.files.{name}").build();
 		assertString(x.getString("file")).is("files/Test1.properties");
-		assertString(x.getString(JAPANESE, "file")).is("files/Test1_ja.properties");
 		assertString(x.forLocale(JAPANESE).getString("file")).is("files/Test1_ja.properties");
 		assertString(x.forLocale(JAPAN).getString("file")).is("files/Test1_ja_JP.properties");
 		assertString(x.forLocale(CHINA).getString("file")).is("files/Test1.properties");
@@ -74,7 +70,6 @@ public class Messages_Test {
 	public void a04_customLocale() throws Exception {
 		Messages x1 = Messages.create(MessageBundleTest1.class).locale(Locale.JAPAN).build();
 		assertString(x1.getString("file")).is("MessageBundleTest1_ja_JP.properties");
-		assertString(x1.getString(JAPANESE, "file")).is("MessageBundleTest1_ja.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x1.forLocale(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");
 		assertString(x1.forLocale(CHINA).getString("file")).is("MessageBundleTest1.properties");
@@ -82,7 +77,6 @@ public class Messages_Test {
 
 		Messages x2 = Messages.create(MessageBundleTest1.class).locale(null).build();
 		assertString(x2.getString("file")).is("MessageBundleTest1.properties");
-		assertString(x2.getString(JAPANESE, "file")).is("MessageBundleTest1_ja.properties");
 		assertString(x2.forLocale(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x2.forLocale(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");
 		assertString(x2.forLocale(CHINA).getString("file")).is("MessageBundleTest1.properties");
@@ -93,7 +87,6 @@ public class Messages_Test {
 	public void a05_nonExistentBundle() throws Exception {
 		Messages x1 = Messages.of(MessageBundleTest1.class, "Bad");
 		assertString(x1.getString("file")).is("{!file}");
-		assertString(x1.getString(JAPANESE, "file")).is("{!file}");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("{!file}");
 		assertString(x1.forLocale(JAPAN).getString("file")).is("{!file}");
 		assertString(x1.forLocale(CHINA).getString("file")).is("{!file}");
@@ -107,7 +100,6 @@ public class Messages_Test {
 	public void a06_parent() throws Exception {
 		Messages x1 = Messages.create(MessageBundleTest1.class).name("Bad").parent(Messages.of(Test2.class)).build();
 		assertString(x1.getString("file")).is("Test2.properties");
-		assertString(x1.getString(JAPANESE, "file")).is("Test2_ja.properties");
 		assertString(x1.forLocale(JAPANESE).getString("file")).is("Test2_ja.properties");
 		assertString(x1.forLocale(JAPAN).getString("file")).is("Test2_ja_JP.properties");
 		assertString(x1.forLocale(CHINA).getString("file")).is("Test2.properties");
@@ -142,12 +134,12 @@ public class Messages_Test {
 		assertString(x.getString("foo","bar")).is("foo bar");
 		assertString(x.getString("bar","bar")).is("bar bar");
 		assertString(x.getString("baz","bar")).is("{!baz}");
-		assertString(x.getString(JAPAN, "foo","bar")).is("fooja bar");
-		assertString(x.getString(CHINA, "foo","bar")).is("foo bar");
-		assertString(x.getString((Locale)null, "foo","bar")).is("foo bar");
-		assertString(x.getString(JAPAN, "baz")).is("baz");
-		assertString(x.getString(CHINA, "baz")).is("{!baz}");
-		assertString(x.getString((Locale)null, "baz")).is("{!baz}");
+		assertString(x.forLocale(JAPAN).getString("foo","bar")).is("fooja bar");
+		assertString(x.forLocale(CHINA).getString("foo","bar")).is("foo bar");
+		assertString(x.forLocale(null).getString("foo","bar")).is("foo bar");
+		assertString(x.forLocale(JAPAN).getString("baz")).is("baz");
+		assertString(x.forLocale(CHINA).getString("baz")).is("{!baz}");
+		assertString(x.forLocale(null).getString("baz")).is("{!baz}");
 	}
 
 	@Test
@@ -155,9 +147,9 @@ public class Messages_Test {
 		Messages x = Messages.of(MessageBundleTest1.class);
 		assertString(x.findFirstString("baz","foo")).is("foo {0}");
 		assertString(x.findFirstString("baz","baz")).isNull();
-		assertString(x.findFirstString(JAPAN,"baz","foo")).is("baz");
-		assertString(x.findFirstString(CHINA,"baz","baz")).isNull();
-		assertString(x.findFirstString((Locale)null,"baz","baz")).isNull();
+		assertString(x.forLocale(JAPAN).findFirstString("baz","foo")).is("baz");
+		assertString(x.forLocale(CHINA).findFirstString("baz","baz")).isNull();
+		assertString(x.forLocale(null).findFirstString("baz","baz")).isNull();
 	}
 
 	@Test

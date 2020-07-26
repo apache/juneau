@@ -1249,19 +1249,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The resource bundle.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Messages getMessageBundle() {
+	public Messages getMessages() {
 		return context.getMessages().forLocale(getLocale());
 	}
 
 	/**
-	 * Shortcut method for calling {@link Messages#getString(Locale, String, Object...)} based on the request locale.
+	 * Shortcut method for calling {@link RestRequest#getMessages()} and {@link Messages#getString(String,Object...)}.
 	 *
 	 * @param key The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return The localized message.
 	 */
 	public String getMessage(String key, Object...args) {
-		return context.getMessages().getString(getLocale(), key, args);
+		return getMessages().getString(key, args);
 	}
 
 	/**

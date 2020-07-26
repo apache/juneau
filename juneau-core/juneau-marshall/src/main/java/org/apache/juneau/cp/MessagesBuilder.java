@@ -99,7 +99,7 @@ public class MessagesBuilder {
 	 * @return A new {@link Messages} object.
 	 */
 	public Messages build() {
-		return new Messages(forClass, getBundle(), parent);
+		return new Messages(forClass, getBundle(), locale, parent);
 	}
 
 	private ResourceBundle getBundle() {
