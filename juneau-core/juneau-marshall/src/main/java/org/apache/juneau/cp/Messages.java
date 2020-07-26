@@ -12,195 +12,151 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.ResourceBundleUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.marshall.*;
 
 /**
- * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
+ * A wrapper around a {@link ResourceBundle}.
  *
- * <ul class='spaced-list'>
- * 	<li>
- * 		Instead of throwing {@link MissingResourceException}, the {@link #getString(String)} method
- * 		will return <js>"{!!key}"</js> if the bundle was not found, and <js>"{!key}"</js> if bundle
- * 		was found but the key is not in the bundle.
- * 	<li>
- * 		A client locale can be set as a {@link ThreadLocal} object using the static {@link #setClientLocale(Locale)}
- * 		so that client localized messages can be retrieved using the {@link #getClientString(String, Object...)}
- * 		method on all instances of this class.
- * 	<li>
- * 		Resource bundles on parent classes can be added to the search path for this class by using the
- * 		{@link #addSearchPath(Class, String)} method.
- * 		This allows messages to be retrieved from the resource bundles of parent classes.
- * 	<li>
- * 		Locale-specific bundles can be retrieved by using the {@link #getBundle(Locale)} method.
- * 	<li>
- * 		The {@link #getString(Locale, String, Object...)} method can be used to retrieve locale-specific messages.
- * 	<li>
- * 		Messages in the resource bundle can optionally be prefixed with the simple class name.
- * 		For example, if the class is <c>MyClass</c> and the properties file contains <js>"MyClass.myMessage"</js>,
- * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
- * </ul>
- *
- * <ul class='notes'>
- * 	<li>
- * 		This class is thread-safe.
- * </ul>
+ * <p>
+ * Adds support for non-existent resource bundles and associating class loaders.
  */
 public class Messages extends ResourceBundle {
 
-	private static final ThreadLocal<Locale> clientLocale = new ThreadLocal<>();
-
-	private final ResourceBundle rb;
-	private final String bundlePath, className;
-	private final Class<?> forClass;
-	private final long creationThreadId;
-
-	// A map that contains all keys [shortKeyName->keyName] and [keyName->keyName], where shortKeyName
-	// refers to keys prefixed and stripped of the class name (e.g. "foobar"->"MyClass.foobar")
-	private final Map<String,String> keyMap = new ConcurrentHashMap<>();
-
-	// Contains all keys present in all bundles in searchBundles.
-	private final ConcurrentSkipListSet<String> allKeys = new ConcurrentSkipListSet<>();
-
-	// Bundles to search through to find properties.
-	// Typically this will be a list of resource bundles for each class up the class hierarchy chain.
-	private final CopyOnWriteArrayList<Messages> searchBundles = new CopyOnWriteArrayList<>();
+	private ResourceBundle rb;
+	private Class<?> c;
+	private Messages parent;
 
 	// Cache of message bundles per locale.
-	private final ConcurrentHashMap<Locale,Messages> localizedBundles = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Locale,Messages> localizedMessages = new ConcurrentHashMap<>();
+
+	// Cache of virtual keys to actual keys.
+	private final Map<String,String> keyMap;
+
+	private final Set<String> rbKeys;
 
 	/**
-	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return messages in
-	 * that locale.
+	 * Creator.
 	 *
-	 * @param locale The new client locale.
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @return A new builder.
 	 */
-	public static void setClientLocale(Locale locale) {
-		Messages.clientLocale.set(locale);
+	public static final MessagesBuilder create(Class<?> forClass) {
+		return new MessagesBuilder(forClass);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param forClass The class
+	 * @param forClass
+	 * 	The class we're creating this object for.
 	 * @return A new message bundle belonging to the class.
 	 */
 	public static final Messages of(Class<?> forClass) {
-		return new Messages(forClass, null, null);
+		return create(forClass).build();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param forClass The class
-	 * @param bundlePath The location of the resource bundle.
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @param name
+	 * 	The bundle name (e.g. <js>"Messages"</js>).
+	 * 	<br>If <jk>null</jk>, uses the class name.
 	 * @return A new message bundle belonging to the class.
 	 */
-	public static final Messages of(Class<?> forClass, String bundlePath) {
-		return new Messages(forClass, bundlePath, null);
+	public static final Messages of(Class<?> forClass, String name) {
+		return create(forClass).name(name).build();
 	}
+
 
 	/**
 	 * Constructor.
 	 *
-	 * @param forClass The class using this resource bundle.
-	 * @param bundlePath
-	 * 	The path of the resource bundle to wrap.
-	 * 	<br>This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path relative to the package of the
-	 * 	<l>forClass</l> (e.g. <js>"MyMessages"</js> if <l>forClass</l> is <js>"com.foo.MyClass"</js>).
-	 * 	<br>If <jk>null</jk>, searches for the following locations:
-	 * 	<ul>
-	 * 		<li><c>[package].ForClass.properties</c>
-	 * 		<li><c>[package].nls.ForClass.properties</c>
-	 * 		<li><c>[package].i18n.ForClass.properties</c>
-	 * 	</ul>
-	 * @param locale
-	 * 	The locale.
-	 * 	<br>If <jk>null</jk>, uses the default locale.
-	 * @throws MissingResourceException If resource bundle could not be found.
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @param rb
+	 * 	The resource bundle we're encapsulating.  Can be <jk>null</jk>.
+	 * @param parent
+	 * 	The parent resource.  Can be <jk>null</jk>.
 	 */
-	public Messages(Class<?> forClass, String bundlePath, Locale locale) throws MissingResourceException {
-		this.forClass = forClass;
-		this.className = forClass.getSimpleName();
+	public Messages(Class<?> forClass, ResourceBundle rb, Messages parent) {
+		this.c = forClass;
+		this.rb = rb;
+		this.parent = parent;
+		if (parent != null)
+			setParent(parent);
 
-		if (bundlePath == null)
-			bundlePath = findBundlePath(forClass);
-		if (bundlePath.endsWith(".properties"))
-			throw new RuntimeException("Bundle path should not end with '.properties'");
-		this.bundlePath = bundlePath;
+		Map<String,String> keyMap = new TreeMap<>();
 
-		if (locale == null)
-			locale = Locale.getDefault();
-
-		this.creationThreadId = Thread.currentThread().getId();
-		ClassLoader cl = forClass.getClassLoader();
-		ResourceBundle trb = null;
-		try {
-			trb = ResourceBundle.getBundle(bundlePath, locale, cl);
-		} catch (MissingResourceException e) {
-			try {
-				trb = ResourceBundle.getBundle(forClass.getPackage().getName() + '.' + bundlePath, locale, cl);
-			} catch (MissingResourceException e2) {
-			}
-		}
-		this.rb = trb;
+		String cn = c.getSimpleName() + '.';
 		if (rb != null) {
-
-			// Populate keyMap with original mappings.
-			for (Enumeration<String> e = getKeys(); e.hasMoreElements();) {
-				String key = e.nextElement();
+			for (String key : rb.keySet()) {
 				keyMap.put(key, key);
-			}
-
-			// Override/augment with shortname mappings (e.g. "foobar"->"MyClass.foobar")
-			String c = className + '.';
-			for (Enumeration<String> e = getKeys(); e.hasMoreElements();) {
-				String key = e.nextElement();
-				if (key.startsWith(c)) {
-					String shortKey = key.substring(className.length() + 1);
+				if (key.startsWith(cn)) {
+					String shortKey = key.substring(cn.length());
 					keyMap.put(shortKey, key);
 				}
 			}
-
-			allKeys.addAll(keyMap.keySet());
 		}
-		searchBundles.add(this);
-	}
+		if (parent != null) {
+			for (String key : parent.keySet()) {
+				keyMap.put(key, key);
+				if (key.startsWith(cn)) {
+					String shortKey = key.substring(cn.length());
+					keyMap.put(shortKey, key);
+				}
+			}
+		}
 
+		this.keyMap = Collections.unmodifiableMap(new LinkedHashMap<>(keyMap));
+		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
+	}
 
 	/**
-	 * Add another bundle path to this resource bundle.
+	 * Returns this message bundle for the specified locale.
 	 *
-	 * <p>
-	 * Order of property lookup is first-to-last.
-	 *
-	 * <p>
-	 * This method must be called from the same thread as the call to the constructor.
-	 * This eliminates the need for synchronization.
-	 *
-	 * @param forClass The class using this resource bundle.
-	 * @param bundlePath The bundle path.
-	 * @return This object (for method chaining).
+	 * @param locale The locale to get the messages for.
+	 * @return A new {@link Messages} object.  Never <jk>null</jk>.
 	 */
-	public Messages addSearchPath(Class<?> forClass, String bundlePath) {
-		assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
-		Messages srb = new Messages(forClass, bundlePath, null);
-		if (srb.rb != null) {
-			allKeys.addAll(srb.keySet());
-			searchBundles.add(srb);
+	public Messages forLocale(Locale locale) {
+		if (locale == null)
+			locale = Locale.getDefault();
+		Messages mb = localizedMessages.get(locale);
+		if (mb == null) {
+			Messages parent = this.parent == null ? null : this.parent.forLocale(locale);
+			ResourceBundle rb = this.rb == null ? null : findBundle(this.rb.getBaseBundleName(), locale, c.getClassLoader());
+			mb = new Messages(c, rb, parent);
+			localizedMessages.put(locale, mb);
 		}
-		return this;
+		return mb;
 	}
 
-	@Override /* ResourceBundle */
-	public boolean containsKey(String key) {
-		return allKeys.contains(key);
+	/**
+	 * Returns all keys in this resource bundle with the specified prefix.
+	 *
+	 * <p>
+	 * Keys are returned in alphabetical order.
+	 *
+	 * @param prefix The prefix.
+	 * @return The set of all keys in the resource bundle with the prefix.
+	 */
+	public Set<String> keySet(String prefix) {
+		Set<String> set = new LinkedHashSet<>();
+		for (String s : keySet()) {
+			if (s.equals(prefix) || (s.startsWith(prefix) && s.charAt(prefix.length()) == '.'))
+				set.add(s);
+		}
+		return set;
 	}
 
 	/**
@@ -210,12 +166,11 @@ public class Messages extends ResourceBundle {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return
 	 * 	The resolved value.  Never <jk>null</jk>.
-	 * 	<js>"{!!key}"</js> if the bundle is missing.
 	 * 	<js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(String key, Object...args) {
 		String s = getString(key);
-		if (s.length() > 0 && s.charAt(0) == '{')
+		if (s.startsWith("{!"))
 			return s;
 		return format(s, args);
 	}
@@ -234,21 +189,7 @@ public class Messages extends ResourceBundle {
 	public String getString(Locale locale, String key, Object...args) {
 		if (locale == null)
 			return getString(key, args);
-		return getBundle(locale).getString(key, args);
-	}
-
-	/**
-	 * Same as {@link #getString(String, Object...)} but uses the locale specified on the call to {@link #setClientLocale(Locale)}.
-	 *
-	 * @param key The resource bundle key.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 * @return
-	 * 	The resolved value.  Never <jk>null</jk>.
-	 * 	<js>"{!!key}"</js> if the bundle is missing.
-	 * 	<js>"{!key}"</js> if the key is missing.
-	 */
-	public String getClientString(String key, Object...args) {
-		return getString(clientLocale.get(), key, args);
+		return forLocale(locale).getString(key, args);
 	}
 
 	/**
@@ -258,8 +199,6 @@ public class Messages extends ResourceBundle {
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
 	 */
 	public String findFirstString(String...keys) {
-		if (rb == null)
-			return null;
 		for (String k : keys) {
 			if (containsKey(k))
 				return getString(k);
@@ -275,124 +214,42 @@ public class Messages extends ResourceBundle {
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
 	 */
 	public String findFirstString(Locale locale, String...keys) {
-		Messages srb = getBundle(locale);
+		Messages srb = forLocale(locale);
 		return srb.findFirstString(keys);
 	}
 
 	@Override /* ResourceBundle */
-	public Set<String> keySet() {
-		return Collections.unmodifiableSet(allKeys);
+	protected Object handleGetObject(String key) {
+		String k = keyMap.get(key);
+		if (k == null)
+			return "{!" + key + "}";
+		try {
+			if (rbKeys.contains(k))
+				return rb.getObject(k);
+		} catch (MissingResourceException e) { /* Shouldn't happen */ }
+		return parent.handleGetObject(key);
 	}
 
-	/**
-	 * Returns all keys in this resource bundle with the specified prefix.
-	 *
-	 * @param prefix The prefix.
-	 * @return The set of all keys in the resource bundle with the prefix.
-	 */
-	public Set<String> keySet(String prefix) {
-		Set<String> set = new HashSet<>();
-		for (String s : keySet()) {
-			if (s.equals(prefix) || (s.startsWith(prefix) && s.charAt(prefix.length()) == '.'))
-				set.add(s);
-		}
-		return set;
+	@Override /* ResourceBundle */
+	public boolean containsKey(String key) {
+		return keyMap.containsKey(key);
+	}
+
+	@Override /* ResourceBundle */
+	public Set<String> keySet() {
+		return keyMap.keySet();
 	}
 
 	@Override /* ResourceBundle */
 	public Enumeration<String> getKeys() {
-		if (rb == null)
-			return new Vector<String>(0).elements();
-		return rb.getKeys();
+		return Collections.enumeration(keySet());
 	}
 
-	@Override /* ResourceBundle */
-	protected Object handleGetObject(String key) {
-		for (Messages srb : searchBundles) {
-			if (srb.rb != null) {
-				String key2 = srb.keyMap.get(key);
-				if (key2 != null) {
-					try {
-						return srb.rb.getObject(key2);
-					} catch (Exception e) {
-						return "{!"+key+"}";
-					}
-				}
-			}
-		}
-		if (rb == null)
-			return "{!!"+key+"}";
-		return "{!"+key+"}";
-	}
-
-	/**
-	 * Returns this resource bundle as an {@link OMap}.
-	 *
-	 * <p>
-	 * Useful for debugging purposes.
-	 * Note that any class that implements a <c>swap()</c> method will automatically be serialized by
-	 * calling this method and serializing the result.
-	 *
-	 * <p>
-	 * This method always constructs a new {@link OMap} on each call.
-	 *
-	 * @return A new map containing all the keys and values in this bundle.
-	 */
-	public OMap swap() {
+	@Override
+	public String toString() {
 		OMap om = new OMap();
-		for (String k : allKeys)
+		for (String k : new TreeSet<>(keySet()))
 			om.put(k, getString(k));
-		return om;
-	}
-
-	/**
-	 * Returns the resource bundle for the specified locale.
-	 *
-	 * @param locale
-	 * 	The client locale.
-	 * 	<br>If <jk>null</jk>, assumes the default locale.
-	 * @return The resource bundle for the specified locale.  Never <jk>null</jk>.
-	 */
-	public Messages getBundle(Locale locale) {
-		if (locale == null)
-			locale = Locale.getDefault();
-
-		Messages mb = localizedBundles.get(locale);
-		if (mb != null)
-			return mb;
-		mb = new Messages(forClass, bundlePath, locale);
-		List<Messages> l = new ArrayList<>(searchBundles.size()-1);
-		for (int i = 1; i < searchBundles.size(); i++) {
-			Messages srb = searchBundles.get(i);
-			srb = new Messages(srb.forClass, srb.bundlePath, locale);
-			l.add(srb);
-			mb.allKeys.addAll(srb.keySet());
-		}
-		mb.searchBundles.addAll(l);
-		localizedBundles.putIfAbsent(locale, mb);
-		return localizedBundles.get(locale);
-	}
-
-	private static final String findBundlePath(Class<?> forClass) {
-		String path = forClass.getName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		path = forClass.getPackage().getName() + ".nls." + forClass.getSimpleName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		path = forClass.getPackage().getName() + ".i18n." + forClass.getSimpleName();
-		if (tryBundlePath(forClass, path))
-			return path;
-		throw new MissingResourceException("Could not find bundle path for class ", forClass.getName(), null);
-	}
-
-	private static final boolean tryBundlePath(Class<?> c, String path) {
-		try {
-			path = c.getName();
-			ResourceBundle.getBundle(path, Locale.getDefault(), c.getClassLoader());
-			return true;
-		} catch (MissingResourceException e) {
-			return false;
-		}
+		return SimpleJson.DEFAULT.toString(om);
 	}
 }

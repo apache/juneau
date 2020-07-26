@@ -1250,7 +1250,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Messages getMessageBundle() {
-		return context.getMessages().getBundle(getLocale());
+		return context.getMessages().forLocale(getLocale());
 	}
 
 	/**

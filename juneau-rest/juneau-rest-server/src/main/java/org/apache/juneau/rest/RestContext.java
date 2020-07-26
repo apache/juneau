@@ -3852,11 +3852,13 @@ public final class RestContext extends BeanContext {
 
 			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
 			if (mbl.length == 0)
-				msgs = new Messages(rci.inner(), "", null);
+				msgs = Messages.of(rci.inner());
 			else {
-				msgs = new Messages(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath, null);
-				for (int i = 1; i < mbl.length; i++)
-					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : rci.inner(), mbl[i].bundlePath);
+				Messages msgs = null;
+				for (int i = mbl.length-1; i >= 0; i--)
+					if (mbl[i] != null)
+						msgs = Messages.create(mbl[i].baseClass == null ? rci.inner() : mbl[i].baseClass).name(mbl[i].bundlePath).parent(msgs).build();
+				this.msgs = msgs;
 			}
 
 			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();

@@ -29,7 +29,7 @@ public class RestResourceMessagesTest {
 
 	static OMap convertToMap(ResourceBundle rb) {
 		OMap m = new OMap();
-		for (String k : rb.keySet())
+		for (String k : new TreeSet<>(rb.keySet()))
 			m.put(k, rb.getString(k));
 		return m;
 	}

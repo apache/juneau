@@ -109,6 +109,6 @@ public class NlsTest {
 
 	@Test
 	public void c01_missingResourceBundle() throws Exception {
-		c.get("/test").run().assertBody().is("{!!bad}");
+		c.get("/test").run().assertBody().is("{!bad}");
 	}
 }
