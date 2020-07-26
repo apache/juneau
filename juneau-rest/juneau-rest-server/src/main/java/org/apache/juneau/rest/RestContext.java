@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
@@ -1584,7 +1584,7 @@ public final class RestContext extends BeanContext {
 	 * Messages are also available by passing either of the following parameter types into your Java method:
 	 * <ul class='javatree'>
 	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
-	 * 	<li class='jc'>{@link MessageBundle} - Extended resource bundle with several convenience methods.
+	 * 	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
 	 * </ul>
 	 *
 	 * <p>
@@ -3608,7 +3608,7 @@ public final class RestContext extends BeanContext {
 	private final MimetypesFileTypeMap mimetypesFileTypeMap;
 	private final StaticFiles[] staticFiles;
 	private final String[] staticFilesPaths;
-	private final MessageBundle msgs;
+	private final Messages msgs;
 	private final Config config;
 	private final VarResolver varResolver;
 	private final Map<String,RestCallRouter> callRouters;
@@ -3852,9 +3852,9 @@ public final class RestContext extends BeanContext {
 
 			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
 			if (mbl.length == 0)
-				msgs = new MessageBundle(rci.inner(), "", null);
+				msgs = new Messages(rci.inner(), "", null);
 			else {
-				msgs = new MessageBundle(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath, null);
+				msgs = new Messages(mbl[0] != null ? mbl[0].baseClass : rci.inner(), mbl[0].bundlePath, null);
 				for (int i = 1; i < mbl.length; i++)
 					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : rci.inner(), mbl[i].bundlePath);
 			}
@@ -4504,7 +4504,7 @@ public final class RestContext extends BeanContext {
 	 * 	The resource bundle for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public MessageBundle getMessages() {
+	public Messages getMessages() {
 		return msgs;
 	}
 

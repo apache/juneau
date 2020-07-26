@@ -24,7 +24,7 @@ import org.apache.juneau.cp.*;
  */
 public class RestartCommand extends ConsoleCommand {
 
-	private final MessageBundle mb = MessageBundle.of(RestartCommand.class, "Messages");
+	private final Messages mb = Messages.of(RestartCommand.class, "Messages");
 
 	@Override /* ConsoleCommand */
 	public String getName() {

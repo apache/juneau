@@ -52,7 +52,7 @@ import org.apache.juneau.collections.*;
  * 		This class is thread-safe.
  * </ul>
  */
-public class MessageBundle extends ResourceBundle {
+public class Messages extends ResourceBundle {
 
 	private static final ThreadLocal<Locale> clientLocale = new ThreadLocal<>();
 
@@ -70,10 +70,10 @@ public class MessageBundle extends ResourceBundle {
 
 	// Bundles to search through to find properties.
 	// Typically this will be a list of resource bundles for each class up the class hierarchy chain.
-	private final CopyOnWriteArrayList<MessageBundle> searchBundles = new CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<Messages> searchBundles = new CopyOnWriteArrayList<>();
 
 	// Cache of message bundles per locale.
-	private final ConcurrentHashMap<Locale,MessageBundle> localizedBundles = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Locale,Messages> localizedBundles = new ConcurrentHashMap<>();
 
 	/**
 	 * Sets the locale for this thread so that calls to {@link #getClientString(String, Object...)} return messages in
@@ -82,7 +82,7 @@ public class MessageBundle extends ResourceBundle {
 	 * @param locale The new client locale.
 	 */
 	public static void setClientLocale(Locale locale) {
-		MessageBundle.clientLocale.set(locale);
+		Messages.clientLocale.set(locale);
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class MessageBundle extends ResourceBundle {
 	 * @param forClass The class
 	 * @return A new message bundle belonging to the class.
 	 */
-	public static final MessageBundle of(Class<?> forClass) {
-		return new MessageBundle(forClass, null, null);
+	public static final Messages of(Class<?> forClass) {
+		return new Messages(forClass, null, null);
 	}
 
 	/**
@@ -102,8 +102,8 @@ public class MessageBundle extends ResourceBundle {
 	 * @param bundlePath The location of the resource bundle.
 	 * @return A new message bundle belonging to the class.
 	 */
-	public static final MessageBundle of(Class<?> forClass, String bundlePath) {
-		return new MessageBundle(forClass, bundlePath, null);
+	public static final Messages of(Class<?> forClass, String bundlePath) {
+		return new Messages(forClass, bundlePath, null);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class MessageBundle extends ResourceBundle {
 	 * 	<br>If <jk>null</jk>, uses the default locale.
 	 * @throws MissingResourceException If resource bundle could not be found.
 	 */
-	public MessageBundle(Class<?> forClass, String bundlePath, Locale locale) throws MissingResourceException {
+	public Messages(Class<?> forClass, String bundlePath, Locale locale) throws MissingResourceException {
 		this.forClass = forClass;
 		this.className = forClass.getSimpleName();
 
@@ -188,9 +188,9 @@ public class MessageBundle extends ResourceBundle {
 	 * @param bundlePath The bundle path.
 	 * @return This object (for method chaining).
 	 */
-	public MessageBundle addSearchPath(Class<?> forClass, String bundlePath) {
+	public Messages addSearchPath(Class<?> forClass, String bundlePath) {
 		assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
-		MessageBundle srb = new MessageBundle(forClass, bundlePath, null);
+		Messages srb = new Messages(forClass, bundlePath, null);
 		if (srb.rb != null) {
 			allKeys.addAll(srb.keySet());
 			searchBundles.add(srb);
@@ -275,7 +275,7 @@ public class MessageBundle extends ResourceBundle {
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
 	 */
 	public String findFirstString(Locale locale, String...keys) {
-		MessageBundle srb = getBundle(locale);
+		Messages srb = getBundle(locale);
 		return srb.findFirstString(keys);
 	}
 
@@ -308,7 +308,7 @@ public class MessageBundle extends ResourceBundle {
 
 	@Override /* ResourceBundle */
 	protected Object handleGetObject(String key) {
-		for (MessageBundle srb : searchBundles) {
+		for (Messages srb : searchBundles) {
 			if (srb.rb != null) {
 				String key2 = srb.keyMap.get(key);
 				if (key2 != null) {
@@ -353,18 +353,18 @@ public class MessageBundle extends ResourceBundle {
 	 * 	<br>If <jk>null</jk>, assumes the default locale.
 	 * @return The resource bundle for the specified locale.  Never <jk>null</jk>.
 	 */
-	public MessageBundle getBundle(Locale locale) {
+	public Messages getBundle(Locale locale) {
 		if (locale == null)
 			locale = Locale.getDefault();
 
-		MessageBundle mb = localizedBundles.get(locale);
+		Messages mb = localizedBundles.get(locale);
 		if (mb != null)
 			return mb;
-		mb = new MessageBundle(forClass, bundlePath, locale);
-		List<MessageBundle> l = new ArrayList<>(searchBundles.size()-1);
+		mb = new Messages(forClass, bundlePath, locale);
+		List<Messages> l = new ArrayList<>(searchBundles.size()-1);
 		for (int i = 1; i < searchBundles.size(); i++) {
-			MessageBundle srb = searchBundles.get(i);
-			srb = new MessageBundle(srb.forClass, srb.bundlePath, locale);
+			Messages srb = searchBundles.get(i);
+			srb = new Messages(srb.forClass, srb.bundlePath, locale);
 			l.add(srb);
 			mb.allKeys.addAll(srb.keySet());
 		}

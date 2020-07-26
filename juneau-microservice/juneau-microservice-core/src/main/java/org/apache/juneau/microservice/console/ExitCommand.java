@@ -24,7 +24,7 @@ import org.apache.juneau.cp.*;
  */
 public class ExitCommand extends ConsoleCommand {
 
-	private final MessageBundle mb = MessageBundle.of(ExitCommand.class, "Messages");
+	private final Messages mb = Messages.of(ExitCommand.class, "Messages");
 
 	@Override /* ConsoleCommand */
 	public String getName() {

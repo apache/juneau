@@ -22,7 +22,7 @@ import org.apache.juneau.plaintext.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ResourceManager_Test {
+public class Resources_Test {
 
 	private static Parser PARSER = PlainTextParser.DEFAULT;
 

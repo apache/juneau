@@ -37,7 +37,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -1236,7 +1236,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The {@link MessageBundle} object can also be passed as a parameter on the method.
+	 * 		The {@link Messages} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1249,12 +1249,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The resource bundle.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public MessageBundle getMessageBundle() {
+	public Messages getMessageBundle() {
 		return context.getMessages().getBundle(getLocale());
 	}
 
 	/**
-	 * Shortcut method for calling {@link MessageBundle#getString(Locale, String, Object...)} based on the request locale.
+	 * Shortcut method for calling {@link Messages#getString(Locale, String, Object...)} based on the request locale.
 	 *
 	 * @param key The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.

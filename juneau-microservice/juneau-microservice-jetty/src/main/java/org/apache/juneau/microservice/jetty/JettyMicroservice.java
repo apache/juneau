@@ -24,7 +24,7 @@ import javax.servlet.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.parser.ParseException;
@@ -88,7 +88,7 @@ public class JettyMicroservice extends Microservice {
 			.join();
 	}
 
-	final MessageBundle messages = MessageBundle.of(JettyMicroservice.class);
+	final Messages messages = Messages.of(JettyMicroservice.class);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties set in constructor
@@ -165,7 +165,7 @@ public class JettyMicroservice extends Microservice {
 	@Override /* Microservice */
 	public synchronized JettyMicroservice stop() throws Exception {
 		final Logger logger = getLogger();
-		final MessageBundle mb2 = messages;
+		final Messages mb2 = messages;
 		Thread t = new Thread("JettyMicroserviceStop") {
 			@Override /* Thread */
 			public void run() {

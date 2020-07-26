@@ -22,7 +22,7 @@ import java.util.*;
 import javax.servlet.*;
 
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -44,7 +44,7 @@ public class RestParamsTest {
 			return t == null ? null : t.getString("foo");
 		}
 		@RestMethod
-		public String a02(MessageBundle t) {
+		public String a02(Messages t) {
 			return t == null ? null : t.getString("foo");
 		}
 		@RestMethod(name=POST)

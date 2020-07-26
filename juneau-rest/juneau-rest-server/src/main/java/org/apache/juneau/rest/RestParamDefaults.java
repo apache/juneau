@@ -25,7 +25,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
@@ -589,7 +589,7 @@ class RestParamDefaults {
 	static final class MessageBundleObject extends RestMethodParam {
 
 		protected MessageBundleObject() {
-			super(OTHER, MessageBundle.class);
+			super(OTHER, Messages.class);
 		}
 
 		@Override /* RestMethodParam */

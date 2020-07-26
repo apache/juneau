@@ -26,7 +26,7 @@ import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -70,7 +70,7 @@ final class SwaggerGenerator {
 	private final JsonSchemaGeneratorSession js;
 	private final Class<?> c;
 	private final Object resource;
-	private final MessageBundle mb;
+	private final Messages mb;
 
 	/**
 	 * Constructor.

@@ -51,7 +51,7 @@ import org.apache.juneau.collections.*;
  * 	<li>
  * 		This class is thread-safe.
  * </ul>
- * @deprecated Use {@link org.apache.juneau.cp.MessageBundle}.
+ * @deprecated Use {@link org.apache.juneau.cp.Messages}.
  */
 @Deprecated
 public class MessageBundle extends ResourceBundle {

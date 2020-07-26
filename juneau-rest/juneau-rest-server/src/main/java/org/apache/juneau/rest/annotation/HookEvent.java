@@ -21,7 +21,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.exception.*;
@@ -145,7 +145,7 @@ public enum HookEvent {
 	 * 	<li>Other objects:
 	 * 		<ul>
 	 * 			<li>{@link ResourceBundle}
-	 * 			<li>{@link MessageBundle}
+	 * 			<li>{@link Messages}
 	 * 			<li>{@link InputStream}
 	 * 			<li>{@link ServletInputStream}
 	 * 			<li>{@link Reader}

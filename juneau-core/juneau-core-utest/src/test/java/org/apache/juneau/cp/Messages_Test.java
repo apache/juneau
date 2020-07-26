@@ -23,17 +23,17 @@ import org.apache.juneau.cp.test1.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class MessageBundle_Test {
+public class Messages_Test {
 
 	@Test
 	public void a01_nonExistent() throws Exception {
-		assertThrown(()->MessageBundle.of(Test1.class)).contains("Could not find bundle path for class");
-		assertThrown(()->MessageBundle.of(Test1.class,"bad.properties")).contains("Bundle path should not end with '.properties'");
+		assertThrown(()->Messages.of(Test1.class)).contains("Could not find bundle path for class");
+		assertThrown(()->Messages.of(Test1.class,"bad.properties")).contains("Bundle path should not end with '.properties'");
 	}
 
 	@Test
 	public void a02_sameDirectory() throws Exception {
-		MessageBundle x = MessageBundle.of(MessageBundleTest1.class);
+		Messages x = Messages.of(MessageBundleTest1.class);
 		assertString(x.getString("file")).is("MessageBundleTest1.properties");
 		assertString(x.getBundle(JAPANESE).getString("file")).is("MessageBundleTest1_ja.properties");
 		assertString(x.getBundle(JAPAN).getString("file")).is("MessageBundleTest1_ja_JP.properties");

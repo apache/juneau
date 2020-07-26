@@ -39,7 +39,7 @@ import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.ManifestFileVar;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.cp.MessageBundle;
+import org.apache.juneau.cp.Messages;
 
 /**
  * Parent class for all microservices.
@@ -111,7 +111,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 
-	final MessageBundle messages = MessageBundle.of(Microservice.class);
+	final Messages messages = Messages.of(Microservice.class);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties set in constructor
@@ -764,7 +764,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void out(MessageBundle mb, String messageKey, Object...args) {
+	public void out(Messages mb, String messageKey, Object...args) {
 		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			getConsoleWriter().println(msg);
@@ -781,7 +781,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void err(MessageBundle mb, String messageKey, Object...args) {
+	public void err(Messages mb, String messageKey, Object...args) {
 		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG

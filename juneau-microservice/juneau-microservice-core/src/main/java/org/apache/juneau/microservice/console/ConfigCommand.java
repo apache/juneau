@@ -25,7 +25,7 @@ import org.apache.juneau.cp.*;
  */
 public class ConfigCommand extends ConsoleCommand {
 
-	private final MessageBundle mb = MessageBundle.of(ConfigCommand.class, "Messages");
+	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
 	@Override /* ConsoleCommand */
 	public String getName() {
