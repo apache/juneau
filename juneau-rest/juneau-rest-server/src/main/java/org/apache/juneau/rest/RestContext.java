@@ -1622,8 +1622,7 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li
-	 * 		>Mappings are cumulative from super classes.
+	 * 	<li>Mappings are cumulative from super classes.
 	 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 	 * </ul>
 	 *
