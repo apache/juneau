@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -1554,7 +1555,7 @@ public final class RestContext extends BeanContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_messages REST_messages}
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
-	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.rest.MessageBundleLocation}&gt;</c>
+	 * 	<li><b>Data type:</b>  <c>List&lt;{@link org.apache.juneau.utils.Tuple2}&lt;Class,String&gt;&gt;</c>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
@@ -1564,59 +1565,72 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(String)},
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(Class,String)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#messages(MessageBundleLocation...)}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Identifies the location of the resource bundle for this class.
+	 * Identifies the location of the resource bundle for this class if it's different from the class name.
 	 *
 	 * <p>
-	 * This annotation is used to provide localized messages for the following methods:
+	 * By default, the resource bundle name is assumed to match the class name.  For example, given the class
+	 * <c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
+	 * allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
+	 * specifying a value of <js>"MyMessages"</js>.
+	 *
+	 * <p>
+	 * 	Resource bundles are searched using the following base name patterns:
+	 * 	<ul>
+	 * 		<li><js>"{package}.{name}"</js>
+	 * 		<li><js>"{package}.i18n.{name}"</js>
+	 * 		<li><js>"{package}.nls.{name}"</js>
+	 * 		<li><js>"{package}.messages.{name}"</js>
+	 * 	</ul>
+	 *
+	 * <p>
+	 * This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
 	 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
 	 * </ul>
 	 *
 	 * <p>
-	 * Messages are also available by passing either of the following parameter types into your Java method:
+	 * Request-localized messages are also available by passing either of the following parameter types into your Java method:
 	 * <ul class='javatree'>
 	 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
 	 * 	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
 	 * </ul>
 	 *
-	 * <p>
-	 * Messages passed into Java methods already have their locale set to that of the incoming request.
-	 *
-	 * <p>
 	 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
 	 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
 	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>package</jk> org.apache.foo;
+	 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
 	 *
-	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
+	 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Contents of org/apache/foo/MyResource.java</jc>
+	 *
 	 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
 	 * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
-	 * 		<jk>public</jk> Object helloYou(RestRequest req, MessageBundle messages, <ja>@Path</ja>(<js>"name"</js>) String you)) {
-	 * 			String s;
+	 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
+	 * 			String <jv>s</jv>;
 	 *
 	 * 			<jc>// Get it from the RestRequest object.</jc>
-	 * 			s = req.getMessage(<js>"HelloMessage"</js>, you);
+	 * 			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
 	 *
 	 * 			<jc>// Or get it from the method parameter.</jc>
-	 * 			s = messages.getString(<js>"HelloMessage"</js>, you);
+	 * 			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 	 *
 	 * 			<jc>// Or get the message in a locale different from the request.</jc>
-	 * 			s = messages.getString(Locale.<jsf>UK</jsf>, <js>"HelloMessage"</js>, you);
+	 * 			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 	 *
-	 * 			<jk>return</jk> s;
+	 * 			<jk>return</jk> <jv>s</jv>;
 	 * 		}
 	 * 	}
 	 * </p>
@@ -1627,6 +1641,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link Messages}
 	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
 	 * </ul>
 	 */
@@ -3849,16 +3864,11 @@ public final class RestContext extends BeanContext {
 				s.add(sf.getPath());
 			staticFilesPaths = s.toArray(new String[s.size()]);
 
-			MessageBundleLocation[] mbl = getInstanceArrayProperty(REST_messages, MessageBundleLocation.class, new MessageBundleLocation[0]);
-			if (mbl.length == 0)
-				msgs = Messages.of(rci.inner());
-			else {
-				Messages msgs = null;
-				for (int i = mbl.length-1; i >= 0; i--)
-					if (mbl[i] != null)
-						msgs = Messages.create(mbl[i].baseClass == null ? rci.inner() : mbl[i].baseClass).name(mbl[i].bundlePath).parent(msgs).build();
-				this.msgs = msgs;
-			}
+			Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class, new Tuple2[0]);
+			Messages msgs = null;
+			for (int i = mbl.length-1; i >= 0; i--)
+				msgs = Messages.create(firstNonNull(mbl[i].getA(), rci.inner())).name(mbl[i].getB()).parent(msgs).build();
+			this.msgs = msgs;
 
 			this.fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.getPath();
 

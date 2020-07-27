@@ -35,6 +35,19 @@ public class HashCode {
 	}
 
 	/**
+	 * Calculates a hash code over the specified objects.
+	 *
+	 * @param objects The objects to calculate a hashcode over.
+	 * @return A numerical hashcode value.
+	 */
+	public static final int of(Object...objects) {
+		HashCode x = create();
+		for (Object oo : objects)
+			x.add(oo);
+		return x.get();
+	}
+
+	/**
 	 * Hashes the hashcode of the specified object into this object.
 	 *
 	 * @param o The object whose hashcode will be hashed with this object.
@@ -42,7 +55,7 @@ public class HashCode {
 	 */
 	public HashCode add(Object o) {
 		o = unswap(o);
-		add(o == null ? 1 : o.hashCode());
+		add(o == null ? 0 : o.hashCode());
 		return this;
 	}
 

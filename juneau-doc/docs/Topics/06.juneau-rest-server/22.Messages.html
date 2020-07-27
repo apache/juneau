@@ -13,49 +13,97 @@
  ***************************************************************************************************************************/
  -->
 
+{8.1.4-updated} 
 Messages
 
 <p>
-	The {@link oajr.annotation.Rest#messages @Rest(messages)} annotation is used to associate a resource bundle with a servlet class.
+	The {@link oajr.annotation.Rest#messages @Rest(messages)} annotation identifies the location of the resource bundle 
+	for a <ja>@Rest</ja>-annotated class if it's different from the class name.
 </p>
-<p class='bpcode w800'>
-	<jc>// Servlet with associated resource bundle</jc>
-	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
-	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+<p>
+	By default, the resource bundle name is assumed to match the class name.  For example, given the class
+	<c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
+	allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
+	specifying a value of <js>"MyMessages"</js>.
+</p>
+<p>
+Resource bundles are searched using the following base name patterns:
+</p>
+<ul>
+	<li><js>"{package}.{name}"</js>
+	<li><js>"{package}.i18n.{name}"</js>
+	<li><js>"{package}.nls.{name}"</js>
+	<li><js>"{package}.messages.{name}"</js>
+</ul>
 
-		<jc>// Returns the localized greeting from the "greeting" key in MyMessages.properties</jc>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> String printLocalizedGreeting(RestRequest req) {
-			<jk>return</jk> req.getMessage(<js>"greeting"</js>);
-		}
+<p>
+	This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
 </p>
-<p>	
-	The resource bundle can also be passed into the method by simply specifying a parameter
-	of type {@link java.util.ResourceBundle} or {@link oaj.utils.MessageBundle}:
+<ul class='javatree'>
+	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
+	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
+</ul>
+
+<p>
+	Request-localized messages are also available by passing either of the following parameter types into your Java method:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
+	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
+</ul>
+<p>
+	The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+	<js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+	absolute path like <js>"com.foo.sample.nls.Messages"</js>
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<cc>#--------------------------------------------------------------------------------
+	# Contents of org/apache/foo/nls/MyMessages.properties
+	#--------------------------------------------------------------------------------</cc>
+	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public</jk> String printLocalizedGreeting(MessageBundle messages) {
-		<jk>return</jk> messages.getString(<js>"greeting"</js>);
+	<jc>// Contents of org/apache/foo/MyResource.java</jc>
+
+	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
+	<jk>public class</jk> MyResource {...}
+
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
+		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
+			String <jv>s</jv>;
+
+			<jc>// Get it from the RestRequest object.</jc>
+			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
+
+			<jc>// Or get it from the method parameter.</jc>
+			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+
+			<jc>// Or get the message in a locale different from the request.</jc>
+			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+
+			<jk>return</jk> <jv>s</jv>;
+		}
 	}
 </p>
 <p>
-	If a resource bundle is shared by multiple servlets, the label and description can be prefixed by the class 
-	name:
+	When using shared resource bundles, keys can be prefixed by class names like so and still retrieve by simple
+	key names:
 </p>
 <p class='bpcode w800'>
 	<cc>#--------------------------------------------------------------------------------
-	# Contents of MyMessages.properties
+	# Contents of shared org/apache/foo/nls/MyMessages.properties
 	#--------------------------------------------------------------------------------</cc>
-	<ck>greeting</ck> = Hello!
-</p>	 	
-<p class='bpcode w800'>
-	<cc>#--------------------------------------------------------------------------------
-	# Contents of shared MyMessages.properties
-	#--------------------------------------------------------------------------------</cc>
-	<ck>MyRestServlet.greeting</ck> = Hello!
+	<ck>MyResource.HelloMessage</ck> = <cv>Hello {0}!</cv>
+</p>
+
+<p>
+	Messages are automatically inherited from super classes.  If a string cannot be found in the bundle of the current
+	class, it will be searched for up the class hierarchy.
 </p>
 
 <ul class='seealso'>
+	<li class='jc'>{@link oaj.cp.Messages}
 	<li class='jf'>{@link oajr.RestContext#REST_messages}
 </ul>

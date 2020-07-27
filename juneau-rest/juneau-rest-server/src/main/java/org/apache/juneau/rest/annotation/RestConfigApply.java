@@ -32,6 +32,7 @@ import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Applies {@link Rest} annotations to a {@link PropertyStoreBuilder}.
@@ -181,8 +182,7 @@ public class RestConfigApply extends ConfigApply<Rest> {
 			}
 		}
 
-		if (! a.messages().isEmpty())
-			psb.prependTo(REST_messages, new MessageBundleLocation(c.inner(), string(a.messages())));
+		psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 
 		for (String header : strings(a.staticFileResponseHeaders())) {
 			String[] h = RestUtils.parseHeader(header);

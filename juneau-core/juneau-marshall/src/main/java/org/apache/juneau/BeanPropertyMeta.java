@@ -430,7 +430,7 @@ public final class BeanPropertyMeta {
 		this.canWrite = b.canWrite;
 		this.readOnly = b.readOnly;
 		this.writeOnly = b.writeOnly;
-		this.hashCode = HashCode.create().add(beanMeta.hashCode()).add(name == null ? 0 : name.hashCode()).get();
+		this.hashCode = HashCode.of(beanMeta,name);
 	}
 
 	/**

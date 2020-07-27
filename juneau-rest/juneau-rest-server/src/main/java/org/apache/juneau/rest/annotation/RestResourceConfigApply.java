@@ -173,7 +173,7 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		}
 
 		if (! a.messages().isEmpty())
-			psb.prependTo(REST_messages, new MessageBundleLocation(c.inner(), string(a.messages())));
+			psb.prependTo(REST_messages, Tuple2.of(c.inner(), string(a.messages())));
 
 		for (String header : strings(a.staticFileResponseHeaders())) {
 			String[] h = RestUtils.parseHeader(header);

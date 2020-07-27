@@ -1226,11 +1226,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req, <ja>@Query</ja>(<js>"user"</js>) String user) {
 	 *
-	 * 		<jc>// Get message bundle.</jc>
-	 * 		MessageBundle mb = req.getMessageBundle();
-	 *
 	 * 		<jc>// Return a localized message.</jc>
-	 * 		<jk>return</jk> mb.getString(<js>"hello.message"</js>, user);
+	 * 		<jk>return</jk> req.getMessages().getString(<js>"hello.message"</js>, user);
 	 * 	}
 	 * </p>
 	 *

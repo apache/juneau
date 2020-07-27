@@ -46,6 +46,7 @@ import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Defines the initial configuration of a <c>RestServlet</c> or <c>@Rest</c> annotated object.
@@ -1218,28 +1219,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
 	 *
-	 * <p>
-	 * Identifies the location of the resource bundle for this class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_messages}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder messages(MessageBundleLocation...values) {
-		return prependTo(REST_messages, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Messages.
-	 *
-	 * <p>
-	 * Same as {@link #messages(MessageBundleLocation...)} except allows you to pass in the base class and bundle
-	 * path separately.
-	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_messages}
 	 * </ul>
@@ -1252,7 +1231,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(Class<?> baseClass, String bundlePath) {
-		return prependTo(REST_messages, new MessageBundleLocation(baseClass, bundlePath));
+		return prependTo(REST_messages, Tuple2.of(baseClass, bundlePath));
 	}
 
 	/**
@@ -1270,7 +1249,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder messages(String bundlePath) {
-		return prependTo(REST_messages, new MessageBundleLocation(null, bundlePath));
+		return prependTo(REST_messages, Tuple2.of(null, bundlePath));
 	}
 
 	/**
