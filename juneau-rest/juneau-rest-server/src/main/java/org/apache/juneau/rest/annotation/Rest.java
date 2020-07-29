@@ -279,6 +279,41 @@ public @interface Rest {
 	String config() default "";
 
 	/**
+	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
+	 *
+	 * <review>NEEDS REVIEW</review>
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestContext <jk>extends</jk> RestContext {
+	 * 		<jk>public</jk> MyRestContext(RestContextBuilder <jv>builder</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		// Override any methods.
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our REST class</jc>
+	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link RestContextBuilder#context(Class)}
+	 * </ul>
+	 */
+	Class<? extends RestContext> context() default RestContext.Null.class;
+
+	/**
 	 * Class-level response converters.
 	 *
 	 * <p>

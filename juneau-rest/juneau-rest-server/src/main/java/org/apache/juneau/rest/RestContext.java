@@ -87,7 +87,15 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @ConfigurableContext(nocache=true)
-public final class RestContext extends BeanContext {
+public class RestContext extends BeanContext {
+
+	/** Represents a null value for the {@link Rest#context()} annotation.*/
+	@SuppressWarnings("javadoc")
+	public static final class Null extends RestContext {
+		public Null(RestContextBuilder builder) throws Exception {
+			super(builder);
+		}
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -804,7 +812,7 @@ public final class RestContext extends BeanContext {
 	 * 		<li class='jm'>{@link #getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
 	 * 		<li class='jm'>{@link #getClasspathResource(Class,MediaType,String,Locale) getClasspathResource(Class,MediaType,String,Locale)}
 	 * 		<li class='jm'>{@link #getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
-	 * 		<li class='jm'>{@link #resolveStaticFile(String) resolveStaticFile(String)}
+	 * 		<li class='jm'>{@link #getStaticFile(String) resolveStaticFile(String)}
 	 * 	</ul>
 	 * 	<li class='jc'>{@link RestRequest}
 	 * 	<ul>
@@ -1676,7 +1684,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Used for specifying the content type on file resources retrieved through the following methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#resolveStaticFile(String) RestContext.resolveStaticFile(String)}
+	 * 	<li class='jm'>{@link RestContext#getStaticFile(String) RestContext.resolveStaticFile(String)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean,MediaType,boolean)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String,boolean)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathHttpResource(String)}
@@ -3193,6 +3201,65 @@ public final class RestContext extends BeanContext {
 	public static final String REST_consumes = PREFIX + ".consumes.ls";
 
 	/**
+	 * Configuration property:  REST context class.
+	 *
+	 * <review>NEEDS REVIEW</review>
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_context REST_context}
+	 * 	<li><b>Name:</b>  <js>"RestContext.context.c"</js>
+	 * 	<li><b>Data type:</b>  <c>Class&lt;? extends {@link org.apache.juneau.rest.RestContext}&gt;</c>
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.RestContext}
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#context()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#context(Class)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our extended context class</jc>
+	 * 	<jk>public</jk> MyRestContext <jk>extends</jk> RestContext {
+	 * 		<jk>public</jk> MyRestContext(RestContextBuilder <jv>builder</jv>) {
+	 * 			<jk>super</jk>(<jv>builder</jv>);
+	 * 		}
+	 *
+	 * 		<jc>// Override any methods.</jc>
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Option #1 - Defined via annotation.</jc>
+	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 *
+	 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.context(MyRestContext.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	public static final String REST_context = PREFIX + ".context.c";
+
+	/**
 	 * Configuration property:  Use classpath resource caching.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3704,7 +3771,7 @@ public final class RestContext extends BeanContext {
 	 * @throws Exception If any initialization problems were encountered.
 	 */
 	@SuppressWarnings("deprecation")
-	RestContext(RestContextBuilder builder) throws Exception {
+	public RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 
 		startTime = Instant.now();
@@ -4277,7 +4344,7 @@ public final class RestContext extends BeanContext {
 	 * @throws NotFound Invalid path.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
+	protected StaticFile getStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
@@ -4918,20 +4985,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public boolean hasChildResources() {
 		return ! childResources.isEmpty();
-	}
-
-	/**
-	 * Returns the context of the child resource associated with the specified path.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
-	 * </ul>
-	 *
-	 * @param path The path of the child resource to resolve.
-	 * @return The resolved context, or <jk>null</jk> if it could not be resolved.
-	 */
-	public RestContext getChildResource(String path) {
-		return childResources.get(path);
 	}
 
 	/**

@@ -157,6 +157,10 @@ public class RestConfigApply extends ConfigApply<Rest> {
 
 		psb.prependTo(REST_paramResolvers, a.paramResolvers());
 
+		Class<?> cc = a.context();
+		if (! cc.equals(RestContext.Null.class))
+			psb.set(REST_context, cc);
+
 		s = string(a.uriContext());
 		if (isNotEmpty(s))
 			psb.set(REST_uriContext, s);

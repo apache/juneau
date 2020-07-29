@@ -204,7 +204,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContext build() {
 		try {
-			return new RestContext(this);
+			PropertyStore ps = getPropertyStore();
+			Class<? extends RestContext> c = ps.getClassProperty(REST_context, RestContext.class, RestContext.class);
+			ConstructorInfo ci = ClassInfo.of(c).getConstructor(Visibility.PUBLIC, RestContextBuilder.class);
+			if (ci == null)
+				throw new InternalServerError("Invalid class specified for REST_context.  Must extend from RestContext and provide a public constructor of the form T(RestContextBuilder).");
+			return ci.invoke(this);
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
 		}
@@ -796,6 +801,46 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder clientVersionHeader(String value) {
 		return set(REST_clientVersionHeader, value);
+	}
+
+	/**
+	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST context class.
+	 *
+	 * <review>NEEDS REVIEW</review>
+	 * <p>
+	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
+	 *
+	 * <p>
+	 * The subclass must provide the following:
+	 * <ul>
+	 * 	<li>A public constructor that takes in one parameter that should be passed to the super constructor:  {@link RestContextBuilder}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our REST class</jc>
+	 * 	<ja>@Rest</ja>(context=MyRestContext.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>
+	 * 	<jk>public class</jk> MyResource {
+	 * 		...
+	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	 * 		<jk>public void</jk> init(RestContextBuilder <jv>builder</jv>) <jk>throws</jk> Exception {
+	 * 			<jv>builder</jv>.context(MyRestContext.<jk>class</jk>);
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public RestContextBuilder context(Class<? extends RestContext> value) {
+		return set(REST_context, value);
 	}
 
 	/**

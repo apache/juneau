@@ -149,7 +149,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 			if (call.getPathInfoUndecoded() != null) {
 				String p = call.getPathInfoUndecoded().substring(1);
 				if (context.isStaticFile(p)) {
-					r = context.resolveStaticFile(p);
+					r = context.getStaticFile(p);
 					if (! r.exists()) {
 						call.output(null);
 						r = null;

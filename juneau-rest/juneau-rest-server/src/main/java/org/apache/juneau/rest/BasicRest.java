@@ -36,6 +36,10 @@ import org.apache.juneau.http.exception.*;
 /**
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.
  *
+ * <p>
+ * This is particularly useful in Spring Boot environments that auto-detect servlets to deploy in servlet containers,
+ * but you want this resource to be deployed as a child instead.
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRest}
  * </ul>
