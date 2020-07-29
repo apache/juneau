@@ -48,14 +48,14 @@ public class BasicRestInfoProviderTest {
 
 	private Swagger getSwaggerWithFile(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).classpathResourceFinder(TestClasspathResourceFinder.class).build();
-		RestRequest req = rc.getCallHandler().createRequest(new RestCall(new MockServletRequest(), null));
+		RestRequest req = rc.createRequest(new RestCall(rc, new MockServletRequest(), null));
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}
 
 	private static Swagger getSwagger(Object resource) throws Exception {
 		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new RestCall(new MockServletRequest(), null));
+		RestRequest req = rc.createRequest(new RestCall(rc, new MockServletRequest(), null));
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}

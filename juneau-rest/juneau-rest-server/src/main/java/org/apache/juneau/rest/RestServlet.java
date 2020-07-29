@@ -42,7 +42,7 @@ import org.apache.juneau.http.exception.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */
-public abstract class RestServlet extends HttpServlet implements RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
+public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,6 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 	private boolean isInitialized = false;  // Should not be volatile.
 	private volatile RestResourceResolver resourceResolver = new BasicRestResourceResolver();
 	private Logger logger = Logger.getLogger(getClass().getName());
-	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
 	private ResourceFinder resourceFinder;
@@ -98,7 +97,6 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 		this.builder = context.builder;
 		this.context = context;
 		isInitialized = true;
-		callHandler = new BasicRestCallHandler(context);
 		infoProvider = new BasicRestInfoProvider(context);
 		callLogger = new BasicRestCallLogger(context);
 		resourceFinder = new RecursiveResourceFinder();
@@ -291,7 +289,7 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 				isInitialized = true;
 			}
 
-			context.getCallHandler().execute(r1, r2);
+			context.execute(r1, r2);
 
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
@@ -600,54 +598,6 @@ public abstract class RestServlet extends HttpServlet implements RestCallHandler
 		return getContext().getResponse();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestCallHandler
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestCallHandler */
-	public void execute(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		callHandler.execute(req, res);
-	}
-
-	@Override /* RestCallHandler */
-	public RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
-		return callHandler.createCall(req, res);
-	}
-
-	@Override /* RestCallHandler */
-	public RestRequest createRequest(RestCall call) throws ServletException {
-		return callHandler.createRequest(call);
-	}
-
-	@Override /* RestCallHandler */
-	public RestResponse createResponse(RestCall call) throws ServletException {
-		return callHandler.createResponse(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleResponse(RestCall call) throws Exception {
-		callHandler.handleResponse(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleNotFound(RestCall call) throws Exception {
-		callHandler.handleNotFound(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleError(RestCall call, Throwable e) throws Exception {
-		callHandler.handleError(call, e);
-	}
-
-	@Override /* RestCallHandler */
-	public Throwable convertThrowable(Throwable t) {
-		return callHandler.convertThrowable(t);
-	}
-
-	@Override /* RestCallHandler */
-	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res) {
-		return callHandler.getSessionObjects(req, res);
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// RestInfoProvider

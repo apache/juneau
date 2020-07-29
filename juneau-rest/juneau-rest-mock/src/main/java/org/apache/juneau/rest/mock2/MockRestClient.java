@@ -31,7 +31,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.RestCallHandler;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.client2.RestRequest;
@@ -46,7 +45,7 @@ import org.apache.juneau.rest.client2.RestRequest;
  * 	The class itself extends from {@link RestClient} providing it with the rich feature set of that API and combines
  * 	it with the Apache HttpClient {@link HttpClientConnection} interface for processing requests.
  *  The class converts {@link HttpRequest} objects to instances of {@link MockServletRequest} and {@link MockServletResponse} which are passed directly
- *  to the call handler on the resource class {@link RestCallHandler#execute(HttpServletRequest,HttpServletResponse)}.
+ *  to the call handler on the resource class {@link RestContext#execute(HttpServletRequest,HttpServletResponse)}.
  *  In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
  *  actually having to run in a servlet container.
  *  All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
@@ -752,7 +751,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			MockServletResponse res = MockServletResponse.create();
-			restBeanCtx.getCallHandler().execute(sreq.get(), res);
+			restBeanCtx.execute(sreq.get(), res);
 
 			// If the status isn't set, something's broken.
 			if (res.getStatus() == 0)
@@ -772,7 +771,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			return response;
 		} catch (Exception e) {
-			throw new HttpException(e.getMessage(), e);
+			throw new HttpException(emptyIfNull(e.getMessage()), e);
 		}
 	}
 

@@ -23,6 +23,7 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.BasicIllegalArgumentException.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.time.*;
@@ -397,106 +398,11 @@ public class RestContext extends BeanContext {
 	/**
 	 * Configuration property:  REST call handler.
 	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}
-	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
-	 * 	<li><b>Data type:</b>
-	 * 		<ul>
-	 * 			<li>{@link org.apache.juneau.rest.RestCallHandler}
-	 * 			<li><c>Class&lt;{@link org.apache.juneau.rest.RestCallHandler}&gt;</c>
-	 * 		</ul>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.rest.BasicRestCallHandler}
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#callHandler()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callHandler(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#callHandler(RestCallHandler)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our customized call handler.</jc>
-	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> BasicRestCallHandler {
-	 *
-	 * 		<jc>// Must provide this constructor!</jc>
-	 * 		<jk>public</jk> MyRestCallHandler(RestContext context) {
-	 * 			<jk>super</jk>(context);
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public</jk> RestRequest createRequest(HttpServletRequest req) <jk>throws</jk> ServletException {
-	 * 			<jc>// Low-level handling of requests.</jc>
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> handleResponse(RestRequest req, RestResponse res, Object output) <jk>throws</jk> IOException, RestException {
-	 * 			<jc>// Low-level handling of responses.</jc>
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> handleNotFound(int rc, RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-	 * 			<jc>// Low-level handling of various error conditions.</jc>
-	 * 			...
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(callHandler=MyRestCallHandler.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 *
-	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.callHandler(MyRestCallHandler.<jk>class</jk>);
-	 *
-	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_callHandler</jsf>, MyRestCallHandler.<jk>class</jk>);
-	 * 		}
-	 *
-	 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.callHandler(MyRestCallHandler.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default call handler if not specified is {@link BasicRestCallHandler}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestCallHandler} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallHandler} interface with the same
-	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
-	 * 		When defined as a class, the implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
+	 * </div>
 	 */
+	@Deprecated
 	public static final String REST_callHandler = PREFIX + ".callHandler.o";
 
 	/**
@@ -569,7 +475,7 @@ public class RestContext extends BeanContext {
 	 * 		explicitly overridden via this annotation.
 	 * 	<li>
 	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
-	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
+	 * 		that gets used if not overridden by this annotation.
 	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
 	 * 	<li>
 	 * 		When defined as a class, the implementation must have one of the following constructors:
@@ -2190,7 +2096,7 @@ public class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
 	 * 		</ul>
-	 * 		That method is used by {@link BasicRestCallHandler#handleError(RestCall, Throwable)}.
+	 * 		That method is used by {@link #handleError(RestCall, Throwable)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + ".renderResponseStackTraces.b";
@@ -3699,7 +3605,6 @@ public class RestContext extends BeanContext {
 	private final RestCallLogger callLogger;
 	private final RestCallLoggerConfig callLoggerConfig;
 	private final StackTraceDatabase stackTraceDb;
-	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
 	private final HttpException initException;
 	private final RestContext parentContext;
@@ -3735,8 +3640,7 @@ public class RestContext extends BeanContext {
 	private final ResourceManager staticResourceManager;
 	@Deprecated private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
-	private final ThreadLocal<RestRequest> req = new ThreadLocal<>();
-	private final ThreadLocal<RestResponse> res = new ThreadLocal<>();
+	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
 
 	private final ReflectionMap<Enablement> debugEnablement;
 
@@ -4198,9 +4102,6 @@ public class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			Object defaultRestCallHandler = resource instanceof RestCallHandler ? resource : BasicRestCallHandler.class;
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, defaultRestCallHandler, resourceResolver, this);
-
 			Object defaultRestInfoProvider = resource instanceof RestInfoProvider ? resource : BasicRestInfoProvider.class;
 			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, defaultRestInfoProvider, resourceResolver, this);
 
@@ -4599,21 +4500,6 @@ public class RestContext extends BeanContext {
 	 */
 	public RestInfoProvider getInfoProvider() {
 		return infoProvider;
-	}
-
-	/**
-	 * Returns the REST call handler used by this resource.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The call handler for this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public RestCallHandler getCallHandler() {
-		return callHandler;
 	}
 
 	/**
@@ -5217,28 +5103,431 @@ public class RestContext extends BeanContext {
 		return rp;
 	}
 
-	/*
-	 * Calls all @RestHook(PRE) methods.
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Call handling
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Wraps an incoming servlet request/response pair into a single {@link RestCall} object.
+	 *
+	 * <p>
+	 * This is the first method called by {@link #execute(HttpServletRequest, HttpServletResponse)}.
+	 *
+	 * @param req The rest request.
+	 * @param res The rest response.
+	 * @return The wrapped request/response pair.
 	 */
-	void preCall(RestRequest req, RestResponse res) throws HttpException {
+	protected RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
+		return new RestCall(this, req, res).logger(getCallLogger()).loggerConfig(getCallLoggerConfig());
+	}
+
+	/**
+	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
+	 *
+	 * <p>
+	 * This method is called immediately after {@link #startCall(RestCall)} has been called.
+	 *
+	 * @param call The current REST call.
+	 * @return The wrapped request object.
+	 * @throws ServletException If any errors occur trying to interpret the request.
+	 */
+	public RestRequest createRequest(RestCall call) throws ServletException {
+		return new RestRequest(call);
+	}
+
+	/**
+	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
+	 * and the request returned by {@link #createRequest(RestCall)}.
+	 *
+	 * @param call The current REST call.
+	 * @return The wrapped response object.
+	 * @throws ServletException If any errors occur trying to interpret the request or response.
+	 */
+	public RestResponse createResponse(RestCall call) throws ServletException {
+		return new RestResponse(call);
+	}
+
+	/**
+	 * The main service method.
+	 *
+	 * <p>
+	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
+	 *
+	 * @param r1 The incoming HTTP servlet request object.
+	 * @param r2 The incoming HTTP servlet response object.
+	 * @throws ServletException General servlet exception.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public void execute(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
+
+		RestCall call = createCall(r1, r2);
+
+		// Must be careful not to bleed thread-locals.
+		if (this.call.get() != null)
+			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
+		this.call.set(call);
+
+		try {
+			checkForInitException();
+
+			// If the resource path contains variables (e.g. @Rest(path="/f/{a}/{b}"), then we want to resolve
+			// those variables and push the servletPath to include the resolved variables.  The new pathInfo will be
+			// the remainder after the new servletPath.
+			// Only do this for the top-level resource because the logic for child resources are processed next.
+			if (pathPattern.hasVars() && getParentContext() == null) {
+				String sp = call.getServletPath();
+				String pi = call.getPathInfoUndecoded();
+				UrlPathInfo upi2 = new UrlPathInfo(pi == null ? sp : sp + pi);
+				UrlPathPatternMatch uppm = pathPattern.match(upi2);
+				if (uppm != null && ! uppm.hasEmptyVars()) {
+					RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+					call.request(
+						new OverrideableHttpServletRequest(call.getRequest())
+							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+							.servletPath(uppm.getPrefix())
+					);
+				} else {
+					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
+					return;
+				}
+			}
+
+			// If this resource has child resources, try to recursively call them.
+			String pi = call.getPathInfoUndecoded();
+			if (hasChildResources() && pi != null && ! pi.equals("/")) {
+				for (RestContext rc : getChildResources().values()) {
+					UrlPathPattern upp = rc.pathPattern;
+					UrlPathPatternMatch uppm = upp.match(call.getUrlPathInfo());
+					if (uppm != null) {
+						if (! uppm.hasEmptyVars()) {
+							RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
+								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+								.servletPath(call.getServletPath() + uppm.getPrefix());
+							rc.execute(childRequest, call.getResponse());
+						} else {
+							call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
+						}
+						return;
+					}
+				}
+			}
+
+			if (isDebug(call))
+				call.debug(true);
+
+			startCall(call);
+
+			call.restRequest(createRequest(call));
+			call.restResponse(createResponse(call));
+
+			StaticFile r = null;
+			if (call.getPathInfoUndecoded() != null) {
+				String p = call.getPathInfoUndecoded().substring(1);
+				if (isStaticFile(p)) {
+					r = getStaticFile(p);
+					if (! r.exists()) {
+						call.output(null);
+						r = null;
+					}
+				} else if (p.equals("favicon.ico")) {
+					call.output(null);
+				}
+			}
+
+			if (r != null) {
+				call.status(SC_OK);
+				call.output(r);
+			} else {
+
+				// If the specified method has been defined in a subclass, invoke it.
+				int rc = 0;
+				String m = call.getMethod();
+
+				if (callRouters.containsKey(m))
+					rc = callRouters.get(m).invoke(call);
+
+				if ((rc == 0 || rc == 404) && callRouters.containsKey("*"))
+					rc = callRouters.get("*").invoke(call);
+
+				// Should be 405 if the URL pattern matched but HTTP method did not.
+				if (rc == 0)
+					for (RestCallRouter rcc : callRouters.values())
+						if (rcc.matches(call))
+							rc = SC_METHOD_NOT_ALLOWED;
+
+				// Should be 404 if URL pattern didn't match.
+				if (rc == 0)
+					rc = SC_NOT_FOUND;
+
+				// If not invoked above, see if it's an OPTIONs request
+				if (rc != SC_OK)
+					handleNotFound(call.status(rc));
+
+				if (call.getStatus() == 0)
+					call.status(rc);
+			}
+
+			if (call.hasOutput()) {
+				// Now serialize the output if there was any.
+				// Some subclasses may write to the OutputStream or Writer directly.
+				handleResponse(call);
+			}
+
+
+		} catch (Throwable e) {
+			handleError(call, convertThrowable(e));
+		} finally {
+			clearState();
+		}
+
+		call.finish();
+		finishCall(call);
+	}
+
+	private boolean isDebug(RestCall call) {
+		Enablement e = null;
+		RestMethodContext mc = call.getRestMethodContext();
+		if (mc != null)
+			e = mc.getDebug();
+		if (e == null)
+			e = getDebug();
+		if (e == TRUE)
+			return true;
+		if (e == FALSE)
+			return false;
+		if (e == PER_REQUEST)
+			return "true".equalsIgnoreCase(call.getRequest().getHeader("X-Debug"));
+		return false;
+	}
+
+	/**
+	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
+	 * returned by the Java method.
+	 *
+	 * <p>
+	 * Subclasses may override this method if they wish to modify the way the output is rendered or support other output
+	 * formats.
+	 *
+	 * <p>
+	 * The default implementation simply iterates through the response handlers on this resource
+	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest,RestResponse)} method returns
+	 * <jk>true</jk>.
+	 *
+	 * @param call The HTTP call.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws HttpException Non-200 response.
+	 * @throws NotImplemented No registered response handlers could handle the call.
+	 */
+	public void handleResponse(RestCall call) throws IOException, HttpException, NotImplemented {
+
+		RestRequest req = call.getRestRequest();
+		RestResponse res = call.getRestResponse();
+
+		// Loop until we find the correct handler for the POJO.
+		for (ResponseHandler h : getResponseHandlers())
+			if (h.handle(req, res))
+				return;
+
+		Object output = res.getOutput();
+		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
+	}
+
+	/**
+	 * Method that can be subclassed to allow uncaught throwables to be treated as other types of throwables.
+	 *
+	 * <p>
+	 * The default implementation looks at the throwable class name to determine whether it can be converted to another type:
+	 *
+	 * <ul>
+	 * 	<li><js>"*AccessDenied*"</js> - Converted to {@link Unauthorized}.
+	 * 	<li><js>"*Empty*"</js>,<js>"*NotFound*"</js> - Converted to {@link NotFound}.
+	 * </ul>
+	 *
+	 * @param t The thrown object.
+	 * @return The converted thrown object.
+	 */
+	@SuppressWarnings("deprecation")
+	public Throwable convertThrowable(Throwable t) {
+
+		ClassInfo ci = ClassInfo.ofc(t);
+		if (ci.is(InvocationTargetException.class)) {
+			t = ((InvocationTargetException)t).getTargetException();
+			ci = ClassInfo.ofc(t);
+		}
+
+		if (ci.is(HttpRuntimeException.class)) {
+			t = ((HttpRuntimeException)t).getInner();
+			ci = ClassInfo.ofc(t);
+		}
+
+		if (ci.isChildOf(RestException.class) || ci.hasAnnotation(Response.class))
+			return t;
+
+		if (t instanceof ParseException || t instanceof InvalidDataConversionException)
+			return new BadRequest(t);
+
+		String n = t.getClass().getName();
+
+		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
+			return new Unauthorized(t);
+
+		if (n.contains("Empty") || n.contains("NotFound"))
+			return new NotFound(t);
+
+		return t;
+	}
+
+	/**
+	 * Handle the case where a matching method was not found.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
+	 * The default implementation will simply throw an exception with an appropriate message.
+	 *
+	 * @param call The HTTP call.
+	 * @throws Exception Any exception can be thrown.
+	 */
+	public void handleNotFound(RestCall call) throws Exception {
+		String pathInfo = call.getPathInfo();
+		String methodUC = call.getMethod();
+		int rc = call.getStatus();
+		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);
+		if (rc == SC_NOT_FOUND)
+			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
+		else if (rc == SC_PRECONDITION_FAILED)
+			throw new PreconditionFailed("Method ''{0}'' not found on resource{1} with matching matcher.", methodUC, onPath);
+		else if (rc == SC_METHOD_NOT_ALLOWED)
+			throw new MethodNotAllowed("Method ''{0}'' not found on resource{1}.", methodUC, onPath);
+		else
+			throw new ServletException("Invalid method response: " + rc);
+	}
+
+	/**
+	 * Method for handling response errors.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own custom error response handling.
+	 *
+	 * @param call The rest call.
+	 * @param e The exception that occurred.
+	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
+	 */
+	@SuppressWarnings("deprecation")
+	public synchronized void handleError(RestCall call, Throwable e) throws IOException {
+
+		call.exception(e);
+
+		if (call.isDebug())
+			e.printStackTrace();
+
+		int occurrence = getStackTraceOccurrence(e);
+
+		int code = 500;
+
+		ClassInfo ci = ClassInfo.ofc(e);
+		Response r = ci.getLastAnnotation(Response.class);
+		if (r != null)
+			if (r.code().length > 0)
+				code = r.code()[0];
+
+		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, code)).setOccurrence(occurrence);
+
+		HttpServletRequest req = call.getRequest();
+		HttpServletResponse res = call.getResponse();
+
+		Throwable t = null;
+		if (e instanceof HttpRuntimeException)
+			t = ((HttpRuntimeException)e).getInner();
+		if (t == null)
+			t = e2.getRootCause();
+		if (t != null) {
+			res.setHeader("Exception-Name", stripInvalidHttpHeaderChars(t.getClass().getName()));
+			res.setHeader("Exception-Message", stripInvalidHttpHeaderChars(t.getMessage()));
+		}
+
+		try {
+			res.setContentType("text/plain");
+			res.setHeader("Content-Encoding", "identity");
+			res.setStatus(e2.getStatus());
+
+			PrintWriter w = null;
+			try {
+				w = res.getWriter();
+			} catch (IllegalStateException x) {
+				w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
+			}
+
+			try (PrintWriter w2 = w) {
+				String httpMessage = RestUtils.getHttpResponseText(e2.getStatus());
+				if (httpMessage != null)
+					w2.append("HTTP ").append(String.valueOf(e2.getStatus())).append(": ").append(httpMessage).append("\n\n");
+				if (isRenderResponseStackTraces())
+					e.printStackTrace(w2);
+				else
+					w2.append(e2.getFullStackMessage(true));
+			}
+
+		} catch (Exception e1) {
+			req.setAttribute("Exception", e1);
+		}
+	}
+
+	/**
+	 * Returns the session objects for the specified request.
+	 *
+	 * <p>
+	 * The default implementation simply returns a single map containing <c>{'req':req,'res',res}</c>.
+	 *
+	 * @param call The current REST call.
+	 * @return The session objects for that request.
+	 */
+	public Map<String,Object> getSessionObjects(RestCall call) {
+		Map<String,Object> m = new HashMap<>();
+		m.put("req", call.getRequest());
+		m.put("res", call.getResponse());
+		return m;
+	}
+
+	/**
+	 * Called at the start of a request to invoke all {@link HookEvent#START_CALL} methods.
+	 *
+	 * @param call The current request.
+	 */
+	protected void startCall(RestCall call) {
+		for (int i = 0; i < startCallMethods.length; i++)
+			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
+	}
+
+	/**
+	 * Called during a request to invoke all {@link HookEvent#PRE_CALL} methods.
+	 *
+	 * @param call The current request.
+	 * @throws HttpException If thrown from call methods.
+	 */
+	protected void preCall(RestCall call) throws HttpException {
 		for (int i = 0; i < preCallMethods.length; i++)
-			preOrPost(resource, preCallMethods[i], preCallMethodParams[i], req, res);
+			preOrPost(resource, preCallMethods[i], preCallMethodParams[i], call);
 	}
 
-	/*
-	 * Calls all @RestHook(POST) methods.
+	/**
+	 * Called during a request to invoke all {@link HookEvent#POST_CALL} methods.
+	 *
+	 * @param call The current request.
+	 * @throws HttpException If thrown from call methods.
 	 */
-	void postCall(RestRequest req, RestResponse res) throws HttpException {
+	protected void postCall(RestCall call) throws HttpException {
 		for (int i = 0; i < postCallMethods.length; i++)
-			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], req, res);
+			preOrPost(resource, postCallMethods[i], postCallMethodParams[i], call);
 	}
 
-	private static void preOrPost(Object resource, MethodInvoker m, RestMethodParam[] mp, RestRequest req, RestResponse res) throws HttpException {
+	private static void preOrPost(Object resource, MethodInvoker m, RestMethodParam[] mp, RestCall call) throws HttpException {
 		if (m != null) {
 			Object[] args = new Object[mp.length];
 			for (int i = 0; i < mp.length; i++) {
 				try {
-					args[i] = mp[i].resolve(req, res);
+					args[i] = mp[i].resolve(call.getRestRequest(), call.getRestResponse());
 				} catch (Exception e) {
 					throw toHttpException(e, BadRequest.class, "Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.", mp[i].getParamType().name(), mp[i].getName(), mp[i].getType(), m.getDeclaringClass().getName(), m.getName());
 				}
@@ -5251,18 +5540,15 @@ public class RestContext extends BeanContext {
 		}
 	}
 
-	/*
-	 * Calls all @RestHook(START) methods.
+	/**
+	 * Called at the end of a request to invoke all {@link HookEvent#END_CALL} methods.
+	 *
+	 * <p>
+	 * This is the very last method called in {@link #execute(HttpServletRequest, HttpServletResponse)}.
+	 *
+	 * @param call The current request.
 	 */
-	void startCall(RestCall call) {
-		for (int i = 0; i < startCallMethods.length; i++)
-			startOrFinish(resource, startCallMethods[i], startCallMethodParams[i], call.getRequest(), call.getResponse());
-	}
-
-	/*
-	 * Calls all @RestHook(FINISH) methods.
-	 */
-	void finishCall(RestCall call) {
+	protected void finishCall(RestCall call) {
 		for (int i = 0; i < endCallMethods.length; i++)
 			startOrFinish(resource, endCallMethods[i], endCallMethodParams[i], call.getRequest(), call.getResponse());
 	}
@@ -5285,7 +5571,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Calls all @RestHook(POST_INIT) methods in parent-to-child order.
+	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT} methods.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws ServletException Error occurred.
@@ -5299,7 +5585,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Calls all @RestHook(POST_INIT_CHILD_FIRST) methods in child-to-parent order.
+	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
 	 *
 	 * @return This object (for method chaining).
 	 * @throws ServletException Error occurred.
@@ -5334,7 +5620,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Calls {@link Servlet#destroy()} on any child resources defined on this resource.
+	 * Called during servlet initialization to invoke all {@link HookEvent#DESTROY} methods.
 	 */
 	protected void destroy() {
 		for (int i = 0; i < destroyMethods.length; i++) {
@@ -5358,14 +5644,8 @@ public class RestContext extends BeanContext {
 	 * @return The HTTP request object, or <jk>null</jk> if it hasn't been created.
 	 */
 	public RestRequest getRequest() {
-		return req.get();
-	}
-
-	void setRequest(RestRequest req) {
-		// Must be careful not to bleed thread-locals.
-		if (this.req.get() != null)
-			System.err.println("WARNING:  Thread-local request object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
-		this.req.set(req);
+		RestCall rc = call.get();
+		return rc == null ? null : rc.getRestRequest();
 	}
 
 	/**
@@ -5374,14 +5654,8 @@ public class RestContext extends BeanContext {
 	 * @return The HTTP response object, or <jk>null</jk> if it hasn't been created.
 	 */
 	public RestResponse getResponse() {
-		return res.get();
-	}
-
-	void setResponse(RestResponse res) {
-		// Must be careful not to bleed thread-locals.
-		if (this.res.get() != null)
-			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
-		this.res.set(res);
+		RestCall rc = call.get();
+		return rc == null ? null : rc.getRestResponse();
 	}
 
 	/**
@@ -5415,8 +5689,7 @@ public class RestContext extends BeanContext {
 	 * This should always be called in a finally block in the RestServlet.
 	 */
 	void clearState() {
-		req.remove();
-		res.remove();
+		call.remove();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -5431,7 +5704,6 @@ public class RestContext extends BeanContext {
 				.a("allowedMethodHeader", allowedMethodHeaders)
 				.a("allowedMethodParams", allowedMethodParams)
 				.a("allowedHeaderParams", allowedHeaderParams)
-				.a("callHandler", callHandler)
 				.a("clientVersionHeader", clientVersionHeader)
 				.a("consumes", consumes)
 				.a("infoProvider", infoProvider)

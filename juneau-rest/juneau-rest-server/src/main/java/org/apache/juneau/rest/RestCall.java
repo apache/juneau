@@ -30,6 +30,7 @@ public class RestCall {
 	private HttpServletResponse res;
 	private RestRequest rreq;
 	private RestResponse rres;
+	private RestContext context;
 	private RestMethodContext rmethod;
 	private UrlPathInfo urlPathInfo;
 	private String pathInfoUndecoded;
@@ -40,11 +41,12 @@ public class RestCall {
 	/**
 	 * Constructor.
 	 *
+	 * @param context The REST context object.
 	 * @param req The incoming HTTP servlet request object.
 	 * @param res The incoming HTTP servlet response object.
 	 */
-	public RestCall(HttpServletRequest req, HttpServletResponse res) {
-		request(req).response(res);
+	public RestCall(RestContext context, HttpServletRequest req, HttpServletResponse res) {
+		context(context).request(req).response(res);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -72,6 +74,17 @@ public class RestCall {
 	 */
 	public RestCall response(HttpServletResponse res) {
 		this.res = res;
+		return this;
+	}
+
+	/**
+	 * Overrides the context object on this call.
+	 *
+	 * @param context The context that's creating this call.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall context(RestContext context) {
+		this.context = context;
 		return this;
 	}
 
@@ -376,5 +389,14 @@ public class RestCall {
 		if (rreq != null)
 			return rreq.isDebug();
 		return false;
+	}
+
+	/**
+	 * Returns the context that created this call.
+	 *
+	 * @return The context that created this call.
+	 */
+	public RestContext getContext() {
+		return context;
 	}
 }

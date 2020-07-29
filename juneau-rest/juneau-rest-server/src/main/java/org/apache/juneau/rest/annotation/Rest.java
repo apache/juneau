@@ -162,35 +162,12 @@ public @interface Rest {
 	/**
 	 * REST call handler.
 	 *
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
+	 * </div>
 	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default call handler if not specified is {@link BasicRestCallHandler}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestCallHandler} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallHandler} interface with the same
-	 * 		functionality as {@link BasicRestCallHandler} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding these methods.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
-	 * </ul>
 	 */
+	@Deprecated
 	Class<? extends RestCallHandler> callHandler() default RestCallHandler.Null.class;
 
 	/**

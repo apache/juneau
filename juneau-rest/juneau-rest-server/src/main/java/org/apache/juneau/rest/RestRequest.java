@@ -120,14 +120,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RestResponse res;
 	private HttpPartSerializerSession partSerializerSession;
 	private HttpPartParserSession partParserSession;
+	private final RestCall call;
 
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestContext context, HttpServletRequest req) throws ServletException {
-		super(req);
+	RestRequest(RestCall call) throws ServletException {
+		super(call.getRequest());
+		HttpServletRequest req = call.getRequest();
 		this.inner = req;
-		this.context = context;
+		this.context = call.getContext();
+		this.call = call;
 
 		try {
 			isPost = req.getMethod().equalsIgnoreCase("POST");
@@ -1415,7 +1418,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (varSession == null)
 			varSession = context
 				.getVarResolver()
-				.createSession(context.getCallHandler().getSessionObjects(this, context.getResponse()))
+				.createSession(context.getSessionObjects(call))
 				.sessionObject("req", this)
 				.sessionObject("res", res);
 		return varSession;

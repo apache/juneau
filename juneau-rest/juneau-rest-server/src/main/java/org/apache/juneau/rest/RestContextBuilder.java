@@ -576,20 +576,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
 	 *
-	 * <p>
-	 * This class handles the basic lifecycle of an HTTP REST call.
-	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestCallHandler}.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@FluentSetter
+	@Deprecated
 	public RestContextBuilder callHandler(Class<? extends RestCallHandler> value) {
 		return set(REST_callHandler, value);
 	}
@@ -597,19 +590,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
 	 *
-	 * <p>
-	 * Same as {@link #callHandler(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callHandler}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestCallHandler}.
-	 * @return This object (for method chaining).
+	 * <div class='warn'>
+	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
+	 * </div>
 	 */
+	@SuppressWarnings("javadoc")
 	@FluentSetter
+	@Deprecated
 	public RestContextBuilder callHandler(RestCallHandler value) {
 		return set(REST_callHandler, value);
 	}

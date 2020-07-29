@@ -79,19 +79,20 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestContext context, RestRequest req, HttpServletResponse res) throws BadRequest {
-		super(res);
-		this.inner = res;
-		this.request = req;
+	RestResponse(RestCall call) throws BadRequest {
+		super(call.getResponse());
+		this.inner = call.getResponse();
+		this.request = call.getRestRequest();
+		RestContext context = call.getContext();
 
 		for (Map.Entry<String,Object> e : context.getResHeaders().entrySet())
 			setHeaderSafe(e.getKey(), stringify(e.getValue()));
 
 		try {
-			String passThroughHeaders = req.getHeader("x-response-headers");
+			String passThroughHeaders = request.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
 				HttpPartParser p = context.getPartParser();
-				OMap m = p.createPartSession(req.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
+				OMap m = p.createPartSession(request.getParserSessionArgs()).parse(HEADER, null, passThroughHeaders, context.getClassMeta(OMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeaderSafe(e.getKey(), e.getValue().toString());
 			}

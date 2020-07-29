@@ -22,18 +22,15 @@ import javax.servlet.http.*;
 /**
  * Class that handles the basic lifecycle of an HTTP REST call.
  *
- * <ul class='seealso'>
- * 	<li class='jf'>{@link RestContext#REST_callHandler}
- * </ul>
+ * <div class='warn'>
+ * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
+ * </div>
  */
+@Deprecated
 public interface RestCallHandler {
 
 	/**
 	 * Represents no RestCallHandler.
-	 *
-	 * <p>
-	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link BasicRestCallHandler} if not specified at any level.
 	 */
 	public interface Null extends RestCallHandler {}
 

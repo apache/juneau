@@ -972,7 +972,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				return SC_PRECONDITION_FAILED;
 		}
 
-		context.preCall(req, res);
+		context.preCall(call);
 
 		call.loggerConfig(callLoggerConfig);
 
@@ -1041,7 +1041,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 				}
 			}
 
-			context.postCall(req, res);
+			context.postCall(call);
 
 			if (res.hasOutput())
 				for (RestConverter converter : converters)

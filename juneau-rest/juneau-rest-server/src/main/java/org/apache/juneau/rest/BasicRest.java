@@ -56,11 +56,10 @@ import org.apache.juneau.http.exception.*;
 		"stats: servlet:/stats"
 	}
 )
-public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestCallHandler, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
+public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods, RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 	private volatile RestContext context;
-	private RestCallHandler callHandler;
 	private RestInfoProvider infoProvider;
 	private RestCallLogger callLogger;
 	private ResourceFinder resourceFinder;
@@ -280,7 +279,6 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	@RestHook(POST_INIT)
 	public void onPostInit(RestContext context) throws Exception {
 		this.context = context;
-		this.callHandler = new BasicRestCallHandler(context);
 		this.infoProvider = new BasicRestInfoProvider(context);
 		this.callLogger = new BasicRestCallLogger(context);
 		this.resourceFinder = new BasicResourceFinder();
@@ -506,55 +504,6 @@ public abstract class BasicRest implements BasicUniversalRest, BasicRestMethods,
 	 */
 	public synchronized RestResponse getResponse() {
 		return getContext().getResponse();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestCallHandler
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestCallHandler */
-	public void execute(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		callHandler.execute(req, res);
-	}
-
-	@Override /* RestCallHandler */
-	public RestCall createCall(HttpServletRequest req, HttpServletResponse res) {
-		return callHandler.createCall(req, res);
-	}
-
-	@Override /* RestCallHandler */
-	public RestRequest createRequest(RestCall call) throws ServletException {
-		return callHandler.createRequest(call);
-	}
-
-	@Override /* RestCallHandler */
-	public RestResponse createResponse(RestCall call) throws ServletException {
-		return callHandler.createResponse(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleResponse(RestCall call) throws Exception {
-		callHandler.handleResponse(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleNotFound(RestCall call) throws Exception {
-		callHandler.handleNotFound(call);
-	}
-
-	@Override /* RestCallHandler */
-	public void handleError(RestCall call, Throwable e) throws Exception {
-		callHandler.handleError(call, e);
-	}
-
-	@Override /* RestCallHandler */
-	public Throwable convertThrowable(Throwable t) {
-		return callHandler.convertThrowable(t);
-	}
-
-	@Override /* RestCallHandler */
-	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res) {
-		return callHandler.getSessionObjects(req, res);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
