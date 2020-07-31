@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
@@ -44,10 +45,10 @@ public class Rest_Messages_Test {
 			return m.getString(name);
 		}
 	}
-	static MockRestClient a1 = MockRestClient.build(A1.class);
 
 	@Test
 	public void a01_default() throws Exception {
+		MockRestClient a1 = MockRestClient.build(A1.class);
 		a1.get("/a").run().assertBody().is("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
 		a1.get("/b").run().assertBody().is("{'A1.key2':'A1.value2a',key1:'value1a',key2:'A1.value2a'}");
 		a1.get("/c?name=key1").run().assertBody().is("value1a");
@@ -57,10 +58,10 @@ public class Rest_Messages_Test {
 
 	@Rest
 	public static class A2 extends A1 {}
-	static MockRestClient a2 = MockRestClient.build(A2.class);
 
 	@Test
 	public void a02_subclassed() throws Exception {
+		MockRestClient a2 = MockRestClient.build(A2.class);
 		a2.get("/a").run().assertBody().is("{'A1.key2':'A1.value2a','A2.key3':'A2.value3b',key1:'value1a',key2:'value2b',key3:'A2.value3b'}");
 		a2.get("/b").run().assertBody().is("{'A1.key2':'A1.value2a','A2.key3':'A2.value3b',key1:'value1a',key2:'value2b',key3:'A2.value3b'}");
 		a2.get("/c?name=key1").run().assertBody().is("value1a");
@@ -88,10 +89,10 @@ public class Rest_Messages_Test {
 			return m.getString(name);
 		}
 	}
-	static MockRestClient b1 = MockRestClient.build(B1.class);
 
 	@Test
 	public void b01_customName() throws Exception {
+		MockRestClient b1 = MockRestClient.build(B1.class);
 		b1.get("/a").run().assertBody().is("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
 		b1.get("/b").run().assertBody().is("{'B1.key2':'B1.value2a',key1:'value1a',key2:'B1.value2a'}");
 		b1.get("/c?name=key1").run().assertBody().is("value1a");
@@ -101,16 +102,35 @@ public class Rest_Messages_Test {
 
 	@Rest(messages="B2x")
 	public static class B2 extends B1 {}
-	static MockRestClient b2 = MockRestClient.build(B2.class);
 
 	@Test
 	public void b02_subclassed_customName() throws Exception {
+		MockRestClient b2 = MockRestClient.build(B2.class);
 		b2.get("/a").run().assertBody().stderr().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/b").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b',key3:'B2.value3b'}");
 		b2.get("/c?name=key1").run().assertBody().is("value1a");
 		b2.get("/c?name=key2").run().assertBody().is("value2b");
 		b2.get("/c?name=key3").run().assertBody().is("B2.value3b");
 		b2.get("/c?name=key4").run().assertBody().is("{!key4}");
+	}
+
+	public static class B3 extends B1 {
+		 @RestHook(HookEvent.INIT)
+		 public void init(RestContextBuilder builder) throws Exception {
+			 builder.messages("B2x");
+			 builder.messages(B1.class, "B1x");
+		 }
+	}
+
+	@Test
+	public void b03_viaBuilder() throws Exception {
+		MockRestClient b3 = MockRestClient.build(B3.class);
+		b3.get("/a").run().assertBody().stderr().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
+		b3.get("/b").run().assertBody().is("{'B1.key2':'B1.value2a','B2.key3':'B2.value3b',key1:'value1a',key2:'value2b'}");
+		b3.get("/c?name=key1").run().assertBody().is("value1a");
+		b3.get("/c?name=key2").run().assertBody().is("value2b");
+		b3.get("/c?name=key3").run().assertBody().is("{!key3}");
+		b3.get("/c?name=key4").run().assertBody().is("{!key4}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
