@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import javax.servlet.http.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
@@ -39,22 +37,13 @@ import org.apache.juneau.http.exception.*;
 public class RequestPath extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Request attribute name for passing path variables from parent to child.
-	 */
-	static final String REST_PATHVARS_ATTR = "juneau.pathVars";
-
 	private final RestRequest req;
 	private HttpPartParserSession parser;
 
-	RequestPath(RestRequest req) {
+	RequestPath(RestCall call) {
 		super(String.CASE_INSENSITIVE_ORDER);
-		this.req = req;
-		@SuppressWarnings("unchecked")
-		Map<String,String> parentVars = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-		if (parentVars != null)
-			for (Map.Entry<String,String> e : parentVars.entrySet())
-				put(e.getKey(), e.getValue());
+		this.req = call.getRestRequest();
+		putAll(call.getPathVars());
 	}
 
 	RequestPath parser(HttpPartParserSession parser) {
@@ -365,25 +354,5 @@ public class RequestPath extends TreeMap<String,String> {
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return req.getBeanSession().getClassMeta(type);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Static utility methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Utility method that adds path variables to the specified request.
-	 */
-	@SuppressWarnings("unchecked")
-	static HttpServletRequest addPathVars(HttpServletRequest req, Map<String,String> vars) {
-		if (vars != null && ! vars.isEmpty()) {
-			Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-			if (m == null) {
-				m = new TreeMap<>();
-				req.setAttribute(REST_PATHVARS_ATTR, m);
-			}
-			m.putAll(vars);
-		}
-		return req;
 	}
 }

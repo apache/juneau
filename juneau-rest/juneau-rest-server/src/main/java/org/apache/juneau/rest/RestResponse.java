@@ -83,6 +83,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		super(call.getResponse());
 		this.inner = call.getResponse();
 		this.request = call.getRestRequest();
+		call.restResponse(this);
 		RestContext context = call.getContext();
 
 		for (Map.Entry<String,Object> e : context.getResHeaders().entrySet())

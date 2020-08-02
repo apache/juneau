@@ -31,6 +31,7 @@ import org.apache.http.client.entity.*;
 import org.apache.http.conn.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
@@ -142,6 +143,69 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 */
 	public MockRestClientBuilder servletPath(String value) {
 		return set(MOCKRESTCLIENT_servletPath, toValidContextPath(value));
+	}
+
+	/**
+	 * Add resolved path variables to this client.
+	 *
+	 * <p>
+	 * Allows you to add resolved parent path variables when performing tests on child resource classes.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A parent class with a path variable.</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		path=<js>"/parent/{foo}"</js>,
+	 * 		children={
+	 * 			Child.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> Parent { ... }
+	 *
+	 * 	<jc>// A child class that uses the parent path variable.</jc>
+	 * 	<ja>@Rest</ja>
+	 * 	<jk>public class</jk> Child {
+	 *
+	 * 		<jk>@RestMethod</jk>
+	 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
+	 * 			<jk>return</jk> <jv>foo<jv>;
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Test the method that uses the parent path variable.</jc>
+	 * 	MockRestClient
+	 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)
+	 * 		.simpleJson()
+	 * 		.pathVars(<js>"foo"</js>,<js>"bar"</js>)
+	 * 		.build()
+	 * 		.get(<js>"/"</js>)
+	 * 		.run()
+	 * 		.assertStatus().code().is(200)
+	 * 		.assertBody().is(<js>"bar"</js>);
+	 * </p>
+	 *
+	 * <review>Needs review</review>
+	 *
+	 * @param value The path variables.
+	 * @return This object (for method chaining).
+	 * @see MockServletRequest#pathVars(Map)
+	 */
+	public MockRestClientBuilder pathVars(Map<String,String> value) {
+		return putAllTo(MOCKRESTCLIENT_pathVars, value);
+	}
+
+	/**
+	 * Add resolved path variables to this client.
+	 *
+	 * <p>
+	 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
+	 *
+	 * @param pairs The key/value pairs.  Must be an even number of parameters.
+	 * @return This object (for method chaining).
+	 */
+	public MockRestClientBuilder pathVars(String...pairs) {
+		return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
 	}
 
 	@Override /* ContextBuilder */

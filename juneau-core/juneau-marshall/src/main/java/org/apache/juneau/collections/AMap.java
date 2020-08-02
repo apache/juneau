@@ -16,6 +16,7 @@ import static java.util.Collections.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -91,6 +92,28 @@ public final class AMap<K,V> extends LinkedHashMap<K,V> {
 	public static <K,V> AMap<K,V> of(K key, V value) {
 		return new AMap<K,V>().a(key, value);
 	}
+
+	/**
+	 * Creates a map out of a list of key/value pairs.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param parameters
+	 * 	The parameters.
+	 * 	<br>Must be an even number of parameters.
+	 * 	<br>It's up to you to ensure that the parameters are the correct type.
+	 * @return A new map.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> AMap<K,V> ofPairs(Object...parameters) {
+		AMap<K,V> m = AMap.of();
+		if (parameters.length % 2 != 0)
+			throw new BasicRuntimeException("Odd number of parameters passed into AMap.ofPairs()");
+		for (int i = 0; i < parameters.length; i+=2)
+			m.put((K)parameters[i], (V)parameters[i+1]);
+		return m;
+	}
+
 
 	@SuppressWarnings("javadoc")
 	public static <K,V> AMap<K,V> of(K k1, V v1, K k2, V v2) {

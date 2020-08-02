@@ -26,6 +26,11 @@ import org.apache.juneau.rest.util.*;
  */
 public class RestCall {
 
+	/**
+	 * Request attribute name for passing path variables from parent to child.
+	 */
+	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
+
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private RestRequest rreq;
@@ -178,6 +183,34 @@ public class RestCall {
 	 */
 	public Method getJavaMethod() {
 		return rmethod == null ? null : rmethod.method;
+	}
+
+	/**
+	 * Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.
+	 *
+	 * @param vars The variables to add to this call.
+	 */
+	@SuppressWarnings("unchecked")
+	public void addPathVars(Map<String,String> vars) {
+		if (vars != null && ! vars.isEmpty()) {
+			Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+			if (m == null) {
+				m = new TreeMap<>();
+				req.setAttribute(REST_PATHVARS_ATTR, m);
+			}
+			m.putAll(vars);
+		}
+	}
+
+	/**
+	 * Returns resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
+	 *
+	 * @return Resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String,String> getPathVars() {
+		Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+		return m == null ? Collections.emptyMap() : m;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

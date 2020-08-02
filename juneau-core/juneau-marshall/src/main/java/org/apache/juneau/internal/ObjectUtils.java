@@ -224,6 +224,27 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified object is not empty.
+	 *
+	 * <p>
+	 * Return <jk>false</jk> if the value is any of the following:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>An empty Collection
+	 * 	<li>An empty Map
+	 * 	<li>An empty array
+	 * 	<li>An empty CharSequence
+	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
+	 * </ul>
+	 *
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is empty.
+	 */
+	public static boolean isNotEmpty(Object o) {
+		return ! isEmpty(o);
+	}
+
+	/**
 	 * Returns the first non-null value in the specified array
 	 *
 	 * @param t The values to check.
@@ -237,5 +258,4 @@ public class ObjectUtils {
 					return tt;
 		return null;
 	}
-
 }

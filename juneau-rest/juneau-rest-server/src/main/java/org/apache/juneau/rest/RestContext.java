@@ -4861,19 +4861,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this resource has any child resources associated with it.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_children}
-	 * </ul>
-	 *
-	 * @return <jk>true</jk> if this resource has any child resources associated with it.
-	 */
-	public boolean hasChildResources() {
-		return ! childResources.isEmpty();
-	}
-
-	/**
 	 * Returns the authority path of the resource.
 	 *
 	 * <ul class='seealso'>
@@ -5181,7 +5168,7 @@ public class RestContext extends BeanContext {
 				UrlPathInfo upi2 = new UrlPathInfo(pi == null ? sp : sp + pi);
 				UrlPathPatternMatch uppm = pathPattern.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
-					RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+					call.addPathVars(uppm.getVars());
 					call.request(
 						new OverrideableHttpServletRequest(call.getRequest())
 							.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
@@ -5195,13 +5182,13 @@ public class RestContext extends BeanContext {
 
 			// If this resource has child resources, try to recursively call them.
 			String pi = call.getPathInfoUndecoded();
-			if (hasChildResources() && pi != null && ! pi.equals("/")) {
+			if ((! childResources.isEmpty()) && pi != null && ! pi.equals("/")) {
 				for (RestContext rc : getChildResources().values()) {
 					UrlPathPattern upp = rc.pathPattern;
 					UrlPathPatternMatch uppm = upp.match(call.getUrlPathInfo());
 					if (uppm != null) {
 						if (! uppm.hasEmptyVars()) {
-							RequestPath.addPathVars(call.getRequest(), uppm.getVars());
+							call.addPathVars(uppm.getVars());
 							HttpServletRequest childRequest = new OverrideableHttpServletRequest(call.getRequest())
 								.pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 								.servletPath(call.getServletPath() + uppm.getPrefix());
@@ -5219,8 +5206,8 @@ public class RestContext extends BeanContext {
 
 			startCall(call);
 
-			call.restRequest(createRequest(call));
-			call.restResponse(createResponse(call));
+			createRequest(call);
+			createResponse(call);
 
 			StaticFile r = null;
 			if (call.getPathInfoUndecoded() != null) {

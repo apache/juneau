@@ -223,7 +223,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		MOCKRESTCLIENT_restBeanCtx = PREFIX + "restBeanCtx.o",
 		MOCKRESTCLIENT_servletPath = PREFIX + "servletPath.s",
 		MOCKRESTCLIENT_contextPath = PREFIX + "contextPath.s",
-		MOCKRESTCLIENT_mockHttpClientConnectionManager = PREFIX + "mockHttpClientConnectionManager.o";
+		MOCKRESTCLIENT_mockHttpClientConnectionManager = PREFIX + "mockHttpClientConnectionManager.o",
+		MOCKRESTCLIENT_pathVars = PREFIX + "pathVars.oms";
 
 
 	private static Map<Class<?>,RestContext>
@@ -236,6 +237,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	private final RestContext restBeanCtx;
 	private final String contextPath, servletPath;
+	private final Map<String,String> pathVars;
 
 	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
 	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
@@ -254,6 +256,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		this.restBeanCtx = getInstanceProperty(MOCKRESTCLIENT_restBeanCtx, RestContext.class, null);
 		this.contextPath = getStringProperty(MOCKRESTCLIENT_contextPath, "");
 		this.servletPath = getStringProperty(MOCKRESTCLIENT_servletPath, "");
+		this.pathVars = getMapProperty(MOCKRESTCLIENT_pathVars, String.class);
 		getInstanceProperty(MOCKRESTCLIENT_mockHttpClientConnectionManager, MockHttpClientConnectionManager.class, null).init(this);
 	}
 
@@ -699,6 +702,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				.create(request.getRequestLine().getMethod(), pr.getURI())
 				.contextPath(pr.getContextPath())
 				.servletPath(pr.getServletPath())
+				.pathVars(pathVars)
 				.debug(isDebug());
 
 			for (Header h : request.getAllHeaders())

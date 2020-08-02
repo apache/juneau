@@ -143,6 +143,35 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	/**
+	 * Adds the specified parent path variables to this servlet request.
+	 *
+	 * <p>
+	 * See {@link MockRestClientBuilder#pathVars(Map)} for an example.
+	 *
+	 * @param pathVars The
+	 * @return This object (for method chaining).
+	 * @see MockRestClientBuilder#pathVars(Map)
+	 */
+	public MockServletRequest pathVars(Map<String,String> pathVars) {
+		if (isNotEmpty(pathVars))
+			this.attributeMap.put("juneau.pathVars", new TreeMap<>(pathVars));
+		return this;
+	}
+
+	/**
+	 * Add resolved path variables to this client.
+	 *
+	 * <p>
+	 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
+	 *
+	 * @param pairs The key/value pairs.  Must be an even number of parameters.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest pathVars(String...pairs) {
+		return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
+	}
+
+	/**
 	 * Adds the specified role on this request.
 	 *
 	 * @param role The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).

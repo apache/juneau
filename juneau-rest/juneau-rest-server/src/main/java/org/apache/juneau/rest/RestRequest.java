@@ -129,6 +129,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		super(call.getRequest());
 		HttpServletRequest req = call.getRequest();
 		this.inner = req;
+		call.restRequest(this);
 		this.context = call.getContext();
 		this.call = call;
 
@@ -183,7 +184,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (! s.isEmpty())
 				headers.queryParams(queryParams, s);
 
-			this.pathParams = new RequestPath(this);
+			this.pathParams = new RequestPath(call);
 
 		} catch (Exception e) {
 			throw toHttpException(e, InternalServerError.class);
