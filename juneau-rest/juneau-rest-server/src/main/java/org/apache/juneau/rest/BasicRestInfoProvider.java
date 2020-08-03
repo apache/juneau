@@ -107,7 +107,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		// Find it in the cache.
 		// Swaggers are cached by user locale and an int hash of the @RestMethods they have access to.
 		HashCode userHash = HashCode.create();
-		for (RestMethodContext sm : context.getCallMethods().values())
+		for (RestMethodContext sm : context.getMethodContexts())
 			if (sm.isRequestAllowed(req))
 				userHash.add(sm.hashCode());
 		int hashCode = userHash.get();

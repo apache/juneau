@@ -3598,8 +3598,8 @@ public class RestContext extends BeanContext {
 	private final Messages msgs;
 	private final Config config;
 	private final VarResolver varResolver;
-	private final Map<String,RestMethodContext[]> methodMap;
-	private final Map<String,RestMethodContext> callMethods;
+	private final Map<String,List<RestMethodContext>> methodMap;
+	private final List<RestMethodContext> methods;
 	private final Map<String,RestContext> childResources;
 	@SuppressWarnings("deprecation") private final RestLogger logger;
 	private final RestCallLogger callLogger;
@@ -3856,7 +3856,6 @@ public class RestContext extends BeanContext {
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
 			MethodMapBuilder methodMapBuilder = new MethodMapBuilder();
-			AMap<String,RestMethodContext> _javaRestMethods = AMap.of();
 			AMap<String,Method>
 				_startCallMethods = AMap.of(),
 				_preCallMethods = AMap.of(),
@@ -3956,11 +3955,9 @@ public class RestContext extends BeanContext {
 								}
 							};
 
-							_javaRestMethods.put(mi.getSimpleName(), sm);
 							methodMapBuilder.add("GET", sm).add("POST", sm);
 
 						} else {
-							_javaRestMethods.put(mi.getSimpleName(), sm);
 							methodMapBuilder.add(httpMethod, sm);
 						}
 					} catch (Throwable e) {
@@ -4040,7 +4037,6 @@ public class RestContext extends BeanContext {
 				}
 			}
 
-			this.callMethods = _javaRestMethods.unmodifiable();
 			this.preCallMethods = _preCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_preCallMethods.size()]);
 			this.postCallMethods = _postCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_postCallMethods.size()]);
 			this.startCallMethods = _startCallMethods.values().stream().map(x->new MethodInvoker(x, getMethodExecStats(x))).collect(Collectors.toList()).toArray(new MethodInvoker[_startCallMethods.size()]);
@@ -4056,7 +4052,8 @@ public class RestContext extends BeanContext {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			this.methodMap = methodMapBuilder.build();
+			this.methodMap = methodMapBuilder.getMap();
+			this.methods = methodMapBuilder.getList();
 
 			// Initialize our child resources.
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
@@ -4112,22 +4109,29 @@ public class RestContext extends BeanContext {
 		}
 	}
 
-	static class MethodMapBuilder extends TreeMap<String,TreeSet<RestMethodContext>> {
-		private static final long serialVersionUID = 1L;
+	static class MethodMapBuilder  {
+		TreeMap<String,TreeSet<RestMethodContext>> map = new TreeMap<>();
+		Set<RestMethodContext> list = ASet.of();
+
 
 		MethodMapBuilder add(String httpMethodName, RestMethodContext mc) {
 			httpMethodName = httpMethodName.toUpperCase();
-			if (! containsKey(httpMethodName))
-				put(httpMethodName, new TreeSet<>());
-			get(httpMethodName).add(mc);
+			if (! map.containsKey(httpMethodName))
+				map.put(httpMethodName, new TreeSet<>());
+			map.get(httpMethodName).add(mc);
+			list.add(mc);
 			return this;
 		}
 
-		Map<String,RestMethodContext[]> build() {
-			Map<String,RestMethodContext[]> m = new LinkedHashMap<>();
-			for (Map.Entry<String,TreeSet<RestMethodContext>> e : this.entrySet())
-				m.put(e.getKey(), e.getValue().toArray(new RestMethodContext[0]));
+		Map<String,List<RestMethodContext>> getMap() {
+			Map<String,List<RestMethodContext>> m = new LinkedHashMap<>();
+			for (Map.Entry<String,TreeSet<RestMethodContext>> e : map.entrySet())
+				m.put(e.getKey(), AList.of(e.getValue()));
 			return Collections.unmodifiableMap(m);
+		}
+
+		List<RestMethodContext> getList() {
+			return AList.of(list);
 		}
 	}
 
@@ -4929,16 +4933,6 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the parameters defined on the specified Java method.
-	 *
-	 * @param method The Java method to check.
-	 * @return The parameters defined on the Java method.
-	 */
-	public RestMethodParam[] getRestMethodParams(Method method) {
-		return callMethods.get(method.getName()).methodParams;
-	}
-
-	/**
 	 * Returns the media type for the specified file name.
 	 *
 	 * <ul class='seealso'>
@@ -4978,8 +4972,8 @@ public class RestContext extends BeanContext {
 	 * @return
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
-	public Map<String,RestMethodContext> getCallMethods() {
-		return callMethods;
+	public List<RestMethodContext> getMethodContexts() {
+		return methods;
 	}
 
 	/**
@@ -5272,14 +5266,14 @@ public class RestContext extends BeanContext {
 
 		// Should be 405 if the URL pattern matched but HTTP method did not.
 		if (rc == 0)
-			for (RestMethodContext[] rcc : methodMap.values())
+			for (List<RestMethodContext> rcc : methodMap.values())
 				if (matches(rcc, call))
 					rc = SC_METHOD_NOT_ALLOWED;
 
 		return rc;
 	}
 
-	private boolean matches(RestMethodContext[] mc, RestCall call) throws Throwable {
+	private boolean matches(List<RestMethodContext> mc, RestCall call) throws Throwable {
 		UrlPathInfo pi = call.getUrlPathInfo();
 		for (RestMethodContext m : mc)
 			if (m.matches(pi))
@@ -5287,10 +5281,10 @@ public class RestContext extends BeanContext {
 		return false;
 	}
 
-	private int invoke(RestMethodContext[] mc, RestCall call) throws Throwable {
-		if (mc.length == 1) {
-			call.restMethodContext(mc[0]);
-			return mc[0].invoke(call);
+	private int invoke(List<RestMethodContext> mc, RestCall call) throws Throwable {
+		if (mc.size() == 1) {
+			call.restMethodContext(mc.get(0));
+			return mc.get(0).invoke(call);
 		}
 
 		int maxRc = 0;

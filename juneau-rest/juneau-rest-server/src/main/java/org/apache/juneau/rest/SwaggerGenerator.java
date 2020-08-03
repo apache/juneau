@@ -285,7 +285,7 @@ final class SwaggerGenerator {
 			js.addBeanDef(defId, new OMap(definitions.getMap(defId)));
 
 		// Iterate through all the @RestMethod methods.
-		for (RestMethodContext sm : context.getCallMethods().values()) {
+		for (RestMethodContext sm : context.getMethodContexts()) {
 
 			BeanSession bs = sm.createBeanSession();
 
@@ -385,7 +385,7 @@ final class SwaggerGenerator {
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
 
 			// Finally, look for parameters defined on method.
-			for (RestMethodParam mp : context.getRestMethodParams(m)) {
+			for (RestMethodParam mp : sm.methodParams) {
 
 				RestParamType in = mp.getParamType();
 				ParamInfo mpi = mp.getMethodParamInfo();
@@ -506,7 +506,7 @@ final class SwaggerGenerator {
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
-			for (RestMethodParam mp : context.getRestMethodParams(m)) {
+			for (RestMethodParam mp : sm.methodParams) {
 
 				RestParamType in = mp.getParamType();
 				ParamInfo mpi = mp.getMethodParamInfo();
