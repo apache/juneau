@@ -3598,7 +3598,7 @@ public class RestContext extends BeanContext {
 	private final Messages msgs;
 	private final Config config;
 	private final VarResolver varResolver;
-	private final Map<String,RestCallRouter> callRouters;
+	private final Map<String,RestMethodContext[]> methodMap;
 	private final Map<String,RestMethodContext> callMethods;
 	private final Map<String,RestContext> childResources;
 	@SuppressWarnings("deprecation") private final RestLogger logger;
@@ -3855,7 +3855,7 @@ public class RestContext extends BeanContext {
 			// Done after initializing fields above since we pass this object to the child resources.
 			//----------------------------------------------------------------------------------------------------
 			List<String> methodsFound = new LinkedList<>();   // Temporary to help debug transient duplicate method issue.
-			AMap<String,RestCallRouter.Builder> routers = AMap.of();
+			MethodMapBuilder methodMapBuilder = new MethodMapBuilder();
 			AMap<String,RestMethodContext> _javaRestMethods = AMap.of();
 			AMap<String,Method>
 				_startCallMethods = AMap.of(),
@@ -3957,12 +3957,11 @@ public class RestContext extends BeanContext {
 							};
 
 							_javaRestMethods.put(mi.getSimpleName(), sm);
-							addToRouter(routers, "GET", sm);
-							addToRouter(routers, "POST", sm);
+							methodMapBuilder.add("GET", sm).add("POST", sm);
 
 						} else {
 							_javaRestMethods.put(mi.getSimpleName(), sm);
-							addToRouter(routers, httpMethod, sm);
+							methodMapBuilder.add(httpMethod, sm);
 						}
 					} catch (Throwable e) {
 						throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}, methods={1}", rci.inner().getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound));
@@ -4057,10 +4056,7 @@ public class RestContext extends BeanContext {
 			this.postInitChildFirstMethodParams = _postInitChildFirstMethodParams.toArray(new Class[_postInitChildFirstMethodParams.size()][]);
 			this.destroyMethodParams = _destroyMethodParams.toArray(new Class[_destroyMethodParams.size()][]);
 
-			AMap<String,RestCallRouter> _callRouters = AMap.of();
-			for (RestCallRouter.Builder crb : routers.values())
-				_callRouters.put(crb.getHttpMethodName(), crb.build());
-			this.callRouters = _callRouters.unmodifiable();
+			this.methodMap = methodMapBuilder.build();
 
 			// Initialize our child resources.
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
@@ -4116,10 +4112,23 @@ public class RestContext extends BeanContext {
 		}
 	}
 
-	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestMethodContext cm) {
-		if (! routers.containsKey(httpMethodName))
-			routers.put(httpMethodName, new RestCallRouter.Builder(httpMethodName));
-		routers.get(httpMethodName).add(cm);
+	static class MethodMapBuilder extends TreeMap<String,TreeSet<RestMethodContext>> {
+		private static final long serialVersionUID = 1L;
+
+		MethodMapBuilder add(String httpMethodName, RestMethodContext mc) {
+			httpMethodName = httpMethodName.toUpperCase();
+			if (! containsKey(httpMethodName))
+				put(httpMethodName, new TreeSet<>());
+			get(httpMethodName).add(mc);
+			return this;
+		}
+
+		Map<String,RestMethodContext[]> build() {
+			Map<String,RestMethodContext[]> m = new LinkedHashMap<>();
+			for (Map.Entry<String,TreeSet<RestMethodContext>> e : this.entrySet())
+				m.put(e.getKey(), e.getValue().toArray(new RestMethodContext[0]));
+			return Collections.unmodifiableMap(m);
+		}
 	}
 
 	/**
@@ -4500,15 +4509,6 @@ public class RestContext extends BeanContext {
 	 */
 	public RestInfoProvider getInfoProvider() {
 		return infoProvider;
-	}
-
-	/**
-	 * Returns a map of HTTP method names to call routers.
-	 *
-	 * @return A map with HTTP method names upper-cased as the keys, and call routers as the values.
-	 */
-	protected Map<String,RestCallRouter> getCallRouters() {
-		return callRouters;
 	}
 
 	/**
@@ -5229,20 +5229,7 @@ public class RestContext extends BeanContext {
 			} else {
 
 				// If the specified method has been defined in a subclass, invoke it.
-				int rc = 0;
-				String m = call.getMethod();
-
-				if (callRouters.containsKey(m))
-					rc = callRouters.get(m).invoke(call);
-
-				if ((rc == 0 || rc == 404) && callRouters.containsKey("*"))
-					rc = callRouters.get("*").invoke(call);
-
-				// Should be 405 if the URL pattern matched but HTTP method did not.
-				if (rc == 0)
-					for (RestCallRouter rcc : callRouters.values())
-						if (rcc.matches(call))
-							rc = SC_METHOD_NOT_ALLOWED;
+				int rc = findMethodAndInvoke(call);
 
 				// Should be 404 if URL pattern didn't match.
 				if (rc == 0)
@@ -5271,6 +5258,52 @@ public class RestContext extends BeanContext {
 
 		call.finish();
 		finishCall(call);
+	}
+
+	private int findMethodAndInvoke(RestCall call) throws Throwable {
+		String m = call.getMethod();
+
+		int rc = 0;
+		if (methodMap.containsKey(m))
+			rc = invoke(methodMap.get(m), call);
+
+		if ((rc == 0 || rc == 404) && methodMap.containsKey("*"))
+			rc = invoke(methodMap.get("*"), call);
+
+		// Should be 405 if the URL pattern matched but HTTP method did not.
+		if (rc == 0)
+			for (RestMethodContext[] rcc : methodMap.values())
+				if (matches(rcc, call))
+					rc = SC_METHOD_NOT_ALLOWED;
+
+		return rc;
+	}
+
+	private boolean matches(RestMethodContext[] mc, RestCall call) throws Throwable {
+		UrlPathInfo pi = call.getUrlPathInfo();
+		for (RestMethodContext m : mc)
+			if (m.matches(pi))
+				return true;
+		return false;
+	}
+
+	private int invoke(RestMethodContext[] mc, RestCall call) throws Throwable {
+		if (mc.length == 1) {
+			call.restMethodContext(mc[0]);
+			return mc[0].invoke(call);
+		}
+
+		int maxRc = 0;
+		for (RestMethodContext m : mc) {
+			int rc = m.invoke(call);
+			if (rc == SC_OK) {
+				call.restMethodContext(m);
+				return SC_OK;
+			}
+			maxRc = Math.max(maxRc, rc);
+		}
+		return maxRc;
+
 	}
 
 	private boolean isDebug(RestCall call) {

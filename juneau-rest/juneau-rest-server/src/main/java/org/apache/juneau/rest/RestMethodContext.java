@@ -1115,6 +1115,20 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (c != 0)
 			return c;
 
+		c = compare(method.getParameterCount(), o.method.getParameterCount());
+		if (c != 0)
+			return c;
+
+		for (int i = 0; i < method.getParameterCount(); i++) {
+			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
+			if (c != 0)
+				return c;
+		}
+
+		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
+		if (c != 0)
+			return c;
+
 		return 0;
 	}
 
@@ -1176,7 +1190,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestMethodContext) && eq(this, (RestMethodContext)o, (x,y)->x.compareTo(y) == 0);
+		return (o instanceof RestMethodContext) && eq(this, (RestMethodContext)o, (x,y)->x.method.equals(y.method));
 	}
 
 	@Override /* Object */
