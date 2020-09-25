@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.rest.Enablement.*;
-import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -929,21 +928,87 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	}
 
 	/**
-	 * Workhorse method.
+	 * Identifies if this method can process the specified call.
 	 *
-	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
-	 * @return The HTTP response code.
+	 * <p>
+	 * To process the call, the following must be true:
+	 * <ul>
+	 * 	<li>Path pattern must match.
+	 * 	<li>Matchers (if any) must match.
+	 * </ul>
+	 *
+	 * @param call The call to check.
+	 * @return
+	 * 	One of the following values:
+	 * 	<ul>
+	 * 		<li><c>0</c> - Path doesn't match.
+	 * 		<li><c>1</c> - Path matched but matchers did not.
+	 * 		<li><c>2</c> - Matches.
+	 * 	</ul>
 	 */
-	int invoke(RestCall call) throws Throwable {
+	protected int match(RestCall call) {
 
+		UrlPathPatternMatch pm = matchPattern(call);
+
+		if (pm == null)
+			return 0;
+
+		if (requiredMatchers.length == 0 && optionalMatchers.length == 0) {
+			call.urlPathPatternMatch(pm);  // Cache so we don't have to recalculate.
+			return 2;
+		}
+
+		try {
+			RestRequest req = call.getRestRequest();
+			RestResponse res = call.getRestResponse();
+
+			@SuppressWarnings("deprecation")
+			RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
+
+			req.init(this, requestProperties);
+			res.init(this, requestProperties);
+
+			// If the method implements matchers, test them.
+			for (RestMatcher m : requiredMatchers)
+				if (! m.matches(req))
+					return 1;
+			if (optionalMatchers.length > 0) {
+				boolean matches = false;
+				for (RestMatcher m : optionalMatchers)
+					matches |= m.matches(req);
+				if (! matches)
+					return 1;
+			}
+
+			call.urlPathPatternMatch(pm);  // Cache so we don't have to recalculate.
+			return 2;
+		} catch (Exception e) {
+			throw new InternalServerError(e);
+		}
+	}
+
+	private UrlPathPatternMatch matchPattern(RestCall call) {
 		UrlPathPatternMatch pm = null;
-
 		for (UrlPathPattern pp : pathPatterns)
 			if (pm == null)
 				pm = pp.match(call.getUrlPathInfo());
+		return pm;
+	}
+
+
+	/**
+	 * Workhorse method.
+	 *
+	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
+	 */
+	void invoke(RestCall call) throws Throwable {
+
+		UrlPathPatternMatch pm = call.getUrlPathPatternMatch();
+		if (pm == null)
+			pm = matchPattern(call);
 
 		if (pm == null)
-			return SC_NOT_FOUND;
+			throw new NotFound();
 
 		RestRequest req = call.getRestRequest();
 		RestResponse res = call.getRestResponse();
@@ -959,18 +1024,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 		req.init(this, requestProperties);
 		res.init(this, requestProperties);
-
-		// If the method implements matchers, test them.
-		for (RestMatcher m : requiredMatchers)
-			if (! m.matches(req))
-				return SC_PRECONDITION_FAILED;
-		if (optionalMatchers.length > 0) {
-			boolean matches = false;
-			for (RestMatcher m : optionalMatchers)
-				matches |= m.matches(req);
-			if (! matches)
-				return SC_PRECONDITION_FAILED;
-		}
 
 		context.preCall(call);
 
@@ -1006,7 +1059,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 
 			for (RestGuard guard : guards)
 				if (! guard.guard(req, res))
-					return SC_OK;
+					return;
 
 			Object output;
 			try {
@@ -1055,7 +1108,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		} catch (InvocationTargetException e) {
 			throw e.getTargetException();
 		}
-		return SC_OK;
 	}
 //
 //	protected void addStatusCode(int code) {

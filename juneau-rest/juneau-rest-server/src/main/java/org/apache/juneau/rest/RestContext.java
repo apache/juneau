@@ -3911,17 +3911,15 @@ public class RestContext extends BeanContext {
 							sm = new RestMethodContext(smb) {
 
 								@Override
-								int invoke(RestCall call) throws Throwable {
+								void invoke(RestCall call) throws Throwable {
 
-									int rc = super.invoke(call);
-									if (rc != SC_OK)
-										return rc;
+									super.invoke(call);
 
 									final Object o = call.getOutput();
 
 									if ("GET".equals(call.getMethod())) {
 										call.output(rim.getMethodsByPath().keySet());
-										return SC_OK;
+										return;
 
 									} else if ("POST".equals(call.getMethod())) {
 										String pip = call.getUrlPathInfo().getPath();
@@ -3945,13 +3943,13 @@ public class RestContext extends BeanContext {
 												}
 												Object output = m.invoke(o, args);
 												call.output(output);
-												return SC_OK;
+												return;
 											} catch (Exception e) {
 												throw toHttpException(e, InternalServerError.class);
 											}
 										}
 									}
-									return SC_NOT_FOUND;
+									throw new NotFound();
 								}
 							};
 
@@ -4106,32 +4104,6 @@ public class RestContext extends BeanContext {
 			throw e;
 		} finally {
 			initException = _initException;
-		}
-	}
-
-	static class MethodMapBuilder  {
-		TreeMap<String,TreeSet<RestMethodContext>> map = new TreeMap<>();
-		Set<RestMethodContext> list = ASet.of();
-
-
-		MethodMapBuilder add(String httpMethodName, RestMethodContext mc) {
-			httpMethodName = httpMethodName.toUpperCase();
-			if (! map.containsKey(httpMethodName))
-				map.put(httpMethodName, new TreeSet<>());
-			map.get(httpMethodName).add(mc);
-			list.add(mc);
-			return this;
-		}
-
-		Map<String,List<RestMethodContext>> getMap() {
-			Map<String,List<RestMethodContext>> m = new LinkedHashMap<>();
-			for (Map.Entry<String,TreeSet<RestMethodContext>> e : map.entrySet())
-				m.put(e.getKey(), AList.of(e.getValue()));
-			return Collections.unmodifiableMap(m);
-		}
-
-		List<RestMethodContext> getList() {
-			return AList.of(list);
 		}
 	}
 
@@ -5223,18 +5195,13 @@ public class RestContext extends BeanContext {
 			} else {
 
 				// If the specified method has been defined in a subclass, invoke it.
-				int rc = findMethodAndInvoke(call);
-
-				// Should be 404 if URL pattern didn't match.
-				if (rc == 0)
-					rc = SC_NOT_FOUND;
-
-				// If not invoked above, see if it's an OPTIONs request
-				if (rc != SC_OK)
-					handleNotFound(call.status(rc));
-
-				if (call.getStatus() == 0)
-					call.status(rc);
+				try {
+					findMethod(call).invoke(call);
+				} catch (NotFound e) {
+					if (call.getStatus() == 0)
+						call.status(404);
+					handleNotFound(call);
+				}
 			}
 
 			if (call.hasOutput()) {
@@ -5254,50 +5221,44 @@ public class RestContext extends BeanContext {
 		finishCall(call);
 	}
 
-	private int findMethodAndInvoke(RestCall call) throws Throwable {
+	private RestMethodContext findMethod(RestCall call) throws Throwable {
 		String m = call.getMethod();
 
 		int rc = 0;
-		if (methodMap.containsKey(m))
-			rc = invoke(methodMap.get(m), call);
-
-		if ((rc == 0 || rc == 404) && methodMap.containsKey("*"))
-			rc = invoke(methodMap.get("*"), call);
-
-		// Should be 405 if the URL pattern matched but HTTP method did not.
-		if (rc == 0)
-			for (List<RestMethodContext> rcc : methodMap.values())
-				if (matches(rcc, call))
-					rc = SC_METHOD_NOT_ALLOWED;
-
-		return rc;
-	}
-
-	private boolean matches(List<RestMethodContext> mc, RestCall call) throws Throwable {
-		UrlPathInfo pi = call.getUrlPathInfo();
-		for (RestMethodContext m : mc)
-			if (m.matches(pi))
-				return true;
-		return false;
-	}
-
-	private int invoke(List<RestMethodContext> mc, RestCall call) throws Throwable {
-		if (mc.size() == 1) {
-			call.restMethodContext(mc.get(0));
-			return mc.get(0).invoke(call);
-		}
-
-		int maxRc = 0;
-		for (RestMethodContext m : mc) {
-			int rc = m.invoke(call);
-			if (rc == SC_OK) {
-				call.restMethodContext(m);
-				return SC_OK;
+		if (methodMap.containsKey(m)) {
+			for (RestMethodContext mc : methodMap.get(m)) {
+				int mrc = mc.match(call);
+				if (mrc == 2)
+					return mc;
+				rc = Math.max(rc, mrc);
 			}
-			maxRc = Math.max(maxRc, rc);
 		}
-		return maxRc;
 
+		if (methodMap.containsKey("*")) {
+			for (RestMethodContext mc : methodMap.get("*")) {
+				int mrc = mc.match(call);
+				if (mrc == 2)
+					return mc;
+				rc = Math.max(rc, mrc);
+			}
+		}
+
+		// If no paths matched, see if the path matches any other methods.
+		// Note that we don't want to match against "/*" patterns such as getOptions().
+		if (rc == 0) {
+			for (RestMethodContext mc : methods) {
+				if (! mc.getPathPattern().endsWith("/*")) {
+					int mrc = mc.match(call);
+					if (mrc == 2)
+						throw new MethodNotAllowed();
+				}
+			}
+		}
+
+		if (rc == 1)
+			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, call.getPathInfo());
+
+		throw new NotFound();
 	}
 
 	private boolean isDebug(RestCall call) {
@@ -5742,5 +5703,35 @@ public class RestContext extends BeanContext {
 				.a("uriResolution", uriResolution)
 				.a("useClasspathResourceCaching", useClasspathResourceCaching)
 			);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helpers.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static class MethodMapBuilder  {
+		TreeMap<String,TreeSet<RestMethodContext>> map = new TreeMap<>();
+		Set<RestMethodContext> set = ASet.of();
+
+
+		MethodMapBuilder add(String httpMethodName, RestMethodContext mc) {
+			httpMethodName = httpMethodName.toUpperCase();
+			if (! map.containsKey(httpMethodName))
+				map.put(httpMethodName, new TreeSet<>());
+			map.get(httpMethodName).add(mc);
+			set.add(mc);
+			return this;
+		}
+
+		Map<String,List<RestMethodContext>> getMap() {
+			AMap<String,List<RestMethodContext>> m = AMap.of();
+			for (Map.Entry<String,TreeSet<RestMethodContext>> e : map.entrySet())
+				m.put(e.getKey(), AList.of(e.getValue()));
+			return m.unmodifiable();
+		}
+
+		List<RestMethodContext> getList() {
+			return AList.of(set).unmodifiable();
+		}
 	}
 }

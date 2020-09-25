@@ -43,6 +43,8 @@ public class RestCall {
 	private RestCallLogger logger;
 	private RestCallLoggerConfig loggerConfig;
 
+	private UrlPathPatternMatch urlPathPatternMatch;
+
 	/**
 	 * Constructor.
 	 *
@@ -301,6 +303,26 @@ public class RestCall {
 		if (rres != null)
 			rres.setOutput(output);
 		return this;
+	}
+
+	/**
+	 * Sets the URL path pattern match on this call.
+	 *
+	 * @param urlPathPatternMatch The match pattern.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall urlPathPatternMatch(UrlPathPatternMatch urlPathPatternMatch) {
+		this.urlPathPatternMatch = urlPathPatternMatch;
+		return this;
+	}
+
+	/**
+	 * Returns the URL path pattern match on this call.
+	 *
+	 * @return The URL path pattern match on this call.
+	 */
+	public UrlPathPatternMatch getUrlPathPatternMatch() {
+		return urlPathPatternMatch;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
