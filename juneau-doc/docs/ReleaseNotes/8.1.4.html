@@ -248,6 +248,18 @@
 			<li class='ja'>{@link oaj.annotation.Bean#interceptor Bean(interceptor)}
 			<li class='jm'>{@link oaj.BeanContextBuilder#beanInterceptor(Class,Class)}
 		</ul>
+	<li>
+		Fluent setters that follow the <c>withX</c> convention are now automatically detected by all parsers.
+		<p class='bpcode w800'>
+	<jc>// A bean with a fluent setter.</jc>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> MyBean withFoo(String <jv>foo</jv>) {
+			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
+			<jk>return this</jk>;
+		}
+	}
+		</p>
+		Note you could previously use the <ja>@BeanProperty</ja> annotation to identify these setters.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

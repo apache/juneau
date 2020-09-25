@@ -204,8 +204,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public int getF6() {
 			return f6;
 		}
-		public void setF6(int f6) {
+		public A withF6(int f6) {
 			this.f6 = f6;
+			return this;
 		}
 
 		public A() {}

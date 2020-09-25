@@ -755,6 +755,9 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 						methodType = SETTER;
 						n = n.substring(3);
+					} else if (n.startsWith("with") && (rt.isParentOf(c))) {
+						methodType = SETTER;
+						n = n.substring(4);
 					} else if (bpName != null) {
 						methodType = SETTER;
 						if (bpName.isEmpty()) {
