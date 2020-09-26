@@ -155,7 +155,7 @@
 		{@link oaj.annotation.Swap @Swap} annotation can now be used with 
 		{@link oaj.transform.Surrogate} classes.
 	<li>
-		New support for {@doc juneau-marshall.Transforms.PojoBuilders POJO Builders}.	
+		New support for {@doc PojoBuilders POJO Builders}.	
 </ul>
 
 <h5 class='topic w800'>juneau-svl</h5>
@@ -333,12 +333,12 @@
 	<li>
 		Changes to {@link oajr.RestContext}:
 		<ul>
-			<li><c>getResource(String,Locale)</c> renamed to {@link oajr.RestContext#getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
-			<li><c>getResourceAsString(String,Locale)</c> renamed to {@link oajr.RestContext#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
-			<li><c>getResource(Class,MediaType,String,Locale)</c> renamed to {@link oajr.RestContext#getClasspathResource(Class,MediaType,String,Locale) getClasspathResourceAsString(Class,MediaType,String,Locale)}
-			<li>New method {@link oajr.RestContext#getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}.
-			<li>New method {@link oajr.RestContext#getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}.
-			<li>New method {@link oajr.RestContext#getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}.
+			<li><c>getResource(String,Locale)</c> renamed to <dc>getClasspathResource(String,Locale)</dc>
+			<li><c>getResourceAsString(String,Locale)</c> renamed to <dc>getClasspathResourceAsString(String,Locale)</dc>
+			<li><c>getResource(Class,MediaType,String,Locale)</c> renamed to <dc>getClasspathResourceAsString(Class,MediaType,String,Locale)</dc>
+			<li>New method <dc>getClasspathResource(Class,String,Locale)</dc>.
+			<li>New method <dc>getClasspathResourceAsString(Class,String,Locale)</dc>.
+			<li>New method <dc>getClasspathResource(Class,Class,MediaType,String,Locale)</dc>.
 			<li><dc>RestContext.getDefaultRequestHeaders()</dc> returns a 
 				<c>Map&lt;String,Object&gt;</c> instead of <c>Map&lt;String,String&gt;</c>.
 			<li><dc>RestContext.getDefaultResponseHeaders()</dc> returns a 
@@ -371,7 +371,7 @@
 		</ul>
 	<li>
 		<c>RestCallHandler</c> split up into {@link oajr.RestCallHandler} and 
-		{@link oajr.BasicRestCallHandler}
+		<dc>BasicRestCallHandler</dc>
 	<li>
 		<c>RestInfoProvider</c> split up into {@link oajr.RestInfoProvider} and 
 		{@link oajr.BasicRestInfoProvider}

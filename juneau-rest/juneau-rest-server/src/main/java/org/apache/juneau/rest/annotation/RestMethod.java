@@ -28,7 +28,7 @@ import org.apache.juneau.http.remote.*;
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod}
+ * 	<li class='link'>{@doc RestMethod}
  * </ul>
  */
 @Documented
@@ -186,7 +186,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -215,7 +215,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -258,7 +258,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -285,7 +285,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -319,7 +319,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -381,7 +381,7 @@ public @interface RestMethod {
 	 * Information provided here overrides information provided in the servlet-level annotation.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
+	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
 	 * </ul>
 	 */
 	@Deprecated
@@ -391,7 +391,7 @@ public @interface RestMethod {
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	Logging logging() default @Logging;
@@ -428,7 +428,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -668,7 +668,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -693,7 +693,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -775,7 +775,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
@@ -839,7 +839,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -853,7 +853,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -871,7 +871,7 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -913,14 +913,14 @@ public @interface RestMethod {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is {@doc SimpleJson}.
+	 * 		The format is {@doc SimplifiedJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 * 	<li>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

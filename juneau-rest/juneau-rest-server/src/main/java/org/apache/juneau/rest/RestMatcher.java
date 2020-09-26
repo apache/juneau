@@ -64,7 +64,7 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
+ * 	<li class='link'>{@doc RestmMatchers}
  * </ul>
  */
 public abstract class RestMatcher {

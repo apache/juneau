@@ -19,7 +19,7 @@ import org.apache.juneau.http.annotation.*;
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+ * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  */
 public @interface ResourceSwagger {
@@ -50,7 +50,7 @@ public @interface ResourceSwagger {
 	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -84,7 +84,7 @@ public @interface ResourceSwagger {
 	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
 	 * 		</ol>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -94,7 +94,7 @@ public @interface ResourceSwagger {
 	 * Defines the swagger field <c>/info/contact</c>.
 	 *
 	 * <p>
-	 * A {@doc SimpleJson} string with the following fields:
+	 * A {@doc SimplifiedJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -119,10 +119,10 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -157,7 +157,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger license field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc SimpleJson} string with the following fields:
+	 * A {@doc SimplifiedJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
@@ -181,10 +181,10 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -200,7 +200,7 @@ public @interface ResourceSwagger {
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
 	 *
 	 * <p>
-	 * A {@doc SimpleJson} string with the following fields:
+	 * A {@doc SimplifiedJson} string with the following fields:
 	 * <p class='bcode w800'>
 	 * 	[
 	 * 		{
@@ -230,10 +230,10 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} array.
+	 * 		The format is a {@doc SimplifiedJson} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -257,7 +257,7 @@ public @interface ResourceSwagger {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -281,7 +281,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -291,7 +291,7 @@ public @interface ResourceSwagger {
 	 * Free-form value for the swagger of a resource.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this resource.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this resource.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
@@ -380,7 +380,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -393,7 +393,7 @@ public @interface ResourceSwagger {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

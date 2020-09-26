@@ -23,7 +23,7 @@ import org.apache.juneau.http.remote.*;
  * Identifies a remote proxy REST interface.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+ * 	<li class='link'>{@doc RestRpc}
  * </ul>
  *
  * @deprecated Use {@link Remote}

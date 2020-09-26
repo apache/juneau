@@ -39,7 +39,7 @@ import org.apache.juneau.http.exception.*;
  * Servlet implementation of a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
+ * 	<li class='link'>{@doc RestServlet}
  * </ul>
  */
 public abstract class RestServlet extends HttpServlet implements RestInfoProvider, RestCallLogger, RestResourceResolver, ResourceFinder {

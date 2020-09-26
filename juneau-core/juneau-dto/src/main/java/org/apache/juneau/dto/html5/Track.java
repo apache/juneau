@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.embedded-content-0#the-track-element <track>}
+ * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-track-element <track>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="track")
@@ -46,7 +46,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-track-default default}
+	 * {@doc ExtHTML5.embedded-content-0#attr-track-default default}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-track-kind kind} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-track-kind kind} attribute.
 	 *
 	 * <p>
 	 * The type of text track.
@@ -75,7 +75,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-track-label label} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-track-label label} attribute.
 	 *
 	 * <p>
 	 * User-visible label.
@@ -89,7 +89,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-track-src src} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-track-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -112,7 +112,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-track-srclang srclang}
+	 * {@doc ExtHTML5.embedded-content-0#attr-track-srclang srclang}
 	 * attribute.
 	 *
 	 * <p>

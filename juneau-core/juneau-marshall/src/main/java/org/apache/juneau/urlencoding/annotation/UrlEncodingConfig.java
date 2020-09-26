@@ -53,7 +53,7 @@ public @interface UrlEncodingConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	UrlEncoding[] applyUrlEncoding() default {};
@@ -86,7 +86,7 @@ public @interface UrlEncodingConfig {
 	 * 	<li>
 	 * 		This option only applies to beans.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

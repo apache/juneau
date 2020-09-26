@@ -113,16 +113,16 @@ import org.apache.juneau.oapi.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerHeaderObject}
+ * 	<li class='link'>{@doc RestResponseHeaderAnnotation}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerHeaderObject}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
+ * 	<li class='link'>{@doc RestResponseAnnotation}
+ * 	<li class='link'>{@doc RestcResponse}
  * </ul>
 */
 @Documented
@@ -184,7 +184,7 @@ public @interface ResponseHeader {
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * <mk>description</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -197,7 +197,7 @@ public @interface ResponseHeader {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -209,7 +209,7 @@ public @interface ResponseHeader {
 	String[] d() default {};
 
 	/**
-	 * <mk>type</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>type</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -243,7 +243,7 @@ public @interface ResponseHeader {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
@@ -254,7 +254,7 @@ public @interface ResponseHeader {
 	String t() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>format</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -300,7 +300,7 @@ public @interface ResponseHeader {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
@@ -311,7 +311,7 @@ public @interface ResponseHeader {
 	String f() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
@@ -353,7 +353,7 @@ public @interface ResponseHeader {
 	String cf() default "";
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>$ref</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * Denotes a reference to a definition object.
@@ -367,7 +367,7 @@ public @interface ResponseHeader {
 	String $ref() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -383,7 +383,7 @@ public @interface ResponseHeader {
 	String max() default "";
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -399,7 +399,7 @@ public @interface ResponseHeader {
 	String min() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -415,7 +415,7 @@ public @interface ResponseHeader {
 	String mo() default "";
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -431,7 +431,7 @@ public @interface ResponseHeader {
 	long maxl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -447,7 +447,7 @@ public @interface ResponseHeader {
 	long minl() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * A string value is valid if it matches the specified regular expression pattern.
@@ -472,7 +472,7 @@ public @interface ResponseHeader {
 	String p() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -488,7 +488,7 @@ public @interface ResponseHeader {
 	long maxi() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -504,7 +504,7 @@ public @interface ResponseHeader {
 	long mini() default -1;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -520,7 +520,7 @@ public @interface ResponseHeader {
 	boolean emax() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -536,7 +536,7 @@ public @interface ResponseHeader {
 	boolean emin() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -552,7 +552,7 @@ public @interface ResponseHeader {
 	boolean ui() default false;
 
 	/**
-	 * <mk>items</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>items</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -563,7 +563,7 @@ public @interface ResponseHeader {
 	Items items() default @Items;
 
 	/**
-	 * <mk>default</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>default</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -579,7 +579,7 @@ public @interface ResponseHeader {
 	String[] df() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc SwaggerHeaderObject}.
+	 * <mk>enum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -625,10 +625,10 @@ public @interface ResponseHeader {
 	String[] ex() default {};
 
 	/**
-	 * Free-form value for the {@doc SwaggerHeaderObject}.
+	 * Free-form value for the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Header object:
@@ -681,7 +681,7 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -692,7 +692,7 @@ public @interface ResponseHeader {
 	 * 	<ja>@ResponseHeader</ja>(<js>"description:'The new location of this resource'"</js>)
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

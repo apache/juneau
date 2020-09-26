@@ -106,7 +106,7 @@ import org.apache.juneau.reflect.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_paramResolvers}
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodParameters}
+ * 	<li class='link'>{@doc RestmParameters}
  * </ul>
  */
 public abstract class RestMethodParam {

@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * <br>Subclasses MUST implement a no-arg public constructor or constructor that takes in a {@link RestContext} arg.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+ * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
 public class BasicRestCallLogger implements RestCallLogger {

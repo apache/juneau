@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * Applies to getters or setters that should not be interpreted as bean property getters or setters.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanIgnoreAnnotation}
+ * 	<li class='link'>{@doc BeanIgnoreAnnotation}
  * </ul>
  */
 @Documented
@@ -141,7 +141,7 @@ public @interface BeanIgnore {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

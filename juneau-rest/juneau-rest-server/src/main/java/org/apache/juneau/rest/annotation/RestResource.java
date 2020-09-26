@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * a REST resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Rest}
+ * 	<li class='link'>{@doc RestAnnotation}
  * </ul>
  */
 @SuppressWarnings("deprecation")
@@ -65,7 +65,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -89,7 +89,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Use <js>"*"</js> to represent all methods.
@@ -117,7 +117,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Method names are case-insensitive.
@@ -143,7 +143,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Use <js>"*"</js> to represent all methods.
@@ -171,7 +171,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -189,7 +189,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -255,7 +255,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -273,7 +273,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
@@ -309,7 +309,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -323,7 +323,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -344,7 +344,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -358,7 +358,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -376,7 +376,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -395,7 +395,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		The format is plain-text.
@@ -425,7 +425,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Setting a flag is equivalent to setting the same property to <js>"true"</js>.
@@ -489,7 +489,7 @@ public @interface RestResource {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
+	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
 	 * </ul>
 	 */
 	HtmlDoc htmldoc() default @HtmlDoc;
@@ -523,7 +523,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
@@ -533,7 +533,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	Logging logging() default @Logging;
@@ -547,7 +547,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -564,7 +564,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -582,7 +582,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -818,7 +818,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -837,7 +837,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -937,7 +937,7 @@ public @interface RestResource {
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1001,7 +1001,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1062,7 +1062,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1132,7 +1132,7 @@ public @interface RestResource {
 	 * </ol>
 	 *
 	 * <p>
-	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
+	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimplifiedJson} object.
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		staticFiles={
@@ -1160,7 +1160,7 @@ public @interface RestResource {
 	 * 		<br>When both parent and child resources map against the same path, files will be search in the child location
 	 * 		and then the parent location.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1178,7 +1178,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1196,7 +1196,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1245,7 +1245,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
@@ -1265,7 +1265,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1283,7 +1283,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1304,7 +1304,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1325,7 +1325,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1344,7 +1344,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1363,7 +1363,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -1393,7 +1393,7 @@ public @interface RestResource {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

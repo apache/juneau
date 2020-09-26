@@ -16,7 +16,7 @@ package org.apache.juneau.dto.html5;
  * Various useful static methods for creating HTML elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 public class HtmlBuilder {

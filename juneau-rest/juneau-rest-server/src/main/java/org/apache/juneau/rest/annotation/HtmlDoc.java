@@ -85,7 +85,7 @@ import org.apache.juneau.rest.widget.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
+ * 	<li class='link'>{@doc RestHtmlDocAnnotation}
  * </ul>
  */
 @Deprecated
@@ -112,7 +112,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -155,7 +155,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -199,7 +199,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -245,7 +245,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
@@ -286,7 +286,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -336,7 +336,7 @@ public @interface HtmlDoc {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -345,7 +345,7 @@ public @interface HtmlDoc {
 	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
 	 * 		to place a link inside the list of parent links.
 	 * 	<li>
-	 * 		Supports {@doc juneau-marshall.URIs} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
+	 * 		Supports {@doc MarshallingUris} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -365,7 +365,7 @@ public @interface HtmlDoc {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -407,7 +407,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -448,7 +448,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -489,7 +489,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is a URL.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
@@ -579,7 +579,7 @@ public @interface HtmlDoc {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+	 * 	<li class='link'>{@doc RestHtmlWidgets}
 	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};

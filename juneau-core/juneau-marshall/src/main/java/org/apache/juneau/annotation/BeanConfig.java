@@ -58,7 +58,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Bean[] applyBean() default {};
@@ -71,7 +71,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Beanc[] applyBeanc() default {};
@@ -84,7 +84,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Beanp[] applyBeanp() default {};
@@ -97,7 +97,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	BeanIgnore[] applyBeanIgnore() default {};
@@ -110,7 +110,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Example[] applyExample() default {};
@@ -123,7 +123,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	NameProperty[] applyNameProperty() default {};
@@ -136,7 +136,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	ParentProperty[] applyParentProperty() default {};
@@ -149,7 +149,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Swap[] applySwap() default {};
@@ -162,7 +162,7 @@ public @interface BeanConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	URI[] applyURI() default {};
@@ -188,7 +188,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"PRIVATE"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -218,7 +218,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"PRIVATE"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -245,7 +245,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
+	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 *
 	 * <div class='warn'>
@@ -304,7 +304,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"PRIVATE"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -336,8 +336,8 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
+	 * 	<li class='link'>{@doc BeanFilters}
+	 * 	<li class='link'>{@doc InterfaceFilters}
 	 * </ul>
 	 *
 	 * <div class='warn'>
@@ -383,7 +383,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -413,7 +413,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"PRIVATE"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -437,7 +437,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
@@ -463,7 +463,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
@@ -489,7 +489,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -513,7 +513,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -533,7 +533,7 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
 	 * <ul class='seealso'>
@@ -594,7 +594,7 @@ public @interface BeanConfig {
 	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -627,7 +627,7 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -693,7 +693,7 @@ public @interface BeanConfig {
 	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -726,7 +726,7 @@ public @interface BeanConfig {
 	 *	<li>
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -776,7 +776,7 @@ public @interface BeanConfig {
 	 * 	bpro=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -810,7 +810,7 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -860,7 +860,7 @@ public @interface BeanConfig {
 	 * 	bpwo=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -894,7 +894,7 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -939,7 +939,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -966,7 +966,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
+	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 */
 	Class<?>[] dictionary() default {};
@@ -1021,7 +1021,7 @@ public @interface BeanConfig {
 	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1053,7 +1053,7 @@ public @interface BeanConfig {
 	 * 		The individual strings are concatenated together and the whole string is treated as a JSON Object.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1094,7 +1094,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1118,7 +1118,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1142,7 +1142,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1166,7 +1166,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1189,7 +1189,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1213,7 +1213,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1237,7 +1237,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1322,7 +1322,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1339,7 +1339,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1357,7 +1357,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1410,7 +1410,7 @@ public @interface BeanConfig {
 	 * 			<li><c>java.util.*</c>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1511,7 +1511,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1537,12 +1537,12 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.AutoPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
+	 * 	<li class='link'>{@doc PojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc OneWayPojoSwaps}
+	 * 	<li class='link'>{@doc SwapAnnotation}
+	 * 	<li class='link'>{@doc AutoPojoSwaps}
+	 * 	<li class='link'>{@doc SurrogateClasses}
 	 * </ul>
 	 */
 	Class<?>[] swaps() default {};
@@ -1573,7 +1573,7 @@ public @interface BeanConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1596,7 +1596,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1621,7 +1621,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1645,7 +1645,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1690,7 +1690,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1718,7 +1718,7 @@ public @interface BeanConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1740,7 +1740,7 @@ public @interface BeanConfig {
 	 *	<li>
 	 * 		Default value: <js>"0"</js>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1762,7 +1762,7 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Default value: <js>"100"</js>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

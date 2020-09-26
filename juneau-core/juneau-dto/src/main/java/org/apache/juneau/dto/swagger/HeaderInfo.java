@@ -47,7 +47,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,x-example,*")
@@ -191,7 +191,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * The type of the object.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -237,7 +237,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned <c>type</c>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -253,7 +253,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned <c>type</c>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -395,7 +395,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -418,7 +418,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -445,7 +445,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -458,7 +458,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -488,7 +488,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -501,7 +501,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -531,7 +531,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -544,7 +544,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -574,7 +574,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -587,7 +587,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -617,7 +617,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -630,7 +630,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -660,7 +660,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -673,7 +673,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -703,7 +703,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>pattern</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -719,7 +719,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * This string SHOULD be a valid regular expression.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -749,7 +749,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -762,7 +762,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -792,7 +792,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -805,7 +805,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -835,7 +835,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -848,7 +848,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -878,7 +878,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -891,7 +891,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>enum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -949,7 +949,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -962,7 +962,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Bean property setter:  <property>multipleOf</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value

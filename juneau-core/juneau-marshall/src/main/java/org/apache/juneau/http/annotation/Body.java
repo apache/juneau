@@ -100,22 +100,22 @@ import org.apache.juneau.jsonschema.*;
  * </ol>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Body}
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerParameterObject}
+ * 	<li class='link'>{@doc RestBodyAnnotation}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Body}
+ * 	<li class='link'>{@doc RestcBody}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
+ * 	<li class='link'>{@doc RestRequestAnnotation}
+ * 	<li class='link'>{@doc RestcRequest}
  * </ul>
  *
  * <div class='warn'>
@@ -140,7 +140,7 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * <mk>description</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -173,7 +173,7 @@ public @interface Body {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -185,7 +185,7 @@ public @interface Body {
 	String[] d() default {};
 
 	/**
-	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>required</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines whether the body is mandatory.
@@ -224,7 +224,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -240,7 +240,7 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * <mk>schema</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The schema defining the type used for the body parameter.
@@ -261,7 +261,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -275,7 +275,7 @@ public @interface Body {
 	 * A serialized example of the body of a request.
 	 *
 	 * <p>
-	 * This is the {@doc SimpleJson} of an example of the body.
+	 * This is the {@doc SimplifiedJson} of an example of the body.
 	 *
 	 * <p>
 	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
@@ -380,13 +380,13 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is any {@doc SimpleJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
+	 * 		The format is any {@doc SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		has a schema associated with it meancan be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -401,7 +401,7 @@ public @interface Body {
 	 * Serialized examples of the body of a request.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object whose keys are media types and values are string representations of that value.
+	 * This is a {@doc SimplifiedJson} object whose keys are media types and values are string representations of that value.
 	 *
 	 * <p>
 	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
@@ -425,13 +425,13 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a {@doc SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
@@ -446,10 +446,10 @@ public @interface Body {
 	String[] exs() default {};
 
 	/**
-	 * Free-form value for the {@doc SwaggerParameterObject}.
+	 * Free-form value for the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this parameter-info.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this parameter-info.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the body:
@@ -502,7 +502,7 @@ public @interface Body {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		Schema-based serialization is NOT affected by values defined in this annotation.
 	 * 		<br>It only affects the generated Swagger documentation.
@@ -518,7 +518,7 @@ public @interface Body {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

@@ -37,22 +37,22 @@ Serializers
 	}
 
 	<jc>// Serialize to JSON, XML, or HTML</jc>
-	Person p = <jk>new</jk> Person();
+	Person <jv>p</jv> = <jk>new</jk> Person();
 
 	<jc>// Produces:
 	//	"{\"name\":\"John Smith\",\"age\":21}"</jc>
-	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 
 	<jc>// Produces:
 	//	"{name:'John Smith',age:21}"</jc>
-	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 
 	<jc>// Produces:
 	//	&lt;object&gt;
 	//	  &lt;name&gt;John Smith&lt;/name&gt;
 	//	  &lt;age&gt;21&lt;/age&gt;
 	//	&lt;/object&gt;</jc>
-	String xml = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>xml</jv> = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 
 	<jc>// Produces:
 	//	&lt;table&gt;
@@ -60,19 +60,19 @@ Serializers
 	//	  &lt;tr&gt;&lt;td&gt;name&lt;/td&gt;&lt;td&gt;John Smith&lt;/td&gt;&lt;/tr&gt;
 	//	  &lt;tr&gt;&lt;td&gt;age&lt;/td&gt;&lt;td&gt;21&lt;/td&gt;&lt;/tr&gt;
 	//	&lt;/table&gt;</jc>
-	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 	
 	<jc>// Produces:
 	//	"(name='John Smith',age=21)"</jc>
-	String uon = UonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 
 	<jc>// Produces:
 	//	"name='John+Smith'&amp;age=21"</jc>
-	String urlencoding = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>urlencoding</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 
 	<jc>// Produces:
 	// 82 A4 6E 61 6D 65 AA 4A 6F 68 6E 20 53 6D 69 74 68 A3 61 67 65 15 </jc>
-	<jk>byte</jk>[] b = MsgPackSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	<jk>byte</jk>[] <jv>b</jv> = MsgPackSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>p</jv>);
 </p>
 
 <p>
@@ -81,16 +81,16 @@ Serializers
 
 <p class='bpcode w800'>
 	<jc>// Use one of the default serializers to serialize a POJO</jc>
-	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
+	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
 
 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
-	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
+	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
 	
 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
-	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
+	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
 	
 	<jc>// Serialize a POJO to JSON</jc>
-	String json = serializer.serialize(someObject);
+	String <jv>json</jv> = <jv>serializer</jv>.serialize(someObject);
 </p>
 <p>
 	Default serialization support is provided for Java primitives, <c>Maps</c>, <c>Collections</c>, 
@@ -100,6 +100,6 @@ Serializers
 </p>
 
 <ul class='seealso'>
-	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
+	<li class='doclink'>{@doc GlossaryLanguageSupport link} - Glossary of all supported languages.
 </ul>
 

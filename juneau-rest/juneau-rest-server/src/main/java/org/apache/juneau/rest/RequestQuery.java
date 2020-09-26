@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * <br>This can be useful in cases where you're using GET parameters on FORM POSTs, and you don't want the body of the request to be read.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestQuery}
+ * 	<li class='link'>{@doc RestmRequestQuery}
  * </ul>
  */
 @SuppressWarnings("unchecked")

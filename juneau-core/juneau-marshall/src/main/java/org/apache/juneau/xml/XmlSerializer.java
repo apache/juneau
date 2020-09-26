@@ -187,7 +187,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_addNamespaceUrisToRoot = PREFIX + ".addNamespaceUrisToRoot.b";
@@ -237,7 +237,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_autoDetectNamespaces = PREFIX + ".autoDetectNamespaces.b";
@@ -269,7 +269,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * Specifies the default namespace URI for this document.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_defaultNamespace = PREFIX + ".defaultNamespace.s";
@@ -301,7 +301,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_enableNamespaces = PREFIX + ".enableNamespaces.b";
@@ -333,7 +333,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * The default list of namespaces associated with this serializer.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	public static final String XML_namespaces = PREFIX + ".namespaces.ls";
@@ -366,7 +366,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * {@link XmlSchemaSerializer} class.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	@Deprecated
@@ -536,7 +536,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
 	 * 	<p>
 	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>

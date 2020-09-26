@@ -142,7 +142,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.ContextsBuildersSessionsPropertyStores}
+ * 	<li class='link'>{@doc ContextsBuildersSessionsPropertyStores}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -570,7 +570,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
+	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + ".beanDictionary.lc";
@@ -1121,7 +1121,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
+	 * 	<li class='link'>{@doc BeanDictionaries}
 	 * </ul>
 	 */
 	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
@@ -2112,12 +2112,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.AutoPojoSwaps}
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
+	 * 	<li class='link'>{@doc PojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc OneWayPojoSwaps}
+	 * 	<li class='link'>{@doc SwapAnnotation}
+	 * 	<li class='link'>{@doc AutoPojoSwaps}
+	 * 	<li class='link'>{@doc SurrogateClasses}
 	 * </ul>
 	 */
 	public static final String BEAN_swaps = PREFIX + ".swaps.lo";

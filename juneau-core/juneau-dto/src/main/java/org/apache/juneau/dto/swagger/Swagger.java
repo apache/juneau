@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * This is the root document object for the API specification.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
@@ -286,7 +286,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support {@doc SwaggerPathTemplating path templating}
+	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -304,7 +304,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support {@doc SwaggerPathTemplating path templating}
+	 * 	<br>The host does not support {@doc ExtSwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -334,7 +334,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc SwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -351,7 +351,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>If it is not included, the API is served directly under the <c>host</c>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <c>basePath</c> does not support {@doc SwaggerPathTemplating path templating}.
+	 * 	<br>The <c>basePath</c> does not support {@doc ExtSwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -482,7 +482,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -498,11 +498,11 @@ public class Swagger extends SwaggerElement {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <c>consumes</c> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under {@doc SwaggerMimeTypes}.
+	 * Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
@@ -565,7 +565,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -585,7 +585,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1238,7 +1238,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc SwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -1258,7 +1258,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the {@doc SwaggerOperationObject Operation Object} must be declared.
+	 * 	<br>Not all tags that are used by the {@doc ExtSwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Ignored if <jk>null</jk>.

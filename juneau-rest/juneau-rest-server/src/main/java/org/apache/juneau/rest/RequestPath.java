@@ -31,7 +31,7 @@ import org.apache.juneau.http.exception.*;
  * Provides access to the matched path variables and path match remainder.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestPathMatch}
+ * 	<li class='link'>{@doc RestmRequestPathMatch}
  * </ul>
  */
 public class RequestPath extends TreeMap<String,String> {

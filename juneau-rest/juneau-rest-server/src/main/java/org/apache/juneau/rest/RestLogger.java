@@ -28,7 +28,7 @@ import org.apache.juneau.json.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_logger}
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+ * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
 @Deprecated

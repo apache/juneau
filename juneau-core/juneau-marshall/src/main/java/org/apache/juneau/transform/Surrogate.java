@@ -82,7 +82,7 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
+ * 	<li class='link'>{@doc SurrogateClasses}
  * </ul>
  */
 public interface Surrogate {}

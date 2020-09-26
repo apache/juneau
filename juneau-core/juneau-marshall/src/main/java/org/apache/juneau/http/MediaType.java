@@ -31,7 +31,7 @@ import org.apache.juneau.json.*;
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @BeanIgnore

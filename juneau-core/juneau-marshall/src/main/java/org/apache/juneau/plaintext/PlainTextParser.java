@@ -81,7 +81,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
 	 */
 	public PlainTextParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);

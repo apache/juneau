@@ -34,7 +34,7 @@ import org.apache.juneau.json.*;
  * <br>Subclasses MUST implement a no-arg public constructor.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+ * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
 @Deprecated

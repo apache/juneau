@@ -1,0 +1,67 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Binary Data
+
+<p>
+	The following methods are provided for accessing binary data:
+</p>
+<ul class='javatree'>
+	<li class='jc'>{@link oaj.config.Config}
+	<ul>
+		<li class='jm'>{@link oaj.config.Config#getBytes(String) getBytes(String)}
+		<li class='jm'>{@link oaj.config.Config#getBytes(String,byte[]) getBytes(String,byte[])}
+	</ul>
+</ul>
+<p>
+	Binary data can be represented in 3 formats:
+</p>
+<ul class='spaced-list'>
+	<li>BASE-64 (default)
+		<br>Example: <c><js>"Zm9vYmFycw=="</js></c>
+	<li>Hexadecimal
+		<br>Example: <c><js>"666F6F62617273"</js></c>
+	<li>Spaced hexadecimal
+		<br>Example: <c><js>"66 6F 6F 62 61 72 73"</js></c>
+</ul>
+<p>
+	The binary data format is controlled via the following setting:
+</p>
+<ul class='javatree'>
+	<li class='jf'>{@link oaj.config.Config#CONFIG_binaryFormat}
+</ul>
+<p>
+	For example:
+</p>
+<p class='bpcode w800'>
+	<ck>key</ck> = <cv>Zm9vYmFycw==</cv>
+</p>
+<p class='bpcode w800'>
+	<jk>byte</jk>[] <jv>bytes</jv> = <jv>config</jv>.getBytes(<js>"key"</js>);
+</p>
+<p>
+	Binary lines can be split up into separate lines for readability:
+</p>
+<p class='bpcode w800'>
+	<ck>key</ck> = 
+		<cv>Zm9vYm
+		Fycw==</cv>
+</p>
+<p>
+	Binary data line wrapping can be controlled via the following setting:
+</p>
+<ul class='javatree'>
+	<li class='jf'>{@link oaj.config.Config#CONFIG_binaryLineLength}
+</ul>

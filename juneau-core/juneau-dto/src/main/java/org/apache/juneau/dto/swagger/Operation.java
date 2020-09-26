@@ -125,7 +125,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")
@@ -342,7 +342,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -357,7 +357,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -489,7 +489,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -510,7 +510,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Values MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
@@ -576,7 +576,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
+	 * 	<br>Value MUST be as described under {@doc ExtSwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -642,15 +642,15 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
+	 * 		If a parameter is already defined at the {@doc ExtSwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
-	 * 		The list can use the {@doc SwaggerReferenceObject}
-	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
+	 * 		The list can use the {@doc ExtSwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc ExtSwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
@@ -685,15 +685,15 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
+	 * 		If a parameter is already defined at the {@doc ExtSwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
-	 * 		The list can use the {@doc SwaggerReferenceObject}
-	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
+	 * 		The list can use the {@doc ExtSwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc ExtSwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
@@ -716,15 +716,15 @@ public class Operation extends SwaggerElement {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
+	 * 		If a parameter is already defined at the {@doc ExtSwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
 	 * 	<li>
-	 * 		The list can use the {@doc SwaggerReferenceObject}
-	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
+	 * 		The list can use the {@doc ExtSwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc ExtSwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>

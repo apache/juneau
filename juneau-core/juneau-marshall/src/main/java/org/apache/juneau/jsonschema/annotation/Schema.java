@@ -69,8 +69,8 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerSchemaObject}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerSchemaObject}
  * </ul>
  */
 @Documented
@@ -78,7 +78,7 @@ import org.apache.juneau.oapi.*;
 public @interface Schema {
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>$ref</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * 	A JSON reference to the schema definition.
@@ -87,14 +87,14 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String $ref() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>format</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -109,12 +109,12 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
@@ -125,20 +125,20 @@ public @interface Schema {
 	String f() default "";
 
 	/**
-	 * <mk>title</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>title</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is plain text.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String title() default "";
 
 	/**
-	 * <mk>description</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -165,7 +165,7 @@ public @interface Schema {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -177,14 +177,14 @@ public @interface Schema {
 	String[] d() default {};
 
 	/**
-	 * <mk>default</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>default</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is any {@doc SimpleJson}.
+	 * 		The format is any {@doc SimplifiedJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -196,13 +196,13 @@ public @interface Schema {
 	String[] df() default {};
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -214,13 +214,13 @@ public @interface Schema {
 	String mo() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -232,13 +232,13 @@ public @interface Schema {
 	String max() default "";
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -250,13 +250,13 @@ public @interface Schema {
 	boolean emax() default false;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -268,13 +268,13 @@ public @interface Schema {
 	String min() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -286,13 +286,13 @@ public @interface Schema {
 	boolean emin() default false;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -304,13 +304,13 @@ public @interface Schema {
 	long maxl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -322,7 +322,7 @@ public @interface Schema {
 	long minl() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -336,7 +336,7 @@ public @interface Schema {
 	 * 	<li>
 	 * 		This string SHOULD be a valid regular expression.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -348,13 +348,13 @@ public @interface Schema {
 	String p() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -366,13 +366,13 @@ public @interface Schema {
 	long maxi() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is numeric.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -384,13 +384,13 @@ public @interface Schema {
 	long mini() default -1;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is boolean.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -402,14 +402,14 @@ public @interface Schema {
 	boolean ui() default false;
 
 	/**
-	 * <mk>maxProperties</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>maxProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -421,14 +421,14 @@ public @interface Schema {
 	long maxp() default -1;
 
 	/**
-	 * <mk>minProperties</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>minProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -440,7 +440,7 @@ public @interface Schema {
 	long minp() default -1;
 
 	/**
-	 * <mk>required</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>required</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * 	Determines whether this parameter is mandatory.
@@ -467,7 +467,7 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is boolean.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -479,14 +479,14 @@ public @interface Schema {
 	boolean r() default false;
 
 	/**
-	 * <mk>enum</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>enum</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} array or comma-delimited list.
+	 * 		The format is a {@doc SimplifiedJson} array or comma-delimited list.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -498,7 +498,7 @@ public @interface Schema {
 	String[] e() default {};
 
 	/**
-	 * <mk>type</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>type</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -532,12 +532,12 @@ public @interface Schema {
 	 * 			<li><js>"file"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 */
@@ -549,14 +549,14 @@ public @interface Schema {
 	String t() default "";
 
 	/**
-	 * <mk>items</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>items</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -613,70 +613,70 @@ public @interface Schema {
 	String cf() default "";
 
 	/**
-	 * <mk>allOf</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>allOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] allOf() default {};
 
 	/**
-	 * <mk>properties</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>properties</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] properties() default {};
 
 	/**
-	 * <mk>additionalProperties</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>additionalProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] additionalProperties() default {};
 
 	/**
-	 * <mk>discriminator</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>discriminator</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String discriminator() default "";
 
 	/**
-	 * <mk>readOnly</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>readOnly</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -688,35 +688,35 @@ public @interface Schema {
 	boolean ro() default false;
 
 	/**
-	 * <mk>xml</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>xml</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] xml() default {};
 
 	/**
-	 * <mk>externalDocs</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * <mk>example</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>example</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A free-form property to include an example of an instance for this schema.
@@ -727,10 +727,10 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object or plain text string.
+	 * 		The format is a {@doc SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -742,17 +742,17 @@ public @interface Schema {
 	String[] ex() default {};
 
 	/**
-	 * <mk>x-examples</mk> field of the {@doc SwaggerSchemaObject}.
+	 * <mk>x-examples</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -769,7 +769,7 @@ public @interface Schema {
 	boolean ignore() default false;
 
 	/**
-	 * Free-form value for the {@doc SwaggerSchemaObject}.
+	 * Free-form value for the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.
@@ -807,7 +807,7 @@ public @interface Schema {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -820,7 +820,7 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
@@ -908,7 +908,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

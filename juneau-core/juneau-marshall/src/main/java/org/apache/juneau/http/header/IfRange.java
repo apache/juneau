@@ -58,7 +58,7 @@ import org.apache.juneau.http.annotation.*;
  * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("If-Range")

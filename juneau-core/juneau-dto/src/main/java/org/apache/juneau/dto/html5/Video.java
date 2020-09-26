@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.embedded-content-0#the-video-element <video>}
+ * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-video-element <video>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="video")
@@ -44,7 +44,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-autoplay autoplay}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-autoplay autoplay}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-controls controls}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-controls controls}
 	 * attribute.
 	 *
 	 * <p>
@@ -78,7 +78,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-crossorigin crossorigin}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -93,7 +93,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -110,7 +110,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-loop loop} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-loop loop} attribute.
 	 *
 	 * <p>
 	 * Whether to loop the media resource.
@@ -126,7 +126,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-mediagroup mediagroup}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-mediagroup mediagroup}
 	 * attribute.
 	 *
 	 * <p>
@@ -141,7 +141,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-muted muted}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-muted muted}
 	 * attribute.
 	 *
 	 * <p>
@@ -158,7 +158,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-video-poster poster}
+	 * {@doc ExtHTML5.embedded-content-0#attr-video-poster poster}
 	 * attribute.
 	 *
 	 * <p>
@@ -173,7 +173,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-preload preload}
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-preload preload}
 	 * attribute.
 	 *
 	 * <p>
@@ -188,7 +188,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-media-src src} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-media-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -211,7 +211,7 @@ public class Video extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

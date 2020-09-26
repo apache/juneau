@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.tabular-data#the-td-element <td>}
+ * DTO for an HTML {@doc ExtHTML5.tabular-data#the-td-element <td>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="td")
@@ -40,7 +40,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-colspan colspan} attribute.
 	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
@@ -56,7 +56,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-headers headers} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-headers headers} attribute.
 	 *
 	 * <p>
 	 * The header cells for this cell.
@@ -70,7 +70,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
 	 *
 	 * <p>
 	 * Number of rows that the cell is to span.

@@ -27,8 +27,8 @@ import java.lang.annotation.*;
  * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerItemsObject}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerItemsObject}
  * </ul>
  */
 @Documented
@@ -36,13 +36,13 @@ import java.lang.annotation.*;
 public @interface SubItems {
 
 	/**
-	 * <mk>type</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>type</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -54,13 +54,13 @@ public @interface SubItems {
 	String t() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>format</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -72,13 +72,13 @@ public @interface SubItems {
 	String f() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -90,13 +90,13 @@ public @interface SubItems {
 	String cf() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -108,13 +108,13 @@ public @interface SubItems {
 	String p() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -126,13 +126,13 @@ public @interface SubItems {
 	String max() default "";
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -144,13 +144,13 @@ public @interface SubItems {
 	String min() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -162,13 +162,13 @@ public @interface SubItems {
 	String mo() default "";
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -180,13 +180,13 @@ public @interface SubItems {
 	long maxl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -198,13 +198,13 @@ public @interface SubItems {
 	long minl() default -1;
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -216,13 +216,13 @@ public @interface SubItems {
 	long maxi() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -234,13 +234,13 @@ public @interface SubItems {
 	long mini() default -1;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -252,13 +252,13 @@ public @interface SubItems {
 	boolean emax() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -270,13 +270,13 @@ public @interface SubItems {
 	boolean emin() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -288,13 +288,13 @@ public @interface SubItems {
 	boolean ui() default false;
 
 	/**
-	 * <mk>default</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>default</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -306,13 +306,13 @@ public @interface SubItems {
 	String[] df() default {};
 
 	/**
-	 * <mk>enum</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>enum</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -324,35 +324,35 @@ public @interface SubItems {
 	String[] e() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>$ref</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String $ref() default "";
 
 	/**
-	 * <mk>items</mk> field of the {@doc SwaggerItemsObject}.
+	 * <mk>items</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object.
+	 * This is a {@doc SimplifiedJson} object.
 	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
 	 */
 	String[] items() default {};
 
 	/**
-	 * Free-form value for the {@doc SwaggerItemsObject}.
+	 * Free-form value for the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of an Items object:
@@ -418,7 +418,7 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -431,7 +431,7 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

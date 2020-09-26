@@ -729,7 +729,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+	 * 	<li class='link'>{@doc RestHtmlWidgets}
 	 * </ul>
 	 */
 	public static final String HTMLDOC_widgets = PREFIX + ".widgets.lo";
@@ -775,7 +775,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
 	 * 	Can contain meta-characters per the <c>media-type</c> specification of
-	 * 	{@doc RFC2616.section14.1}
+	 * 	{@doc ExtRFC2616.section14.1}
 	 * 	<p>
 	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>

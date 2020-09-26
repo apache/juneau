@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="title,description,version,contact,license,termsOfService,*")
@@ -172,7 +172,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -187,7 +187,7 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */

@@ -27,7 +27,7 @@ import org.apache.juneau.uon.*;
  * OpenAPI part parser.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Parsers}
+ * 	<li class='link'>{@doc OpenApiParsers}
  * </ul>
  */
 @ConfigurableContext

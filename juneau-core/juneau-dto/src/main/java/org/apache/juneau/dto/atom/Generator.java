@@ -36,7 +36,7 @@ import org.apache.juneau.xml.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Atom}
+ * 	<li class='link'>{@doc DtoAtom}
  * 	<li class='jp'>{@doc package-summary.html#TOC}
  * </ul>
  */

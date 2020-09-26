@@ -66,7 +66,7 @@ public @interface ParserConfig {
 	 * 			<li><js>"BASE64"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -94,7 +94,7 @@ public @interface ParserConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -116,7 +116,7 @@ public @interface ParserConfig {
 	 * 	<li>
 	 * 		Default: 5
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -179,7 +179,7 @@ public @interface ParserConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -203,7 +203,7 @@ public @interface ParserConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -243,7 +243,7 @@ public @interface ParserConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -269,7 +269,7 @@ public @interface ParserConfig {
 	 * 	<li>
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -291,7 +291,7 @@ public @interface ParserConfig {
 	 * 	<li>
 	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

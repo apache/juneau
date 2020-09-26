@@ -24,7 +24,7 @@ import org.apache.juneau.json.*;
  * Root class for all Swagger beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 public abstract class SwaggerElement {

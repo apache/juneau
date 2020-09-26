@@ -23,7 +23,7 @@ import org.apache.juneau.html.*;
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link HtmlSerializer}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.HtmlDetails.HtmlAnnotation}
+ * 	<li class='link'>{@doc HtmlAnnotation}
  * </ul>
  */
 @Documented
@@ -182,7 +182,7 @@ public @interface Html {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

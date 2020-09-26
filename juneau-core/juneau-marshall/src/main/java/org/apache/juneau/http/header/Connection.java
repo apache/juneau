@@ -76,7 +76,7 @@ import org.apache.juneau.internal.*;
  * See section 19.6.2.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Connection")

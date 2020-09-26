@@ -87,7 +87,7 @@ import org.apache.juneau.internal.*;
  * A message with no transfer-coding is always acceptable.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("TE")

@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.tabular-data#the-th-element <th>}
+ * DTO for an HTML {@doc ExtHTML5.tabular-data#the-th-element <th>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="th")
@@ -40,7 +40,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-th-abbr abbr} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-th-abbr abbr} attribute.
 	 *
 	 * <p>
 	 * Alternative label to use for the header cell when referencing the cell in other contexts.
@@ -54,7 +54,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-colspan colspan} attribute.
 	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
@@ -70,7 +70,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-headers headers} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-headers headers} attribute.
 	 *
 	 * <p>
 	 * The headers for this cell.
@@ -84,7 +84,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
 	 *
 	 * <p>
 	 * Number of rows that the cell is to span.
@@ -100,7 +100,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-th-scope scope} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-th-scope scope} attribute.
 	 *
 	 * <p>
 	 * Specifies which cells the header cell applies to.
@@ -114,7 +114,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-th-sorted sorted}  attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-th-sorted sorted}  attribute.
 	 *
 	 * <p>
 	 * Column sort direction and ordinality.

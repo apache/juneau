@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * A subclass of widgets for rendering menu items with drop-down windows.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
+ * 	<li class='link'>{@doc RestHtmlPredefinedWidgets}
  * </ul>
  */
 public abstract class MenuItemWidget extends Widget {

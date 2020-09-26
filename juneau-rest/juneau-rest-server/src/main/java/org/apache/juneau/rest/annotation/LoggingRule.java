@@ -40,12 +40,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String codes() default "*";
@@ -68,12 +68,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String debugOnly() default "false";
@@ -99,12 +99,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String disabled() default "false";
@@ -123,12 +123,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String exceptions() default "";
@@ -150,12 +150,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String level() default "";
@@ -173,12 +173,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String req() default "short";
@@ -196,12 +196,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String res() default "short";
@@ -211,12 +211,12 @@ public @interface LoggingRule {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public String verbose() default "false";

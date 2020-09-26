@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.text-level-semantics#the-time-element <time>}
+ * DTO for an HTML {@doc ExtHTML5.text-level-semantics#the-time-element <time>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="time")
@@ -40,7 +40,7 @@ public class Time extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.text-level-semantics#attr-time-datetime datetime}
+	 * {@doc ExtHTML5.text-level-semantics#attr-time-datetime datetime}
 	 * attribute.
 	 *
 	 * <p>

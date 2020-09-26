@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  * Sets the <c>Content-Type</c> response header to whatever was set via {@link RestResponse#setContentType(String)}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
+ * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
 public final class InputStreamHandler implements ResponseHandler {

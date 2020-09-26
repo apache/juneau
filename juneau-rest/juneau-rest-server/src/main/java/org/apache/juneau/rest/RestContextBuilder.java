@@ -87,7 +87,7 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestContext}
+ * 	<li class='link'>{@doc RestContext}
  * </ul>
  */
 @FluentSetters(ignore={"set"})
@@ -608,7 +608,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
 	 * </ul>
 	 *
@@ -629,7 +629,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
 	 * </ul>
 	 *
@@ -650,7 +650,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * 	<li class='jf'>{@link RestContext#REST_callLoggerConfig}
 	 * </ul>
 	 *
@@ -1843,7 +1843,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

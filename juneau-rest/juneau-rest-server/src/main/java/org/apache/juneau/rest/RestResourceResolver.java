@@ -37,7 +37,7 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
+ * 	<li class='link'>{@doc RestResourceResolvers}
  * </ul>
  */
 public interface RestResourceResolver extends ResourceResolver {

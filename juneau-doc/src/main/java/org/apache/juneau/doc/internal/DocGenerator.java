@@ -79,7 +79,7 @@ public class DocGenerator {
 				toc
 					.append("\t<li><p class='toc2'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a>").append(pf1.tags.isEmpty() ? "" : ("<span class='update'>"+pf1.tags+"</span>")).append("</p>\n");
 				ds
-					.addLink(pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
+					.addLink(pf1.id, pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
 				contents
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
@@ -96,7 +96,7 @@ public class DocGenerator {
 						toc
 							.append("\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.fullId).append("'>").append(pf2.title).append("</a>").append(pf2.tags.isEmpty() ? "" : ("<span class='update'>"+pf2.tags+"</span>")).append("</p>\n");
 						ds
-							.addLink(pf2.fullId, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
+							.addLink(pf2.id, pf2.fullId, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
 						contents
 							.append("\n")
 							.append("<!-- ==================================================================================================== -->\n\n")
@@ -112,7 +112,7 @@ public class DocGenerator {
 								toc
 									.append("\t\t\t<li><p><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.fullId).append("'>").append(pf3.title).append("</a>").append(pf3.tags.isEmpty() ? "" : ("<span class='update'>"+pf3.tags+"</span>")).append("</p>\n");
 								ds
-									.addLink(pf3.fullId, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
+									.addLink(pf3.id, pf3.fullId, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")

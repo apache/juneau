@@ -71,7 +71,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -108,7 +108,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -131,7 +131,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -154,7 +154,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -171,7 +171,7 @@ public @interface JsonSchemaConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Schema[] applySchema() default {};
@@ -207,7 +207,7 @@ public @interface JsonSchemaConfig {
 	 * 		Keys are the class.
 	 * 		<br>Values are Simple-JSON objects.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -227,7 +227,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li>
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -262,7 +262,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>

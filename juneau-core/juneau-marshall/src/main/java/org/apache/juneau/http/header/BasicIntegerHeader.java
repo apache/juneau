@@ -31,7 +31,7 @@ import org.apache.juneau.http.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header(type="integer",format="int32")

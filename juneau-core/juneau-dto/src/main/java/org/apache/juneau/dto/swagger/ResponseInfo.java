@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="description,schema,headers,x-example,examples,*")
@@ -155,7 +155,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Property value is required.
 	 * @return This object (for method chaining).
 	 */
@@ -187,7 +187,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		If this field does not exist, it means no content is returned as part of the response.
 	 * 	<li>
-	 * 		As an extension to the {@doc SwaggerSchemaObject Schema Object},
+	 * 		As an extension to the {@doc ExtSwaggerSchemaObject Schema Object},
 	 * 		its root type value may also be <js>"file"</js>.
 	 * 	<li>
 	 * 		This SHOULD be accompanied by a relevant produces mime-type.
@@ -209,7 +209,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<li>
 	 * 		If this field does not exist, it means no content is returned as part of the response.
 	 * 	<li>
-	 * 		As an extension to the {@doc SwaggerSchemaObject Schema Object},
+	 * 		As an extension to the {@doc ExtSwaggerSchemaObject Schema Object},
 	 * 		its root type value may also be <js>"file"</js>.
 	 * 	<li>
 	 * 		This SHOULD be accompanied by a relevant produces mime-type.

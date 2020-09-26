@@ -78,7 +78,7 @@ import org.apache.juneau.http.annotation.*;
  * Cache-Control header field (section 14.9).
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Expires")

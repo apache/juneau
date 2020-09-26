@@ -19,7 +19,7 @@ import org.apache.juneau.httppart.bean.*;
  * Represents the metadata about an {@link Request}-annotated argument of a method on a REST proxy class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+ * 	<li class='link'>{@doc RestcProxies}
  * </ul>
  */
 public final class RemoteMethodBeanArg {

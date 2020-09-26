@@ -53,7 +53,7 @@ public @interface SoapXmlConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	SoapXml[] applySoapXml() default {};

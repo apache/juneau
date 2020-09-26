@@ -91,8 +91,8 @@ import org.apache.juneau.serializer.*;
  * The normal object representation of an object.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
- * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
+ * 	<li class='link'>{@doc PojoSwaps}
+ * 	<li class='link'>{@doc SwapAnnotation}
  * </ul>
  *
  * @param <T> The normal form of the class.
@@ -155,7 +155,7 @@ public abstract class PojoSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
 	 */
@@ -176,7 +176,7 @@ public abstract class PojoSwap<T,S> {
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
+	 * 	<li class='link'>{@doc TemplatedSwaps}
 	 * </ul>
 	 *
 	 * @return Additional context information, or <jk>null</jk> if not specified.
@@ -189,7 +189,7 @@ public abstract class PojoSwap<T,S> {
 	 * Sets the media types that this swap is associated with.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
 	 * </ul>
 	 *
 	 * @param mediaTypes The media types that this swap is associated with.
@@ -204,7 +204,7 @@ public abstract class PojoSwap<T,S> {
 	 * Sets the template string on this swap.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
+	 * 	<li class='link'>{@doc TemplatedSwaps}
 	 * </ul>
 	 *
 	 * @param template The template string on this swap.

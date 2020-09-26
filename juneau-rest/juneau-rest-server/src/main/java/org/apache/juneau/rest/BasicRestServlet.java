@@ -150,7 +150,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServlet}
+ * 	<li class='link'>{@doc BasicRestServlet}
  * </ul>
  */
 @Rest(

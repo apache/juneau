@@ -602,7 +602,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriContext}
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -638,7 +638,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriRelativity}
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
 	 * @param value
@@ -678,7 +678,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_uriResolution}
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 *
 	 * @param value

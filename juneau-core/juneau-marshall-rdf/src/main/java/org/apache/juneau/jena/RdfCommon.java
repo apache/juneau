@@ -220,13 +220,13 @@ public interface RdfCommon {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+	 * 		{@doc ExtARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+	 * 		{@doc ExtARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+	 * 		{@doc ExtARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_errorMode = PREFIX + ".jena.rdfXml.error-mode.s";
@@ -254,7 +254,7 @@ public interface RdfCommon {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+	 * 		{@doc ExtARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_embedding = PREFIX + ".jena.rdfXml.embedding.b";
@@ -286,9 +286,9 @@ public interface RdfCommon {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li>
-	 * 		{@doc ARP/ARPErrorNumbers.html ARPErrorNumbers}
+	 * 		{@doc ExtARP/ARPErrorNumbers.html ARPErrorNumbers}
 	 * 	<li>
-	 * 		{@doc ARP/ARPOptions.html#setErrorMode(int,%20int) ARPOptions.setErrorMode(int, int)}
+	 * 		{@doc ExtARP/ARPOptions.html#setErrorMode(int,%20int) ARPOptions.setErrorMode(int, int)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_err_ = PREFIX + ".jena.rdfXml.ERR_";

@@ -265,7 +265,7 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link oajr.RestContent#REST_context REST_context}/{@link oajr.annotation.Rest#context() @Rest(context)} setting to allow you to extend the {@link oajr.RestContext}
+		New {@link oajr.RestContext#REST_context REST_context}/{@link oajr.annotation.Rest#context() @Rest(context)} setting to allow you to extend the {@link oajr.RestContext}
 		class.
 	<li>
 		{@link oajr.annotation.Rest}-annotated classes can now implement the following interfaces directly instead of having
@@ -275,39 +275,6 @@
 			<li class='jic'>{@link oajr.RestInfoProvider} - Normally defined through {@link oajr.annotation.Rest#infoProvider() @Rest.infoProvider()}.
 			<li class='jic'>{@link oajr.RestCallLogger} - Normally defined through {@link oajr.annotation.Rest#callLogger() @Rest.callLogger()}.
 			<li class='jic'>{@link oaj.utils.ClasspathResourceFinder} - Normally defined through {@link oajr.annotation.Rest#classpathResourceFinder() @Rest.classpathResourceFinder()}.
-		</ul>
-	<li>
-		{@link oajr.RestServlet} and {@link oajr.BasicRest} now implement the {@link oajr.RestCallHandler}, {@link oajr.RestInfoProvider}, {@link oajr.RestCallLogger}, {@link oajr.RestResourceResolver},
-		and {@link oaj.utils.ClasspathResourceFinder} interfaces directly and provides the same functionality as {@link oajr.BasicRestCallHandler}, 
-		{@link oajr.BasicRestInfoProvider}, {@link oajr.BasicRestCallLogger}, {@link oajr.BasicRestResourceResolver}, and {@link oaj.utils.ClasspathResourceFinderBasic}.  
-		
-		This makes it easier to tweak these methods without having to implement your own classes.
-		<br>The methods added for {@link oajr.RestCallHandler} are:
-		<ul>
-			<li class='jac'>{@link oajr.RestServlet}
-			<ul>
-				<li class='jm'>{@link oajr.RestServlet#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oajr.RestServlet#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oajr.RestServlet#createRequest(RestCall) createRequest(RestCall)}
-				<li class='jm'>{@link oajr.RestServlet#createResponse(RestCall) createResponse(RestCall)}
-				<li class='jm'>{@link oajr.RestServlet#handleResponse(RestCall) handleResponse(RestCall)}
-				<li class='jm'>{@link oajr.RestServlet#handleNotFound(RestCall) handleNotFound(RestCall)}
-				<li class='jm'>{@link oajr.RestServlet#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
-				<li class='jm'>{@link oajr.RestServlet#convertThrowable(Throwable) throwable(Throwable)}
-				<li class='jm'>{@link oajr.RestServlet#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
-			</ul>
-			<li class='jac'>{@link oajr.BasicRest}
-			<ul>
-				<li class='jm'>{@link oajr.BasicRest#execute(HttpServletRequest, HttpServletResponse) execute(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oajr.BasicRest#createCall(HttpServletRequest, HttpServletResponse) createCall(HttpServletRequest, HttpServletResponse)}
-				<li class='jm'>{@link oajr.BasicRest#createRequest(RestCall) createRequest(RestCall)}
-				<li class='jm'>{@link oajr.BasicRest#createResponse(RestCall) createResponse(RestCall)}
-				<li class='jm'>{@link oajr.BasicRest#handleResponse(RestCall) handleResponse(RestCall)}
-				<li class='jm'>{@link oajr.BasicRest#handleNotFound(RestCall) handleNotFound(RestCall)}
-				<li class='jm'>{@link oajr.BasicRest#handleError(RestCall,Throwable) handleError(RestCall,Throwable)}
-				<li class='jm'>{@link oajr.BasicRest#convertThrowable(Throwable) throwable(Throwable)}
-				<li class='jm'>{@link oajr.BasicRest#getSessionObjects(RestRequest req, RestResponse res) getSessionObjects(RestRequest,RestResponse)}
-			</ul>
 		</ul>
 		<br>The methods added for {@link oajr.RestInfoProvider} are:
 		<ul>
@@ -462,7 +429,7 @@
 	}
 		</p>
 	<li>
-		Improved {@link oajr.annotation.RestMethod#REST_messages REST_messages} support (mostly bug fixes).
+		Improved {@link oajr.RestContext#REST_messages REST_messages} support (mostly bug fixes).
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

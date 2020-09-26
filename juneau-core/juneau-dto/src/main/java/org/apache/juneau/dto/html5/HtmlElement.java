@@ -33,7 +33,7 @@ import org.apache.juneau.xml.annotation.*;
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)
@@ -140,7 +140,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.editing#the-accesskey-attribute accesskey}
+	 * {@doc ExtHTML5.editing#the-accesskey-attribute accesskey}
 	 * attribute.
 	 *
 	 * @param accesskey The new value for this attribute.
@@ -152,7 +152,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#classes class} attribute.
+	 * {@doc ExtHTML5.dom#classes class} attribute.
 	 *
 	 * @param _class The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -163,7 +163,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.editing#attr-contenteditable contenteditable}
+	 * {@doc ExtHTML5.editing#attr-contenteditable contenteditable}
 	 * attribute.
 	 *
 	 * @param contenteditable The new value for this attribute.
@@ -176,7 +176,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#the-dir-attribute dir} attribute.
+	 * {@doc ExtHTML5.dom#the-dir-attribute dir} attribute.
 	 *
 	 * @param dir The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -187,7 +187,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.editing#the-hidden-attribute hidden} attribute.
+	 * {@doc ExtHTML5.editing#the-hidden-attribute hidden} attribute.
 	 *
 	 * @param hidden
 	 * 	The new value for this attribute.
@@ -200,7 +200,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#the-id-attribute id} attribute.
+	 * {@doc ExtHTML5.dom#the-id-attribute id} attribute.
 	 *
 	 * @param id The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -211,7 +211,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#attr-lang lang} attribute.
+	 * {@doc ExtHTML5.dom#attr-lang lang} attribute.
 	 *
 	 * @param lang The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -222,7 +222,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onabort onabort} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onabort onabort} attribute.
 	 *
 	 * @param onabort The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -233,7 +233,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onblur onblur} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onblur onblur} attribute.
 	 *
 	 * @param onblur The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -244,7 +244,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oncancel oncancel} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-oncancel oncancel} attribute.
 	 *
 	 * @param oncancel The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -255,7 +255,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oncanplay oncanplay} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-oncanplay oncanplay} attribute.
 	 *
 	 * @param oncanplay The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -266,7 +266,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oncanplaythrough oncanplaythrough}
+	 * {@doc ExtHTML5.webappapis#handler-oncanplaythrough oncanplaythrough}
 	 * attribute.
 	 *
 	 * @param oncanplaythrough The new value for this attribute.
@@ -278,7 +278,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onchange onchange} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onchange onchange} attribute.
 	 *
 	 * @param onchange The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -289,7 +289,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onclick onclick} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onclick onclick} attribute.
 	 *
 	 * @param onclick The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -300,7 +300,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oncuechange oncuechange}
+	 * {@doc ExtHTML5.webappapis#handler-oncuechange oncuechange}
 	 * attribute.
 	 *
 	 * @param oncuechange The new value for this attribute.
@@ -312,7 +312,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-ondblclick ondblclick} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-ondblclick ondblclick} attribute.
 	 *
 	 * @param ondblclick The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -323,7 +323,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-ondurationchange ondurationchange}
+	 * {@doc ExtHTML5.webappapis#handler-ondurationchange ondurationchange}
 	 * attribute.
 	 *
 	 * @param ondurationchange The new value for this attribute.
@@ -335,7 +335,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onemptied onemptied} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onemptied onemptied} attribute.
 	 *
 	 * @param onemptied The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -346,7 +346,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onended onended} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onended onended} attribute.
 	 *
 	 * @param onended The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -357,7 +357,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onerror onerror} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onerror onerror} attribute.
 	 *
 	 * @param onerror The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -368,7 +368,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onfocus onfocus} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onfocus onfocus} attribute.
 	 *
 	 * @param onfocus The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -379,7 +379,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oninput oninput} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-oninput oninput} attribute.
 	 *
 	 * @param oninput The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -390,7 +390,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-oninvalid oninvalid} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-oninvalid oninvalid} attribute.
 	 *
 	 * @param oninvalid The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -401,7 +401,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onkeydown onkeydown} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onkeydown onkeydown} attribute.
 	 *
 	 * @param onkeydown The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -412,7 +412,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onkeypress onkeypress} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onkeypress onkeypress} attribute.
 	 *
 	 * @param onkeypress The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -423,7 +423,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onkeyup onkeyup} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onkeyup onkeyup} attribute.
 	 *
 	 * @param onkeyup The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -434,7 +434,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onload onload} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onload onload} attribute.
 	 *
 	 * @param onload The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -445,7 +445,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onloadeddata onloadeddata}
+	 * {@doc ExtHTML5.webappapis#handler-onloadeddata onloadeddata}
 	 * attribute.
 	 *
 	 * @param onloadeddata The new value for this attribute.
@@ -457,7 +457,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onloadedmetadata onloadedmetadata}
+	 * {@doc ExtHTML5.webappapis#handler-onloadedmetadata onloadedmetadata}
 	 * attribute.
 	 *
 	 * @param onloadedmetadata The new value for this attribute.
@@ -469,7 +469,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onloadstart onloadstart}
+	 * {@doc ExtHTML5.webappapis#handler-onloadstart onloadstart}
 	 * attribute.
 	 *
 	 * @param onloadstart The new value for this attribute.
@@ -481,7 +481,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmousedown onmousedown}
+	 * {@doc ExtHTML5.webappapis#handler-onmousedown onmousedown}
 	 * attribute.
 	 *
 	 * @param onmousedown The new value for this attribute.
@@ -493,7 +493,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmouseenter onmouseenter} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onmouseenter onmouseenter} attribute.
 	 *
 	 * @param onmouseenter The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -504,7 +504,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmouseleave onmouseleave}
+	 * {@doc ExtHTML5.webappapis#handler-onmouseleave onmouseleave}
 	 * attribute.
 	 *
 	 * @param onmouseleave The new value for this attribute.
@@ -516,7 +516,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmousemove onmousemove}
+	 * {@doc ExtHTML5.webappapis#handler-onmousemove onmousemove}
 	 * attribute.
 	 *
 	 * @param onmousemove The new value for this attribute.
@@ -528,7 +528,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmouseout onmouseout} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onmouseout onmouseout} attribute.
 	 *
 	 * @param onmouseout The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -539,7 +539,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmouseover onmouseover}
+	 * {@doc ExtHTML5.webappapis#handler-onmouseover onmouseover}
 	 * attribute.
 	 *
 	 * @param onmouseover The new value for this attribute.
@@ -551,7 +551,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmouseup onmouseup} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onmouseup onmouseup} attribute.
 	 *
 	 * @param onmouseup The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -562,7 +562,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onmousewheel onmousewheel}
+	 * {@doc ExtHTML5.webappapis#handler-onmousewheel onmousewheel}
 	 * attribute.
 	 *
 	 * @param onmousewheel The new value for this attribute.
@@ -574,7 +574,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onpause onpause} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onpause onpause} attribute.
 	 *
 	 * @param onpause The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -585,7 +585,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onplay onplay} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onplay onplay} attribute.
 	 *
 	 * @param onplay The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -596,7 +596,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onplaying onplaying} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onplaying onplaying} attribute.
 	 *
 	 * @param onplaying The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -607,7 +607,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onprogress onprogress} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onprogress onprogress} attribute.
 	 *
 	 * @param onprogress The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -618,7 +618,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onratechange onratechange}
+	 * {@doc ExtHTML5.webappapis#handler-onratechange onratechange}
 	 * attribute.
 	 *
 	 * @param onratechange The new value for this attribute.
@@ -630,7 +630,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onreset onreset} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onreset onreset} attribute.
 	 *
 	 * @param onreset The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -641,7 +641,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onresize onresize} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onresize onresize} attribute.
 	 *
 	 * @param onresize The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -652,7 +652,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onscroll onscroll} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onscroll onscroll} attribute.
 	 *
 	 * @param onscroll The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -663,7 +663,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onseeked onseeked} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onseeked onseeked} attribute.
 	 *
 	 * @param onseeked The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -674,7 +674,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onseeking onseeking} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onseeking onseeking} attribute.
 	 *
 	 * @param onseeking The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -685,7 +685,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onselect onselect} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onselect onselect} attribute.
 	 *
 	 * @param onselect The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -696,7 +696,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onshow onshow} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onshow onshow} attribute.
 	 *
 	 * @param onshow The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -707,7 +707,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onstalled onstalled} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onstalled onstalled} attribute.
 	 *
 	 * @param onstalled The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -718,7 +718,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onsubmit onsubmit} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onsubmit onsubmit} attribute.
 	 *
 	 * @param onsubmit The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -729,7 +729,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onsuspend onsuspend} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onsuspend onsuspend} attribute.
 	 *
 	 * @param onsuspend The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -740,7 +740,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-ontimeupdate ontimeupdate}
+	 * {@doc ExtHTML5.webappapis#handler-ontimeupdate ontimeupdate}
 	 * attribute.
 	 *
 	 * @param ontimeupdate The new value for this attribute.
@@ -752,7 +752,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-ontoggle ontoggle} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-ontoggle ontoggle} attribute.
 	 *
 	 * @param ontoggle The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -763,7 +763,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onvolumechange onvolumechange}
+	 * {@doc ExtHTML5.webappapis#handler-onvolumechange onvolumechange}
 	 * attribute.
 	 *
 	 * @param onvolumechange The new value for this attribute.
@@ -775,7 +775,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-onwaiting onwaiting} attribute.
+	 * {@doc ExtHTML5.webappapis#handler-onwaiting onwaiting} attribute.
 	 *
 	 * @param onwaiting The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -786,7 +786,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.editing#attr-spellcheck spellcheck} attribute.
+	 * {@doc ExtHTML5.editing#attr-spellcheck spellcheck} attribute.
 	 *
 	 * @param spellcheck
 	 * 	The new value for this attribute.
@@ -799,7 +799,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#the-style-attribute style} attribute.
+	 * {@doc ExtHTML5.dom#the-style-attribute style} attribute.
 	 *
 	 * @param style The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -810,7 +810,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.editing#attr-tabindex tabindex} attribute.
+	 * {@doc ExtHTML5.editing#attr-tabindex tabindex} attribute.
 	 *
 	 * @param tabindex
 	 * 	The new value for this attribute.
@@ -823,7 +823,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#attr-title title} attribute.
+	 * {@doc ExtHTML5.dom#attr-title title} attribute.
 	 *
 	 * @param title The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -834,7 +834,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * {@doc HTML5.dom#attr-translate translate} attribute.
+	 * {@doc ExtHTML5.dom#attr-translate translate} attribute.
 	 *
 	 * @param translate
 	 * 	The new value for this attribute.

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+ * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  */
 public interface RestInfoProvider {

@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+ * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  */
 public class BasicRestInfoProvider implements RestInfoProvider {

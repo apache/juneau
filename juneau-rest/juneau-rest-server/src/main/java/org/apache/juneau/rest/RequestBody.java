@@ -36,7 +36,7 @@ import org.apache.juneau.rest.util.*;
  * Contains the body of the HTTP request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestBody}
+ * 	<li class='link'>{@doc RestmRequestBody}
  * </ul>
  */
 @SuppressWarnings("unchecked")

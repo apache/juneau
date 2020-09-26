@@ -50,8 +50,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerLicenseObject}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerLicenseObject}
  * </ul>
  */
 @Documented
@@ -59,33 +59,33 @@ import java.lang.annotation.*;
 public @interface License {
 
 	/**
-	 * <mk>name</mk> field of the {@doc SwaggerLicenseObject}.
+	 * <mk>name</mk> field of the {@doc ExtSwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the {@doc SwaggerLicenseObject}.
+	 * <mk>url</mk> field of the {@doc ExtSwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String url() default "";
 
 	/**
-	 * Free-form value for the {@doc SwaggerLicenseObject}.
+	 * Free-form value for the {@doc ExtSwaggerLicenseObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.
@@ -134,7 +134,7 @@ public @interface License {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -147,7 +147,7 @@ public @interface License {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

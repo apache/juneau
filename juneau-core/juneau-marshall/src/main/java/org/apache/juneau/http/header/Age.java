@@ -54,7 +54,7 @@ import org.apache.juneau.http.annotation.*;
  * Caches SHOULD use an arithmetic type of at least 31 bits of range.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Age")

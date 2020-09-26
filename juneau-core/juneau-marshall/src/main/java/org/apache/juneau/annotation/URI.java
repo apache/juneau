@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * This annotation allows you to identify other classes that return URIs via <c>toString()</c> as URI objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.URIs}
+ * 	<li class='link'>{@doc MarshallingUris}
  * </ul>
  */
 @Documented
@@ -113,7 +113,7 @@ public @interface URI {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

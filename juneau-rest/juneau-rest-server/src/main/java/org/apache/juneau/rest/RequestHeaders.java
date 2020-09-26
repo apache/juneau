@@ -36,7 +36,7 @@ import org.apache.juneau.http.header.Date;
  * Entries are stored in a case-insensitive map.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestHeaders}
+ * 	<li class='link'>{@doc RestmRequestHeaders}
  * </ul>
  */
 public class RequestHeaders extends TreeMap<String,String[]> {

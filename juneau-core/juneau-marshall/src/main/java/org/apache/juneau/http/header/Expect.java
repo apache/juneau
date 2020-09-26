@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * See section 8.2.3 for the use of the 100 (continue) status.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Expect")

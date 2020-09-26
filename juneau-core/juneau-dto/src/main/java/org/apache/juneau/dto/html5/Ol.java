@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.grouping-content#the-ol-element <ol>}
+ * DTO for an HTML {@doc ExtHTML5.grouping-content#the-ol-element <ol>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="ol")
@@ -40,7 +40,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.grouping-content#attr-ol-reversed reversed}
+	 * {@doc ExtHTML5.grouping-content#attr-ol-reversed reversed}
 	 * attribute.
 	 *
 	 * <p>
@@ -57,7 +57,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.grouping-content#attr-ol-start start} attribute.
+	 * {@doc ExtHTML5.grouping-content#attr-ol-start start} attribute.
 	 *
 	 * <p>
 	 * Ordinal value of the first item.
@@ -73,7 +73,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.grouping-content#attr-ol-type type} attribute.
+	 * {@doc ExtHTML5.grouping-content#attr-ol-type type} attribute.
 	 *
 	 * <p>
 	 * Kind of list marker.

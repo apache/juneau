@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
  * A subclass of HTML elements that contain only other elements, not text.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 public class HtmlElementContainer extends HtmlElement {

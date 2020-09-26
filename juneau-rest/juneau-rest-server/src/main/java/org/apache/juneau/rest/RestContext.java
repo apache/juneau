@@ -84,7 +84,7 @@ import org.apache.juneau.xml.*;
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestContext}
+ * 	<li class='link'>{@doc RestContext}
  * </ul>
  */
 @ConfigurableContext(nocache=true)
@@ -344,7 +344,7 @@ public class RestContext extends BeanContext {
 	 * pages.
 	 *
 	 * <p>
-	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
+	 * Note that per the {@doc ExtRFC2616.section9 HTTP specification}, special care should
 	 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
 	 *
 	 *
@@ -490,7 +490,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String REST_callLogger = PREFIX + ".callLogger.o";
@@ -567,7 +567,7 @@ public class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String REST_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
@@ -680,7 +680,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Instantiation.Children}
+	 * 	<li class='link'>{@doc RestChildren}
 	 * </ul>
 	 */
 	public static final String REST_children = PREFIX + ".children.lo";
@@ -947,7 +947,7 @@ public class RestContext extends BeanContext {
 	 * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
 	 * 	<li class='jc'>{@link Queryable} - Allows query/view/sort functions to be performed on POJOs.
 	 * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
-	 * 	<li class='link'>{@doc juneau-rest-server.Converters}
+	 * 	<li class='link'>{@doc RestConverters}
 	 * </ul>
 	 *
 	 * <ul class='notes'>
@@ -1189,7 +1189,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Encoders}
+	 * 	<li class='link'>{@doc RestEncoders}
 	 * </ul>
 	 */
 	public static final String REST_encoders = PREFIX + ".encoders.lo";
@@ -1275,7 +1275,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Guards}
+	 * 	<li class='link'>{@doc RestGuards}
 	 * </ul>
 	 */
 	public static final String REST_guards = PREFIX + ".guards.lo";
@@ -1556,7 +1556,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link Messages}
-	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
+	 * 	<li class='link'>{@doc RestMessages}
 	 * </ul>
 	 */
 	public static final String REST_messages = PREFIX + ".messages.lo";
@@ -1812,7 +1812,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Parsers}
+	 * 	<li class='link'>{@doc RestParsers}
 	 * </ul>
 	 */
 	public static final String REST_parsers = PREFIX + ".parsers.lo";
@@ -2403,8 +2403,8 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
-	 * 	<li class='link'>{@doc juneau-rest-server.Injection}
+	 * 	<li class='link'>{@doc RestResourceResolvers}
+	 * 	<li class='link'>{@doc RestInjection}
 	 * </ul>
 	 */
 	public static final String REST_resourceResolver = PREFIX + ".resourceResolver.o";
@@ -2612,7 +2612,7 @@ public class RestContext extends BeanContext {
 	 * 	<li>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestContext#REST_rolesDeclared}.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Role guards defined at both the class and method level must both pass.
@@ -2720,7 +2720,7 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
+	 * 	<li class='link'>{@doc RestSerializers}
 	 * </ul>
 	 * <p>
 	 */
@@ -2886,7 +2886,7 @@ public class RestContext extends BeanContext {
 	 * </ol>
 	 *
 	 * <p>
-	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimpleJson} object.
+	 * Response headers can be specified for served files by adding a 3rd section that consists of a {@doc SimplifiedJson} object.
 	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(
 	 * 		staticFiles={
@@ -3029,7 +3029,7 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -4188,8 +4188,8 @@ public class RestContext extends BeanContext {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} - For adding custom vars.
-	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
-	 * 	<li class='link'>{@doc DefaultRestSvlVariables}
+	 * 	<li class='link'>{@doc RestSvlVariables}
+	 * 	<li class='link'>{@doc RestSvlVariables}
 	 * </ul>
 	 *
 	 * @return The var resolver in use by this resource.

@@ -31,7 +31,7 @@ package org.apache.juneau.rest;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.Children}
+ * 	<li class='link'>{@doc RestChildren}
  * </ul>
  */
 public class RestChild {

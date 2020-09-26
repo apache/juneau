@@ -25,7 +25,7 @@ Read-only Configs
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Create a read-only config</jc>
-	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).readOnly().build();
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).readOnly().build();
 </p>
 <p>
 	This causes all methods that make modifications to throw {@link java.lang.UnsupportedOperationException}.

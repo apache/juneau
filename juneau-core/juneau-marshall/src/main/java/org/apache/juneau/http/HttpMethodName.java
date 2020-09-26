@@ -16,7 +16,7 @@ package org.apache.juneau.http;
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  *
  * @deprecated Use {@link HttpMethod}.
@@ -24,28 +24,28 @@ package org.apache.juneau.http;
 @Deprecated
 public class HttpMethodName {
 
-	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
+	/** {@doc ExtRFC2616.section9#sec9.2 OPTIONS} */
 	public static final String OPTIONS = "OPTIONS";
 
-	/** {@doc RFC2616.section9#sec9.3 GET} */
+	/** {@doc ExtRFC2616.section9#sec9.3 GET} */
 	public static final String GET = "GET";
 
-	/** {@doc RFC2616.section9#sec9.4 HEAD} */
+	/** {@doc ExtRFC2616.section9#sec9.4 HEAD} */
 	public static final String HEAD = "HEAD";
 
-	/** {@doc RFC2616.section9#sec9.5 POST} */
+	/** {@doc ExtRFC2616.section9#sec9.5 POST} */
 	public static final String POST = "POST";
 
-	/** {@doc RFC2616.section9#sec9.6 PUT} */
+	/** {@doc ExtRFC2616.section9#sec9.6 PUT} */
 	public static final String PUT = "PUT";
 
-	/** {@doc RFC2616.section9#sec9.7 DELETE} */
+	/** {@doc ExtRFC2616.section9#sec9.7 DELETE} */
 	public static final String DELETE = "DELETE";
 
-	/** {@doc RFC2616.section9#sec9.8 TRACE} */
+	/** {@doc ExtRFC2616.section9#sec9.8 TRACE} */
 	public static final String TRACE = "TRACE";
 
-	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
+	/** {@doc ExtRFC2616.section9#sec9.9 CONNECT} */
 	public static final String CONNECT = "CONNECT";
 
 	/** {@doc https://tools.ietf.org/html/rfc5789 PATCH} */

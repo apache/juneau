@@ -26,7 +26,7 @@ import org.apache.juneau.svl.*;
  * Wraps the request attributes in a {@link Map} interface and provides several convenience methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
+ * 	<li class='link'>{@doc RestmRequestAttributes}
  * </ul>
  */
 public class RequestAttributes extends OMap {

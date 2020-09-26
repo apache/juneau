@@ -29,7 +29,7 @@ import org.apache.juneau.transform.*;
  * This annotation can be applied to classes and interfaces.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanAnnotation}
+ * 	<li class='link'>{@doc BeanAnnotation}
  * </ul>
  */
 @Documented
@@ -302,7 +302,7 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

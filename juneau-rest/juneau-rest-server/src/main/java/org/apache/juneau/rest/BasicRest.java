@@ -41,7 +41,7 @@ import org.apache.juneau.http.exception.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRest}
+ * 	<li class='link'>{@doc BasicRest}
  * </ul>
  */
 @Rest(

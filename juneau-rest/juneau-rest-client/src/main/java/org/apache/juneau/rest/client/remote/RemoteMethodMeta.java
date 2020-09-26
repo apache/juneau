@@ -33,7 +33,7 @@ import org.apache.juneau.reflect.*;
  * Captures the information in {@link RemoteMethod @RemoteMethod} annotations for caching and reuse.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+ * 	<li class='link'>{@doc RestcProxies}
  * </ul>
  */
 public class RemoteMethodMeta {

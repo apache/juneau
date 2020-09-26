@@ -31,7 +31,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
+ * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
  * </ul>
  */
 @Bean(bpi="name,description", fluentSetters=true)

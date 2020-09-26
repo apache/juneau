@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * Additional information about the encoding parameters MAY be provided.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header(name="Content-Encoding",_enum={"gzip","compress","deflate","identity","other"})

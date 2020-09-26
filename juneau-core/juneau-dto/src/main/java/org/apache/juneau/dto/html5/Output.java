@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-output-element <output>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-output-element <output>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="output")
@@ -40,7 +40,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-output-for for} attribute.
+	 * {@doc ExtHTML5.forms#attr-output-for for} attribute.
 	 *
 	 * <p>
 	 * Specifies controls from which the output was calculated.
@@ -54,7 +54,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -68,7 +68,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.

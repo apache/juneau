@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.embedded-content-0#the-source-element <source>}
+ * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-source-element <source>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="source")
@@ -46,7 +46,7 @@ public class Source extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-source-src src} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-source-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -69,7 +69,7 @@ public class Source extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-source-type type} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-source-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.

@@ -88,7 +88,7 @@ import org.apache.juneau.utils.*;
  * </table>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestRequest}
+ * 	<li class='link'>{@doc RestmRestRequest}
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
@@ -288,7 +288,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
+	 * 	<li class='link'>{@doc RestConfigurableProperties}
 	 * </ul>
 	 *
 	 * @return The properties active for this request.
@@ -357,7 +357,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestHeaders}
+	 * 	<li class='link'>{@doc RestmRequestHeaders}
 	 * </ul>
 	 *
 	 * @return
@@ -524,7 +524,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestAttributes}
+	 * 	<li class='link'>{@doc RestmRequestAttributes}
 	 * </ul>
 	 *
 	 * @return
@@ -601,7 +601,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestQuery}
+	 * 	<li class='link'>{@doc RestmRequestQuery}
 	 * </ul>
 	 *
 	 * @return
@@ -663,7 +663,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestFormData}
+	 * 	<li class='link'>{@doc RestmRequestFormData}
 	 * </ul>
 	 *
 	 * @return
@@ -743,7 +743,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestPathMatch}
+	 * 	<li class='link'>{@doc RestmRequestPathMatch}
 	 * </ul>
 	 *
 	 * @return
@@ -802,7 +802,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestBody}
+	 * 	<li class='link'>{@doc RestmRequestBody}
 	 * </ul>
 	 *
 	 * @return
@@ -991,7 +991,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-	 * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+	 * 	<li class='link'>{@doc RestSwagger}
 	 * </ul>
 	 *
 	 * @return
@@ -1025,7 +1025,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
-	 * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+	 * 	<li class='link'>{@doc RestSwagger}
 	 * </ul>
 	 *
 	 * @return
@@ -1145,7 +1145,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the serializers associated with this request.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
+	 * 	<li class='link'>{@doc RestSerializers}
 	 * </ul>
 	 *
 	 * @return The serializers associated with this request.
@@ -1158,7 +1158,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the parsers associated with this request.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Parsers}
+	 * 	<li class='link'>{@doc RestParsers}
 	 * </ul>
 	 *
 	 * @return The parsers associated with this request.
@@ -1243,7 +1243,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
-	 * 	<li class='link'>{@doc juneau-rest-server.Messages}
+	 * 	<li class='link'>{@doc RestMessages}
 	 * </ul>
 	 *
 	 * @return
@@ -1410,7 +1410,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
+	 * 	<li class='link'>{@doc RestSvlVariables}
 	 * </ul>
 	 *
 	 * @return The variable resolver for this request.
@@ -1554,7 +1554,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurationFiles}
+	 * 	<li class='link'>{@doc RestConfigurationFiles}
 	 * </ul>
 	 *
 	 * @return
@@ -1764,7 +1764,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
 	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 *
 	 * @return

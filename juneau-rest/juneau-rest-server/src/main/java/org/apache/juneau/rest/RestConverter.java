@@ -75,7 +75,7 @@ import org.apache.juneau.serializer.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
- * 	<li class='link'>{@doc juneau-rest-server.Converters}
+ * 	<li class='link'>{@doc RestConverters}
  * </ul>
  */
 public interface RestConverter {

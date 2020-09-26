@@ -19,7 +19,7 @@ import javax.servlet.http.*;
  *
  * <ul class='seealso'>
  * 	<li class='jf'>{@link RestContext#REST_callLogger}
- * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+ * 	<li class='link'>{@doc RestLoggingAndDebugging}
  * </ul>
  */
 public interface RestCallLogger {

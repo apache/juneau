@@ -391,8 +391,8 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -406,12 +406,23 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #name(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder n(String value) {
+		return name(value);
+	}
+
+	/**
 	 * <mk>httpStatusCode</mk> key.
 	 *
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerResponsesObject Responses}
+	 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
 	 * </ul>
 	 *
 	 * @param value
@@ -432,7 +443,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerResponsesObject Responses}
+	 * 	<li>{@doc ExtSwaggerResponsesObject Responses}
 	 * </ul>
 	 *
 	 * @param value
@@ -458,8 +469,8 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -470,6 +481,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder required(Boolean value) {
 		required = resolve(value, required);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #required(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder r(Boolean value) {
+		return required(value);
 	}
 
 	/**
@@ -492,6 +514,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #required(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder r(String value) {
+		return required(value);
+	}
+
+	/**
 	 * <mk>required</mk> field.
 	 *
 	 * <p>
@@ -501,6 +534,15 @@ public class HttpPartSchemaBuilder {
 	 */
 	public HttpPartSchemaBuilder required() {
 		return required(true);
+	}
+
+	/**
+	 * Synonym for {@link #required()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder r() {
+		return required();
 	}
 
 	/**
@@ -547,14 +589,14 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerSecuritySchemeObject SecurityScheme}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -570,6 +612,17 @@ public class HttpPartSchemaBuilder {
 			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
 		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #type(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder t(String value) {
+		return type(value);
 	}
 
 	/**
@@ -699,14 +752,14 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerSecuritySchemeObject SecurityScheme}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerSecuritySchemeObject SecurityScheme}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -719,10 +772,21 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #type(HttpPartDataType)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder t(HttpPartDataType value) {
+		return type(value);
+	}
+
+	/**
 	 * <mk>format</mk> field.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
+	 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -769,14 +833,14 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @param value
@@ -795,10 +859,21 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #format(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder f(String value) {
+		return format(value);
+	}
+
+	/**
 	 * <mk>format</mk> field.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
+	 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -848,14 +923,14 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @param value
@@ -865,6 +940,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder format(HttpPartFormat value) {
 		format = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #format(HttpPartFormat)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder f(HttpPartFormat value) {
+		return format(value);
 	}
 
 	/**
@@ -998,7 +1084,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
 	 * </ul>
 	 *
 	 * @param value
@@ -1009,6 +1095,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder allowEmptyValue(Boolean value) {
 		allowEmptyValue = resolve(value, allowEmptyValue);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #allowEmptyValue(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder aev(Boolean value) {
+		return allowEmptyValue(value);
 	}
 
 	/**
@@ -1028,6 +1125,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #allowEmptyValue(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder aev(String value) {
+		return allowEmptyValue(value);
+	}
+
+	/**
 	 * <mk>allowEmptyValue</mk> field.
 	 *
 	 * <p>
@@ -1036,6 +1144,15 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder allowEmptyValue() {
+		return allowEmptyValue(true);
+	}
+
+	/**
+	 * Synonym for {@link #allowEmptyValue()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder aev() {
 		return allowEmptyValue(true);
 	}
 
@@ -1051,10 +1168,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1069,6 +1186,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #items(HttpPartSchemaBuilder)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder i(HttpPartSchemaBuilder value) {
+		return items(value);
+	}
+
+	/**
 	 * <mk>items</mk> field.
 	 *
 	 * <p>
@@ -1080,10 +1208,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1095,6 +1223,17 @@ public class HttpPartSchemaBuilder {
 		if (value != null)
 			this.items = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #items(HttpPartSchema)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder i(HttpPartSchema value) {
+		return items(value);
 	}
 
 	HttpPartSchemaBuilder items(OMap value) {
@@ -1143,9 +1282,9 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <p>
@@ -1164,6 +1303,17 @@ public class HttpPartSchemaBuilder {
 			throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
 		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #collectionFormat(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cf(String value) {
+		return collectionFormat(value);
 	}
 
 	/**
@@ -1195,9 +1345,9 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <p>
@@ -1210,6 +1360,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder collectionFormat(HttpPartCollectionFormat value) {
 		collectionFormat = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #collectionFormat(HttpPartCollectionFormat)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder cf(HttpPartCollectionFormat value) {
+		return collectionFormat(value);
 	}
 
 	/**
@@ -1285,10 +1446,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1303,6 +1464,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #_default(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder df(String value) {
+		return _default(value);
+	}
+
+	/**
 	 * <mk>maximum</mk> field.
 	 *
 	 * <p>
@@ -1314,10 +1486,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1329,6 +1501,17 @@ public class HttpPartSchemaBuilder {
 		if (value != null)
 			this.maximum = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #maximum(Number)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder max(Number value) {
+		return maximum(value);
 	}
 
 	/**
@@ -1344,10 +1527,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1358,6 +1541,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder exclusiveMaximum(Boolean value) {
 		exclusiveMaximum = resolve(value, exclusiveMaximum);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emax(Boolean value) {
+		return exclusiveMaximum(value);
 	}
 
 	/**
@@ -1377,6 +1571,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #exclusiveMaximum(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emax(String value) {
+		return exclusiveMaximum(value);
+	}
+
+	/**
 	 * <mk>exclusiveMaximum</mk> field.
 	 *
 	 * <p>
@@ -1386,6 +1591,15 @@ public class HttpPartSchemaBuilder {
 	 */
 	public HttpPartSchemaBuilder exclusiveMaximum() {
 		return exclusiveMaximum(true);
+	}
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emax() {
+		return exclusiveMaximum();
 	}
 
 	/**
@@ -1400,10 +1614,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1415,6 +1629,17 @@ public class HttpPartSchemaBuilder {
 		if (value != null)
 			this.minimum = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #minimum(Number)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder min(Number value) {
+		return minimum(value);
 	}
 
 	/**
@@ -1430,10 +1655,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1444,6 +1669,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder exclusiveMinimum(Boolean value) {
 		exclusiveMinimum = resolve(value, exclusiveMinimum);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emin(Boolean value) {
+		return exclusiveMinimum(value);
 	}
 
 	/**
@@ -1463,6 +1699,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #exclusiveMinimum(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emin(String value) {
+		return exclusiveMinimum(value);
+	}
+
+	/**
 	 * <mk>exclusiveMinimum</mk> field.
 	 *
 	 * <p>
@@ -1472,6 +1719,15 @@ public class HttpPartSchemaBuilder {
 	 */
 	public HttpPartSchemaBuilder exclusiveMinimum() {
 		return exclusiveMinimum(true);
+	}
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder emin() {
+		return exclusiveMinimum();
 	}
 
 	/**
@@ -1487,10 +1743,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1501,6 +1757,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder maxLength(Long value) {
 		maxLength = resolve(value, maxLength);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #maxLength(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxl(Long value) {
+		return maxLength(value);
 	}
 
 	/**
@@ -1520,6 +1787,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #maxLength(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxl(String value) {
+		return maxLength(value);
+	}
+
+	/**
 	 * <mk>minLength</mk> field.
 	 *
 	 * <p>
@@ -1532,10 +1810,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1546,6 +1824,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder minLength(Long value) {
 		minLength = resolve(value, minLength);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #minLength(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minl(Long value) {
+		return minLength(value);
 	}
 
 	/**
@@ -1565,6 +1854,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #minLength(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minl(String value) {
+		return minLength(value);
+	}
+
+	/**
 	 * <mk>pattern</mk> field.
 	 *
 	 * <p>
@@ -1576,10 +1876,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1598,6 +1898,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #pattern(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder p(String value) {
+		return pattern(value);
+	}
+
+	/**
 	 * <mk>maxItems</mk> field.
 	 *
 	 * <p>
@@ -1609,10 +1920,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1623,6 +1934,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder maxItems(Long value) {
 		maxItems = resolve(value, maxItems);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #maxItems(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxi(Long value) {
+		return maxItems(value);
 	}
 
 	/**
@@ -1642,6 +1964,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #maxItems(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxi(String value) {
+		return maxItems(value);
+	}
+
+	/**
 	 * <mk>minItems</mk> field.
 	 *
 	 * <p>
@@ -1653,10 +1986,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1667,6 +2000,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder minItems(Long value) {
 		minItems = resolve(value, minItems);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #minItems(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder mini(Long value) {
+		return minItems(value);
 	}
 
 	/**
@@ -1686,6 +2030,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #minItems(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder mini(String value) {
+		return minItems(value);
+	}
+
+	/**
 	 * <mk>uniqueItems</mk> field.
 	 *
 	 * <p>
@@ -1701,10 +2056,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1715,6 +2070,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder uniqueItems(Boolean value) {
 		uniqueItems = resolve(value, uniqueItems);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #uniqueItems(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder ui(Boolean value) {
+		return uniqueItems(value);
 	}
 
 	/**
@@ -1734,6 +2100,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #uniqueItems(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder ui(String value) {
+		return uniqueItems(value);
+	}
+
+	/**
 	 * <mk>uniqueItems</mk> field.
 	 *
 	 * <p>
@@ -1743,6 +2120,15 @@ public class HttpPartSchemaBuilder {
 	 */
 	public HttpPartSchemaBuilder uniqueItems() {
 		return uniqueItems(true);
+	}
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder ui() {
+		return uniqueItems();
 	}
 
 	/**
@@ -1762,6 +2148,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #skipIfEmpty(Boolean)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder sie(Boolean value) {
+		return skipIfEmpty(value);
+	}
+
+	/**
 	 * <mk>skipIfEmpty</mk> field.
 	 *
 	 * <p>
@@ -1778,6 +2175,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #skipIfEmpty(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder sie(String value) {
+		return skipIfEmpty(value);
+	}
+
+	/**
 	 * Identifies whether an item should be skipped if it's empty.
 	 *
 	 * <p>
@@ -1790,6 +2198,15 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #skipIfEmpty()}.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder sie() {
+		return skipIfEmpty();
+	}
+
+	/**
 	 * <mk>enum</mk> field.
 	 *
 	 * <p>
@@ -1798,10 +2215,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1813,6 +2230,17 @@ public class HttpPartSchemaBuilder {
 		if (value != null && ! value.isEmpty())
 			this._enum = value;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #_enum(Set)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder e(Set<String> value) {
+		return _enum(value);
 	}
 
 	/**
@@ -1831,6 +2259,17 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #_enum(String...)}.
+	 *
+	 * @param values
+	 * 	The new values for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder e(String...values) {
+		return _enum(values);
+	}
+
+	/**
 	 * <mk>multipleOf</mk> field.
 	 *
 	 * <p>
@@ -1842,10 +2281,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerParameterObject Parameter}
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
-	 * 	<li>{@doc SwaggerItemsObject Items}
-	 * 	<li>{@doc SwaggerHeaderObject Header}
+	 * 	<li>{@doc ExtSwaggerParameterObject Parameter}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerItemsObject Items}
+	 * 	<li>{@doc ExtSwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1860,12 +2299,23 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #multipleOf(Number)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder mo(Number value) {
+		return multipleOf(value);
+	}
+
+	/**
 	 * <mk>mapProperties</mk> field.
 	 *
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -1876,6 +2326,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder maxProperties(Long value) {
 		maxProperties = resolve(value, maxProperties);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #maxProperties(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxp(Long value) {
+		return maxProperties(value);
 	}
 
 	/**
@@ -1895,12 +2356,23 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #maxProperties(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxp(String value) {
+		return maxProperties(value);
+	}
+
+	/**
 	 * <mk>minProperties</mk> field.
 	 *
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -1911,6 +2383,17 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder minProperties(Long value) {
 		minProperties = resolve(value, minProperties);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #minProperties(Long)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minp(Long value) {
+		return minProperties(value);
 	}
 
 	/**
@@ -1930,12 +2413,23 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
+	 * Synonym for {@link #minProperties(String)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minp(String value) {
+		return minProperties(value);
+	}
+
+	/**
 	 * <mk>properties</mk> field.
 	 *
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param key
@@ -1960,7 +2454,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param key
@@ -1985,7 +2479,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param key
@@ -2005,7 +2499,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param key
@@ -2032,7 +2526,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -2052,7 +2546,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -2072,7 +2566,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -2090,7 +2584,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc ExtSwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value

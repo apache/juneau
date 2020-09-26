@@ -31,7 +31,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
+ * 	<li class='link'>{@doc SwapAnnotation}
  * </ul>
  */
 @Documented
@@ -66,7 +66,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc PerMediaTypePojoSwaps}
 	 * </ul>
 	 */
 	String[] mediaTypes() default {};
@@ -151,7 +151,7 @@ public @interface Swap {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";
@@ -187,7 +187,7 @@ public @interface Swap {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
+	 * 	<li class='link'>{@doc TemplatedSwaps}
 	 * </ul>
 	 */
 	String template() default "";

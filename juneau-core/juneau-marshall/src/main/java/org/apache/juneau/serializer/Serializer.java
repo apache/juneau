@@ -715,7 +715,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
 	public static final String SERIALIZER_uriContext = PREFIX + ".uriContext.s";
@@ -765,7 +765,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * See {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
 	public static final String SERIALIZER_uriRelativity = PREFIX + ".uriRelativity.s";
@@ -817,7 +817,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * See {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext} for examples.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.URIs}
+	 * 	<li class='link'>{@doc MarshallingUris}
 	 * </ul>
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + ".uriResolution.s";
@@ -861,7 +861,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc RFC2616.section14.1}
+	 * 	Can contain meta-characters per the <c>media-type</c> specification of {@doc ExtRFC2616.section14.1}
 	 * 	<p>
 	 * 	If empty, then assumes the only media type supported is <c>produces</c>.
 	 * 	<p>

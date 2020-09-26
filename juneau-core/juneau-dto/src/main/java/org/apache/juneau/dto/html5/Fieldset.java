@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-fieldset-element <fieldset>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-fieldset-element <fieldset>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
 */
 @Bean(typeName="fieldset")
@@ -40,7 +40,7 @@ public class Fieldset extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fieldset-disabled disabled} attribute.
+	 * {@doc ExtHTML5.forms#attr-fieldset-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -56,7 +56,7 @@ public class Fieldset extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -70,7 +70,7 @@ public class Fieldset extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.

@@ -56,7 +56,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestResponse}
+ * 	<li class='link'>{@doc RestmRestResponse}
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -139,7 +139,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Gets the serializer group for the response.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
+	 * 	<li class='link'>{@doc RestSerializers}
 	 * </ul>
 	 *
 	 * @return The serializer group for the response.
@@ -195,7 +195,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
+	 * 	<li class='link'>{@doc RestmReturnTypes}
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.
@@ -239,7 +239,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
-	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
+	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
 	 * </ul>
 	 *
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
@@ -290,7 +290,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
+	 * 	<li class='link'>{@doc RestConfigurableProperties}
 	 * </ul>
 	 *
 	 * @return The properties active for this request.

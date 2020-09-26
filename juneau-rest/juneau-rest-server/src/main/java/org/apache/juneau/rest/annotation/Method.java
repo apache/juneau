@@ -43,7 +43,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodParameters}
+ * 	<li class='link'>{@doc RestmParameters}
  * </ul>
  */
 @Documented

@@ -20,7 +20,7 @@ import org.apache.juneau.*;
  * Various useful static methods for creating Swagger elements.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 public class SwaggerBuilder {

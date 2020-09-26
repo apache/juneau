@@ -23,7 +23,7 @@ import org.apache.juneau.rest.*;
  * Typically used in top-level GET methods of router resources to render a list of available child resources.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
+ * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
  * </ul>
  */
 public class ChildResourceDescriptions extends ResourceDescriptions {

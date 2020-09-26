@@ -70,7 +70,7 @@ import org.apache.juneau.internal.*;
  * though the sending of an unacceptable response is also allowed.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Accept-Charset")

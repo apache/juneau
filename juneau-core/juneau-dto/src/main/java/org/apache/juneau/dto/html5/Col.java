@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.tabular-data#the-col-element <col>}
+ * DTO for an HTML {@doc ExtHTML5.tabular-data#the-col-element <col>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="col")
@@ -40,7 +40,7 @@ public class Col extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.tabular-data#attr-col-span span} attribute.
+	 * {@doc ExtHTML5.tabular-data#attr-col-span span} attribute.
 	 *
 	 * <p>
 	 * Number of columns spanned by the element.

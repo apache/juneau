@@ -52,7 +52,7 @@ import org.apache.juneau.http.annotation.*;
  * Also see section 13.10 for cache requirements of some methods.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Location")

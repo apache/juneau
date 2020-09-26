@@ -61,7 +61,7 @@ import org.apache.juneau.transform.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties}
+ * 	<li class='link'>{@doc GlossaryConfigurableProperties}
  * </ul>
  */
 public class BeanContextBuilder extends ContextBuilder {

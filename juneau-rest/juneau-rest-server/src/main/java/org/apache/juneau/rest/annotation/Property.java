@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * (e.g. <c>Boolean</c>, etc...).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
+ * 	<li class='link'>{@doc RestConfigurableProperties}
  * </ul>
  */
 @Documented

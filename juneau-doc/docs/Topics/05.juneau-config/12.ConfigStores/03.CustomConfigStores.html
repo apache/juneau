@@ -42,17 +42,17 @@ Custom ConfigStores
 
 	
 		<jc>// Constructor called from builder.</jc>
-		<jk>protected</jk> ConfigSqlStore(PropertyStore ps) {
-			<jk>super</jk>(ps);
+		<jk>protected</jk> ConfigSqlStore(PropertyStore <jv>ps</jv>) {
+			<jk>super</jk>(<jv>ps</jv>);
 			
 			<jk>this</jk>.<jf>jdbcUrl</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <js>"jdbc:derby:mydb"</js>);
 			<jk>this</jk>.<jf>tableName</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_tableName</jsf>);
 			<jk>this</jk>.<jf>nameColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_nameColumn</jsf>);
 			<jk>this</jk>.<jf>valueColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_valueColumn</jsf>);		
 
-			<jk>int</jk> pollInterval = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);  <jc>// Time in seconds.</jc>
+			<jk>int</jk> <jv>pollInterval</jv> = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);  <jc>// Time in seconds.</jc>
 			
-			TimerTask timerTask = <jk>new</jk> TimerTask() {
+			TimerTask <jv>timerTask</jv> = <jk>new</jk> TimerTask() {
 				<ja>@Override</ja>
 				<jk>public void</jk> run() {
 					ConfigSqlStore.<jk>this</jk>.poll();
@@ -60,69 +60,68 @@ Custom ConfigStores
 			};
 
 			<jk>this</jk>.<jf>watcher</jf> = <jk>new</jk> Timer(<js>"MyTimer"</js>);
-			<jf>watcher</jf>.scheduleAtFixedRate(timerTask, 0, pollInterval * 1000);
+			<jf>watcher</jf>.scheduleAtFixedRate(<jv>timerTask</jv>, 0, <jv>pollInterval</jv> * 1000);
 		}
 		
 		<jk>private synchronized void</jk> poll() {
 		
 			<jc>// Loop through all our entries and find the latest values.</jc>
-			<jk>for</jk> (Map.Entry&lt;String,String&gt; e : cache.entrySet()) {
-				String name = e.getKey();
-				String cacheContents = e.getValue();
-				String newContents = getDatabaseValue(name);
+			<jk>for</jk> (Map.Entry&lt;String,String&gt; <jv>e</jv> : <jf>cache</jf>.entrySet()) {
+				String <jv>name</jv> = <jv>e</jv>.getKey();
+				String <jv>cacheContents</jv> = <jv>e</jv>.getValue();
+				String <jv>newContents</jv> = getDatabaseValue(<jv>name</jv>);
 				
 				<jc>// Change detected!</jc>
-				<jk>if</jk> (! cacheContents.equals(newContents)) 
-					update(name, newContents);
+				<jk>if</jk> (! <jv>cacheContents</jv>.equals(<jv>newContents</jv>)) 
+					update(<jv>name</jv>, <jv>newContents</jv>);
 			}
 			
 		}
 		
 		<jc>// Reads the value from the database.</jc>
-		<jk>protected</jk> String getDatabaseValue(String name) {
+		<jk>protected</jk> String getDatabaseValue(String <jv>name</jv>) {
 			<jc>// Implement me!</jc>
 		}
 	
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String read(String name) {
-			String contents = <jf>cache</jf>.get(name);
-			<jk>if</jk> (contents == <jk>null</jk>) {
-				contents = getDatabaseValue(name);
-				update(name, contents);
+		<jk>public synchronized</jk> String read(String <jv>name</jv>) {
+			String <jv>contents</jv> = <jf>cache</jf>.get(<jv>name</jv>);
+			<jk>if</jk> (<jv>contents</jv> == <jk>null</jk>) {
+				<jv>contents</jv> = getDatabaseValue(<jv>name</jv>);
+				update(<jv>name</jv>, <jv>contents</jv>);
 			}
-			<jk>return</jk> contents;
+			<jk>return</jk> <jv>contents</jv>;
 		}
 	
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
+		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
 	
 			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (<jsm>isEquals</jsm>(expectedContents, newContents))
+			<jk>if</jk> (<jsm>isEquals</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
 				<jk>return null</jk>;
 			
-			String currentContents = read(name);
+			String <jv>currentContents</jv> = read(<jv>name</jv>);
 			
-			<jk>if</jk> (expectedContents != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(currentContents, expectedContents)) 
-				<jk>return</jk> currentContents;
+			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>)) 
+				<jk>return</jk> <jv>currentContents</jv>;
 			
-			update(name, newContents);
+			update(<jv>name</jv>, <jv>newContents</jv>);
 			
 			<jc>// Success!</jc>
 			<jk>return null</jk>;
 		}
-	
 		
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> ConfigSqlStore update(String name, String newContents) {
-			<jf>cache</jf>.put(name, newContents);
-			<jk>super</jk>.update(name, newContents);  <jc>// Trigger any listeners.</jc>
+		<jk>public synchronized</jk> ConfigSqlStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
+			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
 			<jk>return this</jk>;
 		}
 		
 		<ja>@Override</ja> <jc>/* Closeable */</jc>
 		<jk>public synchronized void</jk> close() {
-			<jk>if</jk> (watcher != <jk>null</jk>)
-				watcher.cancel();
+			<jk>if</jk> (<jf>watcher</jf> != <jk>null</jk>)
+				<jf>watcher</jf>.cancel();
 		}
 	}
 </p>
@@ -138,32 +137,32 @@ Custom ConfigStores
 			<jk>super</jk>();
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder(PropertyStore ps) {
-			<jk>super</jk>(ps);
+		<jk>public</jk> ConfigSqlStoreBuilder(PropertyStore <jv>ps</jv>) {
+			<jk>super</jk>(<jv>ps</jv>);
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder jdbcUrl(String value) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, value);
+		<jk>public</jk> ConfigSqlStoreBuilder jdbcUrl(String <jv>value</jv>) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <jv>value</jv>);
 			<jk>return this</jk>;
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder tableName(String value) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_tableName</jsf>, value);
+		<jk>public</jk> ConfigSqlStoreBuilder tableName(String <jv>value</jv>) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_tableName</jsf>, <jv>value</jv>);
 			<jk>return this</jk>;
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder nameColumn(String value) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_nameColumn</jsf>, value);
+		<jk>public</jk> ConfigSqlStoreBuilder nameColumn(String <jv>value</jv>) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_nameColumn</jsf>, <jv>value</jv>);
 			<jk>return this</jk>;
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder valueColumn(String value) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_valueColumn</jsf>, value);
+		<jk>public</jk> ConfigSqlStoreBuilder valueColumn(String <jv>value</jv>) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_valueColumn</jsf>, <jv>value</jv>);
 			<jk>return this</jk>;
 		}
 
-		<jk>public</jk> ConfigSqlStoreBuilder pollInterval(<jk>int</jk> value) {
-			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, value);
+		<jk>public</jk> ConfigSqlStoreBuilder pollInterval(<jk>int</jk> <jv>value</jv>) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, <jv>value</jv>);
 			<jk>return this</jk>;
 		}
 

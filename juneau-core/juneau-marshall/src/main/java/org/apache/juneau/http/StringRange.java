@@ -34,7 +34,7 @@ import org.apache.juneau.collections.*;
  * An example of a type range is a value in an <c>Accept-Encoding</c> header.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @BeanIgnore

@@ -102,7 +102,7 @@ import org.apache.juneau.internal.*;
  * A user agent might suggest in such a case to add "en" to get the best matching behavior.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Accept-Language")

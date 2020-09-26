@@ -30,7 +30,7 @@ import org.apache.juneau.annotation.*;
  * annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
+ * 	<li class='link'>{@doc BeanFilters}
  * </ul>
  */
 public final class BeanFilter {

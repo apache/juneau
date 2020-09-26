@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.sections#the-body-element <body>}
+ * DTO for an HTML {@doc ExtHTML5.sections#the-body-element <body>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="body")
@@ -40,7 +40,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-onafterprint onafterprint}
+	 * {@doc ExtHTML5.webappapis#handler-window-onafterprint onafterprint}
 	 * attribute.
 	 *
 	 * @param onafterprint The new value for this attribute.
@@ -52,7 +52,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-onbeforeunload onbeforeunload}
+	 * {@doc ExtHTML5.webappapis#handler-window-onbeforeunload onbeforeunload}
 	 * attribute.
 	 *
 	 * @param onbeforeunload The new value for this attribute.
@@ -64,7 +64,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-onmessage onmessage}
+	 * {@doc ExtHTML5.webappapis#handler-window-onmessage onmessage}
 	 * attribute.
 	 *
 	 * @param onmessage The new value for this attribute.
@@ -76,7 +76,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-ononline ononline}
+	 * {@doc ExtHTML5.webappapis#handler-window-ononline ononline}
 	 * attribute.
 	 *
 	 * @param ononline The new value for this attribute.
@@ -88,7 +88,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-onpageshow onpageshow}
+	 * {@doc ExtHTML5.webappapis#handler-window-onpageshow onpageshow}
 	 * attribute.
 	 *
 	 * @param onpageshow The new value for this attribute.
@@ -100,7 +100,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.webappapis#handler-window-onstorage onstorage}
+	 * {@doc ExtHTML5.webappapis#handler-window-onstorage onstorage}
 	 * attribute.
 	 *
 	 * @param onstorage The new value for this attribute.

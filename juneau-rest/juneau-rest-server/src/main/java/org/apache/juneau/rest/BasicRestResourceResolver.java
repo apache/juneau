@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * Child classes can also be defined as inner-classes of the parent resource class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
+ * 	<li class='link'>{@doc RestResourceResolvers}
  * </ul>
  */
 public class BasicRestResourceResolver extends FuzzyResourceResolver implements RestResourceResolver {

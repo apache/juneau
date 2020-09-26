@@ -378,7 +378,9 @@ ul.notes:before {
 	content: 'Notes:';
 }
 div.description ul.seealso:before, 
-div.description ul.notes:before {
+div.description ul.notes:before,
+div.topic ul.seealso:before, 
+div.topic ul.notes:before {
 	white-space: pre;
 	font-size: 1.1em;
 	font-weight: bold;
@@ -388,7 +390,9 @@ div.description ul.notes:before {
 	line-height: 30px;
 }
 div.details ul.seealso:before, 
-div.details ul.notes:before {
+div.details ul.notes:before,
+div.topic ul.seealso:before, 
+div.topic ul.notes:before {
 	white-space: pre;
 	font-size: 1.1em;
 	font-weight: bold;

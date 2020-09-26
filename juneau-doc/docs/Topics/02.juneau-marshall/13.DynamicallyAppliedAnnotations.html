@@ -1,0 +1,187 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.3-new} 
+Dynamically Applied Annotations
+
+<p>
+	In the section {@doc Transforms}, you were introduced to annotations that can be applied to bean
+	classes, methods, fields, and constructors such as {@link oaj.annotation.Bean @Bean}:
+</p>
+<p class='bpcode w800'>
+	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	<jc>// All other properties are ignored.</jc>
+	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
+	<jk>public class</jk> Address { ... }
+</p>
+<p>
+	An alternate way of applying these annotations is using the <ja>@XConfig</ja> annotations introduced in section
+	{@doc ConfigurableAnnotations}.  
+</p>
+<p class='bpcode w800'>
+	<jc>// Unannotated class.</jc>
+	<jk>public class</jk> Address { ... }
+
+	<ja>@BeanConfig</ja>(
+		applyBean={
+			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
+		}
+	}
+	<jk>public static class</jk> DummyClass {}
+
+	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(DummyClass.<jk>class</jk>).build();
+	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>addressBean</jv>);
+</p>
+<p>
+	The advantage to this approach is it allows you to use Juneau annotations on classes/methods/fields/constructors
+	where you might not have access to the source code, or when you only want to selectively apply the annotation 
+	under certain scenarios instead of globally.
+</p>
+<p>
+	For example, the following shows the <ja>@Bean</ja> annotation being selectively applied on a single REST method 
+	(described later in {@doc juneau-rest-server}): 
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja> 
+	<ja>@BeanConfig</ja>(
+		applyBean={
+			<ja>@Bean</ja>(on=<js>"Address"</js>, bpi=<js>"AddressBean: street,city,state"</js>)
+		}
+	}
+	<jk>public</jk> List&lt;Address&gt; getAddresses() {}
+</p>
+<p>
+	Any Juneau annotation that has an <c>on()</c> method can be applied dynamically this way.
+	These include:
+</p>
+<ul>
+	<li class='ja'>{@link oaj.annotation.Bean}
+	<li class='ja'>{@link oaj.annotation.Beanc}
+	<li class='ja'>{@link oaj.annotation.BeanIgnore}
+	<li class='ja'>{@link oaj.annotation.Beanp}
+	<li class='ja'>{@link oaj.annotation.Example}
+	<li class='ja'>{@link oaj.annotation.NameProperty}
+	<li class='ja'>{@link oaj.annotation.ParentProperty}
+	<li class='ja'>{@link oaj.annotation.Swap}
+	<li class='ja'>{@link oaj.annotation.URI}
+	<li class='ja'>{@link oaj.csv.annotation.Csv}
+	<li class='ja'>{@link oaj.html.annotation.Html}
+	<li class='ja'>{@link oaj.jso.annotation.Jso}
+	<li class='ja'>{@link oaj.json.annotation.Json}
+	<li class='ja'>{@link oaj.jsonschema.annotation.Schema}
+	<li class='ja'>{@link oaj.msgpack.annotation.MsgPack}
+	<li class='ja'>{@link oaj.oapi.annotation.OpenApi}
+	<li class='ja'>{@link oaj.plaintext.annotation.PlainText}
+	<li class='ja'>{@link oaj.soap.annotation.SoapXml}
+	<li class='ja'>{@link oaj.uon.annotation.Uon}
+	<li class='ja'>{@link oaj.urlencoding.annotation.UrlEncoding}
+	<li class='ja'>{@link oaj.xml.annotation.Xml}
+	<li class='ja'>{@link oaj.jena.annotation.Rdf}
+</ul>
+<p>
+	The valid pattern matches are:
+</p>
+<ul class='spaced-list'>
+	<li>Classes:
+		<ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass"</js>
+				</ul>
+			<li>Fully qualified inner class: 
+				<ul>
+					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass"</js>
+				</ul>
+			<li>Simple inner: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2"</js>
+					<li><js>"Inner1$Inner2"</js>
+					<li><js>"Inner2"</js>
+				</ul>
+		</ul>
+	<li>Methods:
+		<ul>
+			<li>Fully qualified with args: 
+				<ul>
+					<li><js>"com.foo.MyClass.myMethod(String,int)"</js> 
+					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js> 
+					<li><js>"com.foo.MyClass.myMethod()"</js>
+				</ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass.myMethod"</js>
+				</ul>
+			<li>Simple with args: 
+				<ul>
+					<li><js>"MyClass.myMethod(String,int)"</js>
+					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
+					<li><js>"MyClass.myMethod()"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass.myMethod"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
+					<li><js>"Inner1$Inner2.myMethod"</js>
+					<li><js>"Inner2.myMethod"</js>
+				</ul>
+		</ul>
+	<li>Fields:
+		<ul>
+			<li>Fully qualified: 
+				<ul>
+					<li><js>"com.foo.MyClass.myField"</js>
+				</ul>
+			<li>Simple: 
+				<ul>
+					<li><js>"MyClass.myField"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2.myField"</js>
+					<li><js>"Inner1$Inner2.myField"</js>
+					<li><js>"Inner2.myField"</js>
+				</ul>
+		</ul>
+	<li>Constructors:
+		<ul>
+			<li>Fully qualified with args: 
+				<ul>
+					<li><js>"com.foo.MyClass(String,int)"</js>
+					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
+					<li><js>"com.foo.MyClass()"</js>
+				</ul>
+			<li>Simple with args: 
+				<ul>
+					<li><js>"MyClass(String,int)"</js>
+					<li><js>"MyClass(java.lang.String,int)"</js>
+					<li><js>"MyClass()"</js>
+				</ul>
+			<li>Simple inner class: 
+				<ul>
+					<li><js>"MyClass$Inner1$Inner2()"</js>
+					<li><js>"Inner1$Inner2()"</js>
+					<li><js>"Inner2()"</js>
+				</ul>
+		</ul>
+	<li>A comma-delimited list of anything on this list.
+</ul>
+

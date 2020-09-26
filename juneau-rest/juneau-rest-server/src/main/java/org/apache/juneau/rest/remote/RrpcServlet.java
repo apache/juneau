@@ -46,7 +46,7 @@ import org.apache.juneau.http.remote.*;
  * {@link #getServiceMap()} method that maps java interfaces to POJO instances.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+ * 	<li class='link'>{@doc RestRpc}
  * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})

@@ -74,22 +74,22 @@ import org.apache.juneau.oapi.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Query}
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerParameterObject}
+ * 	<li class='link'>{@doc RestQueryAnnotation}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Query}
+ * 	<li class='link'>{@doc RestcQuery}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
+ * 	<li class='link'>{@doc RestRequestAnnotation}
+ * 	<li class='link'>{@doc RestcRequest}
  * </ul>
  */
 @Documented
@@ -239,7 +239,7 @@ public @interface Query {
 	String value() default "";
 
 	/**
-	 * <mk>description</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A brief description of the parameter. This could contain examples of use.
@@ -255,7 +255,7 @@ public @interface Query {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -267,7 +267,7 @@ public @interface Query {
 	String[] d() default {};
 
 	/**
-	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>required</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines whether the parameter is mandatory.
@@ -299,7 +299,7 @@ public @interface Query {
 	//=================================================================================================================
 
 	/**
-	 * <mk>type</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>type</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -350,7 +350,7 @@ public @interface Query {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
@@ -361,10 +361,10 @@ public @interface Query {
 	String t() default "";
 
 	/**
-	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>format</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
+	 * The extending format for the previously mentioned {@doc ExtSwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -418,7 +418,7 @@ public @interface Query {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
@@ -429,7 +429,7 @@ public @interface Query {
 	String f() default "";
 
 	/**
-	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>allowEmptyValue</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
@@ -456,7 +456,7 @@ public @interface Query {
 	boolean aev() default false;
 
 	/**
-	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>items</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -478,7 +478,7 @@ public @interface Query {
 	Items items() default @Items;
 
 	/**
-	 * <mk>collectionFormat</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
@@ -525,7 +525,7 @@ public @interface Query {
 	String cf() default "";
 
 	/**
-	 * <mk>default</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>default</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -566,7 +566,7 @@ public @interface Query {
 	String[] df() default {};
 
 	/**
-	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
@@ -598,7 +598,7 @@ public @interface Query {
 	String max() default "";
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
@@ -630,7 +630,7 @@ public @interface Query {
 	boolean emax() default false;
 
 	/**
-	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
@@ -662,7 +662,7 @@ public @interface Query {
 	String min() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
@@ -694,7 +694,7 @@ public @interface Query {
 	boolean emin() default false;
 
 	/**
-	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -727,7 +727,7 @@ public @interface Query {
 	long maxl() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -760,7 +760,7 @@ public @interface Query {
 	long minl() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
@@ -791,7 +791,7 @@ public @interface Query {
 	String p() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
@@ -822,7 +822,7 @@ public @interface Query {
 	long maxi() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
@@ -853,7 +853,7 @@ public @interface Query {
 	long mini() default -1;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
@@ -888,7 +888,7 @@ public @interface Query {
 	boolean ui() default false;
 
 	/**
-	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>enum</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
@@ -899,7 +899,7 @@ public @interface Query {
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <p>
-	 * The format is a {@doc SimpleJson} array or comma-delimited list.
+	 * The format is a {@doc SimplifiedJson} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -940,7 +940,7 @@ public @interface Query {
 	String[] e() default {};
 
 	/**
-	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
@@ -1019,10 +1019,10 @@ public @interface Query {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object or plain text string.
+	 * 		The format is a {@doc SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -1034,10 +1034,10 @@ public @interface Query {
 	String[] ex() default {};
 
 	/**
-	 * Free-form value for the {@doc SwaggerParameterObject}.
+	 * Free-form value for the {@doc ExtSwaggerParameterObject}.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Query object:
@@ -1104,7 +1104,7 @@ public @interface Query {
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -1117,7 +1117,7 @@ public @interface Query {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

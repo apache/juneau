@@ -44,8 +44,8 @@ import org.apache.juneau.svl.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.SimpleVariableLanguage.VarResolvers}
- * 	<li class='link'>{@doc juneau-config.Variables}
+ * 	<li class='link'>{@doc VarResolvers}
+ * 	<li class='link'>{@doc ConfigVariables}
  * </ul>
  */
 public class ConfigVar extends DefaultingVar {

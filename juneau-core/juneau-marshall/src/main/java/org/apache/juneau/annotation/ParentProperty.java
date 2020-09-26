@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.NamePropertyAnnotation}
+ * 	<li class='link'>{@doc NamePropertyAnnotation}
  * </ul>
  */
 @Target({METHOD,FIELD})
@@ -96,7 +96,7 @@ public @interface ParentProperty {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	String on() default "";

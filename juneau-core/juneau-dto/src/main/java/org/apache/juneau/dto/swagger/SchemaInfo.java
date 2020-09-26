@@ -56,7 +56,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
@@ -166,7 +166,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property getter:  <property>format</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -179,7 +179,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property setter:  <property>format</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -266,7 +266,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -873,7 +873,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property setter:  <property>enum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -940,7 +940,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property setter:  <property>type</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value

@@ -31,23 +31,23 @@ ConfigMemoryStore
 		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
 		
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String read(String name) {
-			<jk>return</jk> <jsm>emptyIfNull</jsm>(<jf>cache</jf>.get(name));
+		<jk>public synchronized</jk> String read(String <jv>name</jv>) {
+			<jk>return</jk> <jsm>emptyIfNull</jsm>(<jf>cache</jf>.get(<jv>name</jv>));
 		}
 	
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
+		<jk>public synchronized</jk> String write(String <jv>name</jv>, String <jv>expectedContents</jv>, String <jv>newContents</jv>) {
 	
 			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (<jsm>isEquals</jsm>(expectedContents, newContents))
+			<jk>if</jk> (<jsm>isEquals</jsm>(<jv>expectedContents</jv>, <jv>newContents</jv>))
 				<jk>return null</jk>;
 			
-			String currentContents = read(name);
+			String <jv>currentContents</jv> = read(<jv>name</jv>);
 			
-			<jk>if</jk> (expectedContents != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(currentContents, expectedContents)) 
+			<jk>if</jk> (<jv>expectedContents</jv> != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(<jv>currentContents</jv>, <jv>expectedContents</jv>)) 
 				<jk>return</jk> currentContents;
 			
-			update(name, newContents);
+			update(<jv>name</jv>, <jv>newContents</jv>);
 			
 			<jc>// Success!</jc>
 			<jk>return null</jk>;
@@ -55,9 +55,9 @@ ConfigMemoryStore
 	
 		
 		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
-		<jk>public synchronized</jk> ConfigMemoryStore update(String name, String newContents) {
-			<jf>cache</jf>.put(name, newContents);
-			<jk>super</jk>.update(name, newContents);  <jc>// Trigger any listeners.</jc>
+		<jk>public synchronized</jk> ConfigMemoryStore update(String <jv>name</jv>, String <jv>newContents</jv>) {
+			<jf>cache</jf>.put(<jv>name</jv>, <jv>newContents</jv>);
+			<jk>super</jk>.update(<jv>name</jv>, <jv>newContents</jv>);  <jc>// Trigger any listeners.</jc>
 			<jk>return this</jk>;
 		}
 	}

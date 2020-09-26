@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  * client, which in some circumstances will appear as if the proxy is forwarding the Proxy-Authenticate header field.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Proxy-Authenticate")

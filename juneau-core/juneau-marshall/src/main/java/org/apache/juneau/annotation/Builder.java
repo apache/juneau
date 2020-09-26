@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoBuilders}
+ * 	<li class='link'>{@doc PojoBuilders}
  * </ul>
  */
 @Documented

@@ -64,7 +64,7 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.StaticFiles}
+ * 	<li class='link'>{@doc RestStaticFiles}
  * </ul>
  */
 public class StaticFileMapping {

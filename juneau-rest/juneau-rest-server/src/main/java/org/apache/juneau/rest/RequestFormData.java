@@ -51,7 +51,7 @@ import org.apache.juneau.http.exception.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestFormData}
+ * 	<li class='link'>{@doc RestmRequestFormData}
  * </ul>
  */
 @SuppressWarnings("unchecked")

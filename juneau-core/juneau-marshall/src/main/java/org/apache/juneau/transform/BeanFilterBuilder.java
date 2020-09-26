@@ -52,7 +52,7 @@ import org.apache.juneau.reflect.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
+ * 	<li class='link'>{@doc BeanFilters}
  * </ul>
  *
  * @param <T> The bean type that this filter applies to.

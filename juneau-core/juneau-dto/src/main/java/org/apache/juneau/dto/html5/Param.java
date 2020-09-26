@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.embedded-content-0#the-param-element <param>}
+ * DTO for an HTML {@doc ExtHTML5.embedded-content-0#the-param-element <param>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="param")
@@ -42,7 +42,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-param-name name} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-param-name name} attribute.
 	 *
 	 * <p>
 	 * Name of parameter.
@@ -56,7 +56,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-param-value value}
+	 * {@doc ExtHTML5.embedded-content-0#attr-param-value value}
 	 * attribute.
 	 *
 	 * <p>

@@ -45,7 +45,7 @@ import org.apache.juneau.reflect.*;
  * This class is thread safe and reusable.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails}
+ * 	<li class='link'>{@doc OpenApiDetails}
  * </ul>
  */
 public class HttpPartSchema {

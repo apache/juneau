@@ -1,0 +1,73 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Simplified JSON
+
+<p>
+	The {@link oaj.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+</p>
+<p>
+	Simplified JSON is identical to JSON except for the following:
+</p>
+<ul class='spaced-list'>
+	<li>JSON attributes are only quoted when necessary.
+	<li>Uses single-quotes for quoting.
+</ul>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Some free-form JSON.</jc>
+	OMap <jv>omap</jv> = OMap.<jsm>of</jsm>(
+		<js>"foo"</js>, <js>"x1"</js>,
+		<js>"_bar"</js>, <js>"x2"</js>,
+		<js>" baz "</js>, <js>"x3"</js>,
+		<js>"123"</js>, <js>"x4"</js>,
+		<js>"return"</js>, <js>"x5"</js>,
+		<js>""</js>, <js>"x6"</js>
+	);
+</p>
+<p class='bpcode w800'>
+	<joc>// Serialized to standard JSON</joc>
+	{
+		<jok>"foo"</jok>: <jov>"x1"</jov>,
+	 	<jok>"_bar"</jok>: <jov>"x2"</jov>,
+	 	<jok>" baz "</jok>: <jov>"x3"</jov>,
+	 	<jok>"123"</jok>: <jov>"x4"</jov>,
+	 	<jok>"return"</jok>: <jov>"x5"</jov>,
+	 	<jok>""</jok>: <jov>"x6"</jov>
+	}
+</p>	 		
+<p class='bpcode w800'>
+	<joc>// Serialized to simplified JSON</joc>
+	{
+		<jok>foo</jok>: <jov>'x1'</jov>,
+	 	<jok>_bar</jok>: <jov>'x2'</jov>,
+	 	<jok>' baz '</jok>: <jov>'x3'</jov>,  <joc>// Quoted due to embedded spaces.</joc>
+	 	<jok>'123'</jok>: <jov>'x4'</jov>,    <joc>// Quoted to prevent confusion with number.</joc>
+	 	<jok>'return'</jok>: <jov>'x5'</jov>, <joc>// Quoted because it's a keyword.</joc>
+	 	<jok>''</jok>: <jov>'x6'</jov>        <joc>// Quoted because it's an empty string.</joc>
+	}
+</p>
+<p>
+	The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
+	This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+</p>
+<p class='bpcode w800'>
+	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
+</p>			
+
+<ul class='seealso'>
+	<li class='jf'>{@link oaj.json.JsonSerializer#JSON_simpleMode}
+</ul>

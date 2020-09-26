@@ -95,7 +95,7 @@ import org.apache.juneau.rest.*;
  *
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.LifecycleHooks}
+ * 	<li class='link'>{@doc RestLifecycleHooks}
  * </ul>
  */
 @Documented

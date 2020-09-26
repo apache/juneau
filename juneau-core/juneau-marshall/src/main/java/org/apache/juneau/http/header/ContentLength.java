@@ -57,7 +57,7 @@ import org.apache.juneau.http.annotation.*;
  * prohibited by the rules in section 4.4.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Content-Length")

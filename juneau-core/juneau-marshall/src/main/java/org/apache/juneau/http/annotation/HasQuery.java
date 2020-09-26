@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.HasQuery}
+ * 	<li class='link'>{@doc RestHasQueryAnnotation}
  * </ul>
  */
 @Documented

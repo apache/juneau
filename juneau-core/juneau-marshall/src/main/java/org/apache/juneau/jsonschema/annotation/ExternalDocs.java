@@ -50,8 +50,8 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='extlink'>{@doc SwaggerExternalDocumentationObject}
+ * 	<li class='link'>{@doc RestSwagger}
+ * 	<li class='extlink'>{@doc ExtSwaggerExternalDocumentationObject}
  * </ul>
  */
 @Documented
@@ -59,7 +59,7 @@ import java.lang.annotation.*;
 public @interface ExternalDocs {
 
 	/**
-	 * <mk>description</mk> field of the {@doc SwaggerExternalDocumentationObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * A short description of the target documentation.
@@ -69,14 +69,14 @@ public @interface ExternalDocs {
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] description() default {};
 
 	/**
-	 * <mk>url</mk> field of the {@doc SwaggerExternalDocumentationObject}.
+	 * <mk>url</mk> field of the {@doc ExtSwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
@@ -87,17 +87,17 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		The format is a URL string.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String url() default "";
 
 	/**
-	 * Free-form value for the {@doc SwaggerExternalDocumentationObject}.
+	 * Free-form value for the {@doc ExtSwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
-	 * This is a {@doc SimpleJson} object that makes up the swagger information for this field.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of documentation:
@@ -145,7 +145,7 @@ public @interface ExternalDocs {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimpleJson} object.
+	 * 		The format is a {@doc SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -158,7 +158,7 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

@@ -1,0 +1,93 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Overview
+
+<p>
+	The <c>juneau-config</c> library contains a powerful API for creating and using INI-style config files.
+</p>
+<h5 class='figure'>Example configuration file:</h5>
+<p class='bpcode w800'>
+	<cc># A set of entries</cc>
+	<cs>[Section1]</cs>
+
+	<cc># An integer</cc>
+	<ck>key1</ck> = <cv>1</cv>
+
+	<cc># A boolean</cc>
+	<ck>key2</ck> = <cv>true</cv>
+	
+	<cc># An array</cc>
+	<ck>key3</ck> = <cv>1,2,3</cv>
+
+	<cc># A POJO</cc>
+	<ck>key4</ck> = <cv>http://bar</cv>
+</p>
+<p>
+	Config files are accessed through the {@link oaj.config.Config} class which
+	are created through the {@link oaj.config.ConfigBuilder} class.
+	Builder creator methods are provided on the <c>Config</c> class:
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a Config object</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	
+	<jc>// Shortcut</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+</p>
+<p>
+	Once instantiated, reading values from the config are simple:
+</p>
+<p class='bpcode w800'>
+	<jc>// Read values from section #1</jc>
+	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
+	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
+	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
+	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+</p>
+<p>
+	The config language may look simple, but it is a very powerful feature with many capabilities including:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Support for storing and retrieving any of the following data types:
+		<ul>
+			<li>Primitives
+			<li>POJOs
+			<li>Beans
+			<li>Arrays, Maps, and Collections of anything
+			<li>Binary data
+		</ul>
+	<li>
+		Transactional modifications with commit/rollback capabilities.
+	<li>
+		A listener API.
+	<li>
+		Filesystem watcher integration allowing changes on the file system to be reflected in real-time.
+	<li>
+		Modifications through the Config class (e.g. add/remove/modify sections and keys, add/remove comments and whitespace, etc...) 
+		<b>DO NOT</b> cause loss of formatting in the file.
+		<br>All existing whitespace and comments are preserved for you!
+	<li>
+		Value encoding for added security.
+	<li>
+		Support for SVL variables.
+	<li>
+		Directly populate beans from config sections.
+	<li>
+		Accessing config sections through Java interface proxies.
+	<li>
+		An extensible storage API allows you to write your own config storage (e.g. storage in databases or the cloud).
+</ul>

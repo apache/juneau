@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-option-element <option>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-option-element <option>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="option")
@@ -51,7 +51,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-option-disabled disabled} attribute.
+	 * {@doc ExtHTML5.forms#attr-option-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -67,7 +67,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-option-label label} attribute.
+	 * {@doc ExtHTML5.forms#attr-option-label label} attribute.
 	 *
 	 * <p>
 	 * User-visible label.
@@ -81,7 +81,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-option-selected selected} attribute.
+	 * {@doc ExtHTML5.forms#attr-option-selected selected} attribute.
 	 *
 	 * <p>
 	 * Whether the option is selected by default.
@@ -97,7 +97,7 @@ public class Option extends HtmlElementText {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-option-value value} attribute.
+	 * {@doc ExtHTML5.forms#attr-option-value value} attribute.
 	 *
 	 * <p>
 	 * Value to be used for form submission.

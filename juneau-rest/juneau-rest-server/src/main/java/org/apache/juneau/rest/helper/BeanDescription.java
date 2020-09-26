@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
  * Useful for rendering simple information about a bean during REST OPTIONS requests.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.PredefinedHelperBeans}
+ * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
  * </ul>
  */
 @Bean(bpi="type,properties")

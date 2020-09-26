@@ -25,59 +25,59 @@ Parsers
 </p>
 <p class='bpcode w800'>
 	<jc>// Use one of the predefined parsers.</jc>
-	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
+	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 
 	<jc>// Parse a JSON object as a bean.</jc>
-	String json = <js>"{name:'John Smith',age:21}"</js>;
-	Person p = parser.parse(json, Person.<jk>class</jk>);
+	String <jv>json</jv> = <js>"{name:'John Smith',age:21}"</js>;
+	Person <jv>p</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Person.<jk>class</jk>);
 
 	<jc>// Or parse it into a generic Map.</jc>
-	Map m1 = parser.parse(json, Map.<jk>class</jk>);
+	Map <jv>m1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Map.<jk>class</jk>);
 
 	<jc>// Parse a JSON string.</jc>
-	json = <js>"'foobar'"</js>;
-	String s2 = parser.parse(json, String.<jk>class</jk>);
+	<jv>json</jv> = <js>"'foobar'"</js>;
+	String <jv>s2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
 
 	<jc>// Parse a JSON number as a Long or Float.</jc>
-	json = <js>"123"</js>;
-	Long l3 = parser.parse(json, Long.<jk>class</jk>);
-	Float f3 = parser.parse(json, Float.<jk>class</jk>);
+	<jv>json</jv> = <js>"123"</js>;
+	Long <jv>l3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Long.<jk>class</jk>);
+	Float <jv>f3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Float.<jk>class</jk>);
 
 	<jc>// Parse a JSON object as a HashMap&lt;String,Person&gt;.</jc>
-	json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-	Map&lt;String,Person&gt; m4 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, Person.<jk>class</jk>)
+	<jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+	Map&lt;String,Person&gt; <jv>m4</jv> = <jv>parser</jv>.parse(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, Person.<jk>class</jk>)
 
 	<jc>// Parse a JSON object as a HashMap&lt;String,LinkedList&lt;Person&gt;&gt;.</jc>
-	json = <js>"{a:[{name:'John Smith',age:21},{name:'Joe Smith',age:42}]}"</js>;
-	Map&lt;String,List&lt;Person&gt;&gt; m5 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, 
+	<jv>json</jv> = <js>"{a:[{name:'John Smith',age:21},{name:'Joe Smith',age:42}]}"</js>;
+	Map&lt;String,List&lt;Person&gt;&gt; <jv>m5</jv> = <jv>parser</jv>.parse(<jv>json</jv>, HashMap.<jk>class</jk>, String.<jk>class</jk>, 
 		LinkedList.<jk>class</jk>, Person.<jk>class</jk>)
 
 	<jc>// Parse a JSON array of integers as a Collection of Integers or int[] array.</jc>
-	json = <js>"[1,2,3]"</js>;
-	List&lt;Integer&gt; l6 = parser.parse(json, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
-	<jk>int</jk>[] i7 = parser.parse(json, <jk>int</jk>[].<jk>class</jk>);
+	<jv>json</jv> = <js>"[1,2,3]"</js>;
+	List&lt;Integer&gt; <jv>l6</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
+	<jk>int</jk>[] <jv>i7</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
 </p>
 <p>
 	The parsers can also be used to populating existing bean and collection objects:
 </p>
 <p class='bpcode w800'>
 	<jc>// Use one of the predefined parsers.</jc>
-	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
+	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 
 	<jc>// Populate the properties on an existing bean from a JSON object.</jc>
-	String json = <js>"{name:'John Smith',age:21}"</js>;
-	Person p = <jk>new</jk> Person();
-	parser.parseIntoBean(json, p);
+	String <jv>json</jv> = <js>"{name:'John Smith',age:21}"</js>;
+	Person <jv>p</jv> = <jk>new</jk> Person();
+	<jv>parser</jv>.parseIntoBean(<jv>json</jv>, <jv>p</jv>);
 
 	<jc>// Populate an existing list from a JSON array of numbers.</jc>
-	json = <js>"[1,2,3]"</js>;
-	List&lt;Integer&gt; l2 = <jk>new</jk> LinkedList&lt;Integer&gt;();
-	parser.parseIntoCollection(json, l2, Integer.<jk>class</jk>);
+	<jv>json</jv> = <js>"[1,2,3]"</js>;
+	List&lt;Integer&gt; <jv>l2</jv> = <jk>new</jk> LinkedList&lt;Integer&gt;();
+	<jv>parser</jv>.parseIntoCollection(<jv>json</jv>, <jv>l2</jv>, Integer.<jk>class</jk>);
 
 	<jc>// Populate an existing map from a JSON object containing beans.</jc>
-	json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-	Map&lt;String,Person&gt; m3 = <jk>new</jk> TreeMap&lt;String,Person&gt;();
-	parser.parseIntoMap(json, m3, String.<jk>class</jk>, Person.<jk>class</jk>);
+	<jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+	Map&lt;String,Person&gt; <jv>m3</jv> = <jk>new</jk> TreeMap&lt;String,Person&gt;();
+	<jv>parser</jv>.parseIntoMap(<jv>json</jv>, <jv>m3</jv>, String.<jk>class</jk>, Person.<jk>class</jk>);
 </p>
 <br>
 <div class='info'>
@@ -90,5 +90,5 @@ Parsers
 </div>
 
 <ul class='seealso'>
-	<li class='doclink'>{@doc Glossaries.LanguageSupport link} - Glossary of all supported languages.
+	<li class='doclink'>{@doc GlossaryLanguageSupport link} - Glossary of all supported languages.
 </ul>

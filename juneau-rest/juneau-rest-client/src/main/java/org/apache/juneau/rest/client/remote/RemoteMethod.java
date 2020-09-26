@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * </div>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+ * 	<li class='link'>{@doc RestcProxies}
  * </ul>
  */
 @Documented

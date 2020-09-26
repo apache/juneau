@@ -88,7 +88,7 @@ import org.apache.juneau.internal.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
+ * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
 @Bean(bpi="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,x-example,x-examples,*")
@@ -262,13 +262,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
 	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc SwaggerPathsObject Paths Object}.
+	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
 	 * 	<li>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerPathTemplating Path Templating}
+	 * 	<li class='extlink'>{@doc ExtSwaggerPathTemplating Path Templating}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -288,13 +288,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		Parameter names are case sensitive.
 	 * 	<li>
 	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the {@doc SwaggerPathsObject Paths Object}.
+	 * 		from the <c>path</c> field in the {@doc ExtSwaggerPathsObject Paths Object}.
 	 * 	<li>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerPathTemplating Path Templating}
+	 * 	<li class='extlink'>{@doc ExtSwaggerPathTemplating Path Templating}
 	 * </ul>
 	 *
 	 * @param value
@@ -407,7 +407,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -421,7 +421,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
+	 * 	<br>{@doc ExtGFM} can be used for rich text representation.
 	 * 	<br>Non-String values will be converted to String using <c>toString()</c>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
@@ -545,7 +545,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * The type of the parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -605,7 +605,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned type.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -621,7 +621,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned type.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -824,7 +824,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -843,7 +843,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -868,7 +868,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -881,7 +881,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -909,7 +909,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -922,7 +922,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -950,7 +950,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -963,7 +963,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -991,7 +991,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1004,7 +1004,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1032,7 +1032,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1045,7 +1045,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1073,7 +1073,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1086,7 +1086,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minLength</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1114,7 +1114,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>pattern</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1130,7 +1130,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * This string SHOULD be a valid regular expression.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1158,7 +1158,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1171,7 +1171,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1199,7 +1199,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1212,7 +1212,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1240,7 +1240,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1253,7 +1253,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
@@ -1281,7 +1281,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1294,7 +1294,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>enum</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -1352,7 +1352,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1365,7 +1365,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>multipleOf</property>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
+	 * 	<li class='extlink'>{@doc ExtJsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value

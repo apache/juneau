@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.ConfigurableProperties}
+ * 	<li class='link'>{@doc RestConfigurableProperties}
  * </ul>
  */
 @SuppressWarnings("serial")

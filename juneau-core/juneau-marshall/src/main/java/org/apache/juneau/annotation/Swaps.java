@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
+ * 	<li class='link'>{@doc SwapAnnotation}
  * </ul>
  */
 @Documented

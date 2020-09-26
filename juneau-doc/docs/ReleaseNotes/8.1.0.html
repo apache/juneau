@@ -20,21 +20,21 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		<a href='#juneau-marshall.ConfigurableAnnotations'>Configurable Annotations</a>
+		{@doc ConfigurableAnnotations Configurable Annotations}
 	<li>
-		<a href='#juneau-marshall.Transforms.DefaultPojoSwaps'>Default PojoSwaps</a>
+		{@doc DefaultPojoSwaps Default PojoSwaps}
 	<li>
-		<a href='#juneau-config.Imports'>Config Imports</a>
+		{@doc ConfigImports Config Imports}
 	<li>
-		<a href='#juneau-rest-server.Instantiation.BasicRest'>BasicRest</a>, <a href='#juneau-rest-server.Instantiation.BasicRestGroup'>BasicRestGroup</a> classes
+		{@doc BasicRest BasicRest}, {@doc BasicRestGroup BasicRestGroup} classes
 	<li>
-		<a href='#juneau-rest-server.Rest.RestPath'>Path variables on resource paths</a>
+		{@doc RestPathAnnotation Path variables on resource paths}
 	<li>
-		<a href='#juneau-rest-server.RestMethod.RequestAttributes'>Request Attributes API</a>
+		{@doc RestmRequestAttributes Request Attributes API}
 	<li>
-		<a href='#juneau-rest-server.RoleGuards'>Role Guards</a>
+		{@doc RestRoleGuards Role Guards}
 	<li>
-		<a href='#juneau-rest-server.LoggingAndDebugging'>Improved REST logging/debugging</a>
+		{@doc RestLoggingAndDebugging Improved REST logging/debugging}
 	<li>
 		<a href='#juneau-rest-mock'>New MockRest API</a>
 </ul>
@@ -308,9 +308,9 @@
 			<ul>
 				<li class='jm'>{@link oajr.RestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
 			</ul>
-			<li class='jc'>{@link oajr.BasicRestCallHandler}
+			<li class='jc'><dc>BasicRestCallHandler</dc>
 			<ul>
-				<li class='jm'>{@link oajr.BasicRestCallHandler#convertThrowable(Throwable) convertThrowable(Throwable)}
+				<li class='jm'><dc>convertThrowable(Throwable)</dc>
 			</ul>
 		</ul>
 	<li>
@@ -341,7 +341,7 @@
 		)
 		<jk>public</jk> String myMethod() <jk>throws</jk> Exception {...}
 		</p>		
-		See {@doc juneau-rest-server.LoggingAndDebugging} for details.
+		See {@doc RestLoggingAndDebugging} for details.
 	<li>
 		Fixed a bug where the HTTP response was returning 405 (method not found) but should really be 404 (not found)
 		when no path patterns match on any of the Java methods.

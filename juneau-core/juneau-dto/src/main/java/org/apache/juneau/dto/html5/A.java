@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.text-level-semantics#the-a-element <a>}
+ * DTO for an HTML {@doc ExtHTML5.text-level-semantics#the-a-element <a>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="a")
@@ -46,7 +46,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-download download} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-download download} attribute.
 	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
@@ -62,7 +62,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-href href} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-href href} attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -85,7 +85,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-hreflang hreflang} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-hreflang hreflang} attribute.
 	 *
 	 * <p>
 	 * Language of the linked resource.
@@ -99,7 +99,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-rel rel} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-rel rel} attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -113,7 +113,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-target target} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-target target} attribute.
 	 *
 	 * <p>
 	 * Default browsing context for hyperlink navigation and form submission.
@@ -127,7 +127,7 @@ public class A extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.links#attr-hyperlink-type type} attribute.
+	 * {@doc ExtHTML5.links#attr-hyperlink-type type} attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

@@ -84,7 +84,7 @@ import org.apache.juneau.rest.reshandlers.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
+ * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
 public interface ResponseHandler {

@@ -33,7 +33,7 @@ import org.apache.juneau.collections.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc SimpleJson}
+ * 	<li class='link'>{@doc SimplifiedJson}
  * </ul>
  */
 public class SimpleJsonSerializer extends JsonSerializer {

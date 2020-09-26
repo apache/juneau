@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-optgroup-element <optgroup>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-optgroup-element <optgroup>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="optgroup")
@@ -40,7 +40,7 @@ public class Optgroup extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-optgroup-disabled disabled} attribute.
+	 * {@doc ExtHTML5.forms#attr-optgroup-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -56,7 +56,7 @@ public class Optgroup extends HtmlElementContainer {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-optgroup-label label} attribute.
+	 * {@doc ExtHTML5.forms#attr-optgroup-label label} attribute.
 	 *
 	 * <p>
 	 * User-visible label.

@@ -1,0 +1,123 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.4-updated}
+@Body
+
+<p>
+	The {@link oaj.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are the HTTP body of the request.
+</p>
+<ul class='javatree'>
+	<li class='ja'>{@link oaj.http.annotation.Body}
+	<ul>
+		<li class='jf'>{@link oaj.http.annotation.Body#required() required}, {@link oaj.http.annotation.Body#r() r} - Input validation.  Body must be present.
+		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - OpenAPI schema.
+	</ul>
+</ul>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Used on parameter</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>);
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Used on class</jc>
+	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		String addPet(Pet <jv>pet</jv>);
+	}
+
+	<ja>@Body</ja>
+	<jk>public class</jk> Pet {...}
+</p>
+
+<p>
+	The argument can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to output using the {@link oaj.serializer.Serializer} registered with the <c>RestClient</c>.
+		<br><c>Content-Type</c> is set to that of the <c>Serializer</c>.
+	<li>
+		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+		<br><c>Content-Type</c> is set to <js>"text/plain"</js>.
+	<li>
+		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+		<br><c>Content-Type</c> is set to <js>"application/octet-stream"</js>.
+	<li>
+		{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+		<br><c>Content-Type</c> is set to <js>"aplication/x-www-form-urlencoded"</js>.
+	<li>
+		<c>HttpEntity</c> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+</ul>
+ 
+<p>
+	OpenAPI schema based serialization can be used by using the {@link oaj.oapi.OpenApiSerializer} class.
+</p>
+
+<p class='bpcode w800'>
+	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	String addCommaDelimitedPipeDelimitedInts(
+		<ja>@Body</ja>(
+			serializer=OpenApiSerializer.<jk>class</jk>,
+			schema=<ja>@Schema</ja>(
+				type=<js>"array"</js>,
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@Items</ja>(
+					type=<js>"array"</js>
+					items=<ja>@SubItems</ja>(
+						type=<js>"int32"</js>,
+					 	<jc>// Auto-validates on client side!</jc>
+						minimum=<js>"0"</js>,
+						maximum=<js>"64"</js>
+					)
+				)
+			)
+		)
+		<jk>int</jk>[][] <jv>input</jv>
+	);
+</p>
+<p class='bpcode w800'>
+	<jc>// Same as above but using free-form schema.</jc>
+	<jc>// Format is simplified-JSON (outer {} brackets are optional).</jc>
+	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	String addCommaDelimitedPipeDelimitedInts(
+		<ja>@Body</ja>(
+			serializer=OpenApiSerializer.<jk>class</jk>,
+			schema=<ja>@Schema</ja>(
+				<js>"type:'array',collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>
+			)
+		)
+		<jk>int</jk>[][] <jv>input</jv>
+	);
+</p>
+<p>
+	See {@doc OpenApiSerializers} for information about supported data types in OpenAPI serialization.
+</p>
+
+<p>
+	If your <c>RestClient</c> class does not have a serializer associated with it, the body will automatically be serialized to a 
+	string using the rules defined in {@doc PojoCategories}.
+</p>
+
+

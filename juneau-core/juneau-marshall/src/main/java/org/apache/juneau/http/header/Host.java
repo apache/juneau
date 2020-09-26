@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * See sections 5.2 and 19.6.1.1 for other requirements relating to Host.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Host")

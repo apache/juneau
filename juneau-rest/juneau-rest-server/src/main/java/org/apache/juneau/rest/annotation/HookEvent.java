@@ -32,7 +32,7 @@ import org.apache.juneau.rest.*;
  * to be called.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.LifecycleHooks}
+ * 	<li class='link'>{@doc RestLifecycleHooks}
  * </ul>
  */
 public enum HookEvent {

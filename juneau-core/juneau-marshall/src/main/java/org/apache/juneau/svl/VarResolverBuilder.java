@@ -22,7 +22,7 @@ import org.apache.juneau.svl.vars.*;
  * Builder class for building instances of {@link VarResolver}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.SimpleVariableLanguage.VarResolvers}
+ * 	<li class='link'>{@doc VarResolvers}
  * </ul>
  */
 public class VarResolverBuilder {

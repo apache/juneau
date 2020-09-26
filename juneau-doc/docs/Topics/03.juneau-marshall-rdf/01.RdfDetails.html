@@ -34,12 +34,12 @@ RDF Details
 <p class='bpcode w800'>
 	<jc>// A simple bean</jc>
 	<jk>public class</jk> Person {
-		<jk>public</jk> String name = <js>"John Smith"</js>;
-		<jk>public int</jk> age = 21;
+		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
+		<jk>public int</jk> <jf>age</jf> = 21;
 	}
 	
 	<jc>// Serialize a bean to JSON, XML, or HTML</jc>
-	Person p = <jk>new</jk> Person();
+	Person <jv>person</jv> = <jk>new</jk> Person();
 
 	<jc>// Produces:
 	// &lt;rdf:RDF
@@ -51,17 +51,17 @@ RDF Details
 	// 		&lt;jp:age&gt;21&lt;/jp:age&gt;
 	// 	&lt;/rdf:Description&gt;
 	// &lt;/rdf:RDF&gt;</jc>
-	String rdfXml = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(p);
+	String <jv>rdfXml</jv> = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(<jv>person</jv>);
 	
 	<jc>// Produces:
 	// @prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .
 	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
 	//	[]    jp:age  "21" ;
 	//	      jp:name "John Smith" .</jc>
-	String rdfN3 = N3Serializer.<jsf>DEFAULT</jsf>.serialize(p);
+	String <jv>rdfN3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
 
 	<jc>// Produces:
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
-	String rdfNTriple = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(p);
+	String <jv>rdfNTriple</jv> = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(<jv>person</jv>);
 </p>

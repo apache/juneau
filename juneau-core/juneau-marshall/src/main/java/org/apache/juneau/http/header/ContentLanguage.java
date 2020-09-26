@@ -70,7 +70,7 @@ import org.apache.juneau.http.annotation.*;
  * Content-Language MAY be applied to any media type -- it is not limited to textual documents.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Content-Language")

@@ -24,7 +24,7 @@ import org.apache.juneau.reflect.*;
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+ * 	<li class='link'>{@doc RestcProxies}
  * </ul>
  */
 public final class RemoteMethodArg {

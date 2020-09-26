@@ -45,7 +45,7 @@ import org.apache.juneau.utils.*;
  * <ul class='seealso'>
  * 	<li class='jc'>{@link PojoRest} - Additional information on addressing elements in a POJO tree using URL notation.
  * 	<li class='jf'>{@link RestContext#REST_converters} - Registering converters with REST resources.
- * 	<li class='link'>{@doc juneau-rest-server.Converters}
+ * 	<li class='link'>{@doc RestConverters}
  * </ul>
  */
 public final class Traversable implements RestConverter {

@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * <c>produces</c> value passed in through the constructor.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
+ * 	<li class='link'>{@doc RestmReturnTypes}
  * </ul>
  */
 public class DefaultHandler implements ResponseHandler {

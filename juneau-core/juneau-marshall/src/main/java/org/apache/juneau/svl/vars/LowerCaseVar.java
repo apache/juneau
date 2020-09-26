@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
+ * 	<li class='link'>{@doc RestSvlVariables}
  * </ul>
  */
 public class LowerCaseVar extends SimpleVar {

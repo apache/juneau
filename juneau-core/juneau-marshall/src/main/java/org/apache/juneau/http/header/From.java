@@ -63,7 +63,7 @@ import org.apache.juneau.http.annotation.*;
  * prior to a request.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("From")

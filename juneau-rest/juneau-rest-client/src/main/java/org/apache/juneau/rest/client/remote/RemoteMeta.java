@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
  * caching and reuse.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+ * 	<li class='link'>{@doc RestcProxies}
  * </ul>
  */
 public class RemoteMeta {

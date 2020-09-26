@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.document-metadata#the-meta-element <meta>}
+ * DTO for an HTML {@doc ExtHTML5.document-metadata#the-meta-element <meta>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="meta")
@@ -31,7 +31,7 @@ public class Meta extends HtmlElementVoid {
 	public Meta() {}
 
 	/**
-	 * {@doc HTML5.document-metadata#attr-meta-charset charset}
+	 * {@doc ExtHTML5.document-metadata#attr-meta-charset charset}
 	 * attribute.
 	 *
 	 * <p>
@@ -46,7 +46,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.document-metadata#attr-meta-content content}
+	 * {@doc ExtHTML5.document-metadata#attr-meta-content content}
 	 * attribute.
 	 *
 	 * <p>
@@ -61,7 +61,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.document-metadata#attr-meta-http-equiv http-equiv}
+	 * {@doc ExtHTML5.document-metadata#attr-meta-http-equiv http-equiv}
 	 * attribute.
 	 *
 	 * <p>
@@ -76,7 +76,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.document-metadata#attr-meta-name name} attribute.
+	 * {@doc ExtHTML5.document-metadata#attr-meta-name name} attribute.
 	 *
 	 * <p>
 	 * Metadata name.

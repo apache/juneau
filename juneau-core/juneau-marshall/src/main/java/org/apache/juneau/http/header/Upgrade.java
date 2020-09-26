@@ -79,7 +79,7 @@ import org.apache.juneau.http.annotation.*;
  * the name with the same protocol.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Upgrade")

@@ -1,0 +1,164 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{8.1.3-new} 
+Language Support
+
+<h5 class='figure'>All serializers/parsers defined in Juneau</h5>
+<table class='styled w1000'>
+	<tr>
+		<th>Language</th><th>Serializers</th><th>Parsers</th><th>Marshalls</th><th>Documentation</th>
+	</tr>
+	<tr>
+		<td><c>text/csv</c></td>
+		<td><ul><li class='jc'>{@link oaj.csv.CsvSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.csv.CsvParser}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/html</c></td>
+		<td><ul><li class='jc'>{@link oaj.html.HtmlSerializer}<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer}<li class='jc'>{@link oaj.html.HtmlDocSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.html.HtmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Html}</ul></td>
+		<td>{@doc HtmlDetails HTML Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/html+schema</c></td>
+		<td><ul><li class='jc'>{@link oaj.html.HtmlSchemaSerializer}<li class='jc'>{@link oaj.html.HtmlSchemaDocSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc HtmlDetails HTML Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/x-java-serialized-object</c></td>
+		<td><ul><li class='jc'>{@link oaj.jso.JsoSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jso.JsoParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Jso}</ul></td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>application/json</c><br><c>text/json</c></td>
+		<td><ul><li class='jc'>{@link oaj.json.JsonSerializer}<li class='jc'>{@link oaj.json.JsonSerializer.Readable}<li class='jc'>{@link oaj.json.JsonSerializer.ReadableSafe}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.json.JsonParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Json}</ul></td>
+		<td>{@doc JsonDetails JSON Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/json+simple</c><br><c>text/json+simple</c></td>
+		<td><ul><li class='jc'>{@link oaj.json.SimpleJsonSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.json.JsonParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.SimpleJson}</ul></td>
+		<td>{@doc SimplifiedJson Simplified JSON}</td>
+	</tr>
+	<tr>
+		<td><c>application/json+schema</c><br><c>text/json+schema</c></td>
+		<td><ul><li class='jc'>{@link oaj.json.JsonSchemaSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc JsonSchema JSON-Schema Support}</td>
+	</tr>
+	<tr>
+		<td><c>octal/msgpack</c></td>
+		<td><ul><li class='jc'>{@link oaj.msgpack.MsgPackSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.msgpack.MsgPackParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.MsgPack}</ul></td>
+		<td>{@doc MsgPackDetails MessagePack Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/n3</c></td>
+		<td><ul><li class='jc'>{@link oaj.jena.N3Serializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jena.N3Parser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.N3}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/n-triple</c></td>
+		<td><ul><li class='jc'>{@link oaj.jena.NTripleSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jena.NTripleParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.NTriple}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/openapi</c></td>
+		<td><ul><li class='jc'>{@link oaj.oapi.OpenApiSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.oapi.OpenApiParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.OpenApi}</ul></td>
+		<td>{@doc OpenApiDetails OpenAPI Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/plain</c></td>
+		<td><ul><li class='jc'>{@link oaj.plaintext.PlainTextSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+rdf<c></td>
+		<td><ul><li class='jc'>{@link oaj.jena.RdfXmlSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jena.RdfXmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.RdfXml}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+rdf+abbrev</c></td>
+		<td><ul><li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jena.RdfXmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+soap</c></td>
+		<td><ul><li class='jc'>{@link oaj.soap.SoapXmlSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td><c>text/turtle</c></td>
+		<td><ul><li class='jc'>{@link oaj.jena.TurtleSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.jena.TurtleParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Turtle}</ul></td>
+		<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
+	</tr>
+	<tr>
+		<td><c>text/uon</c></td>
+		<td><ul><li class='jc'>{@link oaj.uon.UonSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.uon.UonParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Uon}</ul></td>
+		<td>{@doc UonDetails UON Details}</td>
+	</tr>
+	<tr>
+		<td><c>application/x-www-form-urlencoded</c></td>
+		<td><ul><li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.urlencoding.UrlEncodingParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.UrlEncoding}</ul></td>
+		<td>{@doc UrlEncodingDetails URL-Encoding Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml</c></td>
+		<td><ul><li class='jc'>{@link oaj.xml.XmlSerializer}<li class='jc'>{@link oaj.xml.XmlDocSerializer}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.xml.XmlParser}</ul></td>
+		<td><ul><li class='jc'>{@link oaj.marshall.Xml}</ul></td>
+		<td>{@doc XmlDetails XML Details}</td>
+	</tr>
+	<tr>
+		<td><c>text/xml+schema</c></td>
+		<td><ul><li class='jc'>{@link oaj.xmlschema.XmlSchemaSerializer}<li class='jc'>{@link oaj.xmlschema.XmlSchemaDocSerializer}</ul></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>{@doc XmlSchema XML-Schema Support}</td>
+	</tr>
+</table>

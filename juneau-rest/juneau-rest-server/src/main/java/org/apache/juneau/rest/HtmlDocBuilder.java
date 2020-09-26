@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
+ * 	<li class='link'>{@doc RestHtmlDocAnnotation}
  * </ul>
  */
 @Deprecated
@@ -104,7 +104,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks(Object...)} value will be ignored.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -139,10 +139,10 @@ public class HtmlDocBuilder {
 	 * 		The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
 	 * 		relative (to the servlet) or absolute URLs.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		Supports {@doc juneau-marshall.URIs} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
+	 * 		Supports {@doc MarshallingUris} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
 	 * 	<li>
@@ -174,7 +174,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		When a value is specified, the {@link #navlinks(Object[])} value will be ignored.
@@ -210,7 +210,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -244,7 +244,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -275,7 +275,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -309,7 +309,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is a comma-delimited list of URLs.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc(stylesheet)} annotation.
@@ -336,7 +336,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -367,7 +367,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"INHERIT"</js> means copy the values from the parent.
@@ -395,7 +395,7 @@ public class HtmlDocBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc(nowrap)} annotation.
@@ -413,7 +413,7 @@ public class HtmlDocBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc(noResultsMessage)} annotation.
@@ -435,7 +435,7 @@ public class HtmlDocBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc(template)} annotation.
@@ -457,7 +457,7 @@ public class HtmlDocBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc(template)} annotation.

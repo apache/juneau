@@ -57,7 +57,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
+ * 	<li class='link'>{@doc RestSvlVariables}
  * </ul>
  */
 public class RequestVar extends MultipartResolvingVar {

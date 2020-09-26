@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.HasFormData}
+ * 	<li class='link'>{@doc RestHasFormDataAnnotation}
  * </ul>
  */
 @Documented

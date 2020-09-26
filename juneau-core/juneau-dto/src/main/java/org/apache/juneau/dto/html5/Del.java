@@ -15,11 +15,11 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.edits#the-del-element <del>}
+ * DTO for an HTML {@doc ExtHTML5.edits#the-del-element <del>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="del")
@@ -40,7 +40,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.edits#attr-mod-cite cite} attribute.
+	 * {@doc ExtHTML5.edits#attr-mod-cite cite} attribute.
 	 *
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.
@@ -54,7 +54,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.edits#attr-mod-datetime datetime} attribute.
+	 * {@doc ExtHTML5.edits#attr-mod-datetime datetime} attribute.
 	 *
 	 * <p>
 	 * Date and (optionally) time of the change.

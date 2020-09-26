@@ -352,7 +352,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.LoggingAndDebugging}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_callLoggerConfig = PREFIX + ".callLoggerConfig.o";
@@ -395,7 +395,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestMethodMatchers}
+	 * 	<li class='link'>{@doc RestmMatchers}
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_matchers = PREFIX + ".matchers.lo";
@@ -531,7 +531,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -576,7 +576,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *

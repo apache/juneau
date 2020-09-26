@@ -59,7 +59,7 @@ public @interface XmlConfig {
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-marshall.DynamicallyAppliedAnnotations}
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
 	Xml[] applyXml() default {};
@@ -95,7 +95,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -150,7 +150,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -182,7 +182,7 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -207,12 +207,12 @@ public @interface XmlConfig {
 	 * 	<li>
 	 * 		This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_addNamespaceUrisToRoot}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	String addNamespaceUrisToRoot() default "";
@@ -246,12 +246,12 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	String autoDetectNamespaces() default "";
@@ -264,12 +264,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	String defaultNamespace() default "";
@@ -288,12 +288,12 @@ public @interface XmlConfig {
 	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_enableNamespaces}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	String enableNamespaces() default "";
@@ -306,12 +306,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	String[] namespaces() default {};
@@ -325,12 +325,12 @@ public @interface XmlConfig {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_xsNamespace}
-	 * 	<li class='link'>{@doc juneau-marshall.XmlDetails.Namespaces}
+	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
 	@Deprecated

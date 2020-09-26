@@ -968,8 +968,8 @@ import org.apache.juneau.utils.*;
  * Refer to the following documentation on both flavors:
  *
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
- * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+ * 	<li class='link'>{@doc RestcProxies}
+ * 	<li class='link'>{@doc RestRpc}
  * </ul>
  *
  * <br>
@@ -2973,7 +2973,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+	 * 	<li class='link'>{@doc RestcProxies}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
@@ -2988,7 +2988,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Same as {@link #getRemote(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+	 * 	<li class='link'>{@doc RestcProxies}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
@@ -3003,7 +3003,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Same as {@link #getRemote(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
+	 * 	<li class='link'>{@doc RestcProxies}
 	 * </ul>
 
 	 * @param interfaceClass The interface to create a proxy for.
@@ -3204,7 +3204,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+	 * 	<li class='link'>{@doc RestRpc}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
@@ -3219,7 +3219,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+	 * 	<li class='link'>{@doc RestRpc}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
@@ -3234,7 +3234,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	 * Same as {@link #getRrpcInterface(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc juneau-rest-server.restRPC}
+	 * 	<li class='link'>{@doc RestRpc}
 	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.

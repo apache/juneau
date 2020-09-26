@@ -65,7 +65,7 @@ import org.apache.juneau.http.annotation.*;
  * have other means of communicating with the origin server.
  *
  * <ul class='seealso'>
- * 	<li class='extlink'>{@doc RFC2616}
+ * 	<li class='extlink'>{@doc ExtRFC2616}
  * </ul>
  */
 @Header("Allow")

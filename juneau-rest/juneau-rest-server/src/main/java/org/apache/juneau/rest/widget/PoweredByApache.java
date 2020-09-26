@@ -44,7 +44,7 @@ import org.apache.juneau.rest.*;
  * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
+ * 	<li class='link'>{@doc RestHtmlPredefinedWidgets}
  * </ul>
  */
 public class PoweredByApache extends Widget {

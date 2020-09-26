@@ -66,7 +66,7 @@ import org.apache.juneau.http.exception.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server.Guards}
+ * 	<li class='link'>{@doc RestGuards}
  * </ul>
  */
 public abstract class RestGuard {

@@ -17,11 +17,11 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-input-element <input>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-input-element <input>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="input")
@@ -42,7 +42,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-accept accept} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-accept accept} attribute.
 	 *
 	 * <p>
 	 * Hint for expected file type in file upload controls.
@@ -56,7 +56,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-alt alt} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-alt alt} attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -70,7 +70,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-autocomplete autocomplete} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-autocomplete autocomplete} attribute.
 	 *
 	 * <p>
 	 * Hint for form auto-fill feature.
@@ -84,7 +84,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-autofocus autofocus} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-autofocus autofocus} attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
@@ -98,7 +98,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-checked checked} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-checked checked} attribute.
 	 *
 	 * <p>
 	 * Whether the command or control is checked.
@@ -114,7 +114,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-dirname dirname} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-dirname dirname} attribute.
 	 *
 	 * <p>
 	 * Name of form field to use for sending the element's directionality in form submission.
@@ -128,7 +128,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-disabled disabled} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-disabled disabled} attribute.
 	 *
 	 * <p>
 	 * Whether the form control is disabled.
@@ -144,7 +144,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fae-form form} attribute.
+	 * {@doc ExtHTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -158,7 +158,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-formaction formaction} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-formaction formaction} attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -172,7 +172,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-formenctype formenctype} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-formenctype formenctype} attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -186,7 +186,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-formmethod formmethod} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-formmethod formmethod} attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -200,7 +200,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-formnovalidate formnovalidate}
+	 * {@doc ExtHTML5.forms#attr-fs-formnovalidate formnovalidate}
 	 * attribute.
 	 *
 	 * <p>
@@ -215,7 +215,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-formtarget formtarget} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-formtarget formtarget} attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.
@@ -229,7 +229,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
+	 * {@doc ExtHTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -246,7 +246,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-input-inputmode inputmode}
+	 * {@doc ExtHTML5.embedded-content-0#attr-input-inputmode inputmode}
 	 * attribute.
 	 * Hint for selecting an input modality.
 	 *
@@ -259,7 +259,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-list list} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-list list} attribute.
 	 *
 	 * <p>
 	 * List of auto-complete options.
@@ -273,7 +273,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-max max} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-max max} attribute.
 	 *
 	 * <p>
 	 * Maximum value.
@@ -289,7 +289,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-maxlength maxlength} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-maxlength maxlength} attribute.
 	 * Maximum length of value.
 	 *
 	 * @param maxlength The new value for this attribute.
@@ -302,7 +302,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-min min} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-min min} attribute.
 	 *
 	 * <p>
 	 * Minimum value.
@@ -318,7 +318,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-minlength minlength} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-minlength minlength} attribute.
 	 *
 	 * <p>
 	 * Minimum length of value.
@@ -334,7 +334,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-multiple multiple} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-multiple multiple} attribute.
 	 *
 	 * <p>
 	 * Whether to allow multiple values.
@@ -350,7 +350,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fe-name name} attribute.
+	 * {@doc ExtHTML5.forms#attr-fe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
@@ -364,7 +364,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-pattern pattern} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-pattern pattern} attribute.
 	 *
 	 * <p>
 	 * Pattern to be matched by the form control's value.
@@ -378,7 +378,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-placeholder placeholder} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-placeholder placeholder} attribute.
 	 *
 	 * <p>
 	 * User-visible label to be placed within the form control.
@@ -392,7 +392,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-readonly readonly} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-readonly readonly} attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -409,7 +409,7 @@ public class Input extends HtmlElementVoid {
 
 
 	/**
-	 * {@doc HTML5.forms#attr-input-readonly readonly} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-readonly readonly} attribute.
 	 *
 	 * <p>
 	 * Whether to allow the value to be edited by the user.
@@ -424,7 +424,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-readonly required} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-readonly required} attribute.
 	 *
 	 * <p>
 	 * Whether the control is required for form submission.
@@ -440,7 +440,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-size size} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-size size} attribute.
 	 *
 	 * <p>
 	 * Size of the control.
@@ -456,7 +456,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-src src} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -472,7 +472,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-step step} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-step step} attribute.
 	 *
 	 * <p>
 	 * Granularity to be matched by the form control's value.
@@ -486,7 +486,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-type type} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-type type} attribute.
 	 *
 	 * <p>
 	 * Type of form control.
@@ -500,7 +500,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-input-value value} attribute.
+	 * {@doc ExtHTML5.forms#attr-input-value value} attribute.
 	 *
 	 * <p>
 	 * Value of the form control.
@@ -516,7 +516,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	/**
-	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
+	 * {@doc ExtHTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

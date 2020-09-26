@@ -19,11 +19,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML {@doc HTML5.forms#the-form-element <form>}
+ * DTO for an HTML {@doc ExtHTML5.forms#the-form-element <form>}
  * element.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-dto.HTML5}
+ * 	<li class='link'>{@doc DtoHtml5}
  * </ul>
  */
 @Bean(typeName="form")
@@ -54,7 +54,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-form-accept-charset accept-charset}
+	 * {@doc ExtHTML5.forms#attr-form-accept-charset accept-charset}
 	 * attribute.
 	 *
 	 * <p>
@@ -69,7 +69,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-action action} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-action action} attribute.
 	 *
 	 * <p>
 	 * URL to use for form submission.
@@ -90,7 +90,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-form-autocomplete autocomplete}
+	 * {@doc ExtHTML5.forms#attr-form-autocomplete autocomplete}
 	 * attribute.
 	 *
 	 * <p>
@@ -105,7 +105,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-enctype enctype} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-enctype enctype} attribute.
 	 *
 	 * <p>
 	 * Form data set encoding type to use for form submission.
@@ -119,7 +119,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-method method} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-method method} attribute.
 	 *
 	 * <p>
 	 * HTTP method to use for form submission.
@@ -133,7 +133,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-form-name name} attribute.
+	 * {@doc ExtHTML5.forms#attr-form-name name} attribute.
 	 *
 	 * <p>
 	 * Name of form to use in the document.forms API.
@@ -147,7 +147,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-novalidate novalidate} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-novalidate novalidate} attribute.
 	 *
 	 * <p>
 	 * Bypass form control validation for form submission.
@@ -162,7 +162,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	/**
-	 * {@doc HTML5.forms#attr-fs-target target} attribute.
+	 * {@doc ExtHTML5.forms#attr-fs-target target} attribute.
 	 *
 	 * <p>
 	 * Browsing context for form submission.

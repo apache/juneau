@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-marshall.Marshalls}
+ * 	<li class='link'>{@doc Marshalls}
  * </ul>
  */
 public abstract class Marshall {
