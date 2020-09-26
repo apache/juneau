@@ -36,14 +36,13 @@ public class DocStore {
 		}
 	}
 
-	public void addLink(String shortKey, String longKey, String href, String text) {
-		mappings.put(longKey, new Link(href, text));
-		if (! shortKey.contentEquals(longKey)) {
-			if (mappings.containsKey(shortKey))
-				mappings.remove(shortKey);
-			else
-				mappings.put(shortKey, new Link(href, text));
+	public void addLink(String key, String href, String text) {
+		if (mappings.containsKey(key)) {
+			mappings.remove(key);
+			Console.warning("Duplicate @doc tag: {0}", key);
+			return;
 		}
+		mappings.put(key, new Link(href, text));
 	}
 
 	public Link getLink(String key) {
