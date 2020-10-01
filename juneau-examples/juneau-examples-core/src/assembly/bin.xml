@@ -30,12 +30,14 @@
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
+			<useDefaultExcludes>false</useDefaultExcludes>
 			<directory>${basedir}</directory>
 			<includes>
 				<include>src/main/**</include>
 				<include>src/test/**</include>
 				<include>.settings/**</include>
 				<include>.project</include>
+				<include>.classpath</include>
 			</includes>
 		</fileSet>
 		<fileSet>

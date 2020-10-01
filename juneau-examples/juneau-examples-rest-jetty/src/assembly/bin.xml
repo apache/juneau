@@ -37,6 +37,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
+			<useDefaultExcludes>false</useDefaultExcludes>
 			<directory>${basedir}</directory>
 			<outputDirectory>/</outputDirectory>
 			<includes>
@@ -44,6 +45,7 @@
 				<include>files/**</include>
 				<include>.settings/**</include>
 				<include>.project</include>
+				<include>.classpath</include>
 				<include>*.launch</include>
 				<include>*.cfg</include>
 			</includes>

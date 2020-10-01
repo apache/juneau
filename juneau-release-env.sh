@@ -13,14 +13,16 @@
 # ***************************************************************************************************************************
 
 # DO NOT CHECK IN CHANGES TO THIS FILE!
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
+export PATH=$JAVA_HOME/bin:$PATH
 
-export X_VERSION=7.0.0
-export X_NEXT_VERSION=7.0.1-SNAPSHOT
-export X_RELEASE=juneau-7.0.0-RC1
+export X_VERSION=8.2.0
+export X_NEXT_VERSION=8.2.1-SNAPSHOT
+export X_RELEASE=juneau-8.2.0-RC1
 export X_STAGING=~/tmp/dist-release-juneau
-export X_USERNAME=your apache username
-export X_EMAIL=you@apache.org
-export X_CLEANM2=Y
+export X_USERNAME=foo
+export X_EMAIL=foo@apache.org
+export X_CLEANM2=N
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------
