@@ -13,9 +13,13 @@
  ***************************************************************************************************************************/
  -->
 
-8.1.4 (TBD)
+8.2.0 (TBD)
 
 <p>
+Juneau 8.2.0 is a major release. 
+The most significant change is the addition of an entirely new {@link oajr.client2.RestClient} API build from scratch
+with near 100% unit test coverage.
+The new API is located in the <c>org.apache.juneau.rest.client2</c> package and will replace the old API in 9.0.
 </p>
 
 <h5 class='topic w800'>juneau-marshall</h5>
@@ -34,7 +38,7 @@
 	<li>
 		Annotations are now aggregated across the entire class hierarchy instead of simply being overridden.
 		<br>The following is an example.
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Parent class with properties a,b,c</jc>
 	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
 	<jk>public class</jk> MyClass {
@@ -68,7 +72,7 @@
 	<li>
 		Config annotations now override class-level annotations.
 		<br>For example, only the 'a' and 'b' properties get serialized on the bean below:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Parent class with properties a,b,c</jc>
 	<ja>@Bean</ja>(bpi=<js>"a,b,c"</js>)
 	<jk>public class</jk> MyClass {
@@ -105,7 +109,7 @@
 			<li class'jc'>{@link oaj.xml.annotation.XmlAnnotation} <jk>implements</jk> {@link oaj.xml.annotation.Xml}
 		</ul>
 		<br>Example:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@Bean</ja>(bpi=<js>"street,city"</js>) <jc>// Will be overridden</jc>
 	<jk>public class</jk> AddressBean {...}
 	
@@ -116,7 +120,7 @@
 	<li>
 		Bean maps now have the concept of "hidden" properties (properties that aren't serialized but otherwise accessible).
 		<br>For example, the {@link oaj.html.annotation.Html#link()} can now reference hidden properties:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@Bean</ja>(bpi=<js>"a"</js>) <jc>// Will be overridden</jc>
 	<jk>public class</jk> MyBean {
 		
@@ -170,7 +174,7 @@
 	<li>
 		All classes in the {@link oaj.http.response} and {@link oaj.http.exception} now have <c>header(String,Object)</c>
 		methods for adding response headers.
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Method that performs a BASIC Auth handshake.</jc>
 	<ja>@RestMethod</ja>
 	<jk>public</jk> Ok checkBasicAuth(<ja>@Header</ja>(<js>"Authorization"</js>) String auth) <jk>throws</jk> Unauthorized {
@@ -207,7 +211,7 @@
 		</ul>
 	<li>
 		Convenience methods added to {@link oaj.httppart.HttpPartSchema} and related classes to simplify schema definitions:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		
 	<jc>// Old</jc>
@@ -232,7 +236,7 @@
 		<c>JuneauLogger</c> class is being deprecated.  Improvements in logging in Java 8 make it obsolete.
 	<li>
 		Bean filters can now be specified programmatically through a builder API.
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// Create a JSON serializer that only includes specified fields on a specific class.</jc>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
@@ -250,7 +254,7 @@
 		</ul>
 	<li>
 		Fluent setters that follow the <c>withX</c> convention are now automatically detected by all parsers.
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<jc>// A bean with a fluent setter.</jc>
 	<jk>public class</jk> MyBean {
 		<jk>public</jk> MyBean withFoo(String <jv>foo</jv>) {
@@ -390,7 +394,7 @@
 	<li>
 		New {@link oaj.http.annotation.Path#required() @Path(required)} annotation support.
 		<br>A path can be marked as not-required when the path variable is resolved by a parent resource like so:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@Rest</ja>(path=<js>"/parent/{p1}"</js>,children=Child.<jk>class</jk>)
 	<jk>public class</jk> Parent {
 		...
@@ -412,7 +416,7 @@
 		New {@link oajr.annotation.RestMethod#paths() @RestMethod(paths)} annotation that allows you to map multiple
 		paths to the same Java method.
 		<br>Example:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@RestMethod</ja>(
 		name=<jsf>GET</jsf>,
 		paths={<js>"/"</js>,<js>"/{foo}"</js>}
@@ -422,7 +426,7 @@
 	<li>
 		The {@link oajr.annotation.RestMethod @RestMethod} annotation is now implied on all unannotated methods of a {@link oajr.annotation.Rest @Rest}-annotated
 		interface.
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@Rest
 	<jk>public interface</jk> MyRest {
 		String getFoo();  <jc>// @RestMethod(name=GET,path="/foo") is implied.</jc>
@@ -452,12 +456,13 @@
 			<li>All APIs now extend from HttpClient interfaces.
 			<li>Better integration with HttpClient.
 			<li>New fluent-style methods with many new convenience methods.
+			<li>Updated {@doc juneau-rest-client documentation}.
 		</ul>
 	<li>
 		<ja>@RemoteMethod</ja>-annotated methods can now return {@link java.util.concurrent.Future Futures} and 
 		{@link java.util.concurrent.CompletableFuture CompletableFutures} for concurrent processing of requests.
 		<br>Example:
-		<p class='bpcode w800'>
+		<p class='bcode w800'>
 	<ja>@Remote</ja>
 	<jk>public interface</jk> MyInterface {
 		<jk>public</jk> Future&lt;String&gt; doGet();

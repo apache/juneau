@@ -13,6 +13,6 @@
 
 . ~/.profile
 set -e
-export JUNEAU_VERSION=8.1.4
+export JUNEAU_VERSION=8.2.0
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
 [ -z "$X_VERSION" ] && export X_VERSION="${JUNEAU_VERSION}-SNAPSHOT"
