@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>8.2.0</version>
+		<version>8.2.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-rest-server-rdf</artifactId>

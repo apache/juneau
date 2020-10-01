@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>8.2.0</version>
+		<version>8.2.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-my-jetty-microservice</artifactId>
@@ -36,7 +36,7 @@
 	<description>Apache Juneau Jetty Microservice Template</description>
 	
 	<properties>
-		<juneau.version>8.2.0</juneau.version>
+		<juneau.version>8.2.1-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
