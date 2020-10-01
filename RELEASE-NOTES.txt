@@ -12,6 +12,53 @@
 ***************************************************************************************************************************
 
 
+Release Notes - Juneau - Version 8.2.0
+
+** Bug
+    * [JUNEAU-168] - Serializer/Parser handling of proxy beans.
+    * [JUNEAU-184] - HtmlSerializer doesn't property serialize Collection<A> objects.
+    * [JUNEAU-187] - HtmlSerializer does not honor @Bean(bpi) on collections of beans with null values in first row.
+    * [JUNEAU-189] - @ReestMethod(debug="true") does not appear to cause HTTP requests to be logged.
+    * [JUNEAU-195] - @Beanp("*") not working correctly?
+    * [JUNEAU-196] - @Html(noTableHeaders) should work on Collections of beans.
+    * [JUNEAU-197] - @BeanConfig(bpi) does not override @Bean(bpi)
+    * [JUNEAU-201] - JettyMicroserviceBuilder logConfig method is a NO-OP
+    * [JUNEAU-216] - BEANTRAVERSE_initialDepth not setting indentation correctly on first line.
+    * [JUNEAU-232] - BEAN_isIgnoreUnknownNullBeanProperties doesn't always work correctly.
+    * [JUNEAU-233] - JsonParser is not instantiating interface proxies.
+    * [JUNEAU-234] - BEAN_ignoreInvocationExceptionsOnGetters is not working.
+
+** New Feature
+    * [JUNEAU-242] - Framework should recognize "withX" fluent setters.
+
+** Improvement
+    * [JUNEAU-180] - Incorrect Swagger on Spring Boot methods that return Collections of beans.
+    * [JUNEAU-181] - JuneauRestInitializer needs a no-arg constructor.
+    * [JUNEAU-182] - Add a RestCallHandler interface to the RestClient API
+    * [JUNEAU-183] - Remote methods should support Future return types.
+    * [JUNEAU-185] - ResourceDescriptions needs an append(url, label, description) method.
+    * [JUNEAU-186] - REST classes should allow themselves to implement helper classes.
+    * [JUNEAU-188] - @Bean annotation should override class visibility rules.
+    * [JUNEAU-190] - Need ability to define actions for unauthorized requests via the @Rest(roleGuard).
+    * [JUNEAU-191] - <aside> elements in HtmlDocSerializer should allow to float left/right/top/bottom instead of just right.
+    * [JUNEAU-192] - HtmlElement beans should have convenience constructors or creators.
+    * [JUNEAU-193] - RestClient should support all languages by default.
+    * [JUNEAU-194] - Provide a simple Hyperlink bean.
+    * [JUNEAU-198] - Need improved ability to turn on debug in REST via environment variables.
+    * [JUNEAU-199] - New ContentDisposition header bean.
+    * [JUNEAU-200] - StreamResource/ReaderResource classes should take in HttpHeader beans.
+    * [JUNEAU-202] - Add option for ignoring @Transient properties during marshalling.
+    * [JUNEAU-203] - Bean copy constructor can be confused with builder constructor.
+    * [JUNEAU-204] - Add @RestMethod(paths) to allow matching multiple paths.
+    * [JUNEAU-205] - Add @Path(required=boolean) annotation to allow path variables to be optionally matched.
+    * [JUNEAU-208] - Version 7.2.2 is missing from https://juneau.apache.org/#whatsnew.html
+    * [JUNEAU-227] - BEAN_methodVisibility and BEAN_constructorVisibility doesn't affect swap methods.
+    * [JUNEAU-228] - Make it easier to create bean filters programmatically.
+    * [JUNEAU-235] - New BeanInterceptor API for intercepting calls to getters/setters.
+    * [JUNEAU-236] - BEAN_addRootType doesn't work without BEAN_addBeanTypes
+    * [JUNEAU-240] - RestContext should be subclassible.
+    
+
 Release Notes - Juneau - Version 8.1.3
 
 ** Bug
