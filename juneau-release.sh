@@ -203,14 +203,12 @@ cd $X_STAGING/dist/source/$X_RELEASE
 wget -e robots=off --recursive --no-parent --no-directories -A "*-source-release*" https://repository.apache.org/content/repositories/$X_REPO/org/apache/juneau/
 mv juneau-${X_VERSION}-source-release.zip apache-juneau-${X_VERSION}-src.zip
 mv juneau-${X_VERSION}-source-release.zip.asc apache-juneau-${X_VERSION}-src.zip.asc
-mv juneau-${X_VERSION}-source-release.zip.md5 apache-juneau-${X_VERSION}-src.zip.md5
 gpg --print-md SHA512 apache-juneau-${X_VERSION}-src.zip > apache-juneau-${X_VERSION}-src.zip.sha512
 rm *.sha1
 cd $X_STAGING/dist/binaries/$X_RELEASE
 wget -e robots=off --recursive --no-parent --no-directories -A "juneau-distrib*-bin.zip*" https://repository.apache.org/content/repositories/$X_REPO/org/apache/juneau/
 mv juneau-distrib-${X_VERSION}-bin.zip apache-juneau-${X_VERSION}-bin.zip
 mv juneau-distrib-${X_VERSION}-bin.zip.asc apache-juneau-${X_VERSION}-bin.zip.asc
-mv juneau-distrib-${X_VERSION}-bin.zip.md5 apache-juneau-${X_VERSION}-bin.zip.md5
 gpg --print-md SHA512 apache-juneau-${X_VERSION}-bin.zip > apache-juneau-${X_VERSION}-bin.zip.sha512
 rm *.sha1
 cd $X_STAGING/dist
