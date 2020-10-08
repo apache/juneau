@@ -22720,14 +22720,14 @@ Resource bundles are searched using the following base name patterns:
 	RestClient <jv>client</jv> = RestClient
 		.<jsm>create</jsm>()
 		.headers(
-			AMap.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
-			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>)  <jc>// A Header object.</jc>
-			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,()->getBar())  <jc>// A dynamic Header object.</jc>
-			Accept.<jsm>of</jsm>(<js>"application/json"</js>)  <jc>// Predefined Header objects.</jc>
-			HeaderSupplier.<jsm>ofPairs</jsm>(<js>"Foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of Header objects.</jc>
+			AMap.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>),  <jc>// Arbitrary key/value pairs.</jc>
+			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>),  <jc>// A Header object.</jc>
+			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,()->getBar()),  <jc>// A dynamic Header object.</jc>
+			Accept.<jsm>of</jsm>(<js>"application/json"</js>),  <jc>// Predefined Header objects.</jc>
+			HeaderSupplier.<jsm>ofPairs</jsm>(<js>"Foo"</js>,<js>"bar"</js>),  <jc>// A dynamically changing list of Header objects.</jc>
 			AList.<jsm>of</jsm>(ContentType.<jsm>of</jsm>(<js>"application/json"</js>))  <jc>// A list of anything else on this list.</jc>
 		)
-		.headerPairs(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)
+		.headerPairs(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
 		.build();
 </p>
 
@@ -22835,13 +22835,13 @@ Resource bundles are searched using the following base name patterns:
 	RestClient <jv>client</jv> = RestClient
 		.<jsm>create</jsm>()
 		.queries(
-			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
-			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>),  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar()),  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A dynamically changing list of NameValuePair objects.</jc>
 			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
 		)
-		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.queryPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
 		.build();
 </p>
 
@@ -22918,13 +22918,13 @@ Resource bundles are searched using the following base name patterns:
 	RestClient <jv>client</jv> = RestClient
 		.<jsm>create</jsm>()
 		.formDatas(
-			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
-			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>),  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar()),  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A dynamically changing list of NameValuePair objects.</jc>
 			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
 		)
-		.formDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.formDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
 		.build();
 </p>
 

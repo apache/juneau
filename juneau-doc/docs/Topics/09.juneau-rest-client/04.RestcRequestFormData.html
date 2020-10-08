@@ -61,13 +61,13 @@ Request Form Data
 	RestClient <jv>client</jv> = RestClient
 		.<jsm>create</jsm>()
 		.formDatas(
-			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A NameValuePair object.</jc>
-			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar())  <jc>// A dynamic NameValuePair object.</jc>
-			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>)  <jc>// A dynamically changing list of NameValuePair objects.</jc>
+			AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>),  <jc>// Arbitrary key/value pairs.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A NameValuePair object.</jc>
+			BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,()->getBar()),  <jc>// A dynamic NameValuePair object.</jc>
+			NameValuePairSupplier.<jsm>ofPairs</jsm>(<js>"foo"</js>,<js>"bar"</js>),  <jc>// A dynamically changing list of NameValuePair objects.</jc>
 			AList.<jsm>of</jsm>(BasicNameValuePair.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>))  <jc>// A list of anything else on this list.</jc>
 		)
-		.formDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
+		.formDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
 		.build();
 </p>
 
