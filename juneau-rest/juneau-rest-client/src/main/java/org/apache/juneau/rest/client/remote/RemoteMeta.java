@@ -45,15 +45,11 @@ public class RemoteMeta {
 	 *
 	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.Remote @Remote} annotation (optional).
 	 */
-	@SuppressWarnings("deprecation")
 	public RemoteMeta(Class<?> c) {
 		String path = "";
 
 		ClassInfo ci = ClassInfo.of(c);
-		for (RemoteResource r : ci.getAnnotations(RemoteResource.class))
-			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
-		for (org.apache.juneau.http.remote.RemoteResource r : ci.getAnnotations(org.apache.juneau.http.remote.RemoteResource.class))
+		for (Remote r : ci.getAnnotations(Remote.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
