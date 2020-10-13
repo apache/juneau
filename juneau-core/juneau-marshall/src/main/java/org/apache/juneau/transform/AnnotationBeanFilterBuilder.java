@@ -37,14 +37,10 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	 * 	The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
-	@SuppressWarnings("deprecation")
 	public AnnotationBeanFilterBuilder(Class<T> annotatedClass, List<Bean> annotations) throws Exception {
 		super(annotatedClass);
 
 		for (Bean b : annotations) {
-
-			if (! b.properties().isEmpty())
-				bpi(split(b.properties()));
 
 			if (! b.bpi().isEmpty())
 				bpi(split(b.bpi()));
@@ -57,9 +53,6 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 			if (b.fluentSetters())
 				fluentSetters(true);
-
-			if (! b.excludeProperties().isEmpty())
-				bpx(split(b.excludeProperties()));
 
 			if (! b.bpx().isEmpty())
 				bpx(split(b.bpx()));
@@ -78,9 +71,6 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 			if (b.stopClass() != Object.class)
 				stopClass(b.stopClass());
-
-			if (b.beanDictionary().length > 0)
-				dictionary(b.beanDictionary());
 
 			if (b.dictionary().length > 0)
 				dictionary(b.dictionary());

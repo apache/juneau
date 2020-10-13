@@ -39,23 +39,6 @@ import org.apache.juneau.transform.*;
 public @interface Bean {
 
 	/**
-	 * Bean dictionary.
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #dictionary()}.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanDictionary() default {};
-
-	/**
 	 * Bean property includes.
 	 *
 	 * <p>
@@ -164,15 +147,6 @@ public @interface Bean {
 	 * </ul>
 	 */
 	Class<?>[] dictionary() default {};
-
-	/**
-	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #bpx()}.
-	 * </div>
-	 */
-	@Deprecated String excludeProperties() default "";
 
 	/**
 	 * Find fluent setters.
@@ -306,15 +280,6 @@ public @interface Bean {
 	 * </ul>
 	 */
 	String on() default "";
-
-	/**
-	 * The set and order of names of properties associated with a bean class.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #bpi()}.
-	 * </div>
-	 */
-	@Deprecated String properties() default "";
 
 	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.

@@ -228,62 +228,6 @@ public @interface BeanConfig {
 	String beanConstructorVisibility() default "";
 
 	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary in this bean context.
-	 *
-	 * <p>
-	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
-	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
-	 * as <js>"{_type:'myfoo',...}"</js>.
-	 *
-	 * <p>
-	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * 	<li class='link'>{@doc BeanDictionaries}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary()}.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanDictionary() default {};
-
-	/**
-	 * Configuration property:  Add to bean dictionary.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary_replace()}.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanDictionary_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from bean dictionary.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary_remove()}.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanDictionary_remove() default {};
-
-	/**
 	 * Configuration property:  Minimum bean field visibility.
 	 *
 	 * <p>
@@ -606,44 +550,6 @@ public @interface BeanConfig {
 	String[] bpi() default {};
 
 	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * <p>
-	 * Specifies the set and order of names of properties associated with the bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		bpiMap={
-	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
-	 * 		}
-	 * 	)
-	 * <p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class applied to.
-	 * 		<br>Values are comma-delimited lists of property names.
-	 * 	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpi()}.
-	 * </div>
-	 */
-	@Deprecated
-	CS[] bpiMap() default {};
-
-	/**
 	 * Configuration property:  Bean property excludes.
 	 *
 	 * Shortcut for specifying the {@link Bean#bpx()} annotation for all serializers.
@@ -705,44 +611,6 @@ public @interface BeanConfig {
 	String[] bpx() default {};
 
 	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * <p>
-	 * Specifies to exclude the specified list of properties for the specified bean class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		bpxMap={
-	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"foo,bar"</js>)
-	 * 		}
-	 * 	)
-	 * <p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class applied to.
-	 * 		<br>Values are comma-delimited lists of property names.
-	 *	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpx()}.
-	 * </div>
-	 */
-	@Deprecated
-	CS[] bpxMap() default {};
-
-	/**
 	 * Configuration property:  Read-only bean properties.
 	 *
 	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all parsers.
@@ -788,45 +656,6 @@ public @interface BeanConfig {
 	String[] bpro() default {};
 
 	/**
-	 * Configuration property:  Read-only bean properties.
-	 *
-	 * Shortcut for specifying the {@link Bean#bpro()} annotation for all parsers.
-	 *
-	 * <p>
-	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
-	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Ignore 'a' and 'b' properties if they're present in the HTTP request body.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/mybeans"</js>)
-	 * 	<ja>@BeanConfig</ja>(bproMap={<ja>@CS</ja>(MyBean.<jk>class</jk>, <js>"a,b"</js>)})
-	 * 	<jk>public void</jk> postMyBeans(List&lt;MyBean&gt; l) {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Values are comma-delimited lists of bean property names.
-	 * 	<li>
-	 * 		Properties apply to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpi()}.
-	 * </div>
-	 */
-	@Deprecated
-	CS[] bproMap() default {};
-
-	/**
 	 * Configuration property:  Write-only bean properties.
 	 *
 	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all serializers.
@@ -870,45 +699,6 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	String[] bpwo() default {};
-
-	/**
-	 * Configuration property:  Write-only bean properties.
-	 *
-	 * Shortcut for specifying the {@link Bean#bpwo()} annotation for all serializers.
-	 *
-	 * <p>
-	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
-	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Ignore 'a' and 'b' properties if they're present in the HTTP request body.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>)
-	 * 	<ja>@BeanConfig</ja>(bpwoMap={<ja>@CS</ja>(MyBean.<jk>class</jk>, <js>"a,b"</js>)})
-	 * 	<jk>public void</jk> List&lt;MyBean&gt; getMyBeans() {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Values are comma-delimited lists of bean property names.
-	 * 	<li>
-	 * 		Properties apply to specified class and all subclasses.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #applyBean()} and {@link Bean#bpwo()}.
-	 * </div>
-	 */
-	@Deprecated
-	CS[] bpwoMap() default {};
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -1061,15 +851,6 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	String[] examples() default {};
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #bpxMap()}.
-	 * </div>
-	 */
-	@Deprecated CS[] excludeProperties() default {};
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -1270,15 +1051,6 @@ public @interface BeanConfig {
 	CC[] implClasses() default {};
 
 	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link #bpiMap()}.
-	 * </div>
-	 */
-	@Deprecated CS[] includeProperties() default {};
-
-	/**
 	 * Identifies a set of interfaces.
 	 *
 	 * <p>
@@ -1436,38 +1208,6 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	String[] notBeanPackages_remove() default {};
-
-	/**
-	 * Configuration property:  POJO swaps.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps()}
-	 * </div>
-	 */
-	@Deprecated
-	Class<? extends PojoSwap<?,?>>[] pojoSwaps() default {};
-
-	/**
-	 * Configuration property:  Add to POJO swap classes.
-	 *
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps_replace()}
-	 * </div>
-	 */
-	@Deprecated
-	Class<? extends PojoSwap<?,?>>[] pojoSwaps_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from POJO swap classes.
-	 *
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps_remove()}
-	 * </div>
-	 */
-	@Deprecated
-	Class<? extends PojoSwap<?,?>>[] pojoSwaps_remove() default {};
 
 	/**
 	 * Configuration property:  Bean property namer.

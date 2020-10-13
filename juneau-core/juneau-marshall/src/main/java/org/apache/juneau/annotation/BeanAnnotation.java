@@ -29,7 +29,6 @@ public class BeanAnnotation implements Bean {
 	private String on = "";
 
 	private Class<?>[]
-		beanDictionary = new Class[0],
 		dictionary = new Class[0];
 	private Class<?>
 		interfaceClass = Object.class,
@@ -43,8 +42,6 @@ public class BeanAnnotation implements Bean {
 		bpx = "",
 		bpro = "",
 		bpwo = "",
-		excludeProperties = "",
-		properties = "",
 		typeName = "",
 		typePropertyName = "";
 	boolean
@@ -72,22 +69,6 @@ public class BeanAnnotation implements Bean {
 	@Override
 	public Class<? extends Annotation> annotationType() {
 		return Bean.class;
-	}
-
-	@Override
-	public Class<?>[] beanDictionary() {
-		return beanDictionary;
-	}
-
-	/**
-	 * Sets the <c>beanDictionary</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanAnnotation beanDictionary(Class<?>...value) {
-		this.beanDictionary = value;
-		return this;
 	}
 
 	@Override
@@ -171,22 +152,6 @@ public class BeanAnnotation implements Bean {
 	}
 
 	@Override
-	public String excludeProperties() {
-		return excludeProperties;
-	}
-
-	/**
-	 * Sets the <c>excludeProperties</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanAnnotation excludeProperties(String value) {
-		this.excludeProperties = value;
-		return this;
-	}
-
-	@Override
 	public boolean fluentSetters() {
 		return fluentSetters;
 	}
@@ -242,22 +207,6 @@ public class BeanAnnotation implements Bean {
 	 */
 	public BeanAnnotation on(Class<?> value) {
 		this.on = value.getName();
-		return this;
-	}
-
-	@Override
-	public String properties() {
-		return properties;
-	}
-
-	/**
-	 * Sets the <c>properties</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanAnnotation properties(String value) {
-		this.properties = value;
 		return this;
 	}
 

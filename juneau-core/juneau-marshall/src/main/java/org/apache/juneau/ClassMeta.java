@@ -350,7 +350,6 @@ public final class ClassMeta<T> implements Type {
 		Object example;
 		Mutater<String,T> stringMutater;
 
-		@SuppressWarnings("deprecation")
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
@@ -616,8 +615,6 @@ public final class ClassMeta<T> implements Type {
 
 			if (bc != null) {
 				for (Bean b : bc.getAnnotations(Bean.class, c)) {
-					if (b.beanDictionary().length != 0)
-						beanRegistry = new BeanRegistry(bc, null, b.beanDictionary());
 					if (b.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, b.dictionary());
 

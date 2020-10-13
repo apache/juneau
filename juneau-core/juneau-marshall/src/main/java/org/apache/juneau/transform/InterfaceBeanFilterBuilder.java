@@ -52,18 +52,11 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 		init(interfaceClass, bc);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void init(Class<?> interfaceClass, BeanContext bc) {
 		interfaceClass(interfaceClass);
 		List<Bean> annotations = ClassInfo.of(interfaceClass).getAnnotations(Bean.class, bc);
 
 		for (Bean b : annotations) {
-
-			if (! b.properties().isEmpty())
-				bpi(split(b.properties()));
-
-			if (! b.excludeProperties().isEmpty())
-				bpx(split(b.excludeProperties()));
 
 			if (! b.bpi().isEmpty())
 				bpi(split(b.bpi()));
@@ -98,9 +91,6 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 			if (b.stopClass() != Object.class)
 				stopClass(b.stopClass());
-
-			if (b.beanDictionary().length > 0)
-				dictionary(b.beanDictionary());
 
 			if (b.dictionary().length > 0)
 				dictionary(b.dictionary());
