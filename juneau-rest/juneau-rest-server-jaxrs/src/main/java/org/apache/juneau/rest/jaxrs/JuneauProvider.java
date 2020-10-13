@@ -53,14 +53,6 @@ public @interface JuneauProvider {
 	Class<?>[] beanFilters() default {};
 
 	/**
-	 * Provider-level POJO swaps.
-	 *
-	 * @deprecated Use {@link #swaps()}
-	 */
-	@Deprecated
-	Class<?>[] pojoSwaps() default {};
-
-	/**
 	 * Provider-level properties.
 	 *
 	 * <p>
