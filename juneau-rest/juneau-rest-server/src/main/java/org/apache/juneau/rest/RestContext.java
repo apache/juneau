@@ -29,7 +29,6 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import javax.activation.*;
@@ -384,16 +383,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_allowedMethodParams = PREFIX + ".allowedMethodParams.s";
-
-	/**
-	 * Configuration property:  Allow header URL parameters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #REST_allowedHeaderParams}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_allowHeaderParams = PREFIX + ".allowHeaderParams.b";
 
 	/**
 	 * Configuration property:  REST call logger.
@@ -1082,36 +1071,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_defaultCharset = PREFIX + ".defaultCharset.s";
 
 	/**
-	 * Configuration property:  Default request attributes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #REST_reqAttrs}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_attrs = PREFIX + ".reqAttrs.smo";
-
-	/**
-	 * Configuration property:  Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #REST_reqHeaders}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
-
-	/**
-	 * Configuration property:  Default response headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #REST_resHeaders}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_defaultResponseHeaders = PREFIX + ".resHeaders.omo";
-
-	/**
 	 * Configuration property:  Compression encoders.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1373,16 +1332,6 @@ public class RestContext extends BeanContext {
 	 * </ul>
 	 */
 	public static final String REST_infoProvider = PREFIX + ".infoProvider.o";
-
-	/**
-	 * Configuration property:  REST logger.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #REST_callLogger}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_logger = PREFIX + ".logger.o";
 
 	/**
 	 * Configuration property:  The maximum allowed input size (in bytes) on HTTP requests.
@@ -3213,16 +3162,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_useClasspathResourceCaching = PREFIX + ".useClasspathResourceCaching.b";
 
 	/**
-	 * Configuration property:  Use stack trace hashes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link Logging#useStackTraceHashing}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_useStackTraceHashes = PREFIX + ".useStackTraceHashes.b";
-
-	/**
 	 * Configuration property:  Resource URI authority path.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -3555,8 +3494,6 @@ public class RestContext extends BeanContext {
 		renderResponseStackTraces,
 		useClasspathResourceCaching;
 	private final Enablement debug;
-	@Deprecated private final boolean
-		useStackTraceHashes;
 	private final String
 		clientVersionHeader,
 		uriAuthority,
@@ -3627,7 +3564,6 @@ public class RestContext extends BeanContext {
 	private final Map<String,StaticFile> staticFilesCache = new ConcurrentHashMap<>();
 
 	private final ResourceManager staticResourceManager;
-	@Deprecated private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
 	private final ThreadLocal<RestCall> call = new ThreadLocal<>();
 
@@ -3721,7 +3657,6 @@ public class RestContext extends BeanContext {
 			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
-			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			ReflectionMap.Builder<Enablement> deb = ReflectionMap.create(Enablement.class);
@@ -4548,36 +4483,7 @@ public class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the number of times this exception was thrown based on a hash of its stacktrace.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Not used by new logging API.
-	 * </div>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
-	 * </ul>
-	 *
-	 * @param e The exception to check.
-	 * @return
-	 * 	The number of times this exception was thrown, or <c>0</c> if {@link #REST_useStackTraceHashes}
-	 * 	setting is not enabled.
-	 */
-	@Deprecated
-	public int getStackTraceOccurrence(Throwable e) {
-		if (! useStackTraceHashes)
-			return 0;
-		int h = e.hashCode();
-		stackTraceHashes.putIfAbsent(h, new AtomicInteger());
-		return stackTraceHashes.get(h).incrementAndGet();
-	}
-
-	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
-	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */

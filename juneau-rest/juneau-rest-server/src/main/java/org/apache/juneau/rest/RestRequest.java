@@ -1652,40 +1652,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Logger.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use standard logging APIs
-	 * </div>
-	 *
-	 * <p>
-	 * Shortcut for calling <c>getContext().getLogger()</c>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<jk>public void</jk> doGet(RestRequest req) {
-	 *
-	 * 		req.getLogger().logObjects(<jsf>FINE</jsf>, <js>"Request query parameters = {0}"</js>, req.getQuery());
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The logger associated with the resource context.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	@Deprecated
-	public RestCallLogger getLogger() {
-		return null;
-	}
-
-	/**
 	 * Returns the logging configuration defined on the Java method that this request is executing against.
 	 *
 	 * @return The logging configuration defined on the Java method that this request is executing against.

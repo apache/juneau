@@ -530,37 +530,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow header URL parameters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #allowedHeaderParams(String)}
-	 * </div>
-	 *
-	 * <p>
-	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-	 * parameters.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?Accept=text/json&amp;Content-Type=text/json
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowHeaderParams}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder allowHeaderParams(boolean value) {
-		return set(REST_allowedHeaderParams, value ? "*" : null);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
 	 *
 	 * <p>

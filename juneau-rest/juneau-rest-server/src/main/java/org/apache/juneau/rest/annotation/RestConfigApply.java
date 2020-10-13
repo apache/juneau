@@ -49,7 +49,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		super(c, r);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb) {
 		Rest a = ai.getAnnotation();
@@ -86,28 +85,12 @@ public class RestConfigApply extends ConfigApply<Rest> {
 		if (a.consumes().length > 0)
 			psb.set(REST_consumes, strings(a.consumes()));
 
-		for (String ra : strings(a.attrs())) {
-			String[] ra2 = RestUtils.parseKeyValuePair(ra);
-			if (ra2 == null)
-				throw new BasicRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
-			if (isNotEmpty(ra2[1]))
-				psb.putTo(REST_attrs, ra2[0], ra2[1]);
-		}
-
 		for (String ra : strings(a.reqAttrs())) {
 			String[] ra2 = RestUtils.parseKeyValuePair(ra);
 			if (ra2 == null)
 				throw new BasicRuntimeException("Invalid default request attribute specified: ''{0}''.  Must be in the format: ''Name: value''", ra);
 			if (isNotEmpty(ra2[1]))
 				psb.putTo(REST_reqAttrs, ra2[0], ra2[1]);
-		}
-
-		for (String header : strings(a.defaultRequestHeaders())) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new BasicRuntimeException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			if (isNotEmpty(h[1]))
-				psb.putTo(REST_defaultRequestHeaders, h[0], h[1]);
 		}
 
 		for (String header : strings(a.reqHeaders())) {
@@ -129,14 +112,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 			if (isNotEmpty(s))
 				psb.putTo(REST_reqHeaders, "Content-Type", s);
 
-		}
-
-		for (String header : strings(a.defaultResponseHeaders())) {
-			String[] h = parseHeader(header);
-			if (h == null)
-				throw new BasicRuntimeException("Invalid default response header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", header);
-			if (isNotEmpty(h[1]))
-				psb.putTo(REST_defaultResponseHeaders, h[0], h[1]);
 		}
 
 		for (String header : strings(a.resHeaders())) {

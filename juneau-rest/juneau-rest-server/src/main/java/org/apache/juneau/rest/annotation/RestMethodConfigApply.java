@@ -78,14 +78,6 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		if (a.consumes().length > 0)
 			psb.set(REST_consumes, strings(a.consumes()));
 
-		for (String header : strings(a.defaultRequestHeaders())) {
-			String[] h = RestUtils.parseHeader(header);
-			if (h == null)
-				throw new ConfigException("Invalid default request header specified on method ''{0}'': ''{1}''.  Must be in the format: ''Header-Name: header-value''", sig, header);
-			if (isNotEmpty(h[1]))
-				psb.putTo(REST_defaultRequestHeaders, h[0], h[1]);
-		}
-
 		for (String header : strings(a.reqHeaders())) {
 			String[] h = RestUtils.parseHeader(header);
 			if (h == null)
