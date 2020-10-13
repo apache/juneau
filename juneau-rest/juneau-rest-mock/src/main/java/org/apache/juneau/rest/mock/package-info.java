@@ -15,4 +15,4 @@
 /**
  * REST Server Mock API
  */
-package org.apache.juneau.rest.mock2;
+package org.apache.juneau.rest.mock;

@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.json.JsonSerializer.*;
-import static org.apache.juneau.rest.mock2.MockRestClient.*;
+import static org.apache.juneau.rest.mock.MockRestClient.*;
 
 import java.io.*;
 
@@ -27,7 +27,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;

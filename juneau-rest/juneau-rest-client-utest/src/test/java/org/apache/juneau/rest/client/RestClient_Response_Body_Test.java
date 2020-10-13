@@ -33,7 +33,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;

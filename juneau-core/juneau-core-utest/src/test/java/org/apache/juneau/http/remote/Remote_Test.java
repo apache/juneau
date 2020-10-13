@@ -22,11 +22,11 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.RemoteMethod;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

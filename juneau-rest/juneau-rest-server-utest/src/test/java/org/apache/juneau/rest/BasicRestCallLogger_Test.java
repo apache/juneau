@@ -21,7 +21,7 @@ import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 

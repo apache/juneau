@@ -23,7 +23,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})

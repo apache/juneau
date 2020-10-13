@@ -20,7 +20,7 @@ import java.util.logging.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

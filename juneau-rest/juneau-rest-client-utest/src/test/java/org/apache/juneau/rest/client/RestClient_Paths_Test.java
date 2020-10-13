@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

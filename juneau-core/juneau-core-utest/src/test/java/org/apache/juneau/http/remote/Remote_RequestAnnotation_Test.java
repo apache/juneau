@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 

@@ -20,7 +20,7 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

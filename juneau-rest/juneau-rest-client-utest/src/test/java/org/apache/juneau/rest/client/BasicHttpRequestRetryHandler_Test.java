@@ -23,7 +23,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 public class BasicHttpRequestRetryHandler_Test {

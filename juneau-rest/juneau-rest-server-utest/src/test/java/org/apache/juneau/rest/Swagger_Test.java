@@ -36,7 +36,7 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

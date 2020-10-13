@@ -14,7 +14,7 @@ package org.apache.juneau.rest.testutils;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 
 @SuppressWarnings({})
 public class TestUtils extends org.apache.juneau.testutils.TestUtils {

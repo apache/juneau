@@ -17,7 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

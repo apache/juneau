@@ -38,7 +38,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock2.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;

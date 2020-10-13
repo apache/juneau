@@ -10,34 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.mock2;
+package org.apache.juneau.rest.mock;
 
-import static org.junit.runners.MethodSorters.*;
+import org.apache.http.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.client.*;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.annotation.*;
-import org.junit.*;
+/**
+ * A subclass of {@link RestResponse} with additional features for mocked testing.
+ *
+ * <ul class='seealso'>
+ * 	<li class='link'>{@doc juneau-rest-mock}
+ * </ul>
+*/
+public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
 
-@FixMethodOrder(NAME_ASCENDING)
-public class MockRestClient_PathVars {
-
-	@Rest
-	public static class A {
-		@RestMethod
-		public String get(@Path("foo") String foo) {
-			return foo;
-		}
-	}
-
-	@Test
-	public void a01_basic() throws Exception {
-		MockRestClient
-			.create(A.class)
-			.pathVars("foo","bar")
-			.build()
-			.get("/")
-			.run()
-			.assertStatus().code().is(200)
-			.assertBody().is("bar");
+	/**
+	 * Constructor.
+	 *
+	 * @param client The RestClient that created this response.
+	 * @param request The REST request.
+	 * @param response The HTTP response.  Can be <jk>null</jk>.
+	 * @param parser The overridden parser passed into {@link RestRequest#parser(Parser)}.
+	 */
+	public MockRestResponse(RestClient client, RestRequest request, HttpResponse response, Parser parser) {
+		super(client, request, response, parser);
+		((MockRestClient)client).currentResponse(this);
 	}
 }
