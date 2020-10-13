@@ -98,20 +98,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	/**
 	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  Preserve root element during generalized parsing.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #preserveRootElement()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public XmlParserBuilder preserveRootElement(boolean value) {
-		return set(XML_preserveRootElement, value);
-	}
-
-	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  Preserve root element during generalized parsing.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>preserveRootElement(<jk>true</jk>)</code>.
 	 *
@@ -196,20 +182,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@FluentSetter
 	public XmlParserBuilder resolver(Class<? extends XMLResolver> value) {
 		return set(XML_resolver, value);
-	}
-
-	/**
-	 * <i><l>XmlParser</l> configuration property:&emsp;</i>  Enable validation.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #validating()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public XmlParserBuilder validating(boolean value) {
-		return set(XML_validating, value);
 	}
 
 	/**

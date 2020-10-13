@@ -59,20 +59,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Add namespace URLs to the root element.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #addNamespaceUrisToRoot()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public XmlSerializerBuilder addNamespaceUrisToRoot(boolean value) {
-		return set(XML_addNamespaceUrisToRoot, value);
-	}
-
-	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Add namespace URLs to the root element.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>addNamespaceUrisToRoot(<jk>true</jk>)</code>.
 	 *
@@ -85,20 +71,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@FluentSetter
 	public XmlSerializerBuilder addNamespaceUrisToRoot() {
 		return set(XML_addNamespaceUrisToRoot, true);
-	}
-
-	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Auto-detect namespace usage.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontAutoDetectNamespaces()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public XmlSerializerBuilder autoDetectNamespaces(boolean value) {
-		return set(XML_autoDetectNamespaces, value);
 	}
 
 	/**
@@ -136,20 +108,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@FluentSetter
 	public XmlSerializerBuilder defaultNamespace(String value) {
 		return set(XML_defaultNamespace, value);
-	}
-
-	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Enable support for XML namespaces.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #enableNamespaces()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public XmlSerializerBuilder enableNamespaces(boolean value) {
-		return set(XML_enableNamespaces, value);
 	}
 
 	/**

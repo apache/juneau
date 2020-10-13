@@ -51,20 +51,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	/**
 	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #detectRecursions()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanTraverseBuilder detectRecursions(boolean value) {
-		return set(BEANTRAVERSE_detectRecursions, value);
-	}
-
-	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
-	 *
 	 * <p>
 	 * When enabled, specifies that recursions should be checked for during traversal.
 	 *
@@ -106,20 +92,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public BeanTraverseBuilder detectRecursions() {
 		return set(BEANTRAVERSE_detectRecursions, true);
-	}
-
-	/**
-	 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #ignoreRecursions()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanTraverseBuilder ignoreRecursions(boolean value) {
-		return set(BEANTRAVERSE_ignoreRecursions, value);
 	}
 
 	/**
