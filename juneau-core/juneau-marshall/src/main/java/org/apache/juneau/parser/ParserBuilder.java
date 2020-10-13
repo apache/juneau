@@ -54,19 +54,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Auto-close streams.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #autoCloseStreams()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public ParserBuilder autoCloseStreams(boolean value) {
-		return set(PARSER_autoCloseStreams, value);
-	}
 
 	/**
 	 * <i><l>Parser</l> configuration property:&emsp;</i>  Auto-close streams.
@@ -192,19 +179,6 @@ public class ParserBuilder extends BeanContextBuilder {
 		return set(PARSER_listener, value);
 	}
 
-	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #strict()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public ParserBuilder strict(boolean value) {
-		return set(PARSER_strict, value);
-	}
 
 	/**
 	 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
@@ -271,20 +245,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	/**
 	 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public ParserBuilder trimStrings(boolean value) {
-		return set(PARSER_trimStrings, value);
-	}
-
-	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
-	 *
 	 * <p>
 	 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
@@ -314,20 +274,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	@FluentSetter
 	public ParserBuilder trimStrings() {
 		return set(PARSER_trimStrings, true);
-	}
-
-	/**
-	 * <i><l>Parser</l> configuration property:&emsp;</i>  Unbuffered.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #unbuffered()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public ParserBuilder unbuffered(boolean value) {
-		return set(PARSER_unbuffered, value);
 	}
 
 	/**

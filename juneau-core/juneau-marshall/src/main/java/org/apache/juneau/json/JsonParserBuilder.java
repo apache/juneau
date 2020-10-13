@@ -59,20 +59,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * <i><l>JsonParser</l> configuration property:&emsp;</i>  Validate end.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #validateEnd()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public JsonParserBuilder validateEnd(boolean value) {
-		return set(JSON_validateEnd, value);
-	}
-
-	/**
-	 * <i><l>JsonParser</l> configuration property:&emsp;</i>  Validate end.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
 	 *

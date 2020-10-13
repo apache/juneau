@@ -110,20 +110,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	/**
 	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #allowNestedDescriptions()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public JsonSchemaSerializerBuilder allowNestedDescriptions(boolean value) {
-		return set(JSONSCHEMA_allowNestedDescriptions, value);
-	}
-
-	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
-	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
@@ -136,20 +122,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
-	}
-
-	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested examples.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #allowNestedExamples()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public JsonSchemaSerializerBuilder allowNestedExamples(boolean value) {
-		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
 
 	/**
@@ -238,20 +210,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@FluentSetter
 	public JsonSchemaSerializerBuilder defaultSchema(Class<?> c, OMap schema) {
 		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
-	}
-
-	/**
-	 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #useBeanDefs()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public JsonSchemaSerializerBuilder useBeanDefs(boolean value) {
-		return set(JSONSCHEMA_useBeanDefs, value);
 	}
 
 	/**

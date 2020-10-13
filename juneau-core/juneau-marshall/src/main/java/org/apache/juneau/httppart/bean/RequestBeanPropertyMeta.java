@@ -115,30 +115,8 @@ public class RequestBeanPropertyMeta {
 	 * @param _default The default serializer to use if not defined on the annotation.
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	@Deprecated
-	public HttpPartSerializer getSerializer(HttpPartSerializer _default) {
-		return serializer == null ? _default : serializer;
-	}
-
-	/**
-	 * Returns the serializer to use for serializing the bean property value.
-	 *
-	 * @param _default The default serializer to use if not defined on the annotation.
-	 * @return The serializer to use for serializing the bean property value.
-	 */
 	public HttpPartSerializerSession getSerializer(HttpPartSerializerSession _default) {
 		return serializer == null ? _default : serializer.createPartSession(null);
-	}
-
-	/**
-	 * Returns the parser to use for parsing the bean property value.
-	 *
-	 * @param _default The default parsing to use if not defined on the annotation.
-	 * @return The parsing to use for serializing the bean property value.
-	 */
-	@Deprecated
-	public HttpPartParser getParser(HttpPartParser _default) {
-		return parser == null ? _default : parser;
 	}
 
 	/**

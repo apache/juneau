@@ -56,19 +56,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Prefix solidus <js>'/'</js> characters with escapes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #escapeSolidus()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public JsonSerializerBuilder escapeSolidus(boolean value) {
-		return set(JSON_escapeSolidus, value);
-	}
 
 	/**
 	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Prefix solidus <js>'/'</js> characters with escapes.
@@ -90,20 +77,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	/**
 	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #simple()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public JsonSerializerBuilder simple(boolean value) {
-		return set(JSON_simpleMode, value);
-	}
-
-	/**
-	 * <i><l>JsonSerializer</l> configuration property:&emsp;</i>  Simple JSON mode.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>simple(<jk>true</jk>)</code>.
 	 *
@@ -115,7 +88,7 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSerializerBuilder simple() {
-		return simple(true);
+		return set(JSON_simpleMode, true);
 	}
 
 	/**

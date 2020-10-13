@@ -83,20 +83,6 @@ public class InputStreamParserBuilder extends ParserBuilder {
 		return set(ISPARSER_binaryFormat, value);
 	}
 
-	/**
-	 * <i><l>InputStreamParser</l> configuration property:&emsp;</i>  Binary input format.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public InputStreamParserBuilder binaryFormat(String value) {
-		return set(ISPARSER_binaryFormat, BinaryFormat.valueOf(value));
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */
