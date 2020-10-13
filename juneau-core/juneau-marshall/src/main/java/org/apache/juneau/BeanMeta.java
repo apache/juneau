@@ -164,7 +164,6 @@ public class BeanMeta<T> {
 			this.pNames = pNames;
 		}
 
-		@SuppressWarnings("deprecation")
 		String init(BeanMeta<T> beanMeta) {
 			Class<?> c = classMeta.getInnerClass();
 			ClassInfo ci = classMeta.getInfo();
@@ -226,25 +225,6 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc constructor on public constructors.
 				for (ConstructorInfo x : ci.getPublicConstructors()) {
-					if (x.hasAnnotation(BeanConstructor.class)) {
-						if (constructor != null)
-							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
-						constructor = x;
-						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
-						if (constructorArgs.length != x.getParamCount()) {
-							if (constructorArgs.length != 0)
-								throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
-							constructorArgs = new String[x.getParamCount()];
-							int i = 0;
-							for (ParamInfo pi : x.getParams()) {
-								String pn = pi.getName();
-								if (pn == null)
-									throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
-								constructorArgs[i++] = pn;
-							}
-						}
-						constructor.setAccessible();
-					}
 					if (ctx.hasAnnotation(Beanc.class, x)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
@@ -386,10 +366,7 @@ public class BeanMeta<T> {
 							// Two getters.  Pick the best.
 							if (bpm.getter != null) {
 
-								if (m.getAnnotation(BeanProperty.class) == null && bpm.getter.getAnnotation(BeanProperty.class) != null)
-									m = bpm.getter;  // @BeanProperty annotated method takes precedence.
-
-								else if (! ctx.hasAnnotation(Beanp.class, m) && ctx.hasAnnotation(Beanp.class, bpm.getter))
+								if (! ctx.hasAnnotation(Beanp.class, m) && ctx.hasAnnotation(Beanp.class, bpm.getter))
 									m = bpm.getter;  // @Beanp annotated method takes precedence.
 
 								else if (m.getName().startsWith("is") && bpm.getter.getName().startsWith("get"))
@@ -565,11 +542,9 @@ public class BeanMeta<T> {
 		 * Returns null if the field isn't a valid property.
 		 */
 		private String findPropertyName(Field f) {
-			@SuppressWarnings("deprecation")
-			BeanProperty px = f.getAnnotation(BeanProperty.class);
 			List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
 			List<Name> ln = ctx.getAnnotations(Name.class, f);
-			String name = bpName(px, lp, ln);
+			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
 			return propertyNamer.getPropertyName(f.getName());
@@ -703,11 +678,9 @@ public class BeanMeta<T> {
 				if (t != null && t.value())
 					continue;
 
-				@SuppressWarnings("deprecation")
-				BeanProperty px = m.getLastAnnotation(BeanProperty.class);
 				List<Beanp> lp = ctx.getAnnotations(Beanp.class, m);
 				List<Name> ln = ctx.getAnnotations(Name.class, m);
-				if (! (m.isVisible(v) || px != null || lp.size() > 0 || ln.size() > 0))
+				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
 					continue;
 
 				String n = m.getSimpleName();
@@ -715,7 +688,7 @@ public class BeanMeta<T> {
 				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
-				String bpName = bpName(px, lp, ln);
+				String bpName = bpName(lp, ln);
 
 				if (pt.size() == 0) {
 					if ("*".equals(bpName)) {
@@ -807,11 +780,9 @@ public class BeanMeta<T> {
 				if (ctx.hasAnnotation(BeanIgnore.class, f))
 					continue;
 
-				@SuppressWarnings("deprecation")
-				BeanProperty px = f.getAnnotation(BeanProperty.class);
 				List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
 
-				if (! (v.isVisible(f.inner()) || px != null || lp.size() > 0))
+				if (! (v.isVisible(f.inner()) || lp.size() > 0))
 					continue;
 
 				l.add(f.inner());
@@ -1006,9 +977,8 @@ public class BeanMeta<T> {
 		return beanFilter == null ? value : beanFilter.writeProperty(bean, name, value);
 	}
 
-	@SuppressWarnings("deprecation")
-	static final String bpName(BeanProperty px, List<Beanp> p, List<Name> n) {
-		if (px == null && p.isEmpty() && n.isEmpty())
+	static final String bpName(List<Beanp> p, List<Name> n) {
+		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
 			return last(n).value();
@@ -1023,11 +993,6 @@ public class BeanMeta<T> {
 		if (name != null)
 			return name;
 
-		if (px != null) {
-			if (! px.name().isEmpty())
-				return px.name();
-			return px.value();
-		}
 		return null;
 	}
 
