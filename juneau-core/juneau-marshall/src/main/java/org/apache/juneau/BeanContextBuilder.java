@@ -383,93 +383,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionary(Object...values) {
-		return prependTo(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionary(Class<?>...values) {
-		return prependTo(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionaryReplace(Object...values) {
-		return set(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
-		return removeFrom(BEAN_beanDictionary, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beanDictionaryRemove(Object...values) {
-		return removeFrom(BEAN_beanDictionary, values);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Minimum bean field visibility.
 	 *
 	 * <p>
@@ -632,20 +545,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  BeanMap.put() returns old property value.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #beanMapPutReturnsOldValue()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanContextBuilder beanMapPutReturnsOldValue(boolean value) {
-		return set(BEAN_beanMapPutReturnsOldValue, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  BeanMap.put() returns old property value.
-	 *
 	 * <p>
 	 * When enabled, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
 	 * values.  Otherwise, it returns <jk>null</jk>.
@@ -739,20 +638,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require no-arg constructors.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #beansRequireDefaultConstructor()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beansRequireDefaultConstructor(boolean value) {
-		return set(BEAN_beansRequireDefaultConstructor, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require no-arg constructors.
-	 *
 	 * <p>
 	 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -811,20 +696,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require Serializable interface.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #beansRequireSerializable()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beansRequireSerializable(boolean value) {
-		return set(BEAN_beansRequireSerializable, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require Serializable interface.
-	 *
 	 * <p>
 	 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -878,20 +749,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require setters for getters.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #beansRequireSettersForGetters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beansRequireSettersForGetters(boolean value) {
-		return set(BEAN_beansRequireSettersForGetters, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require setters for getters.
-	 *
 	 * <p>
 	 * When enabled, ignore read-only properties (properties with getters but not setters).
 	 *
@@ -938,20 +795,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder beansRequireSettersForGetters() {
 		return set(BEAN_beansRequireSettersForGetters, true);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require at least one property.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #beansDontRequireSomeProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder beansRequireSomeProperties(boolean value) {
-		return set(BEAN_beansRequireSomeProperties, value);
 	}
 
 	/**
@@ -1697,20 +1540,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Debug mode.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #debug()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder debug(boolean value) {
-		return set(CONTEXT_debug, value);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean dictionary.
 	 *
 	 * <p>
@@ -1950,59 +1779,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpx(Class, String)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder excludeProperties(Class<?> beanClass, String properties) {
-		return putTo(BEAN_bpx, beanClass.getName(), properties);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpx(Map)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder excludeProperties(Map<String,String> values) {
-		return set(BEAN_bpx, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpx(String, String)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder excludeProperties(String beanClassName, String value) {
-		return putTo(BEAN_bpx, beanClassName, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Find fluent setters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #fluentSetters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder fluentSetters(boolean value) {
-		return set(BEAN_fluentSetters, value);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Find fluent setters.
 	 *
 	 * <p>
@@ -2099,20 +1875,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on getters.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnGetters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
-		return set(BEAN_ignoreInvocationExceptionsOnGetters, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on getters.
-	 *
 	 * <p>
 	 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -2156,20 +1918,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on setters.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #ignoreInvocationExceptionsOnSetters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
-		return set(BEAN_ignoreInvocationExceptionsOnSetters, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore invocation errors on setters.
-	 *
 	 * <p>
 	 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -2208,20 +1956,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
 		return set(BEAN_ignoreInvocationExceptionsOnSetters, true);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore properties without setters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontIgnorePropertiesWithoutSetters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignorePropertiesWithoutSetters(boolean value) {
-		return set(BEAN_ignorePropertiesWithoutSetters, value);
 	}
 
 	/**
@@ -2274,20 +2008,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore transient fields.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreTransientFields()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignoreTransientFields(boolean value) {
-		return set(BEAN_ignoreTransientFields, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore transient fields.
-	 *
 	 * <p>
 	 * When enabled, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
 	 *
@@ -2332,20 +2052,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore unknown properties.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #ignoreUnknownBeanProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignoreUnknownBeanProperties(boolean value) {
-		return set(BEAN_ignoreUnknownBeanProperties, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore unknown properties.
-	 *
 	 * <p>
 	 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -2382,20 +2088,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder ignoreUnknownBeanProperties() {
 		return set(BEAN_ignoreUnknownBeanProperties, true);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore unknown properties with null values.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontIgnoreUnknownNullBeanProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder ignoreUnknownNullBeanProperties(boolean value) {
-		return set(BEAN_ignoreUnknownNullBeanProperties, value);
 	}
 
 	/**
@@ -2537,45 +2229,6 @@ public class BeanContextBuilder extends ContextBuilder {
 		for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
 			putTo(BEAN_implClasses, e.getKey().getName(), e.getValue());
 		return this;
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpi(Class, String)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder includeProperties(Class<?> beanClass, String value) {
-		return putTo(BEAN_bpi, beanClass.getName(), value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpi(Map)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder includeProperties(Map<String,String> values) {
-		return set(BEAN_bpi, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpi(String, String)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated public BeanContextBuilder includeProperties(String beanClassName, String value) {
-		return putTo(BEAN_bpi, beanClassName, value);
 	}
 
 	/**
@@ -2889,20 +2542,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 		return prependTo(BEAN_annotations, new BeanAnnotation(on).propertyNamer(value));
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Sort bean properties.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #sortProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder sortProperties(boolean value) {
-		return set(BEAN_sortProperties, value);
 	}
 
 	/**
@@ -3288,20 +2927,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use enum names.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #useEnumNames()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder useEnumNames(boolean value) {
-		return set(BEAN_useEnumNames, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use enum names.
-	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 	 *
@@ -3353,20 +2978,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use interface proxies.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontUseInterfaceProxies()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder useInterfaceProxies(boolean value) {
-		return set(BEAN_useInterfaceProxies, value);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use interface proxies.
-	 *
 	 * <p>
 	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
@@ -3404,20 +3015,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder dontUseInterfaceProxies() {
 		return set(BEAN_useInterfaceProxies, false);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use Java Introspector.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #useJavaBeanIntrospector()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder useJavaBeanIntrospector(boolean value) {
-		return set(BEAN_useJavaBeanIntrospector, value);
 	}
 
 	/**

@@ -1225,15 +1225,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_examples = PREFIX + ".examples.smo";
 
 	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #BEAN_bpx}
-	 * </div>
-	 */
-	@Deprecated public static final String BEAN_excludeProperties = BEAN_bpx;
-
-	/**
 	 * Configuration property:  Find fluent setters.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1690,15 +1681,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 */
 	public static final String BEAN_implClasses = PREFIX + ".implClasses.smc";
-
-	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #BEAN_bpi}
-	 * </div>
-	 */
-	@Deprecated public static final String BEAN_includeProperties = BEAN_bpi;
 
 	/**
 	 * Configuration property:  Bean class exclusions.
