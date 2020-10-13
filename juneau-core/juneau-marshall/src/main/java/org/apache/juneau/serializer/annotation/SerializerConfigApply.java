@@ -38,7 +38,6 @@ public class SerializerConfigApply extends ConfigApply<SerializerConfig> {
 		super(c, r);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<SerializerConfig> ai, PropertyStoreBuilder psb) {
 		SerializerConfig a = ai.getAnnotation();
@@ -58,8 +57,6 @@ public class SerializerConfigApply extends ConfigApply<SerializerConfig> {
 			psb.set(SERIALIZER_trimEmptyCollections, bool(a.trimEmptyCollections()));
 		if (! a.trimEmptyMaps().isEmpty())
 			psb.set(SERIALIZER_trimEmptyMaps, bool(a.trimEmptyMaps()));
-		if (! a.trimNullProperties().isEmpty())
-			psb.set(SERIALIZER_trimNullProperties, bool(a.trimNullProperties()));
 		if (! a.trimStrings().isEmpty())
 			psb.set(SERIALIZER_trimStrings, bool(a.trimStrings()));
 		if (! a.uriContext().isEmpty())

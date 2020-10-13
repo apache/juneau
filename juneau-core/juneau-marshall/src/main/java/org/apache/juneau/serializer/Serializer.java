@@ -544,60 +544,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	public static final String SERIALIZER_trimEmptyMaps = PREFIX + ".trimEmptyMaps.b";
 
 	/**
-	 * Configuration property:  Trim null bean property values.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
-	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Serializer.trimNullProperties</c>
-	 * 	<li><b>Environment variable:</b>  <c>SERIALIZER_TRIMNULLPROPERTIES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.serializer.annotation.SerializerConfig#trimNullProperties()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#trimNullProperties(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.serializer.SerializerBuilder#dontTrimNullProperties()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, null bean values will not be serialized to the output.
-	 *
-	 * <p>
-	 * Note that enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Map entries with <jk>null</jk> values will be lost.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that serializes null properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.dontTrimNullProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_trimNullProperties</jsf>, <jk>false</jk>)
-	 * 		.build();
-	 * </p>
-	 * @deprecated Use {@link #SERIALIZER_keepNullProperties}
-	 */
-	@Deprecated
-	public static final String SERIALIZER_trimNullProperties = PREFIX + ".trimNullProperties.b";
-
-	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -881,7 +827,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		super(ps);
 
 		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes, false);
-		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties, ! getBooleanProperty(SERIALIZER_trimNullProperties, true));
+		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties, false);
 		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
 		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps, false);
 		trimStrings = getBooleanProperty(SERIALIZER_trimStrings, false);

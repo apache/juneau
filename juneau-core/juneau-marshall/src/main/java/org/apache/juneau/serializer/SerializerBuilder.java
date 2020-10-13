@@ -495,34 +495,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim null bean property values.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim null bean property values.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder dontTrimNullProperties() {
-		return set(SERIALIZER_trimNullProperties, false);
-	}
-
-	/**
 	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim strings.
 	 *
 	 * <div class='warn'>

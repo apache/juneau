@@ -261,12 +261,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimNullProperties(boolean value) {
-		super.trimNullProperties(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;

@@ -127,7 +127,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().swaps(getPojoSwaps()).trimNullProperties(false).build();
+		s = UrlEncodingSerializer.create().swaps(getPojoSwaps()).keepNullProperties().build();
 		e = "AQID=a&BAUG=null&null=b";
 		r = s.serialize(t);
 		assertEquals(e, r);

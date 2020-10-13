@@ -65,7 +65,7 @@ public class SerializerConfigAnnotationTest {
 		sortMaps="$X{true}",
 		trimEmptyCollections="$X{true}",
 		trimEmptyMaps="$X{true}",
-		trimNullProperties="$X{true}",
+		keepNullProperties="$X{false}",
 		trimStrings="$X{true}",
 		uriContext="{}",
 		uriRelativity="$X{RESOURCE}",

@@ -371,20 +371,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerGroupBuilder trimNullProperties(boolean value) {
-		return set(SERIALIZER_trimNullProperties, value);
-	}
-
-	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <div class='warn'>

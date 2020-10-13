@@ -303,38 +303,6 @@ public @interface SerializerConfig {
 	String trimEmptyMaps() default "";
 
 	/**
-	 * Configuration property:  Trim null bean property values.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, null bean values will not be serialized to the output.
-	 *
-	 * <p>
-	 * Note that enabling this setting has the following effects on parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Map entries with <jk>null</jk> values will be lost.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_trimNullProperties}
-	 * </ul>
-	 * @deprecated Use {@link #keepNullProperties()}
-	 */
-	@Deprecated
-	String trimNullProperties() default "";
-
-	/**
 	 * Configuration property:  Trim strings.
 	 *
 	 * <p>
