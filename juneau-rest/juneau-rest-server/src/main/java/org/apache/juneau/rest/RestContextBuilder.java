@@ -110,7 +110,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 
-	@SuppressWarnings("deprecation")
 	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
@@ -140,14 +139,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			List<AnnotationInfo<RestResource>> restResourceAnnotationsParentFirst = rci.getAnnotationInfos(RestResource.class);
 			List<AnnotationInfo<Rest>> restAnnotationsParentFirst = rci.getAnnotationInfos(Rest.class);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
-			for (AnnotationInfo<RestResource> r : restResourceAnnotationsParentFirst)
-				if (! r.getAnnotation().config().isEmpty())
-					configPath = r.getAnnotation().config();
 			for (AnnotationInfo<Rest> r : restAnnotationsParentFirst)
 				if (! r.getAnnotation().config().isEmpty())
 					configPath = r.getAnnotation().config();
@@ -180,13 +175,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
-			for (AnnotationInfo<RestResource> e : restResourceAnnotationsParentFirst) {
-				RestResource r = e.getAnnotation();
-				for (Property p : r.properties())
-					set(vr.resolve(p.name()), vr.resolve(p.value()));
-				for (String p : r.flags())
-					set(p, true);
-			}
 			for (AnnotationInfo<Rest> e : restAnnotationsParentFirst) {
 				Rest r = e.getAnnotation();
 				for (Property p : r.properties())

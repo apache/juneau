@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.text.*;
 
 import org.apache.juneau.http.exception.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Exception thrown to trigger an error HTTP status.
@@ -182,7 +181,7 @@ public class RestException extends RuntimeException {
 	 * Returns the number of times this exception occurred on this servlet.
 	 *
 	 * @return
-	 * 	The occurrence number if {@link RestResource#useStackTraceHashes() @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
+	 * 	The occurrence number if {@code @RestResource(useStackTraceHashes)} is enabled, or <c>0</c> otherwise.
 	 */
 	@Deprecated
 	public int getOccurrence() {

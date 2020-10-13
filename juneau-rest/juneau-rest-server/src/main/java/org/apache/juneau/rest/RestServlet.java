@@ -131,7 +131,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
-	@SuppressWarnings("deprecation")
 	public synchronized String getPath() {
 		if (context != null)
 			return context.getPath();
@@ -142,9 +141,6 @@ public abstract class RestServlet extends HttpServlet implements RestInfoProvide
 				path = trimSlashes(rr.path());
 		if (! path.isEmpty())
 			return path;
-		for (RestResource rr : ci.getAnnotations(RestResource.class))
-			if (! rr.path().isEmpty())
-				path = trimSlashes(rr.path());
 		return "";
 	}
 

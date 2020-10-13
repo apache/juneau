@@ -100,7 +100,6 @@ final class SwaggerGenerator {
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws Exception Error occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	public Swagger getSwagger() throws Exception {
 
 		ClassInfo rci = ClassInfo.of(resource).resolved();
@@ -113,65 +112,6 @@ final class SwaggerGenerator {
 			omSwagger = context.getClasspathResource(OMap.class, MediaType.JSON, rci.getSimpleName() + ".json", locale);
 		if (omSwagger == null)
 			omSwagger = new OMap();
-
-		// Combine it with @RestResource(swagger)
-		for (RestResource rr : rci.getAnnotations(RestResource.class)) {
-
-			OMap sInfo = omSwagger
-				.getMap("info", true);
-			sInfo.ase("title",
-				firstNonEmpty(
-					sInfo.getString("title"),
-					resolve(rr.title())
-				)
-			);
-			sInfo.ase("description",
-				firstNonEmpty(
-					sInfo.getString("description"),
-					resolve(rr.description())
-				)
-			);
-
-			ResourceSwagger r = rr.swagger();
-
-			omSwagger.appendAll(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
-
-			if (! empty(r)) {
-				OMap info = omSwagger.getMap("info", true);
-
-				info
-					.ase("title", resolve(r.title()))
-					.ase("description", resolve(r.description()))
-					.ase("version", resolve(r.version()))
-					.ase("termsOfService", resolve(r.termsOfService()))
-					.ase("contact",
-						merge(
-							info.getMap("contact"),
-							toMap(r.contact(), "@ResourceSwagger(contact) on class {0}", c)
-						)
-					)
-					.ase("license",
-						merge(
-							info.getMap("license"),
-							toMap(r.license(), "@ResourceSwagger(license) on class {0}", c)
-						)
-					);
-			}
-
-			omSwagger
-				.ase("externalDocs",
-					merge(
-						omSwagger.getMap("externalDocs"),
-						toMap(r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
-					)
-				)
-				.ase("tags",
-					merge(
-						omSwagger.getList("tags"),
-						toList(r.tags(), "@ResourceSwagger(tags) on class {0}", c)
-					)
-				);
-		}
 
 		// Combine it with @Rest(swagger)
 		for (Rest rr : rci.getAnnotations(Rest.class)) {

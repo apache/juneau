@@ -65,17 +65,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			title,
 			description;
 
-		@SuppressWarnings("deprecation")
 		Builder(RestContext context) {
 			ClassInfo ci = ClassInfo.of(context.getResource()).resolved();
-			for (RestResource r : ci.getAnnotations(RestResource.class)) {
-				if (! r.siteName().isEmpty())
-					siteName = r.siteName();
-				if (r.title().length > 0)
-					title = joinnl(r.title());
-				if (r.description().length > 0)
-					description = joinnl(r.description());
-			}
 			for (Rest r : ci.getAnnotations(Rest.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
