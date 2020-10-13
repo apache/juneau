@@ -32,8 +32,8 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
-import org.apache.juneau.rest.client2.RestRequest;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.RestRequest;
 
 /**
  * Mocked {@link RestClient}.

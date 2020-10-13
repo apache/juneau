@@ -30,7 +30,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;

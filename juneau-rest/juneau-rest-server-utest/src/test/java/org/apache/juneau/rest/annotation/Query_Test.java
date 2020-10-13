@@ -24,7 +24,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;

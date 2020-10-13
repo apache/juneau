@@ -14,7 +14,7 @@ package org.apache.juneau.rest.mock2;
 
 import org.apache.http.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 
 /**
  * A subclass of {@link RestResponse} with additional features for mocked testing.
@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client2.*;
  * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
 */
-public class MockRestResponse extends org.apache.juneau.rest.client2.RestResponse {
+public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
 
 	/**
 	 * Constructor.

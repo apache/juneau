@@ -19,8 +19,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
-import org.apache.juneau.rest.client2.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.RemoteMethod;

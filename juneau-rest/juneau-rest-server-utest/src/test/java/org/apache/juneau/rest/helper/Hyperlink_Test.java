@@ -18,7 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 

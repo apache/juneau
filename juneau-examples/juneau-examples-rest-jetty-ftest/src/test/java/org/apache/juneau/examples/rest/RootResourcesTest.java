@@ -19,7 +19,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.helper.*;
 import org.junit.*;
 

@@ -20,7 +20,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 
 /**
  * A subclass of {@link RestRequest} with additional features for mocked testing.
@@ -32,7 +32,7 @@ import org.apache.juneau.rest.client2.*;
  * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */
-public class MockRestRequest extends org.apache.juneau.rest.client2.RestRequest {
+public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Servlet request override values.

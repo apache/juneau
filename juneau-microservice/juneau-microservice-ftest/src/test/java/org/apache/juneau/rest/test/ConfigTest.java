@@ -21,7 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

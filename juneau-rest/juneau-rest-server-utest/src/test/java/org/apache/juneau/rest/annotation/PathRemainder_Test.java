@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;

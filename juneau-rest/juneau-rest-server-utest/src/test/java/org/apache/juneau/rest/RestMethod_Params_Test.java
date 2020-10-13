@@ -33,7 +33,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 

@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
@@ -710,7 +710,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - RestClientBuilder */
-	public MockRestClientBuilder callHandler(Class<? extends org.apache.juneau.rest.client2.RestCallHandler> value) {
+	public MockRestClientBuilder callHandler(Class<? extends org.apache.juneau.rest.client.RestCallHandler> value) {
 		super.callHandler(value);
 		return this;
 	}

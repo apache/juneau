@@ -14,7 +14,7 @@ package org.apache.juneau.rest.mock2;
 
 import java.io.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 
 /**
  * A capturing {@link PrintStream} that allows you to easily capture console output.

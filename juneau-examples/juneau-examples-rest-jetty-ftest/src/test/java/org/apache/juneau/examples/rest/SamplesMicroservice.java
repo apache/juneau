@@ -17,7 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client2.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 
 /**
