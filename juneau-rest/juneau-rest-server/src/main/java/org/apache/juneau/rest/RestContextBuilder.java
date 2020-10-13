@@ -878,34 +878,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attributes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqAttrs(String...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder attrs(String...values) throws RestServletException {
-		return reqAttrs(values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqHeaders(String...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder defaultRequestHeaders(String...headers) throws RestServletException {
-		return reqHeaders(headers);
-	}
-
-	/**
 	 * Specifies a default <c>Accept</c> header value if not specified on a request.
 	 *
 	 * @param value
@@ -933,62 +905,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		if (isNotEmpty(value))
 			reqHeader("Content-Type", value);
 		return this;
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request attribute.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqAttr(String, Object)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder attr(String name, Object value) {
-		return reqAttr(name, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqHeader(String,Object)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder defaultRequestHeader(String name, Object value) {
-		return reqHeader(name, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #resHeaders(String...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder defaultResponseHeaders(String...headers) throws RestServletException {
-		return resHeaders(headers);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Default response headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #resHeader(String, Object)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder defaultResponseHeader(String name, Object value) {
-		return resHeader(name, value);
 	}
 
 	/**

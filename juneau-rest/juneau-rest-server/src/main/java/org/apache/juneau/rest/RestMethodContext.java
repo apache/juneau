@@ -68,16 +68,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	static final String PREFIX = "RestMethodContext";
 
 	/**
-	 * Configuration property:  Default request attributes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #RESTMETHOD_reqAttrs}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String RESTMETHOD_attrs = PREFIX + ".reqAttrs.smo";
-
-	/**
 	 * Configuration property:  Client version pattern matcher.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -257,16 +247,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	public static final String RESTMETHOD_defaultQuery = PREFIX + ".defaultQuery.omo";
 
 	/**
-	 * Configuration property:  Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #RESTMETHOD_defaultRequestHeaders}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String RESTMETHOD_defaultRequestHeaders = PREFIX + ".reqHeaders.smo";
-
-	/**
 	 * Configuration property:  HTTP method name.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -399,41 +379,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * </ul>
 	 */
 	public static final String RESTMETHOD_matchers = PREFIX + ".matchers.lo";
-
-	/**
-	 * Configuration property:  Resource method path.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestMethodContext#RESTMETHOD_path RESTMETHOD_path}
-	 * 	<li><b>Name:</b>  <js>"RestMethodContext.path.s"</js>
-	 * 	<li><b>Data type:</b>  <c>String</c>
-	 * 	<li><b>System property:</b>  <c>RestMethodContext.path</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTMETHODCONTEXT_PATH</c>
-	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#path()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Identifies the URL subpath relative to the servlet class.
-	 *
-	 * <p>
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		This method is only applicable for Java methods.
-	 * 	<li>
-	 * 		Slashes are trimmed from the path ends.
-	 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-	 * </ul>
-	 * @deprecated Use {@link #RESTMETHOD_paths}
-	 */
-	@Deprecated
-	public static final String RESTMETHOD_path = PREFIX + ".path.s";
 
 	/**
 	 * Configuration property:  Resource method paths.
