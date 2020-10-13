@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.remote.*;
 
@@ -369,23 +368,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	Class<? extends RestGuard>[] guards() default {};
-
-	/**
-	 * Provides HTML-doc-specific metadata on this method.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
-	 * </div>
-	 *
-	 * <p>
-	 * Information provided here overrides information provided in the servlet-level annotation.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
-	 * </ul>
-	 */
-	@Deprecated
-	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
 	 * Specifies rules on how to handle logging of HTTP requests/responses.

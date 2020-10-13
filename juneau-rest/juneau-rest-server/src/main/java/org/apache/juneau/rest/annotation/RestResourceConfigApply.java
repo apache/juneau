@@ -20,7 +20,6 @@ import java.util.logging.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.Parser.*;
 
 import org.apache.juneau.*;
@@ -33,7 +32,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -295,15 +293,6 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 
 		if (! a.roleGuard().isEmpty())
 			psb.addTo(REST_roleGuard, string(a.roleGuard()));
-
-		HtmlDoc hd = a.htmldoc();
-		new HtmlDocBuilder(psb).process(hd);
-		for (Class<? extends Widget> wc : hd.widgets()) {
-			Widget w = castOrCreate(Widget.class, wc);
-			psb.prependTo(REST_widgets, w);
-			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
-			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
-		}
 	}
 
 	private String trimLeadingSlash(String value) {

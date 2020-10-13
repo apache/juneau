@@ -23,10 +23,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -71,8 +69,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
-	@SuppressWarnings("deprecation")
-	private HtmlDocBuilder htmlDocBuilder;
 
 	private ResponseBeanMeta responseMeta;
 
@@ -205,50 +201,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		this.output = output;
 		this.isNullOutput = output == null;
 		return this;
-	}
-
-	/**
-	 * Returns a programmatic interface for setting properties for the HTML doc view.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocConfig}
-	 * </div>
-	 *
-	 * <p>
-	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod(htmldoc)} annotation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Declarative approach.</jc>
-	 *  <ja>@HtmlDocConfig</ja>(
-	 * 		header={
-	 * 			<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>
-	 * 		},
-	 * 		aside={
-	 * 			<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>
-	 * 		}
-	 * 	)
-	 * 	<jk>public</jk> Object doGet(RestResponse res) {
-	 *
-	 * 		<jc>// Equivalent programmatic approach.</jc>
-	 * 		res.getHtmlDocBuilder()
-	 * 			.header(<js>"&lt;p&gt;This is my REST interface&lt;/p&gt;"</js>)
-	 * 			.aside(<js>"&lt;p&gt;Custom aside content&lt;/p&gt;"</js>);
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
-	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
-	 * </ul>
-	 *
-	 * @return A new programmatic interface for setting properties for the HTML doc view.
-	 */
-	@Deprecated
-	public HtmlDocBuilder getHtmlDocBuilder() {
-		if (htmlDocBuilder == null)
-			htmlDocBuilder = new HtmlDocBuilder(PropertyStore.create());
-		return htmlDocBuilder;
 	}
 
 	/**

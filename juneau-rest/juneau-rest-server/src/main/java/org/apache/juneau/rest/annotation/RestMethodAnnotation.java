@@ -65,7 +65,6 @@ public class RestMethodAnnotation implements RestMethod {
 
 	private Class<? extends RestConverter>[] converters = new Class[0];
 	private Class<? extends RestGuard>[] guards = new Class[0];
-	@SuppressWarnings("deprecation") private HtmlDoc htmldoc = null;
 	private Logging logging = new LoggingAnnotation();
 	private Class<? extends RestMatcher>[] matchers = new Class[0];
 	private int priority = 0;
@@ -166,12 +165,6 @@ public class RestMethodAnnotation implements RestMethod {
 	@Override /* RestMethod */
 	public Class<? extends RestGuard>[] guards() {
 		return guards;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override /* RestMethod */
-	public HtmlDoc htmldoc() {
-		return htmldoc;
 	}
 
 	@Override /* RestMethod */

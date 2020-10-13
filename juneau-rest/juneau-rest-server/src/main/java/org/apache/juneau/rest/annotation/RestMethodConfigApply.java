@@ -14,12 +14,10 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -30,7 +28,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.AnnotationUtils;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -285,15 +282,6 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 			}
 
 			psb.set(RESTMETHOD_callLoggerConfig, m);
-		}
-
-		HtmlDoc hd = a.htmldoc();
-		new HtmlDocBuilder(psb).process(hd);
-		for (Class<? extends Widget> wc : hd.widgets()) {
-			Widget w = castOrCreate(Widget.class, wc);
-			psb.prependTo(REST_widgets, w);
-			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".script}");
-			psb.prependTo(HTMLDOC_script, "$W{"+w.getName()+".style}");
 		}
 	}
 

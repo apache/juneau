@@ -433,55 +433,6 @@ public @interface RestResource {
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
-	 * Provides HTML-doc-specific metadata on this method.
-	 *
-	 * <p>
-	 * Used to customize the output from the HTML Doc serializer.
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		path=<js>"/addressBook"</js>,
-	 *
-	 * 		<jc>// Links on the HTML rendition page.
-	 * 		// "request:/..." URIs are relative to the request URI.
-	 * 		// "servlet:/..." URIs are relative to the servlet URI.
-	 * 		// "$C{...}" variables are pulled from the config file.</jc>
-	 * 		htmldoc=<ja>@HtmlDoc</ja>(
-	 * 			<jc>// Widgets for $W variables.</jc>
-	 * 			widgets={
-	 * 				PoweredByJuneau.<jk>class</jk>,
-	 * 				ContentTypeLinks.<jk>class</jk>
-	 * 			}
-	 * 			navlinks={
-	 * 				<js>"up: request:/.."</js>,
-	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
-	 * 				<js>"stats: servlet:/stats"</js>,
-	 * 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java"</js>,
-	 * 			},
-	 * 			aside={
-	 * 				<js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>,
-	 * 				<js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>,
-	 * 				<js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>,
-	 * 				<js>"		&lt;ul&gt;"</js>,
-	 * 				<js>"			&lt;li&gt;XML and RDF namespaces"</js>,
-	 * 				<js>"			&lt;li&gt;Swagger documentation"</js>,
-	 * 				<js>"			&lt;li&gt;Widgets"</js>,
-	 * 				<js>"		&lt;/ul&gt;"</js>,
-	 * 				<js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>,
-	 * 				<js>"	$W{ContentTypeLinks}"</js>,
-	 * 				<js>"&lt;/div&gt;"</js>
-	 * 			},
-	 * 			footer=<js>"$W{PoweredByJuneau}"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc RestHtmlDocAnnotation}
-	 * </ul>
-	 */
-	HtmlDoc htmldoc() default @HtmlDoc;
-
-	/**
 	 * Configuration property:  REST info provider.
 	 *
 	 * <p>
