@@ -25,15 +25,12 @@ import java.lang.reflect.Method;
 /**
  * Builder class for {@link RestMethodContext} objects.
  */
-@SuppressWarnings("deprecation")
 public class RestMethodContextBuilder extends BeanContextBuilder {
 
 	RestContext context;
 	java.lang.reflect.Method method;
 
 	boolean dotAll;
-
-	RestMethodProperties properties;
 
 	RestMethodContextBuilder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		this.context = context;
@@ -62,16 +59,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 			VarResolverSession vrs = vr.createSession();
 
 			applyAnnotations(mi.getAnnotationList(ConfigAnnotationFilter.INSTANCE), vrs);
-
-			properties = new RestMethodProperties(context.getProperties());
-
-			if (m.properties().length > 0 || m.flags().length > 0) {
-				properties = new RestMethodProperties(properties);
-				for (Property p1 : m.properties())
-					properties.put(p1.name(), p1.value());
-				for (String p1 : m.flags())
-					properties.put(p1, true);
-			}
 
 		} catch (RestServletException e) {
 			throw e;

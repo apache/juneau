@@ -597,8 +597,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
 	private final RestConverter[] converters;
-	@SuppressWarnings("deprecation")
-	private final RestMethodProperties properties;
 	private final Integer priority;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
@@ -806,8 +804,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			_widgets.put(w.getName(), w);
 		this.widgets = _widgets.unmodifiable();
 
-		this.properties = b.properties;
-
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
 
@@ -962,11 +958,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 			RestRequest req = call.getRestRequest();
 			RestResponse res = call.getRestResponse();
 
-			@SuppressWarnings("deprecation")
-			RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
-
-			req.init(this, requestProperties);
-			res.init(this, requestProperties);
+			req.init(this);
+			res.init(this);
 
 			// If the method implements matchers, test them.
 			for (RestMatcher m : requiredMatchers)
@@ -1019,11 +1012,8 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		if (pm.getRemainder() != null)
 			rp.remainder(pm.getRemainder());
 
-		@SuppressWarnings("deprecation")
-		RequestProperties requestProperties = new RequestProperties(req.getVarResolverSession(), properties);
-
-		req.init(this, requestProperties);
-		res.init(this, requestProperties);
+		req.init(this);
+		res.init(this);
 
 		context.preCall(call);
 

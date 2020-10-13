@@ -100,8 +100,7 @@ class RestParamDefaults {
 			RequestBodyObject.class,
 			ConfigObject.class,
 			UriContextObject.class,
-			UriResolverObject.class,
-			RestRequestPropertiesObject.class
+			UriResolverObject.class
 		};
 
 		for (Class<?> c : r) {
@@ -553,19 +552,6 @@ class RestParamDefaults {
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			BeanSession bs = req.getBeanSession();
 			return bs.convertToType(req.getQuery().containsKey(name), bs.getClassMeta(type));
-		}
-	}
-
-	@Deprecated
-	static final class RestRequestPropertiesObject extends RestMethodParam {
-
-		protected RestRequestPropertiesObject() {
-			super(OTHER, RequestProperties.class);
-		}
-
-		@Override /* RestMethodParam */
-		public RequestProperties resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getProperties();
 		}
 	}
 

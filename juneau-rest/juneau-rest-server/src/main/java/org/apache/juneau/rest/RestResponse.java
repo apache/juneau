@@ -28,7 +28,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.util.*;
@@ -64,8 +63,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private RestMethodContext restJavaMethod;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
-	@SuppressWarnings("deprecation")
-	private RequestProperties properties;                // Response properties
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
@@ -101,9 +98,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws NotAcceptable, IOException {
+	final void init(RestMethodContext rjm) throws NotAcceptable, IOException {
 		this.restJavaMethod = rjm;
-		this.properties = properties;
 
 		if (request.isDebug())
 			setDebug();
@@ -200,72 +196,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse setOutput(Object output) {
 		this.output = output;
 		this.isNullOutput = output == null;
-		return this;
-	}
-
-	/**
-	 * Retrieve the properties active for this request.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link RestResponse#getAttributes()}
-	 * </div>
-	 *
-	 * <p>
-	 * This contains all resource and method level properties from the following:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link Rest#properties()}
-	 * 	<li class='ja'>{@link RestMethod#properties()}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
-	 * </ul>
-	 *
-	 * <p>
-	 * The returned object is modifiable and allows you to override session-level properties before
-	 * they get passed to the serializers.
-	 * <br>However, properties are open-ended, and can be used for any purpose.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>SERIALIZER_sortMaps</jsf>, value=<js>"false"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public</jk> Map doGet(RestResponse res, <ja>@Query</ja>(<js>"sortMaps"</js>) Boolean sortMaps) {
-	 *
-	 * 		<jc>// Override value if specified through query parameter.</jc>
-	 * 		<jk>if</jk> (sortMaps != <jk>null</jk>)
-	 * 			res.getProperties().put(<jsf>SERIALIZER_sortMaps</jsf>, sortMaps);
-	 *
-	 * 		<jk>return</jk> <jsm>getMyMap</jsm>();
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'>{@doc RestConfigurableProperties}
-	 * </ul>
-	 *
-	 * @return The properties active for this request.
-	 */
-	@Deprecated
-	public RequestProperties getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #attr(String,Object)}
-	 * </div>
-	 *
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	public RestResponse prop(String name, Object value) {
-		this.properties.append(name, value);
 		return this;
 	}
 

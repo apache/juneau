@@ -100,8 +100,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final String method;
 	private RequestBody body;
 	private Method javaMethod;
-	@SuppressWarnings("deprecation")
-	private RequestProperties properties;
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
@@ -193,10 +191,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
-	final void init(RestMethodContext rjm, @SuppressWarnings("deprecation") RequestProperties properties) throws IOException {
+	final void init(RestMethodContext rjm) throws IOException {
 		this.restJavaMethod = rjm;
 		this.javaMethod = rjm.method;
-		this.properties = properties;
 		this.beanSession = rjm.createSession();
 		this.partParserSession = rjm.partParser.createPartSession(getParserSessionArgs());
 		this.partSerializerSession = rjm.partSerializer.createPartSession(getSerializerSessionArgs());
@@ -219,14 +216,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (isDebug()) {
 			inner = CachingHttpServletRequest.wrap(inner);
 		}
-
-		String stylesheet = getQuery().getString("stylesheet");
-		if (stylesheet != null)
-			getSession().setAttribute(HTMLDOC_stylesheet, stylesheet.replace(' ', '$'));  // Prevent SVL insertion.
-		stylesheet = (String)getSession().getAttribute("stylesheet");
-		if (stylesheet != null)
-			properties.put(HTMLDOC_stylesheet, new String[]{stylesheet});
-
 	}
 
 	RestRequest setResponse(RestResponse res) {
@@ -243,77 +232,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String qs = getQueryString();
 		return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Retrieve the properties active for this request.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #getAttributes()}
-	 * </div>
-	 *
-	 * <p>
-	 * This contains all resource and method level properties from the following:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link Rest#properties()}
-	 * 	<li class='ja'>{@link RestMethod#properties()}
-	 * 	<li class='jm'>{@link RestContextBuilder#set(String, Object)}
-	 * </ul>
-	 *
-	 * <p>
-	 * The returned object is modifiable and allows you to override session-level properties before
-	 * they get passed to the serializers.
-	 * <br>However, properties are open-ended, and can be used for any purpose.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>SERIALIZER_sortMaps</jsf>, value=<js>"false"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public</jk> Map doGet(RestRequest req, <ja>@Query</ja>(<js>"sortMaps"</js>) Boolean sortMaps) {
-	 *
-	 * 		<jc>// Override value if specified through query parameter.</jc>
-	 * 		<jk>if</jk> (sortMaps != <jk>null</jk>)
-	 * 			req.getProperties().put(<jsf>SERIALIZER_sortMaps</jsf>, sortMaps);
-	 *
-	 * 		<jk>return</jk> <jsm>getMyMap</jsm>();
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'>{@doc RestConfigurableProperties}
-	 * </ul>
-	 *
-	 * @return The properties active for this request.
-	 */
-	@Deprecated
-	public RequestProperties getProperties() {
-		return this.properties;
-	}
-
-	/**
-	 * Shortcut for calling <c>getProperties().append(name, value);</c> fluently.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - {@link RequestAttributes#put(String, Object)} or {@link #setAttribute(String, Object)}
-	 * </div>
-	 *
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	public RestRequest prop(String name, Object value) {
-		this.properties.append(name, value);
-		return this;
-	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Headers
@@ -1706,7 +1624,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (serializerSessionArgs == null)
 			serializerSessionArgs = SerializerSessionArgs
 				.create()
-				.properties(getProperties())
 				.javaMethod(getJavaMethod())
 				.locale(getLocale())
 				.timeZone(getHeaders().getTimeZone())
@@ -1727,7 +1644,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			parserSessionArgs =
 				ParserSessionArgs
 					.create()
-					.properties(getProperties())
 					.javaMethod(getJavaMethod())
 					.locale(getLocale())
 					.timeZone(getHeaders().getTimeZone())
