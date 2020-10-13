@@ -3901,7 +3901,7 @@ public class RestContext extends BeanContext {
 							final ClassMeta<?> interfaceClass = getClassMeta(mi.inner().getGenericReturnType());
 							final RrpcInterfaceMeta rim = new RrpcInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
+								throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
 							RestMethodContextBuilder smb = new RestMethodContextBuilder(resource, mi.inner(), this);
 							smb.dotAll();
@@ -5300,7 +5300,6 @@ public class RestContext extends BeanContext {
 	 * @param t The thrown object.
 	 * @return The converted thrown object.
 	 */
-	@SuppressWarnings("deprecation")
 	public Throwable convertThrowable(Throwable t) {
 
 		ClassInfo ci = ClassInfo.ofc(t);
@@ -5314,7 +5313,7 @@ public class RestContext extends BeanContext {
 			ci = ClassInfo.ofc(t);
 		}
 
-		if (ci.isChildOf(RestException.class) || ci.hasAnnotation(Response.class))
+		if (ci.hasAnnotation(Response.class))
 			return t;
 
 		if (t instanceof ParseException || t instanceof InvalidDataConversionException)
@@ -5366,15 +5365,12 @@ public class RestContext extends BeanContext {
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
-	@SuppressWarnings("deprecation")
 	public synchronized void handleError(RestCall call, Throwable e) throws IOException {
 
 		call.exception(e);
 
 		if (call.isDebug())
 			e.printStackTrace();
-
-		int occurrence = getStackTraceOccurrence(e);
 
 		int code = 500;
 
@@ -5384,7 +5380,7 @@ public class RestContext extends BeanContext {
 			if (r.code().length > 0)
 				code = r.code()[0];
 
-		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, code)).setOccurrence(occurrence);
+		HttpException e2 = (e instanceof HttpException ? (HttpException)e : new HttpException(e, code));
 
 		HttpServletRequest req = call.getRequest();
 		HttpServletResponse res = call.getResponse();

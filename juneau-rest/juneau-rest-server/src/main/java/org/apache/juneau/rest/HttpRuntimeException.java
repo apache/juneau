@@ -68,12 +68,11 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 	 * @param args The message arguments to pass to the ec class constructor.
 	 * @return RuntimeException The new exception to throw.
 	 */
-	@SuppressWarnings("deprecation")
 	public static RuntimeException toHttpException(Throwable t, Class<?> ec, String msg, Object...args) {
 		ClassInfo ci = ClassInfo.ofc(t);
 
-		// If it's a RestException or is any RuntimeException annotated with @Response, it can be rethrown.
-		if (ci.isRuntimeException() && (ci.isChildOf(RestException.class) || ci.hasAnnotation(Response.class)))
+		// If it's any RuntimeException annotated with @Response, it can be rethrown.
+		if (ci.isRuntimeException() && ci.hasAnnotation(Response.class))
 			return (RuntimeException)t;
 
 		// If it's a non-RuntimeException but annotated with @Response, it can be wrapped and rethrown.

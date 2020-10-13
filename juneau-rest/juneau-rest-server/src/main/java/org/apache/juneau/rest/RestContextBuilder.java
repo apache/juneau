@@ -2406,32 +2406,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Use stack trace hashes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #callLoggerConfig(RestCallLoggerConfig)}
-	 * </div>
-	 *
-	 * <p>
-	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
-	 * made available through the {@link RestException#getOccurrence()} method.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useStackTraceHashes}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder useStackTraceHashes(boolean value) {
-		return set(REST_useStackTraceHashes, value);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
 	 *
 	 * <div class='warn'>
