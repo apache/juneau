@@ -59,20 +59,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #addKeyValueTableHeaders()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public HtmlSerializerBuilder addKeyValueTableHeaders(boolean value) {
-		return set(HTML_addKeyValueTableHeaders, value);
-	}
-
-	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Add key/value headers on bean/map tables.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>addKeyValueTableHeaders(<jk>true</jk>)</code>.
 	 *
@@ -85,20 +71,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@FluentSetter
 	public HtmlSerializerBuilder addKeyValueTableHeaders() {
 		return set(HTML_addKeyValueTableHeaders, true);
-	}
-
-	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for URLs in {@link String Strings}.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontDetectLinksInStrings()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public HtmlSerializerBuilder detectLinksInStrings(boolean value) {
-		return set(HTML_detectLinksInStrings, value);
 	}
 
 	/**
@@ -142,20 +114,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	/**
 	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for link labels in URIs.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dontDetectLabelParameters()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public HtmlSerializerBuilder detectLabelParameters(boolean value) {
-		return set(HTML_detectLabelParameters, value);
-	}
-
-	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for link labels in URIs.
-	 *
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
@@ -188,20 +146,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder uriAnchorText(AnchorText value) {
-		return set(HTML_uriAnchorText, value);
-	}
-
-	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Anchor text source.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #uriAnchorText(AnchorText)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public HtmlSerializerBuilder uriAnchorText(String value) {
 		return set(HTML_uriAnchorText, value);
 	}
 
