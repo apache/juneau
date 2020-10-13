@@ -47,6 +47,6 @@ public class RequestProperties extends ResolvingOMap {
 	 */
 	public RequestProperties(VarResolverSession varResolver, RestMethodProperties inner) {
 		super(varResolver);
-		setInner(inner);
+		inner(inner);
 	}
 }

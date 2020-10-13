@@ -52,6 +52,6 @@ public class RestMethodProperties extends OMap {
 	 * @param inner The inner properties.
 	 */
 	public RestMethodProperties(RestMethodProperties inner) {
-		setInner(inner);
+		inner(inner);
 	}
 }

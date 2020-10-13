@@ -593,7 +593,7 @@ final class SwaggerGenerator {
 //		}
 
 		try {
-			String swaggerJson = omSwagger.toString(SimpleJsonSerializer.DEFAULT_READABLE);
+			String swaggerJson = SimpleJsonSerializer.DEFAULT_READABLE.toString(omSwagger);
 //			System.err.println(swaggerJson);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {

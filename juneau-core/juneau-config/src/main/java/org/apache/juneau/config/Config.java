@@ -1259,19 +1259,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Convenience method for returning a config entry as an {@link ObjectMap}.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 * @deprecated Use {@link #getMap(String)}
-	 */
-	@Deprecated
-	public ObjectMap getObjectMap(String key) throws ParseException {
-		return getObject(key, ObjectMap.class);
-	}
-
-	/**
 	 * Convenience method for returning a config entry as an {@link OMap}.
 	 *
 	 * @param key The key.
@@ -1280,20 +1267,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public OMap getMap(String key) throws ParseException {
 		return getObject(key, OMap.class);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link ObjectMap}.
-	 *
-	 * @param key The key.
-	 * @param def The default value.
-	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 * @deprecated Use {@link #getMap(String,OMap)}
-	 */
-	@Deprecated
-	public ObjectMap getObjectMap(String key, ObjectMap def) throws ParseException {
-		return getObjectWithDefault(key, def, ObjectMap.class);
 	}
 
 	/**
@@ -1309,19 +1282,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
-	 * Convenience method for returning a config entry as an {@link ObjectList}.
-	 *
-	 * @param key The key.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 * @deprecated Use {@link #getList(String)}.
-	 */
-	@Deprecated
-	public ObjectList getObjectList(String key) throws ParseException {
-		return getList(key);
-	}
-
-	/**
 	 * Convenience method for returning a config entry as an {@link OList}.
 	 *
 	 * @param key The key.
@@ -1330,20 +1290,6 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 */
 	public OList getList(String key) throws ParseException {
 		return getObject(key, OList.class);
-	}
-
-	/**
-	 * Convenience method for returning a config entry as an {@link ObjectList}.
-	 *
-	 * @param key The key.
-	 * @param def The default value.
-	 * @return The value, or the default value if the section or key does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 * @deprecated Use {@link #getList(String, OList)}.
-	 */
-	@Deprecated
-	public ObjectList getObjectList(String key, ObjectList def) throws ParseException {
-		return getObjectWithDefault(key, def, ObjectList.class);
 	}
 
 	/**

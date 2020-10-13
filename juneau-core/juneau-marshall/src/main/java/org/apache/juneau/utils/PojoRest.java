@@ -534,7 +534,7 @@ public final class PojoRest {
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link ObjectMap}.
+	 * Returns the specified entry value converted to a {@link OMap}.
 	 *
 	 * <p>
 	 * Shortcut for <code>get(OMap.<jk>class</jk>, key, defVal)</code>.

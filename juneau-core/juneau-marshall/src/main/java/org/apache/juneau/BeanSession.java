@@ -625,15 +625,6 @@ public class BeanSession extends Session {
 							return (T)m2.cast(cm);
 					}
 				}
-				if (value instanceof ObjectMap && builder == null) {
-					ObjectMap m2 = (ObjectMap)value;
-					String typeName = m2.getString(getBeanTypePropertyName(to));
-					if (typeName != null) {
-						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && to.info.isParentOf(cm.innerClass))
-							return (T)m2.cast(cm);
-					}
-				}
 				if (builder != null) {
 					BeanMap m = toBeanMap(builder.create(this, to));
 					m.load((Map<?,?>) value);
