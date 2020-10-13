@@ -522,19 +522,6 @@ public final class PojoRest {
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 * @deprecated Use {@link #getOMap(String)}
-	 */
-	@Deprecated
-	public ObjectMap getObjectMap(String url) {
-		return get(url, ObjectMap.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Map}.
-	 *
 	 * <p>
 	 * Shortcut for <code>get(OMap.<jk>class</jk>, key)</code>.
 	 *
@@ -544,20 +531,6 @@ public final class PojoRest {
 	 */
 	public OMap getOMap(String url) {
 		return get(url, OMap.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link ObjectMap}.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 * @deprecated Use {@link #getOMap(String, OMap)}
-	 */
-	@Deprecated
-	public ObjectMap getObjectMap(String url, ObjectMap defVal) {
-		return getWithDefault(url, defVal, ObjectMap.class);
 	}
 
 	/**
@@ -576,19 +549,6 @@ public final class PojoRest {
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link ObjectList}.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 * @deprecated Use {@link #getOList(String)}
-	 */
-	@Deprecated
-	public ObjectList getObjectList(String url) {
-		return get(url, ObjectList.class);
-	}
-
-	/**
 	 * Returns the specified entry value converted to a {@link OList}.
 	 *
 	 * <p>
@@ -600,20 +560,6 @@ public final class PojoRest {
 	 */
 	public OList getOList(String url) {
 		return get(url, OList.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link ObjectList}.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 * @deprecated Use {@link #getOList(String)}
-	 */
-	@Deprecated
-	public ObjectList getObjectList(String url, ObjectList defVal) {
-		return getWithDefault(url, defVal, ObjectList.class);
 	}
 
 	/**
