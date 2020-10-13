@@ -86,20 +86,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
 
-	/**
-	 * <i><l>OutputStreamSerializer</l> configuration property:&emsp;</i>  Binary output format.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #binaryFormat(BinaryFormat)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public OutputStreamSerializerBuilder binaryFormat(String value) {
-		return set(OSSERIALIZER_binaryFormat, BinaryFormat.valueOf(value));
-	}
-
 	// <FluentSetters>
 
 	@Override /* GENERATED - ContextBuilder */

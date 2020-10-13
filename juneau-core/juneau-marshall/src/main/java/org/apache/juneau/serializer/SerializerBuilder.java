@@ -53,20 +53,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #addBeanTypes()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder addBeanTypes(boolean value) {
-		return set(SERIALIZER_addBeanTypes, value);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
-	 *
 	 * <p>
 	 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -111,20 +97,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@FluentSetter
 	public SerializerBuilder addBeanTypes() {
 		return set(SERIALIZER_addBeanTypes, true);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add type attribute to root nodes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #addRootType()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder addRootType(boolean value) {
-		return set(SERIALIZER_addRootType, value);
 	}
 
 	/**
@@ -175,20 +147,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@FluentSetter
 	public SerializerBuilder addRootType() {
 		return set(SERIALIZER_addRootType, true);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Don't trim null bean property values.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #keepNullProperties()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder keepNullProperties(boolean value) {
-		return set(SERIALIZER_keepNullProperties, value);
 	}
 
 	/**
@@ -287,20 +245,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort arrays and collections alphabetically.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #sortCollections()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder sortCollections(boolean value) {
-		return set(SERIALIZER_sortCollections, value);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort arrays and collections alphabetically.
-	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of arrays and collections before serializing them.
 	 *
@@ -336,20 +280,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort maps alphabetically.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #sortMaps()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder sortMaps(boolean value) {
-		return set(SERIALIZER_sortMaps, value);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Sort maps alphabetically.
-	 *
 	 * <p>
 	 * When enabled, copies and sorts the contents of maps by their keys before serializing them.
 	 *
@@ -380,20 +310,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@FluentSetter
 	public SerializerBuilder sortMaps() {
 		return set(SERIALIZER_sortMaps, true);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty lists and arrays.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #trimEmptyCollections()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder trimEmptyCollections(boolean value) {
-		return set(SERIALIZER_trimEmptyCollections, value);
 	}
 
 	/**
@@ -442,20 +358,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	/**
 	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty maps.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #trimEmptyMaps()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder trimEmptyMaps(boolean value) {
-		return set(SERIALIZER_trimEmptyMaps, value);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim empty maps.
-	 *
 	 * <p>
 	 * When enabled, empty map values will not be serialized to the output.
 	 *
@@ -492,20 +394,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@FluentSetter
 	public SerializerBuilder trimEmptyMaps() {
 		return set(SERIALIZER_trimEmptyMaps, true);
-	}
-
-	/**
-	 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim strings.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #trimStrings()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public SerializerBuilder trimStrings(boolean value) {
-		return set(SERIALIZER_trimStrings, value);
 	}
 
 	/**

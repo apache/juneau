@@ -148,20 +148,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder addRootType(boolean value) {
-		super.addRootType(value);
 		return this;
 	}
 
@@ -213,20 +201,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder sortCollections(boolean value) {
-		super.sortCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder sortCollections() {
 		super.sortCollections();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder sortMaps(boolean value) {
-		super.sortMaps(value);
 		return this;
 	}
 
@@ -237,32 +213,14 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimEmptyCollections(boolean value) {
-		super.trimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimEmptyMaps(boolean value) {
-		super.trimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
-		return this;
-	}
-
-	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder trimStrings(boolean value) {
-		super.trimStrings(value);
 		return this;
 	}
 
