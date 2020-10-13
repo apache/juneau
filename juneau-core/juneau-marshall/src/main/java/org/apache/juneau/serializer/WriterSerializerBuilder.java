@@ -236,20 +236,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	/**
 	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #useWhitespace()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public WriterSerializerBuilder useWhitespace(boolean value) {
-		return set(WSERIALIZER_useWhitespace, value);
-	}
-
-	/**
-	 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Use whitespace.
-	 *
 	 * <p>
 	 * When enabled, whitespace is added to the output to improve readability.
 	 *

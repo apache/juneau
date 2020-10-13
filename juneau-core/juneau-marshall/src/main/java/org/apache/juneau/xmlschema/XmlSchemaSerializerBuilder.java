@@ -130,12 +130,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* WriterSerializerBuilder */
-	public XmlSchemaSerializerBuilder useWhitespace(boolean value) {
-		super.useWhitespace(value);
-		return this;
-	}
-
-	@Override /* WriterSerializerBuilder */
 	public XmlSchemaSerializerBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;

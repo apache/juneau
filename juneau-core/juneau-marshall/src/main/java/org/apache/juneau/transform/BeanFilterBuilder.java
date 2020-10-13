@@ -129,36 +129,6 @@ public class BeanFilterBuilder<T> {
 	}
 
 	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpi(String...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated public BeanFilterBuilder<T> properties(String...value) {
-		this.bpi = ASet.of();
-		for (String v : value)
-			bpi.a(split(v));
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #bpx(String...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated public BeanFilterBuilder<T> excludeProperties(String...value) {
-		this.bpx = ASet.of();
-		for (String v : value)
-			bpi.a(split(v));
-		return this;
-	}
-
-	/**
 	 * Configuration property:  Bean interface class.
 	 *
 	 * Identifies a class to be used as the interface class for this and all subclasses.
@@ -427,54 +397,6 @@ public class BeanFilterBuilder<T> {
 	 */
 	public BeanFilterBuilder<T> propertyNamer(Class<? extends PropertyNamer> value) {
 		this.propertyNamer = value;
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #dictionary(Class...)}
-	 * </div>
-	 *
-	 * <p>
-	 * Adds to the list of classes that make up the bean dictionary for this bean.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Define our filter.</jc>
-	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
-	 * 		<jk>public</jk> MyFilter() {
-	 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
-	 * 			beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Register it with a parser.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.beanFilters(MyFilter.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Instantiate our bean.</jc>
-	 * 	MyBean myBean = p.parse(json);
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#dictionary()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	public BeanFilterBuilder<T> beanDictionary(Class<?>...values) {
-		if (dictionary == null)
-			dictionary = Arrays.asList(values);
-		else for (Class<?> cc : values)
-			dictionary.add(cc);
 		return this;
 	}
 
