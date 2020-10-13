@@ -79,20 +79,16 @@ public class RemoteMethodMeta {
 		RemoteMethodArg bodyArg;
 		RemoteMethodReturn methodReturn;
 
-		@SuppressWarnings("deprecation")
 		Builder(String parentPath, Method m, String defaultMethod) {
 
 			MethodInfo mi = MethodInfo.of(m);
 
-			org.apache.juneau.rest.client.remote.RemoteMethod orm = mi.getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
-			if (orm == null)
-				orm = mi.getResolvedReturnType().getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 			RemoteMethod rm = mi.getLastAnnotation(RemoteMethod.class);
 			if (rm == null)
 				rm = mi.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
 
-			httpMethod = rm == null ? (orm == null ? "" : orm.method()) : rm.method();
-			path = rm == null ? (orm == null ? "" : orm.path()) : rm.path();
+			httpMethod = rm == null ? "" : rm.method();
+			path = rm == null ? "" : rm.path();
 
 			if (path.isEmpty()) {
 				path = HttpUtils.detectHttpPath(m, true);

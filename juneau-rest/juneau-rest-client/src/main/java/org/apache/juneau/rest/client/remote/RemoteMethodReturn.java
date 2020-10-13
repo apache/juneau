@@ -36,13 +36,9 @@ public final class RemoteMethodReturn {
 	private final ResponseBeanMeta meta;
 	private boolean isFuture, isCompletableFuture;
 
-	@SuppressWarnings("deprecation")
 	RemoteMethodReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		org.apache.juneau.rest.client.remote.RemoteMethod orm = m.getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
-		if (orm == null)
-			orm = m.getResolvedReturnType().getLastAnnotation(org.apache.juneau.rest.client.remote.RemoteMethod.class);
 		RemoteMethod rm = m.getLastAnnotation(RemoteMethod.class);
 		if (rm == null)
 			rm = m.getResolvedReturnType().getLastAnnotation(RemoteMethod.class);
@@ -56,15 +52,9 @@ public final class RemoteMethodReturn {
 			isCompletableFuture = true;
 			rt = ClassInfo.of(((ParameterizedType)rt.innerType()).getActualTypeArguments()[0]);
 		}
+
 		if (rt.is(void.class) || rt.is(Void.class))
 			rv = RemoteReturn.NONE;
-		else if (orm != null)
-			switch (orm.returns()) {
-				case BEAN: rv = RemoteReturn.BEAN; break;
-				case BODY: rv = RemoteReturn.BODY; break;
-				case NONE: rv = RemoteReturn.NONE; break;
-				case STATUS: rv = RemoteReturn.STATUS; break;
-			}
 		else if (rm != null)
 			rv = rm.returns();
 		else
