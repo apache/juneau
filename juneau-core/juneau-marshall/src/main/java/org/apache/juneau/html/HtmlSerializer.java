@@ -754,7 +754,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		return new HtmlSerializerSession(this, args);
 	}
 
-	@Override /* XmlSerializer */
+	/**
+	 * Returns the schema serializer.
+	 *
+	 * @return The schema serializer.
+	 */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
 			schemaSerializer = builder().build(HtmlSchemaSerializer.class);

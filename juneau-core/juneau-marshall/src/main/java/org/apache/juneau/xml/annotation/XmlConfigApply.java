@@ -34,7 +34,6 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 		super(c, r);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb) {
 		XmlConfig a = ai.getAnnotation();
@@ -50,8 +49,6 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 			psb.set(XML_enableNamespaces, bool(a.enableNamespaces()));
 		if (a.namespaces().length > 0)
 			psb.set(XML_namespaces, Namespace.createArray(strings(a.namespaces())));
-		if (! a.xsNamespace().isEmpty())
-			psb.set(XML_xsNamespace, string(a.xsNamespace()));
 
 		if (a.eventAllocator() != XmlEventAllocator.Null.class)
 			psb.set(XML_eventAllocator, a.eventAllocator());

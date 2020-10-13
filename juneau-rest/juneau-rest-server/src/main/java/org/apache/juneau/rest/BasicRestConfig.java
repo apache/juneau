@@ -26,7 +26,6 @@ import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * Basic configuration for a REST resource that supports all languages.
@@ -48,7 +47,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		SimpleJsonSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
-		XmlSchemaDocSerializer.class,
 		UonSerializer.class,
 		UrlEncodingSerializer.class,
 		OpenApiSerializer.class,

@@ -24,7 +24,6 @@ import org.apache.juneau.uon.UonParser;
 import org.apache.juneau.uon.UonSerializer;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.
@@ -60,7 +59,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.Ns.class,
 		XmlDocSerializer.class,
-		XmlSchemaDocSerializer.class,
 		HtmlDocSerializer.class,
 		UrlEncodingSerializer.class,
 		SoapXmlSerializer.class,
@@ -76,6 +74,5 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		UrlEncodingParser.class,
 	}
 )
-@SuppressWarnings("deprecation")
 public final class BasicProvider extends BaseProvider {}
 
