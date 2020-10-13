@@ -25,7 +25,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -234,18 +233,6 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	Class<?>[] children() default {};
-
-	/**
-	 * Classpath resource finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_classpathResourceFinder}
-	 * </ul>
-	 */
-	Class<? extends ClasspathResourceFinder> classpathResourceFinder() default ClasspathResourceFinder.Null.class;
 
 	/**
 	 * Client version header.

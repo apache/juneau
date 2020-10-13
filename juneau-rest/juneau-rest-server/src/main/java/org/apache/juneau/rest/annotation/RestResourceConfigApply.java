@@ -186,9 +186,6 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (! a.useClasspathResourceCaching().isEmpty())
 			psb.set(REST_useClasspathResourceCaching, bool(a.useClasspathResourceCaching()));
 
-		if (a.classpathResourceFinder() != ClasspathResourceFinder.Null.class)
-			psb.set(REST_classpathResourceFinder, a.classpathResourceFinder());
-
 		if (! a.path().isEmpty())
 			psb.set(REST_path, trimLeadingSlash(string(a.path())));
 
