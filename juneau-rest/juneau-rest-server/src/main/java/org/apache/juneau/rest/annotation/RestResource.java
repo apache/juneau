@@ -507,18 +507,6 @@ public @interface RestResource {
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
 
 	/**
-	 * REST logger.
-	 *
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_logger}
-	 * </ul>
-	 */
-	Class<? extends RestLogger> logger() default RestLogger.Null.class;
-
-	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <ul class='seealso'>

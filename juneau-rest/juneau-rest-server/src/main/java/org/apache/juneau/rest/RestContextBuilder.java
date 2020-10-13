@@ -120,7 +120,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		ClassInfo rci = ClassInfo.of(resourceClass);
 
 		// Default values.
-		logger(BasicRestLogger.class);
 		partSerializer(OpenApiSerializer.class);
 		partParser(OpenApiParser.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
@@ -1175,57 +1174,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return set(REST_infoProvider, value);
 	}
 
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST logger.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #callLogger(Class)}
-	 * </div>
-	 *
-	 * <p>
-	 * Specifies the logger to use for logging.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_logger}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestCallLogger}.
-	 * 	<br>Can be <jk>null</jk> to disable logging.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder logger(Class<? extends RestLogger> value) {
-		return set(REST_logger, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST logger.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #callLogger(RestCallLogger)}
-	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #logger(Class)} except input is a pre-constructed instance.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_logger}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is {@link BasicRestLogger}.
-	 * 	<br>Can be <jk>null</jk> to disable logging.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder logger(RestLogger value) {
-		return set(REST_logger, value);
-	}
 
 	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  The maximum allowed input size (in bytes) on HTTP requests.

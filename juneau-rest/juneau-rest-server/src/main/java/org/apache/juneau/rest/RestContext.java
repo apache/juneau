@@ -3601,7 +3601,6 @@ public class RestContext extends BeanContext {
 	private final Map<String,List<RestMethodContext>> methodMap;
 	private final List<RestMethodContext> methods;
 	private final Map<String,RestContext> childResources;
-	@SuppressWarnings("deprecation") private final RestLogger logger;
 	private final RestCallLogger callLogger;
 	private final RestCallLoggerConfig callLoggerConfig;
 	private final StackTraceDatabase stackTraceDb;
@@ -3775,8 +3774,6 @@ public class RestContext extends BeanContext {
 			reqAttrs = new OMap(getMapProperty(REST_reqAttrs, Object.class)).unmodifiable();
 			resHeaders = getMapProperty(REST_resHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
-
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
 
 			Object clc = getProperty(REST_callLoggerConfig);
 			if (this.debug == TRUE)
@@ -4405,26 +4402,6 @@ public class RestContext extends BeanContext {
 	 */
 	public String getPath() {
 		return fullPath;
-	}
-
-	/**
-	 * Returns the logger to use for this resource.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #getCallLogger()}
-	 * </div>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #REST_logger}
-	 * </ul>
-	 *
-	 * @return
-	 * 	The logger to use for this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	@Deprecated
-	public RestLogger getLogger() {
-		return logger;
 	}
 
 	/**
@@ -5682,7 +5659,6 @@ public class RestContext extends BeanContext {
 				.a("clientVersionHeader", clientVersionHeader)
 				.a("consumes", consumes)
 				.a("infoProvider", infoProvider)
-				.a("logger", logger)
 				.a("paramResolvers", paramResolvers)
 				.a("parsers", parsers)
 				.a("partParser", partParser)

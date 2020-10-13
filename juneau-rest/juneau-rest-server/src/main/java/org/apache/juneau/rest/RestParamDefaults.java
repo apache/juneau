@@ -90,7 +90,6 @@ class RestParamDefaults {
 			RequestAttributesObject.class,
 			RequestQueryObject.class,
 			RequestFormDataObject.class,
-			RestLoggerObject.class,
 			RestContextObject.class,
 			ParserObject.class,
 			ReaderParserObject.class,
@@ -715,19 +714,6 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getFormData();
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	static final class RestLoggerObject extends RestMethodParam {
-
-		protected RestLoggerObject() {
-			super(OTHER, RestLogger.class);
-		}
-
-		@Override /* RestMethodParam */
-		public RestLogger resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getContext().getLogger();
 		}
 	}
 

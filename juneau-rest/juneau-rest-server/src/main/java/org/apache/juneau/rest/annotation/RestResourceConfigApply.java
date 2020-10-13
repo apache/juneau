@@ -198,9 +198,6 @@ public class RestResourceConfigApply extends ConfigApply<RestResource> {
 		if (a.resourceResolver() != RestResourceResolver.Null.class)
 			psb.set(REST_resourceResolver, a.resourceResolver());
 
-		if (a.logger() != RestLogger.Null.class)
-			psb.set(REST_logger, a.logger());
-
 		if (a.callLogger() != RestCallLogger.Null.class)
 			psb.set(REST_callLogger, a.callLogger());
 

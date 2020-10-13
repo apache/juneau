@@ -1754,14 +1754,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The {@link RestLogger} object can also be passed as a parameter on the method.
-	 * </ul>
-	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_logger}
-	 * 	<li class='jac'>{@link org.apache.juneau.rest.RestLogger}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level, String, Object...)}
 	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
 	 * </ul>

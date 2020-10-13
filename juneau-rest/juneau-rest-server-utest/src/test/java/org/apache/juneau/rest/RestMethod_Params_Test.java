@@ -94,11 +94,6 @@ public class RestMethod_Params_Test {
 		public String l(@Method String t) {
 			return t;
 		}
-		@SuppressWarnings("deprecation")
-		@RestMethod
-		public boolean m(RestLogger t) {
-			return t != null;
-		}
 		@RestMethod
 		public boolean n(RestContext t) {
 			return t != null;
@@ -146,7 +141,6 @@ public class RestMethod_Params_Test {
 		a.get("/j").run().assertBody().is("true");
 		a.get("/k").run().assertBody().is("true");
 		a.get("/l").run().assertBody().is("GET");
-		a.get("/m").run().assertBody().is("true");
 		a.get("/n").run().assertBody().is("true");
 		a.get("/o").contentType("application/json").run().assertBody().is("org.apache.juneau.json.JsonParser");
 		a.get("/p").acceptLanguage("en-US").run().assertBody().is("en_US");
