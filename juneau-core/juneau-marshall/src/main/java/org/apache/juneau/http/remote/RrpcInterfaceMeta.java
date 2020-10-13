@@ -18,7 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.remote.*;
 
 /**
  * Contains the meta-data about a remote proxy REST interface.
@@ -47,15 +46,10 @@ public class RrpcInterfaceMeta {
 	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
 	 * 	<br>This is only used on the client side.
 	 */
-	@SuppressWarnings("deprecation")
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		String path = "";
 		ClassInfo ci = ClassInfo.of(c);
-
-		for (RemoteInterface r : ci.getAnnotations(RemoteInterface.class))
-			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
 
 		for (Remote r : ci.getAnnotations(Remote.class))
 			if (! r.path().isEmpty())
