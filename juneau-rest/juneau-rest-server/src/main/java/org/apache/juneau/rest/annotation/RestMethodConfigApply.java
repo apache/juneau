@@ -120,8 +120,6 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		psb.set(BEAN_beanFilters, merge(ConverterUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
 
-		psb.set(BEAN_pojoSwaps, merge(ConverterUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), a.pojoSwaps()));
-
 		if (a.bpi().length > 0) {
 			Map<String,String> bpiMap = new LinkedHashMap<>();
 			for (String s1 : a.bpi()) {

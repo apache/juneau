@@ -98,20 +98,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	/**
 	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Validate end.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #validateEnd()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public UonParserBuilder validateEnd(boolean value) {
-		return set(UON_validateEnd, value);
-	}
-
-	/**
-	 * <i><l>UonParser</l> configuration property:&emsp;</i>  Validate end.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>validateEnd(<jk>true</jk>)</code>.
 	 *

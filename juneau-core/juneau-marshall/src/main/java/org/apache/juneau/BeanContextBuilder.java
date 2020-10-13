@@ -2800,48 +2800,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  POJO swaps.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #swaps(Object...)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder pojoSwaps(Object...values) {
-		return appendTo(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  POJO swaps.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #set(String,Object)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder pojoSwapsReplace(Object...values) {
-		return set(BEAN_pojoSwaps, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  POJO swaps.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #removeFrom(String,Object)}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	@FluentSetter
-	public BeanContextBuilder pojoSwapsRemove(Object...values) {
-		return removeFrom(BEAN_pojoSwaps, values);
-	}
-
-	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean property namer
 	 *
 	 * <p>

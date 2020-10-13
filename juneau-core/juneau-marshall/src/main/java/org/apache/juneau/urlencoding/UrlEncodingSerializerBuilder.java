@@ -59,20 +59,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	/**
 	 * <i><l>UrlEncodingSerializer</l> configuration property:&emsp;</i>  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #expandedParams()}
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public UrlEncodingSerializerBuilder expandedParams(boolean value) {
-		return set(URLENC_expandedParams, value);
-	}
-
-	/**
-	 * <i><l>UrlEncodingSerializer</l> configuration property:&emsp;</i>  Serialize bean property collections/arrays as separate key/value pairs.
-	 *
 	 * <p>
 	 * Shortcut for calling <code>expandedParams(<jk>true</jk>)</code>.
 	 *

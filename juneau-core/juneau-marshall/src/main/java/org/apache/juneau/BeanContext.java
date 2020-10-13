@@ -1854,36 +1854,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_notBeanPackages_remove = PREFIX + ".notBeanPackages.ss/remove";
 
 	/**
-	 * Configuration property:  POJO swaps.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_pojoSwaps = PREFIX + ".pojoSwaps.lo";
-
-	/**
-	 * Configuration property:  Add to POJO swap classes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps_add}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_pojoSwaps_add = PREFIX + ".pojoSwaps.lo/add";
-
-	/**
-	 * Configuration property:  Remove from POJO swap classes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #BEAN_swaps_remove}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_pojoSwaps_remove = PREFIX + ".pojoSwaps.lo/remove";
-
-	/**
 	 * Configuration property:  Bean property namer.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2466,19 +2436,6 @@ public class BeanContext extends Context implements MetaProvider {
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
-		for (Object o : getListProperty(BEAN_pojoSwaps, Object.class)) {
-			if (o instanceof Class) {
-				ClassInfo ci = ClassInfo.of((Class<?>)o);
-				if (ci.isChildOf(PojoSwap.class))
-					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
-				else if (ci.isChildOf(Surrogate.class))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner(), this));
-				else
-					throw new BasicRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
-			} else if (o instanceof PojoSwap) {
-				lpf.add((PojoSwap)o);
-			}
-		}
 		for (Object o : getListProperty(BEAN_swaps, Object.class)) {
 			if (o instanceof Class) {
 				ClassInfo ci = ClassInfo.of((Class<?>)o);
