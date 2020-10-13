@@ -42,12 +42,10 @@ public class RestMethodAnnotation implements RestMethod {
 		summary = "";
 
 	private String[]
-		attrs = new String[0],
 		bpi = new String[0],
 		bpx = new String[0],
 		defaultFormData = new String[0],
 		defaultQuery = new String[0],
-		defaultRequestHeaders = new String[0],
 		description = new String[0],
 		flags = new String[0],
 		paths = new String[0],
@@ -60,7 +58,6 @@ public class RestMethodAnnotation implements RestMethod {
 		beanFilters = new Class<?>[0],
 		encoders = new Class<?>[0],
 		parsers = new Class<?>[0],
-		pojoSwaps = new Class<?>[0],
 		serializers = new Class<?>[0];
 
 	private Class<? extends RestConverter>[] converters = new Class[0];
@@ -80,11 +77,6 @@ public class RestMethodAnnotation implements RestMethod {
 	@Override /* RestMethod */
 	public Class<? extends Annotation> annotationType() {
 		return RestMethod.class;
-	}
-
-	@Override /* RestMethod */
-	public String[] attrs() {
-		return attrs;
 	}
 
 	@Override /* RestMethod */
@@ -140,11 +132,6 @@ public class RestMethodAnnotation implements RestMethod {
 	@Override /* RestMethod */
 	public String[] defaultQuery() {
 		return defaultQuery;
-	}
-
-	@Override /* RestMethod */
-	public String[] defaultRequestHeaders() {
-		return defaultRequestHeaders;
 	}
 
 	@Override /* RestMethod */
@@ -205,11 +192,6 @@ public class RestMethodAnnotation implements RestMethod {
 	@Override /* RestMethod */
 	public String[] paths() {
 		return paths;
-	}
-
-	@Override /* RestMethod */
-	public Class<?>[] pojoSwaps() {
-		return pojoSwaps;
 	}
 
 	@Override /* RestMethod */

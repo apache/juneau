@@ -150,16 +150,6 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
-	 * Default request attributes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqAttrs()}
-	 * </div>
-	 */
-	@Deprecated
-	String[] attrs() default {};
-
-	/**
 	 * REST children.
 	 *
 	 * <p>
@@ -494,26 +484,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String defaultContentType() default "";
-
-	/**
-	 * Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqHeaders()}
-	 * </div>
-	 */
-	@Deprecated
-	String[] defaultRequestHeaders() default {};
-
-	/**
-	 * Default response headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #resHeaders()}
-	 * </div>
-	 */
-	@Deprecated
-	String[] defaultResponseHeaders() default {};
 
 	/**
 	 * Optional servlet description.

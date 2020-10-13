@@ -38,16 +38,6 @@ import org.apache.juneau.http.remote.*;
 public @interface RestMethod {
 
 	/**
-	 * Default request attributes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqAttrs()}
-	 * </div>
-	 */
-	@Deprecated
-	String[] attrs() default {};
-
-	/**
 	 * Sets the bean filters for the serializers and parsers defined on this method.
 	 *
 	 * <div class='warn'>
@@ -289,16 +279,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String[] defaultQuery() default {};
-
-	/**
-	 * Default request headers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #reqHeaders()}
-	 * </div>
-	 */
-	@Deprecated
-	String[] defaultRequestHeaders() default {};
 
 	/**
 	 * Optional description for the exposed API.
@@ -590,30 +570,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String[] paths() default {};
-
-	/**
-	 * Sets the POJO swaps for the serializers and parsers defined on this method.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#swaps()}
-	 * </div>
-	 *
-	 * <p>
-	 * If no value is specified, the POJO swaps are inherited from the class.
-	 * <br>Otherwise, this value overrides the POJO swaps defined on the class.
-	 *
-	 * <p>
-	 * Use {@link Inherit} to inherit POJO swaps defined on the class.
-	 *
-	 * <p>
-	 * Use {@link None} to suppress inheriting POJO swaps defined on the class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * </ul>
-	 */
-	@Deprecated
-	Class<?>[] pojoSwaps() default {};
 
 	/**
 	 * URL path pattern priority.
