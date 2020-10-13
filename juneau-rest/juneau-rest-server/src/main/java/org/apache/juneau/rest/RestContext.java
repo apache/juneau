@@ -396,16 +396,6 @@ public class RestContext extends BeanContext {
 	public static final String REST_allowHeaderParams = PREFIX + ".allowHeaderParams.b";
 
 	/**
-	 * Configuration property:  REST call handler.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_callHandler = PREFIX + ".callHandler.o";
-
-	/**
 	 * Configuration property:  REST call logger.
 	 *
 	 * <h5 class='section'>Property:</h5>

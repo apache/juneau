@@ -160,17 +160,6 @@ public @interface Rest {
 	String[] attrs() default {};
 
 	/**
-	 * REST call handler.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
-	 * </div>
-	 * <p>
-	 */
-	@Deprecated
-	Class<? extends RestCallHandler> callHandler() default RestCallHandler.Null.class;
-
-	/**
 	 * REST children.
 	 *
 	 * <p>

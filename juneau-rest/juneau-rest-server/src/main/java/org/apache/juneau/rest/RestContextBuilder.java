@@ -561,34 +561,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public RestContextBuilder callHandler(Class<? extends RestCallHandler> value) {
-		return set(REST_callHandler, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call handler.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link RestContext#REST_context} and override methods.
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public RestContextBuilder callHandler(RestCallHandler value) {
-		return set(REST_callHandler, value);
-	}
-
-	/**
 	 * <i><l>RestContext</l> configuration property:&emsp;</i>  REST call logger.
 	 *
 	 * <p>

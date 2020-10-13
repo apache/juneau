@@ -267,9 +267,6 @@ public class RestConfigApply extends ConfigApply<Rest> {
 			psb.set(REST_callLoggerConfig, m);
 		}
 
-		if (a.callHandler() != RestCallHandler.Null.class)
-			psb.set(REST_callHandler, a.callHandler());
-
 		if (a.infoProvider() != RestInfoProvider.Null.class)
 			psb.set(REST_infoProvider, a.infoProvider());
 
