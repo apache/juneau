@@ -40,19 +40,6 @@ import org.apache.juneau.transform.*;
 public @interface JuneauProvider {
 
 	/**
-	 * Provider-level bean filters.
-	 *
-	 * <p>
-	 * These filters are applied to all serializers and parsers being used by the provider.
-	 *
-	 * <p>
-	 * If the specified class is an instance of {@link BeanFilter}, then a filter built from that builder is added.
-	 * Any other classes are wrapped in a {@link BeanFilter} with {@link BeanFilter#interfaceClass(Class)} to indicate that subclasses should
-	 * be treated as the specified class type.
-	 */
-	Class<?>[] beanFilters() default {};
-
-	/**
 	 * Provider-level properties.
 	 *
 	 * <p>

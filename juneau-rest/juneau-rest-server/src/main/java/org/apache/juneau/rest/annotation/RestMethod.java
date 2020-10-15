@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.annotation.*;
@@ -36,47 +35,6 @@ import org.apache.juneau.http.remote.*;
 @Inherited
 @PropertyStoreApply(RestMethodConfigApply.class)
 public @interface RestMethod {
-
-	/**
-	 * Sets the bean filters for the serializers and parsers defined on this method.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#beanFilters()}
-	 * </div>
-	 *
-	 * <p>
-	 * If no value is specified, the bean filters are inherited from the class.
-	 * <br>Otherwise, this value overrides the bean filters defined on the class.
-	 *
-	 * <p>
-	 * Use {@link Inherit} to inherit bean filters defined on the class.
-	 *
-	 * <p>
-	 * Use {@link None} to suppress inheriting bean filters defined on the class.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * </ul>
-	 */
-	@Deprecated Class<?>[] beanFilters() default {};
-
-	/**
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpi} property on all serializers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#bpi()}
-	 * </div>
-	 */
-	@Deprecated String[] bpi() default {};
-
-	/**
-	 * Shortcut for specifying the {@link BeanContext#BEAN_bpx} property on all serializers.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#bpx()}
-	 * </div>
-	 */
-	@Deprecated String[] bpx() default {};
 
 	/**
 	 * Specifies whether this method can be called based on the client version.

@@ -64,8 +64,8 @@ public class BeanConfigAnnotationTest {
 				Map.Entry e = (Map.Entry)t;
 				return apply(e.getKey()) + "=" + apply(e.getValue());
 			}
-			if (t instanceof UnmodifiableBeanFilter)
-				return ((UnmodifiableBeanFilter)t).getBeanClass().getSimpleName();
+			if (t instanceof BeanFilter)
+				return ((BeanFilter)t).getBeanClass().getSimpleName();
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)
@@ -112,9 +112,6 @@ public class BeanConfigAnnotationTest {
 		dictionary_replace={A1.class,A2.class,A3.class},
 		dictionary_remove=A2.class,
 		beanFieldVisibility="$X{PRIVATE}",
-		beanFilters={A1.class,A2.class},
-		beanFilters_replace={A1.class,A2.class,A3.class},
-		beanFilters_remove=A2.class,
 		beanMapPutReturnsOldValue="$X{true}",
 		beanMethodVisibility="$X{PRIVATE}",
 		beansRequireDefaultConstructor="$X{true}",
@@ -169,7 +166,6 @@ public class BeanConfigAnnotationTest {
 		check("PRIVATE", bc.getBeanConstructorVisibility());
 		check("A1,A3", bc.getBeanDictionaryClasses());
 		check("PRIVATE", bc.getBeanFieldVisibility());
-		check("A1,A3", bc.getBeanFilters());
 		check("true", bc.isBeanMapPutReturnsOldValue());
 		check("PRIVATE", bc.getBeanMethodVisibility());
 		check("true", bc.isBeansRequireDefaultConstructor());
@@ -219,7 +215,6 @@ public class BeanConfigAnnotationTest {
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());
 		check("PUBLIC", bc.getBeanFieldVisibility());
-		check("", bc.getBeanFilters());
 		check("false", bc.isBeanMapPutReturnsOldValue());
 		check("PUBLIC", bc.getBeanMethodVisibility());
 		check("false", bc.isBeansRequireDefaultConstructor());
@@ -271,7 +266,6 @@ public class BeanConfigAnnotationTest {
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionaryClasses());
 		check("PUBLIC", bc.getBeanFieldVisibility());
-		check("", bc.getBeanFilters());
 		check("false", bc.isBeanMapPutReturnsOldValue());
 		check("PUBLIC", bc.getBeanMethodVisibility());
 		check("false", bc.isBeansRequireDefaultConstructor());

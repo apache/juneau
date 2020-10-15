@@ -1216,17 +1216,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Bean filters.
-	 *
-	 *
-	 * @return
-	 * 	Only look for bean fields with this specified minimum visibility.
-	 */
-	protected UnmodifiableBeanFilter[] getBeanFilters() {
-		return ctx.getBeanFilters();
-	}
-
-	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
 	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue

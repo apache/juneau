@@ -10,54 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.transform;
+package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.beans.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.transform.*;
 
 /**
- * Builder class for {@link UnmodifiableBeanFilter} objects.
+ * Builder class for {@link BeanFilter} objects.
  *
  * <p>
- * This class is the programmatic equivalent to the {@link Bean @Bean} annotation.
- *
- * <p>
- * The general approach to defining bean filters is to create subclasses from this class and call methods to
- * set various attributes
- * <p class='bcode w800'>
- * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
- *
- * 		<jc>// Must provide a no-arg constructor!</jc>
- * 		<jk>public</jk> MyFilter() {
- *
- * 			<jc>// Call one or more configuration methods.</jc>
- * 			bpi(<js>"foo,bar,baz"</js>);
- * 			sortProperties();
- * 			propertyNamer(PropertyNamerULC.<jk>class</jk>);
- * 		}
- * 	}
- *
- * 	<jc>// Register it with a serializer or parser.</jc>
- * 	WriterSerializer s = JsonSerializer
- * 		.<jsm>create</jsm>()
- * 		.beanFilters(MyFilter.<jk>class</jk>)
- * 		.build();
- * </p>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc BeanFilters}
- * </ul>
- *
- * @param <T> The bean type that this filter applies to.
+ * This class is the programmatic equivalent to the aggregation of one or more {@link Bean @Bean} annotations.
  */
-public class BeanFilter<T> {
+public class BeanFilterBuilder {
 
 	Class<?> beanClass;
 	String typeName;
@@ -75,31 +45,10 @@ public class BeanFilter<T> {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * Bean class is determined through reflection of the parameter type.
-	 */
-	protected BeanFilter() {
-		beanClass = ClassInfo.of(this.getClass()).getParameterType(0, BeanFilter.class);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param beanClass The bean class that this filter applies to.
 	 */
-	protected BeanFilter(Class<?> beanClass) {
+	public BeanFilterBuilder(Class<?> beanClass) {
 		this.beanClass = beanClass;
-	}
-
-	/**
-	 * Create a new instance of this bean filter.
-	 *
-	 * @param <T> The bean class being filtered.
-	 * @param beanClass The bean class being filtered.
-	 * @return A new {@link BeanFilter} object.
-	 */
-	public static <T> BeanFilter<T> create(Class<T> beanClass) {
-		return new BeanFilter<>(beanClass);
 	}
 
 	/**
@@ -108,7 +57,7 @@ public class BeanFilter<T> {
 	 * @param annotations The annotations to apply.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> applyAnnotations(List<Bean> annotations) {
+	public BeanFilterBuilder applyAnnotations(List<Bean> annotations) {
 
 		for (Bean b : annotations) {
 
@@ -183,7 +132,7 @@ public class BeanFilter<T> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> typeName(String value) {
+	public BeanFilterBuilder typeName(String value) {
 		this.typeName = value;
 		return this;
 	}
@@ -238,7 +187,7 @@ public class BeanFilter<T> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> interfaceClass(Class<?> value) {
+	public BeanFilterBuilder interfaceClass(Class<?> value) {
 		this.interfaceClass = value;
 		return this;
 	}
@@ -295,7 +244,7 @@ public class BeanFilter<T> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> stopClass(Class<?> value) {
+	public BeanFilterBuilder stopClass(Class<?> value) {
 		this.stopClass = value;
 		return this;
 	}
@@ -336,7 +285,7 @@ public class BeanFilter<T> {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> sortProperties(boolean value) {
+	public BeanFilterBuilder sortProperties(boolean value) {
 		this.sortProperties = value;
 		return this;
 	}
@@ -354,7 +303,7 @@ public class BeanFilter<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> sortProperties() {
+	public BeanFilterBuilder sortProperties() {
 		this.sortProperties = true;
 		return this;
 	}
@@ -394,7 +343,7 @@ public class BeanFilter<T> {
 	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> fluentSetters(boolean value) {
+	public BeanFilterBuilder fluentSetters(boolean value) {
 		this.fluentSetters = value;
 		return this;
 	}
@@ -412,7 +361,7 @@ public class BeanFilter<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> fluentSetters() {
+	public BeanFilterBuilder fluentSetters() {
 		this.fluentSetters = true;
 		return this;
 	}
@@ -455,7 +404,7 @@ public class BeanFilter<T> {
 	 * 	<br>The default is {@link PropertyNamerDefault}.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> propertyNamer(Class<? extends PropertyNamer> value) {
+	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> value) {
 		this.propertyNamer = value;
 		return this;
 	}
@@ -497,7 +446,7 @@ public class BeanFilter<T> {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> bpi(String...value) {
+	public BeanFilterBuilder bpi(String...value) {
 		this.bpi = ASet.of();
 		for (String v : value)
 			bpi.a(split(v));
@@ -541,7 +490,7 @@ public class BeanFilter<T> {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> bpx(String...value) {
+	public BeanFilterBuilder bpx(String...value) {
 		this.bpx = ASet.of();
 		for (String v : value)
 			bpx.a(split(v));
@@ -587,7 +536,7 @@ public class BeanFilter<T> {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> bpro(String...value) {
+	public BeanFilterBuilder bpro(String...value) {
 		this.bpro = ASet.of();
 		for (String v : value)
 			bpro.a(split(v));
@@ -633,7 +582,7 @@ public class BeanFilter<T> {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> bpwo(String...value) {
+	public BeanFilterBuilder bpwo(String...value) {
 		this.bpwo = ASet.of();
 		for (String v : value)
 			bpwo.a(split(v));
@@ -675,7 +624,7 @@ public class BeanFilter<T> {
 	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> dictionary(Class<?>...values) {
+	public BeanFilterBuilder dictionary(Class<?>...values) {
 		if (dictionary == null)
 			dictionary = Arrays.asList(values);
 		else for (Class<?> cc : values)
@@ -716,17 +665,17 @@ public class BeanFilter<T> {
 	 * 	<br>The default value is {@link BeanInterceptor}.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilter<T> interceptor(Class<?> value) {
+	public BeanFilterBuilder interceptor(Class<?> value) {
 		this.interceptor = value;
 		return this;
 	}
 
 	/**
-	 * Creates a {@link UnmodifiableBeanFilter} with settings in this builder class.
+	 * Creates a {@link BeanFilter} with settings in this builder class.
 	 *
-	 * @return A new {@link UnmodifiableBeanFilter} instance.
+	 * @return A new {@link BeanFilter} instance.
 	 */
-	public UnmodifiableBeanFilter build() {
-		return new UnmodifiableBeanFilter(this);
+	public BeanFilter build() {
+		return new BeanFilter(this);
 	}
 }

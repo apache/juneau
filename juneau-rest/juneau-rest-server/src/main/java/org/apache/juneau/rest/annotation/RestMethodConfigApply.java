@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.RestMethodContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
@@ -45,7 +43,6 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 		super(c, r);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb) {
 		RestMethod a = ai.getAnnotation();
@@ -106,36 +103,6 @@ public class RestMethodConfigApply extends ConfigApply<RestMethod> {
 
 		if (! a.clientVersion().isEmpty())
 			psb.set(RESTMETHOD_clientVersion, a.clientVersion());
-
-		psb.set(BEAN_beanFilters, merge(ConverterUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), a.beanFilters()));
-
-		if (a.bpi().length > 0) {
-			Map<String,String> bpiMap = new LinkedHashMap<>();
-			for (String s1 : a.bpi()) {
-				for (String s2 : split(s1, ';')) {
-					int i = s2.indexOf(':');
-					if (i == -1)
-						throw new ConfigException(
-							"Invalid format for @RestMethod(bpi) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s1);
-					bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
-				}
-			}
-			psb.putAllTo(BEAN_bpi, bpiMap);
-		}
-
-		if (a.bpx().length > 0) {
-			Map<String,String> bpxMap = new LinkedHashMap<>();
-			for (String s1 : a.bpx()) {
-				for (String s2 : split(s1, ';')) {
-					int i = s2.indexOf(':');
-					if (i == -1)
-						throw new ConfigException(
-							"Invalid format for @RestMethod(bpx) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s1);
-					bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
-				}
-			}
-			psb.putAllTo(BEAN_bpx, bpxMap);
-		}
 
 		if (! a.defaultCharset().isEmpty())
 			psb.set(REST_defaultCharset, string(a.defaultCharset()));

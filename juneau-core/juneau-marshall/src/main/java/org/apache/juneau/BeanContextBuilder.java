@@ -446,48 +446,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean filters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanContextBuilder beanFilters(Object...values) {
-		return prependTo(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean filters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanContextBuilder beanFiltersReplace(Object...values) {
-		return set(BEAN_beanFilters, values);
-	}
-
-	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Bean filters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link BeanConfig#interfaces()} and other methods.
-	 * </div>
-	 */
-	@SuppressWarnings("javadoc")
-	@FluentSetter
-	@Deprecated
-	public BeanContextBuilder beanFiltersRemove(Object...values) {
-		return removeFrom(BEAN_beanFilters, values);
-	}
-
-	/**
 	 * Bean interceptor.
 	 *
 	 * <p>

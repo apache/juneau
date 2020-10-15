@@ -10,14 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.transform;
+package org.apache.juneau;
 
 import java.util.*;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.transform.*;
 
 /**
  * Parent class for all bean filters.
@@ -26,14 +26,14 @@ import org.apache.juneau.annotation.*;
  * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
  *
  * <p>
- * Bean filters are created by {@link BeanFilter} which is the programmatic equivalent to the {@link Bean @Bean}
+ * Bean filters are created by {@link BeanFilterBuilder} which is the programmatic equivalent to the {@link Bean @Bean}
  * annotation.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc BeanFilters}
  * </ul>
  */
-public final class UnmodifiableBeanFilter {
+public final class BeanFilter {
 
 	private final Class<?> beanClass;
 	private final Set<String> bpi, bpx, bpro, bpwo;
@@ -48,7 +48,7 @@ public final class UnmodifiableBeanFilter {
 	/**
 	 * Constructor.
 	 */
-	UnmodifiableBeanFilter(BeanFilter<?> builder) {
+	BeanFilter(BeanFilterBuilder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
 		this.bpi = new LinkedHashSet<>(builder.bpi);
@@ -71,14 +71,14 @@ public final class UnmodifiableBeanFilter {
 	}
 
 	/**
-	 * Static creator.
+	 * Create a new instance of this bean filter.
 	 *
-	 * @param <T> The class being filtered.
-	 * @param c The class being filtered.
-	 * @return A new instance of BeanFilterBuilder.
+	 * @param <T> The bean class being filtered.
+	 * @param beanClass The bean class being filtered.
+	 * @return A new {@link BeanFilterBuilder} object.
 	 */
-	public static <T> BeanFilter<T> create(Class<T> c) {
-		return new BeanFilter<>(c);
+	public static <T> BeanFilterBuilder create(Class<T> beanClass) {
+		return new BeanFilterBuilder(beanClass);
 	}
 
 	/**

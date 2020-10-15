@@ -50,9 +50,6 @@ import org.apache.juneau.xml.annotation.*;
  * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * </ul>
  *
- * <p>
- * <br>The order can also be overridden through the use of a {@link UnmodifiableBeanFilter}.
- *
  * <h5 class='topic'>POJO swaps</h5>
  *
  * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties

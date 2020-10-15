@@ -69,9 +69,10 @@ import org.apache.juneau.transforms.*;
 @BeanConfig(
 	maxDepth="5",
 	detectRecursions="true",
-	beanFilters={
-		// Interpret these as their parent classes, not subclasses
-		HttpServletRequest.class, HttpSession.class, ServletContext.class,
+	applyBean={
+		@Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class),
+		@Bean(on="HttpSession",interfaceClass=HttpSession.class),
+		@Bean(on="ServletContext",interfaceClass=ServletContext.class)
 	},
 	swaps={
 		// Add a special filter for Enumerations

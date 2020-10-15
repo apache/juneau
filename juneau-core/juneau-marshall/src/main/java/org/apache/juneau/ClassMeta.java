@@ -93,7 +93,6 @@ public final class ClassMeta<T> implements Type {
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
 	private final PojoSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
-	private final UnmodifiableBeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
 	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
@@ -125,9 +124,6 @@ public final class ClassMeta<T> implements Type {
 	 * @param implClass
 	 * 	For interfaces and abstract classes, this represents the "real" class to instantiate.
 	 * 	Can be <jk>null</jk>.
-	 * @param beanFilter
-	 * 	The {@link UnmodifiableBeanFilter} programmatically associated with this class.
-	 * 	Can be <jk>null</jk>.
 	 * @param pojoSwap
 	 * 	The {@link PojoSwap} programmatically associated with this class.
 	 * 	Can be <jk>null</jk>.
@@ -140,7 +136,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, UnmodifiableBeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
@@ -152,7 +148,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, swaps, childPojoSwaps, example);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, swaps, childPojoSwaps, example);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -163,7 +159,6 @@ public final class ClassMeta<T> implements Type {
 			this.stringConstructor = builder.stringConstructor;
 			this.primitiveDefault = builder.primitiveDefault;
 			this.publicMethods = builder.publicMethods;
-			this.beanFilter = beanFilter;
 			this.swaps = builder.swaps.isEmpty() ? null : builder.swaps.toArray(new PojoSwap[builder.swaps.size()]);
 			this.builderSwap = builder.builderSwap;
 			this.keyType = builder.keyType;
@@ -252,7 +247,6 @@ public final class ClassMeta<T> implements Type {
 		this.notABeanReason = mainType.notABeanReason;
 		this.swaps = mainType.swaps;
 		this.builderSwap = mainType.builderSwap;
-		this.beanFilter = mainType.beanFilter;
 		this.initException = mainType.initException;
 		this.beanRegistry = mainType.beanRegistry;
 		this.exampleMethod = mainType.exampleMethod;
@@ -296,7 +290,6 @@ public final class ClassMeta<T> implements Type {
 		this.notABeanReason = null;
 		this.swaps = null;
 		this.builderSwap = null;
-		this.beanFilter = null;
 		this.initException = null;
 		this.beanRegistry = null;
 		this.exampleMethod = null;
@@ -350,7 +343,7 @@ public final class ClassMeta<T> implements Type {
 		Object example;
 		Mutater<String,T> stringMutater;
 
-		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, UnmodifiableBeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 			BeanContext bc = beanContext;
@@ -540,8 +533,7 @@ public final class ClassMeta<T> implements Type {
 				noArgConstructor = x.getPublicConstructor();
 			}
 
-			if (beanFilter == null)
-				beanFilter = findBeanFilter(bc);
+			BeanFilter beanFilter = findBeanFilter(bc);
 
 			if (swaps != null)
 				this.swaps.a(swaps);
@@ -684,7 +676,7 @@ public final class ClassMeta<T> implements Type {
 			this.stringMutater = Mutaters.get(String.class, c);
 		}
 
-		private UnmodifiableBeanFilter findBeanFilter(BeanContext bc) {
+		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
 				List<Bean> ba = info.getAnnotations(Bean.class, bc);
 				if (! ba.isEmpty())

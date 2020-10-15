@@ -258,60 +258,6 @@ public @interface BeanConfig {
 	String beanFieldVisibility() default "";
 
 	/**
-	 * Configuration property:  Bean filters.
-	 *
-	 * <p>
-	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
-	 * <br>It's useful when you want to use the <c>@Bean</c> annotation functionality, but you don't have the ability to alter
-	 * the bean classes.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Values can consist of any of the following types:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>Any subclass of {@link BeanFilter}.
-	 * 				<br>These must have a public no-arg constructor.
-	 * 			<li>Any bean interfaces.
-	 * 				<br>A shortcut for defining a {@link BeanFilter} with {@link BeanFilter#interfaceClass(Class)}.
-	 * 				<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 				<br>All other bean properties will be ignored.
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
-	 * 	<li class='link'>{@doc BeanFilters}
-	 * 	<li class='link'>{@doc InterfaceFilters}
-	 * </ul>
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanFilters() default {};
-
-	/**
-	 * Configuration property:  Add to bean filters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanFilters_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from bean filters.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link #interfaces()} or other various approaches.
-	 * </div>
-	 */
-	@Deprecated
-	Class<?>[] beanFilters_remove() default {};
-
-	/**
 	 * Configuration property:  BeanMap.put() returns old property value.
 	 *
 	 * <p>
