@@ -1222,7 +1222,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	protected BeanFilter[] getBeanFilters() {
+	protected UnmodifiableBeanFilter[] getBeanFilters() {
 		return ctx.getBeanFilters();
 	}
 

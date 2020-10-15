@@ -51,7 +51,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <p>
- * <br>The order can also be overridden through the use of a {@link BeanFilter}.
+ * <br>The order can also be overridden through the use of a {@link UnmodifiableBeanFilter}.
  *
  * <h5 class='topic'>POJO swaps</h5>
  *

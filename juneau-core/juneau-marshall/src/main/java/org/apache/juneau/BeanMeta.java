@@ -35,7 +35,7 @@ import org.apache.juneau.transform.*;
  * <h5 class='topic'>Description</h5>
  *
  * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
- * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
+ * 	is present on the class, or the class has a {@link UnmodifiableBeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
@@ -56,7 +56,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  *
  * <p>
- * The order can also be overridden through the use of an {@link BeanFilter}.
+ * The order can also be overridden through the use of an {@link UnmodifiableBeanFilter}.
  *
  * @param <T> The class type that this metadata applies to.
  */
@@ -84,7 +84,7 @@ public class BeanMeta<T> {
 	protected final BeanContext ctx;
 
 	/** Optional bean filter associated with the target class. */
-	protected final BeanFilter beanFilter;
+	protected final UnmodifiableBeanFilter beanFilter;
 
 	/** Type variables implemented by this bean. */
 	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
@@ -113,7 +113,7 @@ public class BeanMeta<T> {
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, UnmodifiableBeanFilter beanFilter, String[] pNames) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.c = classMeta.getInnerClass();
@@ -141,7 +141,7 @@ public class BeanMeta<T> {
 	private static final class Builder<T> {
 		ClassMeta<T> classMeta;
 		BeanContext ctx;
-		BeanFilter beanFilter;
+		UnmodifiableBeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
 		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.of();
@@ -157,7 +157,7 @@ public class BeanMeta<T> {
 		String dictionaryName, typePropertyName;
 		boolean sortProperties, fluentSetters;
 
-		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
+		Builder(ClassMeta<T> classMeta, BeanContext ctx, UnmodifiableBeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
 			this.ctx = ctx;
 			this.beanFilter = beanFilter;

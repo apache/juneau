@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		Provides the ability to wrap beans inside {@link Map} interfaces.
  * 	<li>
- * 		Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter BeanFilters},
+ * 		Serves as a repository for metadata on POJOs, such as associated {@link UnmodifiableBeanFilter BeanFilters},
  * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
@@ -485,7 +485,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dictionary(Object...)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#dictionary(Class...)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#dictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1244,8 +1244,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters()}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#fluentSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#fluentSetters(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#fluentSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1853,7 +1853,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#propertyNamer(Class)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#propertyNamer(Class)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#propertyNamer(Class)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1916,8 +1916,8 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#sortProperties()}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#sortProperties()}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#sortProperties(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.transform.BeanFilter#sortProperties()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2317,7 +2317,7 @@ public class BeanContext extends Context implements MetaProvider {
 	private final Class<?>[] notBeanClasses;
 	private final List<Class<?>> beanDictionaryClasses;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
-	private final BeanFilter[] beanFilters;
+	private final UnmodifiableBeanFilter[] beanFilters;
 	private final PojoSwap<?,?>[] swaps;
 	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
@@ -2405,17 +2405,19 @@ public class BeanContext extends Context implements MetaProvider {
 		notBeanPackageNames = l1.toArray(new String[l1.size()]);
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
-		LinkedList<BeanFilter> lbf = new LinkedList<>();
+		LinkedList<UnmodifiableBeanFilter> lbf = new LinkedList<>();
 		for (Object o : getListProperty(BEAN_beanFilters, Object[].class)) {
 			ClassInfo ci = o instanceof Class ? ClassInfo.of((Class)o) : ClassInfo.of(o);
-			if (ci.isChildOf(BeanFilter.class))
-				lbf.add(castOrCreate(BeanFilter.class, o));
-			else if (ci.isChildOf(BeanFilterBuilder.class))
-				lbf.add(castOrCreate(BeanFilterBuilder.class, o).build());
-			else if (o instanceof Class)
-				lbf.add(new InterfaceBeanFilterBuilder((Class<?>)o, this).build());
+			if (ci.isChildOf(UnmodifiableBeanFilter.class))
+				lbf.add(castOrCreate(UnmodifiableBeanFilter.class, o));
+			else if (ci.isChildOf(BeanFilter.class))
+				lbf.add(castOrCreate(BeanFilter.class, o).build());
+			else if (o instanceof Class) {
+				Class<?> ic = (Class<?>) o;
+				lbf.add(BeanFilter.create(ic).interfaceClass(ic).applyAnnotations(ClassInfo.of(ic).getAnnotations(Bean.class, this)).build());
+			}
 		}
-		beanFilters = lbf.toArray(new BeanFilter[0]);
+		beanFilters = lbf.toArray(new UnmodifiableBeanFilter[0]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
 		for (Object o : getListProperty(BEAN_swaps, Object.class)) {
@@ -3046,16 +3048,16 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Returns the {@link BeanFilter} associated with the specified class, or <jk>null</jk> if there is no bean filter
+	 * Returns the {@link UnmodifiableBeanFilter} associated with the specified class, or <jk>null</jk> if there is no bean filter
 	 * associated with the class.
 	 *
 	 * @param <T> The class associated with the bean filter.
 	 * @param c The class associated with the bean filter.
 	 * @return The bean filter associated with the class, or null if there is no association.
 	 */
-	private final <T> BeanFilter findBeanFilter(Class<T> c) {
+	private final <T> UnmodifiableBeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
-			for (BeanFilter f : beanFilters)
+			for (UnmodifiableBeanFilter f : beanFilters)
 				if (ClassInfo.of(f.getBeanClass()).isParentOf(c))
 					return f;
 		return null;
@@ -3642,7 +3644,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	protected final BeanFilter[] getBeanFilters() {
+	protected final UnmodifiableBeanFilter[] getBeanFilters() {
 		return beanFilters;
 	}
 

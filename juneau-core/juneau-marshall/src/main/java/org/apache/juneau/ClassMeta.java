@@ -93,7 +93,7 @@ public final class ClassMeta<T> implements Type {
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
 	private final PojoSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
-	private final BeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
+	private final UnmodifiableBeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
 	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
 	private final BeanContext beanContext;                  // The bean context that created this object.
 	private final ClassMeta<?>
@@ -126,7 +126,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	For interfaces and abstract classes, this represents the "real" class to instantiate.
 	 * 	Can be <jk>null</jk>.
 	 * @param beanFilter
-	 * 	The {@link BeanFilter} programmatically associated with this class.
+	 * 	The {@link UnmodifiableBeanFilter} programmatically associated with this class.
 	 * 	Can be <jk>null</jk>.
 	 * @param pojoSwap
 	 * 	The {@link PojoSwap} programmatically associated with this class.
@@ -140,7 +140,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, UnmodifiableBeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
@@ -350,7 +350,7 @@ public final class ClassMeta<T> implements Type {
 		Object example;
 		Mutater<String,T> stringMutater;
 
-		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, UnmodifiableBeanFilter beanFilter, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 			BeanContext bc = beanContext;
@@ -684,11 +684,11 @@ public final class ClassMeta<T> implements Type {
 			this.stringMutater = Mutaters.get(String.class, c);
 		}
 
-		private BeanFilter findBeanFilter(BeanContext bc) {
+		private UnmodifiableBeanFilter findBeanFilter(BeanContext bc) {
 			try {
 				List<Bean> ba = info.getAnnotations(Bean.class, bc);
 				if (! ba.isEmpty())
-					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
+					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

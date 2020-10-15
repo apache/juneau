@@ -64,8 +64,8 @@ public class BeanConfigAnnotationTest {
 				Map.Entry e = (Map.Entry)t;
 				return apply(e.getKey()) + "=" + apply(e.getValue());
 			}
-			if (t instanceof BeanFilter)
-				return ((BeanFilter)t).getBeanClass().getSimpleName();
+			if (t instanceof UnmodifiableBeanFilter)
+				return ((UnmodifiableBeanFilter)t).getBeanClass().getSimpleName();
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)

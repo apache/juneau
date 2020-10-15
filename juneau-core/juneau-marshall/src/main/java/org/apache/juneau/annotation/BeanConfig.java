@@ -269,10 +269,10 @@ public @interface BeanConfig {
 	 * 	<li>
 	 * 		Values can consist of any of the following types:
 	 * 		<ul class='spaced-list'>
-	 * 			<li>Any subclass of {@link BeanFilterBuilder}.
+	 * 			<li>Any subclass of {@link BeanFilter}.
 	 * 				<br>These must have a public no-arg constructor.
 	 * 			<li>Any bean interfaces.
-	 * 				<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 				<br>A shortcut for defining a {@link BeanFilter} with {@link BeanFilter#interfaceClass(Class)}.
 	 * 				<br>Any subclasses of an interface class will only have properties defined on the interface.
 	 * 				<br>All other bean properties will be ignored.
 	 * 		</ul>
