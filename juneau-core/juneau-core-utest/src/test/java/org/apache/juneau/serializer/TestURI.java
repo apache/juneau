@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
 public class TestURI {
 
 	// String annotated as a URI
-	@org.apache.juneau.annotation.URI
+	@Uri
 	@Rdf(beanUri=true)
 	@Xml(format=XmlFormat.ATTR)
 	public String f0 = "f0/x0";
@@ -47,7 +47,7 @@ public class TestURI {
 		fio = null;
 
 	// Strings annotated with @URI properties
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public String
 		f2a = "http://www.apache.org/f2a",
 		f2b = "/f2b",
@@ -66,7 +66,7 @@ public class TestURI {
 		f2o = null;
 
 	// Strings with labels
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public String
 		f3a = "http://www.apache.org/f3a/x?label=MY_LABEL&foo=bar",
 		f3b = StringUtils.urlEncode("<>&'\""),
@@ -76,12 +76,12 @@ public class TestURI {
 	public TestURIb f4 = new TestURIb();
 
 	// @URI on bean property method.
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public String getF5() {
 		return "f5/x";
 	}
 
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public static class TestURIb {
 		@Override /* Object */
 		public String toString() {

@@ -155,17 +155,17 @@ public @interface BeanConfig {
 	Swap[] applySwap() default {};
 
 	/**
-	 * Dynamically applies {@link URI @URI} annotations to specified classes/methods/fields.
+	 * Dynamically applies {@link Uri @Uri} annotations to specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link URI#on() @URI.on} to specify the names
+	 * Provides an alternate approach for applying annotations using {@link Uri#on() @URI.on} to specify the names
 	 * to apply the annotation to.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	URI[] applyURI() default {};
+	Uri[] applyURI() default {};
 
 	/**
 	 * Configuration property:  Minimum bean class visibility.

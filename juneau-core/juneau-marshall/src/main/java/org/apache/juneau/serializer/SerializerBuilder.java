@@ -481,7 +481,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <ul>
 	 * 	<li>{@link java.net.URI}
 	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 	 * </ul>
 	 *
 	 * <p>
@@ -519,7 +519,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 * <ul>
 	 * 	<li>{@link java.net.URI}
 	 * 	<li>{@link java.net.URL}
-	 * 	<li>Properties and classes annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 	 * </ul>
 	 *
 	 * <p>

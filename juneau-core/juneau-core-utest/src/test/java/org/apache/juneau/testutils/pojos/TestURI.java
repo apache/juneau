@@ -21,14 +21,14 @@ import org.apache.juneau.xml.annotation.*;
 
 @Bean(sort=true)
 public class TestURI {
-	@org.apache.juneau.annotation.URI
+	@Uri
 	@Rdf(beanUri=true)
 	@Xml(format=XmlFormat.ATTR)
 	public String f0 = "f0/x0";
 
 	public URI f1, f2, f3;
 
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public String f4, f5, f6;
 
 	public URL f7;
@@ -37,7 +37,7 @@ public class TestURI {
 
 	public String fa, fb, fc, fd, fe;
 
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public String getF9() {
 		return "f9/x9";
 	}
@@ -58,7 +58,7 @@ public class TestURI {
 		fe = "http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL";
 	}
 
-	@org.apache.juneau.annotation.URI
+	@Uri
 	public static class TestURIb {
 		@Override /* Object */
 		public String toString() {

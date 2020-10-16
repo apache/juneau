@@ -171,7 +171,7 @@ public class RestClient_Config_Serializer_Test {
 	}
 
 	public static class A13 {
-		@URI
+		@Uri
 		public String f = "foo";
 	}
 

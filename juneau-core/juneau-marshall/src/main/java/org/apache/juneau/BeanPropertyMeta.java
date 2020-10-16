@@ -193,14 +193,14 @@ public final class BeanPropertyMeta {
 				}
 				for (Swap s : bc.getAnnotations(Swap.class, innerField))
 					swap = getPropertyPojoSwap(s);
-				isUri |= last(bc.getAnnotations(org.apache.juneau.annotation.URI.class, innerField)) != null;
+				isUri |= last(bc.getAnnotations(Uri.class, innerField)) != null;
 			}
 
 			if (getter != null) {
 				List<Beanp> lp = bc.getAnnotations(Beanp.class, getter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, getter));
+				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				for (Beanp p : lp) {
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
@@ -218,7 +218,7 @@ public final class BeanPropertyMeta {
 				List<Beanp> lp = bc.getAnnotations(Beanp.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, setter));
+				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
 				for (Beanp p : lp) {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
@@ -498,8 +498,8 @@ public final class BeanPropertyMeta {
 	 * A bean property can be considered a URI if any of the following are true:
 	 * <ul>
 	 * 	<li>Property class type is {@link URL} or {@link URI}.
-	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.URI @URI}.
-	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.URI @URI}.
+	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
+	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if this bean property is a URI.

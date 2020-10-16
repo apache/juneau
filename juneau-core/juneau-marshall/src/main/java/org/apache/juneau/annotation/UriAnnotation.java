@@ -18,19 +18,19 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 
 /**
- * A concrete implementation of the {@link URI} annotation.
+ * A concrete implementation of the {@link Uri} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class UriAnnotation extends TargetedAnnotation.OnClassMethodField implements URI {
+public class UriAnnotation extends TargetedAnnotation.OnClassMethodField implements Uri {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link URI#on()}
+	 * 	<br>See {@link Uri#on()}
 	 */
 	public UriAnnotation(String...on) {
 		on(on);

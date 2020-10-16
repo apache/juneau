@@ -420,7 +420,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 	}
 
 	public static class T9 {
-		@URI
+		@Uri
 		public String f = "foo";
 	}
 

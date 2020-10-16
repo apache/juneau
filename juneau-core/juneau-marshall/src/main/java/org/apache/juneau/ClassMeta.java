@@ -419,7 +419,7 @@ public final class ClassMeta<T> implements Type {
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (ci.isChildOfAny(URL.class, URI.class) || bc.hasAnnotation(org.apache.juneau.annotation.URI.class, c))
+				else if (ci.isChildOfAny(URL.class, URI.class) || bc.hasAnnotation(Uri.class, c))
 					cc = URI;
 				else if (ci.isChildOf(Reader.class))
 					cc = READER;

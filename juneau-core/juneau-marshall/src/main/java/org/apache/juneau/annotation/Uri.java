@@ -31,7 +31,7 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-public @interface URI {
+public @interface Uri {
 
 	/**
 	 * Dynamically apply this annotation to the specified class/method/fields.
