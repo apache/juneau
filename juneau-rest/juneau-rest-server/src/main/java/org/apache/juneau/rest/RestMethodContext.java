@@ -50,7 +50,6 @@ import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.guards.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -560,7 +559,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final OMap reqAttrs;
 	final String defaultCharset;
 	final long maxInput;
-	final Map<String,Widget> widgets;
 	final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
@@ -576,7 +574,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	final Enablement debug;
 	final int hierarchyDepth;
 
-	@SuppressWarnings("deprecation")
 	RestMethodContext(RestMethodContextBuilder b) throws ServletException {
 		super(b.getPropertyStore());
 
@@ -743,11 +740,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 		this.defaultFormData = Collections.unmodifiableMap(_defaultFormData);
 
 		this.priority = getIntegerProperty(RESTMETHOD_priority, 0);
-
-		AMap<String,Widget> _widgets = AMap.of();
-		for (Widget w : getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0]))
-			_widgets.put(w.getName(), w);
-		this.widgets = _widgets.unmodifiable();
 
 		this.supportedAcceptTypes = getListProperty(REST_produces, MediaType.class, serializers.getSupportedMediaTypes());
 		this.supportedContentTypes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());

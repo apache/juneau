@@ -30,7 +30,6 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.httppart.*;
@@ -42,7 +41,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.vars.*;
-import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -2260,102 +2258,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@FluentSetter
 	public RestContextBuilder useClasspathResourceCaching(boolean value) {
 		return set(REST_useClasspathResourceCaching, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(Class[])}
-	 * </div>
-	 *
-	 * <p>
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
-	 * generate arbitrary replacement text.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 *
-	 */
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder widgets(Class<? extends Widget>...values) {
-		return prependTo(REST_widgets, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(Class[])}
-	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #widgets(Class...)} but replaces any previous values.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to set on this setting.
-	 * @return This object (for method chaining).
-	 */
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder widgetsReplace(Class<? extends Widget>...values) {
-		return set(REST_widgets, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgets(HtmlWidget[])}
-	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder widgets(Widget...values) {
-		return prependTo(REST_widgets, values);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  HTML Widgets.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget[])}
-	 * </div>
-	 *
-	 * <p>
-	 * Same as {@link #widgets(Widget...)} except allows you to overwrite the previous value.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_widgets}
-	 * </ul>
-	 *
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	@FluentSetter
-	public RestContextBuilder widgetsReplace(Widget...values) {
-		return set(REST_widgets, values);
 	}
 
 	@Override /* ContextBuilder */

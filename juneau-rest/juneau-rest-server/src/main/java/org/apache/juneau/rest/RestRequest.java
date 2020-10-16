@@ -1485,22 +1485,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - No replacement.
-	 * </div>
-	 *
-	 * @return
-	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
-	 * 	Never <jk>null</jk>.
-	 */
-	@Deprecated
-	public Map<String,Widget> getWidgets() {
-		return restJavaMethod == null ? Collections.<String,Widget>emptyMap() : restJavaMethod.widgets;
-	}
-
-	/**
 	 * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
 	 *
 	 * <h5 class='section'>Examples:</h5>

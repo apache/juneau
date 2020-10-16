@@ -3428,16 +3428,6 @@ public class RestContext extends BeanContext {
 	 */
 	public static final String REST_uriResolution = PREFIX + ".uriResolution.s";
 
-	/**
-	 * Configuration property:  HTML Widgets.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link HtmlDocSerializer#HTMLDOC_widgets}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String REST_widgets = PREFIX + ".widgets.lo";
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
@@ -3599,7 +3589,6 @@ public class RestContext extends BeanContext {
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	@SuppressWarnings("deprecation")
 	public RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 
@@ -3635,7 +3624,7 @@ public class RestContext extends BeanContext {
 					SwaggerVar.class,
 					UrlVar.class,
 					UrlEncodeVar.class,
-					WidgetVar.class
+					HtmlWidgetVar.class
 				)
 				.build()
 			;
