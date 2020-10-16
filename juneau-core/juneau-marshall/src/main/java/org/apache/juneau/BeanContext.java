@@ -1096,46 +1096,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
 
 	/**
-	 * Configuration property:  Bean property includes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link Bean#bpi()} and {@link BeanConfig#bpi()}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_bpi = PREFIX + ".bpi.sms";
-
-	/**
-	 * Configuration property:  Bean property excludes.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link Bean#bpx()} and {@link BeanConfig#bpx()}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_bpx = PREFIX + ".bpx.sms";
-
-	/**
-	 * Configuration property:  Read-only bean properties.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link Bean#bpro()} and {@link BeanConfig#bpro()}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_bpro = PREFIX + ".bpro.sms";
-
-	/**
-	 * Configuration property:  Write-only bean properties.
-	 *
-	 * <div class='warn'>
-	 * 	<b>Deprecated</b> - Use {@link Bean#bpwo()} and {@link BeanConfig#bpwo()}
-	 * </div>
-	 */
-	@Deprecated
-	public static final String BEAN_bpwo = PREFIX + ".bpwo.sms";
-
-	/**
 	 * Configuration property:  POJO examples.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2285,7 +2245,6 @@ public class BeanContext extends Context implements MetaProvider {
 	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
 	private final Map<String,ClassInfo> implClasses;
-	private final Map<String,Set<String>> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
 	private final String typePropertyName;
 	private final int beanHashCode;
@@ -2402,27 +2361,6 @@ public class BeanContext extends Context implements MetaProvider {
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
 			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
 		implClasses = icm.unmodifiable();
-
-		AMap<String,Set<String>> m2 = AMap.of();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpi, String.class).entrySet())
-			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
-		bpi = m2.unmodifiable();
-
-		m2 = AMap.of();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpx, String.class).entrySet())
-			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
-		bpx = m2.unmodifiable();
-
-		m2 = AMap.of();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpro, String.class).entrySet())
-			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
-		bpro = m2.unmodifiable();
-
-		m2 = AMap.of();
-		for (Map.Entry<String,String> e : getMapProperty(BEAN_bpwo, String.class).entrySet())
-			m2.put(e.getKey(), ASet.of(split(e.getValue())).unmodifiable());
-		bpwo = m2.unmodifiable();
-
 
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
@@ -3664,139 +3602,6 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Bean property includes.
-	 *
-	 * @see #BEAN_bpi
-	 * @return
-	 * 	Include properties keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpi() {
-		return bpi;
-	}
-
-	/**
-	 * Returns the {@link #BEAN_bpi} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The properties to include for the specified class, or an empty set if it's not defined for the class.
-	 */
-	protected Set<String> getBpi(Class<?> c) {
-		if (bpi.isEmpty())
-			return emptySet();
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
-			for (String n : c2.getNames()) {
-				Set<String> s = bpi.get(n);
-				if (s != null)
-					return s;
-			}
-		}
-		if (bpi.containsKey("*"))
-			return bpi.get("*");
-		return emptySet();
-	}
-
-	/**
-	 * Bean property excludes.
-	 *
-	 * @see #BEAN_bpx
-	 * @return
-	 * 	The list of property names to exclude keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpx() {
-		return bpx;
-	}
-
-	/**
-	 * Returns the {@link #BEAN_bpx} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The properties to exclude for the specified class, or an empty set if it's not defined for the class.
-	 */
-	protected Set<String> getBpx(Class<?> c) {
-		if (bpx.isEmpty())
-			return emptySet();
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
-			for (String n : c2.getNames()) {
-				Set<String> s = bpx.get(n);
-				if (s != null)
-					return s;
-			}
-		}
-		if (bpx.containsKey("*"))
-			return bpx.get("*");
-		return emptySet();
-	}
-
-	/**
-	 * Read-only bean properties.
-	 *
-	 * @see #BEAN_bpro
-	 * @return
-	 * 	The list of read-only property names keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpro() {
-		return bpro;
-	}
-
-	/**
-	 * Returns the {@link #BEAN_bpro} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The read-only properties for the specified class, or an empty set if it's not defined for the class.
-	 */
-	protected Set<String> getBpro(Class<?> c) {
-		if (bpro.isEmpty())
-			return emptySet();
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
-			for (String n : c2.getNames()) {
-				Set<String> s = bpro.get(n);
-				if (s != null)
-					return s;
-			}
-		}
-		if (bpro.containsKey("*"))
-			return bpro.get("*");
-		return emptySet();
-	}
-
-	/**
-	 * Write-only bean properties.
-	 *
-	 * @see #BEAN_bpwo
-	 * @return
-	 * 	The list of write-only property names keyed by class name.
-	 */
-	protected final Map<String,Set<String>> getBpwo() {
-		return bpwo;
-	}
-
-	/**
-	 * Returns the {@link #BEAN_bpwo} setting for the specified class.
-	 *
-	 * @param c The class.
-	 * @return The write-only properties for the specified class, or an empty set if it's not defined for the class.
-	 */
-	protected Set<String> getBpwo(Class<?> c) {
-		if (bpwo.isEmpty())
-			return emptySet();
-		ClassInfo ci = ClassInfo.of(c);
-		for (ClassInfo c2 : ci.getAllParentsChildFirst()) {
-			for (String n : c2.getNames()) {
-				Set<String> s = bpwo.get(n);
-				if (s != null)
-					return s;
-			}
-		}
-		if (bpwo.containsKey("*"))
-			return bpwo.get("*");
-		return emptySet();
-	}
-
-
-	/**
 	 * POJO examples.
 	 *
 	 * @see #BEAN_examples
@@ -4032,8 +3837,6 @@ public class BeanContext extends Context implements MetaProvider {
 				.a("beansRequireSerializable", beansRequireSerializable)
 				.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
 				.a("beansRequireSomeProperties", beansRequireSomeProperties)
-				.a("bpi", bpi)
-				.a("bpx", bpx)
 				.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 				.a("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)

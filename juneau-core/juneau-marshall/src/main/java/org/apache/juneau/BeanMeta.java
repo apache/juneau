@@ -288,10 +288,10 @@ public class BeanMeta<T> {
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
-				Set<String> bpi = new LinkedHashSet<>(ctx.getBpi(c));
-				Set<String> bpx = new LinkedHashSet<>(ctx.getBpx(c));
-				Set<String> bpro = new LinkedHashSet<>(ctx.getBpro(c));
-				Set<String> bpwo = new LinkedHashSet<>(ctx.getBpwo(c));
+				Set<String> bpi = new LinkedHashSet<>();
+				Set<String> bpx = new LinkedHashSet<>();
+				Set<String> bpro = new LinkedHashSet<>();
+				Set<String> bpwo = new LinkedHashSet<>();
 
 				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
 

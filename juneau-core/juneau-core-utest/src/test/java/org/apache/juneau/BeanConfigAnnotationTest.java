@@ -222,10 +222,6 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
-		check("", bc.getBpi());
-		check("", bc.getBpx());
-		check("", bc.getBpro());
-		check("", bc.getBpwo());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
@@ -273,10 +269,6 @@ public class BeanConfigAnnotationTest {
 		check("false", bc.isBeansRequireSettersForGetters());
 		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
-		check("", bc.getBpi());
-		check("", bc.getBpx());
-		check("", bc.getBpro());
-		check("", bc.getBpwo());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("", bc.getExamples());
