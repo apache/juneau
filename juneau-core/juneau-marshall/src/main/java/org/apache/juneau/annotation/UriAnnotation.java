@@ -13,6 +13,7 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 
@@ -36,5 +37,36 @@ public class UriAnnotation extends TargetedAnnotation.OnClassMethodField impleme
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public UriAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public UriAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public UriAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public UriAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public UriAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
 	// </FluentSetters>
 }
