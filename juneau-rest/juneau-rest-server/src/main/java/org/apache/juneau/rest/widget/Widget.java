@@ -102,15 +102,6 @@ public abstract class Widget implements HtmlWidget {
 	}
 
 	/**
-	 * Implement {@link #getHtml(RestRequest, RestResponse)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public String getHtml(RestRequest req) throws Exception {
-		return getHtml(req, null);
-	}
-
-	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.
 	 *
 	 * <p>
@@ -126,15 +117,6 @@ public abstract class Widget implements HtmlWidget {
 	}
 
 	/**
-	 * Implement {@link #getScript(RestRequest, RestResponse)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public String getScript(RestRequest req) throws Exception {
-		return getScript(req, null);
-	}
-
-	/**
 	 * Resolves any CSS styles that should be added to the <xt>&lt;head&gt;/&lt;style&gt;</xt> element.
 	 *
 	 * <p>
@@ -147,15 +129,6 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	public String getStyle(RestRequest req, RestResponse res) throws Exception {
 		return null;
-	}
-
-	/**
-	 * Implement {@link #getStyle(RestRequest, RestResponse)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public String getStyle(RestRequest req) throws Exception {
-		return getStyle(req, null);
 	}
 
 	/**
