@@ -911,5 +911,17 @@ public @interface Schema {
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String on() default "";
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
 }

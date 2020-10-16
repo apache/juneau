@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link BeanIgnore} annotation.
@@ -25,9 +24,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class BeanIgnoreAnnotation implements BeanIgnore {
-
-	private String on = "";
+public class BeanIgnoreAnnotation extends TargetedAnnotation.OnClassMethodFieldConstructor implements BeanIgnore {
 
 	/**
 	 * Constructor.
@@ -35,112 +32,47 @@ public class BeanIgnoreAnnotation implements BeanIgnore {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link BeanIgnore#on()}
 	 */
-	public BeanIgnoreAnnotation(String on) {
+	public BeanIgnoreAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link BeanIgnore#on()}
-	 */
-	public BeanIgnoreAnnotation(Class<?> on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link BeanIgnore#on()}
-	 */
-	public BeanIgnoreAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link BeanIgnore#on()}
-	 */
-	public BeanIgnoreAnnotation(Field on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link BeanIgnore#on()}
-	 */
-	public BeanIgnoreAnnotation(Constructor<?> on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return BeanIgnore.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanIgnoreAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public BeanIgnoreAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanIgnoreAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public BeanIgnoreAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanIgnoreAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public BeanIgnoreAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanIgnoreAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public BeanIgnoreAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanIgnoreAnnotation on(Constructor<?> value) {
-		this.on = ConstructorInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClassMethodField */
+	public BeanIgnoreAnnotation on(Method...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodFieldConstructor */
+	public BeanIgnoreAnnotation on(java.lang.reflect.Constructor<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

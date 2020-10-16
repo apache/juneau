@@ -15,6 +15,7 @@ package org.apache.juneau.html.annotation;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link HtmlLink} annotation.
@@ -23,10 +24,9 @@ import org.apache.juneau.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class HtmlLinkAnnotation implements HtmlLink {
+public class HtmlLinkAnnotation extends TargetedAnnotation.OnClass implements HtmlLink {
 
 	private String
-		on = "",
 		nameProperty = "",
 		uriProperty = "";
 
@@ -36,50 +36,8 @@ public class HtmlLinkAnnotation implements HtmlLink {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link HtmlLink#on()}
 	 */
-	public HtmlLinkAnnotation(String on) {
+	public HtmlLinkAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link HtmlLink#on()}
-	 */
-	public HtmlLinkAnnotation(Class<?> on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return HtmlLink.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlLinkAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlLinkAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
 	}
 
 	@Override
@@ -113,4 +71,26 @@ public class HtmlLinkAnnotation implements HtmlLink {
 		this.uriProperty = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public HtmlLinkAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public HtmlLinkAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public HtmlLinkAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

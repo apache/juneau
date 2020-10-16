@@ -13,10 +13,8 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Beanc} annotation.
@@ -25,19 +23,9 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class BeancAnnotation implements Beanc {
+public class BeancAnnotation extends TargetedAnnotation.OnConstructor implements Beanc {
 
-	private String on="", properties="";
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Beanc#on()}
-	 */
-	public BeancAnnotation(String on) {
-		on(on);
-	}
+	private String properties="";
 
 	/**
 	 * Constructor.
@@ -45,40 +33,8 @@ public class BeancAnnotation implements Beanc {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Beanc#on()}
 	 */
-	public BeancAnnotation(Constructor<?> on) {
+	public BeancAnnotation(String...on) {
 		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Beanc.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeancAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeancAnnotation on(Constructor<?> value) {
-		this.on = ConstructorInfo.of(value).getFullName();
-		return this;
 	}
 
 	@Override
@@ -96,4 +52,20 @@ public class BeancAnnotation implements Beanc {
 		this.properties = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public BeancAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnConstructor */
+	public BeancAnnotation on(java.lang.reflect.Constructor<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

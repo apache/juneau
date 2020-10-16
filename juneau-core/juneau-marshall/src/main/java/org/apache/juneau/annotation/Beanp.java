@@ -265,7 +265,7 @@ public @interface Beanp {
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String on() default "";
+	String[] on() default {};
 
 	/**
 	 * For bean properties of maps and collections, this annotation can be used to identify the class types of the

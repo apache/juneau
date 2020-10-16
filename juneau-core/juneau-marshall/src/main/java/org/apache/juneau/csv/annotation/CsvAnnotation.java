@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link Csv} annotation.
@@ -25,9 +25,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class CsvAnnotation implements Csv {
-
-	private String on = "";
+public class CsvAnnotation extends TargetedAnnotation.OnClassMethodField implements Csv {
 
 	/**
 	 * Constructor.
@@ -35,91 +33,41 @@ public class CsvAnnotation implements Csv {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Csv#on()}
 	 */
-	public CsvAnnotation(String on) {
+	public CsvAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Csv#on()}
-	 */
-	public CsvAnnotation(Class<?> on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Csv#on()}
-	 */
-	public CsvAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Csv#on()}
-	 */
-	public CsvAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Csv.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public CsvAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public CsvAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public CsvAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public CsvAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public CsvAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public CsvAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public CsvAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public CsvAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public CsvAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

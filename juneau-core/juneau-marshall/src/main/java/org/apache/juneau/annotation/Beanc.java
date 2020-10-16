@@ -125,7 +125,7 @@ public @interface Beanc {
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String on() default "";
+	String[] on() default {};
 
 	/**
 	 * The names of the properties of the constructor arguments.

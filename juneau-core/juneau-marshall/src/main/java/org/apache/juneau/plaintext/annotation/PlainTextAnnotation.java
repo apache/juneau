@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link PlainText} annotation.
@@ -25,9 +25,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class PlainTextAnnotation implements PlainText {
-
-	private String on = "";
+public class PlainTextAnnotation extends TargetedAnnotation.OnClassMethodField implements PlainText {
 
 	/**
 	 * Constructor.
@@ -35,91 +33,41 @@ public class PlainTextAnnotation implements PlainText {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link PlainText#on()}
 	 */
-	public PlainTextAnnotation(String on) {
+	public PlainTextAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link PlainText#on()}
-	 */
-	public PlainTextAnnotation(Class<?> on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link PlainText#on()}
-	 */
-	public PlainTextAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link PlainText#on()}
-	 */
-	public PlainTextAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return PlainText.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public PlainTextAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public PlainTextAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public PlainTextAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public PlainTextAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public PlainTextAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public PlainTextAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public PlainTextAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public PlainTextAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public PlainTextAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

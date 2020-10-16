@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Swap} annotation.
@@ -25,10 +24,9 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class SwapAnnotation implements Swap {
+public class SwapAnnotation extends TargetedAnnotation.OnClassMethodField implements Swap {
 
 	private String
-		on = "",
 		template = "";
 	private Class<?>
 		impl = Null.class,
@@ -42,43 +40,8 @@ public class SwapAnnotation implements Swap {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Swap#on()}
 	 */
-	public SwapAnnotation(String on) {
+	public SwapAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Swap#on()}
-	 */
-	public SwapAnnotation(Class<?> on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Swap#on()}
-	 */
-	public SwapAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Swap#on()}
-	 */
-	public SwapAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Swap.class;
 	}
 
 	@Override
@@ -114,55 +77,6 @@ public class SwapAnnotation implements Swap {
 	}
 
 	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SwapAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SwapAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SwapAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SwapAnnotation on(Field value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	@Override
 	public String template() {
 		return template;
 	}
@@ -193,4 +107,38 @@ public class SwapAnnotation implements Swap {
 		this.value = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public SwapAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public SwapAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public SwapAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public SwapAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public SwapAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

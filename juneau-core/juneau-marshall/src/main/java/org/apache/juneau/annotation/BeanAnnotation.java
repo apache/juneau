@@ -24,9 +24,7 @@ import org.apache.juneau.transform.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class BeanAnnotation implements Bean {
-
-	private String on = "";
+public class BeanAnnotation extends TargetedAnnotation.OnClass implements Bean {
 
 	private Class<?>[]
 		dictionary = new Class[0];
@@ -53,7 +51,7 @@ public class BeanAnnotation implements Bean {
 	 *
 	 * @param on The initial value for the <c>on</c> property.
 	 */
-	public BeanAnnotation(String on) {
+	public BeanAnnotation(String...on) {
 		on(on);
 	}
 
@@ -62,13 +60,8 @@ public class BeanAnnotation implements Bean {
 	 *
 	 * @param on The initial value for the <c>on</c> property.
 	 */
-	public BeanAnnotation(Class<?> on) {
+	public BeanAnnotation(Class<?>...on) {
 		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Bean.class;
 	}
 
 	@Override
@@ -184,33 +177,6 @@ public class BeanAnnotation implements Bean {
 	}
 
 	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	@Override
 	public Class<? extends BeanInterceptor<?>> interceptor() {
 		return interceptor;
 	}
@@ -305,4 +271,26 @@ public class BeanAnnotation implements Bean {
 		this.typePropertyName = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public BeanAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public BeanAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public BeanAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

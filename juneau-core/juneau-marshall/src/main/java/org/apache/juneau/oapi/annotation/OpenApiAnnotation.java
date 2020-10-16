@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link OpenApi} annotation.
@@ -25,9 +25,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class OpenApiAnnotation implements OpenApi {
-
-	private String on = "";
+public class OpenApiAnnotation extends TargetedAnnotation.OnClassMethodField implements OpenApi {
 
 	/**
 	 * Constructor.
@@ -35,91 +33,41 @@ public class OpenApiAnnotation implements OpenApi {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link OpenApi#on()}
 	 */
-	public OpenApiAnnotation(String on) {
+	public OpenApiAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link OpenApi#on()}
-	 */
-	public OpenApiAnnotation(Class<?> on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link OpenApi#on()}
-	 */
-	public OpenApiAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link OpenApi#on()}
-	 */
-	public OpenApiAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return OpenApi.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public OpenApiAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public OpenApiAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public OpenApiAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public OpenApiAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public OpenApiAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public OpenApiAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public OpenApiAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public OpenApiAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public OpenApiAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

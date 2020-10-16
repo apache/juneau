@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link Uon} annotation.
@@ -25,9 +25,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class UonAnnotation implements Uon {
-
-	private String on = "";
+public class UonAnnotation extends TargetedAnnotation.OnClassMethodField implements Uon {
 
 	/**
 	 * Constructor.
@@ -35,91 +33,41 @@ public class UonAnnotation implements Uon {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Uon#on()}
 	 */
-	public UonAnnotation(String on) {
+	public UonAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Uon#on()}
-	 */
-	public UonAnnotation(Class<?> on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Uon#on()}
-	 */
-	public UonAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Uon#on()}
-	 */
-	public UonAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Uon.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UonAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public UonAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UonAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public UonAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UonAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public UonAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UonAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public UonAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public UonAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

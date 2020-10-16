@@ -16,8 +16,8 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Html} annotation.
@@ -27,10 +27,9 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 @SuppressWarnings("rawtypes")
-public class HtmlAnnotation implements Html {
+public class HtmlAnnotation extends TargetedAnnotation.OnClassMethodField implements Html {
 
 	private String
-		on = "",
 		anchorText = "",
 		link = "";
 	private HtmlFormat
@@ -47,43 +46,8 @@ public class HtmlAnnotation implements Html {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Html#on()}
 	 */
-	public HtmlAnnotation(String on) {
+	public HtmlAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Html#on()}
-	 */
-	public HtmlAnnotation(Class<?> on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Html#on()}
-	 */
-	public HtmlAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Html#on()}
-	 */
-	public HtmlAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Html.class;
 	}
 
 	@Override
@@ -167,55 +131,6 @@ public class HtmlAnnotation implements Html {
 	}
 
 	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public HtmlAnnotation on(Field value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	@Override
 	public Class<? extends HtmlRender> render() {
 		return render;
 	}
@@ -230,4 +145,38 @@ public class HtmlAnnotation implements Html {
 		this.render = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public HtmlAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public HtmlAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public HtmlAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public HtmlAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public HtmlAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

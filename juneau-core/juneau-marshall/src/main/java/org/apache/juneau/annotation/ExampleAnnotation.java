@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Example} annotation.
@@ -25,19 +24,9 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class ExampleAnnotation implements Example {
+public class ExampleAnnotation extends TargetedAnnotation.OnClassMethodField implements Example {
 
-	private String on = "", value = "";
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Example#on()}
-	 */
-	public ExampleAnnotation(String on) {
-		on(on);
-	}
+	private String value = "";
 
 	/**
 	 * Constructor.
@@ -45,82 +34,8 @@ public class ExampleAnnotation implements Example {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Example#on()}
 	 */
-	public ExampleAnnotation(Class<?> on) {
+	public ExampleAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Example#on()}
-	 */
-	public ExampleAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Example#on()}
-	 */
-	public ExampleAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Example.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ExampleAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ExampleAnnotation on(Field value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ExampleAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ExampleAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
 	}
 
 	@Override
@@ -138,4 +53,38 @@ public class ExampleAnnotation implements Example {
 		this.value = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public ExampleAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public ExampleAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public ExampleAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public ExampleAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public ExampleAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link UrlEncoding} annotation.
@@ -25,10 +25,8 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class UrlEncodingAnnotation implements UrlEncoding {
+public class UrlEncodingAnnotation extends TargetedAnnotation.OnClassMethodField implements UrlEncoding {
 
-	private String
-		on = "";
 	private boolean
 		expandedParams = false;
 
@@ -38,43 +36,8 @@ public class UrlEncodingAnnotation implements UrlEncoding {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link UrlEncoding#on()}
 	 */
-	public UrlEncodingAnnotation(String on) {
+	public UrlEncodingAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link UrlEncoding#on()}
-	 */
-	public UrlEncodingAnnotation(Class<?> on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link UrlEncoding#on()}
-	 */
-	public UrlEncodingAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link UrlEncoding#on()}
-	 */
-	public UrlEncodingAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return UrlEncoding.class;
 	}
 
 	@Override
@@ -93,52 +56,37 @@ public class UrlEncodingAnnotation implements UrlEncoding {
 		return this;
 	}
 
-	@Override
-	public String on() {
-		return on;
-	}
+	// <FluentSetters>
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UrlEncodingAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public UrlEncodingAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UrlEncodingAnnotation on(Class<?> value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClass */
+	public UrlEncodingAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UrlEncodingAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnClass */
+	public UrlEncodingAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UrlEncodingAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnClassMethodField */
+	public UrlEncodingAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public UrlEncodingAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

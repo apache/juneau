@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link ParentProperty} annotation.
@@ -25,9 +24,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class ParentPropertyAnnotation implements ParentProperty {
-
-	private String on = "";
+public class ParentPropertyAnnotation extends TargetedAnnotation.OnMethodField implements ParentProperty {
 
 	/**
 	 * Constructor.
@@ -35,70 +32,29 @@ public class ParentPropertyAnnotation implements ParentProperty {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link ParentProperty#on()}
 	 */
-	public ParentPropertyAnnotation(String on) {
+	public ParentPropertyAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link ParentProperty#on()}
-	 */
-	public ParentPropertyAnnotation(Method on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link ParentProperty#on()}
-	 */
-	public ParentPropertyAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return ParentProperty.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParentPropertyAnnotation on(String value) {
-		this.on = value;
+	@Override /* GENERATED - TargetedAnnotation */
+	public ParentPropertyAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParentPropertyAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - OnMethodField */
+	public ParentPropertyAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ParentPropertyAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnMethodField */
+	public ParentPropertyAnnotation on(Method...value) {
+		super.on(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

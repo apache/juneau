@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link NameProperty} annotation.
@@ -25,9 +24,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class NamePropertyAnnotation implements NameProperty {
-
-	private String on = "";
+public class NamePropertyAnnotation extends TargetedAnnotation.OnMethodField implements NameProperty {
 
 	/**
 	 * Constructor.
@@ -35,69 +32,29 @@ public class NamePropertyAnnotation implements NameProperty {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link NameProperty#on()}
 	 */
-	public NamePropertyAnnotation(String on) {
+	public NamePropertyAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link NameProperty#on()}
-	 */
-	public NamePropertyAnnotation(Method on) {
-		on(on);
-	}
+	// <FluentSetters>
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link NameProperty#on()}
-	 */
-	public NamePropertyAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return NameProperty.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public NamePropertyAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public NamePropertyAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
+	@Override /* GENERATED - TargetedAnnotation */
+	public NamePropertyAnnotation on(String...value) {
+		super.on(value);
 		return this;
 	}
 
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public NamePropertyAnnotation on(Field value) {
-		this.on = value.getName();
+	@Override /* GENERATED - OnMethodField */
+	public NamePropertyAnnotation on(Field...value) {
+		super.on(value);
 		return this;
 	}
+
+	@Override /* GENERATED - OnMethodField */
+	public NamePropertyAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

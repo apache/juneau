@@ -13,10 +13,8 @@
 package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link URI} annotation.
@@ -25,9 +23,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class UriAnnotation implements URI {
-
-	private String on = "";
+public class UriAnnotation extends TargetedAnnotation.OnClassMethodField implements URI {
 
 	/**
 	 * Constructor.
@@ -35,91 +31,10 @@ public class UriAnnotation implements URI {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link URI#on()}
 	 */
-	public UriAnnotation(String on) {
+	public UriAnnotation(String...on) {
 		on(on);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link URI#on()}
-	 */
-	public UriAnnotation(Class<?> on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link URI#on()}
-	 */
-	public UriAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link URI#on()}
-	 */
-	public UriAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return URI.class;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UriAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UriAnnotation on(Class<?> value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UriAnnotation on(Field value) {
-		this.on = value.getName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public UriAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
-		return this;
-	}
+	// <FluentSetters>
+	// </FluentSetters>
 }

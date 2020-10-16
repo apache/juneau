@@ -16,7 +16,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * A concrete implementation of the {@link Beanp} annotation.
@@ -25,10 +24,9 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link BeanContextBuilder#annotations(Annotation...)}
  * </ul>
  */
-public class BeanpAnnotation implements Beanp {
+public class BeanpAnnotation extends TargetedAnnotation.OnMethodField implements Beanp {
 
 	private String
-		on = "",
 		name = "",
 		value = "",
 		properties = "",
@@ -47,33 +45,8 @@ public class BeanpAnnotation implements Beanp {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Beanp#on()}
 	 */
-	public BeanpAnnotation(String on) {
+	public BeanpAnnotation(String...on) {
 		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Beanp#on()}
-	 */
-	public BeanpAnnotation(Method on) {
-		on(on);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param on The initial value for the <c>on</c> property.
-	 * 	<br>See {@link Beanp#on()}
-	 */
-	public BeanpAnnotation(Field on) {
-		on(on);
-	}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Beanp.class;
 	}
 
 	@Override
@@ -121,44 +94,6 @@ public class BeanpAnnotation implements Beanp {
 	 */
 	public BeanpAnnotation type(Class<?> value) {
 		this.type = value;
-		return this;
-	}
-
-	@Override
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanpAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanpAnnotation on(Method value) {
-		this.on = MethodInfo.of(value).getFullName();
-		return this;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanpAnnotation on(Field value) {
-		this.on = value.getName();
 		return this;
 	}
 
@@ -257,4 +192,26 @@ public class BeanpAnnotation implements Beanp {
 		this.wo = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public BeanpAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnMethodField */
+	public BeanpAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnMethodField */
+	public BeanpAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

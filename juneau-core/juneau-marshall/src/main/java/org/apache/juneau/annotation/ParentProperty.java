@@ -99,5 +99,5 @@ public @interface ParentProperty {
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String on() default "";
+	String[] on() default {};
 }

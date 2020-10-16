@@ -185,7 +185,19 @@ public @interface Html {
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String on() default "";
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
 
 	/**
 	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.

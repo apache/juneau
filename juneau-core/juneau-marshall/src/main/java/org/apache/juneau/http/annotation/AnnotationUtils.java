@@ -133,8 +133,8 @@ public class AnnotationUtils {
 		if (a == null)
 			return true;
 		return
-			allEmpty(a.value(), a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.ex(), a.examples(), a.exs())
-			&& allEmpty(a.$ref(), a.format(), a.f(), a.title(), a.multipleOf(), a.mo(), a.maximum(), a.max(), a.minimum(), a.min(), a.pattern(), a.p(), a.type(), a.t(), a.discriminator(), a.collectionFormat(), a.cf(), a.on())
+			allEmpty(a.value(), a.description(), a.d(), a._default(), a.df(), a._enum(), a.e(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.ex(), a.examples(), a.exs(), a.on())
+			&& allEmpty(a.$ref(), a.format(), a.f(), a.title(), a.multipleOf(), a.mo(), a.maximum(), a.max(), a.minimum(), a.min(), a.pattern(), a.p(), a.type(), a.t(), a.discriminator(), a.collectionFormat(), a.cf())
 			&& allMinusOne(a.maxProperties(), a.maxp(), a.minProperties(), a.minp())
 			&& allFalse(a.ignore(), a.exclusiveMaximum(), a.emax(), a.exclusiveMinimum(), a.emin(), a.readOnly(), a.ro(), a.required(), a.r(), a.uniqueItems(), a.ui())
 			&& allMinusOne(a.maxLength(), a.maxl(), a.minLength(), a.minl(), a.maxItems(), a.maxi(), a.minItems(), a.mini())

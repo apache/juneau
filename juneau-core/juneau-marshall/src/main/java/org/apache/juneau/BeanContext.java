@@ -2316,12 +2316,24 @@ public class BeanContext extends Context implements MetaProvider {
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
 			try {
-				Method m = a.getClass().getMethod("on");
-				m.setAccessible(true);
-				String on = (String)m.invoke(a);
-				rmb.append(on, a);
-			} catch (NoSuchMethodException e) {
-				throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method.", a.getClass().getSimpleName());
+				ClassInfo ci = ClassInfo.of(a.getClass());
+
+				MethodInfo mi = ci.getMethod("onClass");
+				if (mi != null) {
+					if (! mi.getReturnType().is(Class[].class))
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", a.getClass().getSimpleName());
+					for (Class<?> c : (Class<?>[])mi.accessible().invoke(a))
+						rmb.append(c.getName(), a);
+				}
+
+				mi = ci.getMethod("on");
+				if (mi != null) {
+					if (! mi.getReturnType().is(String[].class))
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", a.getClass().getSimpleName());
+					for (String s : (String[])mi.accessible().invoke(a))
+						rmb.append(s, a);
+				}
+
 			} catch (Exception e) {
 				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", a.getClass().getName());
 			}

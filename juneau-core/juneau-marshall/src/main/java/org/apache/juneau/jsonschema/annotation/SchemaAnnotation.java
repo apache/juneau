@@ -13,8 +13,10 @@
 package org.apache.juneau.jsonschema.annotation;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * A concrete implementation of the {@link Schema} annotation.
@@ -22,9 +24,7 @@ import org.apache.juneau.*;
  * <p>
  * Annotations can be applied programmatically using {@link BeanContextBuilder#annotations(Annotation...)}.
  */
-public class SchemaAnnotation implements Schema {
-
-	private String on = "";
+public class SchemaAnnotation extends TargetedAnnotation.OnClassMethodField implements Schema {
 
 	private String
 		$ref = "",
@@ -99,18 +99,8 @@ public class SchemaAnnotation implements Schema {
 	 * @param on The initial value for the <c>on</c> property.
 	 * 	<br>See {@link Schema#on()}
 	 */
-	public SchemaAnnotation(String on) {
-		this.on = on;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public SchemaAnnotation() {}
-
-	@Override
-	public Class<? extends Annotation> annotationType() {
-		return Schema.class;
+	public SchemaAnnotation(String...on) {
+		on(on);
 	}
 
 	@Override /* Schema */
@@ -802,22 +792,6 @@ public class SchemaAnnotation implements Schema {
 	}
 
 	@Override /* Schema */
-	public String on() {
-		return on;
-	}
-
-	/**
-	 * Sets the <c>on</c> property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaAnnotation on(String value) {
-		this.on = value;
-		return this;
-	}
-
-	@Override /* Schema */
 	public String pattern() {
 		return pattern;
 	}
@@ -1040,4 +1014,38 @@ public class SchemaAnnotation implements Schema {
 		this.xml = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - TargetedAnnotation */
+	public SchemaAnnotation on(String...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public SchemaAnnotation on(java.lang.Class<?>...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClass */
+	public SchemaAnnotation onClass(java.lang.Class<?>...value) {
+		super.onClass(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public SchemaAnnotation on(Field...value) {
+		super.on(value);
+		return this;
+	}
+
+	@Override /* GENERATED - OnClassMethodField */
+	public SchemaAnnotation on(Method...value) {
+		super.on(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

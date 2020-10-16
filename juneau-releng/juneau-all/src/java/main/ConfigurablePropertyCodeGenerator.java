@@ -17,33 +17,47 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.csv.*;
+import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.jso.*;
+import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
+import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xml.annotation.*;
 
 public class ConfigurablePropertyCodeGenerator {
 
@@ -200,7 +214,38 @@ public class ConfigurablePropertyCodeGenerator {
 
 		ExecutableInfo.class,
 		ConstructorInfo.class,
-		MethodInfo.class
+		MethodInfo.class,
+
+		TargetedAnnotation.class,
+		TargetedAnnotation.OnClass.class,
+		TargetedAnnotation.OnClassMethodField.class,
+		TargetedAnnotation.OnConstructor.class,
+		TargetedAnnotation.OnMethodField.class,
+		TargetedAnnotation.OnClassMethodFieldConstructor.class,
+		BeanAnnotation.class,
+		BeancAnnotation.class,
+		BeanIgnoreAnnotation.class,
+		BeanpAnnotation.class,
+		ExampleAnnotation.class,
+		NamePropertyAnnotation.class,
+		ParentPropertyAnnotation.class,
+		SwapAnnotation.class,
+		UriAnnotation.class,
+		CsvAnnotation.class,
+		HtmlAnnotation.class,
+		HtmlLinkAnnotation.class,
+		JsoAnnotation.class,
+		JsonAnnotation.class,
+		SchemaAnnotation.class,
+		MsgPackAnnotation.class,
+		OpenApiAnnotation.class,
+		PlainTextAnnotation.class,
+		SoapXmlAnnotation.class,
+		UonAnnotation.class,
+		UrlEncodingAnnotation.class,
+		XmlAnnotation.class,
+		RdfAnnotation.class
+
 	};
 
 	static Set<Class<?>> ignoreClasses = ASet.of(
@@ -233,6 +278,8 @@ public class ConfigurablePropertyCodeGenerator {
 
 		for (Class<?> c : classes) {
 			File f = findClassFile(c);
+			if (f == null)
+				continue;
 			System.out.println("Processing " + f.getName());
 			String s = IOUtils.read(f);
 
@@ -371,7 +418,7 @@ public class ConfigurablePropertyCodeGenerator {
 			if (f.exists())
 				return f;
 		}
-		throw new RuntimeException("Could not find source for class " + c.getName());
+		return null;
 	}
 
 	private static class MethodComparator implements Comparator<Method> {
