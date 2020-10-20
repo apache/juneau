@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.jsonschema.annotation.Schema;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
@@ -219,15 +218,13 @@ public @interface Response {
 	 * </p>
 	 *
 	 * <p>
-	 * Examples can also be specified via generic properties as well using the {@link BeanContext#BEAN_examples} property at either the class or method level.
+	 * Examples can also be specified via generic properties as well using the {@link Marshalled#example() @Marshalled(example)} annotation at either the class or method level.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Examples defined at class level.</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(
-	 * 				name=<jsf>BEAN_examples</jsf>,
-	 * 				value=<js>"{'org.apache.juneau.examples.rest.petstore.PetCreate': {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
-	 * 			)
+	 * 	<ja>@Rest</ja>
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		applyMarshalled={
+	 * 			<ja>@Marshalled</ja>(on=<js>"PetCreate"</js>,example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
 	 * 		}
 	 * 	)
 	 * </p>
@@ -240,10 +237,8 @@ public @interface Response {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='jc'>{@link BeanContext}
-	 * 	<ul>
-	 * 		<li class='jf'>{@link BeanContext#BEAN_examples BEAN_examples}
-	 * 	</ul>
+	 * 	<li class='ja'>{@link Bean#example() Bean(example)}
+	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * 	<li class='jc'>{@link JsonSchemaSerializer}
 	 * 	<ul>
 	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}

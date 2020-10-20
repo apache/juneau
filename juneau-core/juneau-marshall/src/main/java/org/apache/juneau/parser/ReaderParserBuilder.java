@@ -405,8 +405,8 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> ReaderParserBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> ReaderParserBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

@@ -62,7 +62,7 @@ import org.apache.juneau.rest.widget.*;
 	}
 )
 @BeanConfig(
-	examples="Schema: $F{JsonSchemaResource_example.json}"
+	applyMarshalled=@Marshalled(on="Schema",example="$F{JsonSchemaResource_example.json}")
 )
 public class JsonSchemaResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;

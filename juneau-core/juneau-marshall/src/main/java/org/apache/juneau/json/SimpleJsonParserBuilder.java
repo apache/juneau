@@ -337,8 +337,8 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> SimpleJsonParserBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> SimpleJsonParserBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

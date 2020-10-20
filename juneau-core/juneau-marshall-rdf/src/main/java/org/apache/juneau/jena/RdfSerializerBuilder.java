@@ -1217,8 +1217,8 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> RdfSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> RdfSerializerBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

@@ -585,8 +585,8 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> WriterSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> WriterSerializerBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

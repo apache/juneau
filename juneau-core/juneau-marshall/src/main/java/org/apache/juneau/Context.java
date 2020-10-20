@@ -762,6 +762,17 @@ public abstract class Context {
 	}
 
 	/**
+	 * Constructs the specified context class using the property store of this context class.
+	 * 
+	 * @param c The context class to instantiate.
+	 * @param <T> The context class to instantiate.
+	 * @return The instantiated context class.
+	 */
+	public <T extends Context> T getContext(Class<T> c) {
+		return ContextCache.INSTANCE.create(c, propertyStore);
+	}
+
+	/**
 	 * Create a new bean session based on the properties defined on this context.
 	 *
 	 * <p>

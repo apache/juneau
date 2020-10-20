@@ -836,8 +836,8 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> SerializerBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> SerializerBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

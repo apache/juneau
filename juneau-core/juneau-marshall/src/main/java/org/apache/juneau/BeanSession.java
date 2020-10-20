@@ -1298,17 +1298,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  POJO examples.
-	 *
-	 * @see BeanContext#BEAN_examples
-	 * @return
-	 * 	A map of POJO examples keyed by class name.
-	 */
-	protected final Map<String,?> getExamples() {
-		return ctx.getExamples();
-	}
-
-	/**
 	 * Configuration property:  Find fluent setters.
 	 *
 	 * <h5 class='section'>Description:</h5>

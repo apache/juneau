@@ -116,6 +116,19 @@ public @interface BeanConfig {
 	Example[] applyExample() default {};
 
 	/**
+	 * Dynamically applies {@link Marshalled Marshalled} annotations to specified classes.
+	 *
+	 * <p>
+	 * Provides an alternate approach for applying annotations using {@link Marshalled#on() Marshalled.on} to specify the names
+	 * to apply the annotation to.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Marshalled[] applyMarshalled() default {};
+
+	/**
 	 * Dynamically applies {@link NameProperty @NameProperty} annotations to specified methods/fields.
 	 *
 	 * <p>
@@ -724,79 +737,6 @@ public @interface BeanConfig {
 	 * </ul>
 	 */
 	Class<?>[] dictionary_remove() default {};
-
-	/**
-	 * Configuration property:  POJO examples.
-	 *
-	 * <p>
-	 * Specifies an example of the specified class.
-	 *
-	 * <p>
-	 * Examples are used in cases such as POJO examples in Swagger documents.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		examples={
-	 * 			<ja>@CS</ja>(key=MyBean.<jk>class</jk>, value=<js>"{foo:'bar'}"</js>)
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Keys are the class of the example.
-	 * 		<br>Values are Simple-JSON representation of that class.
-	 * 	<li>
-	 * 		POJO examples can also be defined on classes via the following:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>A static field annotated with {@link Example @Example}.
-	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
-	 * </ul>
-	 */
-	CS[] example() default {};
-
-	/**
-	 * Configuration property:  POJO examples.
-	 *
-	 * <p>
-	 * Same as {@link #example()} but allows you to define examples as a Simple-JSON string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		examples={
-	 * 			<js>"MyBean: {foo:'bar'}"</js>  <jc>// Could also be "{MyBean: {foo:'bar'}}"</jc>
-	 * 		}
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class of the example and can be the fully-qualified name or simple name.
-	 * 		<br>Values are Simple-JSON representation of that class.
-	 *	<li>
-	 * 		The individual strings are concatenated together and the whole string is treated as a JSON Object.
-	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
-	 * </ul>
-	 */
-	String[] examples() default {};
 
 	/**
 	 * Configuration property:  Find fluent setters.

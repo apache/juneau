@@ -29,6 +29,7 @@ public class BeanAnnotation extends TargetedAnnotation.OnClass implements Bean {
 	private Class<?>[]
 		dictionary = new Class[0];
 	private Class<?>
+		implClass = Object.class,
 		interfaceClass = Object.class,
 		stopClass = Object.class;
 	private Class<? extends BeanInterceptor<?>>
@@ -40,6 +41,7 @@ public class BeanAnnotation extends TargetedAnnotation.OnClass implements Bean {
 		bpx = "",
 		bpro = "",
 		bpwo = "",
+		example = "",
 		typeName = "",
 		typePropertyName = "";
 	boolean
@@ -145,6 +147,22 @@ public class BeanAnnotation extends TargetedAnnotation.OnClass implements Bean {
 	}
 
 	@Override
+	public String example() {
+		return example;
+	}
+
+	/**
+	 * Sets the <c>example</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanAnnotation example(String value) {
+		this.example = value;
+		return this;
+	}
+
+	@Override
 	public boolean fluentSetters() {
 		return fluentSetters;
 	}
@@ -157,6 +175,22 @@ public class BeanAnnotation extends TargetedAnnotation.OnClass implements Bean {
 	 */
 	public BeanAnnotation fluentSetters(boolean value) {
 		this.fluentSetters = value;
+		return this;
+	}
+
+	@Override
+	public Class<?> implClass() {
+		return implClass;
+	}
+
+	/**
+	 * Sets the <c>implClass</c> property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanAnnotation implClass(Class<?> value) {
+		this.implClass = value;
 		return this;
 	}
 

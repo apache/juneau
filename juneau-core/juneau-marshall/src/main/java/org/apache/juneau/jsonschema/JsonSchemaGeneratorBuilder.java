@@ -88,7 +88,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -546,8 +546,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> JsonSchemaGeneratorBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> JsonSchemaGeneratorBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 

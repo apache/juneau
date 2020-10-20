@@ -25,7 +25,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
@@ -1642,7 +1641,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  POJO example.
+	 * POJO example.
 	 *
 	 * <p>
 	 * Specifies an example of the specified class.
@@ -1650,47 +1649,47 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <p>
 	 * Examples are used in cases such as POJO examples in Swagger documents.
 	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
 	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_examples</jsf>, MyBean.<jk>class</jk>.getName(), <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
-	 * 		.build();
+	 * </p>
+	 * 
+	 * <p>
+	 * This is a shorthand method for the following code:
+	 * <p class='bcode w800'>
+	 * 		<jv>builder</jv>.annotations(<jk>new</jk> MarshalledAnnotation().onClass(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>o</jv>)))
 	 * </p>
 	 *
+	 * <ul class='notes'>
+	 * 	<li>Using this method assumes the serialized form of the object is the same as that produced
+	 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
+	 * </ul>
+	 * 
 	 * <p>
 	 * POJO examples can also be defined on classes via the following:
 	 * <ul class='spaced-list'>
+	 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
 	 * 	<li>A static field annotated with {@link Example @Example}.
 	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
 	 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
-	 * </ul>
-	 *
 	 * @param pojoClass The POJO class.
-	 * @param o An instance of the POJO class used for examples.
+	 * @param o
+	 * 	An instance of the POJO class used for examples.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
-		return putTo(BEAN_examples, pojoClass.getName(), o);
+		return annotations(new MarshalledAnnotation().onClass(pojoClass).example(SimpleJson.DEFAULT.toString(o)));
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  POJO example.
+	 * POJO example.
 	 *
 	 * <p>
 	 * Specifies an example in JSON of the specified class.
@@ -1704,10 +1703,16 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
+	 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.example(MyBean.<jk>class</jk>, <js>"{foo:'bar'}"</js>)
 	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This is a shorthand method for the following code:
+	 * <p class='bcode w800'>
+	 * 		<jv>builder</jv>.annotations(<jk>new</jk> MarshalledAnnotation().onClass(<jv>pojoClass</jv>).example(<jv>json</jv>))
 	 * </p>
 	 *
 	 * <p>
@@ -1719,7 +1724,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * 	<li class='ja'>{@link Marshalled#example()}
 	 * </ul>
 	 *
 	 * @param <T> The POJO class type.
@@ -1728,12 +1733,8 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public <T> BeanContextBuilder exampleJson(Class<T> pojoClass, String json) {
-		try {
-			return putTo(BEAN_examples, pojoClass.getName(), SimpleJson.DEFAULT.read(json, pojoClass));
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
+	public <T> BeanContextBuilder example(Class<T> pojoClass, String json) {
+		return annotations(new MarshalledAnnotation().onClass(pojoClass).example(json));
 	}
 
 	/**

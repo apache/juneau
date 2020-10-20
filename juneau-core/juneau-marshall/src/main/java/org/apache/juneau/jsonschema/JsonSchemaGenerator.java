@@ -109,7 +109,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * </ul>
 	 *
 	 * <p>

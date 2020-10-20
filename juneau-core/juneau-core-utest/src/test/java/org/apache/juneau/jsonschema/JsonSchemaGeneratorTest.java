@@ -916,13 +916,11 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void addExample_STRING_wDefault() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("string")
-			.exampleJson(String.class, "bar1")
-			.example(StringBuilder.class, new StringBuilder("bar2"))
+			.example(StringBuilder.class, new StringBuilder("foo"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')
 			.build().createSession();
-		assertObject(s.getSchema(String.class)).json().is("{type:'string','x-example':'bar1'}");
-		assertObject(s.getSchema(StringBuilder.class)).json().is("{type:'string','x-example':'bar2'}");
+		assertObject(s.getSchema(StringBuilder.class)).json().is("{type:'string','x-example':'foo'}");
 		assertObject(s.getSchema(Character.class)).json().is("{type:'string','x-example':'b'}");
 		assertObject(s.getSchema(char.class)).json().is("{type:'string','x-example':'c'}");
 	}
@@ -939,13 +937,11 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void addExample_STRING_2darray_wDefault() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("string")
-			.exampleJson(String.class, "bar1")
-			.example(StringBuilder.class, new StringBuilder("bar2"))
+			.example(StringBuilder.class, new StringBuilder("foo"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')
 			.build().createSession();
-		assertObject(s.getSchema(String[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'string','x-example':'bar1'}}}");
-		assertObject(s.getSchema(StringBuilder[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'string','x-example':'bar2'}}}");
+		assertObject(s.getSchema(StringBuilder[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'string','x-example':'foo'}}}");
 		assertObject(s.getSchema(Character[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'string','x-example':'b'}}}");
 		assertObject(s.getSchema(char[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'string','x-example':'c'}}}");
 	}
@@ -980,7 +976,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_ENUM_wDefault_useEnumNames() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, "'TWO'").build().createSession();
 		assertObject(s.getSchema(TestEnumToString.class)).json().is("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'TWO'}");
 	}
 

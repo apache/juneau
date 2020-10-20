@@ -19,8 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.marshall.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -71,10 +69,6 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
 		if (! a.debug().isEmpty())
 			psb.set(CONTEXT_debug, bool(a.debug()));
-		for (CS e : a.example())
-			psb.putTo(BEAN_examples, e.k().getName(), parse(e.k(), e.v(), "example"));
-		if (a.examples().length > 0)
-			psb.putAllTo(BEAN_examples, omap(a.examples(), "examples"));
 		if (! a.fluentSetters().isEmpty())
 			psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
 		if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
@@ -146,6 +140,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.prependTo(BEAN_annotations, a.applyBeanIgnore());
 		if (a.applyExample().length > 0)
 			psb.prependTo(BEAN_annotations, a.applyExample());
+		if (a.applyMarshalled().length > 0)
+			psb.prependTo(BEAN_annotations, a.applyMarshalled());
 		if (a.applyNameProperty().length > 0)
 			psb.prependTo(BEAN_annotations, a.applyNameProperty());
 		if (a.applyParentProperty().length > 0)
@@ -183,13 +179,5 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 
 	private TimeZone timeZone(String in) {
 		return TimeZone.getTimeZone(string(in));
-	}
-
-	private <T> T parse(Class<T> c, String in, String loc) {
-		try {
-			return SimpleJson.DEFAULT.read(string(in), c);
-		} catch (ParseException e) {
-			throw new ConfigException("Invalid syntax for visibility on annotation @BeanConfig({0}): {1}", loc, in);
-		}
 	}
 }

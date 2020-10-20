@@ -125,7 +125,6 @@ public class BeanConfigAnnotationTest {
 		bpwo="A1:$X{qux}",
 		debug="$X{true}",
 		detectRecursions="$X{true}",
-		examples="$X{A1}: {foo:1}",
 		fluentSetters="$X{true}",
 		ignoreInvocationExceptionsOnGetters="$X{true}",
 		ignoreInvocationExceptionsOnSetters="$X{true}",
@@ -175,7 +174,6 @@ public class BeanConfigAnnotationTest {
 		check("foo", bc.getBeanTypePropertyName());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
-		check("A1={foo:1}", bc.getExamples());
 		check("true", bc.isFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -224,7 +222,6 @@ public class BeanConfigAnnotationTest {
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
-		check("", bc.getExamples());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
@@ -271,7 +268,6 @@ public class BeanConfigAnnotationTest {
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
-		check("", bc.getExamples());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());

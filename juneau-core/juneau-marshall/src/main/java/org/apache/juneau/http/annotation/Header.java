@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.jsonschema.annotation.Items;
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
@@ -974,7 +973,7 @@ public @interface Header {
 	 * 		name=<js>"Status"</js>,
 	 * 		type=<js>"array"</js>,
 	 * 		collectionFormat=<js>"csv"</js>,
-	 * 		example=<js>"AVALIABLE,PENDING"</js>
+	 * 		example=<js>"AVAILIABLE,PENDING"</js>
 	 * 	)
 	 * 	PetStatus[] status
 	 * </p>
@@ -992,10 +991,7 @@ public @interface Header {
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='jc'>{@link BeanContext}
-	 * 	<ul>
-	 * 		<li class='jf'>{@link BeanContext#BEAN_examples BEAN_examples}
-	 * 	</ul>
+	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * 	<li class='jc'>{@link JsonSchemaSerializer}
 	 * 	<ul>
 	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}

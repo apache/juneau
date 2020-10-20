@@ -32,7 +32,6 @@ import java.util.concurrent.locks.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
@@ -108,7 +107,7 @@ public final class ClassMeta<T> implements Type {
 	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
-	private final Object example;                          // Example object.
+	private final String example;                           // Example JSON.
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
@@ -136,7 +135,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
@@ -148,7 +147,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, swaps, childPojoSwaps, example);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, swaps, childPojoSwaps);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -340,10 +339,10 @@ public final class ClassMeta<T> implements Type {
 			childUnswapMap;
 		Method exampleMethod;
 		Field exampleField;
-		Object example;
+		String example;
 		Mutater<String,T> stringMutater;
 
-		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 			BeanContext bc = beanContext;
@@ -534,6 +533,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			BeanFilter beanFilter = findBeanFilter(bc);
+			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
 			if (swaps != null)
 				this.swaps.a(swaps);
@@ -616,6 +616,12 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
+			if (beanFilter != null)
+				example = beanFilter.getExample();
+
+			if (example == null && marshalledFilter != null)
+				example = marshalledFilter.getExample();
+
 			if (example == null && bc != null)
 				for (Example e : bc.getAnnotations(Example.class, c))
 					if (! e.value().isEmpty())
@@ -624,10 +630,10 @@ public final class ClassMeta<T> implements Type {
 			if (example == null) {
 				switch(cc) {
 					case BOOLEAN:
-						example = true;
+						example = "true";
 						break;
 					case CHAR:
-						example = 'a';
+						example = "a";
 						break;
 					case CHARSEQ:
 					case STR:
@@ -635,22 +641,22 @@ public final class ClassMeta<T> implements Type {
 						break;
 					case DECIMAL:
 						if (isFloat())
-							example = new Float(1f);
+							example = "1.0";
 						else if (isDouble())
-							example = new Double(1d);
+							example = "1.0";
 						break;
 					case ENUM:
 						Iterator<? extends Enum> i = EnumSet.allOf((Class<? extends Enum>)c).iterator();
 						if (i.hasNext())
-							example = i.next();
+							example = beanContext.isUseEnumNames() ? i.next().name() : i.next().toString();
 						break;
 					case NUMBER:
 						if (isShort())
-							example = new Short((short)1);
+							example = "1";
 						else if (isInteger())
-							example = new Integer(1);
+							example = "1";
 						else if (isLong())
-							example = new Long(1l);
+							example = "1";
 						break;
 					case URI:
 					case ARGS:
@@ -671,8 +677,6 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			this.example = example;
-
 			this.stringMutater = Mutaters.get(String.class, c);
 		}
 
@@ -681,6 +685,17 @@ public final class ClassMeta<T> implements Type {
 				List<Bean> ba = info.getAnnotations(Bean.class, bc);
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			return null;
+		}
+
+		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
+			try {
+				List<Marshalled> ba = info.getAnnotations(Marshalled.class, bc);
+				if (! ba.isEmpty())
+					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -950,25 +965,8 @@ public final class ClassMeta<T> implements Type {
 	@BeanIgnore
 	public T getExample(BeanSession session) {
 		try {
-			if (example != null) {
-				if (isInstance(example))
-					return (T)example;
-				if (example instanceof String) {
-					if (isCharSequence())
-						return (T)example;
-					String s = example.toString();
-					if (isMapOrBean() && StringUtils.isJsonObject(s, false))
-						return JsonParser.DEFAULT.parse(s, this);
-					if (isCollectionOrArray() && StringUtils.isJsonArray(s, false))
-						return JsonParser.DEFAULT.parse(s, this);
-				}
-				if (example instanceof Map && isMapOrBean()) {
-					return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT_READABLE.toString(example), this);
-				}
-				if (example instanceof Collection && isCollectionOrArray()) {
-					return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT_READABLE.serialize(example), this);
-				}
-			}
+			if (example != null)
+				return session.getContext().getContext(JsonParser.class).parse(example, this);
 			if (exampleMethod != null)
 				return (T)MethodInfo.of(exampleMethod).invokeFuzzy(null, session);
 			if (exampleField != null)
@@ -1723,7 +1721,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
-		if (isEnum() && beanContext.isUseEnumNames() && fromStringMethod != null)
+		if (isEnum() && beanContext.isUseEnumNames())
 			return (T)Enum.valueOf((Class<? extends Enum>)this.innerClass, arg);
 
 		Method m = fromStringMethod;

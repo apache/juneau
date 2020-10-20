@@ -38,9 +38,9 @@ public final class BeanFilter {
 	private final Class<?> beanClass;
 	private final Set<String> bpi, bpx, bpro, bpwo;
 	private final PropertyNamer propertyNamer;
-	private final Class<?> interfaceClass, stopClass;
+	private final Class<?> implClass, interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
-	private final String typeName;
+	private final String typeName, example;
 	private final Class<?>[] beanDictionary;
 	@SuppressWarnings("rawtypes")
 	private final BeanInterceptor interceptor;
@@ -55,6 +55,8 @@ public final class BeanFilter {
 		this.bpx = new LinkedHashSet<>(builder.bpx);
 		this.bpro = new LinkedHashSet<>(builder.bpro);
 		this.bpwo = new LinkedHashSet<>(builder.bpwo);
+		this.example = builder.example;
+		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
@@ -178,6 +180,15 @@ public final class BeanFilter {
 	}
 
 	/**
+	 * Returns the implementation class associated with this class.
+	 *
+	 * @return The implementation class associated with this class, or <jk>null</jk> if no implementation class is associated.
+	 */
+	public Class<?> getImplClass() {
+		return implClass;
+	}
+
+	/**
 	 * Returns the interface class associated with this class.
 	 *
 	 * @return The interface class associated with this class, or <jk>null</jk> if no interface class is associated.
@@ -193,6 +204,15 @@ public final class BeanFilter {
 	 */
 	public Class<?> getStopClass() {
 		return stopClass;
+	}
+
+	/**
+	 * Returns the example associated with this class.
+	 *
+	 * @return The example associated with this class, or <jk>null</jk> if no example is associated.
+	 */
+	public String getExample() {
+		return example;
 	}
 
 	/**

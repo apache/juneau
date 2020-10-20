@@ -40,6 +40,7 @@ public abstract class Session {
 	private Map<String,Object> cache;
 	private List<String> warnings;                 // Any warnings encountered.
 
+	private final Context ctx;
 	private final boolean debug;
 	private final Locale locale;
 	private final TimeZone timeZone;
@@ -54,6 +55,7 @@ public abstract class Session {
 	 * 	Runtime arguments.
 	 */
 	protected Session(Context ctx, SessionArgs args) {
+		this.ctx = ctx;
 		this.properties = args.properties == null ? OMap.EMPTY_MAP : args.properties;
 		debug = getProperty(CONTEXT_debug, Boolean.class, ctx.isDebug());
 		locale = getProperty(CONTEXT_locale, Locale.class, ctx.getDefaultLocale());
@@ -197,6 +199,15 @@ public abstract class Session {
 	 */
 	public Set<String> getPropertyKeys() {
 		return properties.keySet();
+	}
+
+	/**
+	 * Returns the context that created this session.
+	 *
+	 * @return The context that created this session.
+	 */
+	public Context getContext() {
+		return ctx;
 	}
 
 	@SuppressWarnings("unchecked")

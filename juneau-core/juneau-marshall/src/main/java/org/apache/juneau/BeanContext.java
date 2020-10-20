@@ -1096,64 +1096,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
 
 	/**
-	 * Configuration property:  POJO examples.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_examples BEAN_examples}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Object&gt;</c>
-	 * 	<li><b>Default:</b>  <c>{}</c>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Example}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#example()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#examples()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#example(Class,Object)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * Specifies an example of the specified class.
-	 *
-	 * <p>
-	 * Examples are used in cases such as POJO examples in Swagger documents.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_examples</jsf>, MyBean.<jk>class</jk>.getName(), <jk>new</jk> MyBean().foo(<js>"foo"</js>).bar(123))
-	 * 		.build();
-	 * </p>
-	 *
-	 * <p>
-	 * POJO examples can also be defined on classes via the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>A static field annotated with {@link Example @Example}.
-	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
-	 * </ul>
-	 */
-	public static final String BEAN_examples = PREFIX + ".examples.smo";
-
-	/**
 	 * Configuration property:  Find fluent setters.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -2242,7 +2184,6 @@ public class BeanContext extends Context implements MetaProvider {
 	private final List<Class<?>> beanDictionaryClasses;
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final PojoSwap<?,?>[] swaps;
-	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
 	private final Map<String,ClassInfo> implClasses;
 	private final PropertyNamer propertyNamer;
@@ -2355,8 +2296,6 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
 
-		examples = getMapProperty(BEAN_examples, Object.class);
-
 		AMap<String,ClassInfo> icm = AMap.of();
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
 			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
@@ -2364,8 +2303,8 @@ public class BeanContext extends Context implements MetaProvider {
 
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class), findExample(String.class)));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class), findExample(Object.class)));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(beanHashCode, cm);
 		}
 		cmCache = cmCacheCache.get(beanHashCode);
@@ -2582,7 +2521,7 @@ public class BeanContext extends Context implements MetaProvider {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<>(type, this, findImplClass(type), findPojoSwaps(type), findChildPojoSwaps(type), findExample(type));
+					cm = new ClassMeta<>(type, this, findImplClass(type), findPojoSwaps(type), findChildPojoSwaps(type));
 			}
 		}
 		if (waitForInit)
@@ -2902,26 +2841,6 @@ public class BeanContext extends Context implements MetaProvider {
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
-		}
-		return null;
-	}
-
-	private final Object findExample(Class<?> c) {
-		if (c != null) {
-			Object o = examples.get(c.getName());
-			if (o != null)
-				return o;
-			o = examples.get(c.getSimpleName());
-			if (o != null)
-				return o;
-			Class<?> c2 = findImplClass(c);
-			if (c2 == null)
-				return null;
-			o = examples.get(c2.getName());
-			if (o != null)
-				return o;
-			o = examples.get(c2.getSimpleName());
-			return o;
 		}
 		return null;
 	}
@@ -3599,17 +3518,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 */
 	protected final String getBeanTypePropertyName() {
 		return typePropertyName;
-	}
-
-	/**
-	 * POJO examples.
-	 *
-	 * @see #BEAN_examples
-	 * @return
-	 * 	A map of POJO examples keyed by class name.
-	 */
-	protected final Map<String,?> getExamples() {
-		return examples;
 	}
 
 	/**

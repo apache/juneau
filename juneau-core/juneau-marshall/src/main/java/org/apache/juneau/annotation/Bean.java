@@ -149,6 +149,44 @@ public @interface Bean {
 	Class<?>[] dictionary() default {};
 
 	/**
+	 * POJO example.
+	 *
+	 * <p>
+	 * Specifies an example of the specified class in Simplified JSON format.
+	 *
+	 * <p>
+	 * Examples are used in cases such as POJO examples in Swagger documents.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Bean</ja>(example=<js>"{foo:'bar'}"</js>)
+	 * 	<jk>public class</jk> MyClass {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Keys are the class of the example.
+	 * 		<br>Values are Simple-JSON representation of that class.
+	 * 	<li>
+	 * 		POJO examples can also be defined on classes via the following:
+	 * 		<ul class='spaced-list'>
+	 * 			<li>A static field annotated with {@link Example @Example}.
+	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Example}
+	 * </ul>
+	 */
+	String example() default "";
+
+	/**
 	 * Find fluent setters.
 	 *
 	 * <p>
@@ -180,6 +218,22 @@ public @interface Bean {
 	 * </ul>
 	 */
 	boolean fluentSetters() default false;
+
+	/**
+	 * Implementation class.
+	 *
+	 * <p>
+	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
+	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
+	 * parse).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Bean</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyInterface {...}
+	 * <p>
+	 */
+	Class<?> implClass() default Null.class;
 
 	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.

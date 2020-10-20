@@ -30,13 +30,13 @@ import org.apache.juneau.transform.*;
 public class BeanFilterBuilder {
 
 	Class<?> beanClass;
-	String typeName;
+	String typeName, example;
 	ASet<String>
 		bpi = ASet.of(),
 		bpx = ASet.of(),
 		bpro = ASet.of(),
 		bpwo = ASet.of();
-	Class<?> interfaceClass, stopClass;
+	Class<?> implClass, interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
 	List<Class<?>> dictionary;
@@ -96,6 +96,12 @@ public class BeanFilterBuilder {
 
 			if (b.interceptor() != BeanInterceptor.Default.class)
 				interceptor(b.interceptor());
+
+			if (b.implClass() != Null.class)
+				implClass(b.implClass());
+
+			if (! b.example().isEmpty())
+				example(b.example());
 		}
 		return this;
 	}
@@ -138,7 +144,18 @@ public class BeanFilterBuilder {
 	}
 
 	/**
-	 * Configuration property:  Bean interface class.
+	 * Bean implementation class.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder implClass(Class<?> value) {
+		this.implClass = value;
+		return this;
+	}
+
+	/**
+	 * Bean interface class.
 	 *
 	 * Identifies a class to be used as the interface class for this and all subclasses.
 	 *
@@ -629,6 +646,18 @@ public class BeanFilterBuilder {
 			dictionary = Arrays.asList(values);
 		else for (Class<?> cc : values)
 			dictionary.add(cc);
+		return this;
+	}
+
+	/**
+	 * Example.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder example(String value) {
+		this.example = value;
 		return this;
 	}
 

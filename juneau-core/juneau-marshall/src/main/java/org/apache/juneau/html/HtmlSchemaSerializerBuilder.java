@@ -91,7 +91,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -517,8 +517,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public <T> HtmlSchemaSerializerBuilder exampleJson(Class<T> pojoClass, String json) {
-		super.exampleJson(pojoClass, json);
+	public <T> HtmlSchemaSerializerBuilder example(Class<T> pojoClass, String json) {
+		super.example(pojoClass, json);
 		return this;
 	}
 
