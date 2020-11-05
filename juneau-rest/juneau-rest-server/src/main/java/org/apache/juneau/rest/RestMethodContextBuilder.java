@@ -248,74 +248,74 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public RestMethodContextBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public RestMethodContextBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public RestMethodContextBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public RestMethodContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public RestMethodContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public RestMethodContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public RestMethodContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public RestMethodContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public RestMethodContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public RestMethodContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public RestMethodContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public RestMethodContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

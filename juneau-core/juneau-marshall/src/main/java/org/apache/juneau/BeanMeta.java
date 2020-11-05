@@ -298,7 +298,7 @@ public class BeanMeta<T> {
 
 				if (beanFilter != null) {
 
-					Set<String> bfbpi = beanFilter.getBpi();
+					Set<String> bfbpi = beanFilter.getProperties();
 
 					filterProps.addAll(bfbpi);
 
@@ -309,8 +309,8 @@ public class BeanMeta<T> {
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
 
-					bpro.addAll(beanFilter.getBpro());
-					bpwo.addAll(beanFilter.getBpwo());
+					bpro.addAll(beanFilter.getReadOnlyProperties());
+					bpwo.addAll(beanFilter.getWriteOnlyProperties());
 				}
 
 				fixedBeanProps.addAll(bpi);
@@ -458,8 +458,8 @@ public class BeanMeta<T> {
 				if (beanFilter != null) {
 
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-					Set<String> bfbpi = beanFilter.getBpi();
-					Set<String> bfbpx = beanFilter.getBpx();
+					Set<String> bfbpi = beanFilter.getProperties();
+					Set<String> bfbpx = beanFilter.getExcludeProperties();
 
 					if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
 						// Only include specified properties if BeanFilter.includeKeys is specified.

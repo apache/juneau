@@ -38,9 +38,7 @@ public class ContextCache {
 	 */
 	public static final ContextCache INSTANCE = new ContextCache();
 
-	private final static boolean USE_DEEP_MATCHING = Boolean.getBoolean("ContextCache.useDeepMatching");
-
-	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<Integer,CacheEntry>> contextCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<PropertyStore,Context>> contextCache = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
 
 	// When enabled, this will spit out cache-hit metrics to the console on shutdown.
@@ -104,22 +102,20 @@ public class ContextCache {
 		if (prefixes == null)
 			return instantiate(c, ps);
 
-		ConcurrentHashMap<Integer,CacheEntry> m = getContextCache(c);
+		ConcurrentHashMap<PropertyStore,Context> m = getContextCache(c);
 
-		Integer hashCode = ps.hashCode(prefixes);
-		CacheEntry ce = m.get(hashCode);
+		ps = ps.subset(prefixes);
 
-		if (ce != null && USE_DEEP_MATCHING && ! ce.ps.equals(ps))
-			throw new ContextRuntimeException("Property store hashcode mismatch!", new Object[0]);
+		Context context = m.get(ps);
 
-		logCache(c, ce != null);
+		logCache(c, context != null);
 
-		if (ce == null) {
-			ce = new CacheEntry(ps, instantiate(c, ps));
-			m.putIfAbsent(hashCode, ce);
+		if (context == null) {
+			context = instantiate(c, ps);
+			m.putIfAbsent(ps, context);
 		}
 
-		return (T)ce.context;
+		return (T)context;
 	}
 
 	private <T extends Context> T instantiate(Class<T> c, PropertyStore ps) {
@@ -132,11 +128,11 @@ public class ContextCache {
 		}
 	}
 
-	private ConcurrentHashMap<Integer,CacheEntry> getContextCache(Class<?> c) {
-		ConcurrentHashMap<Integer,CacheEntry> m = contextCache.get(c);
+	private ConcurrentHashMap<PropertyStore,Context> getContextCache(Class<?> c) {
+		ConcurrentHashMap<PropertyStore,Context> m = contextCache.get(c);
 		if (m == null) {
 			m = new ConcurrentHashMap<>();
-			ConcurrentHashMap<Integer,CacheEntry> m2 = contextCache.putIfAbsent(c, m);
+			ConcurrentHashMap<PropertyStore,Context> m2 = contextCache.putIfAbsent(c, m);
 			if (m2 != null)
 				m = m2;
 		}
@@ -170,15 +166,5 @@ public class ContextCache {
 
 	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
 		return (T)castOrCreate(Context.class, cc, true, ps);
-	}
-
-	private static class CacheEntry {
-		final PropertyStore ps;
-		final Context context;
-
-		CacheEntry(PropertyStore ps, Context context) {
-			this.ps = ps;
-			this.context = context;
-		}
 	}
 }

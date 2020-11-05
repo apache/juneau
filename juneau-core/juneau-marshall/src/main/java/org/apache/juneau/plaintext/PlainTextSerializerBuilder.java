@@ -224,74 +224,74 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public PlainTextSerializerBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public PlainTextSerializerBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public PlainTextSerializerBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public PlainTextSerializerBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public PlainTextSerializerBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public PlainTextSerializerBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public PlainTextSerializerBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public PlainTextSerializerBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public PlainTextSerializerBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public PlainTextSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public PlainTextSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public PlainTextSerializerBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public PlainTextSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

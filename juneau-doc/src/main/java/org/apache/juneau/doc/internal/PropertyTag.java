@@ -75,7 +75,7 @@ public class PropertyTag implements Taglet {
 	public String toString(Tag tag) {
 		String s = System.getProperty(tag.text());
 		if (s == null)
-			System.err.println("Unknown system property '"+tag.text()+"'");
+			System.err.println("Unknown system property '"+tag.text()+"'");  // NOT DEBUG
 		return s == null ? tag.text() : s;
 	}
 

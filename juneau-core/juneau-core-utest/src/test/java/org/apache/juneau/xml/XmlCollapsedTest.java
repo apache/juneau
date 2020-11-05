@@ -182,7 +182,7 @@ public class XmlCollapsedTest {
 		XmlUtils.validateXml(t, s);
 	}
 
-	@Bean(bpi="f1,f2,f3,f4")
+	@Bean(properties="f1,f2,f3,f4")
 	public static class D {
 
 		private List<String> f1 = new LinkedList<>(), f3 = new LinkedList<>();
@@ -238,7 +238,7 @@ public class XmlCollapsedTest {
 		XmlUtils.validateXml(t, s);
 	}
 
-	@Bean(bpi="f1,f2")
+	@Bean(properties="f1,f2")
 	public static class E {
 
 		private ArrayList<String> f1, f2;

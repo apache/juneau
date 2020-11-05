@@ -46,7 +46,7 @@ public abstract class OneWayStringSwapTest<T> {
 		if (! isEquals(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
-					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);
+					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
 				Assert.fail();
 			} else {
 				fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
@@ -56,7 +56,7 @@ public abstract class OneWayStringSwapTest<T> {
 
 	private void fail(String msg, Object...args) {
 		String s = format(msg, args);
-		System.err.println(s);
+		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
 }

@@ -46,7 +46,7 @@ public abstract class RoundTripStringSwapTest<T> {
 		if (! isEquals(expected, s)) {
 			if (expected.isEmpty()) {
 				if (! label.startsWith("[]"))
-					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);
+					System.err.println(label.substring(0, label.indexOf(']')+1) + " "+s);  // NOT DEBUG
 				Assert.fail();
 			} else {
 				fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
@@ -62,14 +62,14 @@ public abstract class RoundTripStringSwapTest<T> {
 		if (! isEquals(s, s2)) {
 			if (expected.isEmpty())
 				Assert.fail();
-			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");
+			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 			fail("Test [{0} unswap] failed.  Expected=[{1}], Actual=[{2}]", label, s, s2);
 		}
 	}
 
 	private void fail(String msg, Object...args) {
 		String s = format(msg, args);
-		System.err.println(s);
+		System.err.println(s);  // NOT DEBUG
 		Assert.fail(s);
 	}
 }

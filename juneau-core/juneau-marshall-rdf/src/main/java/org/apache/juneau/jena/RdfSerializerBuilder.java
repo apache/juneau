@@ -1103,74 +1103,74 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public RdfSerializerBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public RdfSerializerBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public RdfSerializerBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public RdfSerializerBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public RdfSerializerBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public RdfSerializerBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public RdfSerializerBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public RdfSerializerBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public RdfSerializerBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public RdfSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public RdfSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public RdfSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

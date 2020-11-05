@@ -10,51 +10,61 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.doc.internal;
+package org.apache.juneau.annotation;
 
-import java.text.*;
+import static org.apache.juneau.BeanContext.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
- * Console utilities.
+ * Applies targeted {@link Bean} annotations to a {@link PropertyStoreBuilder}.
  */
-public class Console {
+public class BeanApply extends ConfigApply<Bean> {
 
 	/**
-	 * Print a console [INFO] message.
+	 * Constructor.
 	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
+	 * @param c The annotation class.
+	 * @param r The resolver for resolving values in annotations.
 	 */
-	public static void info(String msg, Object...args) {
-		System.out.println("[INFO] " + format(msg, args));
-		System.out.flush();
+	public BeanApply(Class<Bean> c, VarResolverSession r) {
+		super(c, r);
 	}
 
-	/**
-	 * Print a console [WARNING] message.
-	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
-	 */
-	public static void warning(String msg, Object...args) {
-		System.err.println("[WARNING] " + format(msg, args));  // NOT DEBUG
-		System.err.flush();
-	}
+	@Override
+	public void apply(AnnotationInfo<Bean> ai, PropertyStoreBuilder psb) {
+		Bean a = ai.getAnnotation();
 
-	/**
-	 * Print a console [ERROR] message.
-	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
-	 */
-	public static void error(String msg, Object...args) {
-		System.err.println("[ERROR] " + format(msg, args));  // NOT DEBUG
-		System.err.flush();
-	}
+		if (a.on().length == 0 && a.onClass().length == 0)
+			return;
 
-	private static String format(String msg, Object...args) {
-		if (args.length == 0)
-			return msg;
-		return MessageFormat.format(msg, args);
+		Bean copy = BeanBuilder
+			.create()
+			.dictionary(a.dictionary())
+			.example(string(a.example()))
+			.excludeProperties(string(a.excludeProperties()))
+			.fluentSetters(a.fluentSetters())
+			.implClass(a.implClass())
+			.interceptor(a.interceptor())
+			.interfaceClass(a.interfaceClass())
+			.on(strings(a.on()))
+			.onClass(a.onClass())
+			.p(string(a.p()))
+			.properties(string(a.properties()))
+			.propertyNamer(a.propertyNamer())
+			.readOnlyProperties(string(a.readOnlyProperties()))
+			.ro(string(a.ro()))
+			.sort(a.sort())
+			.stopClass(a.stopClass())
+			.typeName(string(a.typeName()))
+			.typePropertyName(string(a.typePropertyName()))
+			.wo(string(a.wo()))
+			.writeOnlyProperties(string(a.writeOnlyProperties()))
+			.xp(string(a.xp()))
+			.build();
+
+		psb.prependTo(BEAN_annotations, copy);
 	}
 }

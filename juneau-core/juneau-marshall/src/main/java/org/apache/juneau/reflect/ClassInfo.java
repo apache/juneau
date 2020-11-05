@@ -61,8 +61,10 @@ public final class ClassInfo {
 	final Class<?> c;
 	private ClassInfo proxyFor;
 	private final boolean isParameterizedType;
+	private Boolean isRepeatedAnnotation;
 	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
 	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
+	private MethodInfo repeatedAnnotationMethod;
 	private ConstructorInfo[] publicConstructors, declaredConstructors;
 	private FieldInfo[] publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private int dim = -1;
@@ -1324,15 +1326,19 @@ public final class ClassInfo {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(p, a));
+				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+					m.add(AnnotationInfo.of(p, a2));
 		for (ClassInfo ci : getInterfacesParentFirst())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(ci, a));
+				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+					m.add(AnnotationInfo.of(ci, a2));
 		for (ClassInfo ci : getParentsParentFirst())
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				m.add(AnnotationInfo.of(ci, a));
+				for (Annotation a2 : AnnotationUtils.splitRepeated(a))
+					m.add(AnnotationInfo.of(ci, a2));
 		return m;
 	}
+
 
 	<T extends Annotation> T findAnnotation(Class<T> a, MetaProvider mp) {
 		if (a == null)
@@ -2219,6 +2225,72 @@ public final class ClassInfo {
 		return c != null && c.isEnum();
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this is a repeated annotation class.
+	 *
+	 * <p>
+	 * A repeated annotation has a single <code>value()</code> method that returns an array
+	 * of annotations who themselves are marked with the {@link Repeatable @Repeatable} annotation
+	 * of this class.
+	 *
+	 * @return <jk>true</jk> if this is a repeated annotation class.
+	 */
+	public boolean isRepeatedAnnotation() {
+		if (isRepeatedAnnotation == null) {
+			boolean b = false;
+			MethodInfo mi = getMethod("value");
+			if (mi != null) {
+				ClassInfo rt = mi.getReturnType();
+				if (rt.isArray()) {
+					ClassInfo rct = rt.getComponentType();
+					if (rct.hasAnnotation(Repeatable.class)) {
+						Repeatable r = rct.getLastAnnotation(Repeatable.class) ;
+							b = r.value().equals(c);
+					}
+				}
+			}
+			isRepeatedAnnotation = b;
+		}
+		return isRepeatedAnnotation;
+	}
+
+	/**
+	 * Returns the repeated annotation method on this class.
+	 *
+	 * <p>
+	 * The repeated annotation method is the <code>value()</code> method that returns an array
+	 * of annotations who themselves are marked with the {@link Repeatable @Repeatable} annotation
+	 * of this class.
+	 *
+	 * @return The repeated annotation method on this class, or <jk>null</jk> if it doesn't exist.
+	 */
+	public MethodInfo getRepeatedAnnotationMethod() {
+		if (isRepeatedAnnotation()) {
+			if (repeatedAnnotationMethod == null)
+				repeatedAnnotationMethod = getMethod("value");
+			return repeatedAnnotationMethod;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an array.
+	 *
+	 * @return <jk>true</jk> if this class is an array.
+	 */
+	public boolean isArray() {
+		return c != null && c.isArray();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an annotation.
+	 *
+	 * @return <jk>true</jk> if this class is an annotation.
+	 */
+	public boolean isAnnotation() {
+		return c != null && c.isAnnotation();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2354,4 +2426,5 @@ public final class ClassInfo {
 	public boolean equals(Object o) {
 		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x,y)->eq(x.t, y.t));
 	}
+
 }

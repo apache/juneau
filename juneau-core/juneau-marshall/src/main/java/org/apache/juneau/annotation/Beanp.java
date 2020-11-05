@@ -364,9 +364,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 */
 	String ro() default "";
@@ -440,9 +440,9 @@ public @interface Beanp {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 */
 	String wo() default "";

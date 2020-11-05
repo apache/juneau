@@ -763,7 +763,7 @@ public abstract class Context {
 
 	/**
 	 * Constructs the specified context class using the property store of this context class.
-	 * 
+	 *
 	 * @param c The context class to instantiate.
 	 * @param <T> The context class to instantiate.
 	 * @return The instantiated context class.

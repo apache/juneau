@@ -208,6 +208,30 @@ public final class PropertyStore {
 		this.hashCode = groups.hashCode();
 	}
 
+	
+	/**
+	 * Returns a subset of this property store consisting of just the specified group names.
+	 * 
+	 * @param groups The group names to include. 
+	 * @return A new property store.
+	 */
+	public PropertyStore subset(String[] groups) {
+		TreeMap<String,PropertyGroup> m = new TreeMap<>();
+		for (String g : groups) {
+			PropertyGroup g2 = this.groups.get(g);
+			if (g2 != null)
+				m.put(g, g2);
+		}
+
+		return new PropertyStore(m);
+	}
+
+	private PropertyStore(SortedMap<String,PropertyGroup> propertyMaps) {
+		this.groups = Collections.unmodifiableSortedMap(propertyMaps);
+		this.hashCode = groups.hashCode();
+	}
+
+
 	/**
 	 * Creates a new empty builder for a property store.
 	 *

@@ -101,7 +101,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			iteration.set(i);
 			String s = proxy.setInt3dArray(new int[][][]{{{i},null},null}, i);
 			if (i % 1000 == 0)
-				System.err.println("response="+s);
+				System.err.println("response="+s);  // NOT DEBUG
 			time.set(System.currentTimeMillis());
 		}
 		timer.cancel();

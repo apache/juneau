@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Represents an entry in {@link StackTraceDatabase}.
  */
-@Bean(bpi="exception,hash,count")
+@Bean(properties="exception,hash,count")
 public class StackTraceInfo implements Comparable<StackTraceInfo> {
 	final AtomicInteger count;
 	final long timeout;

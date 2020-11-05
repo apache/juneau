@@ -33,66 +33,78 @@ public class BeanBuilder_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Bean a1 = BeanBuilder.create()
-		.bpi("bpi")
-		.bpro("bpro")
-		.bpwo("bpwo")
-		.bpx("bpx")
 		.dictionary(X1.class)
 		.example("example")
+		.excludeProperties("excludeProperties")
 		.fluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
 		.on("on")
 		.onClass(X1.class)
+		.p("p")
+		.properties("properties")
 		.propertyNamer(BasicPropertyNamer.class)
+		.readOnlyProperties("readOnlyProperties")
+		.ro("ro")
 		.sort(true)
 		.stopClass(X1.class)
 		.typeName("typeName")
 		.typePropertyName("typePropertyName")
+		.wo("wo")
+		.writeOnlyProperties("writeOnlyProperties")
+		.xp("xp")
 		.build();
 
 	Bean a2 = BeanBuilder.create()
-		.bpi("bpi")
-		.bpro("bpro")
-		.bpwo("bpwo")
-		.bpx("bpx")
 		.dictionary(X1.class)
 		.example("example")
+		.excludeProperties("excludeProperties")
 		.fluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
 		.on("on")
 		.onClass(X1.class)
+		.p("p")
+		.properties("properties")
 		.propertyNamer(BasicPropertyNamer.class)
+		.readOnlyProperties("readOnlyProperties")
+		.ro("ro")
 		.sort(true)
 		.stopClass(X1.class)
 		.typeName("typeName")
 		.typePropertyName("typePropertyName")
+		.wo("wo")
+		.writeOnlyProperties("writeOnlyProperties")
+		.xp("xp")
 		.build();
 
 	@Test
 	public void a01_basic() {
 		assertObject(a1).stderr().json().is(""
 			+ "{"
-				+ "bpi:'bpi',"
-				+ "bpro:'bpro',"
-				+ "bpwo:'bpwo',"
-				+ "bpx:'bpx',"
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "example:'example',"
+				+ "excludeProperties:'excludeProperties',"
 				+ "fluentSetters:true,"
 				+ "implClass:'"+CNAME+"$X1',"
 				+ "interceptor:'"+CNAME+"$X2',"
 				+ "interfaceClass:'"+CNAME+"$X1',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
+				+ "p:'p',"
+				+ "properties:'properties',"
 				+ "propertyNamer:'org.apache.juneau.BasicPropertyNamer',"
+				+ "readOnlyProperties:'readOnlyProperties',"
+				+ "ro:'ro',"
 				+ "sort:true,"
 				+ "stopClass:'"+CNAME+"$X1',"
 				+ "typeName:'typeName',"
-				+ "typePropertyName:'typePropertyName'"
+				+ "typePropertyName:'typePropertyName',"
+				+ "wo:'wo',"
+				+ "writeOnlyProperties:'writeOnlyProperties',"
+				+ "xp:'xp'"
 			+ "}"
 		);
 	}
@@ -135,45 +147,53 @@ public class BeanBuilder_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Bean(
-		bpi="bpi",
-		bpro="bpro",
-		bpwo="bpwo",
-		bpx="bpx",
 		dictionary=X1.class,
 		example="example",
+		excludeProperties="excludeProperties",
 		fluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
 		on="on",
 		onClass=X1.class,
+		p="p",
+		properties="properties",
 		propertyNamer=BasicPropertyNamer.class,
+		readOnlyProperties="readOnlyProperties",
+		ro="ro",
 		sort=true,
 		stopClass=X1.class,
 		typeName="typeName",
-		typePropertyName="typePropertyName"
+		typePropertyName="typePropertyName",
+		wo="wo",
+		writeOnlyProperties="writeOnlyProperties",
+		xp="xp"
 	)
 	public static class D1 {}
 	Bean d1 = D1.class.getAnnotationsByType(Bean.class)[0];
 
 	@Bean(
-		bpi="bpi",
-		bpro="bpro",
-		bpwo="bpwo",
-		bpx="bpx",
 		dictionary=X1.class,
 		example="example",
+		excludeProperties="excludeProperties",
 		fluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
 		on="on",
 		onClass=X1.class,
+		p="p",
+		properties="properties",
 		propertyNamer=BasicPropertyNamer.class,
+		readOnlyProperties="readOnlyProperties",
+		ro="ro",
 		sort=true,
 		stopClass=X1.class,
 		typeName="typeName",
-		typePropertyName="typePropertyName"
+		typePropertyName="typePropertyName",
+		wo="wo",
+		writeOnlyProperties="writeOnlyProperties",
+		xp="xp"
 	)
 	public static class D2 {}
 	Bean d2 = D2.class.getAnnotationsByType(Bean.class)[0];

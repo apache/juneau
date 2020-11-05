@@ -223,74 +223,74 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public MsgPackSerializerBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public MsgPackSerializerBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public MsgPackSerializerBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public MsgPackSerializerBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public MsgPackSerializerBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public MsgPackSerializerBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public MsgPackSerializerBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public MsgPackSerializerBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public MsgPackSerializerBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public MsgPackSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public MsgPackSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackSerializerBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public MsgPackSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

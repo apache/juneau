@@ -224,74 +224,74 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public CsvSerializerBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public CsvSerializerBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public CsvSerializerBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public CsvSerializerBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public CsvSerializerBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public CsvSerializerBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public CsvSerializerBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public CsvSerializerBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public CsvSerializerBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public CsvSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public CsvSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public CsvSerializerBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public CsvSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

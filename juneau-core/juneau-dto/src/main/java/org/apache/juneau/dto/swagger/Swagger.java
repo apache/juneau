@@ -33,7 +33,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(bpi="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
+@Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
 public class Swagger extends SwaggerElement {
 
 	/** Represents a null swagger */

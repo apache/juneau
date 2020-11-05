@@ -62,7 +62,7 @@ public class ReadWriteOnlyPropertiesTest {
 	// @Bean(bpro/bpwo)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(bpro="f1", bpwo="f2")
+	@Bean(readOnlyProperties="f1", writeOnlyProperties="f2")
 	public static class B {
 		@Beanp(ro="true")
 		public int f1;
@@ -91,7 +91,7 @@ public class ReadWriteOnlyPropertiesTest {
 	}
 
 	@BeanConfig(
-		applyBean=@Bean(on="Bc", bpro="f1", bpwo="f2"),
+		applyBean=@Bean(on="Bc", readOnlyProperties="f1", writeOnlyProperties="f2"),
 		applyBeanp={
 			@Beanp(on="Bc.f1", ro="true"),
 			@Beanp(on="Bc.f2", wo="true")
@@ -142,32 +142,32 @@ public class ReadWriteOnlyPropertiesTest {
 		WriterSerializer sw;
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(C.class.getName(), "f1")
-			.bpwo(C.class.getName(), "f2")
+			.beanPropertiesReadOnly(C.class.getName(), "f1")
+			.beanPropertiesWriteOnly(C.class.getName(), "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro("ReadWriteOnlyPropertiesTest$C", "f1")
-			.bpwo("ReadWriteOnlyPropertiesTest$C", "f2")
+			.beanPropertiesReadOnly("ReadWriteOnlyPropertiesTest$C", "f1")
+			.beanPropertiesWriteOnly("ReadWriteOnlyPropertiesTest$C", "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(C.class, "f1")
-			.bpwo(C.class, "f2")
+			.beanPropertiesReadOnly(C.class, "f1")
+			.beanPropertiesWriteOnly(C.class, "f2")
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(AMap.of(C.class.getName(), "f1"))
-			.bpwo(AMap.of(C.class.getName(), "f2"))
+			.beanPropertiesReadOnly(AMap.of(C.class.getName(), "f1"))
+			.beanPropertiesWriteOnly(AMap.of(C.class.getName(), "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.builder()
-			.bpro(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.bpwo(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.beanPropertiesReadOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.beanPropertiesWriteOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 	}
@@ -178,40 +178,40 @@ public class ReadWriteOnlyPropertiesTest {
 		C x;
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(C.class.getName(), "f1")
-			.bpwo(C.class.getName(), "f2")
+			.beanPropertiesReadOnly(C.class.getName(), "f1")
+			.beanPropertiesWriteOnly(C.class.getName(), "f2")
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro("ReadWriteOnlyPropertiesTest$C", "f1")
-			.bpwo("ReadWriteOnlyPropertiesTest$C", "f2")
+			.beanPropertiesReadOnly("ReadWriteOnlyPropertiesTest$C", "f1")
+			.beanPropertiesWriteOnly("ReadWriteOnlyPropertiesTest$C", "f2")
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(C.class, "f1")
-			.bpwo(C.class, "f2")
+			.beanPropertiesReadOnly(C.class, "f1")
+			.beanPropertiesWriteOnly(C.class, "f2")
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(AMap.of(C.class.getName(), "f1"))
-			.bpwo(AMap.of(C.class.getName(), "f2"))
+			.beanPropertiesReadOnly(AMap.of(C.class.getName(), "f1"))
+			.beanPropertiesWriteOnly(AMap.of(C.class.getName(), "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.builder()
-			.bpro(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.bpwo(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.beanPropertiesReadOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.beanPropertiesWriteOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
@@ -222,7 +222,7 @@ public class ReadWriteOnlyPropertiesTest {
 	// @Bean(bpro="*")
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(bpro="*")
+	@Bean(readOnlyProperties="*")
 	public static class D {
 		public int f1;
 		public int f2;
@@ -247,7 +247,7 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(0, x.f2);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="Dc",bpro="*"))
+	@BeanConfig(applyBean=@Bean(on="Dc",readOnlyProperties="*"))
 	public static class Dc {
 		public int f1;
 		public int f2;
@@ -276,7 +276,7 @@ public class ReadWriteOnlyPropertiesTest {
 	// @Bean(bpwo="*")
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(bpwo="*")
+	@Bean(writeOnlyProperties="*")
 	public static class E {
 		public int f1;
 		public int f2;
@@ -301,7 +301,7 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(2, x.f2);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="Ec", bpwo="*"))
+	@BeanConfig(applyBean=@Bean(on="Ec", writeOnlyProperties="*"))
 	public static class Ec {
 		public int f1;
 		public int f2;

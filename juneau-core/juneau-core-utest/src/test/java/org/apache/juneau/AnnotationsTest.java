@@ -46,7 +46,7 @@ public class AnnotationsTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(bpi="age,name")
+	@Bean(properties="age,name")
 	public static class Person1 {
 		public int age;
 		private String name;
@@ -59,12 +59,12 @@ public class AnnotationsTest {
 	}
 
 	@Test
-	public void testBeanWithExplicitProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(Person1a.class).build().createSession();
+	public void testBeanWithExplicitProperties2() throws Exception {
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap bm = null;
 
 		// Basic test
-		bm = session.newBeanMap(Person1a.class).load("{age:21,name:'foobar'}");
+		bm = session.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -77,8 +77,8 @@ public class AnnotationsTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@BeanConfig(applyBean=@Bean(on="Person1a",bpi="age,name"))
-	public static class Person1a {
+	@Bean(p="age,name")
+	public static class Person2 {
 		public int age;
 		private String name;
 		public String getName() {
@@ -88,6 +88,70 @@ public class AnnotationsTest {
 			this.name = name;
 		}
 	}
+
+	@Test
+	public void testBeanWithExplicitProperties3() throws Exception {
+		BeanSession session = BeanContext.DEFAULT.createSession();
+		BeanMap bm = null;
+
+		// Basic test
+		bm = session.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
+		assertNotNull(bm);
+		assertNotNull(bm.getBean());
+		assertEquals(bm.get("age"), 21);
+		assertEquals(bm.get("name"), "foobar");
+
+		bm.put("age", 65);
+		bm.put("name", "futbol");
+		assertEquals(bm.get("age"), 65);
+		assertEquals(bm.get("name"), "futbol");
+	}
+
+	/** Class with explicitly specified properties */
+	@Bean(properties="age",p="name")
+	public static class Person3 {
+		public int age;
+		private String name;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+
+	@Test
+	public void testBeanWithExplicitProperties_usingConfig() throws Exception {
+		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(PersonConfig.class).build().createSession();
+		BeanMap bm = null;
+
+		// Basic test
+		bm = session.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
+		assertNotNull(bm);
+		assertNotNull(bm.getBean());
+		assertEquals(bm.get("age"), 21);
+		assertEquals(bm.get("name"), "foobar");
+
+		bm.put("age", 65);
+		bm.put("name", "futbol");
+		assertEquals(bm.get("age"), 65);
+		assertEquals(bm.get("name"), "futbol");
+	}
+
+	/** Class with explicitly specified properties */
+	public static class Person4 {
+		public int age;
+		private String name;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
+	
+	@Bean(on="Person4",properties="age,name")
+	public static class PersonConfig {}
 
 	//====================================================================================================
 	// Private/protected/default fields should be ignored.

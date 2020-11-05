@@ -46,7 +46,7 @@ public class CommonXmlTest {
 		XmlUtils.validateXml(t, s);
 	}
 
-	@Bean(bpi="url,id,name")
+	@Bean(p="url,id,name")
 	public static class A {
 		@Xml(format=XmlFormat.ATTR) public URL url;
 		@Xml(format=ATTR) public int id;

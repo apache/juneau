@@ -227,74 +227,74 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public HtmlParserBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public HtmlParserBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public HtmlParserBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public HtmlParserBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public HtmlParserBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public HtmlParserBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public HtmlParserBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public HtmlParserBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public HtmlParserBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public HtmlParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public HtmlParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public HtmlParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

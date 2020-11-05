@@ -405,7 +405,7 @@ public class BeanConfigTest {
 	}
 
 
-	@Bean(bpi="name,age")
+	@Bean(p="name,age")
 	public static class ReadOnlyPerson {
 		private final String name;
 		private final int age;
@@ -445,7 +445,7 @@ public class BeanConfigTest {
 	}
 
 
-	@BeanConfig(applyBean=@Bean(on="ReadOnlyPerson2",bpi="name,age"),applyBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
+	@BeanConfig(applyBean=@Bean(on="ReadOnlyPerson2",p="name,age"),applyBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
 	public static class ReadOnlyPerson2 {
 		private final String name;
 		private final int age;

@@ -43,7 +43,7 @@ public class BeanMapErrorsTest {
 		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
-	@Bean(bpi="f1")
+	@Bean(p="f1")
 	public static class A1 {
 		public int f1;
 		private int f2 = -1;
@@ -73,7 +73,7 @@ public class BeanMapErrorsTest {
 
 	@BeanConfig(
 		applyBean={
-			@Bean(on="B1", bpi="f1"),
+			@Bean(on="B1", p="f1"),
 		},
 		applyBeanp={
 			@Beanp(on="B1.f2", value="f2")
@@ -109,7 +109,7 @@ public class BeanMapErrorsTest {
 		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
-	@Bean(bpi="f1")
+	@Bean(p="f1")
 	public static class A2 {
 		public int f1;
 
@@ -132,7 +132,7 @@ public class BeanMapErrorsTest {
 
 	@BeanConfig(
 		applyBean={
-			@Bean(on="B2", bpi="f1")
+			@Bean(on="B2", p="f1")
 		},
 		applyBeanp={
 			@Beanp(on="B2.f2", value="f2")

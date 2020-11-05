@@ -109,7 +109,7 @@ public class TestMicroservice {
 					new HttpRequestRetryHandler() {
 						@Override
 						public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
-							System.err.println("*** ERROR ***");
+							System.err.println("*** ERROR ***");  // NOT DEBUG
 							TestMicroservice.jettyDump(currentRequest[0], currentResponse[0]);
 							return (executionCount < 3);
 						}

@@ -227,7 +227,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@Response(description="File or directory details")
-	@Bean(bpi="type,name,size,lastModified,actions,files")
+	@Bean(properties="type,name,size,lastModified,actions,files")
 	public class FileResource {
 		private final File f;
 		private final String path;

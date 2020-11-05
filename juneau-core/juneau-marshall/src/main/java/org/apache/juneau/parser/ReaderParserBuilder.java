@@ -291,74 +291,74 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public ReaderParserBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public ReaderParserBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public ReaderParserBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public ReaderParserBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public ReaderParserBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public ReaderParserBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public ReaderParserBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public ReaderParserBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public ReaderParserBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public ReaderParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public ReaderParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public ReaderParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

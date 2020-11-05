@@ -55,14 +55,14 @@ public class HtmlSchemaSerializerTest {
 	// Documentation examples
 	//====================================================================================================
 
-	@Bean(bpi="name,birthDate,addresses")
+	@Bean(properties="name,birthDate,addresses")
 	public static class Person {
 		public String name;
 		public Calendar birthDate;
 		public List<Address> addresses;
 	}
 
-	@Bean(bpi="street,city,state,zip,isCurrent")
+	@Bean(properties="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street, city;
 		public StateEnum state;

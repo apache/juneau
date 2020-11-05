@@ -29,7 +29,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
  * </ul>
  */
-@Bean(bpi="type,properties")
+@Bean(properties="type,properties")
 public final class BeanDescription {
 
 	/** The bean class type. */

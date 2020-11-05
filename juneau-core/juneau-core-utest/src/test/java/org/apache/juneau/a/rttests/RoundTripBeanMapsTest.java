@@ -450,7 +450,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObject(d).json().is("{f3:'f3',f2:'f2'}");
 	}
 
-	@Bean(bpi="f3,f2")
+	@Bean(p="f3,f2")
 	public static class D1 {
 		public String f1, f2, f3;
 		public D1 init() {
@@ -466,14 +466,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.create().ssq().bpi(D2.class, "f3,f2").build();
+		JsonSerializer js = JsonSerializer.create().ssq().beanProperties(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().bpi(D2.class, "f3,f2").build();
-		Parser p = getParser().builder().bpi(D2.class, "f3,f2").build();
+		Serializer s = getSerializer().builder().beanProperties(D2.class, "f3,f2").build();
+		Parser p = getParser().builder().beanProperties(D2.class, "f3,f2").build();
 
 		D2 d = new D2().init();
 		Object r = s.serialize(d);
@@ -510,7 +510,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObject(e).json().is("{f1:'f1',f3:'f3'}");
 	}
 
-	@Bean(bpx="f2")
+	@Bean(excludeProperties="f2")
 	public static class E1 {
 		public String f1, f2, f3;
 		public E1 init() {
@@ -530,8 +530,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().bpx(E2.class, "f2").build();
-		Parser p = getParser().builder().bpx(E2.class, "f2").build();
+		Serializer s = getSerializer().builder().beanPropertiesExcludes(E2.class, "f2").build();
+		Parser p = getParser().builder().beanPropertiesExcludes(E2.class, "f2").build();
 
 		E2 e = new E2().init();
 		Object r = s.serialize(e);

@@ -117,9 +117,9 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@SuppressWarnings("unchecked")
 	public SerializerGroup build() {
 		List<Serializer> l = new ArrayList<>();
+		PropertyStore ps = getPropertyStore();
 		for (Object s : serializers) {
 			Class<? extends Serializer> c = null;
-			PropertyStore ps = getPropertyStore();
 			if (s instanceof Class) {
 				c = (Class<? extends Serializer>)s;
 				l.add(ContextCache.INSTANCE.create(c, ps));
@@ -679,74 +679,74 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public SerializerGroupBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public SerializerGroupBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public SerializerGroupBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public SerializerGroupBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public SerializerGroupBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public SerializerGroupBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public SerializerGroupBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public SerializerGroupBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public SerializerGroupBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public SerializerGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public SerializerGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public SerializerGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

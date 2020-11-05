@@ -90,9 +90,9 @@ public class Assertion {
 		if (this.msg != null)
 			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
 		if (stdout)
-			System.out.println(msg);
+			System.out.println(msg);  // NOT DEBUG
 		if (stderr)
-			System.err.println(msg);
+			System.err.println(msg);  // NOT DEBUG
 		return new BasicAssertionError(msg);
 	}
 

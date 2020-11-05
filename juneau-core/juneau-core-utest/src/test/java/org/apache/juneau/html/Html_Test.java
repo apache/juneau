@@ -411,7 +411,7 @@ public class Html_Test {
 	// @Bean(bpi) on collections of beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Bean(bpi="f3,f2,f1")
+	@Bean(p="f3,f2,f1")
 	public static class E {
 		public Integer f1, f2, f3;
 

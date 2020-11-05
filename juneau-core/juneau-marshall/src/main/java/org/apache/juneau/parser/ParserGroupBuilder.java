@@ -541,74 +541,74 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public ParserGroupBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public ParserGroupBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public ParserGroupBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public ParserGroupBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public ParserGroupBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public ParserGroupBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public ParserGroupBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public ParserGroupBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public ParserGroupBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public ParserGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public ParserGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public ParserGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

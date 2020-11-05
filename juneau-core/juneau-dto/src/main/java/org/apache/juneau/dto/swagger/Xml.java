@@ -53,7 +53,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(bpi="name,namespace,prefix,attribute,wrapped,*")
+@Bean(properties="name,namespace,prefix,attribute,wrapped,*")
 public class Xml extends SwaggerElement {
 
 	private String

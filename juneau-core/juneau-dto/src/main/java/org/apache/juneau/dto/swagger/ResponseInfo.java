@@ -61,7 +61,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(bpi="description,schema,headers,x-example,examples,*")
+@Bean(properties="description,schema,headers,x-example,examples,*")
 public class ResponseInfo extends SwaggerElement {
 
 	private String description;

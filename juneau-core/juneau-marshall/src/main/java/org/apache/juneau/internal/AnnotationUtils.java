@@ -17,6 +17,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.reflect.*;
+
 /**
  * Annotation utilities.
  */
@@ -182,5 +184,23 @@ public class AnnotationUtils {
 		if (componentType.equals(Boolean.TYPE))
 			return Arrays.hashCode((boolean[]) o);
 		return Arrays.hashCode((Object[]) o);
+	}
+
+	/**
+	 * If the annotation is an array of other annotations, returns the inner annotations.
+	 * 
+	 * @param a The annotation to split if repeated.
+	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
+	 */
+	public static Annotation[] splitRepeated(Annotation a) {
+		try {
+			ClassInfo ci = ClassInfo.ofc(a.annotationType());
+			MethodInfo mi = ci.getRepeatedAnnotationMethod();
+			if (mi != null)
+				return mi.invoke(a);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Annotation[]{a};
 	}
 }

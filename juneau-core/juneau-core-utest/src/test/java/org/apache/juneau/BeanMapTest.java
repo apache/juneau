@@ -589,7 +589,7 @@ public class BeanMapTest {
 		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
 	}
 
-	@Bean(bpi="s,s2,i,i2")
+	@Bean(p="s,s2,i,i2")
 	public static class E {
 		public String[] s;
 		public String[][] s2;
@@ -1547,7 +1547,6 @@ public class BeanMapTest {
 
 		l = (List)m.cast(session.getClassMeta(List.class, Map.class));
 		assertTrue(l instanceof LinkedList);
-		System.err.println(l.get(0).getClass().getName());
 		assertTrue(l.get(0) instanceof OMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 	}

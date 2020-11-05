@@ -432,74 +432,74 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public JsonSchemaGeneratorBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public JsonSchemaGeneratorBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public JsonSchemaGeneratorBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public JsonSchemaGeneratorBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public JsonSchemaGeneratorBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

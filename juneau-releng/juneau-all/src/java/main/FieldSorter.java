@@ -10,51 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.doc.internal;
+import java.util.*;
+import java.util.stream.*;
 
-import java.text.*;
+public class FieldSorter {
 
-/**
- * Console utilities.
- */
-public class Console {
-
-	/**
-	 * Print a console [INFO] message.
-	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
-	 */
-	public static void info(String msg, Object...args) {
-		System.out.println("[INFO] " + format(msg, args));
-		System.out.flush();
-	}
-
-	/**
-	 * Print a console [WARNING] message.
-	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
-	 */
-	public static void warning(String msg, Object...args) {
-		System.err.println("[WARNING] " + format(msg, args));  // NOT DEBUG
-		System.err.flush();
-	}
-
-	/**
-	 * Print a console [ERROR] message.
-	 *
-	 * @param msg Message.
-	 * @param args Message arguments.
-	 */
-	public static void error(String msg, Object...args) {
-		System.err.println("[ERROR] " + format(msg, args));  // NOT DEBUG
-		System.err.flush();
-	}
-
-	private static String format(String msg, Object...args) {
-		if (args.length == 0)
-			return msg;
-		return MessageFormat.format(msg, args);
+	public static void main(String[] args) {
+		String in = "properties, p, excludeProperties, x, readOnlyProperties, ro, writeOnlyProperties, wo, example, typeName, typePropertyName";
+		System.err.println(Arrays.asList(in.split("[\\s\\,]+")).stream().sorted().collect(Collectors.joining(", ")));
 	}
 }

@@ -61,7 +61,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(bpi="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")
+@Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")
 public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};

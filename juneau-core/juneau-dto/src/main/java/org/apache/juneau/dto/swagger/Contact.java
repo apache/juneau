@@ -51,7 +51,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc DtoSwagger}
  * </ul>
  */
-@Bean(bpi="name,url,email,*")
+@Bean(properties="name,url,email,*")
 public class Contact extends SwaggerElement {
 
 	private String name;

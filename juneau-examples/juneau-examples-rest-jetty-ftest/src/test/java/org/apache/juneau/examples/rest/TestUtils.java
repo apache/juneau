@@ -308,11 +308,11 @@ public class TestUtils {
 	public static final void assertContains(Object value, String...substrings) {
 		for (String substring : substrings)
 			if (! contains(toString(value), substring)) {
-				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");
-				System.err.println("=== TEXT ===");
-				System.err.println(toString(value));
-				System.err.println("============");
-				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
+				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");  // NOT DEBUG
+				System.err.println("=== TEXT ===");  // NOT DEBUG
+				System.err.println(toString(value));  // NOT DEBUG
+				System.err.println("============");  // NOT DEBUG
+				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));  // NOT DEBUG
 			}
 	}
 }

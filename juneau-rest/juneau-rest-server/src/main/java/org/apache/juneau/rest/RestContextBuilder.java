@@ -2117,7 +2117,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder properties(Map<String,Object> values) {
+	public RestContextBuilder restProperties(Map<String,Object> values) {
 		return putAllTo(REST_properties, values);
 	}
 
@@ -2436,74 +2436,74 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public RestContextBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public RestContextBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public RestContextBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public RestContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public RestContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public RestContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public RestContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public RestContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public RestContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public RestContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public RestContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public RestContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

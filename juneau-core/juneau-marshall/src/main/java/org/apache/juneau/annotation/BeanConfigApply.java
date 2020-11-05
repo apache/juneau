@@ -148,24 +148,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.prependTo(BEAN_annotations, a.applyURI());
 		if (a.applySwap().length > 0)
 			psb.prependTo(BEAN_annotations, a.applySwap());
-
-		if (a.bpi().length > 0)
-			for (Map.Entry<String,String> e : stringsMap(a.bpi(), "bpi").entrySet())
-				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpi(e.getValue()).build());
-
-		if (a.bpx().length > 0)
-			for (Map.Entry<String,String> e : stringsMap(a.bpx(), "bpx").entrySet())
-				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpx(e.getValue()).build());
-
-		if (a.bpro().length > 0)
-			for (Map.Entry<String,String> e : stringsMap(a.bpro(), "bpro").entrySet())
-				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpro(e.getValue()).build());
-
-		if (a.bpwo().length > 0)
-			for (Map.Entry<String,String> e : stringsMap(a.bpwo(), "bpwo").entrySet())
-				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpwo(e.getValue()).build());
 	}
-
 
 	private Locale locale(String in) {
 		return Locale.forLanguageTag(string(in));

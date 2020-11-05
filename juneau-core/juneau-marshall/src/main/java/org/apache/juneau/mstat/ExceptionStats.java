@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Represents an entry in {@link ExceptionStore}.
  */
-@Bean(bpi="hash,count,exceptionClass,message,stackTrace,causedBy", fluentSetters=true)
+@Bean(properties="hash,count,exceptionClass,message,stackTrace,causedBy", fluentSetters=true)
 public class ExceptionStats extends ExceptionInfo implements Comparable<ExceptionStats> {
 	private final AtomicInteger count = new AtomicInteger(0);
 	private transient long timeout = -1;

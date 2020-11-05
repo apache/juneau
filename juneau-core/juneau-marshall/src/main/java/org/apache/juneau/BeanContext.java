@@ -2088,7 +2088,7 @@ public class BeanContext extends Context implements MetaProvider {
 	// This map ensures that if the BeanContext properties in the Context are the same,
 	// then we reuse the same Class->ClassMeta cache map.
 	// This significantly reduces the number of times we need to construct ClassMeta objects which can be expensive.
-	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache
+	private static final ConcurrentHashMap<PropertyStore,Map<Class,ClassMeta>> cmCacheCache
 		= new ConcurrentHashMap<>();
 
 	/** Default config.  All default settings. */
@@ -2128,7 +2128,6 @@ public class BeanContext extends Context implements MetaProvider {
 	private final BeanRegistry beanRegistry;
 	private final PropertyNamer propertyNamer;
 	private final String typePropertyName;
-	private final int beanHashCode;
 	private final ReflectionMap<Annotation> annotations;
 
 	final Map<Class,ClassMeta> cmCache;
@@ -2152,6 +2151,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (ps == null)
 			ps = PropertyStore.DEFAULT;
 
+		ps = ps.subset(new String[]{"Context","BeanContext"});
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 		for (Annotation a : ps.getListProperty(BEAN_annotations, Annotation.class)) {
@@ -2179,8 +2179,6 @@ public class BeanContext extends Context implements MetaProvider {
 			}
 		}
 		this.annotations = rmb.build();
-
-		beanHashCode = ps.hashCode("BeanContext");
 
 		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor, false);
 		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable, false);
@@ -2236,13 +2234,13 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
 
-		if (! cmCacheCache.containsKey(beanHashCode)) {
+		if (! cmCacheCache.containsKey(ps)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
 			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
 			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
-			cmCacheCache.putIfAbsent(beanHashCode, cm);
+			cmCacheCache.putIfAbsent(ps, cm);
 		}
-		cmCache = cmCacheCache.get(beanHashCode);
+		cmCache = cmCacheCache.get(ps);
 		cmString = cmCache.get(String.class);
 		cmObject = cmCache.get(Object.class);
 		cmClass = cmCache.get(Class.class);

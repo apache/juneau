@@ -41,105 +41,8 @@ import org.apache.juneau.transform.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanArray.class)
+@PropertyStoreApply(BeanApply.class)
 public @interface Bean {
-
-	/**
-	 * Bean property includes.
-	 *
-	 * <p>
-	 * The set and order of names of properties associated with a bean class.
-	 *
-	 * <p>
-	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
-	 * related methods.
-	 *
-	 * <p>
-	 * This value is entirely optional if you simply want to expose all the getters and public fields on
-	 * a class as bean properties.
-	 * <br>However, it's useful if you want certain getters to be ignored or you want the properties to be
-	 * serialized in a particular order.
-	 * <br>Note that on IBM JREs, the property order is the same as the order in the source code,
-	 * whereas on Oracle JREs, the order is entirely random.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
-	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
-	 * </ul>
-	 */
-	String bpi() default "";
-
-	/**
-	 * Read-only bean properties.
-	 *
-	 * <p>
-	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
-	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
-	 * 	<ja>@Bean</ja>(bpro=<js>"city,state"</js>})
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
-	 * </ul>
-	 */
-	String bpro() default "";
-
-	/**
-	 * Write-only bean properties.
-	 *
-	 * <p>
-	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
-	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
-	 * 	<ja>@Bean</ja>(bpro=<js>"city,state"</js>})
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
-	 * </ul>
-	 */
-	String bpwo() default "";
-
-	/**
-	 * Bean property excludes.
-	 *
-	 * <p>
-	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
-	 * 	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
-	 * </ul>
-	 */
-	String bpx() default "";
 
 	/**
 	 * Bean dictionary.
@@ -190,6 +93,32 @@ public @interface Bean {
 	 * </ul>
 	 */
 	String example() default "";
+
+	/**
+	 * Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
+	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		{@link #xp()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Map)}
+	 * </ul>
+	 */
+	String excludeProperties() default "";
 
 	/**
 	 * Find fluent setters.
@@ -303,6 +232,49 @@ public @interface Bean {
 	Class<?>[] onClass() default {};
 
 	/**
+	 * Synonym for {@link #properties()}.
+	 */
+	String p() default "";
+
+	/**
+	 * Bean property includes.
+	 *
+	 * <p>
+	 * The set and order of names of properties associated with a bean class.
+	 *
+	 * <p>
+	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
+	 * related methods.
+	 *
+	 * <p>
+	 * This value is entirely optional if you simply want to expose all the getters and public fields on
+	 * a class as bean properties.
+	 * <br>However, it's useful if you want certain getters to be ignored or you want the properties to be
+	 * serialized in a particular order.
+	 * <br>Note that on IBM JREs, the property order is the same as the order in the source code,
+	 * whereas on Oracle JREs, the order is entirely random.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		{@link #p()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Map)}
+	 * </ul>
+	 */
+	String properties() default "";
+
+	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.
 	 *
 	 * <p>
@@ -320,6 +292,38 @@ public @interface Bean {
 	 * </ul>
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default BasicPropertyNamer.class;
+
+	/**
+	 * Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
+	 * 	<ja>@Bean</ja>(readOnlyProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		{@link #ro()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Map)}
+	 * </ul>
+	 */
+	String readOnlyProperties() default "";
+
+	/**
+	 * Synonym for {@link #readOnlyProperties()}.
+	 */
+	String ro() default "";
 
 	/**
 	 * Sort bean properties in alphabetical order.
@@ -413,4 +417,41 @@ public @interface Bean {
 	 * </ul>
 	 */
 	String typePropertyName() default "";
+
+	/**
+	 * Synonym for {@link #writeOnlyProperties()}.
+	 */
+	String wo() default "";
+
+	/**
+	 * Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
+	 * 	<ja>@Bean</ja>(writeOnlyProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		{@link #wo()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Map)}
+	 * </ul>
+	 */
+	String writeOnlyProperties() default "";
+
+	/**
+	 * Synonym for {@link #excludeProperties()}.
+	 */
+	String xp() default "";
 }

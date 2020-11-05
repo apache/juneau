@@ -42,7 +42,7 @@ public class App {
 			.initializers(new JuneauRestInitializer(App.class))
 			.run(args);
 
-		System.err.println(System.getProperty("server.port"));
+		System.err.println(System.getProperty("server.port"));  // NOT DEBUG
 	}
 
 	/**

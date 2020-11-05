@@ -22,7 +22,7 @@ import org.apache.juneau.transforms.*;
 /**
  * A snapshot of execution statistics for REST resource classes.
  */
-@Bean(bpi="startTime,upTime,methodStats")
+@Bean(properties="startTime,upTime,methodStats")
 public class RestContextStats {
 	private final Instant startTime;
 	private final List<MethodExecStats> methodStats;

@@ -25,7 +25,7 @@ import org.apache.juneau.utils.*;
  *
  * Keeps track of number of starts/finishes on tasks and keeps an average run time.
  */
-@Bean(bpi="method,runs,running,errors,minTime,maxTime,avgTime,totalTime,exceptions")
+@Bean(properties="method,runs,running,errors,minTime,maxTime,avgTime,totalTime,exceptions")
 public class MethodExecStats implements Comparable<MethodExecStats> {
 
 	private String method;

@@ -15,13 +15,17 @@ package org.apache.juneau.annotation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Bean_Test {
+
+	static VarResolverSession vr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Bean annotation overrides visibility rules on class and constructor.
@@ -153,6 +157,232 @@ public class Bean_Test {
 		B2 b = jp.parse(json, B2.class);
 		json = js.serialize(b);
 		assertEquals("{f1:1,f2:2}", json);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Bean(on=X,properties=) should override @Bean(properties=)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Bean(properties="a,b,c", excludeProperties="b")
+	static class D1 {
+		public int a, b, c, d;
+
+		public static D1 create() {
+			D1 d = new D1();
+			d.a = 1;
+			d.b = 2;
+			d.c = 3;
+			d.d = 4;
+			return d;
+		}
+	}
+
+	@Bean(p="a,b,c", xp="b")
+	static class D2 {
+		public int a, b, c, d;
+
+		public static D2 create() {
+			D2 d = new D2();
+			d.a = 1;
+			d.b = 2;
+			d.c = 3;
+			d.d = 4;
+			return d;
+		}
+	}
+
+	@Bean(on="Dummy", p="b,c,d", xp="c")
+	@Bean(on="D1", properties="b,c,d", excludeProperties="c")
+	@Bean(on="D2", p="b,c,d", xp="c")
+	static class DConfig {}
+
+	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
+
+	@Test
+	public void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(D1.create());
+		assertEquals("{a:1,c:3}", json);
+		D1 x = SimpleJson.DEFAULT.read(json, D1.class);
+		json = SimpleJson.DEFAULT.toString(x);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void d02_beanPXpCombined_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(D2.create());
+		assertEquals("{a:1,c:3}", json);
+		D2 x = SimpleJson.DEFAULT.read(json, D2.class);
+		json = SimpleJson.DEFAULT.toString(x);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
+		AnnotationList al = dConfig.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+
+		String json = js.serialize(D1.create());
+		assertEquals("{b:2,d:4}", json);
+		D1 d = jp.parse(json, D1.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
+		AnnotationList al = dConfig.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+
+		String json = js.serialize(D2.create());
+		assertEquals("{b:2,d:4}", json);
+		D2 d = jp.parse(json, D2.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
+		Bean ba = BeanBuilder.create("D1").properties("b,c,d").excludeProperties("c").build();
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(D1.create());
+		assertEquals("{b:2,d:4}", json);
+		D1 d = jp.parse(json, D1.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
+		Bean ba = BeanBuilder.create("D2").p("b,c,d").xp("c").build();
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(D2.create());
+		assertEquals("{b:2,d:4}", json);
+		D2 d = jp.parse(json, D2.class);
+		json = js.serialize(d);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @BeanConfig(bpi/bpx) should override @Bean(bpi/bpx)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Bean(properties="a,b,c")
+	static class E1a {
+		public int a, b, c, d;
+	}
+
+	@Bean(excludeProperties="b")
+	static class E1 extends E1a {
+
+		public static E1 create() {
+			E1 e = new E1();
+			e.a = 1;
+			e.b = 2;
+			e.c = 3;
+			e.d = 4;
+			return e;
+		}
+	}
+
+	@Bean(p="a,b,c")
+	static class E2a {
+		public int a, b, c, d;
+	}
+
+	@Bean(xp="b")
+	static class E2 extends E2a {
+
+		public static E2 create() {
+			E2 e = new E2();
+			e.a = 1;
+			e.b = 2;
+			e.c = 3;
+			e.d = 4;
+			return e;
+		}
+	}
+
+	@Bean(on="Dummy", p="b,c,d", xp="c")
+	@Bean(on="E1", properties="b,c,d", excludeProperties="c")
+	@Bean(on="E2", p="b,c,d", xp="c")
+	static class EConfig {}
+
+	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
+
+	@Test
+	public void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(E1.create());
+		assertEquals("{a:1,c:3}", json);
+		E1 e = SimpleJson.DEFAULT.read(json, E1.class);
+		json = SimpleJson.DEFAULT.toString(e);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+		String json = SimpleJson.DEFAULT.toString(E2.create());
+		assertEquals("{a:1,c:3}", json);
+		E2 e = SimpleJson.DEFAULT.read(json, E2.class);
+		json = SimpleJson.DEFAULT.toString(e);
+		assertEquals("{a:1,c:3}", json);
+	}
+
+	@Test
+	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+		AnnotationList al = eConfig.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+
+		String json = js.serialize(E1.create());
+		assertEquals("{b:2,d:4}", json);
+		E1 e = jp.parse(json, E1.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+		AnnotationList al = eConfig.getAnnotationList();
+		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
+
+		String json = js.serialize(E2.create());
+		assertEquals("{b:2,d:4}", json);
+		E2 e = jp.parse(json, E2.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+		Bean ba = BeanBuilder.create("E1").properties("b,c,d").excludeProperties("c").build();
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(E1.create());
+		assertEquals("{b:2,d:4}", json);
+		E1 e = jp.parse(json, E1.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
+	}
+
+	@Test
+	public void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
+		Bean ba = BeanBuilder.create("E2").p("b,c,d").xp("c").build();
+		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonParser jp = JsonParser.create().annotations(ba).build();
+
+		String json = js.serialize(E2.create());
+		assertEquals("{b:2,d:4}", json);
+		E2 e = jp.parse(json, E2.class);
+		json = js.serialize(e);
+		assertEquals("{b:2,d:4}", json);
 	}
 }
 

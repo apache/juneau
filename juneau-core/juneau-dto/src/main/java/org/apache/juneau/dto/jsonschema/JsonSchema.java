@@ -33,7 +33,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @Bean(typeName="schema",
-	bpi="id,$schema,$ref, title,description,type,definitions,properties,"
+	properties="id,$schema,$ref, title,description,type,definitions,properties,"
 		+ "patternProperties,dependencies,items,multipleOf,maximum,exclusiveMaximum,"
 		+ "minimum,exclusiveMinimum,maxLength,minLength,pattern,additionalItems,"
 		+ "maxItems,minItems,uniqueItems,maxProperties,minProperties,required,"

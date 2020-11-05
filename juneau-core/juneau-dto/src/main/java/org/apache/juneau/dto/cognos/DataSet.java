@@ -76,7 +76,7 @@ import org.apache.juneau.xml.annotation.*;
  * </p>
  */
 @SuppressWarnings("unchecked")
-@Bean(typeName="dataset", bpi="metadata,data")
+@Bean(typeName="dataset", properties="metadata,data")
 public class DataSet {
 
 	private Column[] metaData;

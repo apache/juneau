@@ -30,17 +30,17 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A1 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpi="X1: a,_b")
+		@Bean(onClass=X1.class, properties="a,_b")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
 		@RestMethod
-		@BeanConfig(bpi="X1: a")
+		@Bean(onClass=X1.class, p="a")
 		public Object b() throws Exception {
 			return new X1().init();
 		}
 		@RestMethod
-		@BeanConfig(bpi="X1: _b")
+		@Bean(onClass=X1.class, p="_b")
 		public Object c() throws Exception {
 			return new X1().init();
 		}
@@ -72,17 +72,17 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A2 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpx="X1: a,_b")
+		@Bean(on="X1", excludeProperties="a,_b")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
 		@RestMethod
-		@BeanConfig(bpx="X1: a")
+		@Bean(on="X1", xp="a")
 		public Object b() throws Exception {
 			return new X1().init();
 		}
 		@RestMethod
-		@BeanConfig(bpx="X1: _b")
+		@Bean(on="X1", xp="_b")
 		public Object c() throws Exception {
 			return new X1().init();
 		}
@@ -114,17 +114,17 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A3 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpi="X2: a,_b")
+		@Bean(onClass=X2.class, p="a,_b")
 		public Object a() throws Exception {
 			return new X2().init();
 		}
 		@RestMethod
-		@BeanConfig(bpi="X2: a")
+		@Bean(onClass=X2.class, p="a")
 		public Object b() throws Exception {
 			return new X2().init();
 		}
 		@RestMethod
-		@BeanConfig(bpi="X2: _b")
+		@Bean(onClass=X2.class, p="_b")
 		public Object c() throws Exception {
 			return new X2().init();
 		}
@@ -156,17 +156,17 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A4 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpx="X2: a,_b")
+		@Bean(onClass=X2.class, xp="a,_b")
 		public Object a() throws Exception {
 			return new X2().init();
 		}
 		@RestMethod
-		@BeanConfig(bpx="X2: a")
+		@Bean(onClass=X2.class, xp="a")
 		public Object b() throws Exception {
 			return new X2().init();
 		}
 		@RestMethod
-		@BeanConfig(bpx="X2: _b")
+		@Bean(onClass=X2.class, xp="_b")
 		public Object c() throws Exception {
 			return new X2().init();
 		}
@@ -198,7 +198,7 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A5 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpi="*: a")
+		@Bean(on="*", p="a")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
@@ -220,7 +220,7 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A6 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpi="org.apache.juneau.rest.annotation.RestMethod_BeanConfig_Test$X1: a")
+		@Bean(on="org.apache.juneau.rest.annotation.RestMethod_BeanConfig_Test$X1", p="a")
 		public Object a() throws Exception {
 			return new X1().init();
 		}
@@ -242,13 +242,13 @@ public class RestMethod_BeanConfig_Test {
 
 	public static class A7 extends BasicRestServlet {
 		@RestMethod
-		@BeanConfig(bpi="MyBean: a")
+		@Bean(on="MyBean", p="a")
 		public Object a() throws Exception {
 			// Should not match.
 			return new X1().init();
 		}
 		@RestMethod
-		@BeanConfig(bpi="MyBean*: a")
+		@Bean(on="MyBean", p="a")
 		public Object b() throws Exception {
 			// Should not match.  We don't support meta-matches in class names.
 			return new X1().init();
@@ -285,7 +285,7 @@ public class RestMethod_BeanConfig_Test {
 		}
 	}
 
-	@Bean(bpi="_b,a")
+	@Bean(properties="_b,a")
 	public static class X2 {
 		public int a;
 		@Beanp("_b") public String b;

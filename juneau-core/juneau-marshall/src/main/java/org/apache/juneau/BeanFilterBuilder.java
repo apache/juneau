@@ -32,10 +32,10 @@ public class BeanFilterBuilder {
 	Class<?> beanClass;
 	String typeName, example;
 	ASet<String>
-		bpi = ASet.of(),
-		bpx = ASet.of(),
-		bpro = ASet.of(),
-		bpwo = ASet.of();
+		properties = ASet.of(),
+		excludeProperties = ASet.of(),
+		readOnlyProperties = ASet.of(),
+		writeOnlyProperties = ASet.of();
 	Class<?> implClass, interfaceClass, stopClass;
 	boolean sortProperties, fluentSetters;
 	Object propertyNamer;
@@ -61,8 +61,8 @@ public class BeanFilterBuilder {
 
 		for (Bean b : annotations) {
 
-			if (! b.bpi().isEmpty())
-				bpi(split(b.bpi()));
+			if (! (b.properties().isEmpty() && b.p().isEmpty()))
+				properties(b.properties(), b.p());
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());
@@ -73,14 +73,14 @@ public class BeanFilterBuilder {
 			if (b.fluentSetters())
 				fluentSetters(true);
 
-			if (! b.bpx().isEmpty())
-				bpx(split(b.bpx()));
+			if (! (b.excludeProperties().isEmpty() && b.xp().isEmpty()))
+				excludeProperties(b.excludeProperties(), b.xp());
 
-			if (! b.bpro().isEmpty())
-				bpro(split(b.bpro()));
+			if (! (b.readOnlyProperties().isEmpty() && b.ro().isEmpty()))
+				readOnlyProperties(b.readOnlyProperties(), b.ro());
 
-			if (! b.bpwo().isEmpty())
-				bpwo(split(b.bpwo()));
+			if (! (b.writeOnlyProperties().isEmpty() && b.wo().isEmpty()))
+				writeOnlyProperties(b.writeOnlyProperties(), b.wo());
 
 			if (b.propertyNamer() != BasicPropertyNamer.class)
 				propertyNamer(b.propertyNamer());
@@ -452,10 +452,10 @@ public class BeanFilterBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpi()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpi(Map)}
+	 * 	<li class='ja'>{@link Bean#properties()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanProperties(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -463,10 +463,11 @@ public class BeanFilterBuilder {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder bpi(String...value) {
-		this.bpi = ASet.of();
+	public BeanFilterBuilder properties(String...value) {
+		this.properties = ASet.of();
 		for (String v : value)
-			bpi.a(split(v));
+			if (!v.isEmpty())
+				properties.a(split(v));
 		return this;
 	}
 
@@ -496,10 +497,10 @@ public class BeanFilterBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpx()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
+	 * 	<li class='ja'>{@link Bean#excludeProperties()}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesExcludes(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -507,10 +508,11 @@ public class BeanFilterBuilder {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder bpx(String...value) {
-		this.bpx = ASet.of();
+	public BeanFilterBuilder excludeProperties(String...value) {
+		this.excludeProperties = ASet.of();
 		for (String v : value)
-			bpx.a(split(v));
+			if (! v.isEmpty())
+				excludeProperties.a(split(v));
 		return this;
 	}
 
@@ -541,11 +543,11 @@ public class BeanFilterBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpro()}
+	 * 	<li class='ja'>{@link Bean#readOnlyProperties()}
 	 * 	<li class='ja'>{@link Beanp#ro()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpro(Map)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -553,10 +555,11 @@ public class BeanFilterBuilder {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder bpro(String...value) {
-		this.bpro = ASet.of();
+	public BeanFilterBuilder readOnlyProperties(String...value) {
+		this.readOnlyProperties = ASet.of();
 		for (String v : value)
-			bpro.a(split(v));
+			if (! v.isEmpty())
+				readOnlyProperties.a(split(v));
 		return this;
 	}
 
@@ -587,11 +590,11 @@ public class BeanFilterBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#bpwo()}
+	 * 	<li class='ja'>{@link Bean#writeOnlyProperties()}
 	 * 	<li class='ja'>{@link Beanp#wo()}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpwo(Map)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 *
 	 * @param value
@@ -599,10 +602,11 @@ public class BeanFilterBuilder {
 	 * 	<br>Values can contain comma-delimited list of property names.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder bpwo(String...value) {
-		this.bpwo = ASet.of();
+	public BeanFilterBuilder writeOnlyProperties(String...value) {
+		this.writeOnlyProperties = ASet.of();
 		for (String v : value)
-			bpwo.a(split(v));
+			if (! v.isEmpty())
+				writeOnlyProperties.a(split(v));
 		return this;
 	}
 

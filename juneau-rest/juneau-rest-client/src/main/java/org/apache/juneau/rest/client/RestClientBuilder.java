@@ -4807,74 +4807,74 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public RestClientBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public RestClientBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public RestClientBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public RestClientBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public RestClientBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public RestClientBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public RestClientBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public RestClientBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public RestClientBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public RestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public RestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public RestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

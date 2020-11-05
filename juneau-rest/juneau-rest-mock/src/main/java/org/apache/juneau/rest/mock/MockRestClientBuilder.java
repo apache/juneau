@@ -385,74 +385,74 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpi(Map<String,Object> values) {
-		super.bpi(values);
+	public MockRestClientBuilder beanProperties(Map<String,Object> values) {
+		super.beanProperties(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpi(Class<?> beanClass, String properties) {
-		super.bpi(beanClass, properties);
+	public MockRestClientBuilder beanProperties(Class<?> beanClass, String properties) {
+		super.beanProperties(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpi(String beanClassName, String properties) {
-		super.bpi(beanClassName, properties);
+	public MockRestClientBuilder beanProperties(String beanClassName, String properties) {
+		super.beanProperties(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpro(Map<String,Object> values) {
-		super.bpro(values);
+	public MockRestClientBuilder beanPropertiesReadOnly(Map<String,Object> values) {
+		super.beanPropertiesReadOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpro(Class<?> beanClass, String properties) {
-		super.bpro(beanClass, properties);
+	public MockRestClientBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesReadOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpro(String beanClassName, String properties) {
-		super.bpro(beanClassName, properties);
+	public MockRestClientBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
+		super.beanPropertiesReadOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpwo(Map<String,Object> values) {
-		super.bpwo(values);
+	public MockRestClientBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
+		super.beanPropertiesWriteOnly(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpwo(Class<?> beanClass, String properties) {
-		super.bpwo(beanClass, properties);
+	public MockRestClientBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		super.beanPropertiesWriteOnly(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpwo(String beanClassName, String properties) {
-		super.bpwo(beanClassName, properties);
+	public MockRestClientBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
+		super.beanPropertiesWriteOnly(beanClassName, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpx(Map<String,Object> values) {
-		super.bpx(values);
+	public MockRestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpx(Class<?> beanClass, String properties) {
-		super.bpx(beanClass, properties);
+	public MockRestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder bpx(String beanClassName, String properties) {
-		super.bpx(beanClassName, properties);
+	public MockRestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 

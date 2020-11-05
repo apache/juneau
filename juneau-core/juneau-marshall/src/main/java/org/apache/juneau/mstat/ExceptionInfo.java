@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Stores information about an exception.
  */
-@Bean(bpi="hash,exceptionClass,message,stackTrace,causedBy", fluentSetters=true)
+@Bean(properties="hash,exceptionClass,message,stackTrace,causedBy", fluentSetters=true)
 public class ExceptionInfo implements Cloneable {
 
 	private String hash;

@@ -87,7 +87,7 @@ public class FragmentTag implements Taglet {
 			e.printStackTrace(System.err);
 		}
 		if (s == null)
-			System.err.println("Unknown fragment '"+tag.text()+"'");
+			System.err.println("Unknown fragment '"+tag.text()+"'");  // NOT DEBUG
 		return s == null ? tag.text() : s;
 	}
 

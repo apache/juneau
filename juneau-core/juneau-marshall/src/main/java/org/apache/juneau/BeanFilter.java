@@ -36,7 +36,7 @@ import org.apache.juneau.transform.*;
 public final class BeanFilter {
 
 	private final Class<?> beanClass;
-	private final Set<String> bpi, bpx, bpro, bpwo;
+	private final Set<String> properties, excludeProperties, readOnlyProperties, writeOnlyProperties;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> implClass, interfaceClass, stopClass;
 	private final boolean sortProperties, fluentSetters;
@@ -51,10 +51,10 @@ public final class BeanFilter {
 	BeanFilter(BeanFilterBuilder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.bpi = new LinkedHashSet<>(builder.bpi);
-		this.bpx = new LinkedHashSet<>(builder.bpx);
-		this.bpro = new LinkedHashSet<>(builder.bpro);
-		this.bpwo = new LinkedHashSet<>(builder.bpwo);
+		this.properties = new LinkedHashSet<>(builder.properties);
+		this.excludeProperties = new LinkedHashSet<>(builder.excludeProperties);
+		this.readOnlyProperties = new LinkedHashSet<>(builder.readOnlyProperties);
+		this.writeOnlyProperties = new LinkedHashSet<>(builder.writeOnlyProperties);
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;
@@ -117,8 +117,8 @@ public final class BeanFilter {
 	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
 	 * 	be used.
 	 */
-	public Set<String> getBpi() {
-		return bpi;
+	public Set<String> getProperties() {
+		return properties;
 	}
 
 	/**
@@ -126,8 +126,8 @@ public final class BeanFilter {
 	 *
 	 * @return The names of the properties to ignore on a bean, or an empty set to not ignore any properties.
 	 */
-	public Set<String> getBpx() {
-		return bpx;
+	public Set<String> getExcludeProperties() {
+		return excludeProperties;
 	}
 
 	/**
@@ -135,8 +135,8 @@ public final class BeanFilter {
 	 *
 	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
 	 */
-	public Set<String> getBpro() {
-		return bpro;
+	public Set<String> getReadOnlyProperties() {
+		return readOnlyProperties;
 	}
 
 	/**
@@ -144,15 +144,15 @@ public final class BeanFilter {
 	 *
 	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
 	 */
-	public Set<String> getBpwo() {
-		return bpwo;
+	public Set<String> getWriteOnlyProperties() {
+		return writeOnlyProperties;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
 	 *
 	 * <p>
-	 * This method is only used when the {@link #getBpi()} method returns <jk>null</jk>.
+	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
 	 * Otherwise, the ordering of the properties in the returned value is used.
 	 *
 	 * @return <jk>true</jk> if bean properties should be sorted.

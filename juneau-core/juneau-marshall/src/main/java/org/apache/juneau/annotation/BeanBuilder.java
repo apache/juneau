@@ -67,46 +67,30 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> implClass, interfaceClass, stopClass;
 		private final Class<?>[] dictionary;
-		private final String bpi, bpx, bpro, bpwo, example, typeName, typePropertyName;
+		private final String example, excludeProperties, p, properties, readOnlyProperties, ro, typeName, typePropertyName, wo, writeOnlyProperties, xp;
 
 		Impl(BeanBuilder b) {
 			super(b);
-			this.bpi = b.bpi;
-			this.bpro = b.bpro;
-			this.bpwo = b.bpwo;
-			this.bpx = b.bpx;
 			this.dictionary = copyOf(b.dictionary);
 			this.example = b.example;
+			this.excludeProperties = b.excludeProperties;
 			this.fluentSetters = b.fluentSetters;
 			this.implClass = b.implClass;
 			this.interceptor = b.interceptor;
 			this.interfaceClass = b.interfaceClass;
+			this.p = b.p;
+			this.properties = b.properties;
 			this.propertyNamer = b.propertyNamer;
+			this.readOnlyProperties = b.readOnlyProperties;
+			this.ro = b.ro;
 			this.sort = b.sort;
 			this.stopClass = b.stopClass;
 			this.typeName = b.typeName;
 			this.typePropertyName = b.typePropertyName;
+			this.wo = b.wo;
+			this.writeOnlyProperties = b.writeOnlyProperties;
+			this.xp = b.xp;
 			postConstruct();
-		}
-
-		@Override /* Bean */
-		public String bpi() {
-			return bpi;
-		}
-
-		@Override /* Bean */
-		public String bpro() {
-			return bpro;
-		}
-
-		@Override /* Bean */
-		public String bpwo() {
-			return bpwo;
-		}
-
-		@Override /* Bean */
-		public String bpx() {
-			return bpx;
 		}
 
 		@Override /* Bean */
@@ -117,6 +101,11 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 		@Override /* Bean */
 		public String example() {
 			return example;
+		}
+
+		@Override /* Bean */
+		public String excludeProperties() {
+			return excludeProperties;
 		}
 
 		@Override /* Bean */
@@ -140,8 +129,28 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 		}
 
 		@Override /* Bean */
+		public String p() {
+			return p;
+		}
+
+		@Override /* Bean */
+		public String properties() {
+			return properties;
+		}
+
+		@Override /* Bean */
 		public Class<? extends PropertyNamer> propertyNamer() {
 			return propertyNamer;
+		}
+
+		@Override /* Bean */
+		public String readOnlyProperties() {
+			return readOnlyProperties;
+		}
+
+		@Override /* Bean */
+		public String ro() {
+			return ro;
 		}
 
 		@Override /* Bean */
@@ -163,6 +172,21 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 		public String typePropertyName() {
 			return typePropertyName;
 		}
+
+		@Override /* Bean */
+		public String writeOnlyProperties() {
+			return writeOnlyProperties;
+		}
+
+		@Override /* Bean */
+		public String wo() {
+			return wo;
+		}
+
+		@Override /* Bean */
+		public String xp() {
+			return xp;
+		}
 	}
 
 
@@ -170,7 +194,7 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	Class<?> implClass=Null.class, interfaceClass=Null.class, stopClass=Null.class;
 	Class<? extends BeanInterceptor<?>> interceptor=BeanInterceptor.Default.class;
 	Class<? extends PropertyNamer> propertyNamer=BasicPropertyNamer.class;
-	String bpi="", bpx="", bpro="", bpwo="", example="", typeName="", typePropertyName="";
+	String example="", excludeProperties="", p="", properties="", readOnlyProperties="", ro="", typeName="", typePropertyName="", wo="", writeOnlyProperties="", xp="";
 	boolean fluentSetters, sort;
 
 	/**
@@ -187,50 +211,6 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	 */
 	public Bean build() {
 		return new Impl(this);
-	}
-
-	/**
-	 * Sets the {@link Bean#bpi()} property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanBuilder bpi(String value) {
-		this.bpi = value;
-		return this;
-	}
-
-	/**
-	 * Sets the {@link Bean#bpro()} property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanBuilder bpro(String value) {
-		this.bpro = value;
-		return this;
-	}
-
-	/**
-	 * Sets the{@link Bean#bpwo()} property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanBuilder bpwo(String value) {
-		this.bpwo = value;
-		return this;
-	}
-
-	/**
-	 * Sets the {@link Bean#bpx()} property on this annotation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public BeanBuilder bpx(String value) {
-		this.bpx = value;
-		return this;
 	}
 
 	/**
@@ -252,6 +232,17 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	 */
 	public BeanBuilder example(String value) {
 		this.example = value;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link Bean#excludeProperties()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder excludeProperties(String value) {
+		this.excludeProperties = value;
 		return this;
 	}
 
@@ -300,6 +291,28 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	}
 
 	/**
+	 * Sets the {@link Bean#properties()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder properties(String value) {
+		this.properties = value;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link Bean#p()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder p(String value) {
+		this.p = value;
+		return this;
+	}
+
+	/**
 	 * Sets the {@link Bean#propertyNamer()} property on this annotation.
 	 *
 	 * @param value The new value for this property.
@@ -307,6 +320,28 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	 */
 	public BeanBuilder propertyNamer(Class<? extends PropertyNamer> value) {
 		this.propertyNamer = value;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link Bean#readOnlyProperties()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder readOnlyProperties(String value) {
+		this.readOnlyProperties = value;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link Bean#ro()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder ro(String value) {
+		this.ro = value;
 		return this;
 	}
 
@@ -351,6 +386,39 @@ public class BeanBuilder extends TargetedAnnotationTBuilder {
 	 */
 	public BeanBuilder typePropertyName(String value) {
 		this.typePropertyName = value;
+		return this;
+	}
+
+	/**
+	 * Sets the{@link Bean#wo()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder wo(String value) {
+		this.wo = value;
+		return this;
+	}
+
+	/**
+	 * Sets the{@link Bean#writeOnlyProperties()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder writeOnlyProperties(String value) {
+		this.writeOnlyProperties = value;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link Bean#xp()} property on this annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanBuilder xp(String value) {
+		this.xp = value;
 		return this;
 	}
 

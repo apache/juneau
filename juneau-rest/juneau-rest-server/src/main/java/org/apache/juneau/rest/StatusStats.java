@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
  * TODO
  *
  */
-@Bean(bpi="resource,methods")
+@Bean(properties="resource,methods")
 @SuppressWarnings("javadoc")
 public class StatusStats implements Comparable<StatusStats> {
 
@@ -52,7 +52,7 @@ public class StatusStats implements Comparable<StatusStats> {
 		return new TreeSet<>(methods.values());
 	}
 
-	@Bean(bpi="method,codes")
+	@Bean(properties="method,codes")
 	public static class Method implements Comparable<Method> {
 		private java.lang.reflect.Method method;
 		private Set<Status> codes = new TreeSet<>();
@@ -72,7 +72,7 @@ public class StatusStats implements Comparable<StatusStats> {
 		}
 	}
 
-	@Bean(bpi="code,count")
+	@Bean(properties="code,count")
 	public static class Status implements Comparable<Status> {
 		private int code;
 		private int count;

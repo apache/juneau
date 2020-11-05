@@ -2952,7 +2952,7 @@ public class RestContext extends BeanContext {
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#property(String,Object)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#properties(Map)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanProperties(Map)}
 	 * 		</ul>
 	 * </ul>
 	 *
