@@ -39,7 +39,7 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testAppendArrayToArray() throws Exception {
-		String[] s = new String[0];
+		String[] s = {};
 
 		s = append(s, "a", "b");
 		assertObject(s).json().is("['a','b']");
@@ -62,7 +62,7 @@ public class ArrayUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testAppendCollectionToArray() throws Exception {
-		String[] s = new String[0];
+		String[] s = {};
 
 		s = append(s, Arrays.asList(new String[]{"a","b"}));
 		assertObject(s).json().is("['a','b']");

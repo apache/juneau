@@ -129,228 +129,30 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(ResponseHeaderArray.class)
 public @interface ResponseHeader {
 
 	/**
-	 * The HTTP status (or statuses) of the response.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The is a comma-delimited list of HTTP status codes that this header applies to.
-	 * 	<li>
-	 * 		The default value is <js>"200"</js>.
-	 * </ul>
-	 */
-	int[] code() default {};
-
-	/**
-	 * The HTTP header name.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain-text.
-	 * </ul>
-	 */
-	String name() default "";
-
-	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining a response header:
-	 * <p class='bcode w800'>
-	 * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
-	 * </p>
-	 */
-	String value() default "";
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 * <mk>default</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
 	 */
-	String[] description() default {};
+	String[] _default() default {};
 
 	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"string"</js>
-	 * 	<li>
-	 * 		<js>"number"</js>
-	 * 	<li>
-	 * 		<js>"integer"</js>
-	 * 	<li>
-	 * 		<js>"boolean"</js>
-	 * 	<li>
-	 * 		<js>"array"</js>
-	 * 	<li>
-	 * 		<js>"object"</js>
-	 * 	<li>
-	 * 		<js>"file"</js>
-	 * </ul>
-	 *
-	 * <p>
-	 * Static strings are defined in {@link ParameterType}.
+	 * <mk>enum</mk> field of the {@doc ExtSwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
-	 * </ul>
 	 */
-	String type() default "";
-
-	/**
-	 * Synonym for {@link #type()}.
-	 */
-	String t() default "";
-
-	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"int32"</js> - Signed 32 bits.
-	 * 		<br>Only valid with type <js>"integer"</js>.
-	 * 	<li>
-	 * 		<js>"int64"</js> - Signed 64 bits.
-	 * 		<br>Only valid with type <js>"integer"</js>.
-	 * 	<li>
-	 * 		<js>"float"</js> - 32-bit floating point number.
-	 * 		<br>Only valid with type <js>"number"</js>.
-	 * 	<li>
-	 * 		<js>"double"</js> - 64-bit floating point number.
-	 * 		<br>Only valid with type <js>"number"</js>.
-	 * 	<li>
-	 * 		<js>"byte"</js> - BASE-64 encoded characters.
-	 * 		<br>Only valid with type <js>"string"</js>.
-	 * 	<li>
-	 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-	 * 		<br>Only valid with type <js>"string"</js>.
-	 * 	<li>
-	 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-	 * 		<br>Only valid with type <js>"string"</js>.
-	 * 	<li>
-	 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-	 * 		<br>Only valid with type <js>"string"</js>.
-	 * 	<li>
-	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
-	 * 	<li>
-	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
-	 * 		<br>Only valid with type <js>"object"</js>.
-	 * </ul>
-	 *
-	 * <p>
-	 * Static strings are defined in {@link FormatType}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
-	 * </ul>
-	 */
-	String format() default "";
-
-	/**
-	 * Synonym for {@link #format()}.
-	 */
-	String f() default "";
-
-	/**
-	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <p>
-	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
-	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
-	 *
-	 * <br>Possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 	<li>
-	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 	<li>
-	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 	<li>
-	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 	<li>
-	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-	 * 	<li>
-	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
-	 * </ul>
-	 *
-	 * <p>
-	 * Static strings are defined in {@link CollectionFormatType}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
-	 */
-	String collectionFormat() default "";
-
-	/**
-	 * Synonym for {@link #collectionFormat()}.
-	 */
-	String cf() default "";
+	String[] _enum() default {};
 
 	/**
 	 * <mk>$ref</mk> field of the {@doc ExtSwaggerHeaderObject}.
@@ -365,264 +167,6 @@ public @interface ResponseHeader {
 	 * </ul>
 	 */
 	String $ref() default "";
-
-	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String maximum() default "";
-
-	/**
-	 * Synonym for {@link #maximum()}.
-	 */
-	String max() default "";
-
-	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String minimum() default "";
-
-	/**
-	 * Synonym for {@link #minimum()}.
-	 */
-	String min() default "";
-
-	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String multipleOf() default "";
-
-	/**
-	 * Synonym for {@link #multipleOf()}.
-	 */
-	String mo() default "";
-
-	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	long maxLength() default -1;
-
-	/**
-	 * Synonym for {@link #maxLength()}.
-	 */
-	long maxl() default -1;
-
-	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	long minLength() default -1;
-
-	/**
-	 * Synonym for {@link #minLength()}.
-	 */
-	long minl() default -1;
-
-	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <p>
-	 * A string value is valid if it matches the specified regular expression pattern.
-	 *
-	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 *
-	 * <p>
-	 * Only allowed for the following types: <js>"string"</js>.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String pattern() default "";
-
-	/**
-	 * Synonym for {@link #pattern()}.
-	 */
-	String p() default "";
-
-	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	long maxItems() default -1;
-
-	/**
-	 * Synonym for {@link #maxItems()}.
-	 */
-	long maxi() default -1;
-
-	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	long minItems() default -1;
-
-	/**
-	 * Synonym for {@link #minItems()}.
-	 */
-	long mini() default -1;
-
-	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	boolean exclusiveMaximum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMaximum()}.
-	 */
-	boolean emax() default false;
-
-	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	boolean exclusiveMinimum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMinimum()}.
-	 */
-	boolean emin() default false;
-
-	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	boolean uniqueItems() default false;
-
-	/**
-	 * Synonym for {@link #uniqueItems()}.
-	 */
-	boolean ui() default false;
-
-	/**
-	 * <mk>items</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	Items items() default @Items;
-
-	/**
-	 * <mk>default</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String[] _default() default {};
-
-	/**
-	 * Synonym for {@link #_default()}.
-	 */
-	String[] df() default {};
-
-	/**
-	 * <mk>enum</mk> field of the {@doc ExtSwaggerHeaderObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String[] _enum() default {};
-
-	/**
-	 * Synonym for {@link #_enum()}.
-	 */
-	String[] e() default {};
-
-	/**
-	 * A serialized example of the parameter.
-	 *
-	 * <p>
-	 * This attribute defines a representation of the value that is used by <c>BasicRestInfoProvider</c> to construct
-	 * an example of parameter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@ResponseHeader</ja>(
-	 * 		name=<js>"Status"</js>,
-	 * 		type=<js>"array"</js>,
-	 * 		collectionFormat=<js>"csv"</js>,
-	 * 		example=<js>"AVALIABLE,PENDING"</js>
-	 * 	)
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	String[] example() default {};
-
-	/**
-	 * Synonym for {@link #example()}.
-	 */
-	String[] ex() default {};
 
 	/**
 	 * Free-form value for the {@doc ExtSwaggerHeaderObject}.
@@ -699,4 +243,482 @@ public @interface ResponseHeader {
 	 * </ul>
 	 */
 	String[] api() default {};
+
+	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
+	 * The HTTP status (or statuses) of the response.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The is a comma-delimited list of HTTP status codes that this header applies to.
+	 * 	<li>
+	 * 		The default value is <js>"200"</js>.
+	 * </ul>
+	 */
+	int[] code() default {};
+
+	/**
+	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <p>
+	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
+	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
+	 *
+	 * <br>Possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li>
+	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li>
+	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li>
+	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li>
+	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link CollectionFormatType}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+	 */
+	String collectionFormat() default "";
+
+	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
+
+	/**
+	 * <mk>description</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] description() default {};
+
+	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
+
+	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
+
+	/**
+	 * Synonym for {@link #example()}.
+	 */
+	String[] ex() default {};
+
+	/**
+	 * A serialized example of the parameter.
+	 *
+	 * <p>
+	 * This attribute defines a representation of the value that is used by <c>BasicRestInfoProvider</c> to construct
+	 * an example of parameter.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(
+	 * 		name=<js>"Status"</js>,
+	 * 		type=<js>"array"</js>,
+	 * 		collectionFormat=<js>"csv"</js>,
+	 * 		example=<js>"AVALIABLE,PENDING"</js>
+	 * 	)
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String[] example() default {};
+
+	/**
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	boolean exclusiveMaximum() default false;
+
+	/**
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	boolean exclusiveMinimum() default false;
+
+	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
+	 * <mk>format</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"int32"</js> - Signed 32 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"int64"</js> - Signed 64 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"float"</js> - 32-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"double"</js> - 64-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"byte"</js> - BASE-64 encoded characters.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+	 * 		<br>Only valid with type <js>"object"</js>.
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link FormatType}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+	 * </ul>
+	 */
+	String format() default "";
+
+	/**
+	 * <mk>items</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	Items items() default @Items;
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
+
+	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String maximum() default "";
+
+	/**
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	long maxItems() default -1;
+
+	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	long maxLength() default -1;
+
+	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
+
+	/**
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String minimum() default "";
+
+	/**
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	long minLength() default -1;
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
+
+	/**
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String multipleOf() default "";
+
+	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
+
+	/**
+	 * The HTTP header name.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain-text.
+	 * </ul>
+	 */
+	String name() default "";
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
+
+	/**
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <p>
+	 * A string value is valid if it matches the specified regular expression pattern.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String pattern() default "";
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
+
+	/**
+	 * <mk>type</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"string"</js>
+	 * 	<li>
+	 * 		<js>"number"</js>
+	 * 	<li>
+	 * 		<js>"integer"</js>
+	 * 	<li>
+	 * 		<js>"boolean"</js>
+	 * 	<li>
+	 * 		<js>"array"</js>
+	 * 	<li>
+	 * 		<js>"object"</js>
+	 * 	<li>
+	 * 		<js>"file"</js>
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link ParameterType}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+	 * </ul>
+	 */
+	String type() default "";
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
+
+	/**
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerHeaderObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	boolean uniqueItems() default false;
+
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 *
+	 * <p>
+	 * The following are completely equivalent ways of defining a response header:
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(<js>"X-Rate-Limit"</js>) Value&lt;Integer&gt; rateLimit)
+	 * </p>
+	 */
+	String value() default "";
 }

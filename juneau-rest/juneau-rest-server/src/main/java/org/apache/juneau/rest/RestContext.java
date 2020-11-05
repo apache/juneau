@@ -3793,7 +3793,7 @@ public class RestContext extends BeanContext {
 					for (Method mi2 : mi.getMatching()) {
 						Class<?> ci2 = mi2.getDeclaringClass();
 						if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null) {
-							a = new RestMethodAnnotation();
+							a = RestMethodBuilder.DEFAULT;
 						}
 					}
 				}

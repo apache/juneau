@@ -914,29 +914,6 @@ public @interface BeanConfig {
 	String ignoreUnknownNullBeanProperties() default "";
 
 	/**
-	 * Configuration property:  Implementation classes.
-	 *
-	 * <p>
-	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
-	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
-	 * parse).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		implClasses={
-	 * 			<ja>@CC</ja>(key=MyInterface.<jk>class</jk>, value=MyInterfaceImpl.<jk>class</jk>)
-	 * 		}
-	 * 	)
-	 * <p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
-	 * </ul>
-	 */
-	CC[] implClasses() default {};
-
-	/**
 	 * Identifies a set of interfaces.
 	 *
 	 * <p>
@@ -1104,7 +1081,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * Predefined classes:
 	 * <ul>
-	 * 	<li>{@link PropertyNamerDefault} (default)
+	 * 	<li>{@link BasicPropertyNamer} (default)
 	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
 	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
 	 * </ul>

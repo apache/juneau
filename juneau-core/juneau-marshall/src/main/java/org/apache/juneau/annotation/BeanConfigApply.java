@@ -83,10 +83,8 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 			psb.set(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
 		if (! a.ignoreUnknownNullBeanProperties().isEmpty())
 			psb.set(BEAN_ignoreUnknownNullBeanProperties, bool(a.ignoreUnknownNullBeanProperties()));
-		for (CC e : a.implClasses())
-			psb.putTo(BEAN_implClasses, e.k().getName(), e.v());
 		for (Class<?> c : a.interfaces())
-			psb.prependTo(BEAN_annotations, new BeanAnnotation(c).interfaceClass(c));
+			psb.prependTo(BEAN_annotations, BeanBuilder.create(c).interfaceClass(c).build());
 		if (! a.locale().isEmpty())
 			psb.set(CONTEXT_locale, locale(a.locale()));
 		if (! a.mediaType().isEmpty())
@@ -153,19 +151,19 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 
 		if (a.bpi().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpi(), "bpi").entrySet())
-				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpi(e.getValue()));
+				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpi(e.getValue()).build());
 
 		if (a.bpx().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpx(), "bpx").entrySet())
-				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpx(e.getValue()));
+				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpx(e.getValue()).build());
 
 		if (a.bpro().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpro(), "bpro").entrySet())
-				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpro(e.getValue()));
+				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpro(e.getValue()).build());
 
 		if (a.bpwo().length > 0)
 			for (Map.Entry<String,String> e : stringsMap(a.bpwo(), "bpwo").entrySet())
-				psb.prependTo(BEAN_annotations, new BeanAnnotation(e.getKey()).bpwo(e.getValue()));
+				psb.prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).bpwo(e.getValue()).build());
 	}
 
 

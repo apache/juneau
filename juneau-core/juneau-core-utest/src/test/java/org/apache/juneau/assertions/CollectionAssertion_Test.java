@@ -35,9 +35,9 @@ public class CollectionAssertion_Test {
 
 		assertThrown(()->assertCollection(null).isSize(0)).is("Value was null.");
 		assertCollection(x1).isSize(0);
-		assertThrown(()->assertCollection(x1).isSize(1)).is("Collection did not have the expected size.  Expected=1, Actual=0.");
+		assertThrown(()->assertCollection(x1).isSize(1)).is("Collection did not have the expected size.  Expect=1, Actual=0.");
 		assertCollection(x2).isSize(2);
-		assertThrown(()->assertCollection(x2).isSize(0)).is("Collection did not have the expected size.  Expected=0, Actual=2.");
+		assertThrown(()->assertCollection(x2).isSize(0)).is("Collection did not have the expected size.  Expect=0, Actual=2.");
 
 		assertThrown(()->assertCollection(null).isEmpty()).is("Value was null.");
 		assertCollection(x1).isEmpty();

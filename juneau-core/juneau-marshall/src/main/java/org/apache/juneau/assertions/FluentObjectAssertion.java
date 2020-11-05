@@ -80,7 +80,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		exists();
 		assertNotNull("parent", parent);
 		if (! ClassInfo.of(value).isChildOf(parent))
-			throw error("Unexpected class.\n\tExpected=[{0}]\n\tActual=[{1}]", className(parent), className(value));
+			throw error("Unexpected class.\n\tExpect=[{0}]\n\tActual=[{1}]", className(parent), className(value));
 		return returns();
 	}
 
@@ -223,7 +223,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 			String s1 = serializer.serialize(this.value);
 			String s2 = serializer.serialize(o);
 			if (! StringUtils.isEquals(s1, s2))
-				throw error("Unexpected comparison.\n\tExpected=[{0}]\n\tActual=[{1}]", s2, s1);
+				throw error("Unexpected comparison.\n\tExpect=[{0}]\n\tActual=[{1}]", s2, s1);
 		} catch (SerializeException e) {
 			throw new RuntimeException(e);
 		}
@@ -242,7 +242,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 			return returns();
 		exists();
 		if (! this.value.equals(equivalent(value)))
-			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -387,7 +387,7 @@ public class FluentObjectAssertion<R> extends FluentAssertion<R> {
 		for (Object v : values)
 			if (this.value.equals(equivalent(v)))
 				return returns();
-		throw error("Expected value not found.\n\tExpected=[{0}]\n\tActual=[{1}]", SimpleJson.DEFAULT.toString(values), value);
+		throw error("Expected value not found.\n\tExpect=[{0}]\n\tActual=[{1}]", SimpleJson.DEFAULT.toString(values), value);
 	}
 
 	/**

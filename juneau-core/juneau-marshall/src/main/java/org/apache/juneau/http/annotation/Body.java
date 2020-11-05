@@ -129,14 +129,50 @@ import org.apache.juneau.jsonschema.*;
  * </div>
  */
 @Documented
-@Target({PARAMETER,FIELD,METHOD,TYPE})
+@Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(BodyArray.class)
 public @interface Body {
 
-	//=================================================================================================================
-	// Attributes common to all Swagger Parameter objects
-	//=================================================================================================================
+	/**
+	 * Equivalent to {@link #value()}.
+	 *
+	 * <p>
+	 * The following are entirely equivalent:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@Body</ja>({
+	 * 		<js>"description: 'Pet object to add to the store',"</js>,
+	 * 		<js>"required: true,"</js>,
+	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 	})
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Body</ja>(api={
+	 * 		<js>"description: 'Pet object to add to the store',"</js>,
+	 * 		<js>"required: true,"</js>,
+	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 	})
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		If you specify both {@link #value()} and {@link #api()}, {@link #value()} will be ignored.
+	 * </ul>
+	 */
+	String[] api() default {};
+
+	/**
+	 * Synonym for {@link #description()}.
+	 */
+	String[] d() default {};
 
 	/**
 	 * <mk>description</mk> field of the {@doc ExtSwaggerParameterObject}.
@@ -179,96 +215,9 @@ public @interface Body {
 	String[] description() default {};
 
 	/**
-	 * Synonym for {@link #description()}.
+	 * Synonym for {@link #example()}.
 	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>required</mk> field of the {@doc ExtSwaggerParameterObject}.
-	 *
-	 * <p>
-	 * Determines whether the body is mandatory.
-	 *
-	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
-	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
-	 *
-	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing validation.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing validation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean required() default false;
-
-	/**
-	 * Synonym for {@link #required()}.
-	 */
-	boolean r() default false;
-
-	//=================================================================================================================
-	// Attributes specific to in=body
-	//=================================================================================================================
-
-	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * <p>
-	 * This is a required attribute per the swagger definition.
-	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing and parsing validation.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing and serializing validation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	Schema schema() default @Schema;
-
-	//=================================================================================================================
-	// Other
-	//=================================================================================================================
+	String[] ex() default {};
 
 	/**
 	 * A serialized example of the body of a request.
@@ -387,11 +336,6 @@ public @interface Body {
 	String[] example() default {};
 
 	/**
-	 * Synonym for {@link #example()}.
-	 */
-	String[] ex() default {};
-
-	/**
 	 * Serialized examples of the body of a request.
 	 *
 	 * <p>
@@ -438,6 +382,106 @@ public @interface Body {
 	 * Synonym for {@link #examples()}.
 	 */
 	String[] exs() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
+
+	/**
+	 * <mk>required</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 *
+	 * <p>
+	 * Determines whether the body is mandatory.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 *
+	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean required() default false;
+
+	/**
+	 * <mk>schema</mk> field of the {@doc ExtSwaggerParameterObject}.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * <p>
+	 * This is a required attribute per the swagger definition.
+	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing and parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	Schema schema() default @Schema;
 
 	/**
 	 * Free-form value for the {@doc ExtSwaggerParameterObject}.
@@ -519,38 +563,4 @@ public @interface Body {
 	 * </ul>
 	 */
 	String[] value() default {};
-
-	/**
-	 * Equivalent to {@link #value()}.
-	 *
-	 * <p>
-	 * The following are entirely equivalent:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<ja>@Body</ja>({
-	 * 		<js>"description: 'Pet object to add to the store',"</js>,
-	 * 		<js>"required: true,"</js>,
-	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 	})
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Body</ja>(api={
-	 * 		<js>"description: 'Pet object to add to the store',"</js>,
-	 * 		<js>"required: true,"</js>,
-	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
-	 * 	})
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		If you specify both {@link #value()} and {@link #api()}, {@link #value()} will be ignored.
-	 * </ul>
-	 */
-	String[] api() default {};
 }

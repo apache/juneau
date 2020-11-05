@@ -24,6 +24,12 @@ import org.apache.juneau.*;
  * Used tailor how bean properties get interpreted by the framework.
  *
  * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Methods/Fields - Bean getters/setters and properties.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <ul class='seealso'>
@@ -31,10 +37,60 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD,PARAMETER})
+@Target({FIELD,METHOD,PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(BeanpArray.class)
 public @interface Beanp {
+
+	/**
+	 * Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary this bean property.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property.
+	 */
+	Class<?>[] dictionary() default {};
+
+	/**
+	 * Specifies a String format for converting the bean property value to a formatted string.
+	 *
+	 * <p>
+	 * Note that this is usually a one-way conversion during serialization.
+	 *
+	 * <p>
+	 * During parsing, we will attempt to convert the value to the original form by using the
+	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
+	 * 	<jk>public float</jk> <jf>price</jf>;
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
+	 * 		<jk>private float</jk> <jf>price</jf>;
+	 *
+	 * 		<jk>public float</jk> getPrice() {
+	 * 			<jk>return</jk> <jf>price</jf>;
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	String format() default "";
 
 	/**
 	 * Identifies the name of the property.
@@ -148,60 +204,6 @@ public @interface Beanp {
 	 * </div>
 	 */
 	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * The following annotations are equivalent:
-	 *
-	 * <p class='bcode w800'>
-	 * 	<ja>@Beanp</ja>(name=<js>"foo"</js>)
-	 *
-	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
-	 * </p>
-	 */
-	String value() default "";
-
-	/**
-	 * Identifies a specialized class type for the property.
-	 *
-	 * <p>
-	 * Normally this can be inferred through reflection of the field type or getter return type.
-	 * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface
-	 * or abstract class to identify the bean type to instantiate.
-	 * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.
-	 *
-	 * <p>
-	 * This property must denote a concrete bean class with a no-arg constructor.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// Identify concrete map type.</jc>
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
-	 * 		<jk>public</jk> Map <jf>p1</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property like so:
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
-	 * 		<jk>private</jk> Map <jf>p1</jf>;
-	 *
-	 * 		<jk>public</jk> Map getP1() {
-	 * 			<jk>return</jk> <jf>p1</jf>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 */
-	Class<?> type() default Object.class;
 
 	/**
 	 * Dynamically apply this annotation to the specified fields/methods.
@@ -348,55 +350,6 @@ public @interface Beanp {
 	String properties() default "";
 
 	/**
-	 * Bean dictionary.
-	 *
-	 * <p>
-	 * The list of classes that make up the bean dictionary this bean property.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
-	 * </ul>
-	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property.
-	 */
-	Class<?>[] dictionary() default {};
-
-	/**
-	 * Specifies a String format for converting the bean property value to a formatted string.
-	 *
-	 * <p>
-	 * Note that this is usually a one-way conversion during serialization.
-	 *
-	 * <p>
-	 * During parsing, we will attempt to convert the value to the original form by using the
-	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
-	 * 	<jk>public float</jk> <jf>price</jf>;
-	 * </p>
-	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property like so:
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
-	 * 		<jk>private float</jk> <jf>price</jf>;
-	 *
-	 * 		<jk>public float</jk> getPrice() {
-	 * 			<jk>return</jk> <jf>price</jf>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 */
-	String format() default "";
-
-	/**
 	 * Identifies a property as read-only.
 	 *
 	 * <p>
@@ -417,6 +370,60 @@ public @interface Beanp {
 	 * </ul>
 	 */
 	String ro() default "";
+
+	/**
+	 * Identifies a specialized class type for the property.
+	 *
+	 * <p>
+	 * Normally this can be inferred through reflection of the field type or getter return type.
+	 * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface
+	 * or abstract class to identify the bean type to instantiate.
+	 * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.
+	 *
+	 * <p>
+	 * This property must denote a concrete bean class with a no-arg constructor.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<jc>// Identify concrete map type.</jc>
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<jk>public</jk> Map <jf>p1</jf>;
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<jk>private</jk> Map <jf>p1</jf>;
+	 *
+	 * 		<jk>public</jk> Map getP1() {
+	 * 			<jk>return</jk> <jf>p1</jf>;
+	 * 		}
+	 * 	}
+	 * </p>
+	 */
+	Class<?> type() default Null.class;
+
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * The following annotations are equivalent:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@Beanp</ja>(name=<js>"foo"</js>)
+	 *
+	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
+	 * </p>
+	 */
+	String value() default "";
 
 	/**
 	 * Identifies a property as write-only.

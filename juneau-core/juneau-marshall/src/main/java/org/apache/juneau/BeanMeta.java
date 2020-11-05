@@ -107,13 +107,14 @@ public class BeanMeta<T> {
 	 * @param ctx The bean context that created this object.
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
+	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.c = classMeta.getInnerClass();
 
-		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames);
+		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
 		this.notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
@@ -145,18 +146,19 @@ public class BeanMeta<T> {
 		BeanPropertyMeta dynaProperty;
 
 		AMap<Class<?>,Class<?>[]> typeVarImpls;
-		ConstructorInfo constructor;
-		String[] constructorArgs = new String[0];
+		ConstructorInfo constructor, implClassConstructor;
+		String[] constructorArgs = {};
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
 		String dictionaryName, typePropertyName;
 		boolean sortProperties, fluentSetters;
 
-		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
+		Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
 			this.classMeta = classMeta;
 			this.ctx = ctx;
 			this.beanFilter = beanFilter;
 			this.pNames = pNames;
+			this.implClassConstructor = implClassConstructor;
 		}
 
 		String init(BeanMeta<T> beanMeta) {
@@ -272,10 +274,9 @@ public class BeanMeta<T> {
 					}
 				}
 
-
 				// If this is an interface, look for impl classes defined in the context.
 				if (constructor == null)
-					constructor = ctx.getImplClassConstructor(c, conVis);
+					constructor = implClassConstructor;
 
 				if (constructor == null)
 					constructor = ci.getNoArgConstructor(hasBean ? Visibility.PRIVATE : conVis);

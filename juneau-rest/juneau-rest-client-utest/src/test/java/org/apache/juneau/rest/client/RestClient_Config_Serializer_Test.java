@@ -130,7 +130,7 @@ public class RestClient_Config_Serializer_Test {
 
 	public static class A9 {
 		public List<String> f1 = AList.of();
-		public String[] f2 = new String[0];
+		public String[] f2 = {};
 	}
 
 	@Test

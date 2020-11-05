@@ -26,16 +26,21 @@ import org.apache.juneau.transform.*;
  * Used to tailor how beans get interpreted by the framework.
  *
  * <p>
- * This annotation can be applied to classes and interfaces.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Bean classes and parent interfaces.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc BeanAnnotation}
  * </ul>
  */
 @Documented
-@Target(TYPE)
+@Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(BeanArray.class)
 public @interface Bean {
 
 	/**
@@ -70,27 +75,6 @@ public @interface Bean {
 	 * </ul>
 	 */
 	String bpi() default "";
-
-	/**
-	 * Bean property excludes.
-	 *
-	 * <p>
-	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
-	 * 	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
-	 * 	<jk>public class</jk> Address {...}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
-	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
-	 * </ul>
-	 */
-	String bpx() default "";
 
 	/**
 	 * Read-only bean properties.
@@ -135,6 +119,27 @@ public @interface Bean {
 	 * </ul>
 	 */
 	String bpwo() default "";
+
+	/**
+	 * Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
+	 * 	<ja>@Bean</ja>(bpx=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Class, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(String, String)}
+	 * 	<li class='jm'>{@link BeanContextBuilder#bpx(Map)}
+	 * </ul>
+	 */
+	String bpx() default "";
 
 	/**
 	 * Bean dictionary.
@@ -236,6 +241,18 @@ public @interface Bean {
 	Class<?> implClass() default Null.class;
 
 	/**
+	 * Bean property interceptor.
+	 *
+	 * <p>
+	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jc'>{@link BeanInterceptor}
+	 * </ul>
+	 */
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
+
+	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
 	 *
 	 * <p>
@@ -262,72 +279,10 @@ public @interface Bean {
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * or can be set individually on the child classes.
 	 */
-	Class<?> interfaceClass() default Object.class;
-
-	/**
-	 * Bean property interceptor.
-	 *
-	 * <p>
-	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jc'>{@link BeanInterceptor}
-	 * </ul>
-	 */
-	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
+	Class<?> interfaceClass() default Null.class;
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyBean()}.
-	 * It is ignored when the annotation is applied directly to classes.
-	 *
-	 * <p>
-	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation to REST methods:
-	 * <p class='bpcode w800'>
-	 * 	<jc>// Class with explicit annotation.</jc>
-	 * 	<ja>@Bean</ja>(bpi=<js>"street,city,state"</js>)
-	 * 	<jk>public class</jk> A {...}
-	 *
-	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
-	 * 	<jk>public class</jk> B {...}
-	 *
-	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		applyBean={
-	 * 			<ja>@Bean</ja>(on=<js>"B"</js>, bpi=<js>"street,city,state"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public void</jk> doFoo() {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 *  <li>Classes:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified inner class:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
-	 * 					<li><js>"Inner1$Inner2"</js>
-	 * 					<li><js>"Inner2"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
@@ -364,7 +319,7 @@ public @interface Bean {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_propertyNamer}
 	 * </ul>
 	 */
-	Class<? extends PropertyNamer> propertyNamer() default PropertyNamerDefault.class;
+	Class<? extends PropertyNamer> propertyNamer() default BasicPropertyNamer.class;
 
 	/**
 	 * Sort bean properties in alphabetical order.
@@ -411,7 +366,7 @@ public @interface Bean {
 	 * 	}
 	 * </p>
 	 */
-	Class<?> stopClass() default Object.class;
+	Class<?> stopClass() default Null.class;
 
 	/**
 	 * An identifying name for this class.

@@ -973,24 +973,6 @@ public abstract class ContextBuilder {
 	 * 	<li><js>"omo"</js> - <c>LinkedHashMap&lt;String,Object&gt;</c>
 	 * </ul>
 	 *
-	 * <p>
-	 * For example, the {@link BeanContext#BEAN_implClasses} property which has the value <js>"BeanContext.implClasses.smc"</js>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that specifies the concrete implementation class for an interface.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.implClass(MyInterface.<jk>class</jk>, MyImplementation.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic putTo() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.putTo(<jsf>BEAN_implClasses</jsf>, MyInterface.<jk>class</jk>.getName(), MyImplementation.<jk>class</jk>)
-	 * 		.build();
-	 * </p>
-	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link PropertyStore}
 	 * 	<li class='jm'>{@link #set(String, Object)}
@@ -1031,26 +1013,6 @@ public abstract class ContextBuilder {
 	 * 	<li><js>"omc"</js> - <c>LinkedHashMap&lt;String,Class&gt;</c>
 	 * 	<li><js>"omo"</js> - <c>LinkedHashMap&lt;String,Object&gt;</c>
 	 * </ul>
-	 *
-	 * <p>
-	 * For example, the {@link BeanContext#BEAN_implClasses} property which has the value <js>"BeanContext.implClasses.smc"</js>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that specifies the concrete implementation class for an interface.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.implClass(MyInterface.<jk>class</jk>, MyImplementation.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use generic putAllTo() method.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.putAllTo(<jsf>BEAN_implClasses</jsf>,
-	 * 			AMap.<jsm>of</jsm>(MyInterface.<jk>class</jk>.getName(), MyImplementation.<jk>class</jk>)
-	 * 		)
-	 * 		.build();
-	 * </p>
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link PropertyStore}

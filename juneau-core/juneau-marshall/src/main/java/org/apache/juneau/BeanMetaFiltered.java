@@ -30,7 +30,7 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 * @param pNames The list of transformed property names.
 	 */
 	public BeanMetaFiltered(BeanMeta<T> innerMeta, String[] pNames) {
-		super(innerMeta.classMeta, innerMeta.ctx, innerMeta.beanFilter, pNames);
+		super(innerMeta.classMeta, innerMeta.ctx, innerMeta.beanFilter, pNames, null);
 	}
 
 	/**

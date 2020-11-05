@@ -23,13 +23,13 @@ import org.apache.juneau.transform.*;
  * Associates {@link PojoSwap} and {@link Surrogate} classes with POJOs and bean properties.
  *
  * <p>
- * This annotation can be used in the following locations:
+ * Can be used in the following locations:
  * <ul>
  * 	<li>Classes.
  * 	<li>Bean getters/setters/fields.
- * 	<li>Inside the {@link Swaps @Swaps} annotation.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
- *
+
  * <ul class='seealso'>
  * 	<li class='link'>{@doc SwapAnnotation}
  * </ul>
@@ -38,6 +38,7 @@ import org.apache.juneau.transform.*;
 @Target({TYPE,ANNOTATION_TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(SwapArray.class)
 public @interface Swap {
 
 	/**

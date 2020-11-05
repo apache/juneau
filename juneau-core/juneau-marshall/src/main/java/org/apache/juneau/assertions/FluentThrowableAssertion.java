@@ -64,7 +64,7 @@ public class FluentThrowableAssertion<R> extends FluentAssertion<R> {
 	public R isType(Class<?> type) {
 		assertNotNull("type", type);
 		if (! type.isInstance(value))
-			throw error("Exception was not expected type.\n\tExpected=[{0}]\n\tActual=[{1}]", className(type), className(value));
+			throw error("Exception was not expected type.\n\tExpect=[{0}]\n\tActual=[{1}]", className(type), className(value));
 		return returns();
 	}
 

@@ -22,6 +22,13 @@ import org.apache.juneau.msgpack.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link MsgPackSerializer} and {@link MsgPackParser}.
  *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
  * <ul class='seealso'>
  * </ul>
  */
@@ -29,6 +36,7 @@ import org.apache.juneau.msgpack.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(MsgPackArray.class)
 public @interface MsgPack {
 
 	/**

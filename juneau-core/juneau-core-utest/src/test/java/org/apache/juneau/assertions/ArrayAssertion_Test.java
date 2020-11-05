@@ -32,9 +32,9 @@ public class ArrayAssertion_Test {
 
 		assertThrown(()->assertArray(null).isSize(0)).is("Value was null.");
 		assertArray(x1).isSize(0);
-		assertThrown(()->assertArray(x1).isSize(1)).is("Array did not have the expected size.  Expected=1, Actual=0.");
+		assertThrown(()->assertArray(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
 		assertArray(x2).isSize(1);
-		assertThrown(()->assertArray(x2).isSize(0)).is("Array did not have the expected size.  Expected=0, Actual=1.");
+		assertThrown(()->assertArray(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=1.");
 
 		assertThrown(()->assertArray(null).isEmpty()).is("Value was null.");
 		assertArray(x1).isEmpty();

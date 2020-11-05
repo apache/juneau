@@ -136,18 +136,32 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(RequestArray.class)
 public @interface Request {
 
 	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
 	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	Class<?>[] onClass() default {};
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
@@ -156,4 +170,12 @@ public @interface Request {
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 }

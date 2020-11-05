@@ -87,7 +87,7 @@ public class FluentArrayAssertion<R> extends FluentObjectAssertion<R> {
 	public R isSize(int size) throws AssertionError {
 		exists();
 		if (Array.getLength(value) != size)
-			throw error("Array did not have the expected size.  Expected={0}, Actual={1}.", size, Array.getLength(value));
+			throw error("Array did not have the expected size.  Expect={0}, Actual={1}.", size, Array.getLength(value));
 		return returns();
 	}
 

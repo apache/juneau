@@ -23,7 +23,11 @@ import org.apache.juneau.jena.*;
  * Annotation for specifying options for RDF serializers.
  *
  * <p>
- * Can be applied to Java packages, types, fields, and methods.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields/packages.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <p>
  * Can be used for the following:

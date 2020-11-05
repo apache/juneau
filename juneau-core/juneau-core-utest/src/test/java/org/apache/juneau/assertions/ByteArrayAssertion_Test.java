@@ -32,9 +32,9 @@ public class ByteArrayAssertion_Test {
 
 		assertThrown(()->assertBytes(null).isSize(0)).is("Value was null.");
 		assertBytes(x1).isSize(0);
-		assertThrown(()->assertBytes(x1).isSize(1)).is("Array did not have the expected size.  Expected=1, Actual=0.");
+		assertThrown(()->assertBytes(x1).isSize(1)).is("Array did not have the expected size.  Expect=1, Actual=0.");
 		assertBytes(x2).isSize(2);
-		assertThrown(()->assertBytes(x2).isSize(0)).is("Array did not have the expected size.  Expected=0, Actual=2.");
+		assertThrown(()->assertBytes(x2).isSize(0)).is("Array did not have the expected size.  Expect=0, Actual=2.");
 
 		assertThrown(()->assertBytes(null).isEmpty()).is("Value was null.");
 		assertBytes(x1).isEmpty();
@@ -51,22 +51,22 @@ public class ByteArrayAssertion_Test {
 		assertBytes(null).string().isNull();
 		assertBytes(x1).string().is("");
 		assertBytes(x2).string().is("ab");
-		assertThrown(()->assertBytes(x2).string().is("xx")).is("Unexpected value.\n\tExpected=[xx]\n\tActual=[ab]");
+		assertThrown(()->assertBytes(x2).string().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[ab]");
 
 		assertBytes(null).base64().isNull();
 		assertBytes(x1).base64().is("");
 		assertBytes(x2).base64().is("YWI=");
-		assertThrown(()->assertBytes(x2).base64().is("xx")).is("Unexpected value.\n\tExpected=[xx]\n\tActual=[YWI=]");
+		assertThrown(()->assertBytes(x2).base64().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[YWI=]");
 
 		assertBytes(null).hex().isNull();
 		assertBytes(x1).hex().is("");
 		assertBytes(x2).hex().is("6162");
-		assertThrown(()->assertBytes(x2).hex().is("xx")).is("Unexpected value.\n\tExpected=[xx]\n\tActual=[6162]");
+		assertThrown(()->assertBytes(x2).hex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[6162]");
 
 		assertBytes(null).spacedHex().isNull();
 		assertBytes(x1).spacedHex().is("");
 		assertBytes(x2).spacedHex().is("61 62");
-		assertThrown(()->assertBytes(x2).spacedHex().is("xx")).is("Unexpected value.\n\tExpected=[xx]\n\tActual=[61 62]");
+		assertThrown(()->assertBytes(x2).spacedHex().is("xx")).is("Unexpected value.\n\tExpect=[xx]\n\tActual=[61 62]");
 	}
 
 	@Test

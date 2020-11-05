@@ -63,10 +63,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		bean = roundTrip(bean, IBean.class);
 		assertEquals("bar", bean.getF1());
 
-		bean.setF1("baz");
-		bean = roundTrip(bean, ABean.class);
-		assertEquals("baz", bean.getF1());
-
 		bean.setF1("bing");
 		bean = roundTrip(bean, CBean.class);
 		assertEquals("bing", bean.getF1());
@@ -82,10 +78,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		bean[0].setF1("bar");
 		bean = roundTrip(bean, IBean[].class);
 		assertEquals("bar", bean[0].getF1());
-
-		bean[0].setF1("baz");
-		bean = roundTrip(bean, ABean[].class);
-		assertEquals("baz", bean[0].getF1());
 
 		bean[0].setF1("bing");
 		bean = roundTrip(bean, CBean[].class);
@@ -104,12 +96,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertEquals("bar", l.get(0).getF1());
 		l = roundTrip(l, LinkedList.class, IBean.class);
 		assertEquals("bar", l.get(0).getF1());
-
-		l.get(0).setF1("baz");
-		l = roundTrip(l, List.class, ABean.class);
-		assertEquals("baz", l.get(0).getF1());
-		l = roundTrip(l, LinkedList.class, ABean.class);
-		assertEquals("baz", l.get(0).getF1());
 
 		l.get(0).setF1("bing");
 		l = roundTrip(l, List.class, CBean.class);
@@ -130,12 +116,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertEquals("bar", l.get("foo").getF1());
 		l = roundTrip(l, LinkedHashMap.class, String.class, IBean.class);
 		assertEquals("bar", l.get("foo").getF1());
-
-		l.get("foo").setF1("baz");
-		l = roundTrip(l, Map.class, String.class, ABean.class);
-		assertEquals("baz", l.get("foo").getF1());
-		l = roundTrip(l, LinkedHashMap.class, String.class, ABean.class);
-		assertEquals("baz", l.get("foo").getF1());
 
 		l.get("foo").setF1("bing");
 		l = roundTrip(l, Map.class, String.class, CBean.class);
@@ -415,8 +395,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().annotations(new BeanAnnotation(CA.class).dictionary(CAFilterDictionaryMap.class)).build();
-		Parser p = getParser().builder().annotations(new BeanAnnotation(CA.class).dictionary(CAFilterDictionaryMap.class)).build();
+		Serializer s = getSerializer().builder().annotations(BeanBuilder.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		Parser p = getParser().builder().annotations(BeanBuilder.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
 
 		CA1 c1 = CA1.create();
 		Object r = s.serialize(c1);

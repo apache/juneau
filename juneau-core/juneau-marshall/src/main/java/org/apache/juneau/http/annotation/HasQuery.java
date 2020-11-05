@@ -34,10 +34,15 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER})
 @Retention(RUNTIME)
 @Inherited
 public @interface HasQuery {
+
+	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
 
 	/**
 	 * URL query parameter name.
@@ -50,11 +55,6 @@ public @interface HasQuery {
 	 * </ul>
 	 */
 	String name() default "";
-
-	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
 
 	/**
 	 * A synonym for {@link #name()}.

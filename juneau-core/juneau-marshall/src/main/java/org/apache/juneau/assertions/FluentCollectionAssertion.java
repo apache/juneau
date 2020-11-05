@@ -77,7 +77,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 		for (Object o : this.value)
 			if (eq(o, value))
 				return returns();
-		throw error("Collection did not contain expected value.\nContents: {0}\nExpected:{1}", SimpleJson.DEFAULT.toString(this.value), value);
+		throw error("Collection did not contain expected value.\nContents: {0}\nExpect:{1}", SimpleJson.DEFAULT.toString(this.value), value);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class FluentCollectionAssertion<R> extends FluentObjectAssertion<R> {
 	public R isSize(int size) throws AssertionError {
 		exists();
 		if (value.size() != size)
-			throw error("Collection did not have the expected size.  Expected={0}, Actual={1}.", size, value.size());
+			throw error("Collection did not have the expected size.  Expect={0}, Actual={1}.", size, value.size());
 		return returns();
 	}
 

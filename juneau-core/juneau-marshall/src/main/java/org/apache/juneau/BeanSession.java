@@ -1370,17 +1370,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Implementation classes.
-	 *
-	 * @see BeanContext#BEAN_implClasses
-	 * @return
-	 * 	Implementation classes keyed by interface class names.
-	 */
-	protected final Map<String,ClassInfo> getImplClasses() {
-		return ctx.getImplClasses();
-	}
-
-	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * @see BeanContext#BEAN_notBeanClasses

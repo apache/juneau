@@ -48,7 +48,7 @@ public class ObjectAssertion_Test {
 		assertObject("foo").isType(String.class);
 		assertObject("foo").isType(CharSequence.class);
 		assertObject("foo").isType(Comparable.class);
-		assertThrown(()->assertObject(1).isType(String.class)).is("Unexpected class.\n\tExpected=[java.lang.String]\n\tActual=[java.lang.Integer]");
+		assertThrown(()->assertObject(1).isType(String.class)).is("Unexpected class.\n\tExpect=[java.lang.String]\n\tActual=[java.lang.Integer]");
 
 		assertObject("foo").serialized(JsonSerializer.DEFAULT).is("\"foo\"");
 		assertObject(null).serialized(JsonSerializer.DEFAULT).is("null");
@@ -62,17 +62,17 @@ public class ObjectAssertion_Test {
 
 		int[] x1 = {1,2}, x2 = {2,1};
 		assertObject(x2).jsonSorted().is("[1,2]");
-		assertThrown(()->assertObject(x2).jsonSorted().is("[2,1]")).stderr().is("Unexpected value.\n\tExpected=[[2,1]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x2).jsonSorted().is("[2,1]")).stderr().is("Unexpected value.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
 		assertObject(null).jsonSorted().is("null");
 
 		assertObject(x1).sameAs(x1);
-		assertThrown(()->assertObject(x1).sameAs(x2)).stderr().is("Unexpected comparison.\n\tExpected=[[2,1]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).sameAs(x2)).stderr().is("Unexpected comparison.\n\tExpect=[[2,1]]\n\tActual=[[1,2]]");
 		assertObject(null).sameAs(null);
 		assertThrown(()->assertObject(new A1()).sameAs(null)).contains("Could not call getValue() on property 'foo'");
 
 		assertObject(x1).sameAsSorted(x1);
 		assertObject(x1).sameAsSorted(x2);
-		assertThrown(()->assertObject(x1).sameAs(null)).stderr().is("Unexpected comparison.\n\tExpected=[null]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).sameAs(null)).stderr().is("Unexpected comparison.\n\tExpect=[null]\n\tActual=[[1,2]]");
 		assertObject(null).sameAsSorted(null);
 
 		assertObject(x1).doesNotEqual(null);
@@ -90,7 +90,7 @@ public class ObjectAssertion_Test {
 		assertObject(x1).isNot(null);
 
 		assertObject(x1).isAny(x1,x2);
-		assertThrown(()->assertObject(x1).isAny(x2)).stderr().is("Expected value not found.\n\tExpected=[[[2,1]]]\n\tActual=[[1,2]]");
+		assertThrown(()->assertObject(x1).isAny(x2)).stderr().is("Expected value not found.\n\tExpect=[[[2,1]]]\n\tActual=[[1,2]]");
 
 		assertObject(x1).isNotAny(x2);
 		assertThrown(()->assertObject(x1).isNotAny(x1,x2)).stderr().is("Unexpected value found.\n\tUnexpected=[[1,2]]\n\tActual=[[1,2]]");

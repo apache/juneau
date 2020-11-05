@@ -22,11 +22,19 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by
  * {@link UrlEncodingSerializer} and {@link UrlEncodingParser}.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(UrlEncodingArray.class)
 public @interface UrlEncoding {
 
 	/**

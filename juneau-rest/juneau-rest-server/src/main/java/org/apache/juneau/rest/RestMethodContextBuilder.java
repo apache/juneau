@@ -48,7 +48,7 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 				for (Method mi2 : mi.getMatching()) {
 					Class<?> ci2 = mi2.getDeclaringClass();
 					if (ci2.isInterface() && ci2.getAnnotation(Rest.class) != null)
-						m = new RestMethodAnnotation();
+						m = RestMethodBuilder.DEFAULT;
 				}
 			}
 

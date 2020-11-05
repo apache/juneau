@@ -62,6 +62,22 @@ import java.lang.annotation.*;
 public @interface Contact {
 
 	/**
+	 * <mk>email</mk> field of the {@doc ExtSwaggerContactObject}.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization. MUST be in the format of an email address.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is an email string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String email() default "";
+
+	/**
 	 * <mk>name</mk> field of the {@doc ExtSwaggerContactObject}.
 	 *
 	 * <p>
@@ -92,22 +108,6 @@ public @interface Contact {
 	 * </ul>
 	 */
 	String url() default "";
-
-	/**
-	 * <mk>email</mk> field of the {@doc ExtSwaggerContactObject}.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization. MUST be in the format of an email address.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is an email string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String email() default "";
 
 	/**
 	 * Free-form value for the {@doc ExtSwaggerContactObject}.

@@ -97,8 +97,31 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,METHOD})
+@Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(ResponseStatusArray.class)
 public @interface ResponseStatus {
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
+
 }

@@ -35,7 +35,7 @@ public class PropertyStoreBuilder {
 
 	// Contains a cache of all created PropertyStore objects keyed by hashcode.
 	// Used to minimize memory consumption by reusing identical PropertyStores.
-	private static final Map<Integer,PropertyStore> CACHE = new ConcurrentHashMap<>();
+	private static final Map<PropertyStore,PropertyStore> CACHE = new ConcurrentHashMap<>();
 
 	// Maps property suffixes (e.g. "lc") to PropertyType (e.g. LIST_CLASS)
 	static final Map<String,PropertyType> SUFFIX_MAP = new ConcurrentHashMap<>();
@@ -68,9 +68,9 @@ public class PropertyStoreBuilder {
 		if (propertyStore == null)
 			propertyStore = new PropertyStore(groups);
 
-		PropertyStore ps = CACHE.get(propertyStore.hashCode());
+		PropertyStore ps = CACHE.get(propertyStore);
 		if (ps == null)
-			CACHE.put(propertyStore.hashCode(), propertyStore);
+			CACHE.put(propertyStore, propertyStore);
 		else if (! ps.equals(propertyStore))
 			throw new RuntimeException("Property store mismatch!  This shouldn't happen.  hashCode=["+propertyStore.hashCode()+"]\n---PS#1---\n" + ps.hashCodes() + "\n---PS#2---\n" + propertyStore.hashCodes());
 		else

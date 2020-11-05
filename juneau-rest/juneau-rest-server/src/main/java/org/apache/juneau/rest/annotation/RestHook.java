@@ -99,13 +99,23 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @Documented
-@Target(METHOD)
+@Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(RestHookArray.class)
 public @interface RestHook {
+
+	/**
+	 * Dynamically apply this annotation to the specified methods.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
 
 	/**
 	 * The lifecycle event.
 	 */
-	HookEvent value();
+	HookEvent value() default HookEvent.INIT;
 }

@@ -82,13 +82,13 @@ public class BeanFilterBuilder {
 			if (! b.bpwo().isEmpty())
 				bpwo(split(b.bpwo()));
 
-			if (b.propertyNamer() != PropertyNamerDefault.class)
+			if (b.propertyNamer() != BasicPropertyNamer.class)
 				propertyNamer(b.propertyNamer());
 
-			if (b.interfaceClass() != Object.class)
+			if (b.interfaceClass() != Null.class)
 				interfaceClass(b.interfaceClass());
 
-			if (b.stopClass() != Object.class)
+			if (b.stopClass() != Null.class)
 				stopClass(b.stopClass());
 
 			if (b.dictionary().length > 0)
@@ -418,7 +418,7 @@ public class BeanFilterBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link PropertyNamerDefault}.
+	 * 	<br>The default is {@link BasicPropertyNamer}.
 	 * @return This object (for method chaining).
 	 */
 	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> value) {

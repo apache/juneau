@@ -30,10 +30,11 @@ import org.apache.juneau.http.remote.*;
  * </ul>
  */
 @Documented
-@Target(METHOD)
+@Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(RestMethodConfigApply.class)
+@Repeatable(RestMethodArray.class)
 public @interface RestMethod {
 
 	/**
@@ -97,6 +98,24 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String clientVersion() default "";
+
+	/**
+	 * Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * </ul>
+	 */
+	String[] consumes() default {};
 
 	/**
 	 * Class-level response converters.
@@ -361,6 +380,13 @@ public @interface RestMethod {
 	/**
 	 * REST method name.
 	 *
+	 * Synonym for {@link #name()}.
+	 */
+	String method() default "";
+
+	/**
+	 * REST method name.
+	 *
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
 	 *
@@ -405,11 +431,13 @@ public @interface RestMethod {
 	String name() default "";
 
 	/**
-	 * REST method name.
+	 * Dynamically apply this annotation to the specified methods.
 	 *
-	 * Synonym for {@link #name()}.
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
 	 */
-	String method() default "";
+	String[] on() default {};
 
 	/**
 	 * Parsers.
@@ -541,6 +569,24 @@ public @interface RestMethod {
 	int priority() default 0;
 
 	/**
+	 * Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * </ul>
+	 */
+	String[] produces() default {};
+
+	/**
 	 * Same as {@link Rest#properties() @Rest(properties)}, except defines property values by default when this method is called.
 	 *
 	 * <p>
@@ -600,36 +646,6 @@ public @interface RestMethod {
 	String[] reqHeaders() default {};
 
 	/**
-	 * Declared roles.
-	 *
-	 * <p>
-	 * A comma-delimited list of all possible user roles.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
-	 *
-	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>GET</jsf>,
-	 * 			path=<js>"/foo"</js>,
-	 * 			rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
-	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
-	 * 		)
-	 * 		<jk>public</jk> Object doGet() {
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
-	 * </ul>
-	 */
-	String rolesDeclared() default "";
-
-	/**
 	 * Role guard.
 	 *
 	 * <p>
@@ -682,6 +698,36 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String roleGuard() default "";
+
+	/**
+	 * Declared roles.
+	 *
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 *
+	 * 		<ja>@RestMethod</ja>(
+	 * 			name=<jsf>GET</jsf>,
+	 * 			path=<js>"/foo"</js>,
+	 * 			rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+	 * 		)
+	 * 		<jk>public</jk> Object doGet() {
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * </ul>
+	 */
+	String rolesDeclared() default "";
 
 	/**
 	 * Serializers.
@@ -740,42 +786,6 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String summary() default "";
-
-	/**
-	 * Supported accept media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
-	 */
-	String[] produces() default {};
-
-	/**
-	 * Supported content media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
-	 */
-	String[] consumes() default {};
 
 	/**
 	 * Provides swagger-specific metadata on this method.

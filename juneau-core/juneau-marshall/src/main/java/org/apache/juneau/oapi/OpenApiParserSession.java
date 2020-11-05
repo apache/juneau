@@ -231,7 +231,7 @@ public class OpenApiParserSession extends UonParserSession {
 				if (eType == null)
 					eType = string();
 
-				String[] ss = new String[0];
+				String[] ss = {};
 
 				if (cf == MULTI)
 					ss = new String[]{in};
@@ -276,7 +276,7 @@ public class OpenApiParserSession extends UonParserSession {
 				if (! type.isMapOrBean())
 					throw new ParseException("Invalid type {0} for part type OBJECT.", type);
 
-				String[] ss = new String[0];
+				String[] ss = {};
 
 				if (cf == MULTI)
 					ss = new String[]{in};

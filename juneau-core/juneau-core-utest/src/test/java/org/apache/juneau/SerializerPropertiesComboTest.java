@@ -403,7 +403,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 
 	public static class T5 {
 		public List<String> f1 = AList.of();
-		public String[] f2 = new String[0];
+		public String[] f2 = {};
 	}
 
 	public static class T6 {

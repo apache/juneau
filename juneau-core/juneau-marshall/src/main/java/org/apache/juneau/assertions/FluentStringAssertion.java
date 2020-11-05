@@ -173,7 +173,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isEqual(String value) throws AssertionError {
 		if (! StringUtils.isEquals(value, text))
-			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(text));
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(value, text), fix(value), fix(text));
 		return returns();
 	}
 
@@ -203,7 +203,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 		assertNotNull("lines", lines);
 		String v = join(lines, '\n');
 		if (! StringUtils.isEquals(v, text))
-			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPosition(v, text), fix(v), fix(text));
 		return returns();
 	}
 
@@ -237,14 +237,14 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 		String[] e = StringUtils.join(lines, '\n').trim().split("[\r\n]+"), a = this.text.trim().split("[\r\n]+");
 
 		if (e.length != a.length)
-			throw error("Expected text had different numbers of lines.\n\tExpected=[{0}]\n\tActual=[{1}]", e.length, a.length);
+			throw error("Expected text had different numbers of lines.\n\tExpect=[{0}]\n\tActual=[{1}]", e.length, a.length);
 
 		Arrays.sort(e);
 		Arrays.sort(a);
 
 		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
-				throw error("Expected text had different values at line {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", i+1, e[i], a[i]);
+				throw error("Expected text had different values at line {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", i+1, e[i], a[i]);
 
 		return returns();
 	}
@@ -272,7 +272,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R is(String value) throws AssertionError {
 		if (! StringUtils.isEquals(value, text))
-			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", fix(value), fix(text));
 		return isEqual(value);
 	}
 
@@ -285,7 +285,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<R> {
 	 */
 	public R isEqualIc(String value) throws AssertionError {
 		if (! StringUtils.isEqualsIc(value, text))
-			throw error("Text differed at position {0}.\n\tExpected=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
+			throw error("Text differed at position {0}.\n\tExpect=[{1}]\n\tActual=[{2}]", diffPositionIc(value, text), fix(value), fix(text));
 		return returns();
 	}
 

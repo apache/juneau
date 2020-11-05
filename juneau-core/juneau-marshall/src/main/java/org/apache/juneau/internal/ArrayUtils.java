@@ -511,4 +511,15 @@ public final class ArrayUtils {
 		}
 		return l.toArray(new Object[l.size()]);
 	}
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param array The array to copy.
+	 * @param <T> The element type.
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.s
+	 */
+	public static <T> T[] copyOf(T[] array) {
+		return array == null ? null : Arrays.copyOf(array, array.length);
+	}
 }

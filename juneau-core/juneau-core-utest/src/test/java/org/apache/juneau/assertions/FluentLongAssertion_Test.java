@@ -38,8 +38,8 @@ public class FluentLongAssertion_Test {
 		assertThrown(()->assertLong(null).isGreaterThan(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isGreaterThan(null)).is("Parameter 'value' cannot be null.");
 		assertLong(2l).isGreaterThan(1);
-		assertThrown(()->assertLong(1l).isGreaterThan(2l)).is("Value was not greater than expected.\n\tExpected=[2]\n\tActual=[1]");
-		assertThrown(()->assertLong(1l).isGreaterThan(1l)).is("Value was not greater than expected.\n\tExpected=[1]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGreaterThan(2l)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGreaterThan(1l)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
 
 		assertLong(2l).integer().isGreaterThan(1);
 		assertLong(null).integer().isNull();
@@ -47,43 +47,43 @@ public class FluentLongAssertion_Test {
 		assertThrown(()->assertLong(null).isGt(1l)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isGt(null)).is("Parameter 'value' cannot be null.");
 		assertLong(2l).isGt(1);
-		assertThrown(()->assertLong(1l).isGt(2)).is("Value was not greater than expected.\n\tExpected=[2]\n\tActual=[1]");
-		assertThrown(()->assertLong(1l).isGt(1)).is("Value was not greater than expected.\n\tExpected=[1]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGt(2)).is("Value was not greater than expected.\n\tExpect=[2]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGt(1)).is("Value was not greater than expected.\n\tExpect=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertLong(null).isGreaterThanOrEqual(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isGreaterThanOrEqual(null)).is("Parameter 'value' cannot be null.");
 		assertLong(2l).isGreaterThanOrEqual(1);
-		assertThrown(()->assertLong(1l).isGreaterThanOrEqual(2)).is("Value was not greater than or equals to expected.\n\tExpected=[2]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGreaterThanOrEqual(2)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
 		assertLong(1l).isGreaterThanOrEqual(1);
 
 		assertThrown(()->assertLong(null).isGte(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isGte(null)).is("Parameter 'value' cannot be null.");
 		assertLong(2l).isGte(1);
-		assertThrown(()->assertLong(1l).isGte(2l)).is("Value was not greater than or equals to expected.\n\tExpected=[2]\n\tActual=[1]");
+		assertThrown(()->assertLong(1l).isGte(2l)).is("Value was not greater than or equals to expected.\n\tExpect=[2]\n\tActual=[1]");
 		assertLong(1l).isGte(1l);
 
 		assertThrown(()->assertLong(null).isLessThan(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isLessThan(null)).is("Parameter 'value' cannot be null.");
 		assertLong(1l).isLessThan(2l);
-		assertThrown(()->assertLong(2l).isLessThan(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[2]");
-		assertThrown(()->assertLong(1l).isLessThan(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[1]");
+		assertThrown(()->assertLong(2l).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->assertLong(1l).isLessThan(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertLong(null).isLt(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isLt(null)).is("Parameter 'value' cannot be null.");
 		assertLong(1l).isLt(2);
-		assertThrown(()->assertLong(2l).isLt(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[2]");
-		assertThrown(()->assertLong(1l).isLt(1)).is("Value was not less than expected.\n\tExpected=[1]\n\tActual=[1]");
+		assertThrown(()->assertLong(2l).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->assertLong(1l).isLt(1)).is("Value was not less than expected.\n\tExpect=[1]\n\tActual=[1]");
 
 		assertThrown(()->assertLong(null).isLessThanOrEqual(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isLessThanOrEqual(null)).is("Parameter 'value' cannot be null.");
 		assertLong(1l).isLessThanOrEqual(2);
-		assertThrown(()->assertLong(2l).isLessThanOrEqual(1)).is("Value was not less than or equals to expected.\n\tExpected=[1]\n\tActual=[2]");
+		assertThrown(()->assertLong(2l).isLessThanOrEqual(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
 		assertLong(1l).isLessThanOrEqual(1);
 
 		assertThrown(()->assertLong(null).isLte(1)).is("Value was null.");
 		assertThrown(()->assertLong(1l).isLte(null)).is("Parameter 'value' cannot be null.");
 		assertLong(1l).isLte(2);
-		assertThrown(()->assertLong(2l).isLte(1)).is("Value was not less than or equals to expected.\n\tExpected=[1]\n\tActual=[2]");
+		assertThrown(()->assertLong(2l).isLte(1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
 		assertLong(1l).isLte(1);
 
 		assertThrown(()->assertLong(null).isBetween(1,3)).is("Value was null.");
@@ -92,8 +92,8 @@ public class FluentLongAssertion_Test {
 		assertLong(2l).isBetween(1,3);
 		assertLong(1l).isBetween(1,3);
 		assertLong(3l).isBetween(1,3);
-		assertThrown(()->assertLong(2l).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpected=[1]\n\tActual=[2]");
-		assertThrown(()->assertLong(2l).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpected=[3]\n\tActual=[2]");
+		assertThrown(()->assertLong(2l).isBetween(1,1)).is("Value was not less than or equals to expected.\n\tExpect=[1]\n\tActual=[2]");
+		assertThrown(()->assertLong(2l).isBetween(3,3)).is("Value was not greater than or equals to expected.\n\tExpect=[3]\n\tActual=[2]");
 	}
 
 	@Test

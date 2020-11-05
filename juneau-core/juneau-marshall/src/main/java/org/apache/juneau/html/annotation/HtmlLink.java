@@ -23,7 +23,11 @@ import org.apache.juneau.html.*;
  * Used in conjunction with the {@link HtmlSerializer} class to define hyperlinks.
  *
  * <p>
- * This annotation is applied to classes.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Classes.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <p>
  * Annotation that can be used to specify that a class has a URL associated with it.
@@ -36,9 +40,10 @@ import org.apache.juneau.html.*;
  * </p>
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(HtmlLinkArray.class)
 public @interface HtmlLink {
 
 	/**

@@ -78,105 +78,6 @@ import org.apache.juneau.oapi.*;
 public @interface Schema {
 
 	/**
-	 * <mk>$ref</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * 	A JSON reference to the schema definition.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String $ref() default "";
-
-	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> setAge(
-	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String input
-	 * 	) {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
-	 * </ul>
-	 */
-	String format() default "";
-
-	/**
-	 * Synonym for {@link #format()}.
-	 */
-	String f() default "";
-
-	/**
-	 * <mk>title</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String title() default "";
-
-	/**
-	 * <mk>description</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * A brief description of the body. This could contain examples of use.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
-	 *
-	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] description() default {};
-
-	/**
-	 * Synonym for {@link #description()}.
-	 */
-	String[] d() default {};
-
-	/**
 	 * <mk>default</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
@@ -189,294 +90,6 @@ public @interface Schema {
 	 * </ul>
 	 */
 	String[] _default() default {};
-
-	/**
-	 * Synonym for {@link #_default()}.
-	 */
-	String[] df() default {};
-
-	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String multipleOf() default "";
-
-	/**
-	 * Synonym for {@link #multipleOf()}.
-	 */
-	String mo() default "";
-
-	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String maximum() default "";
-
-	/**
-	 * Synonym for {@link #maximum()}.
-	 */
-	String max() default "";
-
-	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean exclusiveMaximum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMaximum()}.
-	 */
-	boolean emax() default false;
-
-	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String minimum() default "";
-
-	/**
-	 * Synonym for {@link #minimum()}.
-	 */
-	String min() default "";
-
-	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean exclusiveMinimum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMinimum()}.
-	 */
-	boolean emin() default false;
-
-	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long maxLength() default -1;
-
-	/**
-	 * Synonym for {@link #maxLength()}.
-	 */
-	long maxl() default -1;
-
-	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long minLength() default -1;
-
-	/**
-	 * Synonym for {@link #minLength()}.
-	 */
-	long minl() default -1;
-
-	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		This string SHOULD be a valid regular expression.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String pattern() default "";
-
-	/**
-	 * Synonym for {@link #pattern()}.
-	 */
-	String p() default "";
-
-	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long maxItems() default -1;
-
-	/**
-	 * Synonym for {@link #maxItems()}.
-	 */
-	long maxi() default -1;
-
-	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long minItems() default -1;
-
-	/**
-	 * Synonym for {@link #minItems()}.
-	 */
-	long mini() default -1;
-
-	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean uniqueItems() default false;
-
-	/**
-	 * Synonym for {@link #uniqueItems()}.
-	 */
-	boolean ui() default false;
-
-	/**
-	 * <mk>maxProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long maxProperties() default -1;
-
-	/**
-	 * Synonym for {@link #maxProperties()}.
-	 */
-	long maxp() default -1;
-
-	/**
-	 * <mk>minProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long minProperties() default -1;
-
-	/**
-	 * Synonym for {@link #minProperties()}.
-	 */
-	long minp() default -1;
-
-	/**
-	 * <mk>required</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * 	Determines whether this parameter is mandatory.
-	 *  <br>The property MAY be included and its default value is false.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
-	 *
-	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean required() default false;
-
-	/**
-	 * Synonym for {@link #required()}.
-	 */
-	boolean r() default false;
 
 	/**
 	 * <mk>enum</mk> field of the {@doc ExtSwaggerSchemaObject}.
@@ -493,63 +106,23 @@ public @interface Schema {
 	String[] _enum() default {};
 
 	/**
-	 * Synonym for {@link #_enum()}.
-	 */
-	String[] e() default {};
-
-	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>$ref</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
-	 * 	) {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	 * 	<jk>public void</jk> addPet(Pet input) {...}
-	 *
-	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
+	 * <p>
+	 * 	A JSON reference to the schema definition.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		The possible values are:
-	 * 		<ul>
-	 * 			<li><js>"object"</js>
-	 * 			<li><js>"string"</js>
-	 * 			<li><js>"number"</js>
-	 * 			<li><js>"integer"</js>
-	 * 			<li><js>"boolean"</js>
-	 * 			<li><js>"array"</js>
-	 * 			<li><js>"file"</js>
-	 * 		</ul>
+	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
-	 * </ul>
-	 *
 	 */
-	String type() default "";
+	String $ref() default "";
 
 	/**
-	 * Synonym for {@link #type()}.
-	 */
-	String t() default "";
-
-	/**
-	 * <mk>items</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>additionalProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -560,7 +133,26 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	Items items() default @Items;
+	String[] additionalProperties() default {};
+
+	/**
+	 * <mk>allOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] allOf() default {};
+
+	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
 
 	/**
 	 * <mk>collectionFormat</mk> field.
@@ -608,51 +200,48 @@ public @interface Schema {
 	String collectionFormat() default "";
 
 	/**
-	 * Synonym for {@link #collectionFormat()}.
+	 * Synonym for {@link #description()}.
 	 */
-	String cf() default "";
+	String[] d() default {};
 
 	/**
-	 * <mk>allOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 * <mk>description</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <p>
+	 * A brief description of the body. This could contain examples of use.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 *
+	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String[] allOf() default {};
+	String[] description() default {};
 
 	/**
-	 * <mk>properties</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * Synonym for {@link #_default()}.
 	 */
-	String[] properties() default {};
-
-	/**
-	 * <mk>additionalProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] additionalProperties() default {};
+	String[] df() default {};
 
 	/**
 	 * <mk>discriminator</mk> field of the {@doc ExtSwaggerSchemaObject}.
@@ -669,51 +258,24 @@ public @interface Schema {
 	String discriminator() default "";
 
 	/**
-	 * <mk>readOnly</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * Synonym for {@link #_enum()}.
 	 */
-	boolean readOnly() default false;
+	String[] e() default {};
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
 
 	/**
 	 * Synonym for {@link #readOnly()}.
 	 */
-	boolean ro() default false;
-
-	/**
-	 * <mk>xml</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] xml() default {};
-
-	/**
-	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	ExternalDocs externalDocs() default @ExternalDocs;
+	String[] ex() default {};
 
 	/**
 	 * <mk>example</mk> field of the {@doc ExtSwaggerSchemaObject}.
@@ -737,11 +299,6 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * Synonym for {@link #readOnly()}.
-	 */
-	String[] ex() default {};
-
-	/**
 	 * <mk>x-examples</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <p>
@@ -759,9 +316,80 @@ public @interface Schema {
 	String[] examples() default {};
 
 	/**
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean exclusiveMaximum() default false;
+
+	/**
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean exclusiveMinimum() default false;
+
+	/**
 	 * Synonym for {@link #examples()}.
 	 */
 	String[] exs() default {};
+
+	/**
+	 * <mk>externalDocs</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	ExternalDocs externalDocs() default @ExternalDocs;
+
+	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
+	 * <mk>format</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> setAge(
+	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String input
+	 * 	) {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypeFormats}
+	 * </ul>
+	 */
+	String format() default "";
 
 	/**
 	 * Specifies that schema information for this part should not be shown in the generated Swagger documentation.
@@ -769,64 +397,182 @@ public @interface Schema {
 	boolean ignore() default false;
 
 	/**
-	 * Free-form value for the {@doc ExtSwaggerSchemaObject}.
-	 *
-	 * <p>
-	 * This is a JSON object that makes up the swagger information for this field.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the swagger description of a Schema object:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Normal</jc>
-	 * 	<ja>@Schema</ja>(
-	 * 		type=<js>"array"</js>,
-	 * 		items=<ja>@Items</ja>(
-	 * 			$ref=<js>"#/definitions/Pet"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Schema</ja>(<js>"type:'array',items:{$ref:'#/definitions/Pet'}"</js>)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form using variables</jc>
-	 * 	<ja>@Schema</ja>(<js>"$L{petArraySwagger}"</js>)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<mc>// Contents of MyResource.properties</mc>
-	 * 	<mk>petArraySwagger</mk> = <mv>{ type: "array", items: { $ref: "#/definitions/Pet" } }</mv>
-	 * </p>
-	 *
-	 * <p>
-	 * 	The reasons why you may want to use this field include:
-	 * <ul>
-	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
-	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
-	 * </ul>
+	 * <mk>items</mk> field of the {@doc ExtSwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 	<li>
-	 * 		The leading/trailing <c>{ }</c> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<p class='bcode w800'>
-	 * 	<ja>@Schema</ja>(<js>"{type: 'array'}"</js>)
-	 * 		</p>
-	 * 		<p class='bcode w800'>
-	 * 	<ja>@Schema</ja>(<js>"type: 'array'"</js>)
-	 * 		</p>
-	 * 	<li>
-	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
 	 */
-	String[] value() default {};
+	Items items() default @Items;
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
+
+	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String maximum() default "";
+
+	/**
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long maxItems() default -1;
+
+	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long maxLength() default -1;
+
+	/**
+	 * Synonym for {@link #maxProperties()}.
+	 */
+	long maxp() default -1;
+
+	/**
+	 * <mk>maxProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long maxProperties() default -1;
+
+	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
+
+	/**
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String minimum() default "";
+
+	/**
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long minLength() default -1;
+
+	/**
+	 * Synonym for {@link #minProperties()}.
+	 */
+	long minp() default -1;
+
+	/**
+	 * <mk>minProperties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long minProperties() default -1;
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
+
+	/**
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is numeric.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String multipleOf() default "";
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
@@ -924,4 +670,258 @@ public @interface Schema {
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
+
+	/**
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		This string SHOULD be a valid regular expression.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String pattern() default "";
+
+	/**
+	 * <mk>properties</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] properties() default {};
+
+	/**
+	 * Synonym for {@link #required()}.
+	 */
+	boolean r() default false;
+
+	/**
+	 * <mk>readOnly</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean readOnly() default false;
+
+	/**
+	 * <mk>required</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <p>
+	 * 	Determines whether this parameter is mandatory.
+	 *  <br>The property MAY be included and its default value is false.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 *
+	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is boolean.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean required() default false;
+
+	/**
+	 * Synonym for {@link #readOnly()}.
+	 */
+	boolean ro() default false;
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
+
+	/**
+	 * <mk>title</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String title() default "";
+
+	/**
+	 * <mk>type</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
+	 * 	) {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<jk>public void</jk> addPet(Pet input) {...}
+	 *
+	 * 	<ja>@Body</ja>(type=<js>"object"</js>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		The possible values are:
+	 * 		<ul>
+	 * 			<li><js>"object"</js>
+	 * 			<li><js>"string"</js>
+	 * 			<li><js>"number"</js>
+	 * 			<li><js>"integer"</js>
+	 * 			<li><js>"boolean"</js>
+	 * 			<li><js>"array"</js>
+	 * 			<li><js>"file"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='extlink'>{@doc ExtSwaggerDataTypes}
+	 * </ul>
+	 *
+	 */
+	String type() default "";
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
+
+	/**
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is boolean.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean uniqueItems() default false;
+
+	/**
+	 * Free-form value for the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <p>
+	 * This is a JSON object that makes up the swagger information for this field.
+	 *
+	 * <p>
+	 * The following are completely equivalent ways of defining the swagger description of a Schema object:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"array"</js>,
+	 * 		items=<ja>@Items</ja>(
+	 * 			$ref=<js>"#/definitions/Pet"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@Schema</ja>(<js>"type:'array',items:{$ref:'#/definitions/Pet'}"</js>)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form using variables</jc>
+	 * 	<ja>@Schema</ja>(<js>"$L{petArraySwagger}"</js>)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<mc>// Contents of MyResource.properties</mc>
+	 * 	<mk>petArraySwagger</mk> = <mv>{ type: "array", items: { $ref: "#/definitions/Pet" } }</mv>
+	 * </p>
+	 *
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 	<li>
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Schema</ja>(<js>"{type: 'array'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Schema</ja>(<js>"type: 'array'"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
+	 */
+	String[] value() default {};
+
+	/**
+	 * <mk>xml</mk> field of the {@doc ExtSwaggerSchemaObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] xml() default {};
 }

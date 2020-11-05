@@ -220,30 +220,30 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 *
 	 * <p>
-	 * The following is the list of concrete annotations provided that can be constructed and passed into the builder
+	 * The following is the list of builders for annotations that can be constructed and passed into the builder
 	 * class:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
-	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlBuilder}
 	 * </ul>
 	 *
 	 * <p>
@@ -1494,64 +1494,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + ".ignoreUnknownNullBeanProperties.b";
 
 	/**
-	 * Configuration property:  Implementation classes.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_implClasses BEAN_implClasses}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,Class&gt;</c>
-	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#implClasses()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#implClasses(Map)}
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#implClass(Class, Class)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
-	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
-	 * parse).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean interface.</jc>
-	 * 	<jk>public interface</jk> MyBean {
-	 * 		...
-	 * 	}
-	 *
-	 * 	<jc>// A bean implementation.</jc>
-	 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
-	 * 		...
-	 * 	}
-
-	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.implClass(MyBean.<jk>class</jk>, MyBeanImpl.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.addTo(<jsf>BEAN_implClasses</jsf>, MyBean.<jk>class</jk>.getName(), MyBeanImpl.<jk>class</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Instantiates a MyBeanImpl,</jc>
-	 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String BEAN_implClasses = PREFIX + ".implClasses.smc";
-
-	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1712,7 +1654,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_propertyNamer BEAN_propertyNamer}
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;{@link org.apache.juneau.PropertyNamer}&gt;</code>
-	 * 	<li><b>Default:</b>  {@link org.apache.juneau.PropertyNamerDefault}
+	 * 	<li><b>Default:</b>  {@link org.apache.juneau.BasicPropertyNamer}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
@@ -1733,7 +1675,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <p>
 	 * Predefined classes:
 	 * <ul>
-	 * 	<li>{@link PropertyNamerDefault} - Default.
+	 * 	<li>{@link BasicPropertyNamer} - Default.
 	 * 	<li>{@link PropertyNamerDLC} - Dashed-lower-case names.
 	 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
 	 * </ul>
@@ -1844,7 +1786,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swap}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Swaps}
 	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#swaps()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
@@ -2185,7 +2126,6 @@ public class BeanContext extends Context implements MetaProvider {
 	private final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	private final PojoSwap<?,?>[] swaps;
 	private final BeanRegistry beanRegistry;
-	private final Map<String,ClassInfo> implClasses;
 	private final PropertyNamer propertyNamer;
 	private final String typePropertyName;
 	private final int beanHashCode;
@@ -2267,7 +2207,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 		notBeanClasses = getClassArrayProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
 
-		propertyNamer = getInstanceProperty(BEAN_propertyNamer, PropertyNamer.class, PropertyNamerDefault.class);
+		propertyNamer = getInstanceProperty(BEAN_propertyNamer, PropertyNamer.class, BasicPropertyNamer.class);
 
 		List<String> l1 = new LinkedList<>();
 		List<String> l2 = new LinkedList<>();
@@ -2296,15 +2236,10 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		swaps = lpf.toArray(new PojoSwap[lpf.size()]);
 
-		AMap<String,ClassInfo> icm = AMap.of();
-		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
-			icm.put(e.getKey(), ClassInfo.of(e.getValue()));
-		implClasses = icm.unmodifiable();
-
 		if (! cmCacheCache.containsKey(beanHashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<>();
-			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
-			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, findPojoSwaps(String.class), findChildPojoSwaps(String.class)));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, findPojoSwaps(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(beanHashCode, cm);
 		}
 		cmCache = cmCacheCache.get(beanHashCode);
@@ -2521,7 +2456,7 @@ public class BeanContext extends Context implements MetaProvider {
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<>(type, this, findImplClass(type), findPojoSwaps(type), findChildPojoSwaps(type));
+					cm = new ClassMeta<>(type, this, findPojoSwaps(type), findChildPojoSwaps(type));
 			}
 		}
 		if (waitForInit)
@@ -2784,7 +2719,7 @@ public class BeanContext extends Context implements MetaProvider {
 
 		if (p != null) {
 
-			if (p.type() != Object.class)
+			if (p.type() != Null.class)
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {
@@ -2863,50 +2798,6 @@ public class BeanContext extends Context implements MetaProvider {
 			}
 		}
 		return l == null ? null : l.toArray(new PojoSwap[l.size()]);
-	}
-
-	/**
-	 * Gets the no-arg constructor for the specified class.
-	 *
-	 * @param <T> The class to check.
-	 * @param c The class to check.
-	 * @param v The minimum visibility for the constructor.
-	 * @return The no arg constructor, or <jk>null</jk> if the class has no no-arg constructor.
-	 */
-	protected final <T> ConstructorInfo getImplClassConstructor(Class<T> c, Visibility v) {
-		if (implClasses.isEmpty())
-			return null;
-		Class cc = c;
-		while (cc != null) {
-			ClassInfo implClass = implClasses.get(cc.getName());
-			if (implClass != null)
-				return implClass.getNoArgConstructor(v);
-			for (Class ic : cc.getInterfaces()) {
-				implClass = implClasses.get(ic.getName());
-				if (implClass != null)
-					return implClass.getNoArgConstructor(v);
-			}
-			cc = cc.getSuperclass();
-		}
-		return null;
-	}
-
-	private final <T> Class<T> findImplClass(Class<T> c) {
-		if (implClasses.isEmpty())
-			return null;
-		Class cc = c;
-		while (cc != null) {
-			ClassInfo implClass = implClasses.get(cc.getName());
-			if (implClass != null)
-				return implClass.<T>inner();
-			for (Class ic : cc.getInterfaces()) {
-				implClass = implClasses.get(ic.getName());
-				if (implClass != null)
-					return implClass.<T>inner();
-			}
-			cc = cc.getSuperclass();
-		}
-		return null;
 	}
 
 	/**
@@ -2992,9 +2883,8 @@ public class BeanContext extends Context implements MetaProvider {
 			return emptyList();
 		List<Annotation> aa = classAnnotationCache.get(c, a);
 		if (aa == null) {
-			A x = c.getAnnotation(a);
-			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.aifnn(x);
+			A[] x = c.getAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			classAnnotationCache.put(c, a, aa);
@@ -3052,9 +2942,8 @@ public class BeanContext extends Context implements MetaProvider {
 			return emptyList();
 		List<Annotation> aa = declaredClassAnnotationCache.get(c, a);
 		if (aa == null) {
-			A x = c.getDeclaredAnnotation(a);
-			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.aifnn(x);
+			A[] x = c.getDeclaredAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			declaredClassAnnotationCache.put(c, a, aa);
@@ -3113,9 +3002,8 @@ public class BeanContext extends Context implements MetaProvider {
 			return emptyList();
 		List<Annotation> aa = methodAnnotationCache.get(m, a);
 		if (aa == null) {
-			A x = m.getAnnotation(a);
-			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.aifnn(x);
+			A[] x = m.getAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotations.appendAll(m, a, l);
 			aa = l.unmodifiable();
 			methodAnnotationCache.put(m, a, aa);
@@ -3173,9 +3061,8 @@ public class BeanContext extends Context implements MetaProvider {
 			return emptyList();
 		List<Annotation> aa = fieldAnnotationCache.get(f, a);
 		if (aa == null) {
-			A x = f.getAnnotation(a);
-			AList<Annotation> l = new AList<>(x == null ? 0 : 1);
-			l.aifnn(x);
+			A[] x = f.getAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotations.appendAll(f, a, l);
 			aa = l.unmodifiable();
 			fieldAnnotationCache.put(f, a, aa);
@@ -3233,9 +3120,8 @@ public class BeanContext extends Context implements MetaProvider {
 			return emptyList();
 		List<Annotation> aa = constructorAnnotationCache.get(c, a);
 		if (aa == null) {
-			A x = c.getAnnotation(a);
-			AList<Annotation> l = new AList(x == null ? 0 : 1);
-			l.aifnn(x);
+			A[] x = c.getAnnotationsByType(a);
+			AList<Annotation> l = new AList(Arrays.asList(x));
 			annotations.appendAll(c, a, l);
 			aa = l.unmodifiable();
 			constructorAnnotationCache.put(c, a, l);
@@ -3602,17 +3488,6 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Implementation classes.
-	 *
-	 * @see #BEAN_implClasses
-	 * @return
-	 * 	Implementation classes keyed by interface class names.
-	 */
-	protected final Map<String,ClassInfo> getImplClasses() {
-		return implClasses;
-	}
-
-	/**
 	 * Bean class exclusions.
 	 *
 	 * @see #BEAN_notBeanClasses
@@ -3751,7 +3626,6 @@ public class BeanContext extends Context implements MetaProvider {
 				.a("ignoreTransientProperties", ignoreTransientFields)
 				.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
 				.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-				.a("implClasses", implClasses)
 				.a("notBeanClasses", notBeanClasses)
 				.a("notBeanPackageNames", notBeanPackageNames)
 				.a("notBeanPackagePrefixes", notBeanPackagePrefixes)

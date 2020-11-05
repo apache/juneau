@@ -21,7 +21,11 @@ import java.lang.annotation.*;
  * Annotation for specifying various JSON options for the JSON serializers and parsers.
  *
  * <p>
- * Can be applied to Java types.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <p>
  * Can be used for the following:

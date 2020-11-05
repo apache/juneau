@@ -21,6 +21,13 @@ import java.lang.annotation.*;
  * Identifies a setter as a method for adding a parent reference to a child object.
  *
  * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Bean getter/setter/field.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
+ * <p>
  * Used by the parsers to add references to parent objects in child objects.
  *
  * <ul class='notes'>
@@ -32,9 +39,10 @@ import java.lang.annotation.*;
  * 	<li class='link'>{@doc NamePropertyAnnotation}
  * </ul>
  */
-@Target({METHOD,FIELD})
+@Target({METHOD,FIELD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(ParentPropertyArray.class)
 public @interface ParentProperty {
 
 	/**

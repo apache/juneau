@@ -26,6 +26,7 @@ import java.lang.annotation.*;
  * 	<li>Static method that returns an example of the POJO.
  * 	<li>Static field that contains an example of the POJO.
  * 	<li>On a class.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <h5 class='figure'>Examples:</h5>
@@ -59,6 +60,7 @@ import java.lang.annotation.*;
 @Target({FIELD,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(ExampleArray.class)
 public @interface Example {
 
 	/**

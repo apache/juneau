@@ -60,13 +60,13 @@ public class XmlCollapsedTest {
 		public List<String> f1 = new LinkedList<>();
 
 		@Xml(format=COLLAPSED)
-		public String[] f2 = new String[0];
+		public String[] f2 = {};
 
 		@Xml(format=COLLAPSED,childName="xf3")
 		public List<String> f3 = new LinkedList<>();
 
 		@Xml(format=COLLAPSED,childName="xf4")
-		public String[] f4 =  new String[0];
+		public String[] f4 =  {};
 	}
 
 	//====================================================================================================

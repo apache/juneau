@@ -138,13 +138,22 @@ public class ObjectUtils {
 	}
 
 	/**
-	 * Tests two objects for equality, gracefully handling nulls.
+	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
 	 */
 	public static boolean eq(Object o1, Object o2) {
+		if (isArray(o1) && isArray(o2)) {
+			int l1 = Array.getLength(o1), l2 = Array.getLength(o2);
+			if (l1 != l2)
+				return false;
+			for (int i = 0; i < l1; i++)
+				if (! eq(Array.get(o1, i), Array.get(o2, i)))
+					return false;
+			return true;
+		}
 		return Objects.equals(o1, o2);
 	}
 
@@ -169,14 +178,60 @@ public class ObjectUtils {
 	}
 
 	/**
-	 * Tests two objects for equality, gracefully handling nulls.
+	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return <jk>false</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
 	 */
 	public static boolean ne(Object o1, Object o2) {
-		return ! Objects.equals(o1, o2);
+		return ! eq(o1, o2);
+	}
+
+	/**
+	 * Calculates the hashcode for the specified object.
+	 *
+	 * <p>
+	 * Unlike just calling {@link Object#hashCode()}, this method calculates hashsums of arrays by using the contents
+	 * of the array instead of the hashsum of the array itself.
+	 *
+	 * @param o The object to calculate a hashsum on.
+	 * @return The hashsum.
+	 */
+	public static int hashCode(Object o) {
+		if (o == null)
+			return 0;
+		if (isArray(o)) {
+			int x = 1;
+			for (int i = 0; i < Array.getLength(o); i++)
+				x = 31 * x + hashCode(Array.get(o, i));
+			return x;
+		}
+		if (isCollection(o)) {
+			int x = 1;
+			for (Object o2 : (Collection<?>)o)
+				x = 31 * x + hashCode(o2);
+			return x;
+		}
+		if (isMap(o)) {
+			int x = 1;
+			for (Map.Entry<?,?> o2 : ((Map<?,?>)o).entrySet())
+				x = 31 * x + (hashCode(o2.getKey()) ^ hashCode(o2.getValue()));
+			return x;
+		}
+		return o.hashCode();
+	}
+
+	private static boolean isArray(Object o) {
+		return o != null && o.getClass().isArray();
+	}
+
+	private static boolean isCollection(Object o) {
+		return o != null && o.getClass().isAssignableFrom(Collection.class);
+	}
+
+	private static boolean isMap(Object o) {
+		return o != null && o.getClass().isAssignableFrom(Map.class);
 	}
 
 	/**

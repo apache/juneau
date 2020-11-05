@@ -12,16 +12,87 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
+
 import org.apache.juneau.*;
 
 /**
  * Annotation that can be applied to classes to control how they are marshalled.
  *
  * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
+ * <p>
  * This annotation is typically only applied to non-bean classes.  The {@link Bean @Bean} annotation contains equivalent
  * functionality for bean classes.
  */
+@Documented
+@Target({METHOD,TYPE})
+@Retention(RUNTIME)
+@Inherited
+@Repeatable(MarshalledArray.class)
 public @interface Marshalled {
+
+	/**
+	 * POJO example.
+	 *
+	 * <p>
+	 * Specifies an example of the specified class in Simplified JSON format.
+	 *
+	 * <p>
+	 * Examples are used in cases such as POJO examples in Swagger documents.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
+	 * 	<jk>public class</jk> MyClass {...}
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Keys are the class of the example.
+	 * 		<br>Values are Simple-JSON representation of that class.
+	 * 	<li>
+	 * 		POJO examples can also be defined on classes via the following:
+	 * 		<ul class='spaced-list'>
+	 * 			<li>A static field annotated with {@link Example @Example}.
+	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='ja'>{@link Example}
+	 * </ul>
+	 */
+	String example() default "";
+
+	/**
+	 * Implementation class.
+	 *
+	 * <p>
+	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
+	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
+	 * parse).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyInterface {...}
+	 * <p>
+	 */
+	Class<?> implClass() default Null.class;
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.
@@ -93,62 +164,4 @@ public @interface Marshalled {
 	 * </ul>
 	 */
 	Class<?>[] onClass() default {};
-
-	/**
-	 * Implementation class.
-	 *
-	 * <p>
-	 * For interfaces and abstract classes this method can be used to specify an implementation class for the
-	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
-	 * parse).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
-	 * 	<jk>public class</jk> MyInterface {...}
-	 * <p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
-	 * </ul>
-	 */
-	Class<?> implClass() default Null.class;
-
-	/**
-	 * POJO example.
-	 *
-	 * <p>
-	 * Specifies an example of the specified class in Simplified JSON format.
-	 *
-	 * <p>
-	 * Examples are used in cases such as POJO examples in Swagger documents.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
-	 * 	<jk>public class</jk> MyClass {...}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
-	 * 		Keys are the class of the example.
-	 * 		<br>Values are Simple-JSON representation of that class.
-	 * 	<li>
-	 * 		POJO examples can also be defined on classes via the following:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>A static field annotated with {@link Example @Example}.
-	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Example}
-	 * </ul>
-	 */
-	String example() default "";
 }

@@ -66,7 +66,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	public static FieldInfo of(Field f) {
 		if (f == null)
 			return null;
-		return new FieldInfo(null, f);
+		return new FieldInfo(ClassInfo.of(f.getDeclaringClass()), f);
 	}
 
 	/**
@@ -388,6 +388,27 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public String getName() {
 		return f.getName();
+	}
+
+	/**
+	 * Returns the full name of this field.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><js>"com.foo.MyClass.myField"</js> - Method.
+	 * </ul>
+	 *
+	 * @return The underlying executable name.
+	 */
+	public String getFullName() {
+		StringBuilder sb = new StringBuilder(128);
+		ClassInfo dc = declaringClass;
+		Package p = dc.getPackage();
+		if (p != null)
+			sb.append(p.getName()).append('.');
+		dc.appendShortName(sb);
+		sb.append(".").append(getName());
+		return sb.toString();
 	}
 
 	/**

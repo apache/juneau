@@ -52,23 +52,95 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(ResponseArray.class)
 public @interface Response {
 
 	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
+	 * Free-form value for the {@doc ExtSwaggerResponseObject}.
 	 *
 	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
+	 * The following are completely equivalent ways of defining the swagger description of the Response object:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal</jc>
+	 * 	<ja>@Response</ja>(
+	 * 		code=302,
+	 * 		description=<js>"Redirect"</js>,
+	 * 		headers={
+	 * 			<ja>@ResponseHeader</ja>(
+	 * 				name=<js>"Location"</js>,
+	 * 				type=<js>"string"</js>,
+	 * 				format=<js>"uri"</js>
+	 * 			)
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form</jc>
+	 * 	<ja>@Response</ja>(
+	 * 		code=302,
+	 * 		api={
+	 * 			<js>"description: 'Redirect',"</js>,
+	 * 			<js>"headers: {"</js>,
+	 * 				<js>"Location: {"</js>,
+	 * 					<js>"type: 'string',"</js>,
+	 * 					<js>"format: 'uri'"</js>,
+	 * 				<js>"}"</js>,
+	 * 			<js>"}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Free-form using variables</jc>
+	 * 	<ja>@Response</ja>(
+	 * 		code=302,
+	 * 		api=<js>"$L{redirectSwagger}"</js>
+	 * 	)
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<mc>// Contents of MyResource.properties</mc>
+	 * 	<mk>redirectSwagger</mk> = <mv>{ description: "Redirect", headers: { Location: { type: "string", format: "uri" } } }</mv>
+	 * </p>
+	 *
+	 * <p>
+	 * 	The reasons why you may want to use this field include:
+	 * <ul>
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
+	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Note that the only swagger field you can't specify using this value is <js>"code"</js> whose value needs to be known during servlet initialization.
+	 * 	<li>
+	 * 		The format is a {@doc SimplifiedJson} object.
+	 * 	<li>
+	 * 		The leading/trailing <c>{ }</c> characters are optional.
+	 * 		<br>The following two example are considered equivalent:
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Response</ja>(api=<js>"{description: 'Redirect'}"</js>)
+	 * 		</p>
+	 * 		<p class='bcode w800'>
+	 * 	<ja>@Response</ja>(api=<js>"description: 'Redirect''"</js>)
+	 * 		</p>
+	 * 	<li>
+	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * </ul>
 	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	String[] api() default {};
 
 	/**
 	 * The HTTP response code.
@@ -78,23 +150,9 @@ public @interface Response {
 	int[] code() default {};
 
 	/**
-	 * A synonym for {@link #code()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the code.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the response code:
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(code=404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
+	 * Synonym for {@link #description()}.
 	 */
-	int[] value() default {};
+	String[] d() default {};
 
 	/**
 	 * <mk>description</mk> field of the {@doc ExtSwaggerResponseObject}.
@@ -117,33 +175,9 @@ public @interface Response {
 	String[] description() default {};
 
 	/**
-	 * Synonym for {@link #description()}.
+	 * Synonym for {@link #example()}.
 	 */
-	String[] d() default {};
-
-	/**
-	 * <mk>schema</mk> field of the {@doc ExtSwaggerResponseObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based serializing and serializing validation.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	Schema schema() default @Schema;
-
-	/**
-	 * <mk>headers</mk> field of the {@doc ExtSwaggerResponseObject}.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	ResponseHeader[] headers() default {};
+	String[] ex() default {};
 
 	/**
 	 * A serialized example of the body of a response.
@@ -261,11 +295,6 @@ public @interface Response {
 	String[] example() default {};
 
 	/**
-	 * Synonym for {@link #example()}.
-	 */
-	String[] ex() default {};
-
-	/**
 	 * Serialized examples of the body of a response.
 	 *
 	 * <p>
@@ -314,89 +343,82 @@ public @interface Response {
 	String[] exs() default {};
 
 	/**
-	 * Free-form value for the {@doc ExtSwaggerResponseObject}.
-	 *
-	 * <p>
-	 * This is a {@doc SimplifiedJson} object that makes up the swagger information for this field.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the swagger description of the Response object:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Normal</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		description=<js>"Redirect"</js>,
-	 * 		headers={
-	 * 			<ja>@ResponseHeader</ja>(
-	 * 				name=<js>"Location"</js>,
-	 * 				type=<js>"string"</js>,
-	 * 				format=<js>"uri"</js>
-	 * 			)
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		api={
-	 * 			<js>"description: 'Redirect',"</js>,
-	 * 			<js>"headers: {"</js>,
-	 * 				<js>"Location: {"</js>,
-	 * 					<js>"type: 'string',"</js>,
-	 * 					<js>"format: 'uri'"</js>,
-	 * 				<js>"}"</js>,
-	 * 			<js>"}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form using variables</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		api=<js>"$L{redirectSwagger}"</js>
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<mc>// Contents of MyResource.properties</mc>
-	 * 	<mk>redirectSwagger</mk> = <mv>{ description: "Redirect", headers: { Location: { type: "string", format: "uri" } } }</mv>
-	 * </p>
-	 *
-	 * <p>
-	 * 	The reasons why you may want to use this field include:
-	 * <ul>
-	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
-	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
-	 * </ul>
+	 * <mk>headers</mk> field of the {@doc ExtSwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
+	 */
+	ResponseHeader[] headers() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Note that the only swagger field you can't specify using this value is <js>"code"</js> whose value needs to be known during servlet initialization.
-	 * 	<li>
-	 * 		The format is a {@doc SimplifiedJson} object.
-	 * 	<li>
-	 * 		The leading/trailing <c>{ }</c> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<p class='bcode w800'>
-	 * 	<ja>@Response</ja>(api=<js>"{description: 'Redirect'}"</js>)
-	 * 		</p>
-	 * 		<p class='bcode w800'>
-	 * 	<ja>@Response</ja>(api=<js>"description: 'Redirect''"</js>)
-	 * 		</p>
-	 * 	<li>
-	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>
 	 */
-	String[] api() default {};
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
+
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
+	 *
+	 * <p>
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	/**
+	 * <mk>schema</mk> field of the {@doc ExtSwaggerResponseObject}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing and serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	Schema schema() default @Schema;
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
+	/**
+	 * A synonym for {@link #code()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the code.
+	 *
+	 * <p>
+	 * The following are completely equivalent ways of defining the response code:
+	 * <p class='bcode w800'>
+	 * 	<ja>@Response</ja>(code=404)
+	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Response</ja>(404)
+	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
+	 * </p>
+	 */
+	int[] value() default {};
 }

@@ -13,6 +13,7 @@
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.*;
 
@@ -27,6 +28,7 @@ import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
@@ -47,6 +49,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -216,36 +219,63 @@ public class ConfigurablePropertyCodeGenerator {
 		ConstructorInfo.class,
 		MethodInfo.class,
 
-		TargetedAnnotation.class,
-		TargetedAnnotation.OnClass.class,
-		TargetedAnnotation.OnClassMethodField.class,
-		TargetedAnnotation.OnConstructor.class,
-		TargetedAnnotation.OnMethodField.class,
-		TargetedAnnotation.OnClassMethodFieldConstructor.class,
-		BeanAnnotation.class,
-		BeancAnnotation.class,
-		BeanIgnoreAnnotation.class,
-		BeanpAnnotation.class,
-		ExampleAnnotation.class,
-		NamePropertyAnnotation.class,
-		ParentPropertyAnnotation.class,
-		SwapAnnotation.class,
-		UriAnnotation.class,
-		CsvAnnotation.class,
-		HtmlAnnotation.class,
-		HtmlLinkAnnotation.class,
-		JsoAnnotation.class,
-		JsonAnnotation.class,
-		SchemaAnnotation.class,
-		MsgPackAnnotation.class,
-		OpenApiAnnotation.class,
-		PlainTextAnnotation.class,
-		SoapXmlAnnotation.class,
-		UonAnnotation.class,
-		UrlEncodingAnnotation.class,
-		XmlAnnotation.class,
-		RdfAnnotation.class
+		AnnotationBuilder.class,
+		TargetedAnnotationBuilder.class,
+		TargetedAnnotationTBuilder.class,
+		TargetedAnnotationTMBuilder.class,
+		TargetedAnnotationTMFBuilder.class,
+		TargetedAnnotationCBuilder.class,
+		TargetedAnnotationMBuilder.class,
+		TargetedAnnotationMFBuilder.class,
+		TargetedAnnotationTMFCBuilder.class,
+		BeanBuilder.class,
+		BeancBuilder.class,
+		BeanIgnoreBuilder.class,
+		BeanpBuilder.class,
+		ExampleBuilder.class,
+		MarshalledBuilder.class,
+		NamePropertyBuilder.class,
+		ParentPropertyBuilder.class,
+		SwapBuilder.class,
+		UriBuilder.class,
+		CsvBuilder.class,
+		HtmlBuilder.class,
+		HtmlLinkBuilder.class,
+		JsoBuilder.class,
+		JsonBuilder.class,
+		SchemaBuilder.class,
+		MsgPackBuilder.class,
+		OpenApiBuilder.class,
+		PlainTextBuilder.class,
+		SoapXmlBuilder.class,
+		UonBuilder.class,
+		UrlEncodingBuilder.class,
+		XmlBuilder.class,
+		RdfBuilder.class,
 
+		BodyBuilder.class,
+		ContactBuilder.class,
+		FormDataBuilder.class,
+		HasFormDataBuilder.class,
+		HasQueryBuilder.class,
+		HeaderBuilder.class,
+		LicenseBuilder.class,
+		PathBuilder.class,
+		QueryBuilder.class,
+		RequestBuilder.class,
+		ResponseBuilder.class,
+		ResponseBodyBuilder.class,
+		ResponseHeaderBuilder.class,
+		ResponseStatusBuilder.class,
+		TagBuilder.class,
+
+		LoggingBuilder.class,
+		LoggingRuleBuilder.class,
+		MethodSwaggerBuilder.class,
+		ResourceSwaggerBuilder.class,
+		RestBuilder.class,
+		RestHookBuilder.class,
+		RestMethodBuilder.class,
 	};
 
 	static Set<Class<?>> ignoreClasses = ASet.of(

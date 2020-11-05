@@ -23,6 +23,13 @@ import org.apache.juneau.*;
  * Maps constructor arguments to property names on beans with read-only properties.
  *
  * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Bean constructors.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+
+ * <p>
  * This annotation can be used in the case of beans with properties whose values can only be set by passing them in
  * through a constructor on the class.
  * <br>Since method parameter names are lost during compilation, this annotation essentially redefines them so that they
@@ -47,9 +54,10 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target(CONSTRUCTOR)
+@Target({METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(BeancArray.class)
 public @interface Beanc {
 
 	/**

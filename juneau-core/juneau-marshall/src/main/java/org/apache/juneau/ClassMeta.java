@@ -135,7 +135,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
 		this.innerClass = innerClass;
 		this.info = ClassInfo.of(innerClass);
 		this.beanContext = beanContext;
@@ -147,7 +147,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
-			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, swaps, childPojoSwaps);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, swaps, childPojoSwaps);
 
 			this.cc = builder.cc;
 			this.isDelegate = builder.isDelegate;
@@ -342,13 +342,11 @@ public final class ClassMeta<T> implements Type {
 		String example;
 		Mutater<String,T> stringMutater;
 
-		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
+		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, PojoSwap<T,?>[] swaps, PojoSwap<?,?>[] childPojoSwaps) {
 			this.innerClass = innerClass;
 			this.beanContext = beanContext;
 			BeanContext bc = beanContext;
 
-			this.implClass = implClass;
-			ClassInfo ici = ClassInfo.of(implClass);
 			this.childPojoSwaps = childPojoSwaps;
 			if (childPojoSwaps == null) {
 				this.childSwapMap = null;
@@ -527,11 +525,6 @@ public final class ClassMeta<T> implements Type {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED))
 					publicMethods.put(m.getSignature(), m.inner());
 
-			if (innerClass != Object.class) {
-				ClassInfo x = implClass == null ? ci : ici;
-				noArgConstructor = x.getPublicConstructor();
-			}
-
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
@@ -542,6 +535,23 @@ public final class ClassMeta<T> implements Type {
 				this.builderSwap = BuilderSwap.findSwapFromPojoClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 
 			findSwaps(this.swaps, bc);
+
+			if (beanFilter != null) {
+				example = beanFilter.getExample();
+				implClass = (Class<? extends T>) beanFilter.getImplClass();
+			}
+
+			if (marshalledFilter != null) {
+				if (example == null)
+					example = marshalledFilter.getExample();
+				if (implClass == null)
+					implClass = (Class<? extends T>) marshalledFilter.getImplClass();
+			}
+
+			if (innerClass != Object.class) {
+				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
+				noArgConstructor = x.getPublicConstructor();
+			}
 
 			try {
 
@@ -577,7 +587,7 @@ public final class ClassMeta<T> implements Type {
 
 					BeanMeta newMeta = null;
 					try {
-						newMeta = new BeanMeta(ClassMeta.this, bc, beanFilter, null);
+						newMeta = new BeanMeta(ClassMeta.this, bc, beanFilter, null, implClass == null ? null : noArgConstructor);
 						notABeanReason = newMeta.notABeanReason;
 
 						// Always get these even if it's not a bean:
@@ -615,12 +625,6 @@ public final class ClassMeta<T> implements Type {
 						dictionaryName = b.typeName();
 				}
 			}
-
-			if (beanFilter != null)
-				example = beanFilter.getExample();
-
-			if (example == null && marshalledFilter != null)
-				example = marshalledFilter.getExample();
 
 			if (example == null && bc != null)
 				for (Example e : bc.getAnnotations(Example.class, c))
@@ -704,13 +708,9 @@ public final class ClassMeta<T> implements Type {
 
 		private void findSwaps(List<PojoSwap> l, BeanContext bc) {
 
-			if (bc != null) {
+			if (bc != null)
 				for (Swap swap : bc.getAnnotations(Swap.class, innerClass))
 					l.add(createPojoSwap(swap));
-				for (Swaps swaps : bc.getAnnotations(Swaps.class, innerClass))
-					for (Swap swap : swaps.value())
-						l.add(createPojoSwap(swap));
-			}
 
 			PojoSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
@@ -1531,6 +1531,18 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public ConstructorInfo getConstructor() {
 		return noArgConstructor;
+	}
+
+	/**
+	 * Returns the no-arg constructor for this class based on the {@link Marshalled#implClass()} value.
+	 *
+	 * @param conVis The constructor visibility.
+	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
+	 */
+	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
+		if (implClass != null)
+			return ClassInfo.of(implClass).getNoArgConstructor(conVis);
+		return null;
 	}
 
 	/**

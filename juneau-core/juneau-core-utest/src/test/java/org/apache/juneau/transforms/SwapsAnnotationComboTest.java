@@ -507,65 +507,45 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 			).build();
 	}
 
-	@Swaps(
-		{
-			@Swap(value=SwapJson.class, mediaTypes={"application/json"}),
-			@Swap(value=SwapXml.class, mediaTypes={"text/xml"}),
-			@Swap(value=SwapHtml.class, mediaTypes={"text/html"}),
-			@Swap(value=SwapUon.class, mediaTypes={"text/uon"}),
-			@Swap(value=SwapUrlEncoding.class, mediaTypes={"application/x-www-form-urlencoded"}),
-			@Swap(value=SwapMsgPack.class, mediaTypes={"octal/msgpack"}),
-			@Swap(value=SwapRdfXml.class, mediaTypes={"text/xml+rdf"}),
-		}
-	)
+	@Swap(value=SwapJson.class, mediaTypes={"application/json"})
+	@Swap(value=SwapXml.class, mediaTypes={"text/xml"})
+	@Swap(value=SwapHtml.class, mediaTypes={"text/html"})
+	@Swap(value=SwapUon.class, mediaTypes={"text/uon"})
+	@Swap(value=SwapUrlEncoding.class, mediaTypes={"application/x-www-form-urlencoded"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"octal/msgpack"})
+	@Swap(value=SwapRdfXml.class, mediaTypes={"text/xml+rdf"})
 	public static class TestMediaTypeLiterals {}
 
-	@Swaps(
-		{
-			@Swap(value=SwapJson.class, mediaTypes={"*/json"}),
-			@Swap(value=SwapXml.class, mediaTypes={"*/xml"}),
-			@Swap(value=SwapHtml.class, mediaTypes={"*/html"}),
-			@Swap(value=SwapUon.class, mediaTypes={"*/uon"}),
-			@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/x-www-form-urlencoded"}),
-			@Swap(value=SwapMsgPack.class, mediaTypes={"*/msgpack"}),
-			@Swap(value=SwapRdfXml.class, mediaTypes={"*/xml+rdf"}),
-		}
-	)
+	@Swap(value=SwapJson.class, mediaTypes={"*/json"})
+	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
+	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
+	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
+	@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/x-www-form-urlencoded"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"*/msgpack"})
+	@Swap(value=SwapRdfXml.class, mediaTypes={"*/xml+rdf"})
 	public static class TestMediaTypePatterns {}
 
-	@Swaps(
-		{
-			@Swap(value=SwapRdfXml.class, mediaTypes={"*/xml+rdf"}),
-			@Swap(value=SwapMsgPack.class, mediaTypes={"*/msgpack"}),
-			@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/x-www-form-urlencoded"}),
-			@Swap(value=SwapUon.class, mediaTypes={"*/uon"}),
-			@Swap(value=SwapHtml.class, mediaTypes={"*/html"}),
-			@Swap(value=SwapXml.class, mediaTypes={"*/xml"}),
-			@Swap(value=SwapJson.class, mediaTypes={"*/json"}),
-		}
-	)
+	@Swap(value=SwapRdfXml.class, mediaTypes={"*/xml+rdf"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"*/msgpack"})
+	@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/x-www-form-urlencoded"})
+	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
+	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
+	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/json"})
 	public static class TestMediaTypePatternsReversed {}
 
-	@Swaps(
-		{
-			@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"}),
-			@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"}),
-			@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"}),
-			@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"}),
-			@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/foo","*/x-www-form-urlencoded","*/bar"}),
-			@Swap(value=SwapMsgPack.class, mediaTypes={"*/foo","*/msgpack","*/bar"}),
-			@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"}),
-		}
-	)
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"})
+	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
+	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
+	@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"})
+	@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/foo","*/x-www-form-urlencoded","*/bar"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"*/foo","*/msgpack","*/bar"})
+	@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"})
 	public static class TestMediaTypePatternsMulti {}
 
-	@Swaps(
-		{
-			@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"}),
-			@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"}),
-			@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"}),
-		}
-	)
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/bar"})
+	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
+	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
 	public static class TestMediaTypePatternsPartial1 {
 		@Override
 		public String toString() {
@@ -573,14 +553,10 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"}),
-			@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/foo","*/x-www-form-urlencoded","*/bar"}),
-			@Swap(value=SwapMsgPack.class, mediaTypes={"*/foo","*/msgpack","*/bar"}),
-			@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"}),
-		}
-	)
+	@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"})
+	@Swap(value=SwapUrlEncoding.class, mediaTypes={"*/foo","*/x-www-form-urlencoded","*/bar"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"*/foo","*/msgpack","*/bar"})
+	@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"})
 	public static class TestMediaTypePatternsPartial2 {
 		@Override
 		public String toString() {
@@ -588,11 +564,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(value=SwapXml.class, mediaTypes={"text/xml+*"}),
-		}
-	)
+	@Swap(value=SwapXml.class, mediaTypes={"text/xml+*"})
 	public static class TestMediaTypePatternsXmlPlus {
 		@Override
 		public String toString() {
@@ -600,11 +572,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(value=SwapXml.class, mediaTypes={"text/*+xml"}),
-		}
-	)
+	@Swap(value=SwapXml.class, mediaTypes={"text/*+xml"})
 	public static class TestMediaTypePatternsXmlPlusReversed {
 		@Override
 		public String toString() {
@@ -612,11 +580,7 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(value=SwapXml.class, mediaTypes={"text/rdf+*"}),
-		}
-	)
+	@Swap(value=SwapXml.class, mediaTypes={"text/rdf+*"})
 	public static class TestMediaTypePatternsRdfPlus {
 		@Override
 		public String toString() {
@@ -670,17 +634,13 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 	@Swap(impl=TemplateSwap.class,template="foo")
 	public static class TestTemplate {}
 
-	@Swaps(
-		{
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/json"}, template="JSON"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/xml"}, template="XML"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/html"}, template="HTML"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/uon"}, template="UON"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/x-www-form-urlencoded"}, template="URLENCODING"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/msgpack"}, template="MSGPACK"),
-			@Swap(value=TemplateSwap.class, mediaTypes={"*/xml+rdf"}, template="RDFXML"),
-		}
-	)
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/json"}, template="JSON")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/xml"}, template="XML")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/html"}, template="HTML")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/uon"}, template="UON")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/x-www-form-urlencoded"}, template="URLENCODING")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/msgpack"}, template="MSGPACK")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/xml+rdf"}, template="RDFXML")
 	public static class TestTemplates {}
 
 
@@ -691,17 +651,13 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(TemplateSwapJson.class),
-			@Swap(TemplateSwapXml.class),
-			@Swap(TemplateSwapHtml.class),
-			@Swap(TemplateSwapUon.class),
-			@Swap(TemplateSwapUrlEncoding.class),
-			@Swap(TemplateSwapMsgPack.class),
-			@Swap(TemplateSwapRdfXml.class),
-		}
-	)
+	@Swap(TemplateSwapJson.class)
+	@Swap(TemplateSwapXml.class)
+	@Swap(TemplateSwapHtml.class)
+	@Swap(TemplateSwapUon.class)
+	@Swap(TemplateSwapUrlEncoding.class)
+	@Swap(TemplateSwapMsgPack.class)
+	@Swap(TemplateSwapRdfXml.class)
 	public static class TestProgrammaticTemplates {}
 
 	public static class TemplateSwapJson extends TemplateSwap {
@@ -890,25 +846,17 @@ public class SwapsAnnotationComboTest extends ComboSerializeTest {
 		}
 	}
 
-	@Swaps(
-		{
-			@Swap(value=BeanSwap.class, mediaTypes={"*/json"}),
-			@Swap(value=BeanSwap.class, mediaTypes={"*/xml"}),
-			@Swap(value=BeanSwap.class, mediaTypes={"*/html"}),
-		}
-	)
+	@Swap(value=BeanSwap.class, mediaTypes={"*/json"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/xml"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/html"})
 	public static class BeanA {
 		public int f = 1;
 	}
 
-	@Swaps(
-		{
-			@Swap(value=BeanSwap.class, mediaTypes={"*/uon"}),
-			@Swap(value=BeanSwap.class, mediaTypes={"*/x-www-form-urlencoded"}),
-			@Swap(value=BeanSwap.class, mediaTypes={"*/msgpack"}),
-			@Swap(value=BeanSwap.class, mediaTypes={"*/xml+rdf"}),
-		}
-	)
+	@Swap(value=BeanSwap.class, mediaTypes={"*/uon"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/x-www-form-urlencoded"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/msgpack"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/xml+rdf"})
 	public static class BeanB {
 		public int f = 1;
 	}

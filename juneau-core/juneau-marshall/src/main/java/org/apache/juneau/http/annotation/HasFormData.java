@@ -33,10 +33,15 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER})
 @Retention(RUNTIME)
 @Inherited
 public @interface HasFormData {
+
+	/**
+	 * Synonym for {@link #name()}.
+	 */
+	String n() default "";
 
 	/**
 	 * FORM parameter name.
@@ -49,11 +54,6 @@ public @interface HasFormData {
 	 * </ul>
 	 */
 	String name() default "";
-
-	/**
-	 * Synonym for {@link #name()}.
-	 */
-	String n() default "";
 
 	/**
 	 * A synonym for {@link #name()}.

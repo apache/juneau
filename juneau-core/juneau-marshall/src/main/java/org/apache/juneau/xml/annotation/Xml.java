@@ -21,7 +21,11 @@ import java.lang.annotation.*;
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
  *
  * <p>
- * Can be applied to Java packages, types, fields, and methods.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields/packages.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <p>
  * Can be used for the following:
@@ -35,6 +39,7 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(XmlArray.class)
 public @interface Xml {
 
 	/**

@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
 import java.util.logging.*;
 
 import org.apache.juneau.rest.*;
@@ -24,6 +27,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='jf'>{@link RestMethodContext#RESTMETHOD_callLoggerConfig}
  * </ul>
  */
+@Retention(RUNTIME)
 public @interface LoggingRule {
 
 	/**

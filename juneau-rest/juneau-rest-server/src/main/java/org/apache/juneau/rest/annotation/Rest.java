@@ -37,10 +37,11 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
 @PropertyStoreApply(RestConfigApply.class)
+@Repeatable(RestArray.class)
 public @interface Rest {
 
 	/**
@@ -150,6 +151,38 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
+	 * Specifies the logger to use for logging of HTTP requests and responses.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
+	 * 	<li>
+	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
+	 * 		explicitly overridden via this annotation.
+	 * 	<li>
+	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
+	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
+	 * 		<br>Subclasses can also alter the behavior by overriding this method.
+	 * 	<li>
+	 * 		The implementation must have one of the following constructors:
+	 * 		<ul>
+	 * 			<li><code><jk>public</jk> T(RestContext)</code>
+	 * 			<li><code><jk>public</jk> T()</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
+	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Inner classes of the REST resource class are allowed.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
+	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
+	 * </ul>
+	 */
+	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
+
+	/**
 	 * REST children.
 	 *
 	 * <p>
@@ -233,6 +266,24 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String config() default "";
+
+	/**
+	 * Supported content media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * </ul>
+	 */
+	String[] consumes() default {};
 
 	/**
 	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
@@ -579,38 +630,6 @@ public @interface Rest {
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.Null.class;
 
 	/**
-	 * Specifies the logger to use for logging of HTTP requests and responses.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The default call logger if not specified is {@link BasicRestCallLogger}.
-	 * 	<li>
-	 * 		The resource class itself will be used if it implements the {@link RestCallLogger} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li>
-	 * 		The {@link RestServlet} and {@link BasicRest} classes implement the {@link RestCallLogger} interface with the same
-	 * 		functionality as {@link BasicRestCallLogger} that gets used if not overridden by this annotation.
-	 * 		<br>Subclasses can also alter the behavior by overriding this method.
-	 * 	<li>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_callLogger}
-	 * 	<li class='link'>{@doc RestLoggingAndDebugging}
-	 * </ul>
-	 */
-	Class<? extends RestCallLogger> callLogger() default RestCallLogger.Null.class;
-
-	/**
 	 * Specifies rules on how to handle logging of HTTP requests/responses.
 	 *
 	 * <ul class='seealso'>
@@ -673,6 +692,27 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String[] mimeTypes() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
 
 	/**
 	 * Java method parameter resolvers.
@@ -863,6 +903,24 @@ public @interface Rest {
 	String path() default "";
 
 	/**
+	 * Supported accept media types.
+	 *
+	 * <p>
+	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * </ul>
+	 */
+	String[] produces() default {};
+
+	/**
 	 * Class-level properties.
 	 *
 	 * <p>
@@ -1007,32 +1065,6 @@ public @interface Rest {
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
 	/**
-	 * Declared roles.
-	 *
-	 * <p>
-	 * A comma-delimited list of all possible user roles.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
-	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
-	 * 		...
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
-	 * </ul>
-	 */
-	String rolesDeclared() default "";
-
-	/**
 	 * Role guard.
 	 *
 	 * <p>
@@ -1080,6 +1112,32 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String roleGuard() default "";
+
+	/**
+	 * Declared roles.
+	 *
+	 * <p>
+	 * A comma-delimited list of all possible user roles.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 		...
+	 * 	}
+	 * </p>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jf'>{@link RestContext#REST_rolesDeclared}
+	 * </ul>
+	 */
+	String rolesDeclared() default "";
 
 	/**
 	 * Serializers.
@@ -1291,42 +1349,6 @@ public @interface Rest {
 	 * </ul>
 	 */
 	String[] staticFiles() default {};
-
-	/**
-	 * Supported accept media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_produces}
-	 * </ul>
-	 */
-	String[] produces() default {};
-
-	/**
-	 * Supported content media types.
-	 *
-	 * <p>
-	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_consumes}
-	 * </ul>
-	 */
-	String[] consumes() default {};
 
 	/**
 	 * Provides swagger-specific metadata on this resource.

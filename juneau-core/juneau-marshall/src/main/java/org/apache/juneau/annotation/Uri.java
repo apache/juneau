@@ -21,6 +21,14 @@ import java.lang.annotation.*;
  * Used to identify a class or bean property as a URI.
  *
  * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Classes that should be treated as URIs when serialized.
+ * 	<li>Methods/fields whose values should be treated as URIs when serialized.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
+ * <p>
  * This annotation allows you to identify other classes that return URIs via <c>toString()</c> as URI objects.
  *
  * <ul class='seealso'>
@@ -31,6 +39,7 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(UriArray.class)
 public @interface Uri {
 
 	/**

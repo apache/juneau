@@ -82,258 +82,6 @@ import org.apache.juneau.oapi.*;
 public @interface Items {
 
 	/**
-	 * <mk>type</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String type() default "";
-
-	/**
-	 * Synonym for {@link #type()}.
-	 */
-	String t() default "";
-
-	/**
-	 * <mk>format</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String format() default "";
-
-	/**
-	 * Synonym for {@link #format()}.
-	 */
-	String f() default "";
-
-	/**
-	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String collectionFormat() default "";
-
-	/**
-	 * Synonym for {@link #collectionFormat()}.
-	 */
-	String cf() default "";
-
-	/**
-	 * <mk>pattern</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String pattern() default "";
-
-	/**
-	 * Synonym for {@link #pattern()}.
-	 */
-	String p() default "";
-
-	/**
-	 * <mk>maximum</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String maximum() default "";
-
-	/**
-	 * Synonym for {@link #maximum()}.
-	 */
-	String max() default "";
-
-	/**
-	 * <mk>minimum</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String minimum() default "";
-
-	/**
-	 * Synonym for {@link #minimum()}.
-	 */
-	String min() default "";
-
-	/**
-	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String multipleOf() default "";
-
-	/**
-	 * Synonym for {@link #multipleOf()}.
-	 */
-	String mo() default "";
-
-	/**
-	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long maxLength() default -1;
-
-	/**
-	 * Synonym for {@link #maxLength()}.
-	 */
-	long maxl() default -1;
-
-	/**
-	 * <mk>minLength</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long minLength() default -1;
-
-	/**
-	 * Synonym for {@link #minLength()}.
-	 */
-	long minl() default -1;
-
-	/**
-	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long maxItems() default -1;
-
-	/**
-	 * Synonym for {@link #maxItems()}.
-	 */
-	long maxi() default -1;
-
-	/**
-	 * <mk>minItems</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	long minItems() default -1;
-
-	/**
-	 * Synonym for {@link #minItems()}.
-	 */
-	long mini() default -1;
-
-	/**
-	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean exclusiveMaximum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMaximum()}.
-	 */
-	boolean emax() default false;
-
-	/**
-	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean exclusiveMinimum() default false;
-
-	/**
-	 * Synonym for {@link #exclusiveMinimum()}.
-	 */
-	boolean emin() default false;
-
-	/**
-	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerItemsObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a plain-text string.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	boolean uniqueItems() default false;
-
-	/**
-	 * Synonym for {@link #uniqueItems()}.
-	 */
-	boolean ui() default false;
-
-	/**
 	 * <mk>default</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -345,11 +93,6 @@ public @interface Items {
 	 * </ul>
 	 */
 	String[] _default() default {};
-
-	/**
-	 * Synonym for {@link #_default()}.
-	 */
-	String[] df() default {};
 
 	/**
 	 * <mk>enum</mk> field of the {@doc ExtSwaggerItemsObject}.
@@ -365,11 +108,6 @@ public @interface Items {
 	String[] _enum() default {};
 
 	/**
-	 * Synonym for {@link #_enum()}.
-	 */
-	String[] e() default {};
-
-	/**
 	 * <mk>$ref</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
@@ -383,12 +121,274 @@ public @interface Items {
 	String $ref() default "";
 
 	/**
+	 * Synonym for {@link #collectionFormat()}.
+	 */
+	String cf() default "";
+
+	/**
+	 * <mk>collectionFormat</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String collectionFormat() default "";
+
+	/**
+	 * Synonym for {@link #_default()}.
+	 */
+	String[] df() default {};
+
+	/**
+	 * Synonym for {@link #_enum()}.
+	 */
+	String[] e() default {};
+
+	/**
+	 * Synonym for {@link #exclusiveMaximum()}.
+	 */
+	boolean emax() default false;
+
+	/**
+	 * Synonym for {@link #exclusiveMinimum()}.
+	 */
+	boolean emin() default false;
+
+	/**
+	 * <mk>exclusiveMaximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean exclusiveMaximum() default false;
+
+	/**
+	 * <mk>exclusiveMinimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean exclusiveMinimum() default false;
+
+	/**
+	 * Synonym for {@link #format()}.
+	 */
+	String f() default "";
+
+	/**
+	 * <mk>format</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String format() default "";
+
+	/**
 	 * <mk>items</mk> field of the {@doc ExtSwaggerItemsObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
 	 */
 	SubItems items() default @SubItems;
+
+	/**
+	 * Synonym for {@link #maximum()}.
+	 */
+	String max() default "";
+
+	/**
+	 * Synonym for {@link #maxItems()}.
+	 */
+	long maxi() default -1;
+
+	/**
+	 * <mk>maximum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String maximum() default "";
+
+	/**
+	 * <mk>maxItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long maxItems() default -1;
+
+	/**
+	 * Synonym for {@link #maxLength()}.
+	 */
+	long maxl() default -1;
+
+	/**
+	 * <mk>maxLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long maxLength() default -1;
+
+	/**
+	 * Synonym for {@link #minimum()}.
+	 */
+	String min() default "";
+
+	/**
+	 * Synonym for {@link #minItems()}.
+	 */
+	long mini() default -1;
+
+	/**
+	 * <mk>minimum</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String minimum() default "";
+
+	/**
+	 * <mk>minItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long minItems() default -1;
+
+	/**
+	 * Synonym for {@link #minLength()}.
+	 */
+	long minl() default -1;
+
+	/**
+	 * <mk>minLength</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	long minLength() default -1;
+
+	/**
+	 * Synonym for {@link #multipleOf()}.
+	 */
+	String mo() default "";
+
+	/**
+	 * <mk>multipleOf</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String multipleOf() default "";
+
+	/**
+	 * Synonym for {@link #pattern()}.
+	 */
+	String p() default "";
+
+	/**
+	 * <mk>pattern</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String pattern() default "";
+
+	/**
+	 * Synonym for {@link #type()}.
+	 */
+	String t() default "";
+
+	/**
+	 * <mk>type</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String type() default "";
+
+	/**
+	 * Synonym for {@link #uniqueItems()}.
+	 */
+	boolean ui() default false;
+
+	/**
+	 * <mk>uniqueItems</mk> field of the {@doc ExtSwaggerItemsObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is a plain-text string.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	boolean uniqueItems() default false;
 
 	/**
 	 * Free-form value for the {@doc ExtSwaggerItemsObject}.

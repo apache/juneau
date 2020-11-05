@@ -66,16 +66,6 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 public @interface Tag {
 
 	/**
-	 * <mk>name</mk> field of the {@doc ExtSwaggerTagObject}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * </ul>
-	 */
-	String name() default "";
-
-	/**
 	 * <mk>description</mk> field of the {@doc ExtSwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
@@ -102,6 +92,16 @@ public @interface Tag {
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
+
+	/**
+	 * <mk>name</mk> field of the {@doc ExtSwaggerTagObject}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * </ul>
+	 */
+	String name() default "";
 
 	/**
 	 * Free-form value for the {@doc ExtSwaggerTagObject}.

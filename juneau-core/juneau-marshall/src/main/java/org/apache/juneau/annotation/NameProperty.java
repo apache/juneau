@@ -20,6 +20,13 @@ import java.lang.annotation.*;
 /**
  * Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
  *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Bean getter/setter/field.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
  * <ul class='notes'>
  * 	<li>
  * 		The annotated field or method does not need to be public.
@@ -29,9 +36,10 @@ import java.lang.annotation.*;
  * 	<li class='link'>{@doc NamePropertyAnnotation}
  * </ul>
  */
-@Target({METHOD,FIELD})
+@Target({METHOD,FIELD,TYPE})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(NamePropertyArray.class)
 public @interface NameProperty {
 
 	/**

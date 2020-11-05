@@ -70,7 +70,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 	 */
 	public R isEqual(Date value, ChronoUnit precision) throws AssertionError {
 		if (ne(this.value, value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
-			throw error("Unexpected value.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Unexpected value.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -85,7 +85,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (! (this.value.after(value)))
-			throw error("Value was not after expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Value was not after expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -110,7 +110,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (! (this.value.before(value)))
-			throw error("Value was not before expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Value was not before expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 

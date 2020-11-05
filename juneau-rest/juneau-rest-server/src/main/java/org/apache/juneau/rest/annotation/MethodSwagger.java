@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
+
 import org.apache.juneau.jsonschema.annotation.*;
 
 /**
@@ -21,63 +25,14 @@ import org.apache.juneau.jsonschema.annotation.*;
  * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  */
+@Retention(RUNTIME)
 public @interface MethodSwagger {
 
 	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
+	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
 	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
-	 * 		If not specified, the value is pulled from {@link RestMethod#summary()}.
-	 * </ul>
-	 */
-	String[] summary() default {};
-
-	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
-	 * 		If not specified, the value is pulled from {@link RestMethod#description()}.
-	 * </ul>
-	 */
-	String[] description() default {};
-
-	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
-	 * 		If not specified, the value used is the Java method name.
-	 * </ul>
-	 */
-	String operationId() default "";
-
-	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
+	 * <p>
+	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestMethod#parsers()}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -89,7 +44,7 @@ public @interface MethodSwagger {
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 */
-	String[] schemes() default {};
+	String[] consumes() default {};
 
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/deprecated</c>.
@@ -118,40 +73,22 @@ public @interface MethodSwagger {
 	String deprecated() default "";
 
 	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
-	 *
-	 * <p>
-	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestMethod#parsers()}.
+	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimplifiedJson} array.
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value is pulled from {@link RestMethod#description()}.
 	 * </ul>
 	 */
-	String[] consumes() default {};
-
-	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
-	 *
-	 * <p>
-	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestMethod#serializers()}.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimplifiedJson} array.
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * </ul>
-	 */
-	String[] produces() default {};
+	String[] description() default {};
 
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/externalDocs</c>.
@@ -174,6 +111,23 @@ public @interface MethodSwagger {
 	 * </ul>
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
+
+	/**
+	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value used is the Java method name.
+	 * </ul>
+	 */
+	String operationId() default "";
 
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/parameters</c>.
@@ -211,6 +165,24 @@ public @interface MethodSwagger {
 	String[] parameters() default {};
 
 	/**
+	 * Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
+	 *
+	 * <p>
+	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestMethod#serializers()}.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimplifiedJson} array.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * </ul>
+	 */
+	String[] produces() default {};
+
+	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/responses</c>.
 	 *
 	 * <p>
@@ -240,6 +212,39 @@ public @interface MethodSwagger {
 	 * </ul>
 	 */
 	String[] responses() default {};
+
+	/**
+	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is either a comma-delimited list of simple strings or a {@doc SimplifiedJson} array.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * </ul>
+	 */
+	String[] schemes() default {};
+
+	/**
+	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Values defined on this annotation override values defined for the method in the class swagger.
+	 * 	<li>
+	 * 		If not specified, the value is pulled from {@link RestMethod#summary()}.
+	 * </ul>
+	 */
+	String[] summary() default {};
 
 	/**
 	 * Optional tagging information for the exposed API.

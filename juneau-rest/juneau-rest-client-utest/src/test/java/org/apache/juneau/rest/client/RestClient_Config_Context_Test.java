@@ -161,7 +161,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a09_annotations() throws Exception {
-		client().annotations(new BeanAnnotation(A6a.class).sort(true)).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
+		client().annotations(BeanBuilder.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
 	}
 
 	public static interface A10a {
@@ -183,7 +183,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a10_putAllTo() throws Exception {
-		A10a x = client().putAllTo(BEAN_implClasses,AMap.of(A10a.class.getName(),A10b.class)).build().post("/echoBody",new StringReader("{foo:1}")).run().getBody().as(A10a.class);
+		A10a x = client().implClass(A10a.class,A10b.class).build().post("/echoBody",new StringReader("{foo:1}")).run().getBody().as(A10a.class);
 		assertEquals(1,x.getFoo());
 		assertTrue(x instanceof A10b);
 	}

@@ -13,6 +13,11 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -22,73 +27,8 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='link'>{@doc RestSwagger}
  * </ul>
  */
+@Retention(RUNTIME)
 public @interface ResourceSwagger {
-
-
-	/**
-	 * Defines the swagger field <c>/info/title</c>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
-	 * 			title=<js>"Petstore application"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain-text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The precedence of lookup for this field is:
-	 * 		<ol>
-	 * 			<li><c>{resource-class}.title</c> property in resource bundle.
-	 * 			<li>{@link ResourceSwagger#title()} on this class, then any parent classes.
-	 * 			<li>Value defined in Swagger JSON file.
-	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
-	 * 		</ol>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] title() default {};
-
-	/**
-	 * Defines the swagger field <c>/info/description</c>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Rest</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
-	 * 			description={
-	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js>,
-	 * 				<js>"You can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;."</js>
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The precedence of lookup for this field is:
-	 * 		<ol>
-	 * 			<li><c>{resource-class}.description</c> property in resource bundle.
-	 * 			<li>{@link ResourceSwagger#description()} on this class, then any parent classes.
-	 * 			<li>Value defined in Swagger JSON file.
-	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
-	 * 		</ol>
-	 * 	<li>
-	 * 		Supports {@doc RestSvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] description() default {};
 
 	/**
 	 * Defines the swagger field <c>/info/contact</c>.
@@ -127,6 +67,40 @@ public @interface ResourceSwagger {
 	 * </ul>
 	 */
 	Contact contact() default @Contact;
+
+	/**
+	 * Defines the swagger field <c>/info/description</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			description={
+	 * 				<js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js>,
+	 * 				<js>"You can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;."</js>
+	 * 			}
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The precedence of lookup for this field is:
+	 * 		<ol>
+	 * 			<li><c>{resource-class}.description</c> property in resource bundle.
+	 * 			<li>{@link ResourceSwagger#description()} on this class, then any parent classes.
+	 * 			<li>Value defined in Swagger JSON file.
+	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
+	 * 		</ol>
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String[] description() default {};
 
 	/**
 	 * Defines the swagger field <c>/externalDocs</c>.
@@ -264,28 +238,35 @@ public @interface ResourceSwagger {
 	String[] termsOfService() default {};
 
 	/**
-	 * Defines the swagger field <c>/info/version</c>.
+	 * Defines the swagger field <c>/info/title</c>.
 	 *
-	 *
-	 *
-	 * Provides the version of the application API (not to be confused with the specification version).
-	 *
-	 * <p>
-	 * It is used to populate the Swagger version field and to display on HTML pages.
-	 *
-	 * <p>
-	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
-	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Rest</ja>(
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			title=<js>"Petstore application"</js>
+	 * 		)
+	 * 	)
+	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		The format is plain text.
+	 * 		The format is plain-text.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The precedence of lookup for this field is:
+	 * 		<ol>
+	 * 			<li><c>{resource-class}.title</c> property in resource bundle.
+	 * 			<li>{@link ResourceSwagger#title()} on this class, then any parent classes.
+	 * 			<li>Value defined in Swagger JSON file.
+	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
+	 * 		</ol>
 	 * 	<li>
 	 * 		Supports {@doc RestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	String version() default "";
+	String[] title() default {};
 
 	/**
 	 * Free-form value for the swagger of a resource.
@@ -400,4 +381,28 @@ public @interface ResourceSwagger {
 	 * </ul>
 	 */
 	String[] value() default {};
+
+	/**
+	 * Defines the swagger field <c>/info/version</c>.
+	 *
+	 *
+	 *
+	 * Provides the version of the application API (not to be confused with the specification version).
+	 *
+	 * <p>
+	 * It is used to populate the Swagger version field and to display on HTML pages.
+	 *
+	 * <p>
+	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
+	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The format is plain text.
+	 * 	<li>
+	 * 		Supports {@doc RestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String version() default "";
 }

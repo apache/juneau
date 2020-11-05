@@ -86,7 +86,29 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target(METHOD)
+@Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-public @interface ResponseBody {}
+@Repeatable(ResponseBodyArray.class)
+public @interface ResponseBody {
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	String[] on() default {};
+
+	/**
+	 * Dynamically apply this annotation to the specified classes.
+	 *
+	 * <p>
+	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
+	 * </ul>
+	 */
+	Class<?>[] onClass() default {};
+}

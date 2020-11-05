@@ -58,7 +58,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) <= 0)
-			throw error("Value was not greater than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+			throw error("Value was not greater than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -87,7 +87,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) < 0)
-				throw error("Value was not greater than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not greater than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -116,7 +116,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) >= 0)
-				throw error("Value was not less than expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not less than expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 
@@ -145,7 +145,7 @@ public class FluentComparableAssertion<R> extends FluentObjectAssertion<R> {
 		exists();
 		assertNotNull("value", value);
 		if (compareTo(value) > 0)
-				throw error("Value was not less than or equals to expected.\n\tExpected=[{0}]\n\tActual=[{1}]", value, this.value);
+				throw error("Value was not less than or equals to expected.\n\tExpect=[{0}]\n\tActual=[{1}]", value, this.value);
 		return returns();
 	}
 

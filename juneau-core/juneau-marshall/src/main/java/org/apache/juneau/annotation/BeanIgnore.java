@@ -21,15 +21,13 @@ import java.lang.annotation.*;
  * Ignore classes, fields, and methods from being interpreted as bean or bean components.
  *
  * <p>
- * Applied to classes that may look like beans, but you want to be treated as non-beans.
- * For example, if you want to force a bean to be converted to a string using the <c>toString()</c> method, use
- * this annotation on the class.
- *
- * <p>
- * Applies to fields that should not be interpreted as bean property fields.
- *
- * <p>
- * Applies to getters or setters that should not be interpreted as bean property getters or setters.
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Classes - Forces bean-like classes to be treated as non-beans.
+ * 	<li>Methods - Forces getters/setters to be ignored.
+ * 	<li>Fields - Forces bean fields to be ignored.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc BeanIgnoreAnnotation}
@@ -39,6 +37,7 @@ import java.lang.annotation.*;
 @Target({FIELD,METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(BeanIgnoreArray.class)
 public @interface BeanIgnore {
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.

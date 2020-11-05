@@ -22,6 +22,13 @@ import org.apache.juneau.html.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link HtmlSerializer}.
  *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Marshalled classes/methods/fields.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestMethod</ja>-annotated methods when an {@link #on()} value is specified.
+ * </ul>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc HtmlAnnotation}
  * </ul>
@@ -30,6 +37,7 @@ import org.apache.juneau.html.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(HtmlArray.class)
 public @interface Html {
 
 	/**
