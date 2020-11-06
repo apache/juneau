@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
@@ -129,7 +130,8 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseHeaderArray.class)
+@Repeatable(ResponseHeaderAnnotation.Array.class)
+@PropertyStoreApply(ResponseHeaderAnnotation.Apply.class)
 public @interface ResponseHeader {
 
 	/**

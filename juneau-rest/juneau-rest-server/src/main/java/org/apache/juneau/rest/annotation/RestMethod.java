@@ -33,8 +33,8 @@ import org.apache.juneau.http.remote.*;
 @Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RestMethodConfigApply.class)
-@Repeatable(RestMethodArray.class)
+@PropertyStoreApply(RestMethodAnnotation.Apply.class)
+@Repeatable(RestMethodAnnotation.Array.class)
 public @interface RestMethod {
 
 	/**

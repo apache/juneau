@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
  *
@@ -39,7 +41,8 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(XmlArray.class)
+@Repeatable(XmlAnnotation.Array.class)
+@PropertyStoreApply(XmlAnnotation.Apply.class)
 public @interface Xml {
 
 	/**

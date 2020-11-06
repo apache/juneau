@@ -395,8 +395,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().builder().annotations(BeanBuilder.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
-		Parser p = getParser().builder().annotations(BeanBuilder.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		Serializer s = getSerializer().builder().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		Parser p = getParser().builder().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
 
 		CA1 c1 = CA1.create();
 		Object r = s.serialize(c1);

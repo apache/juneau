@@ -39,7 +39,8 @@ import java.lang.annotation.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(UriArray.class)
+@Repeatable(UriAnnotation.Array.class)
+@PropertyStoreApply(UriAnnotation.Apply.class)
 public @interface Uri {
 
 	/**

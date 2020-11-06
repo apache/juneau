@@ -52,7 +52,8 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseArray.class)
+@Repeatable(ResponseAnnotation.Array.class)
+@PropertyStoreApply(ResponseAnnotation.Apply.class)
 public @interface Response {
 
 	/**

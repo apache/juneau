@@ -57,7 +57,8 @@ import org.apache.juneau.*;
 @Target({METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeancArray.class)
+@Repeatable(BeancAnnotation.Array.class)
+@PropertyStoreApply(BeancAnnotation.Apply.class)
 public @interface Beanc {
 
 	/**

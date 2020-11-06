@@ -18,6 +18,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * REST response body annotation.
  *
@@ -89,7 +91,8 @@ import java.lang.annotation.*;
 @Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseBodyArray.class)
+@Repeatable(ResponseBodyAnnotation.Array.class)
+@PropertyStoreApply(ResponseBodyAnnotation.Apply.class)
 public @interface ResponseBody {
 	/**
 	 * Dynamically apply this annotation to the specified classes.

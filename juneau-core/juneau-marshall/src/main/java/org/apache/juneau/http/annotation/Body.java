@@ -132,7 +132,8 @@ import org.apache.juneau.jsonschema.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BodyArray.class)
+@Repeatable(BodyAnnotation.Array.class)
+@PropertyStoreApply(BodyAnnotation.Apply.class)
 public @interface Body {
 
 	/**

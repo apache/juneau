@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(XmlConfigApply.class)
+@PropertyStoreApply(XmlConfigAnnotation.Apply.class)
 public @interface XmlConfig {
 
 	/**

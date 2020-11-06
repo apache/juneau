@@ -95,7 +95,8 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(QueryArray.class)
+@Repeatable(QueryAnnotation.Array.class)
+@PropertyStoreApply(QueryAnnotation.Apply.class)
 public @interface Query {
 
 	/**

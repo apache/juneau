@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.csv.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.csv.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(CsvArray.class)
+@Repeatable(CsvAnnotation.Array.class)
+@PropertyStoreApply(CsvAnnotation.Apply.class)
 public @interface Csv {
 
 	/**

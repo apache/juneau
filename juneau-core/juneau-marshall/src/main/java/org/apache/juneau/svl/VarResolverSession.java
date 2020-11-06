@@ -433,6 +433,19 @@ public class VarResolverSession {
 		return v != null && v.canResolve(this) ? v : null;
 	}
 
+	/**
+	 * Resolves the specified strings in the string array.
+	 *
+	 * @param in The string array containing variables to resolve.
+	 * @return An array with resolved strings.
+	 */
+	public String[] resolve(String[] in) {
+		String[] out = new String[in.length];
+		for (int i = 0; i < in.length; i++)
+			out[i] = resolve(in[i]);
+		return out;
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return "var=" + this.context.getVarMap().keySet() + ", contextObjects=" + this.context.getContextObjects().keySet() + ", sessionObjects=" + this.sessionObjects.keySet();

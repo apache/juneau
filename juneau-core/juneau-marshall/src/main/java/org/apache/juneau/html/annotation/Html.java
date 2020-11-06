@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 
 /**
@@ -37,7 +38,8 @@ import org.apache.juneau.html.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HtmlArray.class)
+@Repeatable(HtmlAnnotation.Array.class)
+@PropertyStoreApply(HtmlAnnotation.Apply.class)
 public @interface Html {
 
 	/**

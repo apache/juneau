@@ -145,27 +145,27 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * The following is the list of annotations builders provided that can be constructed
 	 * and passed into the builder class:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
 	 * </ul>
 	 *
 	 * <p>
@@ -496,7 +496,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).interceptor(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).interceptor(value).build());
 	}
 
 	/**
@@ -859,7 +859,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanProperties(Class<?> beanClass, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClass).p(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClass).p(properties).build());
 	}
 
 	/**
@@ -922,7 +922,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder beanProperties(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).p(stringify(e.getValue())).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(e.getKey()).p(stringify(e.getValue())).build());
 		return this;
 	}
 
@@ -985,7 +985,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanProperties(String beanClassName, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClassName).p(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClassName).p(properties).build());
 	}
 
 	/**
@@ -1037,7 +1037,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClass).xp(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClass).xp(properties).build());
 	}
 
 	/**
@@ -1092,7 +1092,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).xp(stringify(e.getValue())).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(e.getKey()).xp(stringify(e.getValue())).build());
 		return this;
 	}
 
@@ -1147,7 +1147,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClassName).xp(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClassName).xp(properties).build());
 	}
 
 	/**
@@ -1202,7 +1202,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClass).ro(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClass).ro(properties).build());
 	}
 
 	/**
@@ -1260,7 +1260,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesReadOnly(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).ro(stringify(e.getValue())).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(e.getKey()).ro(stringify(e.getValue())).build());
 		return this;
 	}
 
@@ -1318,7 +1318,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesReadOnly(String beanClassName, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClassName).ro(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClassName).ro(properties).build());
 	}
 
 	/**
@@ -1372,7 +1372,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClass).wo(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClass).wo(properties).build());
 	}
 
 	/**
@@ -1429,7 +1429,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesWriteOnly(Map<String,Object> values) {
 		for (Map.Entry<String,Object> e : values.entrySet())
-			prependTo(BEAN_annotations, BeanBuilder.create(e.getKey()).wo(stringify(e.getValue())).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(e.getKey()).wo(stringify(e.getValue())).build());
 		return this;
 	}
 
@@ -1486,7 +1486,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanPropertiesWriteOnly(String beanClassName, String properties) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(beanClassName).wo(properties).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(beanClassName).wo(properties).build());
 	}
 
 	/**
@@ -1630,7 +1630,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder dictionaryOn(Class<?> on, Class<?>...values) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).dictionary(values).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).dictionary(values).build());
 	}
 
 	/**
@@ -1678,7 +1678,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public <T> BeanContextBuilder example(Class<T> pojoClass, T o) {
-		return annotations(MarshalledBuilder.create(pojoClass).example(SimpleJson.DEFAULT.toString(o)).build());
+		return annotations(MarshalledAnnotation.create(pojoClass).example(SimpleJson.DEFAULT.toString(o)).build());
 	}
 
 	/**
@@ -1727,7 +1727,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public <T> BeanContextBuilder example(Class<T> pojoClass, String json) {
-		return annotations(MarshalledBuilder.create(pojoClass).example(json).build());
+		return annotations(MarshalledAnnotation.create(pojoClass).example(json).build());
 	}
 
 	/**
@@ -1821,7 +1821,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder fluentSetters(Class<?> on) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).fluentSetters(true).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).fluentSetters(true).build());
 	}
 
 	/**
@@ -2125,7 +2125,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
-		return annotations(MarshalledBuilder.create(interfaceClass).implClass(implClass).build());
+		return annotations(MarshalledAnnotation.create(interfaceClass).implClass(implClass).build());
 	}
 
 	/**
@@ -2171,7 +2171,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder implClasses(Map<Class<?>,Class<?>> values) {
 		for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
-			annotations(MarshalledBuilder.create(e.getKey()).implClass(e.getValue()).build());
+			annotations(MarshalledAnnotation.create(e.getKey()).implClass(e.getValue()).build());
 		return this;
 	}
 
@@ -2218,7 +2218,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder interfaceClass(Class<?> on, Class<?> value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).interfaceClass(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).interfaceClass(value).build());
 	}
 
 	/**
@@ -2264,7 +2264,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder interfaces(Class<?>...value) {
 		for (Class<?> v : value)
-			prependTo(BEAN_annotations, BeanBuilder.create(v).interfaceClass(v).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(v).interfaceClass(v).build());
 		return this;
 	}
 
@@ -2485,7 +2485,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).propertyNamer(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).propertyNamer(value).build());
 	}
 
 	/**
@@ -2578,7 +2578,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	@FluentSetter
 	public BeanContextBuilder sortProperties(Class<?>...on) {
 		for (Class<?> c : on)
-			prependTo(BEAN_annotations, BeanBuilder.create(c).sort(true).build());
+			prependTo(BEAN_annotations, BeanAnnotation.create(c).sort(true).build());
 		return this;
 	}
 
@@ -2624,7 +2624,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder stopClass(Class<?> on, Class<?> value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).stopClass(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).stopClass(value).build());
 	}
 
 	/**
@@ -2766,7 +2766,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder typeName(Class<?> on, String value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).typeName(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).typeName(value).build());
 	}
 
 	/**
@@ -2865,7 +2865,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder typePropertyName(Class<?> on, String value) {
-		return prependTo(BEAN_annotations, BeanBuilder.create(on).typePropertyName(value).build());
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).typePropertyName(value).build());
 	}
 
 	/**

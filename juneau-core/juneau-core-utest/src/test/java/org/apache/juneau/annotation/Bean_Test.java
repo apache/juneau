@@ -244,7 +244,7 @@ public class Bean_Test {
 
 	@Test
 	public void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanBuilder.create("D1").properties("b,c,d").excludeProperties("c").build();
+		Bean ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
@@ -257,7 +257,7 @@ public class Bean_Test {
 
 	@Test
 	public void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanBuilder.create("D2").p("b,c,d").xp("c").build();
+		Bean ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
@@ -361,7 +361,7 @@ public class Bean_Test {
 
 	@Test
 	public void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanBuilder.create("E1").properties("b,c,d").excludeProperties("c").build();
+		Bean ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
@@ -374,7 +374,7 @@ public class Bean_Test {
 
 	@Test
 	public void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		Bean ba = BeanBuilder.create("E2").p("b,c,d").xp("c").build();
+		Bean ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
 		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 

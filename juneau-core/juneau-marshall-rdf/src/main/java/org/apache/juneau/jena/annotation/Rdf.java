@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.*;
 
 /**
@@ -39,6 +40,8 @@ import org.apache.juneau.jena.*;
 @Target({PACKAGE,TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(RdfAnnotation.Array.class)
+@PropertyStoreApply(RdfAnnotation.Apply.class)
 public @interface Rdf {
 
 	/**

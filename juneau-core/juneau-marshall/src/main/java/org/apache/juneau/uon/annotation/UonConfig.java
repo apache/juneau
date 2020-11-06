@@ -32,7 +32,7 @@ import org.apache.juneau.urlencoding.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(UonConfigApply.class)
+@PropertyStoreApply(UonConfigAnnotation.Apply.class)
 public @interface UonConfig {
 
 	/**

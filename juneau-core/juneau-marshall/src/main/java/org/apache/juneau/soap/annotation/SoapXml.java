@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.soap.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.soap.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(SoapXmlArray.class)
+@Repeatable(SoapXmlAnnotation.Array.class)
+@PropertyStoreApply(SoapXmlAnnotation.Apply.class)
 public @interface SoapXml {
 
 	/**

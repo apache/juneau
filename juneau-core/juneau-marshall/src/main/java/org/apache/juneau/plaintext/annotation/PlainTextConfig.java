@@ -30,7 +30,7 @@ import org.apache.juneau.plaintext.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(PlainTextConfigApply.class)
+@PropertyStoreApply(PlainTextConfigAnnotation.Apply.class)
 public @interface PlainTextConfig {
 
 	/**

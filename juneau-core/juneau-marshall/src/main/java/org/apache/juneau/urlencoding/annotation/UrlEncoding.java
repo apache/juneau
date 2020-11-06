@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -34,7 +35,8 @@ import org.apache.juneau.urlencoding.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(UrlEncodingArray.class)
+@Repeatable(UrlEncodingAnnotation.Array.class)
+@PropertyStoreApply(UrlEncodingAnnotation.Apply.class)
 public @interface UrlEncoding {
 
 	/**

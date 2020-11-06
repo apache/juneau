@@ -40,8 +40,8 @@ import org.apache.juneau.rest.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(RestConfigApply.class)
-@Repeatable(RestArray.class)
+@PropertyStoreApply(RestAnnotation.Apply.class)
+@Repeatable(RestAnnotation.Array.class)
 public @interface Rest {
 
 	/**

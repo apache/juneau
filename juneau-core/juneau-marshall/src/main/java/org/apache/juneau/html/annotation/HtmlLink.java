@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 
 /**
@@ -43,7 +44,8 @@ import org.apache.juneau.html.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HtmlLinkArray.class)
+@Repeatable(HtmlLinkAnnotation.Array.class)
+@PropertyStoreApply(HtmlLinkAnnotation.Apply.class)
 public @interface HtmlLink {
 
 	/**

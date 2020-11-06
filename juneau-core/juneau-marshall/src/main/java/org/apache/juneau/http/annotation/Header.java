@@ -87,7 +87,8 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HeaderArray.class)
+@Repeatable(HeaderAnnotation.Array.class)
+@PropertyStoreApply(HeaderAnnotation.Apply.class)
 public @interface Header {
 
 	/**

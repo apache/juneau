@@ -24,43 +24,28 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.csv.*;
-import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.exception.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.jso.*;
-import org.apache.juneau.jso.annotation.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
-import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 public class ConfigurablePropertyCodeGenerator {
 
@@ -228,54 +213,6 @@ public class ConfigurablePropertyCodeGenerator {
 		TargetedAnnotationMBuilder.class,
 		TargetedAnnotationMFBuilder.class,
 		TargetedAnnotationTMFCBuilder.class,
-		BeanBuilder.class,
-		BeancBuilder.class,
-		BeanIgnoreBuilder.class,
-		BeanpBuilder.class,
-		ExampleBuilder.class,
-		MarshalledBuilder.class,
-		NamePropertyBuilder.class,
-		ParentPropertyBuilder.class,
-		SwapBuilder.class,
-		UriBuilder.class,
-		CsvBuilder.class,
-		HtmlBuilder.class,
-		HtmlLinkBuilder.class,
-		JsoBuilder.class,
-		JsonBuilder.class,
-		SchemaBuilder.class,
-		MsgPackBuilder.class,
-		OpenApiBuilder.class,
-		PlainTextBuilder.class,
-		SoapXmlBuilder.class,
-		UonBuilder.class,
-		UrlEncodingBuilder.class,
-		XmlBuilder.class,
-		RdfBuilder.class,
-
-		BodyBuilder.class,
-		ContactBuilder.class,
-		FormDataBuilder.class,
-		HasFormDataBuilder.class,
-		HasQueryBuilder.class,
-		HeaderBuilder.class,
-		LicenseBuilder.class,
-		PathBuilder.class,
-		QueryBuilder.class,
-		RequestBuilder.class,
-		ResponseBuilder.class,
-		ResponseBodyBuilder.class,
-		ResponseHeaderBuilder.class,
-		ResponseStatusBuilder.class,
-		TagBuilder.class,
-
-		LoggingBuilder.class,
-		LoggingRuleBuilder.class,
-		MethodSwaggerBuilder.class,
-		ResourceSwaggerBuilder.class,
-		RestBuilder.class,
-		RestHookBuilder.class,
-		RestMethodBuilder.class,
 	};
 
 	static Set<Class<?>> ignoreClasses = ASet.of(

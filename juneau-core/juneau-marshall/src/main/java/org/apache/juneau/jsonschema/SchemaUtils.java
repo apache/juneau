@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.http.annotation.AnnotationUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -25,6 +24,7 @@ import org.apache.juneau.parser.*;
 /**
  * Utilities for working with the schema annotations.
  */
+@Deprecated
 public class SchemaUtils {
 
 	/**
@@ -38,7 +38,7 @@ public class SchemaUtils {
 		if (a == null)
 			return OMap.EMPTY_MAP;
 		OMap om = new OMap();
-		if (empty(a))
+		if (SchemaAnnotation.empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
@@ -123,7 +123,7 @@ public class SchemaUtils {
 	}
 
 	private static OMap merge(OMap om, Items a) throws ParseException {
-		if (empty(a))
+		if (ItemsAnnotation.empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
@@ -150,7 +150,7 @@ public class SchemaUtils {
 	}
 
 	private static OMap merge(OMap om, SubItems a) throws ParseException {
-		if (empty(a))
+		if (SubItemsAnnotation.empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));
@@ -177,7 +177,7 @@ public class SchemaUtils {
 	}
 
 	private static OMap merge(OMap om, ExternalDocs a) throws ParseException {
-		if (empty(a))
+		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		if (a.value().length > 0)
 			om.putAll(parseMap(a.value()));

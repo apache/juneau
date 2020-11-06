@@ -397,7 +397,7 @@ public class Html_Test {
 
 	@Test
 	public void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().annotations(HtmlBuilder.create("MyBean2").noTables(true).build()).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
 		Object o = null;
 		String r;
 

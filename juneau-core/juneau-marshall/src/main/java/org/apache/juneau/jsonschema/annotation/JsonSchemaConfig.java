@@ -32,7 +32,7 @@ import org.apache.juneau.jsonschema.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(JsonSchemaConfigApply.class)
+@PropertyStoreApply(JsonSchemaConfigAnnotation.Apply.class)
 public @interface JsonSchemaConfig {
 
 	/**

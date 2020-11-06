@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jso.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.jso.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(JsoArray.class)
+@Repeatable(JsoAnnotation.Array.class)
+@PropertyStoreApply(JsoAnnotation.Apply.class)
 public @interface Jso {
 
 	/**

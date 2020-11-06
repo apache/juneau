@@ -60,7 +60,8 @@ import java.lang.annotation.*;
 @Target({FIELD,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ExampleArray.class)
+@Repeatable(ExampleAnnotation.Array.class)
+@PropertyStoreApply(ExampleAnnotation.Apply.class)
 public @interface Example {
 
 	/**

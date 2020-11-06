@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.uon.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(UonArray.class)
+@Repeatable(UonAnnotation.Array.class)
+@PropertyStoreApply(UonAnnotation.Apply.class)
 public @interface Uon {
 
 	/**

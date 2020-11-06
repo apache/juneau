@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.oapi.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.oapi.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(OpenApiArray.class)
+@Repeatable(OpenApiAnnotation.Array.class)
+@PropertyStoreApply(OpenApiAnnotation.Apply.class)
 public @interface OpenApi {
 
 	/**

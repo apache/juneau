@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * REST response status annotation.
@@ -100,7 +101,8 @@ import org.apache.juneau.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseStatusArray.class)
+@Repeatable(ResponseStatusAnnotation.Array.class)
+@PropertyStoreApply(ResponseStatusAnnotation.Apply.class)
 public @interface ResponseStatus {
 
 	/**

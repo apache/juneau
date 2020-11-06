@@ -223,27 +223,27 @@ public class BeanContext extends Context implements MetaProvider {
 	 * The following is the list of builders for annotations that can be constructed and passed into the builder
 	 * class:
 	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingBuilder}
-	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlBuilder}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jso.annotation.JsoAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.SchemaAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
+	 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
 	 * </ul>
 	 *
 	 * <p>

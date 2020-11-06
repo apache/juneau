@@ -102,7 +102,7 @@ import org.apache.juneau.rest.*;
 @Target({METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(RestHookArray.class)
+@Repeatable(RestHookAnnotation.Array.class)
 public @interface RestHook {
 
 	/**

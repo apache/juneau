@@ -161,7 +161,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a09_annotations() throws Exception {
-		client().annotations(BeanBuilder.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
+		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().as(A6a.class);
 	}
 
 	public static interface A10a {

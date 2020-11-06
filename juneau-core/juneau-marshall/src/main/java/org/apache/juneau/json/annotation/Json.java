@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Annotation for specifying various JSON options for the JSON serializers and parsers.
  *
@@ -38,6 +40,8 @@ import java.lang.annotation.*;
 @Target({TYPE,METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
+@Repeatable(JsonAnnotation.Array.class)
+@PropertyStoreApply(JsonAnnotation.Apply.class)
 public @interface Json {
 
 	/**

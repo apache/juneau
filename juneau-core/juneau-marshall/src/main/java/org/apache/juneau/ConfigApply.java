@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -42,6 +43,15 @@ public abstract class ConfigApply<T extends Annotation> {
 	protected ConfigApply(Class<T> c, VarResolverSession r) {
 		this.r = r == null ? VarResolver.DEFAULT.createSession() : r;
 		this.c = c;
+	}
+
+	/**
+	 * Returns the var resolver that was added to this object.
+	 *
+	 * @return The var resolver that was added to this object.
+	 */
+	protected VarResolverSession getVarResolver() {
+		return r;
 	}
 
 	/**
@@ -173,6 +183,16 @@ public abstract class ConfigApply<T extends Annotation> {
 		} catch (Exception e) {
 			throw new ConfigException("Invalid syntax for Simple-JSON on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}
+	}
+
+	/**
+	 * Convenience method for detecting if an array is empty.
+	 *
+	 * @param value The array to check.
+	 * @return <jk>true</jk> if the specified array is empty.
+	 */
+	protected boolean isEmpty(Object value) {
+		return Array.getLength(value) == 0;
 	}
 
 	/**

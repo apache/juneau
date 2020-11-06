@@ -14,31 +14,22 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
-import static org.apache.juneau.rest.util.AnnotationUtils.*;
 
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.apache.juneau.jsonschema.annotation.ExternalDocs;
-import org.apache.juneau.jsonschema.annotation.Schema;
-import org.apache.juneau.jsonschema.annotation.SubItems;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Items;
+import org.apache.juneau.jsonschema.annotation.Tag;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.Messages;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Contact;
-import org.apache.juneau.http.annotation.FormData;
-import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.License;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -136,7 +127,7 @@ final class SwaggerGenerator {
 
 			omSwagger.appendAll(parseMap(r.value(), "@ResourceSwagger(value) on class {0}", c));
 
-			if (! empty(r)) {
+			if (! ResourceSwaggerAnnotation.empty(r)) {
 				OMap info = omSwagger.getMap("info", true);
 
 				info
@@ -710,7 +701,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap toMap(ExternalDocs a, String location, Object...locationArgs) throws ParseException {
-		if (empty(a))
+		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
 			.ase("description", resolve(joinnl(a.description())))
@@ -719,7 +710,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap toMap(Contact a, String location, Object...locationArgs) throws ParseException {
-		if (empty(a))
+		if (ContactAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
 			.ase("name", resolve(a.name()))
@@ -729,7 +720,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap toMap(License a, String location, Object...locationArgs) throws ParseException {
-		if (empty(a))
+		if (LicenseAnnotation.empty(a))
 			return null;
 		OMap om = newMap(new OMap(), a.value(), location, locationArgs)
 			.ase("name", resolve(a.name()))
@@ -903,7 +894,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Body a) throws ParseException {
-		if (empty(a))
+		if (BodyAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
@@ -920,7 +911,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Query a) throws ParseException {
-		if (empty(a))
+		if (QueryAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
@@ -951,7 +942,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, FormData a) throws ParseException {
-		if (empty(a))
+		if (FormDataAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
@@ -982,7 +973,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Header a) throws ParseException {
-		if (empty(a))
+		if (HeaderAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
@@ -1012,7 +1003,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Path a) throws ParseException {
-		if (empty(a))
+		if (PathAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
@@ -1040,7 +1031,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Schema a) throws ParseException {
-		if (empty(a))
+		if (SchemaAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
@@ -1083,7 +1074,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, ExternalDocs a) throws ParseException {
-		if (empty(a))
+		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
@@ -1095,7 +1086,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Items a) throws ParseException {
-		if (empty(a))
+		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
@@ -1123,7 +1114,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, SubItems a) throws ParseException {
-		if (empty(a))
+		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
@@ -1151,7 +1142,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, Response a) throws ParseException {
-		if (empty(a))
+		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
@@ -1179,7 +1170,7 @@ final class SwaggerGenerator {
 	}
 
 	private OMap merge(OMap om, ResponseHeader a) throws ParseException {
-		if (empty(a))
+		if (ResponseHeaderAnnotation.empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)

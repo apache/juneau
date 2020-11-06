@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
@@ -139,7 +140,8 @@ import org.apache.juneau.oapi.*;
 @Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(RequestArray.class)
+@Repeatable(RequestAnnotation.Array.class)
+@PropertyStoreApply(RequestAnnotation.Apply.class)
 public @interface Request {
 
 	/**

@@ -39,7 +39,8 @@ import java.lang.annotation.*;
 @Target({METHOD,FIELD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(NamePropertyArray.class)
+@Repeatable(NamePropertyAnnotation.Array.class)
+@PropertyStoreApply(NamePropertyAnnotation.Apply.class)
 public @interface NameProperty {
 
 	/**

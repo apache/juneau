@@ -37,7 +37,8 @@ import java.lang.annotation.*;
 @Target({FIELD,METHOD,TYPE,CONSTRUCTOR})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeanIgnoreArray.class)
+@Repeatable(BeanIgnoreAnnotation.Array.class)
+@PropertyStoreApply(BeanIgnoreAnnotation.Apply.class)
 public @interface BeanIgnore {
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.

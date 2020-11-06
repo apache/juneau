@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(HtmlConfigApply.class)
+@PropertyStoreApply(HtmlConfigAnnotation.Apply.class)
 public @interface HtmlConfig {
 
 	/**

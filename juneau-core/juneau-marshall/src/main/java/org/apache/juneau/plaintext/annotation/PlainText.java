@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.plaintext.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.plaintext.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(PlainTextArray.class)
+@Repeatable(PlainTextAnnotation.Array.class)
+@PropertyStoreApply(PlainTextAnnotation.Apply.class)
 public @interface PlainText {
 
 	/**

@@ -16,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.oapi.*;
 
@@ -75,6 +76,8 @@ import org.apache.juneau.oapi.*;
  */
 @Documented
 @Retention(RUNTIME)
+@Repeatable(SchemaAnnotation.Array.class)
+@PropertyStoreApply(SchemaAnnotation.Apply.class)
 public @interface Schema {
 
 	/**

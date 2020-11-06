@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.msgpack.*;
 
 /**
@@ -36,7 +37,8 @@ import org.apache.juneau.msgpack.*;
 @Target({TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(MsgPackArray.class)
+@Repeatable(MsgPackAnnotation.Array.class)
+@PropertyStoreApply(MsgPackAnnotation.Apply.class)
 public @interface MsgPack {
 
 	/**

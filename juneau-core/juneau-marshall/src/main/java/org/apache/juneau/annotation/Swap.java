@@ -38,7 +38,8 @@ import org.apache.juneau.transform.*;
 @Target({TYPE,ANNOTATION_TYPE,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(SwapArray.class)
+@Repeatable(SwapAnnotation.Array.class)
+@PropertyStoreApply(SwapAnnotation.Apply.class)
 public @interface Swap {
 
 	/**

@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(ParserConfigApply.class)
+@PropertyStoreApply(ParserConfigAnnotation.Apply.class)
 public @interface ParserConfig {
 
 	/**

@@ -21,9 +21,7 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.Schema;
-import org.apache.juneau.jsonschema.annotation.Items;
-import org.apache.juneau.jsonschema.annotation.SubItems;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -1243,13 +1241,13 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder items(Items value) {
-		if (! AnnotationUtils.empty(value))
+		if (! ItemsAnnotation.empty(value))
 			items = HttpPartSchema.create().apply(value);
 		return this;
 	}
 
 	HttpPartSchemaBuilder items(SubItems value) {
-		if (! AnnotationUtils.empty(value))
+		if (! SubItemsAnnotation.empty(value))
 			items = HttpPartSchema.create().apply(value);
 		return this;
 	}

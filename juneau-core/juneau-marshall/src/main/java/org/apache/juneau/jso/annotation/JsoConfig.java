@@ -30,7 +30,7 @@ import org.apache.juneau.jso.*;
 @Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-@PropertyStoreApply(JsoConfigApply.class)
+@PropertyStoreApply(JsoConfigAnnotation.Apply.class)
 public @interface JsoConfig {
 
 	/**
