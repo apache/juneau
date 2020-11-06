@@ -660,14 +660,14 @@ public class RestMethodAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<RestMethod> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<RestMethod> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<RestMethod> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			RestMethod a = ai.getAnnotation();
 			MethodInfo mi = ai.getMethodOn();
 			String sig = mi == null ? "Unknown" : mi.getSignature();

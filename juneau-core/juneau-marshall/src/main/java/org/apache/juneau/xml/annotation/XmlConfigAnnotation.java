@@ -35,14 +35,14 @@ public class XmlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<XmlConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<XmlConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<XmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			XmlConfig a = ai.getAnnotation();
 			if (! a.addBeanTypes().isEmpty())
 				psb.set(XML_addBeanTypes, bool(a.addBeanTypes()));

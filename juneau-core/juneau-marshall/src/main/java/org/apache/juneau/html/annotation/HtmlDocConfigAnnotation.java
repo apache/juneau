@@ -37,14 +37,14 @@ public class HtmlDocConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<HtmlDocConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<HtmlDocConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlDocConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			HtmlDocConfig a = ai.getAnnotation();
 			if (a.aside().length > 0)
 				psb.set(HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));

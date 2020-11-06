@@ -64,11 +64,11 @@ public class ClassInfoTest {
 	}
 
 	public static class AConfigApply extends ConfigApply<AConfig> {
-		protected AConfigApply(Class<AConfig> c, VarResolverSession r) {
-			super(c, r);
+		protected AConfigApply(Class<AConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 		@Override
-		public void apply(AnnotationInfo<AConfig> a, PropertyStoreBuilder ps) {
+		public void apply(AnnotationInfo<AConfig> a, PropertyStoreBuilder ps, VarResolverSession vr) {
 		}
 	}
 

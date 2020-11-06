@@ -34,14 +34,14 @@ public class UonConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<UonConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<UonConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<UonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			UonConfig a = ai.getAnnotation();
 			if (! a.addBeanTypes().isEmpty())
 				psb.set(UON_addBeanTypes, bool(a.addBeanTypes()));

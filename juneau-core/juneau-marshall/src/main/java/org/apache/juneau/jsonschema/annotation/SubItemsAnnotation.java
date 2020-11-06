@@ -13,11 +13,14 @@
 package org.apache.juneau.jsonschema.annotation;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -93,6 +96,41 @@ public class SubItemsAnnotation {
 	 */
 	public static boolean empty(org.apache.juneau.jsonschema.annotation.SubItems a) {
 		return a == null || DEFAULT.equals(a);
+	}
+
+	/**
+	 * Merges the contents of the specified annotation into the specified generic map.
+	 *
+	 * @param om The map to copy the contents to.
+	 * @param a The annotation to apply.
+	 * @return The same map with the annotation contents applied.
+	 * @throws ParseException Invalid JSON found in value.
+	 */
+	public static OMap merge(OMap om, SubItems a) throws ParseException {
+		if (SubItemsAnnotation.empty(a))
+			return om;
+		if (a.value().length > 0)
+			om.putAll(parseMap(a.value()));
+		return om
+			.ase("collectionFormat", a.collectionFormat(), a.cf())
+			.ase("default", joinnl(a._default(), a.df()))
+			.ase("enum", parseSet(a._enum()), parseSet(a.e()))
+			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.ase("format", a.format(), a.f())
+			.ase("items", parseMap(a.items()))
+			.ase("maximum", a.maximum(), a.max())
+			.asmo("maxItems", a.maxItems(), a.maxi())
+			.asmo("maxLength", a.maxLength(), a.maxl())
+			.ase("minimum", a.minimum(), a.min())
+			.asmo("minItems", a.minItems(), a.mini())
+			.asmo("minLength", a.minLength(), a.minl())
+			.ase("multipleOf", a.multipleOf(), a.mo())
+			.ase("pattern", a.pattern(), a.p())
+			.ase("type", a.type(), a.t())
+			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.ase("$ref", a.$ref())
+		;
 	}
 
 	/**

@@ -33,14 +33,14 @@ public class HtmlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<HtmlConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<HtmlConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<HtmlConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<HtmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			HtmlConfig a = ai.getAnnotation();
 			if (! a.addBeanTypes().isEmpty())
 				psb.set(HTML_addBeanTypes, bool(a.addBeanTypes()));

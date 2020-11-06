@@ -33,14 +33,14 @@ public class UrlEncodingConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<UrlEncodingConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<UrlEncodingConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<UrlEncodingConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			UrlEncodingConfig a = ai.getAnnotation();
 
 			if (! a.expandedParams().isEmpty()) {

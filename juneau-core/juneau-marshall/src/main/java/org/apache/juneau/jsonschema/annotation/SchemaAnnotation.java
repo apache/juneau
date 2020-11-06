@@ -16,12 +16,15 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -142,6 +145,85 @@ public class SchemaAnnotation {
 	 */
 	public static boolean empty(Schema a) {
 		return a == null || DEFAULT.equals(a);
+	}
+
+	/**
+	 * Converts the specified <ja>@Schema</ja> annotation into a generic map.
+	 *
+	 * @param a The annotation instance.  Can be <jk>null</jk>.
+	 * @return The schema converted to a map, or and empty map if the annotation was null.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static OMap asMap(Schema a) throws ParseException {
+		if (a == null)
+			return OMap.EMPTY_MAP;
+		OMap om = new OMap();
+		if (SchemaAnnotation.empty(a))
+			return om;
+		if (a.value().length > 0)
+			om.putAll(parseMap(a.value()));
+		return om
+			.ase("additionalProperties", parseMap(a.additionalProperties()))
+			.ase("allOf", joinnl(a.allOf()))
+			.ase("collectionFormat", a.collectionFormat(), a.cf())
+			.ase("default", joinnl(a._default(), a.df()))
+			.ase("discriminator", a.discriminator())
+			.ase("description", joinnl(a.description(), a.d()))
+			.ase("enum", parseSet(a._enum()), parseSet(a.e()))
+			.ase("examples", parseMap(a.examples()), parseMap(a.exs()))
+			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.ase("externalDocs", ExternalDocsAnnotation.merge(om.getMap("externalDocs"), a.externalDocs()))
+			.ase("format", a.format(), a.f())
+			.ase("ignore", a.ignore() ? "true" : null)
+			.ase("items", merge(om.getMap("items"), a.items()))
+			.ase("maximum", a.maximum(), a.max())
+			.asmo("maxItems", a.maxItems(), a.maxi())
+			.asmo("maxLength", a.maxLength(), a.maxl())
+			.asmo("maxProperties", a.maxProperties(), a.maxp())
+			.ase("minimum", a.minimum(), a.min())
+			.asmo("minItems", a.minItems(), a.mini())
+			.asmo("minLength", a.minLength(), a.minl())
+			.asmo("minProperties", a.minProperties(), a.minp())
+			.ase("multipleOf", a.multipleOf(), a.mo())
+			.ase("pattern", a.pattern(), a.p())
+			.ase("properties", parseMap(a.properties()))
+			.asf("readOnly", a.readOnly() || a.ro())
+			.asf("required", a.required() || a.r())
+			.ase("title", a.title())
+			.ase("type", a.type(), a.t())
+			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.ase("xml", joinnl(a.xml()))
+			.ase("x-example", joinnl(a.example(), a.ex()))
+			.ase("$ref", a.$ref())
+		;
+	}
+
+	private static OMap merge(OMap om, Items a) throws ParseException {
+		if (ItemsAnnotation.empty(a))
+			return om;
+		if (a.value().length > 0)
+			om.putAll(parseMap(a.value()));
+		return om
+			.ase("collectionFormat", a.collectionFormat(), a.cf())
+			.ase("default", joinnl(a._default(), a.df()))
+			.ase("enum", parseSet(a._enum()), parseSet(a.e()))
+			.ase("format", a.format(), a.f())
+			.asf("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.asf("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.ase("items", SubItemsAnnotation.merge(om.getMap("items"), a.items()))
+			.ase("maximum", a.maximum(), a.max())
+			.asmo("maxItems", a.maxItems(), a.maxi())
+			.asmo("maxLength", a.maxLength(), a.maxl())
+			.ase("minimum", a.minimum(), a.min())
+			.asmo("minItems", a.minItems(), a.mini())
+			.asmo("minLength", a.minLength(), a.minl())
+			.ase("multipleOf", a.multipleOf(), a.mo())
+			.ase("pattern", a.pattern(), a.p())
+			.asf("uniqueItems", a.uniqueItems() || a.ui())
+			.ase("type", a.type(), a.t())
+			.ase("$ref", a.$ref())
+		;
 	}
 
 	/**
@@ -1204,20 +1286,20 @@ public class SchemaAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Schema> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<Schema> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Schema> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<Schema> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			Schema a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

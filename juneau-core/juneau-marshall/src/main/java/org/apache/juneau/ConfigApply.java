@@ -31,27 +31,18 @@ import org.apache.juneau.svl.*;
  */
 public abstract class ConfigApply<T extends Annotation> {
 
-	private final VarResolverSession r;
+	private final VarResolverSession vr;
 	private final Class<T> c;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param c The annotation class.
-	 * @param r The string resolver to use for resolving strings.
+	 * @param vr The string resolver to use for resolving strings.
 	 */
-	protected ConfigApply(Class<T> c, VarResolverSession r) {
-		this.r = r == null ? VarResolver.DEFAULT.createSession() : r;
+	protected ConfigApply(Class<T> c, VarResolverSession vr) {
+		this.vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		this.c = c;
-	}
-
-	/**
-	 * Returns the var resolver that was added to this object.
-	 *
-	 * @return The var resolver that was added to this object.
-	 */
-	protected VarResolverSession getVarResolver() {
-		return r;
 	}
 
 	/**
@@ -59,8 +50,9 @@ public abstract class ConfigApply<T extends Annotation> {
 	 *
 	 * @param a The annotation.
 	 * @param ps The property store builder.
+	 * @param vr The var resolver.  Should be the same as the one passed in through the constructor.
 	 */
-	public abstract void apply(AnnotationInfo<T> a, PropertyStoreBuilder ps);
+	public abstract void apply(AnnotationInfo<T> a, PropertyStoreBuilder ps, VarResolverSession vr);
 
 
 	/**
@@ -70,7 +62,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved string.
 	 */
 	protected String string(String in) {
-		return r.resolve(in);
+		return vr.resolve(in);
 	}
 
 	/**
@@ -82,7 +74,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	protected String[] strings(String[] in) {
 		String[] out = new String[in.length];
 		for (int i = 0; i < in.length; i++)
-			out[i] = r.resolve(in[i]);
+			out[i] = vr.resolve(in[i]);
 		return out;
 	}
 
@@ -93,7 +85,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return An array with resolved strings.
 	 */
 	protected String[] strings(String in) {
-		in = r.resolve(in);
+		in = vr.resolve(in);
 		return StringUtils.split(in);
 	}
 
@@ -124,7 +116,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @return The resolved boolean.
 	 */
 	public boolean bool(String in) {
-		return Boolean.parseBoolean(r.resolve(in));
+		return Boolean.parseBoolean(vr.resolve(in));
 	}
 
 	/**
@@ -136,7 +128,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 */
 	protected int integer(String in, String loc) {
 		try {
-			return Integer.parseInt(r.resolve(in));
+			return Integer.parseInt(vr.resolve(in));
 		} catch (NumberFormatException e) {
 			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}
@@ -151,7 +143,7 @@ public abstract class ConfigApply<T extends Annotation> {
 	 */
 	protected Visibility visibility(String in, String loc) {
 		try {
-			return Visibility.valueOf(r.resolve(in));
+			return Visibility.valueOf(vr.resolve(in));
 		} catch (IllegalArgumentException e) {
 			throw new ConfigException("Invalid syntax for visibility on annotation @{0}({1}): {2}", c.getSimpleName(), loc, in);
 		}
@@ -211,6 +203,6 @@ public abstract class ConfigApply<T extends Annotation> {
 		}
 
 		@Override /* ConfigApply */
-		public void apply(AnnotationInfo<Annotation> a, PropertyStoreBuilder ps) {}
+		public void apply(AnnotationInfo<Annotation> a, PropertyStoreBuilder ps, VarResolverSession vr) {}
 	}
 }

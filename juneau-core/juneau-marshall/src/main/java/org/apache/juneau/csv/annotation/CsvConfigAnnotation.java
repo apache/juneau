@@ -32,14 +32,14 @@ public class CsvConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<CsvConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<CsvConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			CsvConfig a = ai.getAnnotation();
 
 			if (a.applyCsv().length > 0)

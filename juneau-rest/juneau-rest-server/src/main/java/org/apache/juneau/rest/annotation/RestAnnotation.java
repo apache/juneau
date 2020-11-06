@@ -1063,14 +1063,14 @@ public class RestAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Rest> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<Rest> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<Rest> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			Rest a = ai.getAnnotation();
 			String s = null;
 			ClassInfo c = ai.getClassOn();

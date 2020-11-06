@@ -300,20 +300,20 @@ public class BeanpAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Beanp> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<Beanp> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Beanp> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<Beanp> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			Beanp a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

@@ -129,20 +129,20 @@ public class ParentPropertyAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<ParentProperty> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<ParentProperty> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParentProperty> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<ParentProperty> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			ParentProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

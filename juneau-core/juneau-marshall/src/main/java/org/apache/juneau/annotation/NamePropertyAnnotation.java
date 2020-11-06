@@ -129,20 +129,20 @@ public class NamePropertyAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<NameProperty> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<NameProperty> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<NameProperty> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<NameProperty> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			NameProperty a = ai.getAnnotation();
 
 			if (isEmpty(a.on()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

@@ -33,14 +33,14 @@ public class SoapXmlConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<SoapXmlConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<SoapXmlConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SoapXmlConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<SoapXmlConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			SoapXmlConfig a = ai.getAnnotation();
 
 			if (! a.soapAction().isEmpty())

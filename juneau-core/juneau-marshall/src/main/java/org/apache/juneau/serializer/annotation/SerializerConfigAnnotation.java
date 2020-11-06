@@ -36,14 +36,14 @@ public class SerializerConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<SerializerConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<SerializerConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<SerializerConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			SerializerConfig a = ai.getAnnotation();
 			if (! a.addBeanTypes().isEmpty())
 				psb.set(SERIALIZER_addBeanTypes, bool(a.addBeanTypes()));

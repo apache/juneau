@@ -33,14 +33,14 @@ public class MsgPackConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<MsgPackConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<MsgPackConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<MsgPackConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			MsgPackConfig a = ai.getAnnotation();
 
 			if (! a.addBeanTypes().isEmpty())

@@ -36,14 +36,14 @@ public class ParserConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<ParserConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<ParserConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<ParserConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			ParserConfig a = ai.getAnnotation();
 			if (! a.autoCloseStreams().isEmpty())
 				psb.set(PARSER_autoCloseStreams, bool(a.autoCloseStreams()));

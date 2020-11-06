@@ -105,14 +105,14 @@ public class PropertyStoreBuilder {
 	 * Applies the settings in the specified annotations to this property store.
 	 *
 	 * @param al The list of annotations to apply.
-	 * @param r The string resolver used to resolve any variables in the annotations.
+	 * @param vr The string resolver used to resolve any variables in the annotations.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("unchecked")
-	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession r) {
+	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
-				ai.getConfigApply(r).apply((AnnotationInfo<Annotation>)ai, this);
+				ai.getConfigApply(vr).apply((AnnotationInfo<Annotation>)ai, this, vr);
 			} catch (ConfigException ex) {
 				throw ex;
 			} catch (Exception ex) {

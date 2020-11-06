@@ -32,14 +32,14 @@ public class PlainTextConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<PlainTextConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<PlainTextConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			PlainTextConfig a = ai.getAnnotation();
 
 			if (a.applyPlainText().length > 0)

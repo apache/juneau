@@ -183,20 +183,20 @@ public class RequestAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<Request> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<Request> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Request> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<Request> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			Request a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 

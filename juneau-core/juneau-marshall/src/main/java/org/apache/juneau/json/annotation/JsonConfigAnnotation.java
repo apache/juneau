@@ -34,14 +34,14 @@ public class JsonConfigAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<JsonConfig> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<JsonConfig> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<JsonConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			JsonConfig a = ai.getAnnotation();
 			if (! a.addBeanTypes().isEmpty())
 				psb.set(JSON_addBeanTypes, bool(a.addBeanTypes()));

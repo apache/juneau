@@ -13,11 +13,14 @@
 package org.apache.juneau.jsonschema.annotation;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -61,6 +64,25 @@ public class ExternalDocsAnnotation {
 	 */
 	public static boolean empty(ExternalDocs a) {
 		return a == null || DEFAULT.equals(a);
+	}
+
+	/**
+	 * Merges the contents of the specified annotation into the specified generic map.
+	 *
+	 * @param om The map to copy the contents to.
+	 * @param a The annotation to apply.
+	 * @return The same map with the annotation contents applied.
+	 * @throws ParseException Invalid JSON found in value.
+	 */
+	public static OMap merge(OMap om, ExternalDocs a) throws ParseException {
+		if (ExternalDocsAnnotation.empty(a))
+			return om;
+		if (a.value().length > 0)
+			om.putAll(parseMap(a.value()));
+		return om
+			.ase("description", joinnl(a.description()))
+			.ase("url", a.url())
+		;
 	}
 
 	/**

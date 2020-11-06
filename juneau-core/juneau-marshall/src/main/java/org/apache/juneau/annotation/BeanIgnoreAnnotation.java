@@ -158,20 +158,20 @@ public class BeanIgnoreAnnotation {
 		 * Constructor.
 		 *
 		 * @param c The annotation class.
-		 * @param r The resolver for resolving values in annotations.
+		 * @param vr The resolver for resolving values in annotations.
 		 */
-		public Apply(Class<BeanIgnore> c, VarResolverSession r) {
-			super(c, r);
+		public Apply(Class<BeanIgnore> c, VarResolverSession vr) {
+			super(c, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanIgnore> ai, PropertyStoreBuilder psb) {
+		public void apply(AnnotationInfo<BeanIgnore> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			BeanIgnore a = ai.getAnnotation();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;
 
-			psb.prependTo(BEAN_annotations, copy(a, getVarResolver()));
+			psb.prependTo(BEAN_annotations, copy(a, vr));
 		}
 	}
 
