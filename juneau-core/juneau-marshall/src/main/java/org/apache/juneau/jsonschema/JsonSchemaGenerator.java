@@ -217,36 +217,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	public static final String JSONSCHEMA_beanDefMapper = PREFIX + ".beanDefMapper.o";
 
 	/**
-	 * Configuration property:  Default schemas.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_defaultSchemas JSONSCHEMA_defaultSchemas}
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
-	 * 	<li><b>Data type:</b>  <c>Map&lt;String,{@link org.apache.juneau.collections.OMap}&gt;</c>
-	 * 	<li><b>System property:</b>  <c>JsonSchemaGenerator.defaultSchema</c>
-	 * 	<li><b>Environment variable:</b>  <c>JSONSCHEMAGENERATOR_DEFAULTSCHEMA</c>
-	 * 	<li><b>Default:</b>  Empty map.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.JsonSchemaConfig#defaultSchemas()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGeneratorBuilder#defaultSchema(Class,OMap)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Allows you to override or provide custom schema information for particular class types.
-	 * <p>
-	 * Keys are full class names.
-	 */
-	public static final String JSONSCHEMA_defaultSchemas = PREFIX + ".defaultSchemas.smo";
-
-	/**
 	 * Configuration property:  Ignore types from schema definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -335,7 +305,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	private final BeanDefMapper beanDefMapper;
 	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
-	private final Map<String,OMap> defaultSchemas;
 	private final JsonSerializer jsonSerializer;
 	private final Set<Pattern> ignoreTypes;
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
@@ -355,7 +324,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		beanDefMapper = getInstanceProperty(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, BasicBeanDefMapper.class);
 		addExamplesTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addExamplesTo, null));
 		addDescriptionsTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addDescriptionsTo, null));
-		defaultSchemas = getMapProperty(JSONSCHEMA_defaultSchemas, OMap.class);
 
 		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
 		for (String s : split(ps.getProperty(JSONSCHEMA_ignoreTypes, String.class, "")))
@@ -456,17 +424,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
-	 * Default schemas.
-	 *
-	 * @see #JSONSCHEMA_defaultSchemas
-	 * @return
-	 * 	Custom schema information for particular class types.
-	 */
-	protected final Map<String,OMap> getDefaultSchemas() {
-		return defaultSchemas;
-	}
-
-	/**
 	 * Ignore types from schema definitions.
 	 *
 	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
@@ -547,7 +504,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 				.a("beanDefMapper", beanDefMapper)
 				.a("addExamplesTo", addExamplesTo)
 				.a("addDescriptionsTo", addDescriptionsTo)
-				.a("defaultSchemas", defaultSchemas)
 				.a("ignoreTypes", ignoreTypes)
 			);
 	}

@@ -25,6 +25,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
@@ -199,7 +200,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 * Keys are full class names.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
+	 * 	<li class='jf'>{@link Schema#value}
 	 * </ul>
 	 *
 	 * @param c
@@ -210,7 +211,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSchemaSerializerBuilder defaultSchema(Class<?> c, OMap schema) {
-		return putTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+		return annotations(SchemaAnnotation.create(c).value(schema.toString()).build());
 	}
 
 	/**

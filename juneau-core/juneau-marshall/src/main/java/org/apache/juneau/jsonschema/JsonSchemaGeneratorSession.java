@@ -133,12 +133,6 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			return new OMap().a("$ref", getBeanDefUri(sType));
 		}
 
-		OMap ds = getDefaultSchemas().get(sType.getInnerClass().getName());
-		if (ds != null && ds.containsKey("type")) {
-			pop();
-			return out.aa(ds);
-		}
-
 		JsonSchemaClassMeta jscm = null;
 		ClassMeta pojoSwapCM = pojoSwap == null ? null : getClassMeta(pojoSwap.getClass());
 		if (pojoSwapCM != null && pojoSwapCM.hasAnnotation(Schema.class))
@@ -254,8 +248,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		out.appendIf(false, true, true, "description", description);
 		out.appendIf(false, true, true, "x-example", example);
 
-		if (ds != null)
-			out.appendAll(ds);
+//		if (ds != null)
+//			out.appendAll(ds);
 
 		if (useDef) {
 			defs.put(getBeanDefId(sType), out);
@@ -415,17 +409,6 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	protected final BeanDefMapper getBeanDefMapper() {
 		return ctx.getBeanDefMapper();
-	}
-
-	/**
-	 * Configuration property:  Default schemas.
-	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_defaultSchemas
-	 * @return
-	 * 	Custom schema information for particular class types.
-	 */
-	protected final Map<String,OMap> getDefaultSchemas() {
-		return ctx.getDefaultSchemas();
 	}
 
 	/**

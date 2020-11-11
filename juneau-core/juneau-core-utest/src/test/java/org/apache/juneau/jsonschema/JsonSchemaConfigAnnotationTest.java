@@ -20,7 +20,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -62,7 +61,6 @@ public class JsonSchemaConfigAnnotationTest {
 		allowNestedDescriptions="$X{true}",
 		allowNestedExamples="$X{true}",
 		beanDefMapper=BasicBeanDefMapper.class,
-		defaultSchemas=@CS(k=A.class,v="{foo:'bar'}"),
 		ignoreTypes="$X{foo}",
 		useBeanDefs="$X{true}"
 	)
@@ -78,7 +76,6 @@ public class JsonSchemaConfigAnnotationTest {
 		check("true", x.isAllowNestedDescriptions());
 		check("true", x.isAllowNestedExamples());
 		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("{org.apache.juneau.jsonschema.JsonSchemaConfigAnnotationTest$A={foo:'bar'}}", x.getDefaultSchemas());
 		check("foo", x.getIgnoreTypes());
 		check("true", x.isUseBeanDefs());
 	}
@@ -100,7 +97,6 @@ public class JsonSchemaConfigAnnotationTest {
 		check("false", x.isAllowNestedDescriptions());
 		check("false", x.isAllowNestedExamples());
 		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("{}", x.getDefaultSchemas());
 		check("", x.getIgnoreTypes());
 		check("false", x.isUseBeanDefs());
 	}
@@ -121,7 +117,6 @@ public class JsonSchemaConfigAnnotationTest {
 		check("false", x.isAllowNestedDescriptions());
 		check("false", x.isAllowNestedExamples());
 		check("BasicBeanDefMapper", x.getBeanDefMapper());
-		check("{}", x.getDefaultSchemas());
 		check("", x.getIgnoreTypes());
 		check("false", x.isUseBeanDefs());
 	}

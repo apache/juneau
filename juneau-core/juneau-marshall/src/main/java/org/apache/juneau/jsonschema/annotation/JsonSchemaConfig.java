@@ -197,26 +197,6 @@ public @interface JsonSchemaConfig {
 	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Null.class;
 
 	/**
-	 * Configuration property:  Default schemas.
-	 *
-	 * <p>
-	 * Allows you to override or provide custom schema information for particular class types.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Keys are the class.
-	 * 		<br>Values are Simple-JSON objects.
-	 * 	<li>
-	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
-	 * </ul>
-	 */
-	CS[] defaultSchemas() default {};
-
-	/**
 	 * Configuration property:  Ignore types from schema definitions.
 	 *
 	 * <p>

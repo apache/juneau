@@ -16,7 +16,6 @@ import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -54,8 +53,6 @@ public class JsonSchemaConfigAnnotation {
 				psb.set(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
 			if (a.beanDefMapper() != BeanDefMapper.Null.class)
 				psb.set(JSONSCHEMA_beanDefMapper, a.beanDefMapper());
-			for (CS e : a.defaultSchemas())
-				psb.putTo(JSONSCHEMA_defaultSchemas, e.k().getName(), omap(e.v(), "defaultSchemas"));
 			if (! a.ignoreTypes().isEmpty())
 				psb.set(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
 			if (! a.useBeanDefs().isEmpty())

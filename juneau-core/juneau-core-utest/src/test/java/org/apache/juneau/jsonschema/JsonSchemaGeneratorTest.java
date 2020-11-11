@@ -21,6 +21,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
@@ -1215,27 +1217,27 @@ public class JsonSchemaGeneratorTest {
 			.defaultSchema(char.class, OMap.of("type", "bar"))
 			.defaultSchema(TestEnumToString.class, OMap.of("type", "bar"))
 			.build().createSession();
-		assertObject(s.getSchema(SimpleBean.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(BeanMap.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(BeanList.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(BeanList[][].class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(boolean.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Boolean.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(short.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Short.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(int.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Integer.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(long.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Long.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(float.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Float.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(double.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Double.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(String.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(StringBuilder.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(Character.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(char.class)).json().is("{type:'bar'}");
-		assertObject(s.getSchema(TestEnumToString.class)).json().is("{type:'bar'}");
+		assertObject(s.getSchema(SimpleBean.class)).json().contains("type:'bar'}");
+		assertObject(s.getSchema(BeanMap.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(BeanList.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(BeanList[][].class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(boolean.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Boolean.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(short.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Short.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(int.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Integer.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(long.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Long.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(float.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Float.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(double.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Double.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(String.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(StringBuilder.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(Character.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(char.class)).json().contains("type:'bar'");
+		assertObject(s.getSchema(TestEnumToString.class)).json().contains("type:'bar'");
 	}
 
 	// If default schema does not contain 'type', the value is augmented
@@ -1264,27 +1266,27 @@ public class JsonSchemaGeneratorTest {
 			.defaultSchema(char.class, OMap.of("foo", "bar"))
 			.defaultSchema(TestEnumToString.class, OMap.of("foo", "bar"))
 			.build().createSession();
-		assertObject(s.getSchema(SimpleBean.class)).json().is("{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'}");
-		assertObject(s.getSchema(BeanMap.class)).json().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'},foo:'bar'}");
-		assertObject(s.getSchema(BeanList.class)).json().is("{type:'array',items:{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'},foo:'bar'}");
-		assertObject(s.getSchema(BeanList[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string',foo:'bar'}},foo:'bar'},foo:'bar'}},foo:'bar'}");
-		assertObject(s.getSchema(boolean.class)).json().is("{type:'boolean',foo:'bar'}");
-		assertObject(s.getSchema(Boolean.class)).json().is("{type:'boolean',foo:'bar'}");
-		assertObject(s.getSchema(short.class)).json().is("{type:'integer',format:'int16',foo:'bar'}");
-		assertObject(s.getSchema(Short.class)).json().is("{type:'integer',format:'int16',foo:'bar'}");
-		assertObject(s.getSchema(int.class)).json().is("{type:'integer',format:'int32',foo:'bar'}");
-		assertObject(s.getSchema(Integer.class)).json().is("{type:'integer',format:'int32',foo:'bar'}");
-		assertObject(s.getSchema(long.class)).json().is("{type:'integer',format:'int64',foo:'bar'}");
-		assertObject(s.getSchema(Long.class)).json().is("{type:'integer',format:'int64',foo:'bar'}");
-		assertObject(s.getSchema(float.class)).json().is("{type:'number',format:'float',foo:'bar'}");
-		assertObject(s.getSchema(Float.class)).json().is("{type:'number',format:'float',foo:'bar'}");
-		assertObject(s.getSchema(double.class)).json().is("{type:'number',format:'double',foo:'bar'}");
-		assertObject(s.getSchema(Double.class)).json().is("{type:'number',format:'double',foo:'bar'}");
-		assertObject(s.getSchema(String.class)).json().is("{type:'string',foo:'bar'}");
-		assertObject(s.getSchema(StringBuilder.class)).json().is("{type:'string',foo:'bar'}");
-		assertObject(s.getSchema(Character.class)).json().is("{type:'string',foo:'bar'}");
-		assertObject(s.getSchema(char.class)).json().is("{type:'string',foo:'bar'}");
-		assertObject(s.getSchema(TestEnumToString.class)).json().is("{type:'string','enum':['one','two','three'],foo:'bar'}");
+		assertObject(s.getSchema(SimpleBean.class)).json().is("{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}");
+		assertObject(s.getSchema(BeanMap.class)).json().is("{foo:'bar',type:'object',additionalProperties:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}");
+		assertObject(s.getSchema(BeanList.class)).json().is("{foo:'bar',type:'array',items:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}");
+		assertObject(s.getSchema(BeanList[][].class)).json().is("{foo:'bar',type:'array',items:{type:'array',items:{foo:'bar',type:'array',items:{foo:'bar',type:'object',properties:{f1:{foo:'bar',type:'string'}}}}}}");
+		assertObject(s.getSchema(boolean.class)).json().is("{foo:'bar',type:'boolean'}");
+		assertObject(s.getSchema(Boolean.class)).json().is("{foo:'bar',type:'boolean'}");
+		assertObject(s.getSchema(short.class)).json().is("{foo:'bar',type:'integer',format:'int16'}");
+		assertObject(s.getSchema(Short.class)).json().is("{foo:'bar',type:'integer',format:'int16'}");
+		assertObject(s.getSchema(int.class)).json().is("{foo:'bar',type:'integer',format:'int32'}");
+		assertObject(s.getSchema(Integer.class)).json().is("{foo:'bar',type:'integer',format:'int32'}");
+		assertObject(s.getSchema(long.class)).json().is("{foo:'bar',type:'integer',format:'int64'}");
+		assertObject(s.getSchema(Long.class)).json().is("{foo:'bar',type:'integer',format:'int64'}");
+		assertObject(s.getSchema(float.class)).json().is("{foo:'bar',type:'number',format:'float'}");
+		assertObject(s.getSchema(Float.class)).json().is("{foo:'bar',type:'number',format:'float'}");
+		assertObject(s.getSchema(double.class)).json().is("{foo:'bar',type:'number',format:'double'}");
+		assertObject(s.getSchema(Double.class)).json().is("{foo:'bar',type:'number',format:'double'}");
+		assertObject(s.getSchema(String.class)).json().is("{foo:'bar',type:'string'}");
+		assertObject(s.getSchema(StringBuilder.class)).json().is("{foo:'bar',type:'string'}");
+		assertObject(s.getSchema(Character.class)).json().is("{foo:'bar',type:'string'}");
+		assertObject(s.getSchema(char.class)).json().is("{foo:'bar',type:'string'}");
+		assertObject(s.getSchema(TestEnumToString.class)).json().is("{foo:'bar',type:'string','enum':['one','two','three']}");
 	}
 
 	//====================================================================================================
@@ -1486,4 +1488,22 @@ public class JsonSchemaGeneratorTest {
 
 	@JsonSchemaConfig(applySchema=@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123"))
 	public static class SwapWithAnnotation2 extends PojoSwap<SimpleBean,Integer> {}
+
+	//====================================================================================================
+	// @JsonSchema on PojoSwap
+	//====================================================================================================
+
+	@Schema(onClass=B.class,value="{foo:'bar'}")
+	static class BConfig {}
+
+	static class B {}
+	static ClassInfo bConfig = ClassInfo.of(BConfig.class);
+
+	@Test
+	public void schemaOnClass_onConfig() throws Exception {
+		AnnotationList al = bConfig.getAnnotationList();
+		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().applyAnnotations(al, VarResolver.DEFAULT.createSession()).build().createSession();
+		assertObject(x.getSchema(new B())).json().contains("foo:'bar'");
+	}
+
 }
