@@ -5409,7 +5409,7 @@ public class RestContext extends BeanContext {
 	 * @return This object (for method chaining).
 	 * @throws ServletException Error occurred.
 	 */
-	public RestContext postInit() throws ServletException {
+	public synchronized RestContext postInit() throws ServletException {
 		for (int i = 0; i < postInitMethods.length; i++)
 			postInitOrDestroy(resource, postInitMethods[i], postInitMethodParams[i]);
 		for (RestContext childContext : this.childResources.values())
