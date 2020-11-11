@@ -280,6 +280,7 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	byte[] getBody() {
+		baos.flush();
 		return baos.toByteArray();
 	}
 

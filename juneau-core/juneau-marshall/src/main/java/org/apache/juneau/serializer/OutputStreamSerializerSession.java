@@ -85,6 +85,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		} catch (IOException e) {
 			throw new SerializeException(e); // Should never happen.
 		}
+		baos.flush();
 		return baos.toByteArray();
 	}
 
