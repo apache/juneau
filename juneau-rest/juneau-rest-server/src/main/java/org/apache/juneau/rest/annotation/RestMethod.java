@@ -390,6 +390,9 @@ public @interface RestMethod {
 	 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
 	 *
 	 * <p>
+	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
+	 *
+	 * <p>
 	 * Besides the standard HTTP method names, the following can also be specified:
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -520,6 +523,8 @@ public @interface RestMethod {
 	 * 	<jk>public void</jk> get() {...}
 	 * </p>
 	 *
+	 * <p>
+	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
@@ -829,4 +834,27 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	MethodSwagger swagger() default @MethodSwagger;
+
+	/**
+	 * REST method name and path.
+	 *
+	 * <p>
+	 * Can be used to provide a shortened combined form for the {@link #method()} and {@link #path()} values.
+	 *
+	 * <p>
+	 * The following examples are considered equivalent.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal form</jc>
+	 * 	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+	 *
+	 * 	<jc>// Shortened form</jc>
+	 * 	<ja>@RestMethod</ja>(<js>"PUT /{propertyName}"</js>)
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The path portion is optional.
+	 * </ul>
+	 */
+	String value() default "";
 }

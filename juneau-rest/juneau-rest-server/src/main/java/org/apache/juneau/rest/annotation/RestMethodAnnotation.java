@@ -69,7 +69,7 @@ public class RestMethodAnnotation {
 		Logging logging = LoggingAnnotation.DEFAULT;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
 		Property[] properties = new Property[0];
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="";
+		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="", value="";
 		String[] consumes={}, defaultFormData={}, defaultQuery={}, description={}, flags={}, paths={}, produces={}, reqAttrs={}, reqHeaders={};
 
 		/**
@@ -418,6 +418,17 @@ public class RestMethodAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link RestMethod#value()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object (for method chaining).
+		 */
+		public Builder value(String value) {
+			this.value = value;
+			return this;
+		}
+
 		// <FluentSetters>
 
 		@Override /* GENERATED - TargetedAnnotationBuilder */
@@ -445,7 +456,7 @@ public class RestMethodAnnotation {
 		private final Logging logging;
 		private final MethodSwagger swagger;
 		private final Property[] properties;
-		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary;
+		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary, value;
 		private final String[] consumes, defaultFormData, defaultQuery, description, flags, paths, produces, reqAttrs, reqHeaders;
 
 		Impl(Builder b) {
@@ -480,6 +491,7 @@ public class RestMethodAnnotation {
 			this.serializers = copyOf(b.serializers);
 			this.summary = b.summary;
 			this.swagger = b.swagger;
+			this.value = b.value;
 			postConstruct();
 		}
 
@@ -632,6 +644,11 @@ public class RestMethodAnnotation {
 		public MethodSwagger swagger() {
 			return swagger;
 		}
+
+		@Override /* RestMethod */
+		public String value() {
+			return value;
+		}
 	}
 
 	/**
@@ -770,6 +787,17 @@ public class RestMethodAnnotation {
 
 			if (! a.method().isEmpty())
 				psb.set(RESTMETHOD_httpMethod, string(a.method()));
+
+			if (! a.value().isEmpty()) {
+				String v = string(a.value()).trim();
+				int i = v.indexOf(' ');
+				if (i == -1) {
+					psb.set(RESTMETHOD_httpMethod, v);
+				} else {
+					psb.set(RESTMETHOD_httpMethod, v.substring(0, i).trim());
+					psb.prependTo(RESTMETHOD_paths,  v.substring(i).trim());
+				}
+			}
 
 			if (a.priority() != 0)
 				psb.set(RESTMETHOD_priority, a.priority());

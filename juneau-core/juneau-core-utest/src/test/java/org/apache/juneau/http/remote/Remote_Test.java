@@ -239,17 +239,29 @@ public class Remote_Test {
 		public String x1() {
 			return "foo";
 		}
+		@RestMethod("GET")
+		public String x2() {
+			return "bar";
+		}
+		@RestMethod("GET /x3")
+		public String x3x() {
+			return "baz";
+		}
 	}
 
 	@Remote(path="/")
 	public static interface C1 {
 		String x1();
+		@RemoteMethod("GET") String x2();
+		@RemoteMethod("GET /x3") String x3x();
 	}
 
 	@Test
 	public void c01_overriddenRootUrl() throws Exception {
 		C1 x = client(C.class).build().getRemote(C1.class,"http://localhost/C1");
 		assertEquals("foo",x.x1());
+		assertEquals("bar",x.x2());
+		assertEquals("baz",x.x3x());
 	}
 
 	@Test

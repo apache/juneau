@@ -65,6 +65,7 @@ public class RestMethodAnnotation_Test {
 		.serializers(Serializer.class)
 		.summary("summary")
 		.swagger(MethodSwaggerAnnotation.DEFAULT)
+		.value("value")
 		.build();
 
 	RestMethod a2 = RestMethodAnnotation.create()
@@ -99,6 +100,7 @@ public class RestMethodAnnotation_Test {
 		.serializers(Serializer.class)
 		.summary("summary")
 		.swagger(MethodSwaggerAnnotation.DEFAULT)
+		.value("value")
 		.build();
 
 	@Test
@@ -135,7 +137,8 @@ public class RestMethodAnnotation_Test {
 				+ "rolesDeclared:'rolesDeclared',"
 				+ "serializers:['org.apache.juneau.serializer.Serializer'],"
 				+ "summary:'summary',"
-				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:'',value:[]},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]}"
+				+ "swagger:{consumes:[],deprecated:'',description:[],externalDocs:{description:[],url:'',value:[]},operationId:'',parameters:[],produces:[],responses:[],schemes:[],summary:[],tags:[],value:[]},"
+				+ "value:'value'"
 			+ "}"
 		);
 	}
@@ -212,7 +215,8 @@ public class RestMethodAnnotation_Test {
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		summary="summary",
-		swagger=@MethodSwagger
+		swagger=@MethodSwagger,
+		value="value"
 	)
 	public static class D1 {}
 	RestMethod d1 = D1.class.getAnnotationsByType(RestMethod.class)[0];
@@ -248,7 +252,8 @@ public class RestMethodAnnotation_Test {
 		rolesDeclared="rolesDeclared",
 		serializers=Serializer.class,
 		summary="summary",
-		swagger=@MethodSwagger
+		swagger=@MethodSwagger,
+		value="value"
 	)
 	public static class D2 {}
 	RestMethod d2 = D2.class.getAnnotationsByType(RestMethod.class)[0];

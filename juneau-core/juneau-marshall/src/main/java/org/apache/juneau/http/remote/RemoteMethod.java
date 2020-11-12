@@ -56,6 +56,9 @@ public @interface RemoteMethod {
 	 * 	<ja>@RemoteMethod</ja>
 	 * 	<jk>public void</jk> postPet(...) {...}
 	 * </p>
+	 *
+	 * <p>
+	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 */
 	String path() default "";
 
@@ -73,6 +76,9 @@ public @interface RemoteMethod {
 	 * </p>
 	 *
 	 * <br>If the method cannot be inferred, then the default is <js>"GET"</js>.
+	 *
+	 * <p>
+	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 */
 	String method() default "";
 
@@ -113,4 +119,27 @@ public @interface RemoteMethod {
 	 * </ul>
 	 */
 	RemoteReturn returns() default RemoteReturn.BODY;
+
+	/**
+	 * REST method name and path.
+	 *
+	 * <p>
+	 * Can be used to provide a shortened combined form for the {@link #method()} and {@link #path()} values.
+	 *
+	 * <p>
+	 * The following examples are considered equivalent.
+	 * <p class='bcode w800'>
+	 * 	<jc>// Normal form</jc>
+	 * 	<ja>@RemoteMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+	 *
+	 * 	<jc>// Shortened form</jc>
+	 * 	<ja>@RemoteMethod</ja>(<js>"PUT /{propertyName}"</js>)
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		The path portion is optional.
+	 * </ul>
+	 */
+	String value() default "";
 }

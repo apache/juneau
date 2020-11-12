@@ -40,6 +40,15 @@ Juneau 9.0.0 is a major release.
 		<jk>public</jk> Object myRestMethod() { ... }
 	}
 		</p>
+	<li>
+		New shortened form {@link oaj.http.remote.annotation.RemoteMethod#value()} for specifying http method name and path.
+		<p class='bpcode w800'>
+	<jc>// Normal form</jc>
+	<ja>@RemoteMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
+	
+	<jc>// Shortened form</jc>
+	<ja>@RemoteMethod</ja>(<js>"PUT /foo"</js>)
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
@@ -48,6 +57,17 @@ Juneau 9.0.0 is a major release.
 		Removed deprecated APIs.
 	<li>
 		Removed the <c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
+	<li>
+		New shortened form {@link oajr.annotation.RestMethod#value()} for specifying http method name and path.
+		<p class='bpcode w800'>
+	<jc>// Normal form</jc>
+	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
+	
+	<jc>// Shortened form</jc>
+	<ja>@RestMethod</ja>(<js>"PUT /{propertyName}"</js>)
+		</p>
+	<li>
+		<c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server-springboot</h5>

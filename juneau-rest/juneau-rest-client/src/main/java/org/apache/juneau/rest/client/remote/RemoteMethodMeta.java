@@ -90,6 +90,17 @@ public class RemoteMethodMeta {
 			httpMethod = rm == null ? "" : rm.method();
 			path = rm == null ? "" : rm.path();
 
+			if (rm != null && ! rm.value().isEmpty()) {
+				String v = rm.value().trim();
+				int i = v.indexOf(' ');
+				if (i == -1) {
+					httpMethod = v;
+				} else {
+					httpMethod = v.substring(0, i).trim();
+					path = v.substring(i).trim();
+				}
+			}
+
 			if (path.isEmpty()) {
 				path = HttpUtils.detectHttpPath(m, true);
 			}
