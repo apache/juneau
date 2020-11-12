@@ -404,7 +404,7 @@ public class Remote_Test {
 
 	@Rest
 	public static class E implements BasicSimpleJsonRest {
-		@RestMethod(name=HttpMethod.RRPC)
+		@RestMethod(method=HttpMethod.RRPC)
 		public E1 getProxy() {
 			return new E1() {
 				@Override
@@ -456,7 +456,7 @@ public class Remote_Test {
 
 	@Rest
 	public static class E5 implements BasicSimpleJsonRest {
-		@RestMethod(name=HttpMethod.RRPC)
+		@RestMethod(method=HttpMethod.RRPC)
 		public E5b getProxy() {
 			return new E5b() {
 				@Override
@@ -486,7 +486,7 @@ public class Remote_Test {
 
 	@Rest
 	public static class E6 implements BasicSimpleJsonRest {
-		@RestMethod(name=HttpMethod.RRPC)
+		@RestMethod(method=HttpMethod.RRPC)
 		public E5b getProxy() {
 			return new E5b() {
 				@Override

@@ -33,7 +33,7 @@ public class Rest_AllowedMethodHeaders_Test {
 		public String put() {
 			return "PUT";
 		}
-		@RestMethod(name="foo",path="/")
+		@RestMethod(method="foo",path="/")
 		public String foo() {
 			return "FOO";
 		}

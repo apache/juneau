@@ -105,23 +105,23 @@ public class Restx_Parsers_Test {
 
 	@Rest(parsers=PA.class)
 	public static class A {
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String a(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT, parsers=PB.class)
+		@RestMethod(method=PUT, parsers=PB.class)
 		public String b(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT, parsers={Inherit.class, PB.class,PC.class})
+		@RestMethod(method=PUT, parsers={Inherit.class, PB.class,PC.class})
 		public String c(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT, parsers={Inherit.class, PD.class})
+		@RestMethod(method=PUT, parsers={Inherit.class, PD.class})
 		public String d(@Body String in) {
 			return in;
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String e(@Body String in) {
 			return in;
 		}

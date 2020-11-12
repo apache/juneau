@@ -60,7 +60,7 @@ public interface BasicRestMethods {
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestMethod(name=OPTIONS, path="/*",
+	@RestMethod(method=OPTIONS, path="/*",
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource."
 	)
@@ -83,7 +83,7 @@ public interface BasicRestMethods {
 	 * @param req The HTTP request.
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
-	@RestMethod(name=OPTIONS, path="/*",
+	@RestMethod(method=OPTIONS, path="/*",
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource."
 	)
@@ -111,7 +111,7 @@ public interface BasicRestMethods {
 	 * <p>
 	 * These responses should be left as-is without any additional processing.
 	 */
-	@RestMethod(name=ANY, path="/error",
+	@RestMethod(method=ANY, path="/error",
 		summary="Error occurred",
 		description="An error occurred during handling of the request."
 	)
@@ -126,7 +126,7 @@ public interface BasicRestMethods {
 	 * @param req The HTTP request.
 	 * @return A collection of timing statistics for each annotated method on this resource.
 	 */
-	@RestMethod(name=GET, path="/stats",
+	@RestMethod(method=GET, path="/stats",
 		summary="Timing statistics",
 		description="Timing statistics for method invocations on this resource."
 	)

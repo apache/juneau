@@ -72,7 +72,7 @@
 	}
 
 	<jc>// Our REST method that throws an annotated exception.</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password
@@ -168,7 +168,7 @@
 	the same as applying it to the return type (albeit for this method only).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<ja>@Response</ja>(code=200, description=<js>"OK"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
@@ -191,7 +191,7 @@
 	is {@link oaj.Value} (a placeholder for objects).
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,
@@ -221,7 +221,7 @@
 	that it's a <ja>@Response</ja> bean.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		...
 		Value&lt;Ok&gt; res  <jc>// @Response annotation not needed.</jc>
@@ -384,7 +384,7 @@
 	The following two examples are equivalent:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(
 		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
 	) 
@@ -393,7 +393,7 @@
 	}
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/ok"</js>)
 	<jk>public void</jk> sendContinue(RestResponse res) {
 		res.setStatus(100);
 		res.setOutput(<js>"OK"</js>);

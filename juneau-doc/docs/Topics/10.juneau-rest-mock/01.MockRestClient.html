@@ -200,7 +200,7 @@ MockRestClient
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyRest {
 	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String <jv>id</jv>) {
 			<jk>return</jk> <jv>id</jv>;
 		}

@@ -22,7 +22,7 @@ Method Return Types
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public</jk> String doGet() {
 		<jk>return</jk> <js>"Hello World!"</js>;
 	}
@@ -76,14 +76,14 @@ Method Return Types
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Equivalent method 1</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
 	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		<jk>return</jk> p;
 	}
 
 	<jc>// Equivalent method 2</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		res.setOutput(p);
@@ -91,7 +91,7 @@ Method Return Types
 
 	<jc>// (Sorta) Equivalent method 3</jc>
 	<jc>// (Ignores any converters or method-level properties)</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
 	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
 		Person p = getPersonById(personId);
 		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);

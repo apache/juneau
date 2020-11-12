@@ -37,7 +37,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class A {
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -71,7 +71,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class B {
-		@RestMethod(name=PUT, parsers=P3.class)
+		@RestMethod(method=PUT, parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -114,7 +114,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class C {
-		@RestMethod(name=PUT, parsers={P3.class,Inherit.class})
+		@RestMethod(method=PUT, parsers={P3.class,Inherit.class})
 		public String a(@Body String in) {
 			return in;
 		}
@@ -146,7 +146,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class D {
-		@RestMethod(name=PUT, reqHeaders={"Content-Type: text/p3"}, parsers=P3.class)
+		@RestMethod(method=PUT, reqHeaders={"Content-Type: text/p3"}, parsers=P3.class)
 		public String a(@Body String in) {
 			return in;
 		}
@@ -187,7 +187,7 @@ public class Header_ContentType_Test {
 		parsers={P1.class,P2.class}
 	)
 	public static class E {
-		@RestMethod(name=PUT, reqHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
+		@RestMethod(method=PUT, reqHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
 		public String a(@Body String in) {
 			return in;
 		}

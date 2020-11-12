@@ -72,7 +72,7 @@ Dual-purpose (end-to-end) interfaces
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
-			name=<jsm>GET</jsm>,
+			method=<jsm>GET</jsm>,
 			path=<js>"/pet"</js>,
 			summary=<js>"All pets in the store"</js>,
 			...
@@ -83,7 +83,7 @@ Dual-purpose (end-to-end) interfaces
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
-			name=<jsf>DELETE</jsf>,
+			method=<jsf>DELETE</jsf>,
 			path=<js>"/pet/{petId}"</js>,
 			summary=<js>"Deletes a pet"</js>,
 			...

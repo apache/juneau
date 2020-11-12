@@ -28,7 +28,7 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter.</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,

@@ -656,7 +656,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class E1 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -687,7 +687,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E2 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -718,7 +718,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E3 {
-		@RestMethod(name=GET,path="/path/{foo}",
+		@RestMethod(method=GET,path="/path/{foo}",
 			swagger=@MethodSwagger("operationId:'b-operationId',summary:'b-summary',description:'b-description',deprecated:false,schemes:['b-scheme']")
 		)
 		public X a() {
@@ -751,7 +751,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E4 {
-		@RestMethod(name=GET,path="/path/{foo}",
+		@RestMethod(method=GET,path="/path/{foo}",
 			swagger=@MethodSwagger(
 				operationId="c-operationId",
 				summary="c-summary",
@@ -789,7 +789,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E5 {
-		@RestMethod(name=GET,path="/path/{foo}",
+		@RestMethod(method=GET,path="/path/{foo}",
 			swagger=@MethodSwagger(
 				summary="$L{foo}",
 				operationId="$L{foo}",
@@ -828,7 +828,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E6 {
-		@RestMethod(name=GET,path="/path/{foo}",
+		@RestMethod(method=GET,path="/path/{foo}",
 			summary="d-summary",
 			description="d-description"
 		)
@@ -856,7 +856,7 @@ public class Swagger_Test {
 		)
 	)
 	public static class E7 {
-		@RestMethod(name=GET,path="/path/{foo}",
+		@RestMethod(method=GET,path="/path/{foo}",
 			summary="d-summary",
 			description="d-description"
 		)
@@ -885,7 +885,7 @@ public class Swagger_Test {
 	@Rest
 	public static class F1 {
 
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -899,7 +899,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class F2 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -913,7 +913,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class F3 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("tags:['b-tag']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger("tags:['b-tag']"))
 		public X a() {
 			return null;
 		}
@@ -927,7 +927,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class F4 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="['c-tag-1','c-tag-2']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="['c-tag-1','c-tag-2']"))
 		public X a() {
 			return null;
 		}
@@ -941,7 +941,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:['a-tag']}}}"))
 	public static class F5 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="c-tag-1, c-tag-2"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="c-tag-1, c-tag-2"))
 		public X a() {
 			return null;
 		}
@@ -955,7 +955,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
 	public static class F6 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="$L{foo}"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(tags="$L{foo}"))
 		public X a() {
 			return null;
 		}
@@ -974,7 +974,7 @@ public class Swagger_Test {
 	@Rest
 	public static class G1 {
 
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -988,7 +988,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G2 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1002,7 +1002,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G3 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("externalDocs:{description:'b-description',url:'b-url'}"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger("externalDocs:{description:'b-description',url:'b-url'}"))
 		public X a() {
 			return null;
 		}
@@ -1016,7 +1016,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G4 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs(description="c-description",url="c-url")))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs(description="c-description",url="c-url")))
 		public X a() {
 			return null;
 		}
@@ -1030,7 +1030,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G5 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'d-description',url:'d-url'}")))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'d-description',url:'d-url'}")))
 		public X a() {
 			return null;
 		}
@@ -1044,7 +1044,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G6 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{foo}'}")))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(externalDocs=@ExternalDocs("{description:'$L{foo}',url:'$L{foo}'}")))
 		public X a() {
 			return null;
 		}
@@ -1063,7 +1063,7 @@ public class Swagger_Test {
 	@Rest
 	public static class H1 {
 
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1077,7 +1077,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H2 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1091,7 +1091,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H3 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("consumes:['b-consumes']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger("consumes:['b-consumes']"))
 		public X a() {
 			return null;
 		}
@@ -1105,7 +1105,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H4 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['c-consumes-1','c-consumes-2']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['c-consumes-1','c-consumes-2']"))
 		public X a() {
 			return null;
 		}
@@ -1119,7 +1119,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H5 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="c-consumes-1, c-consumes-2"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="c-consumes-1, c-consumes-2"))
 		public X a() {
 			return null;
 		}
@@ -1133,7 +1133,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H6 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['$L{foo}']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(consumes="['$L{foo}']"))
 		public X a() {
 			return null;
 		}
@@ -1147,7 +1147,7 @@ public class Swagger_Test {
 
 	@Rest(parsers={JsonParser.class})
 	public static class H7 {
-		@RestMethod(name=PUT,path="/path2/{foo}")
+		@RestMethod(method=PUT,path="/path2/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1161,7 +1161,7 @@ public class Swagger_Test {
 
 	@Rest(parsers={JsonParser.class})
 	public static class H8 {
-		@RestMethod(name=PUT,path="/path2/{foo}",parsers={XmlParser.class})
+		@RestMethod(method=PUT,path="/path2/{foo}",parsers={XmlParser.class})
 		public X a() {
 			return null;
 		}
@@ -1175,7 +1175,7 @@ public class Swagger_Test {
 
 	@Rest(parsers={JsonParser.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{consumes:['a-consumes']}}}"))
 	public static class H9 {
-		@RestMethod(name=PUT,path="/path2/{foo}",parsers={XmlParser.class})
+		@RestMethod(method=PUT,path="/path2/{foo}",parsers={XmlParser.class})
 		public X a() {
 			return null;
 		}
@@ -1194,7 +1194,7 @@ public class Swagger_Test {
 	@Rest
 	public static class I1 {
 
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1208,7 +1208,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I2 {
-		@RestMethod(name=GET,path="/path/{foo}")
+		@RestMethod(method=GET,path="/path/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1222,7 +1222,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I3 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger("produces:['b-produces']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger("produces:['b-produces']"))
 		public X a() {
 			return null;
 		}
@@ -1236,7 +1236,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I4 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['c-produces-1','c-produces-2']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['c-produces-1','c-produces-2']"))
 		public X a() {
 			return null;
 		}
@@ -1250,7 +1250,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I5 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="c-produces-1, c-produces-2"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="c-produces-1, c-produces-2"))
 		public X a() {
 			return null;
 		}
@@ -1264,7 +1264,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I6 {
-		@RestMethod(name=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['$L{foo}']"))
+		@RestMethod(method=GET,path="/path/{foo}",swagger=@MethodSwagger(produces="['$L{foo}']"))
 		public X a() {
 			return null;
 		}
@@ -1278,7 +1278,7 @@ public class Swagger_Test {
 
 	@Rest(serializers={JsonSerializer.class})
 	public static class I7 {
-		@RestMethod(name=PUT,path="/path2/{foo}")
+		@RestMethod(method=PUT,path="/path2/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1292,7 +1292,7 @@ public class Swagger_Test {
 
 	@Rest(serializers={JsonSerializer.class})
 	public static class I8 {
-		@RestMethod(name=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
+		@RestMethod(method=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
 		public X a() {
 			return null;
 		}
@@ -1306,7 +1306,7 @@ public class Swagger_Test {
 
 	@Rest(serializers={JsonSerializer.class},swagger=@ResourceSwagger("paths:{'/path2/{foo}':{put:{produces:['a-produces']}}}"))
 	public static class I9 {
-		@RestMethod(name=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
+		@RestMethod(method=PUT,path="/path2/{foo}",serializers={XmlSerializer.class})
 		public X a() {
 			return null;
 		}
@@ -1324,7 +1324,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class J1 {
-		@RestMethod(name=GET,path="/path2/{foo}")
+		@RestMethod(method=GET,path="/path2/{foo}")
 		@Deprecated
 		public X a() {
 			return null;
@@ -1340,7 +1340,7 @@ public class Swagger_Test {
 	@Rest
 	@Deprecated
 	public static class J2 {
-		@RestMethod(name=GET,path="/path2/{foo}")
+		@RestMethod(method=GET,path="/path2/{foo}")
 		public X a() {
 			return null;
 		}
@@ -1358,7 +1358,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class K1 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1432,7 +1432,7 @@ public class Swagger_Test {
 		})
 	)
 	public static class K2 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1507,7 +1507,7 @@ public class Swagger_Test {
 		})
 	)
 	public static class K3 {
-		@RestMethod(name=GET,path="/path/{foo}/query",
+		@RestMethod(method=GET,path="/path/{foo}/query",
 			swagger=@MethodSwagger({
 				"parameters:[{",
 					"'in':'query',",
@@ -1585,7 +1585,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class L1 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1599,7 +1599,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class L2 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1613,7 +1613,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class L3 {
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',x-example:'{id:3}'}]"))
+		@RestMethod(method=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',x-example:'{id:3}'}]"))
 		public X a() {
 			return null;
 		}
@@ -1627,7 +1627,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class L4 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query(n="foo",ex="{id:4}") X foo) {
 			return null;
 		}
@@ -1641,7 +1641,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{'in':'query',name:'foo',x-example:'{id:2}'}]}}}"))
 	public static class L5 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query(n="foo",ex="{id:$L{5}}") X foo) {
 			return null;
 		}
@@ -1659,7 +1659,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class M1 {
-		@RestMethod(name=GET,path="/path/{foo}/body")
+		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body X foo) {
 			return null;
 		}
@@ -1673,7 +1673,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class M2 {
-		@RestMethod(name=GET,path="/path/{foo}/body")
+		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body X foo) {
 			return null;
 		}
@@ -1687,7 +1687,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class M3 {
-		@RestMethod(name=GET,path="/path/{foo}/body",swagger=@MethodSwagger("parameters:[{'in':'body',x-examples:{foo:'c'}}]"))
+		@RestMethod(method=GET,path="/path/{foo}/body",swagger=@MethodSwagger("parameters:[{'in':'body',x-examples:{foo:'c'}}]"))
 		public X a() {
 			return null;
 		}
@@ -1701,7 +1701,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',x-examples:{foo:'b'}}]}}}"))
 	public static class M4 {
-		@RestMethod(name=GET,path="/path/{foo}/body")
+		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body(exs="{foo:'d'}") X foo) {
 			return null;
 		}
@@ -1715,7 +1715,7 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/body':{get:{parameters:[{'in':'body',examples:{foo:'b'}}]}}}"))
 	public static class M5 {
-		@RestMethod(name=GET,path="/path/{foo}/body")
+		@RestMethod(method=GET,path="/path/{foo}/body")
 		public X a(@Body(exs="{foo:'$L{foo}'}") X foo) {
 			return null;
 		}
@@ -1733,7 +1733,7 @@ public class Swagger_Test {
 
 	@Rest
 	public static class N1 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1747,7 +1747,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
 	public static class N2 {
-		@RestMethod(name=GET,path="/path/{foo}/query")
+		@RestMethod(method=GET,path="/path/{foo}/query")
 		public X a(@Query("foo") X foo) {
 			return null;
 		}
@@ -1762,7 +1762,7 @@ public class Swagger_Test {
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/query':{get:{parameters:[{in:'query',name:'foo',schema:{$ref:'b'}}]}}}"))
 	public static class N3 {
 
-		@RestMethod(name=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]"))
+		@RestMethod(method=GET,path="/path/{foo}/query",swagger=@MethodSwagger("parameters:[{'in':'query',name:'foo',schema:{$ref:'c'}}]"))
 		public X a() {
 			return null;
 		}
@@ -1780,12 +1780,12 @@ public class Swagger_Test {
 
 	@Rest
 	public static class O1a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<O1c> foo) {}
 	}
 	@Rest
 	public static class O1b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public O1c a() { return null;}
 	}
 	@Response(code=100)
@@ -1806,7 +1806,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O2 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -1818,7 +1818,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O3 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{description:'b-100-description'}}"))
+		@RestMethod(method=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{description:'b-100-description'}}"))
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -1830,12 +1830,12 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O4a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<O4c> foo) {}
 	}
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O4b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public O4c a() {return null;}
 	}
 	@Response(code=100,description="c-100-description")
@@ -1854,12 +1854,12 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O5a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<O5c> foo) {}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O5b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public O5c a() {return null;}
 	}
 	@Response(code=100,description="$L{foo}")
@@ -1882,12 +1882,12 @@ public class Swagger_Test {
 
 	@Rest
 	public static class P1a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<P1c> foo) {}
 	}
 	@Rest
 	public static class P1b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public P1c a() {return null;}
 	}
 	@Response(code=100)
@@ -1908,7 +1908,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P2 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public X a(@ResponseStatus Value<Integer> foo) {
 			return null;
 		}
@@ -1922,7 +1922,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P3 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
+		@RestMethod(method=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
 		public X a(@ResponseStatus Value<Integer> foo) {
 			return null;
 		}
@@ -1936,12 +1936,12 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P4a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<P4c> foo) {}
 	}
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P4b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public P4c a() {return null;}
 	}
 	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="d-description",type="integer",format="int32"))
@@ -1960,12 +1960,12 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P5a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<P5c> foo) {}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P5b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public P5c a() {return null;}
 	}
 	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="$L{foo}",type="integer",format="int32"))
@@ -1988,12 +1988,12 @@ public class Swagger_Test {
 
 	@Rest
 	public static class Q1a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<Q1c> foo) {}
 	}
 	@Rest
 	public static class Q1b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public Q1c a() {return null;}
 	}
 	@Response(code=100)
@@ -2014,7 +2014,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q2 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2026,7 +2026,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q3 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{example:{foo:'c'}}}"))
+		@RestMethod(method=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{example:{foo:'c'}}}"))
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2038,12 +2038,12 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q4a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<Q4c> foo) {}
 	}
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q4b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public Q4c a() {return null;}
 	}
 	@Response(code=100,example="{foo:'d'}")
@@ -2064,12 +2064,12 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q5a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<Q5c> foo) {}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class Q5b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public Q5c a() {return null;}
 	}
 	@Response(code=100,example="{foo:'$L{foo}'}")
@@ -2094,12 +2094,12 @@ public class Swagger_Test {
 
 	@Rest
 	public static class R1a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<R1c> foo) {}
 	}
 	@Rest
 	public static class R1b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public R1c a() {return null;}
 	}
 	@Response(code=100)
@@ -2120,7 +2120,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R2 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2132,7 +2132,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R3 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
+		@RestMethod(method=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2144,12 +2144,12 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R4a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<R4c> foo) {}
 	}
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R4b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public R4c a() {return null;}
 	}
 	@Response(code=100,examples="{foo:{bar:'d'}}")
@@ -2168,12 +2168,12 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R5a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<R5c> foo) {}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R5b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public R5c a() {return null;}
 	}
 	@Response(code=100,examples="{foo:{bar:'$L{foo}'}}")
@@ -2196,12 +2196,12 @@ public class Swagger_Test {
 
 	@Rest
 	public static class S1a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<S1c> foo) {}
 	}
 	@Rest
 	public static class S1b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public S1c a() {return null;}
 	}
 	@Response(code=100)
@@ -2220,7 +2220,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S2 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2232,7 +2232,7 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S3 {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
+		@RestMethod(method=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
 		public void a(@ResponseStatus Value<Integer> foo) {}
 	}
 
@@ -2244,12 +2244,12 @@ public class Swagger_Test {
 
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S4a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<S4c> foo) {}
 	}
 	@Rest(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S4b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public S4c a() {return null;}
 	}
 	@Response(code=100,schema=@Schema($ref="d"))
@@ -2268,12 +2268,12 @@ public class Swagger_Test {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S5a {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public void a(Value<S5c> foo) {}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S5b {
-		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		@RestMethod(method=GET,path="/path/{foo}/responses/100")
 		public S5c a() {return null;}
 	}
 	@Response(code=100,schema=@Schema("{$ref:'$L{foo}'}"))
@@ -2303,7 +2303,7 @@ public class Swagger_Test {
 	public static class T1 extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET,path="/")
+		@RestMethod(method=GET,path="/")
 		public T2 a(@Body T2 body) {
 			return null;
 		}

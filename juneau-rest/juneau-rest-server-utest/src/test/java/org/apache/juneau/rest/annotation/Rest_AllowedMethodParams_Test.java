@@ -43,7 +43,7 @@ public class Rest_AllowedMethodParams_Test {
 		public String options() {
 			return "OPTIONS";
 		}
-		@RestMethod(name="foo",path="/")
+		@RestMethod(method="foo",path="/")
 		public String foo() {
 			return "FOO";
 		}

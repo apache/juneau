@@ -35,12 +35,12 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
-	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Defined on POJO class</jc>
-	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	<jk>public void</jk> addPet(Pet pet) {...}
 	
 	<ja>@Body</ja>
@@ -50,7 +50,7 @@
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	<jk>public void</jk> addPet(RestRequest req) {
 		Person person = req.getBody().asType(Pet.<jk>class</jk>);
 		...

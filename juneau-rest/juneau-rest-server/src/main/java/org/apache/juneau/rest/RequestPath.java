@@ -317,7 +317,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// REST method</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
 	 * 	<jk>public</jk> String doGetById(RequestPathMatch path, <jk>int</jk> bar) {
 	 * 		<jk>return</jk> path.getRemainder();
 	 * 	}

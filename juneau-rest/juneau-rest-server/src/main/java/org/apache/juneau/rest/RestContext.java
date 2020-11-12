@@ -829,19 +829,19 @@ public class RestContext extends BeanContext {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1() {
 	 * 		...
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2() {
 	 * 		...
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3() {
 	 * 		...
 	 * 	}
@@ -1470,7 +1470,7 @@ public class RestContext extends BeanContext {
 	 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 *
-	 * 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
+	 * 		<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/hello/{you}"</js>)
 	 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
 	 * 			String <jv>s</jv>;
 	 *
@@ -3798,7 +3798,7 @@ public class RestContext extends BeanContext {
 					}
 				}
 				if (a != null) {
-					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
+					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(a.method()) + "," + fixMethodPath(a.path()));
 					try {
 						if (mi.isNotPublic())
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
@@ -4078,7 +4078,7 @@ public class RestContext extends BeanContext {
 	 * A typical usage pattern involves using variables inside the {@link HtmlDocConfig @HtmlDocConfig} annotation:
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>
+	 * 		method=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>
 	 * 	)
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={

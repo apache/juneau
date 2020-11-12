@@ -50,7 +50,7 @@ public class Rest_RVars_Test {
 	)
 	public static class A {
 
-		@RestMethod(name=GET, path="/p2",
+		@RestMethod(method=GET, path="/p2",
 			reqAttrs={"B1: b1", "B2:b"},
 			serializers=A1.class
 		)

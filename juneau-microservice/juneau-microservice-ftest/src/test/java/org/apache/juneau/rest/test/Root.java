@@ -35,7 +35,7 @@ import org.apache.juneau.rest.test.client.*;
 public class Root extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name=GET, path="/")
+	@RestMethod(method=GET, path="/")
 	public ChildResourceDescriptions doGet(RestRequest req) throws Exception {
 		return new ChildResourceDescriptions(req);
 	}

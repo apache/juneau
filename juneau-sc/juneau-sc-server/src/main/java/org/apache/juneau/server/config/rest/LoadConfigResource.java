@@ -26,7 +26,7 @@ public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
-	@RestMethod(name = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
+	@RestMethod(method = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 

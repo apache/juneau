@@ -56,15 +56,15 @@ public @interface RestMethod {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
 	 *
@@ -73,11 +73,11 @@ public @interface RestMethod {
 	 * backwards compatibility.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod();
 	 * 	}
@@ -214,7 +214,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -241,7 +241,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 *
@@ -380,13 +380,6 @@ public @interface RestMethod {
 	/**
 	 * REST method name.
 	 *
-	 * Synonym for {@link #name()}.
-	 */
-	String method() default "";
-
-	/**
-	 * REST method name.
-	 *
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
 	 *
@@ -428,7 +421,7 @@ public @interface RestMethod {
 	 * 		parameter.
 	 * </ul>
 	 */
-	String name() default "";
+	String method() default "";
 
 	/**
 	 * Dynamically apply this annotation to the specified methods.
@@ -456,7 +449,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>PUT</jsf>,
+	 * 			method=<jsf>PUT</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			parsers=MySpecialParser.<jk>class</jk>
 	 * 		)
@@ -485,10 +478,10 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='figure'>Examples:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
 	 *
 	 * <p>
@@ -497,12 +490,12 @@ public @interface RestMethod {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Path is assumed to be "/foo".</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	 * 	<jk>public void</jk> foo() {...}
 	 * </p>
 	 *
 	 * <p>
-	 * If you also do not specify the {@link #name()} and the Java method name starts with <js>"get"</js>, <js>"put"</js>, <js>"post"</js>, or <js>"deleted"</js>,
+	 * If you also do not specify the {@link #method()} and the Java method name starts with <js>"get"</js>, <js>"put"</js>, <js>"post"</js>, or <js>"deleted"</js>,
 	 * then the HTTP method name is stripped from the inferred path.
 	 *
 	 * <h5 class='figure'>Examples:</h5>
@@ -545,7 +538,7 @@ public @interface RestMethod {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>GET</jsf>,
+	 * 		method=<jsf>GET</jsf>,
 	 * 		paths={<js>"/"</js>,<js>"/{foo}"</js>}
 	 * 	)
 	 * 	<jk>public</jk> String doGet(<ja>@Path</ja>(name=<js>"foo"</js>,required=<jk>false</jk>) String foo) {...}
@@ -604,7 +597,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -629,7 +622,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -656,7 +649,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>GET</jsf>,
+	 * 			method=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 		)
@@ -713,7 +706,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>GET</jsf>,
+	 * 			method=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
@@ -747,7 +740,7 @@ public @interface RestMethod {
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
-	 * 			name=<jsf>GET</jsf>,
+	 * 			method=<jsf>GET</jsf>,
 	 * 			path=<js>"/foo"</js>,
 	 * 			serializers=MySpecialSerializer.<jk>class</jk>
 	 * 		)
@@ -800,7 +793,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>PUT</jsf>,
+	 * 		method=<jsf>PUT</jsf>,
 	 * 		path=<js>"/{propertyName}"</js>,
 	 *
 	 * 		<jc>// Swagger info.</jc>

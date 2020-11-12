@@ -72,7 +72,7 @@ import org.apache.juneau.rest.client.RestRequest;
  * 		<jk>public static class</jk> EchoRest {
  *
  * 			<ja>@RestMethod</ja>(
- * 				name=<jsf>PUT</jsf>,
+ * 				method=<jsf>PUT</jsf>,
  * 				path=<js>"/echo"</js>
  * 			)
  * 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean bean) {
@@ -187,7 +187,7 @@ import org.apache.juneau.rest.client.RestRequest;
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest {
  *
- * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
+ * 		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/echoQuery"</js>)
  * 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
  * 			<jk>return</jk> id;
  * 		}

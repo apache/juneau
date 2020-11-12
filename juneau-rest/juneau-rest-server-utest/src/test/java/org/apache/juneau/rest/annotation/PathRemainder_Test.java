@@ -34,7 +34,7 @@ public class PathRemainder_Test {
 
 	@Rest
 	public static class A  {
-		@RestMethod(name=GET, path="/*")
+		@RestMethod(method=GET, path="/*")
 		public String a(@Path("/*") String remainder) {
 			return remainder;
 		}
@@ -54,22 +54,22 @@ public class PathRemainder_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class)
 	public static class B {
-		@RestMethod(name=GET,path="/a/*")
+		@RestMethod(method=GET,path="/a/*")
 		public Object a(@Path("/*") Optional<Integer> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(name=GET,path="/b/*")
+		@RestMethod(method=GET,path="/b/*")
 		public Object b(@Path("/*") Optional<ABean> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(name=GET,path="/c/*")
+		@RestMethod(method=GET,path="/c/*")
 		public Object c(@Path("/*") Optional<List<ABean>> f1) throws Exception {
 			assertNotNull(f1);
 			return f1;
 		}
-		@RestMethod(name=GET,path="/d/*")
+		@RestMethod(method=GET,path="/d/*")
 		public Object d(@Path("/*") List<Optional<ABean>> f1) throws Exception {
 			return f1;
 		}

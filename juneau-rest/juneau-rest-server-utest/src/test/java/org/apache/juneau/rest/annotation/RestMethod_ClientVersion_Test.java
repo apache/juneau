@@ -28,23 +28,23 @@ public class RestMethod_ClientVersion_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(name=GET, path="/")
+		@RestMethod(method=GET, path="/")
 		public String a() {
 			return "no-version";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[0.0,1.0)")
+		@RestMethod(method=GET, path="/", clientVersion="[0.0,1.0)")
 		public String b() {
 			return "[0.0,1.0)";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[1.0,1.0]")
+		@RestMethod(method=GET, path="/", clientVersion="[1.0,1.0]")
 		public String c() {
 			return "[1.0,1.0]";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[1.1,2)")
+		@RestMethod(method=GET, path="/", clientVersion="[1.1,2)")
 		public String d() {
 			return "[1.1,2)";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="2")
+		@RestMethod(method=GET, path="/", clientVersion="2")
 		public String e() {
 			return "2";
 		}
@@ -71,23 +71,23 @@ public class RestMethod_ClientVersion_Test {
 
 	@Rest(clientVersionHeader="Custom-Client-Version")
 	public static class B {
-		@RestMethod(name=GET, path="/")
+		@RestMethod(method=GET, path="/")
 		public String a() {
 			return "no-version";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[0.0,1.0)")
+		@RestMethod(method=GET, path="/", clientVersion="[0.0,1.0)")
 		public String b() {
 			return "[0.0,1.0)";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[1.0,1.0]")
+		@RestMethod(method=GET, path="/", clientVersion="[1.0,1.0]")
 		public String c() {
 			return "[1.0,1.0]";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="[1.1,2)")
+		@RestMethod(method=GET, path="/", clientVersion="[1.1,2)")
 		public String d() {
 			return "[1.1,2)";
 		}
-		@RestMethod(name=GET, path="/", clientVersion="2")
+		@RestMethod(method=GET, path="/", clientVersion="2")
 		public String e() {
 			return "2";
 		}

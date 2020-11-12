@@ -46,7 +46,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		res.setOutput(<js>"Simple string response"</js>);
  * 	}

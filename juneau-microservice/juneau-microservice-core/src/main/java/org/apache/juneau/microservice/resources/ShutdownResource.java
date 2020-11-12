@@ -33,7 +33,7 @@ public class ShutdownResource extends BasicRestServlet {
 	 *
 	 * @return The string <js>"OK"</js>.
 	 */
-	@RestMethod(name=GET, path="/", description="Show contents of config file.")
+	@RestMethod(method=GET, path="/", description="Show contents of config file.")
 	public String shutdown() {
 		new Thread(
 			new Runnable() {

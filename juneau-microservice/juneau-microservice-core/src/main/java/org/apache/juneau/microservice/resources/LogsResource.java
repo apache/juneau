@@ -107,7 +107,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET,
+		method=GET,
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory."
@@ -124,7 +124,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="VIEW",
+		method="VIEW",
 		path="/*",
 		summary="View contents of log file",
 		description="View the contents of a log file."
@@ -184,7 +184,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="PARSE",
+		method="PARSE",
 		path="/*",
 		converters=Queryable.class,
 		summary="View parsed contents of file",
@@ -217,7 +217,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="DOWNLOAD",
+		method="DOWNLOAD",
 		path="/*",
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
@@ -232,7 +232,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=DELETE,
+		method=DELETE,
 		path="/*",
 		summary="Delete log file",
 		description="Delete a log file on the file system."

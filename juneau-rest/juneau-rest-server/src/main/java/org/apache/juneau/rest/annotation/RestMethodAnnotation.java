@@ -69,7 +69,7 @@ public class RestMethodAnnotation {
 		Logging logging = LoggingAnnotation.DEFAULT;
 		MethodSwagger swagger = MethodSwaggerAnnotation.DEFAULT;
 		Property[] properties = new Property[0];
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", name="", method="", path="", rolesDeclared="", roleGuard="", summary="";
+		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", path="", rolesDeclared="", roleGuard="", summary="";
 		String[] consumes={}, defaultFormData={}, defaultQuery={}, description={}, flags={}, paths={}, produces={}, reqAttrs={}, reqHeaders={};
 
 		/**
@@ -276,17 +276,6 @@ public class RestMethodAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestMethod#name()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object (for method chaining).
-		 */
-		public Builder name(String value) {
-			this.name = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestMethod#parsers()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -456,7 +445,7 @@ public class RestMethodAnnotation {
 		private final Logging logging;
 		private final MethodSwagger swagger;
 		private final Property[] properties;
-		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, name, method, path, rolesDeclared, roleGuard, summary;
+		private final String clientVersion, debug, defaultAccept, defaultCharset, defaultContentType, maxInput, method, path, rolesDeclared, roleGuard, summary;
 		private final String[] consumes, defaultFormData, defaultQuery, description, flags, paths, produces, reqAttrs, reqHeaders;
 
 		Impl(Builder b) {
@@ -478,7 +467,6 @@ public class RestMethodAnnotation {
 			this.matchers = copyOf(b.matchers);
 			this.maxInput = b.maxInput;
 			this.method = b.method;
-			this.name = b.name;
 			this.parsers = copyOf(b.parsers);
 			this.path = b.path;
 			this.paths = copyOf(b.paths);
@@ -578,11 +566,6 @@ public class RestMethodAnnotation {
 		@Override /* RestMethod */
 		public String method() {
 			return method;
-		}
-
-		@Override /* RestMethod */
-		public String name() {
-			return name;
 		}
 
 		@Override /* RestMethod */
@@ -787,9 +770,6 @@ public class RestMethodAnnotation {
 
 			if (! a.method().isEmpty())
 				psb.set(RESTMETHOD_httpMethod, string(a.method()));
-
-			if (! a.name().isEmpty())
-				psb.set(RESTMETHOD_httpMethod, string(a.name()));
 
 			if (a.priority() != 0)
 				psb.set(RESTMETHOD_priority, a.priority());

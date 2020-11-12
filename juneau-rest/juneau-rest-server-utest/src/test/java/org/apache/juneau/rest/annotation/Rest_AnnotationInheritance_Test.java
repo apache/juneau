@@ -32,11 +32,11 @@ public class Rest_AnnotationInheritance_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static interface IA {
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String a(@Body String b);
-		@RestMethod(name=GET)
+		@RestMethod(method=GET)
 		public String b(@Query("foo") String b);
-		@RestMethod(name=GET)
+		@RestMethod(method=GET)
 		public String c(@Header("foo") String b);
 	}
 

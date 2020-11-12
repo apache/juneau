@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  * a drop-down menu item for rendering all other supported content types in plain text:
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
- * 		name=<jsf>GET</jsf>,
+ * 		method=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>
  * 	)
  *  <ja>@HtmlDocConfig</ja>(

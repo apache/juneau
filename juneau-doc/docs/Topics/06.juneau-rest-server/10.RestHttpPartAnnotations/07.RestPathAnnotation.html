@@ -48,7 +48,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	<jk>public void</jk> doGet(
 			<ja>@Path</ja>(<js>"foo"</js>) String foo,
 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
@@ -60,7 +60,7 @@
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	<jk>public void</jk> doGet(RestRequest req) {
 		RequestPath p = req.getPathMatch();
 		String foo = p.getString(<js>"foo"</js>);
@@ -80,17 +80,17 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
 	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
 	<jk>public void</jk> doGet(<ja>@Path</ja> Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
 	<jk>public void</jk> doGet(<ja>@Path</ja> MyBean bean) {...}
 </p>
 

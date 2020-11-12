@@ -95,11 +95,11 @@ public class BeanConfig_Swaps_Test {
 		public A a() {
 			return new A(); // Should return "A2-1".
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public A b(@Body A a) {
 			return a; // Should return "A2-1".
 		}
-		@RestMethod(name=PUT, path="/c/{a}")
+		@RestMethod(method=PUT, path="/c/{a}")
 		public A c(@Path("a") A a) {
 			return a; // Should return "A2-1".
 		}
@@ -108,12 +108,12 @@ public class BeanConfig_Swaps_Test {
 		public A d() {
 			return new A(); // Should return "A3-1".
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		@BeanConfig(swaps={SwapA3.class})
 		public A e(@Body A a) {
 			return a; // Should return "A3-1".
 		}
-		@RestMethod(name=PUT, path="/f/{a}")
+		@RestMethod(method=PUT, path="/f/{a}")
 		@BeanConfig(swaps={SwapA3.class})
 		public A f(@Path("a") A a) {
 			return a; // Should return "A3-1".

@@ -50,7 +50,7 @@ public class DebugResource extends BasicRestServlet {
 	 * @return Child utility links.
 	 * @throws Exception
 	 */
-	@RestMethod(name=GET, path="/", description="Show contents of config file.")
+	@RestMethod(method=GET, path="/", description="Show contents of config file.")
 	public ResourceDescriptions getChildren() throws Exception {
 		return new ResourceDescriptions()
 			.append("jetty/dump", "Jetty thread dump")
@@ -60,7 +60,7 @@ public class DebugResource extends BasicRestServlet {
 	/**
 	 * [GET /jetty/dump] - Generates and retrieves the jetty thread dump.
 	 */
-	@RestMethod(name=GET, path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
+	@RestMethod(method=GET, path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
 		res.setContentType("text/plain");
 		return new StringReader(JettyMicroservice.getInstance().getServer().dump());
@@ -69,7 +69,7 @@ public class DebugResource extends BasicRestServlet {
 	/**
 	 * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.
 	 */
-	@RestMethod(name=POST, path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
+	@RestMethod(method=POST, path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
 	public String createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = JettyMicroservice.getInstance().getServer().dump();
 		try (FileWriter fw = new FileWriter(req.getConfig().getString("Logging/logDir") + "/jetty-thread-dump.log")) {

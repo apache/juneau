@@ -27,12 +27,12 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings({"serial"})
 public class ConfigResource extends BasicRestServlet {
 
-	@RestMethod(name=GET, path="/")
+	@RestMethod(method=GET, path="/")
 	public Object test1(RestRequest req) {
 		return req.getConfig().toMap();
 	}
 
-	@RestMethod(name=GET, path="/{key}/{class}")
+	@RestMethod(method=GET, path="/{key}/{class}")
 	public Object test2(RestRequest req, @Path("key") String key, @Path("class") Class<?> c) throws Exception {
 		return req.getConfig().getObject(key, c);
 	}

@@ -46,7 +46,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(
  * 			<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1,
  * 			<ja>@FormData</ja>(<js>"p2"</js>) String p2,
@@ -57,7 +57,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(RestRequest req) {
  * 		<jk>int</jk> p1 = req.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
  * 		String p2 = req.getFormData(String.<jk>class</jk>, <js>"p2"</js>);

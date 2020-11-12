@@ -48,7 +48,7 @@ public class Swagger_Path_Test {
 				return "a";
 			}
 		}
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(A1 f) {}
 
 		@Path(
@@ -67,7 +67,7 @@ public class Swagger_Path_Test {
 				return "b";
 			}
 		}
-		@RestMethod(name=GET,path="/b/{P}")
+		@RestMethod(method=GET,path="/b/{P}")
 		public void b(A2 f) {}
 
 		@Path(
@@ -90,7 +90,7 @@ public class Swagger_Path_Test {
 				return "c";
 			}
 		}
-		@RestMethod(name=GET,path="/c/{P}")
+		@RestMethod(method=GET,path="/c/{P}")
 		public void c(A3 f) {}
 
 
@@ -101,7 +101,7 @@ public class Swagger_Path_Test {
 				return "d";
 			}
 		}
-		@RestMethod(name=GET,path="/d/{P}")
+		@RestMethod(method=GET,path="/d/{P}")
 		public void d(A4 f) {}
 
 		@Path(n="P",e={" ['a','b'] "})
@@ -111,7 +111,7 @@ public class Swagger_Path_Test {
 				return "e";
 			}
 		}
-		@RestMethod(name=GET,path="/e/{P}")
+		@RestMethod(method=GET,path="/e/{P}")
 		public void e(A5 f) {}
 	}
 
@@ -158,26 +158,26 @@ public class Swagger_Path_Test {
 
 		@Path(n="P")
 		public static class B1 {}
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(B1 f) {}
 
 		@Path("P")
 		public static class B2 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/b/{P}")
+		@RestMethod(method=GET,path="/b/{P}")
 		public void b(B2 b) {}
 
 		@Path("P")
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/c/{P}")
+		@RestMethod(method=GET,path="/c/{P}")
 		public void c(B3 b) {}
 
 		@Path("P")
 		public static class B4 {}
-		@RestMethod(name=GET,path="/d/{P}")
+		@RestMethod(method=GET,path="/d/{P}")
 		public void d(B4 b) {}
 	}
 
@@ -206,7 +206,7 @@ public class Swagger_Path_Test {
 		public static class C1 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(C1 f) {}
 	}
 
@@ -221,14 +221,14 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class D {
 
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(@Path(
 			n="P",
 			d="a",
 			t="string"
 		) String h) {}
 
-		@RestMethod(name=GET,path="/b/{P}")
+		@RestMethod(method=GET,path="/b/{P}")
 		public void b(@Path(
 			n="P",
 			api={
@@ -237,7 +237,7 @@ public class Swagger_Path_Test {
 			}
 		) String h) {}
 
-		@RestMethod(name=GET,path="/c/{P}")
+		@RestMethod(method=GET,path="/c/{P}")
 		public void c(@Path(
 			n="P",
 			api={
@@ -248,10 +248,10 @@ public class Swagger_Path_Test {
 			t="string"
 		) String h) {}
 
-		@RestMethod(name=GET,path="/d/{P}")
+		@RestMethod(method=GET,path="/d/{P}")
 		public void d(@Path("P") String h) {}
 
-		@RestMethod(name=GET,path="/e/{P}")
+		@RestMethod(method=GET,path="/e/{P}")
 		public void e(@Path(n="P",e={" ['a','b'] "}) String h) {}
 	}
 
@@ -282,29 +282,29 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class E {
 
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(@Path("P") String h) {}
 
 		public static class E2 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/b/{P}")
+		@RestMethod(method=GET,path="/b/{P}")
 		public void b(@Path("P") E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/c/{P}")
+		@RestMethod(method=GET,path="/c/{P}")
 		public void c(@Path("P") E3 b) {}
 
 		public static class E4 {}
-		@RestMethod(name=GET,path="/d/{P}")
+		@RestMethod(method=GET,path="/d/{P}")
 		public void d(@Path("P") E4 b) {}
 
-		@RestMethod(name=GET,path="/e/{P}")
+		@RestMethod(method=GET,path="/e/{P}")
 		public void e(@Path("P") Integer b) {}
 
-		@RestMethod(name=GET,path="/f/{P}")
+		@RestMethod(method=GET,path="/f/{P}")
 		public void f(@Path("P") Boolean b) {}
 	}
 
@@ -335,7 +335,7 @@ public class Swagger_Path_Test {
 	@Rest
 	public static class F {
 
-		@RestMethod(name=GET,path="/a/{P}")
+		@RestMethod(method=GET,path="/a/{P}")
 		public void a(@Path(n="P",ex="{f1:'b'}") String h) {}
 	}
 

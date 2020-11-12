@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bcode w800'>
  * 	<jc>// Resource method on resource "http://localhost:8080/sample/addressBook"</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, converters=Traversable.<jk>class</jk>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, converters=Traversable.<jk>class</jk>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		<jk>return new</jk> AddressBook();
  * 	}

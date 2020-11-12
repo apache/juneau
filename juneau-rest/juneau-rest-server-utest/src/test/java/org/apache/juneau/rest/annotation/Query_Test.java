@@ -97,12 +97,12 @@ public class Query_Test {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String c(RestRequest req, @Query(n="p1") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String d(RestRequest req, @Query(n="p1",f="uon") String p1) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"]";

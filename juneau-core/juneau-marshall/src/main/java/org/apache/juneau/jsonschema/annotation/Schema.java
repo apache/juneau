@@ -217,14 +217,14 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
 	 * 	<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>)
@@ -375,7 +375,7 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>)
 	 * 	<jk>public void</jk> setAge(
 	 * 		<ja>@Body</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String input
 	 * 	) {...}
@@ -685,7 +685,7 @@ public @interface Schema {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>)
 	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
 	 * </p>
 	 *
@@ -744,14 +744,14 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
 	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
@@ -797,14 +797,14 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
 	 * 	<ja>@Body</ja>(type=<js>"object"</js>)

@@ -40,7 +40,7 @@ Predefined Helper Beans
 	<ja>@Resource</ja>
 	<jk>public class</jk> PredefinedLabelsResource {
 	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> ResourceDescription[] getChildMethods() {
 			<jk>return new</jk> ResourceDescription[] {
 				<jk>new</jk> ResourceDescription(<js>"beanDescription"</js>, <js>"BeanDescription"</js>),
@@ -75,7 +75,7 @@ Predefined Helper Beans
 	<ja>@Resource</ja>
 	<jk>public class</jk> PredefinedLabelsResource {
 	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> ResourceDescriptions getChildMethods() {
 			<jk>return new</jk> ResourceDescriptions()
 				.append(<js>"beanDescription"</js>, <js>"BeanDescription"</js>)
@@ -138,7 +138,7 @@ Predefined Helper Beans
 	of a bean and it's properties.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/beanDescription"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/beanDescription"</js>)
 	<jk>public</jk> BeanDescription getBeanDescription() {
 		<jk>return new</jk> BeanDescription(Person.<jk>class</jk>);
 	}	
@@ -160,7 +160,7 @@ Predefined Helper Beans
 	<ja>@Rest</ja>
 	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {
 	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
 		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return new</jk> ChildResourceDescriptions(req);
 		}
@@ -201,7 +201,7 @@ Predefined Helper Beans
 	of a resource class.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
 	<jk>public</jk> SeeOtherRoot addPet(<ja>@Body</ja> Pet pet) {
 		<jsm>addPet</jsm>(Pet);
 		
@@ -213,7 +213,7 @@ Predefined Helper Beans
 	The runtime behavior is the same as the following:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
 	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
 		<jsm>addPet</jsm>(Pet);
 		

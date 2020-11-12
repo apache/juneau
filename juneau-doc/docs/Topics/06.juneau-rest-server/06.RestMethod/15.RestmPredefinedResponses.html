@@ -21,7 +21,7 @@ Predefined Responses
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
 	<jk>public</jk> Ok addPet(<ja>@Body</ja> Pet pet) {
 		<jsm>addPet</jsm>(Pet);
 		
@@ -30,7 +30,7 @@ Predefined Responses
 	}
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
 	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
 		<jsm>addPet</jsm>(Pet);
 		
@@ -116,7 +116,7 @@ Predefined Responses
 	in the following example (since all we see is an Object response). 
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/pets"</js>)
 	<jk>public</jk> Object addPet(<ja>@Body</ja> Pet pet) {
 		<jsm>addPet</jsm>(Pet);
 		

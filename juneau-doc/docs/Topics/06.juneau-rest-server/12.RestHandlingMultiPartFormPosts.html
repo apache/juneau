@@ -34,7 +34,7 @@ Handling Multi-Part Form Posts
 		 * [POST /upload] - Upload a file as a multipart form post.
 		 * Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
+		<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/upload"</js>, matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>)
 		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception {
 			ServletFileUpload upload = <jk>new</jk> ServletFileUpload();
 			FileItemIterator iter = upload.getItemIterator(req);

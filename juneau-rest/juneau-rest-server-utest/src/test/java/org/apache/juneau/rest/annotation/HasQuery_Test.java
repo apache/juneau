@@ -36,7 +36,7 @@ public class HasQuery_Test {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String b(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";

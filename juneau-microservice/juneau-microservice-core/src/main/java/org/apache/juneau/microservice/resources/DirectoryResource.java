@@ -117,7 +117,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET,
+		method=GET,
 		path="/*",
 		summary="View information on file or directory",
 		description="Returns information about the specified file or directory."
@@ -134,7 +134,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="VIEW",
+		method="VIEW",
 		path="/*",
 		summary="View contents of file",
 		description="View the contents of a file.\nContent-Type is set to 'text/plain'."
@@ -152,7 +152,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name="DOWNLOAD",
+		method="DOWNLOAD",
 		path="/*",
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
@@ -170,7 +170,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=DELETE,
+		method=DELETE,
 		path="/*",
 		summary="Delete file",
 		description="Delete a file on the file system."
@@ -181,7 +181,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=PUT,
+		method=PUT,
 		path="/*",
 		summary="Add or replace file",
 		description="Add or overwrite a file on the file system."

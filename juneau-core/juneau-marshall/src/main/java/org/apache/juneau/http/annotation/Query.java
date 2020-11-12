@@ -52,7 +52,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(
  * 			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
  * 			<ja>@Query</ja>(<js>"p2"</js>) String p2,
@@ -63,7 +63,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		<jk>int</jk> p1 = req.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
  * 		String p2 = req.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);

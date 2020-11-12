@@ -139,7 +139,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>POST</jsf>, path=<js>"/{a}"</js>,
+	 * 		method=<jsf>POST</jsf>, path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			parameters={
@@ -192,7 +192,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>GET</jsf>, path=<js>"/"</js>,
+	 * 		method=<jsf>GET</jsf>, path=<js>"/"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			responses={
 					<js>"200:{ description:'Okay' },"</js>,
@@ -318,7 +318,7 @@ public @interface MethodSwagger {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"POST"</js>,
+	 * 		method=<js>"POST"</js>,
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			summary=<js>"Add pet"</js>,
@@ -334,7 +334,7 @@ public @interface MethodSwagger {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"POST"</js>,
+	 * 		method=<js>"POST"</js>,
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>({
 	 * 			<js>"summary: 'Add pet',"</js>,
@@ -350,7 +350,7 @@ public @interface MethodSwagger {
 	 * <p class='bcode w800'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"POST"</js>,
+	 * 		method=<js>"POST"</js>,
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(<js>"$L{addPetSwagger}"</js>)
 	 * )

@@ -35,7 +35,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	@Rest
 	public static class A {
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public Reader a(@Body String b) {
 			return new StringReader(b);
 		}
@@ -55,21 +55,21 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest(parsers=JsonParser.class)
 	public static class B {
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String a(@Body B1 in) {
 			return "OK";
 		}
 		public static class B1 {
 			public String f1;
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String b(@Body B2 in) {
 			return "OK";
 		}
 		public static class B2 {
 			public int f1;
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String c(@Body B3 in) {
 			return "OK";
 		}
@@ -77,21 +77,21 @@ public class Rest_PredefinedStatusCodes_Test {
 			public int f1;
 			private B3(){}
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String d(@Body B4 in) {
 			return "OK";
 		}
 		public class B4 {
 			public B4(){}
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String e(@Body B5 in) {
 			return "OK";
 		}
 		static class B5 {
 			public B5(){}
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String f(@Body B6 in) {
 			return "OK";
 		}
@@ -102,7 +102,7 @@ public class Rest_PredefinedStatusCodes_Test {
 				throw new RuntimeException("Test error");
 			}
 		}
-		@RestMethod(name=PUT, path="/g/{a1}")
+		@RestMethod(method=PUT, path="/g/{a1}")
 		public String g(@Query("p1") int t1, @Path("a1") int a1, @Header("h1") int h1) {
 			return "OK";
 		}
@@ -180,7 +180,7 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest
 	public static class C {
-		@RestMethod(name=GET, path="/")
+		@RestMethod(method=GET, path="/")
 		public String a() {
 			return "OK";
 		}
@@ -211,7 +211,7 @@ public class Rest_PredefinedStatusCodes_Test {
 
 	@Rest
 	public static class D {
-		@RestMethod(name=GET, matchers=NeverMatcher.class)
+		@RestMethod(method=GET, matchers=NeverMatcher.class)
 		public String d() {
 			return "OK";
 		}

@@ -28,19 +28,19 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Default method</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGetDefault() {
 		...
 	}
 
 	<jc>// Method with path pattern</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/xxx"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/xxx"</js>)
 	<jk>public void</jk> doGetNoArgs(...) {
 		...
 	}
 
 	<jc>// Method with path pattern with arguments</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
 	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) MyEnum baz, <ja>@Path</ja>(<js>"bing"</js>) UUID bing) {
 		...
 	}
@@ -51,25 +51,25 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Try first </jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/bar"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/bar"</js>)
 	<jk>public void</jk> method1() {
 		...
 	}
 
 	<jc>// Try second</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/{bar}"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/{bar}"</js>)
 	<jk>public void</jk> method2(...) {
 		...
 	}
 
 	<jc>// Try third</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foo/*"</js>)
 	<jk>public void</jk> method3(...) {
 		...
 	}
 
 	<jc>// Try last</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> method4(...) {
 		...
 	}
@@ -92,12 +92,12 @@
 	The following example shows the distinction.
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String remainder) {
 		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
 	}
 
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>)
 	<jk>public void</jk> doPut() {
 		<jc>// URL path pattern must match exactly and will cause a 404 error if a remainder exists.</jc>
 	}
@@ -108,7 +108,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Example GET request with access to query parameters</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/urlWithParams"</js>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/urlWithParams"</js>)
 	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz;
 	}

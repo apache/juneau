@@ -53,14 +53,14 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req) {
 		RequestHeaders h = req.getHeaders();
 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
@@ -74,17 +74,17 @@
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a map.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Same, but name "*" is inferred.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Header</ja> Map&lt;String,Object&gt; map) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Multiple values passed as a bean.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@Header</ja> MyBean bean) {...}
 </p>
 

@@ -31,14 +31,14 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(<ja>@Attr</ja>(<js>"ETag"</js>) UUID etag) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		UUID etag = req.getAttributes().get(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...

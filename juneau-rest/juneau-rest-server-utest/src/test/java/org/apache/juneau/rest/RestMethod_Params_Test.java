@@ -54,15 +54,15 @@ public class RestMethod_Params_Test {
 		public String b(Messages t) {
 			return t == null ? null : t.getString("foo");
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String c(InputStream t) throws IOException {
 			return read(t);
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String d(ServletInputStream t) throws IOException {
 			return read(t);
 		}
-		@RestMethod(name=POST)
+		@RestMethod(method=POST)
 		public String e(Reader t) throws IOException {
 			return read(t);
 		}

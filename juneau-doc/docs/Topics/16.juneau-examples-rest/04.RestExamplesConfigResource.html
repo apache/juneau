@@ -57,12 +57,12 @@ ConfigResource
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
 		
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
 		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {
 			<jk>return</jk> getServletConfig().getConfig().asMap();
 		}
 		
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Edit config file."</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/edit"</js>, description=<js>"Edit config file."</js>)
 		<jk>public</jk> Form getConfigEditForm(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return</jk> <jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<js>"POST"</js>).enctype(<js>"application/x-www-form-urlencoded"</js>).children(
 				<jsm>div</jsm>()._class(<js>"data"</js>).children(
@@ -78,7 +78,7 @@ ConfigResource
 			);
 		}
 		
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -90,7 +90,7 @@ ConfigResource
 			<jk>return</jk> getSection(section); 
 		} 
 		
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -103,7 +103,7 @@ ConfigResource
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -115,7 +115,7 @@ ConfigResource
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
 		} 
 		
-		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -127,7 +127,7 @@ ConfigResource
 			<jk>return</jk> getServletConfig().getConfig().load(contents, <jk>true</jk>).asMap();
 		} 
 		
-		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
 			swagger={
 				<js>"parameters:["</js>,
@@ -141,7 +141,7 @@ ConfigResource
 			<jk>return</jk> getSection(section); 
 		} 
 		
-		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
+		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
 			swagger={
 				<js>"parameters:["</js>,

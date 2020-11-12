@@ -64,7 +64,7 @@ public class RestHook_Test {
 				req.getHeaders().put("Content-Type", overrideContentType);
 		}
 
-		@RestMethod(name=PUT,
+		@RestMethod(method=PUT,
 			reqAttrs={
 				"p3:mp3",
 				"p4:mp4"
@@ -74,7 +74,7 @@ public class RestHook_Test {
 			return in;
 		}
 
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.put("p3", "pp3");
 			attrs.put("p4", "pp4");
@@ -136,7 +136,7 @@ public class RestHook_Test {
 				attrs.put("Override-Content-Type", overrideContentType);
 		}
 
-		@RestMethod(name=PUT,
+		@RestMethod(method=PUT,
 			reqAttrs={
 				"p3:mp3",
 				"p4:mp4"
@@ -147,7 +147,7 @@ public class RestHook_Test {
 			return null;
 		}
 
-		@RestMethod(name=PUT)
+		@RestMethod(method=PUT)
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.put("p3", "pp3");
 			attrs.put("p4", "pp4");

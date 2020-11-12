@@ -33,11 +33,11 @@ public class RestClient_CallbackStrings_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(name=GET,path="/*")
+		@RestMethod(method=GET,path="/*")
 		public OMap get(RestRequest req) throws Exception {
 			return OMap.of("method","GET","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}
-		@RestMethod(name=PUT,path="/*")
+		@RestMethod(method=PUT,path="/*")
 		public OMap put(RestRequest req) throws Exception {
 			return OMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}

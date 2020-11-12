@@ -30,14 +30,14 @@
  </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req) {
 		<jk>boolean</jk> p1 = req.hasQuery(<js>"p1"</js>);
 		...

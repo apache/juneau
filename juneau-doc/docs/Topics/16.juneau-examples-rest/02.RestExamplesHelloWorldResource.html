@@ -41,7 +41,7 @@ HelloWorldResource
 	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
 		<jk>public</jk> String sayHello() { 
 			<jk>return</jk> <js>"Hello world!"</js>; 
 		} 

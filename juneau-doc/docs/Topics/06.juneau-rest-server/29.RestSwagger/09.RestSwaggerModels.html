@@ -25,7 +25,7 @@ Models
 <p class='bpcode w800'>
 	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
 		
-		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+		<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			...
 			flags={
 				<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>

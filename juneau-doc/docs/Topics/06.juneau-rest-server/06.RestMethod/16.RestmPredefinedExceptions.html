@@ -25,7 +25,7 @@ Predefined Exceptions
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,

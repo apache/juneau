@@ -456,7 +456,7 @@
 		}
 		
 		<jd>/** GET request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> JsonSchema getSchema() <jk>throws</jk> Exception {
 			<jk>return</jk> <jf>schema</jf>;
 		}
@@ -465,14 +465,14 @@
 		 * PUT request handler.
 		 * Replaces the schema document with the specified content, and then mirrors it as the response. 
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>)
+		<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> JsonSchema setSchema(<ja>@Body</ja> JsonSchema schema) <jk>throws</jk> Exception {
 			<jk>this</jk>.<jf>schema</jf> = schema;
 			<jk>return</jk> <jk>this</jk>.<jf>schema</jf>;
 		}
 	
 		<jd>/** OPTIONS request handler */</jd>
-	 	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
+	 	<ja>@RestMethod</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 		<jk>public</jk> ResourceOptions doOptions(RestRequest req) {
 			<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
 		}

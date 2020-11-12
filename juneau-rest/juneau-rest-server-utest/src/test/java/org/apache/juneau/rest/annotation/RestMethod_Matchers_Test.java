@@ -30,23 +30,23 @@ public class RestMethod_Matchers_Test {
 
 	@Rest
 	public static class A {
-		@RestMethod(name=GET, path="/one", matchers=A1.class)
+		@RestMethod(method=GET, path="/one", matchers=A1.class)
 		public String a() {
 			return "OK-1a";
 		}
-		@RestMethod(name=GET, path="/one", matchers=A2.class)
+		@RestMethod(method=GET, path="/one", matchers=A2.class)
 		public String b() {
 			return "OK-1b";
 		}
-		@RestMethod(name=GET, path="/one")
+		@RestMethod(method=GET, path="/one")
 		public String c() {
 			return "OK-1c";
 		}
-		@RestMethod(name=GET, path="/two")
+		@RestMethod(method=GET, path="/two")
 		public String d() {
 			return "OK-2a";
 		}
-		@RestMethod(name=GET, path="/two", matchers={A1.class, A2.class})
+		@RestMethod(method=GET, path="/two", matchers={A1.class, A2.class})
 		public String e() {
 			return "OK-2b";
 		}

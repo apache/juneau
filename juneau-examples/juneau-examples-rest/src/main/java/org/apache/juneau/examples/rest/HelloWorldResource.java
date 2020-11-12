@@ -45,7 +45,7 @@ public class HelloWorldResource implements BasicUniversalRest {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")
+	@RestMethod(method=GET, path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
 	}

@@ -13,6 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
+{todo}
 Widgets
 
 <p>
@@ -28,18 +29,17 @@ Widgets
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
+	<ja>@RestMethod</ja>(...)
+	<ja>@HtmlDocConfig</ja>(
 		widgets={
 			MyWidget.<jk>class</jk>
+		},
+		navlinks={
+			<js>"$W{MyWidget}"</js>
+		},
+		aside={
+			<js>"Check out this widget:  $W{MyWidget}"</js>
 		}
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"$W{MyWidget}"</js>
-			},
-			aside={
-				<js>"Check out this widget:  $W{MyWidget}"</js>
-			}
-		)
 	)
 </p>
 <p>

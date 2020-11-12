@@ -103,15 +103,15 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> Object method1()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 	 * 	<jk>public</jk> Object method2()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is less than 1.1.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
 	 *
@@ -120,11 +120,11 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * backwards compatibility.
 	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod();
 	 * 	}
@@ -204,7 +204,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 */
@@ -239,7 +239,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
 	 */
@@ -259,7 +259,6 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#name()}
 	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#method()}
 	 * 		</ul>
 	 * </ul>
@@ -469,7 +468,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqAttrs={<js>"Foo: bar"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
@@ -514,7 +513,7 @@ public class RestMethodContext extends BeanContext implements Comparable<RestMet
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
+	 * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, reqHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *

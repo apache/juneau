@@ -47,7 +47,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+ * 	<ja>@RestMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(
  * 			<ja>@Path</ja>(<js>"foo"</js>) String foo,
  * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
@@ -106,7 +106,7 @@ public @interface Path {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Comma-delimited list</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
@@ -116,7 +116,7 @@ public @interface Path {
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<jc>// JSON array</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
+	 * 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/pet/findByStatus/{status}"</js>)
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Path</ja>(
 	 * 			name=<js>"status"</js>,
@@ -1067,14 +1067,14 @@ public @interface Path {
 	 * The following are completely equivalent ways of defining a path entry:
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>,
+	 * 		method=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> petId) { ... }
 	 * </p>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<js>"GET"</js>,
+	 * 		method=<js>"GET"</js>,
 	 * 		path=<js>"/pet/{petId}"</js>
 	 * 	)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> petId) { ... }

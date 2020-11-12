@@ -51,7 +51,6 @@ public class RestMethodAnnotation_Test {
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
 		.method("method")
-		.name("name")
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
@@ -86,7 +85,6 @@ public class RestMethodAnnotation_Test {
 		.matchers(RestMatcher.class)
 		.maxInput("maxInput")
 		.method("method")
-		.name("name")
 		.on("on")
 		.parsers(Parser.class)
 		.path("path")
@@ -124,7 +122,6 @@ public class RestMethodAnnotation_Test {
 				+ "matchers:['org.apache.juneau.rest.RestMatcher'],"
 				+ "maxInput:'maxInput',"
 				+ "method:'method',"
-				+ "name:'name',"
 				+ "on:['on'],"
 				+ "parsers:['org.apache.juneau.parser.Parser'],"
 				+ "path:'path',"
@@ -202,7 +199,6 @@ public class RestMethodAnnotation_Test {
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
 		method="method",
-		name="name",
 		on="on",
 		parsers=Parser.class,
 		path="path",
@@ -239,7 +235,6 @@ public class RestMethodAnnotation_Test {
 		matchers=RestMatcher.class,
 		maxInput="maxInput",
 		method="method",
-		name="name",
 		on="on",
 		parsers=Parser.class,
 		path="path",
