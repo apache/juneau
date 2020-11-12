@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.annotation;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -110,7 +110,6 @@ public class BeanConfigAnnotation_Test {
 		beanConstructorVisibility="$X{PRIVATE}",
 		dictionary={A1.class,A2.class},
 		dictionary_replace={A1.class,A2.class,A3.class},
-		dictionary_remove=A2.class,
 		beanFieldVisibility="$X{PRIVATE}",
 		beanMapPutReturnsOldValue="$X{true}",
 		beanMethodVisibility="$X{PRIVATE}",
@@ -134,13 +133,10 @@ public class BeanConfigAnnotation_Test {
 		mediaType="$X{text/foo}",
 		notBeanClasses={A1.class,A2.class},
 		notBeanClasses_replace={A1.class,A2.class,A3.class},
-		notBeanClasses_remove=A2.class,
 		notBeanPackages={"$X{foo1}","$X{foo2}"},
 		notBeanPackages_replace={"$X{foo1}","$X{foo2}","$X{foo3}"},
-		notBeanPackages_remove={"$X{foo2}"},
 		swaps={AB1.class,AB2.class},
 		swaps_replace={AB1.class,AB2.class,AB3.class},
-		swaps_remove=AB2.class,
 		propertyNamer=PropertyNamerULC.class,
 		sortProperties="$X{true}",
 		timeZone="$X{z}",
@@ -158,7 +154,7 @@ public class BeanConfigAnnotation_Test {
 
 		check("PRIVATE", bc.getBeanClassVisibility());
 		check("PRIVATE", bc.getBeanConstructorVisibility());
-		check("A1,A3", bc.getBeanDictionaryClasses());
+		check("A1,A2,A3", bc.getBeanDictionaryClasses());
 		check("PRIVATE", bc.getBeanFieldVisibility());
 		check("true", bc.isBeanMapPutReturnsOldValue());
 		check("PRIVATE", bc.getBeanMethodVisibility());
@@ -180,9 +176,9 @@ public class BeanConfigAnnotation_Test {
 		check("en_US", bc.getLocale());
 		check("1", bc.getMaxDepth());
 		check("application/json", bc.getMediaType());
-		check("A1,A3", bc.getNotBeanClasses());
-		check("foo1,foo3", bc.getNotBeanPackagesNames());
-		check("AB1<String,Integer>,AB3<String,Integer>", bc.getSwaps());
+		check("A1,A2,A3", bc.getNotBeanClasses());
+		check("foo1,foo2,foo3", bc.getNotBeanPackagesNames());
+		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bc.getSwaps());
 		check("PropertyNamerULC", bc.getPropertyNamer());
 		check("true", bc.isSortProperties());
 		check("GMT", bc.getTimeZone());

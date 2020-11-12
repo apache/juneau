@@ -376,22 +376,16 @@ public @interface BeanConfig {
 	Class<?>[] dictionary() default {};
 
 	/**
-	 * Configuration property:  Add to bean dictionary.
+	 * Configuration property:  Replace bean dictionary.
+	 * 
+	 * <p>
+	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 */
 	Class<?>[] dictionary_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from bean dictionary.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary_remove}
-	 * </ul>
-	 */
-	Class<?>[] dictionary_remove() default {};
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -657,22 +651,16 @@ public @interface BeanConfig {
 	Class<?>[] notBeanClasses() default {};
 
 	/**
-	 * Configuration property:  Add to classes that should not be considered beans.
+	 * Configuration property:  Replace classes that should not be considered beans.
+	 * 
+	 * <p>
+	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
 	 * </ul>
 	 */
 	Class<?>[] notBeanClasses_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from classes that should not be considered beans.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 */
-	Class<?>[] notBeanClasses_remove() default {};
 
 	/**
 	 * Configuration property:  Bean package exclusions.
@@ -710,22 +698,16 @@ public @interface BeanConfig {
 	String[] notBeanPackages() default {};
 
 	/**
-	 * Configuration property:  Add to packages whose classes should not be considered beans.
+	 * Configuration property:  Replace packages whose classes should not be considered beans.
 	 *
+	 * <p>
+	 * Same as {@link #notBeanPackages()} but replaces any existing value.
+	 * 
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
 	 */
 	String[] notBeanPackages_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from packages whose classes should not be considered beans.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
-	 * </ul>
-	 */
-	String[] notBeanPackages_remove() default {};
 
 	/**
 	 * Configuration property:  Bean property namer.
@@ -806,22 +788,16 @@ public @interface BeanConfig {
 	Class<?>[] swaps() default {};
 
 	/**
-	 * Configuration property:  Add to Java object swap classes.
+	 * Configuration property: Replace Java object swap classes.
 	 *
+	 * <p>
+	 * Same as {@link #swaps()} but replaces any existing value.
+	 * 
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
 	 * </ul>
 	 */
 	Class<?>[] swaps_replace() default {};
-
-	/**
-	 * Configuration property:  Remove from Java object swap classes.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
-	 * </ul>
-	 */
-	Class<?>[] swaps_remove() default {};
 
 	/**
 	 * Configuration property:  Time zone.

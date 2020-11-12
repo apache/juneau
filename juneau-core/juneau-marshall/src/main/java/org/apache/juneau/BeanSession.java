@@ -1176,7 +1176,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
-	protected final Visibility getBeanClassVisibility() {
+	public final Visibility getBeanClassVisibility() {
 		return ctx.getBeanClassVisibility();
 	}
 
@@ -1187,7 +1187,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanConstructorVisibility() {
+	public final Visibility getBeanConstructorVisibility() {
 		return ctx.getBeanConstructorVisibility();
 	}
 
@@ -1199,7 +1199,7 @@ public class BeanSession extends Session {
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
 	// TODO - Rename to getBeanDictionary()
-	protected final List<Class<?>> getBeanDictionaryClasses() {
+	public final List<Class<?>> getBeanDictionaryClasses() {
 		return ctx.getBeanDictionaryClasses();
 	}
 
@@ -1211,7 +1211,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanFieldVisibility() {
+	public final Visibility getBeanFieldVisibility() {
 		return ctx.getBeanFieldVisibility();
 	}
 
@@ -1223,7 +1223,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
 	 */
-	protected final boolean isBeanMapPutReturnsOldValue() {
+	public final boolean isBeanMapPutReturnsOldValue() {
 		return ctx.isBeanMapPutReturnsOldValue();
 	}
 
@@ -1234,7 +1234,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
-	protected final Visibility getBeanMethodVisibility() {
+	public final Visibility getBeanMethodVisibility() {
 		return ctx.getBeanMethodVisibility();
 	}
 
@@ -1246,7 +1246,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	protected final boolean isBeansRequireDefaultConstructor() {
+	public final boolean isBeansRequireDefaultConstructor() {
 		return ctx.isBeansRequireDefaultConstructor();
 	}
 
@@ -1258,7 +1258,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	protected final boolean isBeansRequireSerializable() {
+	public final boolean isBeansRequireSerializable() {
 		return ctx.isBeansRequireSerializable();
 	}
 
@@ -1270,7 +1270,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
 	 */
-	protected final boolean isBeansRequireSettersForGetters() {
+	public final boolean isBeansRequireSettersForGetters() {
 		return ctx.isBeansRequireSettersForGetters();
 	}
 
@@ -1282,7 +1282,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if a Java class must contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
 	 */
-	protected final boolean isBeansRequireSomeProperties() {
+	public final boolean isBeansRequireSomeProperties() {
 		return ctx.isBeansRequireSomeProperties();
 	}
 
@@ -1293,7 +1293,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
-	protected final String getBeanTypePropertyName() {
+	public final String getBeanTypePropertyName() {
 		return ctx.getBeanTypePropertyName();
 	}
 
@@ -1307,7 +1307,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
-	protected final boolean isFluentSetters() {
+	public final boolean isFluentSetters() {
 		return ctx.isFluentSetters();
 	}
 
@@ -1318,7 +1318,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
-	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
+	public final boolean isIgnoreInvocationExceptionsOnGetters() {
 		return ctx.isIgnoreInvocationExceptionsOnGetters();
 	}
 
@@ -1329,7 +1329,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
-	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
+	public final boolean isIgnoreInvocationExceptionsOnSetters() {
 		return ctx.isIgnoreInvocationExceptionsOnSetters();
 	}
 
@@ -1342,7 +1342,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
 	 */
-	protected final boolean isIgnorePropertiesWithoutSetters() {
+	public final boolean isIgnorePropertiesWithoutSetters() {
 		return ctx.isIgnorePropertiesWithoutSetters();
 	}
 
@@ -1354,7 +1354,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	protected final boolean isIgnoreUnknownBeanProperties() {
+	public final boolean isIgnoreUnknownBeanProperties() {
 		return ctx.isIgnoreUnknownBeanProperties();
 	}
 
@@ -1365,7 +1365,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property is silently ignored.
 	 */
-	protected final boolean isIgnoreUnknownNullBeanProperties() {
+	public final boolean isIgnoreUnknownNullBeanProperties() {
 		return ctx.isIgnoreUnknownNullBeanProperties();
 	}
 
@@ -1376,7 +1376,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */
-	protected final Class<?>[] getNotBeanClasses() {
+	public final Class<?>[] getNotBeanClasses() {
 		return ctx.getNotBeanClasses();
 	}
 
@@ -1387,7 +1387,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
-	protected final String[] getNotBeanPackagesNames() {
+	public final String[] getNotBeanPackagesNames() {
 		return ctx.getNotBeanPackagesNames();
 	}
 
@@ -1409,7 +1409,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
-	protected final PropertyNamer getPropertyNamer() {
+	public final PropertyNamer getPropertyNamer() {
 		return ctx.getPropertyNamer();
 	}
 
@@ -1420,7 +1420,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
-	protected final boolean isSortProperties() {
+	public final boolean isSortProperties() {
 		return ctx.isSortProperties();
 	}
 
@@ -1431,7 +1431,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
-	protected final PojoSwap<?,?>[] getSwaps() {
+	public final PojoSwap<?,?>[] getSwaps() {
 		return ctx.getSwaps();
 	}
 
@@ -1442,7 +1442,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
-	protected final boolean isUseEnumNames() {
+	public final boolean isUseEnumNames() {
 		return ctx.isUseEnumNames();
 	}
 
@@ -1454,7 +1454,7 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	protected final boolean isUseInterfaceProxies() {
+	public final boolean isUseInterfaceProxies() {
 		return ctx.isUseInterfaceProxies();
 	}
 
@@ -1465,7 +1465,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
-	protected final boolean isUseJavaBeanIntrospector() {
+	public final boolean isUseJavaBeanIntrospector() {
 		return ctx.isUseJavaBeanIntrospector();
 	}
 

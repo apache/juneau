@@ -842,7 +842,7 @@ public abstract class Context {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	protected boolean isDebug() {
+	public boolean isDebug() {
 		return debug;
 	}
 
@@ -853,7 +853,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
-	protected final Locale getDefaultLocale() {
+	public final Locale getDefaultLocale() {
 		return locale;
 	}
 
@@ -864,7 +864,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
-	protected final MediaType getDefaultMediaType() {
+	public final MediaType getDefaultMediaType() {
 		return mediaType;
 	}
 
@@ -875,7 +875,7 @@ public abstract class Context {
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */
-	protected final TimeZone getDefaultTimeZone() {
+	public final TimeZone getDefaultTimeZone() {
 		return timeZone;
 	}
 

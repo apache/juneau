@@ -54,8 +54,6 @@ public class BeanConfigAnnotation {
 				psb.prependTo(BEAN_beanDictionary, a.dictionary());
 			if (a.dictionary_replace().length != 0)
 				psb.set(BEAN_beanDictionary, a.dictionary_replace());
-			if (a.dictionary_remove().length != 0)
-				psb.removeFrom(BEAN_beanDictionary, a.dictionary_remove());
 			if (! a.beanFieldVisibility().isEmpty())
 				psb.set(BEAN_beanFieldVisibility, visibility(a.beanFieldVisibility(), "beanFieldVisibility"));
 			if (! a.beanMapPutReturnsOldValue().isEmpty())
@@ -98,14 +96,10 @@ public class BeanConfigAnnotation {
 				psb.addTo(BEAN_notBeanClasses, a.notBeanClasses());
 			if (a.notBeanClasses_replace().length != 0)
 				psb.set(BEAN_notBeanClasses, a.notBeanClasses_replace());
-			if (a.notBeanClasses_remove().length != 0)
-				psb.removeFrom(BEAN_notBeanClasses, a.notBeanClasses_remove());
 			if (a.notBeanPackages().length != 0)
 				psb.addTo(BEAN_notBeanPackages, strings(a.notBeanPackages()));
 			if (a.notBeanPackages_replace().length != 0)
 				psb.set(BEAN_notBeanPackages, strings(a.notBeanPackages_replace()));
-			if (a.notBeanPackages_remove().length != 0)
-				psb.removeFrom(BEAN_notBeanPackages, strings(a.notBeanPackages_remove()));
 			if (a.propertyNamer() != PropertyNamer.Null.class)
 				psb.set(BEAN_propertyNamer, a.propertyNamer());
 			if (! a.sortProperties().isEmpty())
@@ -114,8 +108,6 @@ public class BeanConfigAnnotation {
 				psb.prependTo(BEAN_swaps, a.swaps());
 			if (a.swaps_replace().length != 0)
 				psb.set(BEAN_swaps, a.swaps_replace());
-			if (a.swaps_remove().length != 0)
-				psb.removeFrom(BEAN_swaps, a.swaps_remove());
 			if (! a.timeZone().isEmpty())
 				psb.set(CONTEXT_timeZone, timeZone(a.timeZone()));
 			if (! a.useEnumNames().isEmpty())

@@ -304,7 +304,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
-	protected final boolean isDetectRecursions() {
+	public final boolean isDetectRecursions() {
 		return detectRecursions;
 	}
 
@@ -316,7 +316,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
-	protected final boolean isIgnoreRecursions() {
+	public final boolean isIgnoreRecursions() {
 		return ignoreRecursions;
 	}
 
@@ -327,7 +327,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
-	protected final int getInitialDepth() {
+	public final int getInitialDepth() {
 		return initialDepth;
 	}
 
@@ -339,7 +339,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
 	 */
-	protected final int getMaxDepth() {
+	public final int getMaxDepth() {
 		return maxDepth;
 	}
 
