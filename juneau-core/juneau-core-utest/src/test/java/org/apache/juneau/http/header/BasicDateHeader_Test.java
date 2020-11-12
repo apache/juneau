@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.testutils.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.header.BasicDateHeader.*;

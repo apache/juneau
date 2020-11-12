@@ -25,7 +25,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.testutils.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**

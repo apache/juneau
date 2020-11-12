@@ -18,7 +18,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
@@ -395,16 +394,6 @@ public abstract class WriterSerializer extends Serializer {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Wraps the specified object inside a {@link StringObject}.
-	 *
-	 * @param o The object to wrap.
-	 * @return The wrapped object.
-	 */
-	public final StringObject toStringObject(Object o) {
-		return new StringObject(this, o);
 	}
 
 	/**
