@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfParser.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
@@ -114,9 +113,6 @@ public class RdfConfigAnnotation {
 
 			if (! a.trimWhitespace().isEmpty())
 				psb.set(RDF_trimWhitespace, bool(a.trimWhitespace()));
-
-			if (a.applyRdf().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyRdf());
 		}
 	}
 }

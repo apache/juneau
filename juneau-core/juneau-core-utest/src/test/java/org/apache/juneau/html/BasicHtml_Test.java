@@ -34,7 +34,7 @@ import org.junit.runners.*;
 public class BasicHtml_Test {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {
-		BeanWithWhitespaceTextFields2.class, BeanWithWhitespaceTextPwsFields2.class, BeanWithWhitespaceMixedFields2.class, BeanWithWhitespaceMixedPwsFields2.class, LinkBeanC.class
+		BeanWithWhitespaceTextFields2Config.class, BeanWithWhitespaceTextPwsFields2Config.class, BeanWithWhitespaceMixedFields2Config.class, BeanWithWhitespaceMixedPwsFields2Config.class, LinkBeanCConfig.class
 	};
 	private static final HtmlSerializer
 		s1 = HtmlSerializer.DEFAULT_SQ.builder().addRootType().applyAnnotations(ANNOTATED_CLASSES).build(),
@@ -3371,7 +3371,11 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtmlLink=@HtmlLink(on="LinkBeanC", nameProperty="a", uriProperty="b"))
+	@HtmlLink(on="Dummy1", nameProperty="a", uriProperty="b")
+	@HtmlLink(on="LinkBeanC", nameProperty="a", uriProperty="b")
+	@HtmlLink(on="Dummy2", nameProperty="a", uriProperty="b")
+	private static class LinkBeanCConfig {}
+
 	public static class LinkBeanC {
 		public String a;
 		public String b;
@@ -3553,8 +3557,14 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceTextFields2",format=XML)})
-	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)})
+	@Html(on="Dummy1",format=XML)
+	@Html(on="BeanWithWhitespaceTextFields2",format=XML)
+	@Html(on="Dummy2",format=XML)
+	@Xml(on="Dummy1.a",format=XmlFormat.TEXT)
+	@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)
+	@Xml(on="Dumuy2.a",format=XmlFormat.TEXT)
+	private static class BeanWithWhitespaceTextFields2Config {}
+
 	public static class BeanWithWhitespaceTextFields2 {
 		public String a;
 
@@ -3564,8 +3574,10 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)})
-	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)})
+	@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)
+	@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)
+	private static class BeanWithWhitespaceTextPwsFields2Config {}
+
 	public static class BeanWithWhitespaceTextPwsFields2 {
 		public String a;
 
@@ -3575,8 +3587,10 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceMixedFields2",format=XML)})
-	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)})
+	@Html(on="BeanWithWhitespaceMixedFields2",format=XML)
+	@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)
+	public static class BeanWithWhitespaceMixedFields2Config {}
+
 	public static class BeanWithWhitespaceMixedFields2 {
 		public String[] a;
 
@@ -3586,8 +3600,10 @@ public class BasicHtml_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtml={@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)})
-	@XmlConfig(applyXml={@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)})
+	@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)
+	@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)
+	public static class BeanWithWhitespaceMixedPwsFields2Config {}
+
 	@Html(format=XML)
 	public static class BeanWithWhitespaceMixedPwsFields2 {
 		public String[] a;

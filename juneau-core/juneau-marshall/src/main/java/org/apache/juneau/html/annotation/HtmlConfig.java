@@ -46,32 +46,6 @@ public @interface HtmlConfig {
 	// HtmlCommon
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Dynamically applies {@link Html @Html} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Html#on() @Html.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Html[] applyHtml() default {};
-
-	/**
-	 * Dynamically applies {@link HtmlLink @HtmlLink} annotations to specified classes.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link HtmlLink#on() @HtmlLink.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	HtmlLink[] applyHtmlLink() default {};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// HtmlSerializer
 	//-------------------------------------------------------------------------------------------------------------------

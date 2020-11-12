@@ -1396,11 +1396,15 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void jsonSchema_onclass_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A1a.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A1aConfig.class).build().createSession();
 		assertObject(s.getSchema(A1a.class)).json().is("{description:'baz',format:'bar',type:'foo','x-example':'{f1:123}',properties:{f1:{type:'integer',format:'int32'}}}");
 	}
 
-	@JsonSchemaConfig(applySchema=@Schema(on="A1a",type="foo",format="bar",description="baz",example="{f1:123}"))
+	@Schema(on="Dummy1",type="foo",format="bar",description="baz",example="{f1:123}")
+	@Schema(on="A1a",type="foo",format="bar",description="baz",example="{f1:123}")
+	@Schema(on="Dummy2",type="foo",format="bar",description="baz",example="{f1:123}")
+	private static class A1aConfig {}
+
 	public static class A1a {
 		public int f1;
 	}
@@ -1418,11 +1422,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void jsonSchema_onbeanfield_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A2a.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A2aConfig.class).build().createSession();
 		assertObject(s.getSchema(A2a.class)).json().is("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}");
 	}
 
-	@JsonSchemaConfig(applySchema=@Schema(on="A2a.f1",type="foo",format="bar",description="baz",example="123"))
+	@Schema(on="A2a.f1",type="foo",format="bar",description="baz",example="123")
+	private static class A2aConfig {}
+
 	public static class A2a {
 		public int f1;
 	}
@@ -1442,11 +1448,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void jsonSchema_onbeangetter_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A3a.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A3aConfig.class).build().createSession();
 		assertObject(s.getSchema(A3a.class)).json().is("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}");
 	}
 
-	@JsonSchemaConfig(applySchema=@Schema(on="A3a.getF1",type="foo",format="bar",description="baz",example="123"))
+	@Schema(on="A3a.getF1",type="foo",format="bar",description="baz",example="123")
+	private static class A3aConfig {}
+
 	public static class A3a {
 		public int getF1() {
 			return 123;
@@ -1470,11 +1478,13 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void jsonSchema_onbeansetter_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A4a.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(A4aConfig.class).build().createSession();
 		assertObject(s.getSchema(A4a.class)).json().is("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}");
 	}
 
-	@JsonSchemaConfig(applySchema=@Schema(on="A4a.setF1",type="foo",format="bar",description="baz",example="123"))
+	@Schema(on="A4a.setF1",type="foo",format="bar",description="baz",example="123")
+	private static class A4aConfig {}
+
 	public static class A4a {
 		public int getF1() {
 			return 123;
@@ -1502,7 +1512,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void jsonschema_onpojoswap_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(SwapWithAnnotation2.class)
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().applyAnnotations(SwapWithAnnotation2Config.class)
 			.swaps(SwapWithAnnotation2.class)
 			.build().createSession();
 		assertObject(s.getSchema(SimpleBean.class)).json().is("{description:'baz',format:'bar',type:'foo','x-example':'123'}");
@@ -1510,7 +1520,9 @@ public class JsonSchemaGeneratorTest {
 		assertObject(s.getSchema(SimpleBean[][].class)).json().is("{type:'array',items:{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}");
 	}
 
-	@JsonSchemaConfig(applySchema=@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123"))
+	@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz",example="123")
+	private static class SwapWithAnnotation2Config {}
+
 	public static class SwapWithAnnotation2 extends PojoSwap<SimpleBean,Integer> {}
 
 	//====================================================================================================

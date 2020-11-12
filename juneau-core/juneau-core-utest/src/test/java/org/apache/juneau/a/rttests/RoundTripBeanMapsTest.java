@@ -39,7 +39,7 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 public class RoundTripBeanMapsTest extends RoundTripTest {
 
-	static Class<?>[] ANNOTATED_CLASSES={L2.class, M2.class};
+	static Class<?>[] ANNOTATED_CLASSES={L2Config.class, M2Config.class};
 
 	public RoundTripBeanMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s.applyAnnotations(ANNOTATED_CLASSES), p == null ? null : p.applyAnnotations(ANNOTATED_CLASSES), flags);
@@ -897,7 +897,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		roundTrip(m, LinkedHashMap.class, String.class, L2.class);
 	}
 
-	@JsonConfig(applyJson=@Json(on="L2",wrapperAttr="foo"))
+	@Json(on="L2",wrapperAttr="foo")
+	private static class L2Config {}
+
 	public static class L2 {
 		public int f1;
 
@@ -953,7 +955,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		roundTrip(m, LinkedHashMap.class, String.class, M2.class);
 	}
 
-	@JsonConfig(applyJson=@Json(on="M2",wrapperAttr="foo"))
+	@Json(on="M2",wrapperAttr="foo")
+	private static class M2Config {}
+
 	public static class M2 {
 		int f1;
 

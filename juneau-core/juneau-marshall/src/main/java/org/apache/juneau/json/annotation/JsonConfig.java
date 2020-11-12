@@ -46,19 +46,6 @@ public @interface JsonConfig {
 	// JsonCommon
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Dynamically applies {@link Json @Json} annotations to specified classes.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Json#on() @Json.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Json[] applyJson() default {};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// JsonParser
 	//-------------------------------------------------------------------------------------------------------------------

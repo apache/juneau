@@ -142,7 +142,7 @@ public class XBeans {
 
 
 	@Bean(on="XD,XE,XF",sort=true)
-	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@UrlEncoding(on="C",expandedParams=true)
 	public static class Annotations {}
 
 	public static class XD {

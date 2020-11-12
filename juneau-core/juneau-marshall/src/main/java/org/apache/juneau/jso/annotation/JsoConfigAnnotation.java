@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jso.annotation;
 
-import static org.apache.juneau.BeanContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -40,10 +38,6 @@ public class JsoConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<JsoConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
-			JsoConfig a = ai.getAnnotation();
-
-			if (a.applyJso().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyJso());
 		}
 	}
 }

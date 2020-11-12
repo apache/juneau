@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.xml.XmlParser.*;
 import static org.apache.juneau.xml.XmlSerializer.*;
 
@@ -67,9 +66,6 @@ public class XmlConfigAnnotation {
 				psb.set(XML_resolver, a.resolver());
 			if (! a.validating().isEmpty())
 				psb.set(XML_validating, bool(a.validating()));
-
-			if (a.applyXml().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyXml());
 		}
 	}
 }

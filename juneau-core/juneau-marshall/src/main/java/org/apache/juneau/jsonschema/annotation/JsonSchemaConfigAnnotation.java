@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import org.apache.juneau.*;
@@ -57,9 +56,6 @@ public class JsonSchemaConfigAnnotation {
 				psb.set(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
 			if (! a.useBeanDefs().isEmpty())
 				psb.set(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
-
-			if (a.applySchema().length > 0)
-				psb.prependTo(BEAN_annotations, a.applySchema());
 		}
 	}
 }

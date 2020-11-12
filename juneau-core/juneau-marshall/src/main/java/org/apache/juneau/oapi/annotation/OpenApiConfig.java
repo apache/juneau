@@ -47,19 +47,6 @@ public @interface OpenApiConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Dynamically applies {@link OpenApi @OpenApi} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link OpenApi#on() @OpenApi.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	OpenApi[] applyOpenApi() default {};
-
-	/**
 	 * Default format for HTTP parts.
 	 *
 	 * <p>

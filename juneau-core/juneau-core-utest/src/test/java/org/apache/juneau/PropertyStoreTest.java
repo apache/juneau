@@ -1797,17 +1797,22 @@ public class PropertyStoreTest {
 	public void testEqualsWithAnnotations() {
 		HtmlSerializer
 			s1 = HtmlSerializer.create().build(),
-			s2 = HtmlSerializer.create().applyAnnotations(B1.class).build(),
-			s3 = HtmlSerializer.create().applyAnnotations(B1.class).build(),
-			s4 = HtmlSerializer.create().applyAnnotations(B2.class).build();
+			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
+			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class).build(),
+			s4 = HtmlSerializer.create().applyAnnotations(B2Config.class).build();
 		assertFalse(s1.getPropertyStore().equals(s2.getPropertyStore()));
 		assertFalse(s1.getPropertyStore().equals(s4.getPropertyStore()));
 		assertTrue(s2.getPropertyStore().equals(s3.getPropertyStore()));
 	}
 
-	@HtmlConfig(applyHtml={@Html(on="B1", format=HtmlFormat.XML)})
+	@Html(on="B1", format=HtmlFormat.XML)
+	private static class B1Config {}
+
 	public static class B1 {}
-	@HtmlConfig(applyHtml={@Html(on="B2", format=HtmlFormat.HTML)})
+
+	@Html(on="B2", format=HtmlFormat.HTML)
+	private static class B2Config {}
+
 	public static class B2 {}
 
 	@Test

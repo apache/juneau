@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.json.JsonParser.*;
 import static org.apache.juneau.json.JsonSerializer.*;
 
@@ -52,9 +51,6 @@ public class JsonConfigAnnotation {
 
 			if (! a.validateEnd().isEmpty())
 				psb.set(JSON_validateEnd, bool(a.validateEnd()));
-
-			if (a.applyJson().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyJson());
 		}
 	}
 }

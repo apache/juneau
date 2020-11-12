@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.html.HtmlSerializer.*;
 
 import org.apache.juneau.*;
@@ -54,11 +53,6 @@ public class HtmlConfigAnnotation {
 				psb.set(HTML_labelParameter, string(a.labelParameter()));
 			if (! a.uriAnchorText().isEmpty())
 				psb.set(HTML_uriAnchorText, string(a.uriAnchorText()));
-
-			if (a.applyHtml().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyHtml());
-			if (a.applyHtmlLink().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyHtmlLink());
 		}
 	}
 }

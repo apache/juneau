@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.oapi.OpenApiCommon.*;
 
 import org.apache.juneau.*;
@@ -43,8 +42,6 @@ public class OpenApiConfigAnnotation {
 		public void apply(AnnotationInfo<OpenApiConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
 			OpenApiConfig a = ai.getAnnotation();
 
-			if (a.applyOpenApi().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyOpenApi());
 			if (! a.format().isEmpty())
 				psb.set(OAPI_format, string(a.format()));
 			if (! a.collectionFormat().isEmpty())

@@ -164,19 +164,6 @@ public @interface JsonSchemaConfig {
 	String allowNestedExamples() default "";
 
 	/**
-	 * Dynamically applies {@link Schema @Schema} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Schema#on() @Schema.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Schema[] applySchema() default {};
-
-	/**
 	 * Configuration property:  Bean schema definition mapper.
 	 *
 	 * <p>

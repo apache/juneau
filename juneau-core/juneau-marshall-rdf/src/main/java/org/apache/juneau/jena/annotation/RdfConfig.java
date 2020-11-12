@@ -49,19 +49,6 @@ public @interface RdfConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Dynamically applies {@link Rdf @Rdf} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Rdf#on() @Rdf.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Rdf[] applyRdf() default {};
-
-	/**
 	 * Configuration property:  RDF language.
 	 *
 	 * <p>

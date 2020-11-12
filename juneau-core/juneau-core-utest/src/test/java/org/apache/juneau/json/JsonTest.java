@@ -228,8 +228,8 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(A2.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(A2.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(A2Config.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(A2Config.class).build();
 		String r;
 
 		A2 t = A2.create();
@@ -247,7 +247,11 @@ public class JsonTest {
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@JsonConfig(applyJson=@Json(on="A2",wrapperAttr="foo"))
+	@Json(on="Dummy1",wrapperAttr="foo")
+	@Json(on="A2",wrapperAttr="foo")
+	@Json(on="Dummy2",wrapperAttr="foo")
+	private static class A2Config {}
+
 	public static class A2 {
 		public int f1;
 
@@ -306,8 +310,8 @@ public class JsonTest {
 
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B2.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(B2.class).build();;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(B2Config.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(B2Config.class).build();;
 		String r;
 
 		B2 t = B2.create();
@@ -325,7 +329,9 @@ public class JsonTest {
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@JsonConfig(applyJson=@Json(on="B2",wrapperAttr="foo"))
+	@Json(on="B2",wrapperAttr="foo")
+	private static class B2Config {}
+
 	public static class B2 {
 		int f1;
 

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding.annotation;
 
-import static org.apache.juneau.BeanContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -47,9 +45,6 @@ public class UrlEncodingConfigAnnotation {
 				psb.set(UrlEncodingSerializer.URLENC_expandedParams, bool(a.expandedParams()));
 				psb.set(UrlEncodingParser.URLENC_expandedParams, bool(a.expandedParams()));
 			}
-
-			if (a.applyUrlEncoding().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyUrlEncoding());
 		}
 	}
 }

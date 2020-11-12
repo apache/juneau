@@ -25,6 +25,21 @@ Juneau 9.0.0 is a major release.
 		New {@link aoj.annotation.Marshalled @Marshalled} annotation for non-bean classes.
 	<li>
 		New {@link aoj.annotation.Bean#example() @Bean(example)} annotation.
+	<li>
+		Eliminated the various <c><ja>@XConfig</ja>(applyX={...})</c> annotations and replaced them with the ability
+		to apply targeted annotations directly to configuration classes and methods (such as REST classes/methods).
+		<p class='bpcode w800'>
+	<ja>@Rest</ja>(...)
+	<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>true</jk>)
+	<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>true</jk>)
+	<jk>public class</jk> MyRestClass {
+		
+		<ja>@RestMethod</ja>(...)
+		<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>false</jk>)
+		<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>false</jk>)
+		<jk>public</jk> Object myRestMethod() { ... }
+	}
+		</p>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

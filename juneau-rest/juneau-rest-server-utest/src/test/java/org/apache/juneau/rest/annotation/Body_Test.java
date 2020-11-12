@@ -32,7 +32,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.*;
 
@@ -687,7 +686,7 @@ public class Body_Test {
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	@Bean(on="A,B,C",sort=true)
-	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@UrlEncoding(on="C",expandedParams=true)
 	public static class E2 {
 		@RestMethod(name=PUT, path="/B")
 		public XBeans.XE a(@Body XBeans.XE b) {
@@ -854,7 +853,7 @@ public class Body_Test {
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	@Bean(on="A,B,C",sort=true)
-	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@UrlEncoding(on="C",expandedParams=true)
 	public static class H2 {
 		@RestMethod(name=POST,path="/",
 			properties={
@@ -908,7 +907,7 @@ public class Body_Test {
 		}
 		@RestMethod(name=POST)
 		@Bean(on="A,B,C",sort=true)
-		@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+		@UrlEncoding(on="C",expandedParams=true)
 		public XBeans.XE b(@Body(r=true) XBeans.XE content) throws Exception {
 			return content;
 		}

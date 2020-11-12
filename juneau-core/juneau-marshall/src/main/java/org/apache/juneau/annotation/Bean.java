@@ -213,6 +213,36 @@ public @interface Bean {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
+	 * <p>
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
+	 * It is ignored when the annotation is applied directly to classes.
+	 *
+	 * <h5 class='section'>Valid patterns:</h5>
+	 * <ul class='spaced-list'>
+	 *  <li>Classes:
+	 * 		<ul>
+	 * 			<li>Fully qualified:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Fully qualified inner class:
+	 * 				<ul>
+	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
+	 * 				</ul>
+	 * 			<li>Simple:
+	 * 				<ul>
+	 * 					<li><js>"MyClass"</js>
+	 * 				</ul>
+	 * 			<li>Simple inner:
+	 * 				<ul>
+	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
+	 * 					<li><js>"Inner1$Inner2"</js>
+	 * 					<li><js>"Inner2"</js>
+	 * 				</ul>
+	 * 		</ul>
+	 * 	<li>A comma-delimited list of anything on this list.
+	 * </ul>
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
 	 * </ul>

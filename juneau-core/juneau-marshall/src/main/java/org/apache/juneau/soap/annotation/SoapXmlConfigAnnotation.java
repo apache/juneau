@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.soap.SoapXmlSerializer.*;
 
 import org.apache.juneau.*;
@@ -45,9 +44,6 @@ public class SoapXmlConfigAnnotation {
 
 			if (! a.soapAction().isEmpty())
 				psb.set(SOAPXML_SOAPAction, string(a.soapAction()));
-
-			if (a.applySoapXml().length > 0)
-				psb.prependTo(BEAN_annotations, a.applySoapXml());
 		}
 	}
 }

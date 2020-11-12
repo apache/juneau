@@ -45,19 +45,6 @@ public @interface JsoConfig {
 	// JsoCommon
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Dynamically applies {@link Jso @Jso} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link Jso#on() @Jso.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	Jso[] applyJso() default {};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// JsoSerializer
 	//-------------------------------------------------------------------------------------------------------------------

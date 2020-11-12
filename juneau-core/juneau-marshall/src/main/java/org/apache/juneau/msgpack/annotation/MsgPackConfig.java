@@ -46,19 +46,6 @@ public @interface MsgPackConfig {
 	// MsgPackCommon
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Dynamically applies {@link MsgPack @MsgPack} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link MsgPack#on() @MsgPack.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	MsgPack[] applyMsgPack() default {};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// MsgPackSerializer
 	//-------------------------------------------------------------------------------------------------------------------

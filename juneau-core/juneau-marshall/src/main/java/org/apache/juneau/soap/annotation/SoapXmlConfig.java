@@ -45,19 +45,6 @@ public @interface SoapXmlConfig {
 	// SoapXmlCommon
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Dynamically applies {@link SoapXml @SoapXml} annotations to specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Provides an alternate approach for applying annotations using {@link SoapXml#on() @SoapXml.on} to specify the names
-	 * to apply the annotation to.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc DynamicallyAppliedAnnotations}
-	 * </ul>
-	 */
-	SoapXml[] applySoapXml() default {};
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// SoapXmlSerializer
 	//-------------------------------------------------------------------------------------------------------------------

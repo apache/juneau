@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv.annotation;
 
-import static org.apache.juneau.BeanContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -40,10 +38,6 @@ public class CsvConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<CsvConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
-			CsvConfig a = ai.getAnnotation();
-
-			if (a.applyCsv().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyCsv());
 		}
 	}
 }

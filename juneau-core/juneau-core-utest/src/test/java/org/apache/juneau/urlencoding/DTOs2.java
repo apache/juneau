@@ -23,7 +23,9 @@ public class DTOs2 {
 	@Bean(on="Dummy1",sort=true)
 	@Bean(on="A,B,C",sort=true)
 	@Bean(on="Dummy2",sort=true)
-	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
+	@UrlEncoding(on="Dummy1",expandedParams=true)
+	@UrlEncoding(on="C",expandedParams=true)
+	@UrlEncoding(on="Dummy2",expandedParams=true)
 	public static class Annotations {}
 
 	public static class A {

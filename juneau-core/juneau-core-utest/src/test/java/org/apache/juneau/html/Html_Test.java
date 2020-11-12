@@ -243,7 +243,7 @@ public class Html_Test {
 
 	@Test
 	public void b02_testHtmlAnnotationAsPlainText_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3.class).applyAnnotations(B4.class).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(B3Config.class).build();
 
 		Object o = null;
 		String r;
@@ -257,7 +257,10 @@ public class Html_Test {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
-	@HtmlConfig(applyHtml=@Html(on="B3", format=PLAIN_TEXT))
+	@Html(on="B3", format=PLAIN_TEXT)
+	@Html(on="B4.f1", format=PLAIN_TEXT)
+	private static class B3Config {}
+
 	public static class B3 {
 		public String f1 = "<f1>";
 		@Override /* Object */
@@ -266,7 +269,6 @@ public class Html_Test {
 		}
 	}
 
-	@HtmlConfig(applyHtml=@Html(on="B4.f1", format=PLAIN_TEXT))
 	public static class B4 {
 		public String f1 = "<f1>";
 	}
@@ -301,7 +303,7 @@ public class Html_Test {
 
 	@Test
 	public void c02_testHtmlAnnotationAsXml_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3.class).build();
+		HtmlSerializer s = HtmlSerializer.create().sq().addKeyValueTableHeaders().applyAnnotations(C3Config.class).build();
 		Object o = null;
 		String r;
 
@@ -314,7 +316,9 @@ public class Html_Test {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
-	@HtmlConfig(applyHtml=@Html(on="C3,C4.f1",format=XML))
+	@Html(on="C3,C4.f1",format=XML)
+	private static class C3Config {}
+
 	public static class C3 {
 		public String f1 = "<f1>";
 	}
@@ -344,7 +348,7 @@ public class Html_Test {
 
 	@Test
 	public void d02_testNoTableHeaders_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyMap2.class).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyMap2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -355,7 +359,9 @@ public class Html_Test {
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
-	@HtmlConfig(applyHtml=@Html(on="org.apache.juneau.html.Html_Test$MyMap2", noTables=true, noTableHeaders=true))
+	@Html(on="org.apache.juneau.html.Html_Test$MyMap2", noTables=true, noTableHeaders=true)
+	private static class MyMap2Config {}
+
 	public static class MyMap2 extends LinkedHashMap<String,String> {}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -380,7 +386,7 @@ public class Html_Test {
 
 	@Test
 	public void d04_testNoTableHeadersOnBeans_usingConfig() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyBean2.class).build();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.builder().applyAnnotations(MyBean2Config.class).build();
 		Object o = null;
 		String r;
 
@@ -390,7 +396,9 @@ public class Html_Test {
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
-	@HtmlConfig(applyHtml=@Html(on="MyBean2", noTableHeaders=true))
+	@Html(on="MyBean2", noTableHeaders=true)
+	private static class MyBean2Config {}
+
 	public static class MyBean2 {
 		public int a=1,b=2,c=3;
 	}

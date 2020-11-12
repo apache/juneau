@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext.annotation;
 
-import static org.apache.juneau.BeanContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -40,10 +38,6 @@ public class PlainTextConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<PlainTextConfig> ai, PropertyStoreBuilder psb, VarResolverSession vr) {
-			PlainTextConfig a = ai.getAnnotation();
-
-			if (a.applyPlainText().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyPlainText());
 		}
 	}
 }

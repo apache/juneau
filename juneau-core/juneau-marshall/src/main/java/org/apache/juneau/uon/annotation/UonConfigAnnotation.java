@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon.annotation;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.uon.UonParser.*;
 import static org.apache.juneau.uon.UonSerializer.*;
 
@@ -54,9 +53,6 @@ public class UonConfigAnnotation {
 				psb.set(UON_decoding, bool(a.decoding()));
 			if (! a.validateEnd().isEmpty())
 				psb.set(UON_validateEnd, bool(a.validateEnd()));
-
-			if (a.applyUon().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyUon());
 		}
 	}
 }
