@@ -110,6 +110,7 @@ public class PropertyStoreBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public PropertyStoreBuilder applyAnnotations(AnnotationList al, VarResolverSession vr) {
+		vr = vr == null ? VarResolver.DEFAULT.createSession() : vr;
 		for (AnnotationInfo<?> ai : al.sort()) {
 			try {
 				ai.getConfigApply(vr).apply((AnnotationInfo<Annotation>)ai, this, vr);

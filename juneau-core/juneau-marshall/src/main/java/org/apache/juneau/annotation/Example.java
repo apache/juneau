@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
+
 /**
  * Identifies examples for POJOs.
  *
@@ -68,7 +70,7 @@ public @interface Example {
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyExample()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

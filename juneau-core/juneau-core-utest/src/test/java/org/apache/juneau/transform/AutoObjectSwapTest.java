@@ -173,13 +173,15 @@ public class AutoObjectSwapTest {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="D01c")
+	private static class D01Config {}
+
 	@BeanIgnore
 	public static class D01 {
 		public Map<String,String> swap() {
 			return STRINGMAP;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
 	public static class D01c {
 		public Map<String,String> swap() {
 			return STRINGMAP;
@@ -200,7 +202,7 @@ public class AutoObjectSwapTest {
 
 	@Test
 	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(bc(D01c.class), D01c.class));
+		assertNull(find(bc(D01Config.class), D01c.class));
 	}
 
 	@Test
@@ -212,13 +214,15 @@ public class AutoObjectSwapTest {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="E01c.swap")
+	private static class E01Config {}
+
 	public static class E01 {
 		@BeanIgnore
 		public Map<String,String> swap() {
 			return STRINGMAP;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.swap"))
 	public static class E01c {
 		public Map<String,String> swap() {
 			return STRINGMAP;
@@ -248,7 +252,7 @@ public class AutoObjectSwapTest {
 
 	@Test
 	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(bc(E01c.class), E01c.class));
+		assertNull(find(bc(E01Config.class), E01c.class));
 	}
 
 	@Test
@@ -270,6 +274,9 @@ public class AutoObjectSwapTest {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="F01c.create(java.util.Map)")
+	private static class F01Config {}
+
 	public static class F01 {
 		public Map<String,String> swap() {
 			return STRINGMAP;
@@ -279,7 +286,6 @@ public class AutoObjectSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create(java.util.Map)"))
 	public static class F01c {
 		public Map<String,String> swap() {
 			return STRINGMAP;
@@ -337,7 +343,7 @@ public class AutoObjectSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
-		find(bc(F01c.class), F01c.class).unswap(null, null, null);
+		find(bc(F01Config.class), F01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)
@@ -369,6 +375,9 @@ public class AutoObjectSwapTest {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="G01c(Map)")
+	private static class G01Config {}
+
 	public static class G01 {
 		@BeanIgnore
 		public G01(Map<String,String> o) {}
@@ -377,7 +386,6 @@ public class AutoObjectSwapTest {
 		}
 	}
 
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(Map)"))
 	public static class G01c {
 		public G01c(Map<String,String> o) {}
 		public Map<String,String> swap() {
@@ -400,7 +408,7 @@ public class AutoObjectSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
-		find(bc(G01c.class), G01c.class).unswap(null, null, null);
+		find(bc(G01Config.class), G01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)

@@ -686,7 +686,7 @@ public class Body_Test {
 	}
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
-	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@Bean(on="A,B,C",sort=true)
 	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class E2 {
 		@RestMethod(name=PUT, path="/B")
@@ -853,7 +853,7 @@ public class Body_Test {
 	}
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
-	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@Bean(on="A,B,C",sort=true)
 	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class H2 {
 		@RestMethod(name=POST,path="/",
@@ -907,7 +907,7 @@ public class Body_Test {
 			return content;
 		}
 		@RestMethod(name=POST)
-		@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+		@Bean(on="A,B,C",sort=true)
 		@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 		public XBeans.XE b(@Body(r=true) XBeans.XE content) throws Exception {
 			return content;

@@ -132,27 +132,6 @@ public class BeanConfigAnnotation {
 				psb.set(BEANTRAVERSE_initialDepth, integer(a.initialDepth(), "initialDepth"));
 			if (! a.maxDepth().isEmpty())
 				psb.set(BEANTRAVERSE_maxDepth, integer(a.maxDepth(), "maxDepth"));
-
-			if (a.applyBean().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyBean());
-			if (a.applyBeanp().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyBeanp());
-			if (a.applyBeanc().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyBeanc());
-			if (a.applyBeanIgnore().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyBeanIgnore());
-			if (a.applyExample().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyExample());
-			if (a.applyMarshalled().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyMarshalled());
-			if (a.applyNameProperty().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyNameProperty());
-			if (a.applyParentProperty().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyParentProperty());
-			if (a.applyURI().length > 0)
-				psb.prependTo(BEAN_annotations, a.applyURI());
-			if (a.applySwap().length > 0)
-				psb.prependTo(BEAN_annotations, a.applySwap());
 		}
 
 		private Locale locale(String in) {

@@ -140,7 +140,8 @@ public class XBeans {
 		public static XC INSTANCE = get();
 	}
 
-	@BeanConfig(applyBean={@Bean(on="XD,XE,XF",sort=true)})
+
+	@Bean(on="XD,XE,XF",sort=true)
 	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class Annotations {}
 

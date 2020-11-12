@@ -69,16 +69,14 @@ import org.apache.juneau.transforms.*;
 @BeanConfig(
 	maxDepth="5",
 	detectRecursions="true",
-	applyBean={
-		@Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class),
-		@Bean(on="HttpSession",interfaceClass=HttpSession.class),
-		@Bean(on="ServletContext",interfaceClass=ServletContext.class)
-	},
 	swaps={
 		// Add a special filter for Enumerations
 		EnumerationSwap.class
 	}
 )
+@Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class)
+@Bean(on="HttpSession",interfaceClass=HttpSession.class)
+@Bean(on="ServletContext",interfaceClass=ServletContext.class)
 public class RequestEchoResource extends BasicRest {
 
 	/**

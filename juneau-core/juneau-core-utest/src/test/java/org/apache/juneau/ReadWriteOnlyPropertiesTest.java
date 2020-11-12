@@ -85,18 +85,18 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void b02_beanAnnotationParser() throws Exception {
-		Bc x = JsonParser.DEFAULT.builder().applyAnnotations(Bc.class).build().parse("{f1:1,f2:2}", Bc.class);
+		Bc x = JsonParser.DEFAULT.builder().applyAnnotations(BcConfig.class).build().parse("{f1:1,f2:2}", Bc.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
 
-	@BeanConfig(
-		applyBean=@Bean(on="Bc", readOnlyProperties="f1", writeOnlyProperties="f2"),
-		applyBeanp={
-			@Beanp(on="Bc.f1", ro="true"),
-			@Beanp(on="Bc.f2", wo="true")
-		}
-	)
+	@Bean(on="Dummy1", readOnlyProperties="f1", writeOnlyProperties="f2")
+	@Bean(on="Bc", readOnlyProperties="f1", writeOnlyProperties="f2")
+	@Bean(on="Dummy2", readOnlyProperties="f1", writeOnlyProperties="f2")
+	@Beanp(on="Bc.f1", ro="true")
+	@Beanp(on="Bc.f2", wo="true")
+	private static class BcConfig {}
+
 	public static class Bc {
 		public int f1;
 		public int f2;
@@ -247,7 +247,9 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(0, x.f2);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="Dc",readOnlyProperties="*"))
+	@Bean(on="Dc",readOnlyProperties="*")
+	private static class DcConfig {}
+
 	public static class Dc {
 		public int f1;
 		public int f2;
@@ -262,12 +264,12 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void d03_beanAnnotation_bproAll_serializer_usingConfig() throws Exception {
-		assertObject(Dc.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Dc.class).build()).is("{f1:1,f2:2}");
+		assertObject(Dc.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(DcConfig.class).build()).is("{f1:1,f2:2}");
 	}
 
 	@Test
 	public void d04_beanAnnotation_bproAll_Parser_usingConfig() throws Exception {
-		Dc x = JsonParser.DEFAULT.builder().applyAnnotations(Dc.class).build().parse("{f1:1,f2:2}", Dc.class);
+		Dc x = JsonParser.DEFAULT.builder().applyAnnotations(DcConfig.class).build().parse("{f1:1,f2:2}", Dc.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -301,7 +303,9 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(2, x.f2);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="Ec", writeOnlyProperties="*"))
+	@Bean(on="Ec", writeOnlyProperties="*")
+	private static class EcConfig {}
+
 	public static class Ec {
 		public int f1;
 		public int f2;
@@ -316,12 +320,12 @@ public class ReadWriteOnlyPropertiesTest {
 
 	@Test
 	public void e03_beanAnnotation_bpwoAll_serializer_usingConfig() throws Exception {
-		assertObject(E.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Ec.class).build()).is("{}");
+		assertObject(E.create()).serialized(SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(EcConfig.class).build()).is("{}");
 	}
 
 	@Test
 	public void e04_beanAnnotation_bpwoAll_Parser_usingConfig() throws Exception {
-		Ec x = JsonParser.DEFAULT.builder().applyAnnotations(Ec.class).build().parse("{f1:1,f2:2}", Ec.class);
+		Ec x = JsonParser.DEFAULT.builder().applyAnnotations(EcConfig.class).build().parse("{f1:1,f2:2}", Ec.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}

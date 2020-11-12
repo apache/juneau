@@ -42,7 +42,7 @@ import org.junit.*;
 public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public RoundTripTransformBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
-		super(label, s == null ? null : s.applyAnnotations(Bc.class, E1c.class, F1c.class, F2ac.class), p == null ? null : p.applyAnnotations(Bc.class, E1c.class, F1c.class, F2ac.class), flags);
+		super(label, s == null ? null : s.applyAnnotations(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class), p == null ? null : p.applyAnnotations(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class), flags);
 
 	}
 
@@ -239,7 +239,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("bar", t.f1);
 	}
 
-	@BeanConfig(applySwap=@Swap(on="Bc",value=BcSwap.class))
+	@Swap(on="Dummy1",value=BcSwap.class)
+	@Swap(on="Bc",value=BcSwap.class)
+	@Swap(on="Dummy2",value=BcSwap.class)
+	private static class BcConfig {}
+
 	public static class Bc {
 		public String f1;
 	}
@@ -430,8 +434,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSurrogatesThroughAnnotation_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(E1c.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(E1c.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(E1cConfig.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(E1cConfig.class).build();
 		Object r;
 		E1c x = E1c.create();
 
@@ -447,7 +451,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = roundTrip(x, E1c.class);
 	}
 
-	@BeanConfig(applySwap=@Swap(on="E1c",value=E2c.class))
+	@Swap(on="Dummy1",value=E2c.class)
+	@Swap(on="E1c",value=E2c.class)
+	@Swap(on="Dummy2",value=E2c.class)
+	private static class E1cConfig {}
+
 	public static class E1c {
 		public String f1;
 
@@ -512,7 +520,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = roundTrip(x, F1.class);
 	}
 
-	@BeanConfig(applySwap=@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoLocalDateTime.class))
+	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	private static class F1cConfig {}
+
 	public static class F1c {
 
 		private Calendar c;
@@ -534,8 +546,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSwapOnPrivateField_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F1c.class).build();
-		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F1c.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(F1cConfig.class).build();
+		JsonParser p = JsonParser.DEFAULT.builder().applyAnnotations(F1cConfig.class).build();
 
 		F1c x = F1c.create();
 		String r = null;
@@ -590,7 +602,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		x = roundTrip(x, F2.class);
 	}
 
-	@BeanConfig(applySwap=@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoLocalDateTime.class))
+	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoLocalDateTime.class)
+	private static class F2acConfig {}
+
 	public static class F2ac {
 		protected Calendar c;
 	}

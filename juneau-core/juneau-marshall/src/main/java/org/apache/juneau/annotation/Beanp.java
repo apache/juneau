@@ -210,7 +210,7 @@ public @interface Beanp {
 	 * Dynamically apply this annotation to the specified fields/methods.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyBeanp()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing field/method.
 	 * It is ignored when the annotation is applied directly to fields/methods.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

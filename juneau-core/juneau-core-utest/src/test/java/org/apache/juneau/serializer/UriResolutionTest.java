@@ -603,7 +603,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void a1c_testJsonSerialize_usingConfig() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.json, new TestURIc());
 	}
 
@@ -615,7 +615,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void a2c_testJsonParse_usingConfig() throws Exception {
-		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = JsonSerializer.create().ssq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testParse(s, JsonParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
 	}
 
@@ -627,7 +627,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void b1c_testXmlSerialize_usingConfig() throws Exception {
-		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.xml, new TestURIc());
 	}
 
@@ -639,8 +639,8 @@ public class UriResolutionTest {
 
 	@Test
 	public void b2c_testXmlParse_usingConfig() throws Exception {
-		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
-		testParse(s, XmlParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		Serializer s = XmlSerializer.create().sq().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		testParse(s, XmlParser.DEFAULT.builder().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
 	}
 
 	@Test
@@ -651,7 +651,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void c1c_testHtmlSerialize_usingConfig() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.html, new TestURIc());
 	}
 
@@ -663,8 +663,8 @@ public class UriResolutionTest {
 
 	@Test
 	public void c2c_testHtmlParse_usingConfig() throws Exception {
-		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
-		testParse(s, HtmlParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		Serializer s = HtmlSerializer.create().sq().uriAnchorText(AnchorText.LAST_TOKEN).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		testParse(s, HtmlParser.DEFAULT.builder().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
 	}
 
 	@Test
@@ -675,7 +675,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void d1c_testUonSerialize_usingConfig() throws Exception {
-		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.uon, new TestURIc());
 	}
 
@@ -687,8 +687,8 @@ public class UriResolutionTest {
 
 	@Test
 	public void d2c_testUonParse_usingConfig() throws Exception {
-		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
-		testParse(s, UonParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		Serializer s = UonSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		testParse(s, UonParser.DEFAULT.builder().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
 	}
 
 	@Test
@@ -699,7 +699,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void e1c_testUrlEncodingSerialize_usingConfig() throws Exception {
-		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.urlEncoding, new TestURIc());
 	}
 
@@ -711,8 +711,8 @@ public class UriResolutionTest {
 
 	@Test
 	public void e2c_testUrlEncodingParse_usingConfig() throws Exception {
-		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
-		testParse(s, UrlEncodingParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		Serializer s = UrlEncodingSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		testParse(s, UrlEncodingParser.DEFAULT.builder().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
 	}
 
 	@Test
@@ -723,7 +723,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void f1c_testMsgPackSerialize_usingConfig() throws Exception {
-		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.msgPack, new TestURIc());
 	}
 
@@ -735,8 +735,8 @@ public class UriResolutionTest {
 
 	@Test
 	public void f2c_testMsgPackParse_usingConfig() throws Exception {
-		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
-		testParse(s, MsgPackParser.DEFAULT.builder().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		testParse(s, MsgPackParser.DEFAULT.builder().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
 	}
 
 	@Test
@@ -747,7 +747,7 @@ public class UriResolutionTest {
 
 	@Test
 	public void g1c_testRdfXmlSerialize_usingConfig() throws Exception {
-		Serializer s = RdfSerializer.create().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.class).build();
+		Serializer s = RdfSerializer.create().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testSerialize(s, results.rdfXml, new TestURIc());
 	}
 }

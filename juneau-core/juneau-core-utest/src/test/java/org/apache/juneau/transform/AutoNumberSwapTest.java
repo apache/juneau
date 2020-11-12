@@ -596,13 +596,15 @@ public class AutoNumberSwapTest {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="D01c")
+	private static class D01Config {}
+
 	@BeanIgnore
 	public static class D01 {
 		public Integer toInteger() {
 			return 1;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
 	public static class D01c {
 		public Integer toInteger() {
 			return 1;
@@ -623,7 +625,7 @@ public class AutoNumberSwapTest {
 
 	@Test
 	public void d01c_ignoreClass_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(bc(D01c.class), D01c.class));
+		assertNull(find(bc(D01Config.class), D01c.class));
 	}
 
 	@Test
@@ -647,13 +649,15 @@ public class AutoNumberSwapTest {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="E01c.toInteger")
+	private static class E01Config {}
+
 	public static class E01 {
 		@BeanIgnore
 		public Integer toInteger() {
 			return 1;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.toInteger"))
 	public static class E01c {
 		public Integer toInteger() {
 			return 1;
@@ -688,7 +692,7 @@ public class AutoNumberSwapTest {
 
 	@Test
 	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(bc(E01c.class), E01c.class));
+		assertNull(find(bc(E01Config.class), E01c.class));
 	}
 
 	@Test
@@ -715,6 +719,9 @@ public class AutoNumberSwapTest {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="F01c.create(java.lang.Integer)")
+	private static class F01Config {}
+
 	public static class F01 {
 		public Integer toInteger() {
 			return 1;
@@ -724,7 +731,6 @@ public class AutoNumberSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create(java.lang.Integer)"))
 	public static class F01c {
 		public Integer toInteger() {
 			return 1;
@@ -782,7 +788,7 @@ public class AutoNumberSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void f01c_ignoreUnswapMethod_beanIgnore_usingConfig() throws Exception {
-		find(bc(F01c.class), F01c.class).unswap(null, null, null);
+		find(bc(F01Config.class), F01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)
@@ -814,6 +820,9 @@ public class AutoNumberSwapTest {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="G01c(java.lang.Integer)")
+	private static class G01Config {}
+
 	public static class G01 {
 		@BeanIgnore
 		public G01(Integer o) {}
@@ -822,7 +831,6 @@ public class AutoNumberSwapTest {
 		}
 	}
 
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(java.lang.Integer)"))
 	public static class G01c {
 		public G01c(Integer o) {}
 		public Integer toInteger() {
@@ -845,7 +853,7 @@ public class AutoNumberSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
-		find(bc(G01c.class), G01c.class).unswap(null, null, null);
+		find(bc(G01Config.class), G01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)

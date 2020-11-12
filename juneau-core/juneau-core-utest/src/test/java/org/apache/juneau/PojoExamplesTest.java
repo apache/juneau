@@ -65,11 +65,15 @@ public class PojoExamplesTest {
 
 	@Test
 	public void testExampleField_usingConfig() throws Exception {
-		BeanSession bs = BeanContext.create().applyAnnotations(B1c.class).build().createSession();
+		BeanSession bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().createSession();
 		assertObject(bs.getClassMeta(B1c.class).getExample(bs)).json().is("{f1:'f1b'}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B1c.EXAMPLE"))
+	@Example(on="Dummy1.EXAMPLE")
+	@Example(on="B1c.EXAMPLE")
+	@Example(on="Dummy2.EXAMPLE")
+	private static class B1cConfig {}
+
 	public static class B1c {
 		public String f1;
 
@@ -104,11 +108,15 @@ public class PojoExamplesTest {
 
 	@Test
 	public void testExampleFieldPrivate_usingConfig() throws Exception {
-		BeanSession bs = BeanContext.create().applyAnnotations(B2c.class).build().createSession();
+		BeanSession bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().createSession();
 		assertObject(bs.getClassMeta(B2c.class).getExample(bs)).json().is("{f1:'f1b'}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B2c.EXAMPLE"))
+	@Example(on="Dummy1.EXAMPLE")
+	@Example(on="B2c.EXAMPLE")
+	@Example(on="Dummy2.EXAMPLE")
+	private static class B2cConfig {}
+
 	public static class B2c {
 		public String f1;
 
@@ -146,11 +154,15 @@ public class PojoExamplesTest {
 
 	@Test
 	public void testExampleOnPublicNoArgMethod_usingConfig() throws Exception {
-		BeanSession bs = BeanContext.create().applyAnnotations(C1c.class).build().createSession();
+		BeanSession bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().createSession();
 		assertObject(bs.getClassMeta(C1c.class).getExample(bs)).json().is("{f1:'f1c'}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="C1c.x"))
+	@Example(on="Dummy1.x")
+	@Example(on="C1c.x")
+	@Example(on="Dummy2.x")
+	private static class C1cConfig {}
+
 	public static class C1c {
 		public String f1;
 
@@ -189,11 +201,15 @@ public class PojoExamplesTest {
 
 	@Test
 	public void testExampleOnPrivateNoArgMethod_usingConfig() throws Exception {
-		BeanSession bs = BeanContext.create().applyAnnotations(C2c.class).build().createSession();
+		BeanSession bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().createSession();
 		assertObject(bs.getClassMeta(C2c.class).getExample(bs)).json().is("{f1:'f1c'}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="C2c.x"))
+	@Example(on="Dummy1.x")
+	@Example(on="C2c.x")
+	@Example(on="Dummy2.x")
+	private static class C2cConfig {}
+
 	public static class C2c {
 		public String f1;
 
@@ -233,11 +249,15 @@ public class PojoExamplesTest {
 
 	@Test
 	public void testExampleOnPublicOneArgMethod_usingConfig() throws Exception {
-		BeanSession bs = BeanContext.create().applyAnnotations(D1c.class).build().createSession();
+		BeanSession bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().createSession();
 		assertObject(bs.getClassMeta(D1c.class).getExample(bs)).json().is("{f1:'f1d'}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="D1c.x(BeanSession)"))
+	@Example(on="Dummy1.x(BeanSession)")
+	@Example(on="D1c.x(BeanSession)")
+	@Example(on="Dummy2.x(BeanSession)")
+	private static class D1cConfig {}
+
 	public static class D1c {
 		public String f1;
 

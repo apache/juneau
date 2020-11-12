@@ -168,7 +168,7 @@ public class ExampleAnnotation {
 	/**
 	 * Applies targeted {@link Example} annotations to a {@link PropertyStoreBuilder}.
 	 */
-	public class Apply extends ConfigApply<Example> {
+	public static class Apply extends ConfigApply<Example> {
 
 		/**
 		 * Constructor.

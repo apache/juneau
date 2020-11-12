@@ -533,7 +533,7 @@ public class BeanMapTest {
 		m.put("b", new D2c());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = JsonParser.create().dictionary(D2c.class).applyAnnotations(D1c.class).build();
+		JsonParser p = JsonParser.create().dictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", OList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(OList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2c.class.getName(), t.lb1.get(0).getClass().getName());
@@ -555,11 +555,11 @@ public class BeanMapTest {
 		assertEquals("foobar", t.ab2[0].s);
 	}
 
-	@BeanConfig(
-		applyBean={
-			@Bean(on="D2c", typeName="D2")
-		}
-	)
+	@Bean(on="Dummy1", typeName="dummy")
+	@Bean(on="D2c", typeName="D2")
+	@Bean(on="Dummy2", typeName="dummy")
+	private static class D1cConfig {}
+
 	public static class D1c {
 		public D2c b;
 		public List<D2c> lb1;
@@ -1090,7 +1090,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testPropertyNameFactoryDashedLC1_usingConfig() throws Exception {
-		BeanMap<P1c> m = bc.builder().applyAnnotations(P1c.class).build().createSession().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
+		BeanMap<P1c> m = bc.builder().applyAnnotations(P1cConfig.class).build().createSession().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
 		assertEquals(3, m.get("bing-boo-url"));
@@ -1106,7 +1106,11 @@ public class BeanMapTest {
 		assertEquals(6, b.bingBooURL);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class))
+	@Bean(on="Dummy1", propertyNamer=PropertyNamerDLC.class)
+	@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class)
+	@Bean(on="Dummy2", propertyNamer=PropertyNamerDLC.class)
+	private static class P1cConfig {}
+
 	public static class P1c {
 		public int foo, barBaz, bingBooURL;
 	}
@@ -1826,7 +1830,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testHiddenProperties_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(Uc.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().applyAnnotations(UcConfig.class).build();
 		BeanMeta bm = s.getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1844,7 +1848,11 @@ public class BeanMapTest {
 		assertEquals("b(setter)", t.b);
 	}
 
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD"))
+	@BeanIgnore(on="Dummy1")
+	@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD")
+	@BeanIgnore(on="Dummy2")
+	private static class UcConfig {}
+
 	public static class Uc {
 		public String a, b;
 
@@ -1902,12 +1910,16 @@ public class BeanMapTest {
 
 	@Test
 	public void testBeanPropertyOrder_usingConfig() throws Exception {
-		WriterSerializer ws = JsonSerializer.create().simple().sq().applyAnnotations(Vc.class).build();
+		WriterSerializer ws = JsonSerializer.create().simple().sq().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
 
-	@BeanConfig(applyBean=@Bean(on="V3c", stopClass=Vc.class))
+	@Bean(on="Dummy1", stopClass=Vc.class)
+	@Bean(on="V3c", stopClass=Vc.class)
+	@Bean(on="Dummy2", stopClass=Vc.class)
+	private static class VcConfig {}
+
 	public static class Vc {
 		public String a1="1", a2="2";
 	}

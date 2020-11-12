@@ -193,7 +193,9 @@ public class AutoListSwapTest {
 		assertNull(find(D02.D02A.class));
 	}
 
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="D01c"))
+	@BeanIgnore(on="D01c")
+	private static class D01cConfig {}
+
 	public static class D01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -209,17 +211,20 @@ public class AutoListSwapTest {
 
 	@Test
 	public void d03_ignoreClass_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(bc(D01c.class), D01c.class));
+		assertNull(find(bc(D01cConfig.class), D01c.class));
 	}
 
 	@Test
 	public void d04_ignoreClass_memberClass_usingConfig() throws Exception {
-		assertNull(find(bc(D01c.class), D02c.D02Ac.class));
+		assertNull(find(bc(D01cConfig.class), D02c.D02Ac.class));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
+
+	@BeanIgnore(on="E01c.toList")
+	private static class E01Config {}
 
 	public static class E01 {
 		@BeanIgnore
@@ -227,7 +232,6 @@ public class AutoListSwapTest {
 			return STRINGLIST;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="E01c.toList"))
 	public static class E01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -262,7 +266,7 @@ public class AutoListSwapTest {
 
 	@Test
 	public void e01c_ignoreSwapMethod_beanIgnore_usingConfig() throws Exception {
-		assertNull(find(BeanContext.DEFAULT.builder().applyAnnotations(E01c.class).build(), E01c.class));
+		assertNull(find(BeanContext.DEFAULT.builder().applyAnnotations(E01Config.class).build(), E01c.class));
 	}
 
 	@Test
@@ -289,6 +293,9 @@ public class AutoListSwapTest {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="F01c.create")
+	private static class F01Config {}
+
 	public static class F01 {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -298,7 +305,6 @@ public class AutoListSwapTest {
 			return null;
 		}
 	}
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="F01c.create"))
 	public static class F01c {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -356,7 +362,7 @@ public class AutoListSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void f01c_ignoreUnswapMethod_beanIgnore_applyConfig() throws Exception {
-		find(bc(F01c.class), F01c.class).unswap(null, null, null);
+		find(bc(F01Config.class), F01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)
@@ -388,6 +394,9 @@ public class AutoListSwapTest {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
+	@BeanIgnore(on="G01c(List)")
+	private static class G01Config {}
+
 	public static class G01 {
 		@BeanIgnore
 		public G01(List<String> o) {}
@@ -396,7 +405,6 @@ public class AutoListSwapTest {
 		}
 	}
 
-	@BeanConfig(applyBeanIgnore=@BeanIgnore(on="G01c(List)"))
 	public static class G01c {
 		public G01c(List<String> o) {}
 		public List<String> toList() {
@@ -419,7 +427,7 @@ public class AutoListSwapTest {
 
 	@Test(expected = ParseException.class)
 	public void g01c_ignoreUnswapConstructor_beanIgnore_usingConfig() throws Exception {
-		find(bc(G01c.class), G01c.class).unswap(null, null, null);
+		find(bc(G01Config.class), G01c.class).unswap(null, null, null);
 	}
 
 	@Test(expected = ParseException.class)

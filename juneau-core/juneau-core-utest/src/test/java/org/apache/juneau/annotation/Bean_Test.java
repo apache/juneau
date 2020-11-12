@@ -52,7 +52,11 @@ public class Bean_Test {
 		assertEquals("{f1:1}", json);
 	}
 
-	@BeanConfig(applyBean=@Bean(on="A2"))
+	@Bean(on="Dummy1")
+	@Bean(on="A2")
+	@Bean(on="Dummy2")
+	private static class A2Config {}
+
 	@SuppressWarnings("unused")
 	private static class A2 {
 		public int f1;
@@ -63,7 +67,7 @@ public class Bean_Test {
 			return a;
 		}
 	}
-	static ClassInfo a2ci = ClassInfo.of(A2.class);
+	static ClassInfo a2ci = ClassInfo.of(A2Config.class);
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
@@ -119,7 +123,12 @@ public class Bean_Test {
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
-	@BeanConfig(applyBeanc=@Beanc(on="B2()"),applyBeanp={@Beanp(on="B2.f1"),@Beanp(on="B2.setF2"),@Beanp(on="B2.getF2")})
+	@Beanc(on="B2()")
+	@Beanp(on="B2.f1")
+	@Beanp(on="B2.setF2")
+	@Beanp(on="B2.getF2")
+	private static class B2Config {}
+
 	@SuppressWarnings("unused")
 	public static class B2 {
 
@@ -144,7 +153,7 @@ public class Bean_Test {
 			return b;
 		}
 	}
-	static ClassInfo b2ci = ClassInfo.of(B2.class);
+	static ClassInfo b2ci = ClassInfo.of(B2Config.class);
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {

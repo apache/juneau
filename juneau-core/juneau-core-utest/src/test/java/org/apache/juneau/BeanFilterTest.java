@@ -87,8 +87,8 @@ public class BeanFilterTest {
 
 	@Test
 	public void testSubTypes_usingConfig() throws Exception {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().applyAnnotations(E.class).build();
-		JsonParser p = JsonParser.create().applyAnnotations(E1.class).build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
+		JsonParser p = JsonParser.create().applyAnnotations(EConfig2.class).build();
 
 		E1 e1 = new E1();
 		e1.f1 = "f1";
@@ -112,16 +112,16 @@ public class BeanFilterTest {
 		assertEquals("f2", ((F2)e.fb).f2);
 	}
 
-	@BeanConfig(
-		applyBean={
-			@Bean(on="E", dictionary={E1.class, E2.class}),
-			@Bean(on="E1", typeName="E1"),
-			@Bean(on="E2", typeName="E2"),
-			@Bean(on="F", dictionary={F1.class,F2.class}),
-			@Bean(on="F1", typeName="F1"),
-			@Bean(on="F2", typeName="F2")
-		}
-	)
+	@Bean(on="E", dictionary={E1.class, E2.class})
+	@Bean(on="E1", typeName="E1")
+	@Bean(on="E2", typeName="E2")
+	@Bean(on="F", dictionary={F1.class,F2.class})
+	@Bean(on="F1", typeName="F1")
+	@Bean(on="F2", typeName="F2")
+	private static class EConfig {}
+
+	private static class EConfig2 extends EConfig {}
+
 	public static abstract class E {
 		public String f0 = "f0";
 		public F fb;

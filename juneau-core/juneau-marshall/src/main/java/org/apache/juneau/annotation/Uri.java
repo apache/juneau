@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
+
 /**
  * Used to identify a class or bean property as a URI.
  *
@@ -47,7 +49,7 @@ public @interface Uri {
 	 * Dynamically apply this annotation to the specified class/method/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyURI()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
 	 * It is ignored when the annotation is applied directly to class/method/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

@@ -20,7 +20,9 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 public class DTOs2 {
 
-	@BeanConfig(applyBean={@Bean(on="A,B,C",sort=true)})
+	@Bean(on="Dummy1",sort=true)
+	@Bean(on="A,B,C",sort=true)
+	@Bean(on="Dummy2",sort=true)
 	@UrlEncodingConfig(applyUrlEncoding={@UrlEncoding(on="C",expandedParams=true)})
 	public static class Annotations {}
 

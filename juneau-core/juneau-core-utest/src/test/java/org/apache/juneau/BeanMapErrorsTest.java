@@ -60,7 +60,7 @@ public class BeanMapErrorsTest {
 
 	@Test
 	public void beanPropertyMethodNotInBeanProperties_usingConfig() {
-		BeanContext bc = BeanContext.create().applyAnnotations(B1.class).build();
+		BeanContext bc = BeanContext.create().applyAnnotations(B1Config.class).build();
 
 		BeanMap<B1> bm = bc.createBeanSession().newBeanMap(B1.class);
 		assertTrue(bm.containsKey("f2"));
@@ -71,14 +71,12 @@ public class BeanMapErrorsTest {
 		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
-	@BeanConfig(
-		applyBean={
-			@Bean(on="B1", p="f1"),
-		},
-		applyBeanp={
-			@Beanp(on="B1.f2", value="f2")
-		}
-	)
+	@Bean(on="Dummy",p="dummy")
+	@Bean(on="B1", p="f1")
+	@Beanp(on="Dummy", value="dummy")
+	@Beanp(on="B1.f2", value="f2")
+	private static class B1Config {}
+
 	public static class B1 {
 		public int f1;
 		private int f2 = -1;
@@ -119,7 +117,7 @@ public class BeanMapErrorsTest {
 
 	@Test
 	public void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
-		BeanContext bc = BeanContext.create().applyAnnotations(B2.class).build();
+		BeanContext bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
 		BeanMap<B2> bm = bc.createBeanSession().newBeanMap(B2.class);
 		assertTrue(bm.containsKey("f2"));
@@ -130,14 +128,12 @@ public class BeanMapErrorsTest {
 		assertFalse(bm.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList()).contains("f2"));
 	}
 
-	@BeanConfig(
-		applyBean={
-			@Bean(on="B2", p="f1")
-		},
-		applyBeanp={
-			@Beanp(on="B2.f2", value="f2")
-		}
-	)
+	@Bean(on="Dummy",p="dummy")
+	@Bean(on="B2", p="f1")
+	@Beanp(on="Dummy", value="dummy")
+	@Beanp(on="B2.f2", value="f2")
+	private static class B2Config {}
+
 	public static class B2 {
 		public int f1;
 

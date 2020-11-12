@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+
 import static java.util.Collections.*;
 
 /**
@@ -31,40 +32,40 @@ public interface MetaProvider {
 		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
 			if (a == null || c == null)
 				return emptyList();
-			A aa = c.getAnnotation(a);
-			return aa == null ? emptyList() : singletonList(aa);
+			A[] aa = c.getAnnotationsByType(a);
+			return Arrays.asList(aa);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
 			if (a == null || c == null)
 				return emptyList();
-			A aa = c.getDeclaredAnnotation(a);
-			return aa == null ? emptyList() : singletonList(aa);
+			A[] aa = c.getDeclaredAnnotationsByType(a);
+			return Arrays.asList(aa);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
 			if (a == null || m == null)
 				return emptyList();
-			A aa = m.getAnnotation(a);
-			return aa == null ? emptyList() : singletonList(aa);
+			A[] aa = m.getAnnotationsByType(a);
+			return Arrays.asList(aa);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
 			if (a == null || f == null)
 				return emptyList();
-			A aa = f.getAnnotation(a);
-			return aa == null ? emptyList() : singletonList(aa);
+			A[] aa = f.getAnnotationsByType(a);
+			return Arrays.asList(aa);
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
 			if (a == null || c == null)
 				return emptyList();
-			A aa = c.getAnnotation(a);
-			return aa == null ? emptyList() : singletonList(aa);
+			A[] aa = c.getAnnotationsByType(a);
+			return Arrays.asList(aa);
 		}
 	};
 

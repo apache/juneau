@@ -17,6 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
+
 /**
  * Identifies a setter as a method for adding a parent reference to a child object.
  *
@@ -50,7 +52,7 @@ public @interface ParentProperty {
 	 * Dynamically apply this annotation to the specified methods/fields.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyParentProperty()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing method/field.
 	 * It is ignored when the annotation is applied directly to methods/fields.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

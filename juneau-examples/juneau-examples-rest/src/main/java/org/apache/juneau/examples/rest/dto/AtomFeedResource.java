@@ -70,9 +70,7 @@ import org.apache.juneau.serializer.annotation.*;
 	rdfxml_tab="5",
 	addRootProperty="true"
 )
-@BeanConfig(
-	applyMarshalled=@Marshalled(onClass=Feed.class,example="$F{AtomFeedResource_example.json}")
-)
+@Marshalled(onClass=Feed.class,example="$F{AtomFeedResource_example.json}")
 public class AtomFeedResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;
 

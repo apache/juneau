@@ -432,7 +432,7 @@ public class BeanConfigTest {
 
 	@Test
 	public void testReadOnlyProperties_usingConfig() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(ReadOnlyPerson2.class).build().createSession();
+		BeanSession session = BeanContext.DEFAULT.builder().applyAnnotations(ReadOnlyPerson2Config.class).build().createSession();
 		Object o;
 
 		// Bean to String
@@ -445,7 +445,6 @@ public class BeanConfigTest {
 	}
 
 
-	@BeanConfig(applyBean=@Bean(on="ReadOnlyPerson2",p="name,age"),applyBeanc=@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age"))
 	public static class ReadOnlyPerson2 {
 		private final String name;
 		private final int age;
@@ -469,6 +468,14 @@ public class BeanConfigTest {
 			return "toString():name=" + name + ",age=" + age;
 		}
 	}
+
+	@Bean(on="Dummy1",p="dummy")
+	@Bean(on="ReadOnlyPerson2",p="name,age")
+	@Bean(on="Dummy2",p="dummy")
+	@Beanc(on="Dummy1",properties="dummy")
+	@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age")
+	@Beanc(on="Dummy2",properties="dummy")
+	private static class ReadOnlyPerson2Config {}
 
 	//====================================================================================================
 	// testEnums

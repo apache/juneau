@@ -334,7 +334,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleMethod_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1cConfig.class).build().createSession();
 		assertObject(s.getSchema(B1c.class)).json().is("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}");
 	}
 
@@ -342,17 +342,21 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethod_wDefault_usingConfig() throws Exception {
 		B1c b = new B1c();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1c.class).example(B1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1cConfig.class).example(B1c.class, b).build().createSession();
 		assertObject(s.getSchema(B1c.class)).json().is("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B1cConfig.class).build().createSession();
 		assertObject(s.getSchema(B1c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B1c.example"))
+	@Example(on="Dummy1.example")
+	@Example(on="B1c.example")
+	@Example(on="Dummy2.example")
+	private static class B1cConfig {}
+
 	public static class B1c extends SimpleBean {
 
 		public static B1c example() {
@@ -390,17 +394,21 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_BEAN_exampleMethodOverridden_wDefault_usingConfig() throws Exception {
 		B2c b = new B2c();
 		b.f1 = "baz";
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B2c.class).example(B2c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B2cConfig.class).example(B2c.class, b).build().createSession();
 		assertObject(s.getSchema(B2c.class)).json().is("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'baz'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethodOverridden_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B2c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B2cConfig.class).build().createSession();
 		assertObject(s.getSchema(B2c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B2c.example2"))
+	@Example(on="Dummy1.example2")
+	@Example(on="B2c.example2")
+	@Example(on="Dummy2.example2")
+	private static class B2cConfig {}
+
 	public static class B2c extends B1c {
 
 		public static B2c example2() {
@@ -436,17 +444,19 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B3cConfig.class).build().createSession();
 		assertObject(s.getSchema(B3c.class)).json().is("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B3cConfig.class).build().createSession();
 		assertObject(s.getSchema(B3c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B3c.EXAMPLE"))
+	@Example(on="B3c.EXAMPLE")
+	private static class B3cConfig {}
+
 	public static class B3c extends SimpleBean {
 
 		public static B3c EXAMPLE = getExample();
@@ -475,17 +485,19 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B4c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B4cConfig.class).build().createSession();
 		assertObject(s.getSchema(B4c.class)).json().is("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}");
 	}
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B4c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").applyAnnotations(B4cConfig.class).build().createSession();
 		assertObject(s.getSchema(B4c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="B4c", value="{f1:'foobar'}"))
+	@Example(on="B4c", value="{f1:'foobar'}")
+	private static class B4cConfig {}
+
 	public static class B4c extends SimpleBean {}
 
 	@Test
@@ -541,7 +553,7 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleMethod_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C1c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C1cConfig.class).build().createSession();
 		assertObject(s.getSchema(C1c.class)).json().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}");
 	}
 
@@ -549,11 +561,13 @@ public class JsonSchemaGeneratorTest {
 	public void addExample_MAP_exampleMethod_wDefault_usingConfig() throws Exception {
 		C1c b = new C1c();
 		b.put(456, B1.example());
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C1c.class).example(C1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C1cConfig.class).example(C1c.class, b).build().createSession();
 		assertObject(s.getSchema(C1c.class)).json().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'456':{f1:'foobar'}}}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="C1c.example"))
+	@Example(on="C1c.example")
+	private static class C1cConfig {}
+
 	@SuppressWarnings("serial")
 	public static class C1c extends BeanMap {
 
@@ -591,18 +605,20 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C2c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C2cConfig.class).build().createSession();
 		assertObject(s.getSchema(C2c.class)).json().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C2c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C2cConfig.class).build().createSession();
 		assertObject(s.getSchema(C2c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}}}");
 	}
 
+	@Example(on="C2c.EXAMPLE")
+	private static class C2cConfig {}
+
 	@SuppressWarnings("serial")
-	@BeanConfig(applyExample=@Example(on="C2c.EXAMPLE"))
 	public static class C2c extends BeanMap {
 
 		public static C2c EXAMPLE = getExample();
@@ -632,18 +648,20 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C3cConfig.class).build().createSession();
 		assertObject(s.getSchema(C3c.class)).json().is("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'baz'}}}");
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("map").applyAnnotations(C3cConfig.class).build().createSession();
 		assertObject(s.getSchema(C3c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'baz'}}}}}");
 	}
 
+	@Example(on="C3c", value="{'123':{f1:'baz'}}")
+	private static class C3cConfig {}
+
 	@SuppressWarnings("serial")
-	@BeanConfig(applyExample=@Example(on="C3c", value="{'123':{f1:'baz'}}"))
 	public static class C3c extends BeanMap {}
 
 	@Test
@@ -707,11 +725,13 @@ public class JsonSchemaGeneratorTest {
 		SimpleBean sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D1c.class).example(D1c.class, b).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D1cConfig.class).example(D1c.class, b).build().createSession();
 		assertObject(s.getSchema(D1c.class)).json().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'baz'}]}");
 	}
 
-	@BeanConfig(applyExample=@Example(on="D1c.example"))
+	@Example(on="D1c.example")
+	private static class D1cConfig {}
+
 	@SuppressWarnings("serial")
 	public static class D1c extends BeanList {
 
@@ -749,18 +769,20 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleField_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D2c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D2cConfig.class).build().createSession();
 		assertObject(s.getSchema(D2c.class)).json().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'foobar'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleField_array2d_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("array").applyAnnotations(D2c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("array").applyAnnotations(D2cConfig.class).build().createSession();
 		assertObject(s.getSchema(D2c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},'x-example':[[[{f1:'foobar'}]]]}");
 	}
 
+	@Example(on="D2c.EXAMPLE")
+	private static class D2cConfig {}
+
 	@SuppressWarnings("serial")
-	@BeanConfig(applyExample=@Example(on="D2c.EXAMPLE"))
 	public static class D2c extends BeanList {
 
 		public static D2c EXAMPLE = getExample();
@@ -790,18 +812,20 @@ public class JsonSchemaGeneratorTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanAnnotation_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("collection").applyAnnotations(D3cConfig.class).build().createSession();
 		assertObject(s.getSchema(D3c.class)).json().is("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'baz'}]}");
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
-		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("array").applyAnnotations(D3c.class).build().createSession();
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("array").applyAnnotations(D3cConfig.class).build().createSession();
 		assertObject(s.getSchema(D3c[][].class)).json().is("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},'x-example':[[[{f1:'baz'}]]]}");
 	}
 
+	@Example(on="D3c", value="[{f1:'baz'}]")
+	private static class D3cConfig {}
+
 	@SuppressWarnings("serial")
-	@BeanConfig(applyExample=@Example(on="D3c", value="[{f1:'baz'}]"))
 	public static class D3c extends BeanList {}
 
 	@Test

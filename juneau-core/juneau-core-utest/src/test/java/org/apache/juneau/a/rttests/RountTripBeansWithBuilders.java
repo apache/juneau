@@ -32,7 +32,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 
 	public RountTripBeansWithBuilders(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
-		applyAnnotations(Ac.class);
+		applyAnnotations(AcConfig.class);
 	}
 
 	//====================================================================================================
@@ -83,7 +83,11 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 		assertObject(a).json().is("{f1:1}");
 	}
 
-	@BeanConfig(applyBean=@Bean(on="Builder", fluentSetters=true))
+	@Bean(on="Dummy1", fluentSetters=true)
+	@Bean(on="Builder", fluentSetters=true)
+	@Bean(on="Dummy2", fluentSetters=true)
+	private static class AcConfig {}
+
 	public static class Ac {
 		private final int f1;
 

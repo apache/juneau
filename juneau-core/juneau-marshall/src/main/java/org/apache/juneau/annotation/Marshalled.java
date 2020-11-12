@@ -99,7 +99,7 @@ public @interface Marshalled {
 	 * Dynamically apply this annotation to the specified classes.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyMarshalled()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
 	 * It is ignored when the annotation is applied directly to classes.
 	 *
 	 * <p>
@@ -114,11 +114,7 @@ public @interface Marshalled {
 	 *
 	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
 	 * 	<ja>@RestMethod</ja>(...)
-	 * 	<ja>@BeanConfig</ja>(
-	 * 		applyMarshalled={
-	 * 			<ja>@Marshalled</ja>(on=<js>"B"</js>, example=<js>"{foo:'bar'}"</js>)
-	 * 		}
-	 * 	)
+	 * 	<ja>@Marshalled</ja>(on=<js>"B"</js>, example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public void</jk> doFoo() {...}
 	 * </p>
 	 *

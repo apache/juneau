@@ -65,7 +65,7 @@ public @interface Beanc {
 	 * Dynamically apply this annotation to the specified constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with the {@link BeanConfig#applyBeanc()}.
+	 * Used in conjunction with {@link BeanContextBuilder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing constructor.
 	 * It is ignored when the annotation is applied directly to constructors.
 	 *
 	 * <p>
@@ -76,9 +76,9 @@ public @interface Beanc {
 	 *			<jk>private final</jk> String <jf>name</jf>;
 	 *			<jk>private final int</jk> <jf>age</jf>;
 	 *
-	 *			<jk>public</jk> Person(String name, <jk>int</jk> age) {
-	 *				<jk>this</jk>.<jf>name</jf> = name;
-	 *				<jk>this</jk>.<jf>age</jf> = age;
+	 *			<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
+	 *				<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+	 *				<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
 	 *			}
 	 *
 	 *			<jc>// Read only properties.</jc>
@@ -93,15 +93,16 @@ public @interface Beanc {
 	 *			}
 	 *		}
 	 *
-	 *		<ja>@BeanConfig</ja>(applyBeanc=<ja>@Beanc</ja>(on="Person(String,int)", properties=<js>"name,age"</js>))
-	 *		public static class X {}
+	 *		<ja>@BeanConfig</ja>
+	 *		<ja>@Beanc</ja>(on=<js>"Person(String,int)"</js>, properties=<js>"name,age"</js>))
+	 *		<jk>public static class</jk> MyConfig {}
 	 * </p>
 	 * <p class='bpcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
-	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
-	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.builder().applyAnnotations(X.<jk>class</jk>).build().parse(json);
-	 *		String name = p.getName();  <jc>// "John Smith"</jc>
-	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
+	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
+	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.builder().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
+	 *		String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
+	 *		<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>
