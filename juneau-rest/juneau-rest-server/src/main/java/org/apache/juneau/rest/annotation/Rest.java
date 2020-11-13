@@ -45,7 +45,7 @@ import org.apache.juneau.rest.*;
 public @interface Rest {
 
 	/**
-	 * Allow body URL parameter.
+	 * Disable allow body URL parameter.
 	 *
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
@@ -63,10 +63,10 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
 	 * </ul>
 	 */
-	String allowBodyParam() default "";
+	String disableAllowBodyParam() default "";
 
 	/**
 	 * Configuration property:  Allowed header URL parameters.
@@ -1480,7 +1480,7 @@ public @interface Rest {
 	String uriResolution() default "";
 
 	/**
-	 * Configuration property:  Use classpath resource caching.
+	 * Configuration property:  Disable classpath resource caching.
 	 *
 	 * <p>
 	 * When enabled, resources retrieved via {@link RestRequest#getClasspathHttpResource(String, boolean)} (and related
@@ -1493,8 +1493,8 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
+	 * 	<li class='jf'>{@link RestContext#REST_disableClasspathResourceCaching}
 	 * </ul>
 	 */
-	String useClasspathResourceCaching() default "";
+	String disableClasspathResourceCaching() default "";
 }

@@ -412,40 +412,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RestContextBuilder allowBodyParam(boolean value) {
-		return set(REST_allowBodyParam, value);
-	}
-
-	/**
-	 * <i><l>RestContext</l> configuration property:&emsp;</i>  Allow body URL parameter.
-	 *
-	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
-	 * URL parameter.
-	 * <br>
-	 * For example:
-	 * <p class='bcode w800'>
-	 *  ?body=(name='John%20Smith',age=45)
-	 * </p>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder dontAllowBodyParam() {
-		return set(REST_allowBodyParam, false);
+	public RestContextBuilder disableAllowBodyParam() {
+		return set(REST_disableAllowBodyParam, true);
 	}
 
 	/**
@@ -2247,17 +2221,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_useClasspathResourceCaching}
+	 * 	<li class='jf'>{@link RestContext#REST_disableClasspathResourceCaching}
 	 * </ul>
 	 *
-	 * @param value
-	 * 	The new value for this setting.
-	 * 	<br>The default is <jk>true</jk>.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RestContextBuilder useClasspathResourceCaching(boolean value) {
-		return set(REST_useClasspathResourceCaching, value);
+	public RestContextBuilder disableClasspathResourceCaching() {
+		return set(REST_disableClasspathResourceCaching, true);
 	}
 
 	@Override /* ContextBuilder */

@@ -101,7 +101,7 @@ public class RestAnnotation {
 		Logging logging = LoggingAnnotation.DEFAULT;
 		Property[] properties = {};
 		ResourceSwagger swagger = ResourceSwaggerAnnotation.DEFAULT;
-		String allowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="", useClasspathResourceCaching="";
+		String disableAllowBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="", disableClasspathResourceCaching="";
 		String[] consumes={}, description={}, flags={}, mimeTypes={}, produces={}, reqAttrs={}, reqHeaders={}, resHeaders={}, staticFileResponseHeaders={}, staticFiles={}, title={};
 
 		/**
@@ -121,13 +121,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#allowBodyParam()} property on this annotation.
+		 * Sets the {@link Rest#disableAllowBodyParam()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder allowBodyParam(String value) {
-			this.allowBodyParam = value;
+		public Builder disableAllowBodyParam(String value) {
+			this.disableAllowBodyParam = value;
 			return this;
 		}
 
@@ -682,13 +682,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#useClasspathResourceCaching()} property on this annotation.
+		 * Sets the {@link Rest#disableClasspathResourceCaching()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder useClasspathResourceCaching(String value) {
-			this.useClasspathResourceCaching = value;
+		public Builder disableClasspathResourceCaching(String value) {
+			this.disableClasspathResourceCaching = value;
 			return this;
 		}
 
@@ -733,12 +733,12 @@ public class RestAnnotation {
 		private final Logging logging;
 		private final Property[] properties;
 		private final ResourceSwagger swagger;
-		private final String allowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution, useClasspathResourceCaching;
+		private final String disableAllowBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution, disableClasspathResourceCaching;
 		private final String[] consumes, description, flags, mimeTypes, produces, reqAttrs, reqHeaders, resHeaders, staticFileResponseHeaders, staticFiles, title;
 
 		Impl(Builder b) {
 			super(b);
-			this.allowBodyParam = b.allowBodyParam;
+			this.disableAllowBodyParam = b.disableAllowBodyParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
 			this.allowedMethodParams = b.allowedMethodParams;
@@ -789,13 +789,13 @@ public class RestAnnotation {
 			this.uriContext = b.uriContext;
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
-			this.useClasspathResourceCaching = b.useClasspathResourceCaching;
+			this.disableClasspathResourceCaching = b.disableClasspathResourceCaching;
 			postConstruct();
 		}
 
 		@Override /* Rest */
-		public String allowBodyParam() {
-			return allowBodyParam;
+		public String disableAllowBodyParam() {
+			return disableAllowBodyParam;
 		}
 
 		@Override /* Rest */
@@ -1049,8 +1049,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public String useClasspathResourceCaching() {
-			return useClasspathResourceCaching;
+		public String disableClasspathResourceCaching() {
+			return disableClasspathResourceCaching;
 		}
 	}
 
@@ -1191,8 +1191,8 @@ public class RestAnnotation {
 					psb.putTo(REST_staticFileResponseHeaders, h[0], h[1]);
 			}
 
-			if (! a.useClasspathResourceCaching().isEmpty())
-				psb.set(REST_useClasspathResourceCaching, bool(a.useClasspathResourceCaching()));
+			if (! a.disableClasspathResourceCaching().isEmpty())
+				psb.set(REST_disableClasspathResourceCaching, bool(a.disableClasspathResourceCaching()));
 
 			if (a.classpathResourceFinder() != ResourceFinder.Null.class)
 				psb.set(REST_classpathResourceFinder, a.classpathResourceFinder());
@@ -1265,8 +1265,8 @@ public class RestAnnotation {
 			if (a.infoProvider() != RestInfoProvider.Null.class)
 				psb.set(REST_infoProvider, a.infoProvider());
 
-			if (! a.allowBodyParam().isEmpty())
-				psb.set(REST_allowBodyParam, bool(a.allowBodyParam()));
+			if (! a.disableAllowBodyParam().isEmpty())
+				psb.set(REST_disableAllowBodyParam, bool(a.disableAllowBodyParam()));
 
 			if (! a.allowedHeaderParams().isEmpty())
 				psb.set(REST_allowedHeaderParams, string(a.allowedHeaderParams()));

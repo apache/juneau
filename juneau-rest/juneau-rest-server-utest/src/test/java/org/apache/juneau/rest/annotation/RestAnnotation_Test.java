@@ -36,7 +36,7 @@ public class RestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Rest a1 = RestAnnotation.create()
-		.allowBodyParam("allowBodyParam")
+		.disableAllowBodyParam("disableAllowBodyParam")
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
@@ -89,11 +89,11 @@ public class RestAnnotation_Test {
 		.uriContext("uriContext")
 		.uriRelativity("uriRelativity")
 		.uriResolution("uriResolution")
-		.useClasspathResourceCaching("useClasspathResourceCaching")
+		.disableClasspathResourceCaching("disableClasspathResourceCaching")
 		.build();
 
 	Rest a2 = RestAnnotation.create()
-		.allowBodyParam("allowBodyParam")
+		.disableAllowBodyParam("disableAllowBodyParam")
 		.allowedHeaderParams("allowedHeaderParams")
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
@@ -146,14 +146,13 @@ public class RestAnnotation_Test {
 		.uriContext("uriContext")
 		.uriRelativity("uriRelativity")
 		.uriResolution("uriResolution")
-		.useClasspathResourceCaching("useClasspathResourceCaching")
+		.disableClasspathResourceCaching("disableClasspathResourceCaching")
 		.build();
 
 	@Test
 	public void a01_basic() {
 		assertObject(a1).stderr().json().is(""
 			+ "{"
-				+ "allowBodyParam:'allowBodyParam',"
 				+ "allowedHeaderParams:'allowedHeaderParams',"
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
 				+ "allowedMethodParams:'allowedMethodParams',"
@@ -171,6 +170,8 @@ public class RestAnnotation_Test {
 				+ "defaultCharset:'defaultCharset',"
 				+ "defaultContentType:'defaultContentType',"
 				+ "description:['description'],"
+				+ "disableAllowBodyParam:'disableAllowBodyParam',"
+				+ "disableClasspathResourceCaching:'disableClasspathResourceCaching',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
 				+ "flags:['flags'],"
 				+ "guards:['org.apache.juneau.rest.RestGuard'],"
@@ -205,8 +206,7 @@ public class RestAnnotation_Test {
 				+ "uriAuthority:'uriAuthority',"
 				+ "uriContext:'uriContext',"
 				+ "uriRelativity:'uriRelativity',"
-				+ "uriResolution:'uriResolution',"
-				+ "useClasspathResourceCaching:'useClasspathResourceCaching'"
+				+ "uriResolution:'uriResolution'"
 			+ "}"
 		);
 	}
@@ -255,7 +255,7 @@ public class RestAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		allowBodyParam="allowBodyParam",
+		disableAllowBodyParam="disableAllowBodyParam",
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
@@ -308,13 +308,13 @@ public class RestAnnotation_Test {
 		uriContext="uriContext",
 		uriRelativity="uriRelativity",
 		uriResolution="uriResolution",
-		useClasspathResourceCaching="useClasspathResourceCaching"
+		disableClasspathResourceCaching="disableClasspathResourceCaching"
 	)
 	public static class D1 {}
 	Rest d1 = D1.class.getAnnotationsByType(Rest.class)[0];
 
 	@Rest(
-		allowBodyParam="allowBodyParam",
+		disableAllowBodyParam="disableAllowBodyParam",
 		allowedHeaderParams="allowedHeaderParams",
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
@@ -367,7 +367,7 @@ public class RestAnnotation_Test {
 		uriContext="uriContext",
 		uriRelativity="uriRelativity",
 		uriResolution="uriResolution",
-		useClasspathResourceCaching="useClasspathResourceCaching"
+		disableClasspathResourceCaching="disableClasspathResourceCaching"
 	)
 	public static class D2 {}
 	Rest d2 = D2.class.getAnnotationsByType(Rest.class)[0];

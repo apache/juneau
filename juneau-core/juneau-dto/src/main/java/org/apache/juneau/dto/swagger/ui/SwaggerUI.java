@@ -70,7 +70,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	public static final String SWAGGERUI_resolveRefsMaxDepth = PREFIX + "resolveRefsMaxDepth.i";
 
 
-	static final ResourceManager RESOURCES = new ResourceManager(SwaggerUI.class, BasicResourceFinder.INSTANCE, Boolean.getBoolean("RestContext.useClasspathResourceCaching.b"));
+	static final ResourceManager RESOURCES = new ResourceManager(SwaggerUI.class, BasicResourceFinder.INSTANCE, ! Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b"));
 
 	private static final Set<String> STANDARD_METHODS = ASet.of("get", "put", "post", "delete", "options");
 

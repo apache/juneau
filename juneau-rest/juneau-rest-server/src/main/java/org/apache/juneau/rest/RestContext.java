@@ -104,25 +104,24 @@ public class RestContext extends BeanContext {
 	static final String PREFIX = "RestContext";
 
 	/**
-	 * Configuration property:  Allow body URL parameter.
+	 * Configuration property:  Disable allow body URL parameter.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}
-	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_disableAllowBodyParam REST_disableAllowBodyParam}
+	 * 	<li><b>Name:</b>  <js>"RestContext.disableAllowBodyParam.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestContext.allowBodyParam</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_ALLOWBODYPARAM</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RestContext.disableAllowBodyParam</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DISABLEALLOWBODYPARAM</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#allowBodyParam()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#disableAllowBodyParam()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#allowBodyParam(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#dontAllowBodyParam()}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#disableAllowBodyParam()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -139,23 +138,23 @@ public class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(allowBodyParam=<js>"$C{REST/allowBodyParam,false}"</js>)
+	 * 	<ja>@Rest</ja>(disableAllowBodyParam=<js>"$C{REST/disableAllowBodyParam,true}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 *
 	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.allowBodyParam(<jk>false</jk>);
+	 * 			builder.disableAllowBodyParam();
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_allowBodyParam</jsf>, <jk>false</jk>);
+	 * 			builder.set(<jsf>REST_disableAllowBodyParam</jsf>, <jk>true</jk>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.allowBodyParam(<jk>false</jk>);
+	 * 			builder.disableAllowBodyParam();
 	 * 		}
 	 * 	}
 	 * </p>
@@ -167,7 +166,7 @@ public class RestContext extends BeanContext {
 	 * 		Useful for debugging PUT and POST methods using only a browser.
 	 * </ul>
 	 */
-	public static final String REST_allowBodyParam = PREFIX + ".allowBodyParam.b";
+	public static final String REST_disableAllowBodyParam = PREFIX + ".disableAllowBodyParam.b";
 
 	/**
 	 * Configuration property:  Allowed header URL parameters.
@@ -2849,7 +2848,7 @@ public class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link #REST_classpathResourceFinder} for configuring how classpath resources are located and retrieved.
 	 * 	<li class='jf'>{@link #REST_mimeTypes} for configuring the media types based on file extension.
 	 * 	<li class='jf'>{@link #REST_staticFileResponseHeaders} for configuring response headers on statically served files.
-	 * 	<li class='jf'>{@link #REST_useClasspathResourceCaching} for configuring static file caching.
+	 * 	<li class='jf'>{@link #REST_disableClasspathResourceCaching} for configuring static file caching.
 	 * 	<li class='jm'>{@link RestContext#getClasspathResource(String,Locale)} for retrieving static files.
 	 * </ul>
 	 *
@@ -3109,20 +3108,20 @@ public class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
-	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.RestContext#REST_disableClasspathResourceCaching REST_disableClasspathResourceCaching}
+	 * 	<li><b>Name:</b>  <js>"RestContext.disableClasspathResourceCaching.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RestContext.useClasspathResourceCaching</c>
-	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_USECLASSPATHRESOURCECACHING</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RestContext.disableClasspathResourceCaching</c>
+	 * 	<li><b>Environment variable:</b>  <c>RESTCONTEXT_DISABLECLASSPATHRESOURCECACHING</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#useClasspathResourceCaching()}
+	 * 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#disableClasspathResourceCaching()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#useClasspathResourceCaching(boolean)}
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#disableClasspathResourceCaching()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -3134,23 +3133,23 @@ public class RestContext extends BeanContext {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(useClasspathResourceCaching=<js>"$C{REST/useClasspathResourceCaching,false}"</js>)
+	 * 	<ja>@Rest</ja>(disableClasspathResourceCaching=<js>"$C{REST/disableClasspathResourceCaching,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 	 * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {
 	 *
 	 * 			<jc>// Using method on builder.</jc>
-	 * 			builder.useClasspathResourceCaching(<jk>false</jk>)
+	 * 			builder.disableClasspathResourceCaching()
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_useClasspathResourceCaching</jsf>, <jk>false</jk>);
+	 * 			builder.set(<jsf>REST_disableClasspathResourceCaching</jsf>, <jk>true</jk>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	 * 		<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
-	 * 			builder.useClasspathResourceCaching(<jk>false</jk>)
+	 * 			builder.disableClasspathResourceCaching()
 	 * 		}
 	 * 	}
 	 * </p>
@@ -3159,7 +3158,7 @@ public class RestContext extends BeanContext {
 	 * 	<li class='jf'>{@link #REST_staticFiles} for information about static files.
 	 * </ul>
 	 */
-	public static final String REST_useClasspathResourceCaching = PREFIX + ".useClasspathResourceCaching.b";
+	public static final String REST_disableClasspathResourceCaching = PREFIX + ".disableClasspathResourceCaching.b";
 
 	/**
 	 * Configuration property:  Resource URI authority path.
@@ -3641,7 +3640,7 @@ public class RestContext extends BeanContext {
 			uriResolution = getProperty(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
 			uriRelativity = getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
-			allowBodyParam = getBooleanProperty(REST_allowBodyParam, true);
+			allowBodyParam = ! getBooleanProperty(REST_disableAllowBodyParam, false);
 			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
 			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
@@ -3730,7 +3729,7 @@ public class RestContext extends BeanContext {
 			Object defaultResourceFinder = resource instanceof ResourceFinder ? resource : BasicResourceFinder.class;
 			ResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ResourceFinder.class, defaultResourceFinder, resourceResolver, this);
 
-			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
+			useClasspathResourceCaching = ! getBooleanProperty(REST_disableClasspathResourceCaching, false);
 			staticResourceManager = new ResourceManager(rci.inner(), rf, useClasspathResourceCaching);
 
 			consumes = getListProperty(REST_consumes, MediaType.class, parsers.getSupportedMediaTypes());
@@ -4484,7 +4483,7 @@ public class RestContext extends BeanContext {
 	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RestContext#REST_allowBodyParam}
+	 * 	<li class='jf'>{@link RestContext#REST_disableAllowBodyParam}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
