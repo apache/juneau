@@ -456,8 +456,8 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlParserBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public XmlParserBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

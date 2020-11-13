@@ -487,8 +487,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public JsonSchemaSerializerBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

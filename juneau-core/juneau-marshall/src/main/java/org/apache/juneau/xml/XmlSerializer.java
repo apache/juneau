@@ -192,56 +192,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	public static final String XML_addNamespaceUrisToRoot = PREFIX + ".addNamespaceUrisToRoot.b";
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}
-	 * 	<li><b>Name:</b>  <js>"XmlSerializer.autoDetectNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>XmlSerializer.autoDetectNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_AUTODETECTNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#autoDetectNamespaces()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#dontAutoDetectNamespaces()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Detect namespace usage before serialization.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
-	 * root element to only those that will be used in the resulting document.
-	 *
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
-	 * the root element is serialized.
-	 *
-	 * <p>
-	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Auto-detection of namespaces can be costly performance-wise.
-	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc XmlNamespaces}
-	 * </ul>
-	 */
-	public static final String XML_autoDetectNamespaces = PREFIX + ".autoDetectNamespaces.b";
-
-	/**
 	 * Configuration property:  Default namespace.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -272,6 +222,56 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 * </ul>
 	 */
 	public static final String XML_defaultNamespace = PREFIX + ".defaultNamespace.s";
+
+	/**
+	 * Configuration property:  Don't auto-detect namespace usage.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.xml.XmlSerializer#XML_dontAutoDetectNamespaces XML_dontAutoDetectNamespaces}
+	 * 	<li><b>Name:</b>  <js>"XmlSerializer.dontAutoDetectNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>XmlSerializer.dontAutoDetectNamespaces</c>
+	 * 	<li><b>Environment variable:</b>  <c>XMLSERIALIZER_DONTAUTODETECTNAMESPACES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlConfig#dontAutoDetectNamespaces()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.xml.XmlSerializerBuilder#dontAutoDetectNamespaces()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Don't detect namespace usage before serialization.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link #XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
+	 * root element to only those that will be used in the resulting document.
+	 *
+	 * <p>
+	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * the root element is serialized.
+	 *
+	 * <p>
+	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Auto-detection of namespaces can be costly performance-wise.
+	 * 		<br>In high-performance environments, it's recommended that namespace detection be
+	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='link'>{@doc XmlNamespaces}
+	 * </ul>
+	 */
+	public static final String XML_dontAutoDetectNamespaces = PREFIX + ".dontAutoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Enable support for XML namespaces.
@@ -465,7 +465,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final boolean
-		autoDetectNamespaces,
+		dontAutoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot,
 		addBeanTypes;
@@ -513,7 +513,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 */
 	public XmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		autoDetectNamespaces = getBooleanProperty(XML_autoDetectNamespaces, true);
+		dontAutoDetectNamespaces = getBooleanProperty(XML_dontAutoDetectNamespaces, false);
 		enableNamespaces = getBooleanProperty(XML_enableNamespaces, false);
 		addNamespaceUrlsToRoot = getBooleanProperty(XML_addNamespaceUrisToRoot, false);
 		defaultNamespace = getInstanceProperty(XML_defaultNamespace, Namespace.class, DEFAULT_JUNEAU_NAMESPACE);
@@ -615,14 +615,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	}
 
 	/**
-	 * Auto-detect namespace usage.
+	 * Don't auto-detect namespace usage.
 	 *
-	 * @see #XML_autoDetectNamespaces
+	 * @see #XML_dontAutoDetectNamespaces
 	 * @return
-	 * 	<jk>true</jk> if namespace usage is detected before serialization.
+	 * 	<jk>false</jk> if namespace usage is detected before serialization.
 	 */
-	protected final boolean isAutoDetectNamespaces() {
-		return autoDetectNamespaces;
+	protected final boolean isDontAutoDetectNamespaces() {
+		return dontAutoDetectNamespaces;
 	}
 
 	/**
@@ -666,7 +666,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	public OMap toMap() {
 		return super.toMap()
 			.a("XmlSerializer", new DefaultFilteringOMap()
-				.a("autoDetectNamespaces", autoDetectNamespaces)
+				.a("dontAutoDetectNamespaces", dontAutoDetectNamespaces)
 				.a("enableNamespaces", enableNamespaces)
 				.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
 				.a("defaultNamespace", defaultNamespace)

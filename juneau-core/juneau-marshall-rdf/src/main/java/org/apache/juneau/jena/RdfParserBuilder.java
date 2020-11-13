@@ -1027,8 +1027,8 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public RdfParserBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

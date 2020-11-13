@@ -625,8 +625,8 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public ParserGroupBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

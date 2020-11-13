@@ -488,8 +488,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public UonSerializerBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

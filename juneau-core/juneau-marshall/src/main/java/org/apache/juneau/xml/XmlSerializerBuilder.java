@@ -74,20 +74,20 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Auto-detect namespace usage.
+	 * <i><l>XmlSerializer</l> configuration property:&emsp;</i>  Don't auto-detect namespace usage.
 	 *
 	 * <p>
-	 * Detect namespace usage before serialization.
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
+	 * 	<li class='jf'>{@link XmlSerializer#XML_dontAutoDetectNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder dontAutoDetectNamespaces() {
-		return set(XML_autoDetectNamespaces, false);
+		return set(XML_dontAutoDetectNamespaces, true);
 	}
 
 	/**
@@ -435,8 +435,8 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public XmlSerializerBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

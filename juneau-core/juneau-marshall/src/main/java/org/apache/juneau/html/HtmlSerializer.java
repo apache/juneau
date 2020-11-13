@@ -242,83 +242,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	public static final String HTML_addKeyValueTableHeaders = PREFIX + ".addKeyValueTableHeaders.b";
 
 	/**
-	 * Configuration property:  Look for URLs in {@link java.lang.String Strings}.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>HtmlSerializer.detectLinksInStrings</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DETECTLINKSINSTRINGS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#detectLinksInStrings()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLinksInStrings()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"http://www.apache.org"</js>;
-	 * 	}
-	 *
-	 *  <jc>// Serializer with link detection.</jc>
-	 * 	WriterSerializer s1 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.build();
-	 *
-	 *  <jc>// Serializer without link detection.</jc>
-	 * 	WriterSerializer s2 = HtmlSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.addKeyValueTableHeaders()
-	 * 		.detectLinksInStrings(<jk>false</jk>)
-	 * 		.build();
-	 *
-	 * 	String withLinks = s1.serialize(<jk>new</jk> MyBean());
-	 * 	String withoutLinks = s2.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <p>
-	 * The following shows the difference between the two generated outputs:
-	 *
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th><c>withLinks</c></th>
-	 * 		<th><c>withoutLinks</c></th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td>http://www.apache.org</td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 */
-	public static final String HTML_detectLinksInStrings = PREFIX + ".detectLinksInStrings.b";
-
-	/**
 	 * Configuration property:  Link label parameter name.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -341,29 +264,29 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * </ul>
 	 *
 	 * <p>
-	 * The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 * The parameter name to look for when resolving link labels.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #HTML_detectLabelParameters}
+	 * 	<li class='jf'>{@link #HTML_dontDetectLabelParameters}
 	 * </ul>
 	 */
 	public static final String HTML_labelParameter = PREFIX + ".labelParameter.s";
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Configuration property:  Don't look for link labels in URIs.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLabelParameters.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_dontDetectLabelParameters HTML_dontDetectLabelParameters}
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.dontDetectLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>HtmlSerializer.detectLabelParameters</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DETECTLABELPARAMETERS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.dontDetectLabelParameters</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DONTDETECTLABELPARAMETERS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#detectLabelParameters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#dontDetectLabelParameters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
@@ -373,7 +296,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
 	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
@@ -395,7 +318,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	WriterSerializer s2 = HtmlSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addKeyValueTableHeaders()
-	 * 		.lookForLabelParameters(<jk>false</jk>)
+	 * 		.dontDetectLabelParameters()
 	 * 		.build();
 	 *
 	 * 	String withLabels = s1.serialize(<jk>new</jk> MyBean());
@@ -427,7 +350,84 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_detectLabelParameters = PREFIX + ".detectLabelParameters.b";
+	public static final String HTML_dontDetectLabelParameters = PREFIX + ".dontDetectLabelParameters.b";
+
+	/**
+	 * Configuration property:  Don't look for URLs in {@link java.lang.String Strings}.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_dontDetectLinksInStrings HTML_dontDetectLinksInStrings}
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.dontDetectLinksInStrings.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.dontDetectLinksInStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DONTDETECTLINKSINSTRINGS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#dontDetectLinksInStrings()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLinksInStrings()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"http://www.apache.org"</js>;
+	 * 	}
+	 *
+	 *  <jc>// Serializer with link detection.</jc>
+	 * 	WriterSerializer s1 = HtmlSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addKeyValueTableHeaders()
+	 * 		.build();
+	 *
+	 *  <jc>// Serializer without link detection.</jc>
+	 * 	WriterSerializer s2 = HtmlSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.addKeyValueTableHeaders()
+	 * 		.dontDetectLinksInStrings(<jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	String withLinks = s1.serialize(<jk>new</jk> MyBean());
+	 * 	String withoutLinks = s2.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <p>
+	 * The following shows the difference between the two generated outputs:
+	 *
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<th><c>withLinks</c></th>
+	 * 		<th><c>withoutLinks</c></th>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			<table class='unstyled'>
+	 * 				<tr><th>key</th><th>value</th></tr>
+	 * 				<tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
+	 * 			</table>
+	 * 		</td>
+	 * 		<td>
+	 * 			<table class='unstyled'>
+	 * 				<tr><th>key</th><th>value</th></tr>
+	 * 				<tr><td>f1</td><td>http://www.apache.org</td></tr>
+	 * 			</table>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 */
+	public static final String HTML_dontDetectLinksInStrings = PREFIX + ".dontDetectLinksInStrings.b";
 
 	/**
 	 * Configuration property:  Anchor text source.
@@ -666,8 +666,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 
 	private final AnchorText uriAnchorText;
 	private final boolean
-		detectLabelParameters,
-		detectLinksInStrings,
+		dontDetectLabelParameters,
+		dontDetectLinksInStrings,
 		addKeyValueTableHeaders,
 		addBeanTypes;
 	private final String labelParameter;
@@ -716,8 +716,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	public HtmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
-		detectLabelParameters = getBooleanProperty(HTML_detectLabelParameters, true);
-		detectLinksInStrings = getBooleanProperty(HTML_detectLinksInStrings, true);
+		dontDetectLabelParameters = getBooleanProperty(HTML_dontDetectLabelParameters, false);
+		dontDetectLinksInStrings = getBooleanProperty(HTML_dontDetectLinksInStrings, false);
 		labelParameter = getStringProperty(HTML_labelParameter, "label");
 		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
 		addBeanTypes = getBooleanProperty(HTML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
@@ -820,25 +820,25 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Look for link labels in URIs.
+	 * Don't look for link labels in URIs.
 	 *
-	 * @see #HTML_detectLabelParameters
+	 * @see #HTML_dontDetectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if we should not look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDetectLabelParameters() {
-		return detectLabelParameters;
+	protected final boolean isDontDetectLabelParameters() {
+		return dontDetectLabelParameters;
 	}
 
 	/**
-	 * Look for URLs in {@link String Strings}.
+	 * Don't look for URLs in {@link String Strings}.
 	 *
-	 * @see #HTML_detectLinksInStrings
+	 * @see #HTML_dontDetectLinksInStrings
 	 * @return
-	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
+	 * 	<jk>true</jk> if we should not automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDetectLinksInStrings() {
-		return detectLinksInStrings;
+	protected final boolean isDontDetectLinksInStrings() {
+		return dontDetectLinksInStrings;
 	}
 
 	/**
@@ -846,7 +846,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * @see #HTML_labelParameter
 	 * @return
-	 * 	The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 * 	The parameter name to look for when resolving link labels.
 	 */
 	protected final String getLabelParameter() {
 		return labelParameter;
@@ -873,8 +873,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		return super.toMap()
 			.a("HtmlSerializer", new DefaultFilteringOMap()
 				.a("uriAnchorText", uriAnchorText)
-				.a("detectLabelParameters", detectLabelParameters)
-				.a("detectLinksInStrings", detectLinksInStrings)
+				.a("dontDetectLabelParameters", dontDetectLabelParameters)
+				.a("dontDetectLinksInStrings", dontDetectLinksInStrings)
 				.a("labelParameter", labelParameter)
 				.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
 				.a("addBeanTypes", addBeanTypes)

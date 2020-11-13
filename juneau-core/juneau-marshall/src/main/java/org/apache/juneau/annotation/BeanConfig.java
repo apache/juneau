@@ -271,28 +271,28 @@ public @interface BeanConfig {
 	String beansRequireSettersForGetters() default "";
 
 	/**
-	 * Configuration property:  Beans require at least one property.
+	 * Configuration property:  Beans don't require at least one property.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, then a Java class must contain at least 1 property to be considered a bean.
+	 * If <js>"true"</js>, then a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansDontRequireSomeProperties}
 	 * </ul>
 	 */
-	String beansRequireSomeProperties() default "";
+	String beansDontRequireSomeProperties() default "";
 
 	/**
 	 * Configuration property:  Bean type property name.
@@ -377,7 +377,7 @@ public @interface BeanConfig {
 
 	/**
 	 * Configuration property:  Replace bean dictionary.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
@@ -468,51 +468,51 @@ public @interface BeanConfig {
 	String ignoreInvocationExceptionsOnSetters() default "";
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
+	 * Configuration property:  Don't silently ignore missing setters.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will silently be ignored.
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will throw a {@code BeanRuntimeException}.
+	 * <br>Otherwise it will be sliently ignored.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontSilentlyIgnoreMissingSetters}
 	 * </ul>
 	 */
-	String ignorePropertiesWithoutSetters() default "";
+	String dontSilentlyIgnoreMissingSetters() default "";
 
 	/**
-	 * Configuration property:  Ignore transient fields.
+	 * Configuration property:  Don't ignore transient fields.
 	 *
 	 * <p>
-	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
+	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreTransientFields}
 	 * </ul>
 	 */
-	String ignoreTransientFields() default "";
+	String dontIgnoreTransientFields() default "";
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
@@ -539,28 +539,28 @@ public @interface BeanConfig {
 	String ignoreUnknownBeanProperties() default "";
 
 	/**
-	 * Configuration property:  Ignore unknown properties with null values.
+	 * Configuration property:  Don't ignore unknown properties with null values.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@code BeanRuntimeException}.
+	 * Otherwise it will be silently ignored.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 */
-	String ignoreUnknownNullBeanProperties() default "";
+	String dontIgnoreUnknownNullBeanProperties() default "";
 
 	/**
 	 * Identifies a set of interfaces.
@@ -652,7 +652,7 @@ public @interface BeanConfig {
 
 	/**
 	 * Configuration property:  Replace classes that should not be considered beans.
-	 * 
+	 *
 	 * <p>
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
@@ -702,7 +702,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
-	 * 
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
@@ -792,7 +792,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Same as {@link #swaps()} but replaces any existing value.
-	 * 
+	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_swaps}
 	 * </ul>
@@ -840,29 +840,29 @@ public @interface BeanConfig {
 	String useEnumNames() default "";
 
 	/**
-	 * Configuration property:  Use interface proxies.
+	 * Configuration property:  Don't use interface proxies.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, then interfaces will be instantiated as proxy classes through the use of an
+	 * Disables the feature where interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * <br>Otherwise, throws a {@link BeanRuntimeException}.
+	 * <br>Setting this to <js>"true"</js> causes this to be a {@link BeanRuntimeException}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
 	 *		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontUseInterfaceProxies}
 	 * </ul>
 	 */
-	String useInterfaceProxies() default "";
+	String dontUseInterfaceProxies() default "";
 
 	/**
 	 * Configuration property:  Use Java Introspector.

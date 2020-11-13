@@ -204,17 +204,17 @@ public @interface XmlConfig {
 	String addNamespaceUrisToRoot() default "";
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Configuration property:  Don't auto-detect namespace usage.
 	 *
 	 * <p>
-	 * Detect namespace usage before serialization.
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
 	 * Used in conjunction with {@link XmlSerializer#XML_addNamespaceUrisToRoot} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 *
 	 * <p>
@@ -236,11 +236,11 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_autoDetectNamespaces}
+	 * 	<li class='jf'>{@link XmlSerializer#XML_dontAutoDetectNamespaces}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
-	String autoDetectNamespaces() default "";
+	String dontAutoDetectNamespaces() default "";
 
 	/**
 	 * Configuration property:  Default namespace.

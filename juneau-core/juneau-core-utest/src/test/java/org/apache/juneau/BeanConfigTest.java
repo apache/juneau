@@ -730,9 +730,9 @@ public class BeanConfigTest {
 		p2.dontIgnoreUnknownNullBeanProperties();
 		assertSameCache(p1, p2);
 
-		p1.dontIgnorePropertiesWithoutSetters();
+		p1.dontSilentlyIgnoreMissingSetters();
 		assertDifferentCache(p1, p2);
-		p2.dontIgnorePropertiesWithoutSetters();
+		p2.dontSilentlyIgnoreMissingSetters();
 		assertSameCache(p1, p2);
 
 		p1.ignoreInvocationExceptionsOnGetters();
@@ -760,9 +760,9 @@ public class BeanConfigTest {
 		p2.notBeanPackages("baz");
 		assertSameCache(p1, p2);
 
-		p1.set(BeanContext.BEAN_notBeanPackages_remove, "bar");
+		p1.removeFrom(BeanContext.BEAN_notBeanPackages, "bar");
 		assertDifferentCache(p1, p2);
-		p2.set(BeanContext.BEAN_notBeanPackages_remove, "bar");
+		p2.removeFrom(BeanContext.BEAN_notBeanPackages, "bar");
 		assertSameCache(p1, p2);
 
 		p1.swaps(DummyPojoSwapA.class);

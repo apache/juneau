@@ -93,7 +93,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return true;
 		if (pMeta != null && pMeta.isUri())
 			return true;
-		if (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
+		if ((!isDontDetectLinksInStrings()) && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
 			return true;
 		return false;
 	}
@@ -109,7 +109,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
 		String s = o.toString();
-		if (isDetectLabelParameters()) {
+		if (! isDontDetectLabelParameters()) {
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
 				return urlDecode(m.group(1));
@@ -812,25 +812,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Configuration property:  Don't look for link labels in URIs.
 	 *
-	 * @see HtmlSerializer#HTML_detectLabelParameters
+	 * @see HtmlSerializer#HTML_dontDetectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if we should not look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDetectLabelParameters() {
-		return ctx.isDetectLabelParameters();
+	protected final boolean isDontDetectLabelParameters() {
+		return ctx.isDontDetectLabelParameters();
 	}
 
 	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 * Configuration property:  Don't look for URLs in {@link String Strings}.
 	 *
-	 * @see HtmlSerializer#HTML_detectLinksInStrings
+	 * @see HtmlSerializer#HTML_dontDetectLinksInStrings
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDetectLinksInStrings() {
-		return ctx.isDetectLinksInStrings();
+	protected final boolean isDontDetectLinksInStrings() {
+		return ctx.isDontDetectLinksInStrings();
 	}
 
 	/**
@@ -838,7 +838,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 *
 	 * @see HtmlSerializer#HTML_labelParameter
 	 * @return
-	 * 	The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
+	 * 	The parameter name to look for when resolving link labels.
 	 */
 	protected final String getLabelParameter() {
 		return ctx.getLabelParameter();

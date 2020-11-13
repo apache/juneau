@@ -47,8 +47,8 @@ public class XmlConfigAnnotation {
 				psb.set(XML_addBeanTypes, bool(a.addBeanTypes()));
 			if (! a.addNamespaceUrisToRoot().isEmpty())
 				psb.set(XML_addNamespaceUrisToRoot, bool(a.addNamespaceUrisToRoot()));
-			if (! a.autoDetectNamespaces().isEmpty())
-				psb.set(XML_autoDetectNamespaces, bool(a.autoDetectNamespaces()));
+			if (! a.dontAutoDetectNamespaces().isEmpty())
+				psb.set(XML_dontAutoDetectNamespaces, bool(a.dontAutoDetectNamespaces()));
 			if (! a.defaultNamespace().isEmpty())
 				psb.set(XML_defaultNamespace, string(a.defaultNamespace()));
 			if (! a.enableNamespaces().isEmpty())

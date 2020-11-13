@@ -41,7 +41,7 @@ public class BasicBeanTests {
 		}
 	}
 
-	@BeanConfig(ignoreTransientFields="false")
+	@BeanConfig(dontIgnoreTransientFields="true")
 	public static class A {}
 
 	@Test

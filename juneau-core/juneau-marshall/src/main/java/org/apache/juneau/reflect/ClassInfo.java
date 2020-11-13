@@ -2147,6 +2147,16 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean is(ReflectFlags...flags) {
+		return isAll(flags);
+	}
+
+	/**
 	 * Returns the package of this class.
 	 *
 	 * @return The package of this class.

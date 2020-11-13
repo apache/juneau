@@ -612,7 +612,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanMeta != null)
 				dictionaryName = beanMeta.getDictionaryName();
 
-			if (beanMeta != null && bc != null && bc.isUseInterfaceProxies() && innerClass.isInterface())
+			if (beanMeta != null && bc != null && (!bc.isDontUseInterfaceProxies()) && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (bc != null) {

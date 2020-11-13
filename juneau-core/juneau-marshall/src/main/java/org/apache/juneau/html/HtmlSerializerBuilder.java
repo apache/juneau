@@ -74,28 +74,28 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for URLs in {@link String Strings}.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Don't look for URLs in {@link String Strings}.
 	 *
 	 * <p>
-	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
+	 * Disables the feature where if a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>), then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLinksInStrings}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder dontDetectLinksInStrings() {
-		return set(HTML_detectLinksInStrings, false);
+		return set(HTML_dontDetectLinksInStrings, true);
 	}
 
 	/**
 	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Link label parameter name.
 	 *
 	 * <p>
-	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
+	 * The parameter name to look for when resolving link labels}.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jf'>{@link HtmlSerializer#HTML_labelParameter}
@@ -112,20 +112,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Look for link labels in URIs.
+	 * <i><l>HtmlSerializer</l> configuration property:&emsp;</i>  Dont look for link labels in URIs.
 	 *
 	 * <p>
-	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLabelParameters}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLabelParameters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public HtmlSerializerBuilder dontDetectLabelParameters() {
-		return set(HTML_detectLabelParameters, false);
+		return set(HTML_dontDetectLabelParameters, true);
 	}
 
 	/**
@@ -404,8 +404,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder dontIgnorePropertiesWithoutSetters() {
-		super.dontIgnorePropertiesWithoutSetters();
+	public HtmlSerializerBuilder dontSilentlyIgnoreMissingSetters() {
+		super.dontSilentlyIgnoreMissingSetters();
 		return this;
 	}
 

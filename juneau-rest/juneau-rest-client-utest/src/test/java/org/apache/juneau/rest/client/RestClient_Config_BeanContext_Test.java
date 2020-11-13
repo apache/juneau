@@ -388,7 +388,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a16_dontIgnorePropertiesWithoutSetters() throws Exception {
 		A16 x = client().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class);
 		assertNull(x.foo);
-		assertThrown(()->client().dontIgnorePropertiesWithoutSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
+		assertThrown(()->client().dontSilentlyIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
 	}
 
 	public static class A17 {

@@ -405,6 +405,16 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean is(ReflectFlags...flags) {
+		return isAll(flags);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
 	 *
 	 * @param flags The flags to test for.

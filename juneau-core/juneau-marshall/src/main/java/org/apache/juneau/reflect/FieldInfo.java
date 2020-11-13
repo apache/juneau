@@ -236,6 +236,16 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean is(ReflectFlags...flags) {
+		return isAll(flags);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.

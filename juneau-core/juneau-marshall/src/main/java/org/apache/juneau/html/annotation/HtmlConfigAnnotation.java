@@ -45,10 +45,10 @@ public class HtmlConfigAnnotation {
 				psb.set(HTML_addBeanTypes, bool(a.addBeanTypes()));
 			if (! a.addKeyValueTableHeaders().isEmpty())
 				psb.set(HTML_addKeyValueTableHeaders, bool(a.addKeyValueTableHeaders()));
-			if (! a.detectLabelParameters().isEmpty())
-				psb.set(HTML_detectLabelParameters, bool(a.detectLabelParameters()));
-			if (! a.detectLinksInStrings().isEmpty())
-				psb.set(HTML_detectLinksInStrings, bool(a.detectLinksInStrings()));
+			if (! a.dontDetectLabelParameters().isEmpty())
+				psb.set(HTML_dontDetectLabelParameters, bool(a.dontDetectLabelParameters()));
+			if (! a.dontDetectLinksInStrings().isEmpty())
+				psb.set(HTML_dontDetectLinksInStrings, bool(a.dontDetectLinksInStrings()));
 			if (! a.labelParameter().isEmpty())
 				psb.set(HTML_labelParameter, string(a.labelParameter()));
 			if (! a.uriAnchorText().isEmpty())

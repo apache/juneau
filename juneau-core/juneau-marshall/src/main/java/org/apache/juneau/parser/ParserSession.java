@@ -326,7 +326,7 @@ public abstract class ParserSession extends BeanSession {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			if (value != null || ! isIgnoreUnknownNullBeanProperties())
+			if (value != null || isDontIgnoreUnknownNullBeanProperties())
 				throw new ParseException(this,
 					"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
 					beanMap.getClassMeta());

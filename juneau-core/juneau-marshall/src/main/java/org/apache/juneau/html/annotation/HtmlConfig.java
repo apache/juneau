@@ -127,10 +127,10 @@ public @interface HtmlConfig {
 	String addKeyValueTableHeaders() default "";
 
 	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 * Configuration property:  Don't look for URLs in {@link String Strings}.
 	 *
 	 * <p>
-	 * If a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
 	 * <p>
@@ -161,24 +161,24 @@ public @interface HtmlConfig {
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLinksInStrings}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLinksInStrings}
 	 * </ul>
 	 */
-	String detectLinksInStrings() default "";
+	String dontDetectLinksInStrings() default "";
 
 	/**
 	 * Configuration property:  Link label parameter name.
 	 *
 	 * <p>
-	 * The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
+	 * The parameter name to look for when resolving link labels.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -194,10 +194,10 @@ public @interface HtmlConfig {
 	String labelParameter() default "";
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Configuration property:  Don't look for link labels in URIs.
 	 *
 	 * <p>
-	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
 	 * The parameter name can be changed via the {@link HtmlSerializer#HTML_labelParameter} property.
@@ -231,18 +231,18 @@ public @interface HtmlConfig {
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_detectLabelParameters}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLabelParameters}
 	 * </ul>
 	 */
-	String detectLabelParameters() default "";
+	String dontDetectLabelParameters() default "";
 
 	/**
 	 * Configuration property:  Anchor text source.

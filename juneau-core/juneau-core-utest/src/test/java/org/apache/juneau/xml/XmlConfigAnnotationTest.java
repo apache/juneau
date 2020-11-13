@@ -89,7 +89,7 @@ public class XmlConfigAnnotationTest {
 	@XmlConfig(
 		addBeanTypes="$X{true}",
 		addNamespaceUrisToRoot="$X{true}",
-		autoDetectNamespaces="$X{true}",
+		dontAutoDetectNamespaces="$X{true}",
 		defaultNamespace="$X{foo}",
 		enableNamespaces="$X{true}",
 		eventAllocator=AA.class,
@@ -108,7 +108,7 @@ public class XmlConfigAnnotationTest {
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddNamespaceUrisToRoot());
-		check("true", x.isAutoDetectNamespaces());
+		check("true", x.isDontAutoDetectNamespaces());
 		check("foo:null", x.getDefaultNamespace());
 		check("true", x.isEnableNamespaces());
 		check("[foo:null]", x.getNamespaces());
@@ -139,7 +139,7 @@ public class XmlConfigAnnotationTest {
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
-		check("true", x.isAutoDetectNamespaces());
+		check("false", x.isDontAutoDetectNamespaces());
 		check("juneau:http://www.apache.org/2013/Juneau", x.getDefaultNamespace());
 		check("false", x.isEnableNamespaces());
 		check("[]", x.getNamespaces());
@@ -169,7 +169,7 @@ public class XmlConfigAnnotationTest {
 		XmlSerializerSession x = XmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddNamespaceUrisToRoot());
-		check("true", x.isAutoDetectNamespaces());
+		check("false", x.isDontAutoDetectNamespaces());
 		check("juneau:http://www.apache.org/2013/Juneau", x.getDefaultNamespace());
 		check("false", x.isEnableNamespaces());
 		check("[]", x.getNamespaces());

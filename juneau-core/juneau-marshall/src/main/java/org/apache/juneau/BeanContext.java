@@ -570,14 +570,61 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_beanDictionary = PREFIX + ".beanDictionary.lc";
 
 	/**
-	 * Configuration property:  Add to bean dictionary.
+	 * Configuration property:  Beans don't require at least one property.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansDontRequireSomeProperties BEAN_beansDontRequireSomeProperties}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.beansDontRequireSomeProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.beansDontRequireSomeProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSDONTREQUIRESOMEPROPERTIES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansDontRequireSomeProperties()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansDontRequireSomeProperties()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
+	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with no properties.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 	}
+	 *
+	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.beansDontRequireSomeProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	WriterSerializer s = JsonSerializer
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_beansDontRequireSomeProperties</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
+	 * 		even if it has no properties.
+	 * </ul>
 	 */
-	public static final String BEAN_beanDictionary_add = PREFIX + ".beanDictionary.lc/add";
-
-	/**
-	 * Configuration property:  Remove from bean dictionary.
-	 */
-	public static final String BEAN_beanDictionary_remove = PREFIX + ".beanDictionary.lc/remove";
+	public static final String BEAN_beansDontRequireSomeProperties = PREFIX + ".beansDontRequireSomeProperties.b";
 
 	/**
 	 * Configuration property:  Minimum bean field visibility.
@@ -964,66 +1011,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_beansRequireSettersForGetters = PREFIX + ".beansRequireSettersForGetters.b";
 
 	/**
-	 * Configuration property:  Beans require at least one property.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_beansRequireSomeProperties BEAN_beansRequireSomeProperties}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.beansRequireSomeProperties</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_BEANSREQUIRESOMEPROPERTIES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSomeProperties()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beansDontRequireSomeProperties()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, then a Java class must contain at least 1 property to be considered a bean.
-	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with no properties.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 	}
-	 *
-	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.beansDontRequireSomeProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSomeProperties</jsf>, <jk>false</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
-	 * 		even if it has no properties.
-	 * </ul>
-	 */
-	public static final String BEAN_beansRequireSomeProperties = PREFIX + ".beansRequireSomeProperties.b";
-
-	/**
 	 * Configuration property:  Bean type property name.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1089,6 +1076,205 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </ul>
 	 */
 	public static final String BEAN_typePropertyName = PREFIX + ".typePropertyName.s";
+
+	/**
+	 * Configuration property:  Don't ignore transient fields.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_dontIgnoreTransientFields BEAN_dontIgnoreTransientFields}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.dontIgnoreTransientFields.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.dontIgnoreTransientFields</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DONTIGNORETRANSIENTFIELDS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dontIgnoreTransientFields()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreTransientFields()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a transient field.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public transient</jk> String foo = <js>"foo"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dontIgnoreTransientFields()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_dontIgnoreTransientFields</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+	 * 	String json = s.serialize(<jk>new</jk> MyBean());
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
+	 * </ul>
+	 */
+	public static final String BEAN_dontIgnoreTransientFields = PREFIX + ".dontIgnoreTransientFields.b";
+
+	/**
+	 * Configuration property:  Don't ignore unknown properties with null values.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties BEAN_dontIgnoreUnknownNullBeanProperties}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.dontIgnoreUnknownNullBeanProperties.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.dontIgnoreUnknownNullBeanProperties</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DONTIGNOREUNKNOWNNULLBEANPROPERTIES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dontIgnoreUnknownNullBeanProperties()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreUnknownNullBeanProperties()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
+	 * Otherwise it will be silently ignored.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a single property.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public</jk> String foo;
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dontIgnoreUnknownNullBeanProperties()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_dontIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 */
+	public static final String BEAN_dontIgnoreUnknownNullBeanProperties = PREFIX + ".dontIgnoreUnknownNullBeanProperties.b";
+
+	/**
+	 * Configuration property:  Don't silently ignore missing setters.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_dontSilentlyIgnoreMissingSetters BEAN_dontSilentlyIgnoreMissingSetters}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.dontSilentlyIgnoreMissingSetters.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.dontSilentlyIgnoreMissingSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DONTSILENTLYIGNOREMISSINGSETTERS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dontSilentlyIgnoreMissingSetters()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontSilentlyIgnoreMissingSetters()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
+	 * Otherwise, it will be silently ignored.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public void</jk> getFoo() {
+	 * 			<jk>return</jk> <js>"foo"</js>;
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.dontSilentlyIgnoreMissingSetters()
+	 * 		.build();
+	 *
+	 * 	<jc>// Same, but use property.</jc>
+	 * 	ReaderParser p = JsonParser
+	 * 		.<jsm>create</jsm>()
+	 * 		.set(<jsf>BEAN_dontSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
+	 * 		.build();
+	 *
+	 * 	<jc>// Throws a ParseException.</jc>
+	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <ul class='notes'>
+	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
+	 * </ul>
+	 */
+	public static final String BEAN_dontSilentlyIgnoreMissingSetters = PREFIX + ".dontSilentlyIgnoreMissingSetters.b";
+
+	/**
+	 * Configuration property:  Don't use interface proxies.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_dontUseInterfaceProxies BEAN_dontUseInterfaceProxies}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.dontUseInterfaceProxies.b"</js>
+	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
+	 * 	<li><b>System property:</b>  <c>BeanContext.dontUseInterfaceProxies</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DONTUSEINTERFACEPROXIES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dontUseInterfaceProxies()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontUseInterfaceProxies()}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 *
+	 * <p>
+	 * When <jk>false</jk>, interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
+	 * Otherwise, throws a {@link BeanRuntimeException}.
+	 */
+	public static final String BEAN_dontUseInterfaceProxies = PREFIX + ".dontUseInterfaceProxies.b";
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -1268,121 +1454,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = PREFIX + ".ignoreInvocationExceptionsOnSetters.b";
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignorePropertiesWithoutSetters BEAN_ignorePropertiesWithoutSetters}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.ignorePropertiesWithoutSetters</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREPROPERTIESWITHOUTSETTERS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignorePropertiesWithoutSetters()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnorePropertiesWithoutSetters()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, trying to set a value on a bean property without a setter will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public void</jk> getFoo() {
-	 * 			<jk>return</jk> <js>"foo"</js>;
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnorePropertiesWithoutSetters()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, <jk>false</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Throws a ParseException.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
-	 * </ul>
-	 */
-	public static final String BEAN_ignorePropertiesWithoutSetters = PREFIX + ".ignorePropertiesWithoutSetters.b";
-
-	/**
-	 * Configuration property:  Ignore transient fields.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreTransientFields BEAN_ignoreTransientFields}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreTransientFields.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreTransientFields</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNORETRANSIENTFIELDS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreTransientFields()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreTransientFields()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a transient field.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public transient</jk> String foo = <js>"foo"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnoreTransientFields()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreTransientFields</jsf>, <jk>false</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
-	 * </ul>
-	 */
-	public static final String BEAN_ignoreTransientFields = PREFIX + ".ignoreTransientFields.b";
-
-	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1434,59 +1505,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 */
 	public static final String BEAN_ignoreUnknownBeanProperties = PREFIX + ".ignoreUnknownBeanProperties.b";
-
-	/**
-	 * Configuration property:  Ignore unknown properties with null values.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownNullBeanProperties BEAN_ignoreUnknownNullBeanProperties}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.ignoreUnknownNullBeanProperties</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_IGNOREUNKNOWNNULLBEANPROPERTIES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownNullBeanProperties()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontIgnoreUnknownNullBeanProperties()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// A bean with a single property.</jc>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public</jk> String foo;
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnoreUnknownNullBeanProperties()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, <jk>false</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String BEAN_ignoreUnknownNullBeanProperties = PREFIX + ".ignoreUnknownNullBeanProperties.b";
 
 	/**
 	 * Configuration property:  Bean class exclusions.
@@ -1556,16 +1574,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_notBeanClasses = PREFIX + ".notBeanClasses.sc";
 
 	/**
-	 * Configuration property:  Add to classes that should not be considered beans.
-	 */
-	public static final String BEAN_notBeanClasses_add = PREFIX + ".notBeanClasses.sc/add";
-
-	/**
-	 * Configuration property:  Remove from classes that should not be considered beans.
-	 */
-	public static final String BEAN_notBeanClasses_remove = PREFIX + ".notBeanClasses.sc/remove";
-
-	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1630,16 +1638,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 */
 	public static final String BEAN_notBeanPackages = PREFIX + ".notBeanPackages.ss";
-
-	/**
-	 * Configuration property:  Add to packages whose classes should not be considered beans.
-	 */
-	public static final String BEAN_notBeanPackages_add = PREFIX + ".notBeanPackages.ss/add";
-
-	/**
-	 * Configuration property:  Remove from packages whose classes should not be considered beans.
-	 */
-	public static final String BEAN_notBeanPackages_remove = PREFIX + ".notBeanPackages.ss/remove";
 
 	/**
 	 * Configuration property:  Bean property namer.
@@ -1877,16 +1875,6 @@ public class BeanContext extends Context implements MetaProvider {
 	public static final String BEAN_swaps = PREFIX + ".swaps.lo";
 
 	/**
-	 * Configuration property:  Add to swap classes.
-	 */
-	public static final String BEAN_swaps_add = PREFIX + ".swaps.lo/add";
-
-	/**
-	 * Configuration property:  Remove from swap classes.
-	 */
-	public static final String BEAN_swaps_remove = PREFIX + ".swaps.lo/remove";
-
-	/**
 	 * Configuration property:  Use enum names.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1948,60 +1936,6 @@ public class BeanContext extends Context implements MetaProvider {
 	 * </p>
 	 */
 	public static final String BEAN_useEnumNames = PREFIX + ".useEnumNames.b";
-
-	/**
-	 * Configuration property:  Use interface proxies.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_useInterfaceProxies BEAN_useInterfaceProxies}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
-	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.useInterfaceProxies</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_USEINTERFACEPROXIES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Annotations:</b>
-	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#useInterfaceProxies()}
-	 * 		</ul>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#dontUseInterfaceProxies()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 *
-	 * <p>
-	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
-	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * Otherwise, throws a {@link BeanRuntimeException}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// An interface with a single getter.</jc>
-	 * 	<jk>public interface</jk> MyBean {
-	 * 		String getFoo();
-	 * 		<jk>void</jk> setFoo(String foo);
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that uses interface proxies.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useInterfaceProxies</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Creates a proxy implementation of a MyBean interface.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 */
-	public static final String BEAN_useInterfaceProxies = PREFIX + ".useInterfaceProxies.b";
 
 	/**
 	 * Configuration property:  Use Java Introspector.
@@ -2096,13 +2030,13 @@ public class BeanContext extends Context implements MetaProvider {
 		beansRequireDefaultConstructor,
 		beansRequireSerializable,
 		beansRequireSettersForGetters,
-		beansRequireSomeProperties,
+		beansDontRequireSomeProperties,
 		beanMapPutReturnsOldValue,
-		useInterfaceProxies,
+		dontUseInterfaceProxies,
 		ignoreUnknownBeanProperties,
-		ignoreUnknownNullBeanProperties,
-		ignorePropertiesWithoutSetters,
-		ignoreTransientFields,
+		dontIgnoreUnknownNullBeanProperties,
+		dontSilentlyIgnoreMissingSetters,
+		dontIgnoreTransientFields,
 		ignoreInvocationExceptionsOnGetters,
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
@@ -2178,14 +2112,14 @@ public class BeanContext extends Context implements MetaProvider {
 		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor, false);
 		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable, false);
 		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters, false);
-		beansRequireSomeProperties = getBooleanProperty(BEAN_beansRequireSomeProperties, true);
+		beansDontRequireSomeProperties = getBooleanProperty(BEAN_beansDontRequireSomeProperties, false);
 		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue, false);
 		useEnumNames = getBooleanProperty(BEAN_useEnumNames, false);
-		useInterfaceProxies = getBooleanProperty(BEAN_useInterfaceProxies, true);
+		dontUseInterfaceProxies = getBooleanProperty(BEAN_dontUseInterfaceProxies, false);
 		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties, false);
-		ignoreUnknownNullBeanProperties = getBooleanProperty(BEAN_ignoreUnknownNullBeanProperties, true);
-		ignorePropertiesWithoutSetters = getBooleanProperty(BEAN_ignorePropertiesWithoutSetters, true);
-		ignoreTransientFields = getBooleanProperty(BEAN_ignoreTransientFields, true);
+		dontIgnoreUnknownNullBeanProperties = getBooleanProperty(BEAN_dontIgnoreUnknownNullBeanProperties, false);
+		dontSilentlyIgnoreMissingSetters = getBooleanProperty(BEAN_dontSilentlyIgnoreMissingSetters, false);
+		dontIgnoreTransientFields = getBooleanProperty(BEAN_dontIgnoreTransientFields, false);
 		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters, false);
 		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters, false);
 		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
@@ -3377,15 +3311,15 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Beans require at least one property.
+	 * Beans don't require at least one property.
 	 *
-	 * @see #BEAN_beansRequireSomeProperties
+	 * @see #BEAN_beansDontRequireSomeProperties
 	 * @return
-	 * 	<jk>true</jk> if a Java class must contain at least 1 property to be considered a bean.
+	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireSomeProperties() {
-		return beansRequireSomeProperties;
+	public final boolean isBeansDontRequireSomeProperties() {
+		return beansDontRequireSomeProperties;
 	}
 
 	/**
@@ -3436,25 +3370,25 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Ignore properties without setters.
+	 * Don't silently ignore missing setters.
 	 *
-	 * @see #BEAN_ignorePropertiesWithoutSetters
+	 * @see #BEAN_dontSilentlyIgnoreMissingSetters
 	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isIgnorePropertiesWithoutSetters() {
-		return ignorePropertiesWithoutSetters;
+	public final boolean isDontSilentlyIgnoreMissingSetters() {
+		return dontSilentlyIgnoreMissingSetters;
 	}
 
 	/**
-	 * Ignore transient fields.
+	 * Don't ignore transient fields.
 	 *
-	 * @see #BEAN_ignoreTransientFields
+	 * @see #BEAN_dontIgnoreTransientFields
 	 * @return
-	 * 	<jk>true</jk> if fields and methods marked as transient should be ignored.
+	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
 	 */
-	protected final boolean isIgnoreTransientFields() {
-		return ignoreTransientFields;
+	protected final boolean isDontIgnoreTransientFields() {
+		return dontIgnoreTransientFields;
 	}
 
 	/**
@@ -3470,14 +3404,14 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Ignore unknown properties with null values.
+	 * Don't ignore unknown properties with null values.
 	 *
-	 * @see #BEAN_ignoreUnknownNullBeanProperties
+	 * @see #BEAN_dontIgnoreUnknownNullBeanProperties
 	 * @return
-	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property is silently ignored.
+	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isIgnoreUnknownNullBeanProperties() {
-		return ignoreUnknownNullBeanProperties;
+	public final boolean isDontIgnoreUnknownNullBeanProperties() {
+		return dontIgnoreUnknownNullBeanProperties;
 	}
 
 	/**
@@ -3558,15 +3492,15 @@ public class BeanContext extends Context implements MetaProvider {
 	}
 
 	/**
-	 * Use interface proxies.
+	 * Don't use interface proxies.
 	 *
-	 * @see #BEAN_useInterfaceProxies
+	 * @see #BEAN_dontUseInterfaceProxies
 	 * @return
-	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	<jk>false</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public final boolean isUseInterfaceProxies() {
-		return useInterfaceProxies;
+	public final boolean isDontUseInterfaceProxies() {
+		return dontUseInterfaceProxies;
 	}
 
 	/**
@@ -3612,20 +3546,20 @@ public class BeanContext extends Context implements MetaProvider {
 				.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
 				.a("beansRequireSerializable", beansRequireSerializable)
 				.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
-				.a("beansRequireSomeProperties", beansRequireSomeProperties)
+				.a("beansDontRequireSomeProperties", beansDontRequireSomeProperties)
+				.a("dontIgnoreTransientFields", dontIgnoreTransientFields)
+				.a("dontSilentlyIgnoreMissingSetters", dontSilentlyIgnoreMissingSetters)
 				.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-				.a("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
-				.a("ignoreTransientProperties", ignoreTransientFields)
 				.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-				.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+				.a("dontIgnoreUnknownNullBeanProperties", dontIgnoreUnknownNullBeanProperties)
 				.a("notBeanClasses", notBeanClasses)
 				.a("notBeanPackageNames", notBeanPackageNames)
 				.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
 				.a("pojoSwaps", swaps)
 				.a("sortProperties", sortProperties)
 				.a("useEnumNames", useEnumNames)
-				.a("useInterfaceProxies", useInterfaceProxies)
+				.a("dontUseInterfaceProxies", dontUseInterfaceProxies)
 				.a("useJavaBeanIntrospector", useJavaBeanIntrospector)
 			);
 	}

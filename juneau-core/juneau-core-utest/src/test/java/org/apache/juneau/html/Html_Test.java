@@ -178,7 +178,7 @@ public class Html_Test {
 			+"\n[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL";
 			assertEquals(expected, r);
 
-			s.set(HtmlSerializer.HTML_detectLinksInStrings, true);
+			s.set(HtmlSerializer.HTML_dontDetectLinksInStrings, false);
 			s.dontDetectLabelParameters();
 			r = strip(s.build().serialize(t));
 			expected = ""

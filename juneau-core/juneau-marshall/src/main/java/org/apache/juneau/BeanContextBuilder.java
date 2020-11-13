@@ -755,10 +755,10 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans require at least one property.
+	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Beans don't require at least one property.
 	 *
 	 * <p>
-	 * When enabled, then a Java class must contain at least 1 property to be considered a bean.
+	 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
 	 * <p>
@@ -779,7 +779,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSomeProperties</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_beansDontRequireSomeProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {}</jc>
@@ -792,14 +792,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansRequireSomeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beansDontRequireSomeProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansDontRequireSomeProperties() {
-		return set(BEAN_beansRequireSomeProperties, false);
+		return set(BEAN_beansDontRequireSomeProperties, true);
 	}
 
 	/**
@@ -1911,11 +1911,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore properties without setters.
+	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't silently ignore missing setters.
 	 *
 	 * <p>
-	 * When enabled, trying to set a value on a bean property without a setter will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
+	 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
+	 * Otherwise, it will be silently ignored.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1929,13 +1929,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnorePropertiesWithoutSetters()
+	 * 		.dontSilentlyIgnoreMissingSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignorePropertiesWithoutSetters</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_dontSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a ParseException.</jc>
@@ -1947,21 +1947,21 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignorePropertiesWithoutSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontSilentlyIgnoreMissingSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dontIgnorePropertiesWithoutSetters() {
-		return set(BEAN_ignorePropertiesWithoutSetters, false);
+	public BeanContextBuilder dontSilentlyIgnoreMissingSetters() {
+		return set(BEAN_dontSilentlyIgnoreMissingSetters, true);
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore transient fields.
+	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't ignore transient fields.
 	 *
 	 * <p>
-	 * When enabled, methods and fields marked as <jk>transient</jk> will be ignored as bean properties.
+	 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1979,7 +1979,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreTransientFields</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_dontIgnoreTransientFields</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -1991,14 +1991,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreTransientFields}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreTransientFields}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder dontIgnoreTransientFields() {
-		return set(BEAN_ignoreTransientFields, false);
+		return set(BEAN_dontIgnoreTransientFields, true);
 	}
 
 	/**
@@ -2043,11 +2043,11 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Ignore unknown properties with null values.
+	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't ignore unknown properties with null values.
 	 *
 	 * <p>
-	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
-	 * Otherwise, a {@code BeanRuntimeException} is thrown.
+	 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
+	 * Otherwise it will be silently ignored.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -2065,7 +2065,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownNullBeanProperties</jsf>, <jk>false</jk>)
+	 * 		.set(<jsf>BEAN_dontIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
@@ -2073,14 +2073,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_ignoreUnknownNullBeanProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder dontIgnoreUnknownNullBeanProperties() {
-		return set(BEAN_ignoreUnknownNullBeanProperties, false);
+		return set(BEAN_dontIgnoreUnknownNullBeanProperties, true);
 	}
 
 	/**
@@ -2920,45 +2920,22 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
-	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Use interface proxies.
+	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Don't use interface proxies.
 	 *
 	 * <p>
 	 * When enabled, interfaces will be instantiated as proxy classes through the use of an
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// An interface with a single getter.</jc>
-	 * 	<jk>public interface</jk> MyBean {
-	 * 		String getFoo();
-	 * 		<jk>void</jk> setFoo(String foo);
-	 * 	}
-	 *
-	 * 	<jc>// Create a parser that uses interface proxies.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	ReaderParser p = JsonParser
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useInterfaceProxies</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Creates a proxy implementation of a MyBean interface.</jc>
-	 * 	MyBean b = p.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_useInterfaceProxies}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_dontUseInterfaceProxies}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public BeanContextBuilder dontUseInterfaceProxies() {
-		return set(BEAN_useInterfaceProxies, false);
+		return set(BEAN_dontUseInterfaceProxies, true);
 	}
 
 	/**
