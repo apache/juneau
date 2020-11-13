@@ -236,11 +236,11 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_dontAutoDetectNamespaces}
+	 * 	<li class='jf'>{@link XmlSerializer#XML_disableAutoDetectNamespaces}
 	 * 	<li class='link'>{@doc XmlNamespaces}
 	 * </ul>
 	 */
-	String dontAutoDetectNamespaces() default "";
+	String disableAutoDetectNamespaces() default "";
 
 	/**
 	 * Configuration property:  Default namespace.

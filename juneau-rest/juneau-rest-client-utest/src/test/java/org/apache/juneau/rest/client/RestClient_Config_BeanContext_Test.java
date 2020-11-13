@@ -212,8 +212,8 @@ public class RestClient_Config_BeanContext_Test {
 	public static class A6 {}
 
 	@Test
-	public void a06_beansDontRequireSomeProperties() throws Exception {
-		client().beansDontRequireSomeProperties().build().post("/echoBody",new A6()).run().assertBody().is("{}");
+	public void a06_disableBeansRequireSomeProperties() throws Exception {
+		client().disableBeansRequireSomeProperties().build().post("/echoBody",new A6()).run().assertBody().is("{}");
 	}
 
 	public static class A7  {
@@ -385,10 +385,10 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	@Test
-	public void a16_dontIgnorePropertiesWithoutSetters() throws Exception {
+	public void a16_disableIgnorePropertiesWithoutSetters() throws Exception {
 		A16 x = client().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class);
 		assertNull(x.foo);
-		assertThrown(()->client().dontSilentlyIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
+		assertThrown(()->client().disableSilentlyIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
 	}
 
 	public static class A17 {
@@ -403,10 +403,10 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	@Test
-	public void a17_dontIgnoreTransientFields() throws Exception {
+	public void a17_disableIgnoreTransientFields() throws Exception {
 		A17 x = client().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A17.class);;
 		assertNull(x.bar);
-		x = client().dontIgnoreTransientFields().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().contains("{bar:'2',foo:'1'}").getBody().as(A17.class);
+		x = client().disableIgnoreTransientFields().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().contains("{bar:'2',foo:'1'}").getBody().as(A17.class);
 		assertEquals("2",x.bar);
 	}
 
@@ -415,9 +415,9 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	@Test
-	public void a18_dontIgnoreUnknownNullBeanProperties() throws Exception {
+	public void a18_disableIgnoreUnknownNullBeanProperties() throws Exception {
 		client().build().post("/echoBody",new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(A18.class);;
-		assertThrown(()->client().dontIgnoreUnknownNullBeanProperties().build().post("/echoBody",new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(A18.class)).contains("Unknown property 'bar'");
+		assertThrown(()->client().disableIgnoreUnknownNullBeanProperties().build().post("/echoBody",new StringReader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(A18.class)).contains("Unknown property 'bar'");
 	}
 
 	public static interface A19 {
@@ -426,10 +426,10 @@ public class RestClient_Config_BeanContext_Test {
 	}
 
 	@Test
-	public void a19_dontUseInterfaceProxies() throws Exception {
+	public void a19_disableInterfaceProxies() throws Exception {
 		A19 x = client().build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A19.class);;
 		assertEquals("1",x.getFoo());
-		assertThrown(()->client().dontUseInterfaceProxies().build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A19.class)).contains("could not be instantiated");
+		assertThrown(()->client().disableInterfaceProxies().build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A19.class)).contains("could not be instantiated");
 	}
 
 	public static class A20 {

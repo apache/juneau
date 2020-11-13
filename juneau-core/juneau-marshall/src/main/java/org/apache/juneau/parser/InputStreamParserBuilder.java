@@ -230,8 +230,8 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public InputStreamParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -338,26 +338,26 @@ public class InputStreamParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public InputStreamParserBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public InputStreamParserBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public InputStreamParserBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public InputStreamParserBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public InputStreamParserBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 

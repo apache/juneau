@@ -409,8 +409,8 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public JsonSchemaGeneratorBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -517,26 +517,26 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public JsonSchemaGeneratorBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public JsonSchemaGeneratorBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public JsonSchemaGeneratorBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public JsonSchemaGeneratorBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 

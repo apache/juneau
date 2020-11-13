@@ -521,7 +521,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T1 t = new T1();
@@ -573,7 +573,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnClassWithElementName() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T2 t = new T2();
@@ -639,12 +639,12 @@ public class XmlTest {
 
 		// Add namespace URIs to root, but don't auto-detect.
 		// Only xsi should be added to root.
-		s.addNamespaceUrisToRoot().dontAutoDetectNamespaces();
+		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 
 		// Manually set namespaces
-		s.dontAutoDetectNamespaces();
+		s.disableAutoDetectNamespaces();
 		s.namespaces(
 			Namespace.create("p1","http://p1"),
 			Namespace.create("bar","http://bar"),
@@ -676,7 +676,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNoNsOnClassElementNameOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T4 t = new T4();
@@ -736,7 +736,7 @@ public class XmlTest {
 		assertTrue(t.equals(p.parse(r, T5.class)));
 		XmlUtils.validateXml(t, s.build());
 
-		s.ns().dontAutoDetectNamespaces();
+		s.ns().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<foo:T5><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 
@@ -780,7 +780,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testNsOnPackageNsOnClassNoElementNameOnClass() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T6 t = new T6();
@@ -794,7 +794,7 @@ public class XmlTest {
 
 		// Add namespace URIs to root, but don't auto-detect.
 		// Only xsi should be added to root.
-		s.addNamespaceUrisToRoot().dontAutoDetectNamespaces();
+		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 
@@ -832,7 +832,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testComboOfNsAndOverriddenBeanPropertyNames() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T7 t = new T7();
@@ -846,7 +846,7 @@ public class XmlTest {
 
 		// Add namespace URIs to root, but don't auto-detect.
 		// Only xsi should be added to root.
-		s.addNamespaceUrisToRoot().dontAutoDetectNamespaces();
+		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
 
@@ -881,7 +881,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlNsAnnotation() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T8 t = new T8();
@@ -889,7 +889,7 @@ public class XmlTest {
 		assertEquals("<object><f1>1</f1><f2>2</f2><f3>3</f3><f4>4</f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T8.class)));
 
-		s.ns().dontAutoDetectNamespaces();
+		s.ns().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<object><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
 
@@ -932,7 +932,7 @@ public class XmlTest {
 	//====================================================================================================
 	@Test
 	public void testXmlNsOnPackageNsUriInXmlNs() throws Exception {
-		XmlSerializerBuilder s = XmlSerializer.create().sq().dontAutoDetectNamespaces();
+		XmlSerializerBuilder s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
 		XmlParser p = XmlParser.DEFAULT;
 
 		T9 t = new T9();
@@ -940,7 +940,7 @@ public class XmlTest {
 		assertEquals("<object><f1>1</f1></object>", r);
 		assertTrue(t.equals(p.parse(r, T9.class)));
 
-		s.ns().dontAutoDetectNamespaces();
+		s.ns().disableAutoDetectNamespaces();
 		r = s.build().serialize(t);
 		assertEquals("<object><p1:f1>1</p1:f1></object>", r);
 

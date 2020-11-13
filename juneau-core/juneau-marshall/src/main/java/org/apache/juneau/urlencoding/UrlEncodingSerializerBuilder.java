@@ -220,8 +220,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public UrlEncodingSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -328,26 +328,26 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public UrlEncodingSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public UrlEncodingSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public UrlEncodingSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public UrlEncodingSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 

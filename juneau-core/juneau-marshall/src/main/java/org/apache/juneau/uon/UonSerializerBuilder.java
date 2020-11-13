@@ -380,8 +380,8 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public UonSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -488,26 +488,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public UonSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public UonSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public UonSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public UonSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 

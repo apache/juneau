@@ -93,7 +93,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return true;
 		if (pMeta != null && pMeta.isUri())
 			return true;
-		if ((!isDontDetectLinksInStrings()) && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
+		if (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
 			return true;
 		return false;
 	}
@@ -109,7 +109,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
 		String s = o.toString();
-		if (! isDontDetectLabelParameters()) {
+		if (isDetectLabelParameters()) {
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
 				return urlDecode(m.group(1));
@@ -812,25 +812,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Don't look for link labels in URIs.
+	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * @see HtmlSerializer#HTML_dontDetectLabelParameters
+	 * @see HtmlSerializer#HTML_disableDetectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if we should not look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDontDetectLabelParameters() {
-		return ctx.isDontDetectLabelParameters();
+	protected final boolean isDetectLabelParameters() {
+		return ctx.isDetectLabelParameters();
 	}
 
 	/**
-	 * Configuration property:  Don't look for URLs in {@link String Strings}.
+	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
-	 * @see HtmlSerializer#HTML_dontDetectLinksInStrings
+	 * @see HtmlSerializer#HTML_disableDetectLinksInStrings
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDontDetectLinksInStrings() {
-		return ctx.isDontDetectLinksInStrings();
+	protected final boolean isDetectLinksInStrings() {
+		return ctx.isDetectLinksInStrings();
 	}
 
 	/**

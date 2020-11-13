@@ -773,13 +773,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.beansDontRequireSomeProperties()
+	 * 		.disableBeansRequireSomeProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansDontRequireSomeProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {}</jc>
@@ -792,14 +792,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansDontRequireSomeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder beansDontRequireSomeProperties() {
-		return set(BEAN_beansDontRequireSomeProperties, true);
+	public BeanContextBuilder disableBeansRequireSomeProperties() {
+		return set(BEAN_disableBeansRequireSomeProperties, true);
 	}
 
 	/**
@@ -1929,13 +1929,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.dontSilentlyIgnoreMissingSetters()
+	 * 		.disableSilentlyIgnoreMissingSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_dontSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a ParseException.</jc>
@@ -1947,14 +1947,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontSilentlyIgnoreMissingSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableSilentlyIgnoreMissingSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dontSilentlyIgnoreMissingSetters() {
-		return set(BEAN_dontSilentlyIgnoreMissingSetters, true);
+	public BeanContextBuilder disableSilentlyIgnoreMissingSetters() {
+		return set(BEAN_disableSilentlyIgnoreMissingSetters, true);
 	}
 
 	/**
@@ -1973,13 +1973,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that doesn't ignore transient fields.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnoreTransientFields()
+	 * 		.disableIgnoreTransientFields()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_dontIgnoreTransientFields</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -1991,14 +1991,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreTransientFields}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dontIgnoreTransientFields() {
-		return set(BEAN_dontIgnoreTransientFields, true);
+	public BeanContextBuilder disableIgnoreTransientFields() {
+		return set(BEAN_disableIgnoreTransientFields, true);
 	}
 
 	/**
@@ -2059,13 +2059,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.dontIgnoreUnknownNullBeanProperties()
+	 * 		.disableIgnoreUnknownNullBeanProperties()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_dontIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
@@ -2073,14 +2073,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dontIgnoreUnknownNullBeanProperties() {
-		return set(BEAN_dontIgnoreUnknownNullBeanProperties, true);
+	public BeanContextBuilder disableIgnoreUnknownNullBeanProperties() {
+		return set(BEAN_disableIgnoreUnknownNullBeanProperties, true);
 	}
 
 	/**
@@ -2928,14 +2928,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontUseInterfaceProxies}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder dontUseInterfaceProxies() {
-		return set(BEAN_dontUseInterfaceProxies, true);
+	public BeanContextBuilder disableInterfaceProxies() {
+		return set(BEAN_disableInterfaceProxies, true);
 	}
 
 	/**

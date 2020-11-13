@@ -726,8 +726,8 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public HtmlDocSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -834,26 +834,26 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public HtmlDocSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public HtmlDocSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public HtmlDocSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlDocSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public HtmlDocSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 
@@ -1152,8 +1152,8 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlDocSerializerBuilder dontAutoDetectNamespaces() {
-		super.dontAutoDetectNamespaces();
+	public HtmlDocSerializerBuilder disableAutoDetectNamespaces() {
+		super.disableAutoDetectNamespaces();
 		return this;
 	}
 
@@ -1188,14 +1188,14 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* GENERATED - HtmlSerializerBuilder */
-	public HtmlDocSerializerBuilder dontDetectLabelParameters() {
-		super.dontDetectLabelParameters();
+	public HtmlDocSerializerBuilder disableDetectLabelParameters() {
+		super.disableDetectLabelParameters();
 		return this;
 	}
 
 	@Override /* GENERATED - HtmlSerializerBuilder */
-	public HtmlDocSerializerBuilder dontDetectLinksInStrings() {
-		super.dontDetectLinksInStrings();
+	public HtmlDocSerializerBuilder disableDetectLinksInStrings() {
+		super.disableDetectLinksInStrings();
 		return this;
 	}
 

@@ -380,8 +380,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public HtmlSchemaSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -488,26 +488,26 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public HtmlSchemaSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public HtmlSchemaSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public HtmlSchemaSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public HtmlSchemaSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 
@@ -806,8 +806,8 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlSchemaSerializerBuilder dontAutoDetectNamespaces() {
-		super.dontAutoDetectNamespaces();
+	public HtmlSchemaSerializerBuilder disableAutoDetectNamespaces() {
+		super.disableAutoDetectNamespaces();
 		return this;
 	}
 
@@ -842,14 +842,14 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - HtmlSerializerBuilder */
-	public HtmlSchemaSerializerBuilder dontDetectLabelParameters() {
-		super.dontDetectLabelParameters();
+	public HtmlSchemaSerializerBuilder disableDetectLabelParameters() {
+		super.disableDetectLabelParameters();
 		return this;
 	}
 
 	@Override /* GENERATED - HtmlSerializerBuilder */
-	public HtmlSchemaSerializerBuilder dontDetectLinksInStrings() {
-		super.dontDetectLinksInStrings();
+	public HtmlSchemaSerializerBuilder disableDetectLinksInStrings() {
+		super.disableDetectLinksInStrings();
 		return this;
 	}
 

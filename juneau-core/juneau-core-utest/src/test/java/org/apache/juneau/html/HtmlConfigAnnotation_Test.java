@@ -51,8 +51,8 @@ public class HtmlConfigAnnotation_Test {
 	@HtmlConfig(
 		addBeanTypes="$X{true}",
 		addKeyValueTableHeaders="$X{true}",
-		dontDetectLabelParameters="$X{true}",
-		dontDetectLinksInStrings="$X{true}",
+		disableDetectLabelParameters="$X{true}",
+		disableDetectLinksInStrings="$X{true}",
 		labelParameter="$X{foo}",
 		uriAnchorText="$X{TO_STRING}"
 	)
@@ -65,8 +65,8 @@ public class HtmlConfigAnnotation_Test {
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
-		check("true", x.isDontDetectLabelParameters());
-		check("true", x.isDontDetectLinksInStrings());
+		check("false", x.isDetectLabelParameters());
+		check("false", x.isDetectLinksInStrings());
 		check("foo", x.getLabelParameter());
 		check("TO_STRING", x.getUriAnchorText());
 	}
@@ -91,8 +91,8 @@ public class HtmlConfigAnnotation_Test {
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
-		check("false", x.isDontDetectLabelParameters());
-		check("false", x.isDontDetectLinksInStrings());
+		check("true", x.isDetectLabelParameters());
+		check("true", x.isDetectLinksInStrings());
 		check("label", x.getLabelParameter());
 		check("TO_STRING", x.getUriAnchorText());
 	}
@@ -116,8 +116,8 @@ public class HtmlConfigAnnotation_Test {
 		HtmlSerializerSession x = HtmlSerializer.create().applyAnnotations(al, sr).build().createSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
-		check("false", x.isDontDetectLabelParameters());
-		check("false", x.isDontDetectLinksInStrings());
+		check("true", x.isDetectLabelParameters());
+		check("true", x.isDetectLinksInStrings());
 		check("label", x.getLabelParameter());
 		check("TO_STRING", x.getUriAnchorText());
 	}

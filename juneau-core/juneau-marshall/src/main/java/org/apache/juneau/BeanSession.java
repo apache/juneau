@@ -1275,15 +1275,15 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Beans don't require at least one property.
+	 * Configuration property:  Beans require at least one property.
 	 *
-	 * @see BeanContext#BEAN_beansDontRequireSomeProperties
+	 * @see BeanContext#BEAN_disableBeansRequireSomeProperties
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansDontRequireSomeProperties() {
-		return ctx.isBeansDontRequireSomeProperties();
+	public final boolean isBeansRequireSomeProperties() {
+		return ctx.isBeansRequireSomeProperties();
 	}
 
 	/**
@@ -1334,14 +1334,14 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Don't silently ignore missing setters.
+	 * Configuration property:  Silently ignore missing setters.
 	 *
-	 * @see BeanContext#BEAN_dontSilentlyIgnoreMissingSetters
+	 * @see BeanContext#BEAN_disableSilentlyIgnoreMissingSetters
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isDontSilentlyIgnoreMissingSetters() {
-		return ctx.isDontSilentlyIgnoreMissingSetters();
+	public final boolean isSilentlyIgnoreMissingSetters() {
+		return ctx.isSilentlyIgnoreMissingSetters();
 	}
 
 	/**
@@ -1357,14 +1357,14 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Don't ignore unknown properties with null values.
+	 * Configuration property:  Ignore unknown properties with null values.
 	 *
-	 * @see BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties
+	 * @see BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties
 	 * @return
-	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
+	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isDontIgnoreUnknownNullBeanProperties() {
-		return ctx.isDontIgnoreUnknownNullBeanProperties();
+	public final boolean isIgnoreUnknownNullBeanProperties() {
+		return ctx.isIgnoreUnknownNullBeanProperties();
 	}
 
 	/**
@@ -1445,15 +1445,15 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Don't interface proxies.
+	 * Configuration property:  Use interface proxies.
 	 *
-	 * @see BeanContext#BEAN_dontUseInterfaceProxies
+	 * @see BeanContext#BEAN_disableInterfaceProxies
 	 * @return
-	 * 	<jk>false</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public final boolean isDontUseInterfaceProxies() {
-		return ctx.isDontUseInterfaceProxies();
+	public final boolean isUseInterfaceProxies() {
+		return ctx.isUseInterfaceProxies();
 	}
 
 	/**

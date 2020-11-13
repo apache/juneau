@@ -432,7 +432,7 @@ public class BeanMeta<T> {
 				}
 
 				// Make sure at least one property was found.
-				if (beanFilter == null && (!ctx.isBeansDontRequireSomeProperties()) && normalProps.size() == 0)
+				if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.size() == 0)
 					return "No properties detected on bean class";
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
@@ -771,7 +771,7 @@ public class BeanMeta<T> {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.is(STATIC))
 					continue;
-				if (f.is(TRANSIENT) && ! ctx.isDontIgnoreTransientFields())
+				if (f.is(TRANSIENT) && ctx.isIgnoreTransientFields())
 					continue;
 				if (ctx.hasAnnotation(BeanIgnore.class, f))
 					continue;
@@ -792,7 +792,7 @@ public class BeanMeta<T> {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.is(STATIC))
 					continue;
-				if ((f.is(TRANSIENT) || f.hasAnnotation(Transient.class)) && ! bc.isDontIgnoreTransientFields())
+				if ((f.is(TRANSIENT) || f.hasAnnotation(Transient.class)) && bc.isIgnoreTransientFields())
 					continue;
 				if (f.hasAnnotation(BeanIgnore.class, bc))
 					continue;

@@ -81,14 +81,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLinksInStrings}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLinksInStrings}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlSerializerBuilder dontDetectLinksInStrings() {
-		return set(HTML_dontDetectLinksInStrings, true);
+	public HtmlSerializerBuilder disableDetectLinksInStrings() {
+		return set(HTML_disableDetectLinksInStrings, true);
 	}
 
 	/**
@@ -118,14 +118,14 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLabelParameters}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLabelParameters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public HtmlSerializerBuilder dontDetectLabelParameters() {
-		return set(HTML_dontDetectLabelParameters, true);
+	public HtmlSerializerBuilder disableDetectLabelParameters() {
+		return set(HTML_disableDetectLabelParameters, true);
 	}
 
 	/**
@@ -296,8 +296,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public HtmlSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -404,26 +404,26 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public HtmlSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public HtmlSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public HtmlSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public HtmlSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 
@@ -722,8 +722,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - XmlSerializerBuilder */
-	public HtmlSerializerBuilder dontAutoDetectNamespaces() {
-		super.dontAutoDetectNamespaces();
+	public HtmlSerializerBuilder disableAutoDetectNamespaces() {
+		super.disableAutoDetectNamespaces();
 		return this;
 	}
 

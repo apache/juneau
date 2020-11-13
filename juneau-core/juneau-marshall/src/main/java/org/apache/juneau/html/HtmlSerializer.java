@@ -267,7 +267,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * The parameter name to look for when resolving link labels.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link #HTML_dontDetectLabelParameters}
+	 * 	<li class='jf'>{@link #HTML_disableDetectLabelParameters}
 	 * </ul>
 	 */
 	public static final String HTML_labelParameter = PREFIX + ".labelParameter.s";
@@ -277,20 +277,20 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_dontDetectLabelParameters HTML_dontDetectLabelParameters}
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.dontDetectLabelParameters.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_disableDetectLabelParameters HTML_disableDetectLabelParameters}
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.disableDetectLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>HtmlSerializer.dontDetectLabelParameters</c>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.disableDetectLabelParameters</c>
 	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DONTDETECTLABELPARAMETERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#dontDetectLabelParameters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#disableDetectLabelParameters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLabelParameters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#disableDetectLabelParameters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -318,7 +318,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	WriterSerializer s2 = HtmlSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addKeyValueTableHeaders()
-	 * 		.dontDetectLabelParameters()
+	 * 		.disableDetectLabelParameters()
 	 * 		.build();
 	 *
 	 * 	String withLabels = s1.serialize(<jk>new</jk> MyBean());
@@ -350,27 +350,27 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_dontDetectLabelParameters = PREFIX + ".dontDetectLabelParameters.b";
+	public static final String HTML_disableDetectLabelParameters = PREFIX + ".disableDetectLabelParameters.b";
 
 	/**
 	 * Configuration property:  Don't look for URLs in {@link java.lang.String Strings}.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_dontDetectLinksInStrings HTML_dontDetectLinksInStrings}
-	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.dontDetectLinksInStrings.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.html.HtmlSerializer#HTML_disableDetectLinksInStrings HTML_disableDetectLinksInStrings}
+	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.disableDetectLinksInStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>HtmlSerializer.dontDetectLinksInStrings</c>
-	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DONTDETECTLINKSINSTRINGS</c>
+	 * 	<li><b>System property:</b>  <c>HtmlSerializer.disableDetectLinksInStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>HTMLSERIALIZER_DISABLEDETECTLINKSINSTRINGS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#dontDetectLinksInStrings()}
+	 * 			<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlConfig#disableDetectLinksInStrings()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#dontDetectLinksInStrings()}
+	 * 			<li class='jm'>{@link org.apache.juneau.html.HtmlSerializerBuilder#disableDetectLinksInStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -396,7 +396,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	WriterSerializer s2 = HtmlSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.addKeyValueTableHeaders()
-	 * 		.dontDetectLinksInStrings(<jk>true</jk>)
+	 * 		.disableDetectLinksInStrings()
 	 * 		.build();
 	 *
 	 * 	String withLinks = s1.serialize(<jk>new</jk> MyBean());
@@ -427,7 +427,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HTML_dontDetectLinksInStrings = PREFIX + ".dontDetectLinksInStrings.b";
+	public static final String HTML_disableDetectLinksInStrings = PREFIX + ".disableDetectLinksInStrings.b";
 
 	/**
 	 * Configuration property:  Anchor text source.
@@ -666,8 +666,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 
 	private final AnchorText uriAnchorText;
 	private final boolean
-		dontDetectLabelParameters,
-		dontDetectLinksInStrings,
+		detectLabelParameters,
+		detectLinksInStrings,
 		addKeyValueTableHeaders,
 		addBeanTypes;
 	private final String labelParameter;
@@ -716,8 +716,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	public HtmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
-		dontDetectLabelParameters = getBooleanProperty(HTML_dontDetectLabelParameters, false);
-		dontDetectLinksInStrings = getBooleanProperty(HTML_dontDetectLinksInStrings, false);
+		detectLabelParameters = ! getBooleanProperty(HTML_disableDetectLabelParameters, false);
+		detectLinksInStrings = ! getBooleanProperty(HTML_disableDetectLinksInStrings, false);
 		labelParameter = getStringProperty(HTML_labelParameter, "label");
 		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
 		addBeanTypes = getBooleanProperty(HTML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
@@ -820,25 +820,25 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	}
 
 	/**
-	 * Don't look for link labels in URIs.
+	 * Look for link labels in URIs.
 	 *
-	 * @see #HTML_dontDetectLabelParameters
+	 * @see #HTML_disableDetectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if we should not look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDontDetectLabelParameters() {
-		return dontDetectLabelParameters;
+	protected final boolean isDetectLabelParameters() {
+		return detectLabelParameters;
 	}
 
 	/**
-	 * Don't look for URLs in {@link String Strings}.
+	 * Look for URLs in {@link String Strings}.
 	 *
-	 * @see #HTML_dontDetectLinksInStrings
+	 * @see #HTML_disableDetectLinksInStrings
 	 * @return
-	 * 	<jk>true</jk> if we should not automatically convert strings to URLs if they look like a URL.
+	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDontDetectLinksInStrings() {
-		return dontDetectLinksInStrings;
+	protected final boolean isDetectLinksInStrings() {
+		return detectLinksInStrings;
 	}
 
 	/**
@@ -873,8 +873,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 		return super.toMap()
 			.a("HtmlSerializer", new DefaultFilteringOMap()
 				.a("uriAnchorText", uriAnchorText)
-				.a("dontDetectLabelParameters", dontDetectLabelParameters)
-				.a("dontDetectLinksInStrings", dontDetectLinksInStrings)
+				.a("detectLabelParameters", detectLabelParameters)
+				.a("detectLinksInStrings", detectLinksInStrings)
 				.a("labelParameter", labelParameter)
 				.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
 				.a("addBeanTypes", addBeanTypes)

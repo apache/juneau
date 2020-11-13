@@ -66,8 +66,8 @@ public class BeanConfigAnnotation {
 				psb.set(BEAN_beansRequireSerializable, bool(a.beansRequireSerializable()));
 			if (! a.beansRequireSettersForGetters().isEmpty())
 				psb.set(BEAN_beansRequireSettersForGetters, bool(a.beansRequireSettersForGetters()));
-			if (! a.beansDontRequireSomeProperties().isEmpty())
-				psb.set(BEAN_beansDontRequireSomeProperties, bool(a.beansDontRequireSomeProperties()));
+			if (! a.disableBeansRequireSomeProperties().isEmpty())
+				psb.set(BEAN_disableBeansRequireSomeProperties, bool(a.disableBeansRequireSomeProperties()));
 			if (! a.typePropertyName().isEmpty())
 				psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
 			if (! a.debug().isEmpty())
@@ -78,14 +78,14 @@ public class BeanConfigAnnotation {
 				psb.set(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
 			if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())
 				psb.set(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
-			if (! a.dontSilentlyIgnoreMissingSetters().isEmpty())
-				psb.set(BEAN_dontSilentlyIgnoreMissingSetters, bool(a.dontSilentlyIgnoreMissingSetters()));
-			if (! a.dontIgnoreTransientFields().isEmpty())
-				psb.set(BEAN_dontIgnoreTransientFields, bool(a.dontIgnoreTransientFields()));
+			if (! a.disableSilentlyIgnoreMissingSetters().isEmpty())
+				psb.set(BEAN_disableSilentlyIgnoreMissingSetters, bool(a.disableSilentlyIgnoreMissingSetters()));
+			if (! a.disableIgnoreTransientFields().isEmpty())
+				psb.set(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
 			if (! a.ignoreUnknownBeanProperties().isEmpty())
 				psb.set(BEAN_ignoreUnknownBeanProperties, bool(a.ignoreUnknownBeanProperties()));
-			if (! a.dontIgnoreUnknownNullBeanProperties().isEmpty())
-				psb.set(BEAN_dontIgnoreUnknownNullBeanProperties, bool(a.dontIgnoreUnknownNullBeanProperties()));
+			if (! a.disableIgnoreUnknownNullBeanProperties().isEmpty())
+				psb.set(BEAN_disableIgnoreUnknownNullBeanProperties, bool(a.disableIgnoreUnknownNullBeanProperties()));
 			for (Class<?> c : a.interfaces())
 				psb.prependTo(BEAN_annotations, BeanAnnotation.create(c).interfaceClass(c).build());
 			if (! a.locale().isEmpty())
@@ -112,8 +112,8 @@ public class BeanConfigAnnotation {
 				psb.set(CONTEXT_timeZone, timeZone(a.timeZone()));
 			if (! a.useEnumNames().isEmpty())
 				psb.set(BEAN_useEnumNames, bool(a.useEnumNames()));
-			if (! a.dontUseInterfaceProxies().isEmpty())
-				psb.set(BEAN_dontUseInterfaceProxies, bool(a.dontUseInterfaceProxies()));
+			if (! a.disableInterfaceProxies().isEmpty())
+				psb.set(BEAN_disableInterfaceProxies, bool(a.disableInterfaceProxies()));
 			if (! a.useJavaBeanIntrospector().isEmpty())
 				psb.set(BEAN_useJavaBeanIntrospector, bool(a.useJavaBeanIntrospector()));
 			if (! a.detectRecursions().isEmpty())

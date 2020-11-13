@@ -169,10 +169,10 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLinksInStrings}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLinksInStrings}
 	 * </ul>
 	 */
-	String dontDetectLinksInStrings() default "";
+	String disableDetectLinksInStrings() default "";
 
 	/**
 	 * Configuration property:  Link label parameter name.
@@ -239,10 +239,10 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link HtmlSerializer#HTML_dontDetectLabelParameters}
+	 * 	<li class='jf'>{@link HtmlSerializer#HTML_disableDetectLabelParameters}
 	 * </ul>
 	 */
-	String dontDetectLabelParameters() default "";
+	String disableDetectLabelParameters() default "";
 
 	/**
 	 * Configuration property:  Anchor text source.

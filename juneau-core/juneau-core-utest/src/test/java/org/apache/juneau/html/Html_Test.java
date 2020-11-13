@@ -158,7 +158,7 @@ public class Html_Test {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL'>MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.dontDetectLinksInStrings();
+		s.disableDetectLinksInStrings();
 		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
@@ -178,8 +178,8 @@ public class Html_Test {
 			+"\n[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL";
 			assertEquals(expected, r);
 
-			s.set(HtmlSerializer.HTML_dontDetectLinksInStrings, false);
-			s.dontDetectLabelParameters();
+			s.set(HtmlSerializer.HTML_disableDetectLinksInStrings, false);
+			s.disableDetectLabelParameters();
 			r = strip(s.build().serialize(t));
 			expected = ""
 				+"\n[f0]=<a href='f0/x0'>f0/x0</a>"

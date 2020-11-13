@@ -41,7 +41,7 @@ public class BasicBeanTests {
 		}
 	}
 
-	@BeanConfig(dontIgnoreTransientFields="true")
+	@BeanConfig(disableIgnoreTransientFields="true")
 	public static class A {}
 
 	@Test
@@ -51,7 +51,7 @@ public class BasicBeanTests {
 
 	@Test
 	public void a02_testTransientFieldsIgnored_overrideSetting() {
-		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().dontIgnoreTransientFields().build();
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT.builder().disableIgnoreTransientFields().build();
 		assertObject(A1.create()).serialized(s).is("{f1:1,f2:2}");
 	}
 

@@ -289,10 +289,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_beansDontRequireSomeProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableBeansRequireSomeProperties}
 	 * </ul>
 	 */
-	String beansDontRequireSomeProperties() default "";
+	String disableBeansRequireSomeProperties() default "";
 
 	/**
 	 * Configuration property:  Bean type property name.
@@ -486,10 +486,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontSilentlyIgnoreMissingSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableSilentlyIgnoreMissingSetters}
 	 * </ul>
 	 */
-	String dontSilentlyIgnoreMissingSetters() default "";
+	String disableSilentlyIgnoreMissingSetters() default "";
 
 	/**
 	 * Configuration property:  Don't ignore transient fields.
@@ -509,10 +509,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreTransientFields}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreTransientFields}
 	 * </ul>
 	 */
-	String dontIgnoreTransientFields() default "";
+	String disableIgnoreTransientFields() default "";
 
 	/**
 	 * Configuration property:  Ignore unknown properties.
@@ -557,10 +557,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontIgnoreUnknownNullBeanProperties}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreUnknownNullBeanProperties}
 	 * </ul>
 	 */
-	String dontIgnoreUnknownNullBeanProperties() default "";
+	String disableIgnoreUnknownNullBeanProperties() default "";
 
 	/**
 	 * Identifies a set of interfaces.
@@ -859,10 +859,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_dontUseInterfaceProxies}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableInterfaceProxies}
 	 * </ul>
 	 */
-	String dontUseInterfaceProxies() default "";
+	String disableInterfaceProxies() default "";
 
 	/**
 	 * Configuration property:  Use Java Introspector.

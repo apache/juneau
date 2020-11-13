@@ -116,13 +116,13 @@ public class BeanConfigAnnotation_Test {
 		beansRequireDefaultConstructor="$X{true}",
 		beansRequireSerializable="$X{true}",
 		beansRequireSettersForGetters="$X{true}",
-		beansDontRequireSomeProperties="$X{true}",
+		disableBeansRequireSomeProperties="$X{true}",
 		typePropertyName="$X{foo}",
 		debug="$X{true}",
 		detectRecursions="$X{true}",
-		dontIgnoreUnknownNullBeanProperties="$X{true}",
-		dontSilentlyIgnoreMissingSetters="$X{true}",
-		dontUseInterfaceProxies="$X{true}",
+		disableIgnoreUnknownNullBeanProperties="$X{true}",
+		disableSilentlyIgnoreMissingSetters="$X{true}",
+		disableInterfaceProxies="$X{true}",
 		fluentSetters="$X{true}",
 		ignoreInvocationExceptionsOnGetters="$X{true}",
 		ignoreInvocationExceptionsOnSetters="$X{true}",
@@ -161,17 +161,17 @@ public class BeanConfigAnnotation_Test {
 		check("true", bc.isBeansRequireDefaultConstructor());
 		check("true", bc.isBeansRequireSerializable());
 		check("true", bc.isBeansRequireSettersForGetters());
-		check("true", bc.isBeansDontRequireSomeProperties());
+		check("false", bc.isBeansRequireSomeProperties());
 		check("foo", bc.getBeanTypePropertyName());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
 		check("true", bc.isFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("true", bc.isDontSilentlyIgnoreMissingSetters());
+		check("false", bc.isSilentlyIgnoreMissingSetters());
 		check("true", bc.isIgnoreRecursions());
 		check("true", bc.isIgnoreUnknownBeanProperties());
-		check("true", bc.isDontIgnoreUnknownNullBeanProperties());
+		check("false", bc.isIgnoreUnknownNullBeanProperties());
 		check("1", bc.getInitialDepth());
 		check("en_US", bc.getLocale());
 		check("1", bc.getMaxDepth());
@@ -183,7 +183,7 @@ public class BeanConfigAnnotation_Test {
 		check("true", bc.isSortProperties());
 		check("GMT", bc.getTimeZone());
 		check("true", bc.isUseEnumNames());
-		check("true", bc.isDontUseInterfaceProxies());
+		check("false", bc.isUseInterfaceProxies());
 		check("true", bc.isUseJavaBeanIntrospector());
 	}
 
@@ -208,17 +208,17 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isBeansRequireDefaultConstructor());
 		check("false", bc.isBeansRequireSerializable());
 		check("false", bc.isBeansRequireSettersForGetters());
-		check("false", bc.isBeansDontRequireSomeProperties());
+		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("false", bc.isDontSilentlyIgnoreMissingSetters());
+		check("true", bc.isSilentlyIgnoreMissingSetters());
 		check("false", bc.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
-		check("false", bc.isDontIgnoreUnknownNullBeanProperties());
+		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getDefaultLocale());
 		check("100", bc.getMaxDepth());
@@ -229,7 +229,7 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isSortProperties());
 		check(null, bc.getDefaultTimeZone());
 		check("false", bc.isUseEnumNames());
-		check("false", bc.isDontUseInterfaceProxies());
+		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}
 
@@ -253,17 +253,17 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isBeansRequireDefaultConstructor());
 		check("false", bc.isBeansRequireSerializable());
 		check("false", bc.isBeansRequireSettersForGetters());
-		check("false", bc.isBeansDontRequireSomeProperties());
+		check("true", bc.isBeansRequireSomeProperties());
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
 		check("false", bc.isFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("false", bc.isDontSilentlyIgnoreMissingSetters());
+		check("true", bc.isSilentlyIgnoreMissingSetters());
 		check("false", bc.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
-		check("false", bc.isDontIgnoreUnknownNullBeanProperties());
+		check("true", bc.isIgnoreUnknownNullBeanProperties());
 		check("0", bc.getInitialDepth());
 		check(Locale.getDefault().toString(), bc.getDefaultLocale());
 		check("100", bc.getMaxDepth());
@@ -274,7 +274,7 @@ public class BeanConfigAnnotation_Test {
 		check("false", bc.isSortProperties());
 		check(null, bc.getDefaultTimeZone());
 		check("false", bc.isUseEnumNames());
-		check("false", bc.isDontUseInterfaceProxies());
+		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}
 

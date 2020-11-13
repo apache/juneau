@@ -80,14 +80,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 * Don't detect namespace usage before serialization.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link XmlSerializer#XML_dontAutoDetectNamespaces}
+	 * 	<li class='jf'>{@link XmlSerializer#XML_disableAutoDetectNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public XmlSerializerBuilder dontAutoDetectNamespaces() {
-		return set(XML_dontAutoDetectNamespaces, true);
+	public XmlSerializerBuilder disableAutoDetectNamespaces() {
+		return set(XML_disableAutoDetectNamespaces, true);
 	}
 
 	/**
@@ -327,8 +327,8 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansDontRequireSomeProperties() {
-		super.beansDontRequireSomeProperties();
+	public XmlSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
 		return this;
 	}
 
@@ -435,26 +435,26 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dontSilentlyIgnoreMissingSetters() {
-		super.dontSilentlyIgnoreMissingSetters();
+	public XmlSerializerBuilder disableSilentlyIgnoreMissingSetters() {
+		super.disableSilentlyIgnoreMissingSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dontIgnoreTransientFields() {
-		super.dontIgnoreTransientFields();
+	public XmlSerializerBuilder disableIgnoreTransientFields() {
+		super.disableIgnoreTransientFields();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dontIgnoreUnknownNullBeanProperties() {
-		super.dontIgnoreUnknownNullBeanProperties();
+	public XmlSerializerBuilder disableIgnoreUnknownNullBeanProperties() {
+		super.disableIgnoreUnknownNullBeanProperties();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder dontUseInterfaceProxies() {
-		super.dontUseInterfaceProxies();
+	public XmlSerializerBuilder disableInterfaceProxies() {
+		super.disableInterfaceProxies();
 		return this;
 	}
 

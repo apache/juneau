@@ -131,7 +131,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		if (isEnableNamespaces() && (!isDontAutoDetectNamespaces()))
+		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
 		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
@@ -768,14 +768,14 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Don't auto-detect namespace usage.
+	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @see XmlSerializer#XML_dontAutoDetectNamespaces
+	 * @see XmlSerializer#XML_disableAutoDetectNamespaces
 	 * @return
-	 * 	<jk>false</jk> if namespace usage is detected before serialization.
+	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
-	protected final boolean isDontAutoDetectNamespaces() {
-		return ctx.isDontAutoDetectNamespaces();
+	protected final boolean isAutoDetectNamespaces() {
+		return ctx.isAutoDetectNamespaces();
 	}
 
 	/**
