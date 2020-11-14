@@ -49,8 +49,8 @@ public class RdfConfigAnnotation {
 				psb.set(RDF_juneauNs, string(a.juneauNs()));
 			if (! a.juneauBpNs().isEmpty())
 				psb.set(RDF_juneauBpNs, string(a.juneauBpNs()));
-			if (! a.useXmlNamespaces().isEmpty())
-				psb.set(RDF_useXmlNamespaces, bool(a.useXmlNamespaces()));
+			if (! a.disableUseXmlNamespaces().isEmpty())
+				psb.set(RDF_disableUseXmlNamespaces, bool(a.disableUseXmlNamespaces()));
 			if (! a.arp_iriRules().isEmpty())
 				psb.set(RDF_arp_iriRules, string(a.arp_iriRules()));
 			if (! a.arp_errorMode().isEmpty())
@@ -67,8 +67,8 @@ public class RdfConfigAnnotation {
 				psb.set(RDF_rdfxml_relativeUris, string(a.rdfxml_relativeUris()));
 			if (! a.rdfxml_showXmlDeclaration().isEmpty())
 				psb.set(RDF_rdfxml_showXmlDeclaration, string(a.rdfxml_showXmlDeclaration()));
-			if (! a.rdfxml_showDoctypeDeclaration().isEmpty())
-				psb.set(RDF_rdfxml_showDoctypeDeclaration, bool(a.rdfxml_showDoctypeDeclaration()));
+			if (! a.rdfxml_disableShowDoctypeDeclaration().isEmpty())
+				psb.set(RDF_rdfxml_disableShowDoctypeDeclaration, bool(a.rdfxml_disableShowDoctypeDeclaration()));
 			if (! a.rdfxml_tab().isEmpty())
 				psb.set(RDF_rdfxml_tab, integer(a.rdfxml_tab(), "rdfxml_tab"));
 			if (! a.rdfxml_attributeQuoteChar().isEmpty())
@@ -77,8 +77,8 @@ public class RdfConfigAnnotation {
 				psb.set(RDF_rdfxml_blockRules, string(a.rdfxml_blockRules()));
 			if (! a.n3_minGap().isEmpty())
 				psb.set(RDF_n3_minGap, integer(a.n3_minGap(), "n3_minGap"));
-			if (! a.n3_objectLists().isEmpty())
-				psb.set(RDF_n3_objectLists, bool(a.n3_objectLists()));
+			if (! a.n3_disableObjectLists().isEmpty())
+				psb.set(RDF_n3_disableObjectLists, bool(a.n3_disableObjectLists()));
 			if (! a.n3_subjectColumn().isEmpty())
 				psb.set(RDF_n3_subjectColumn, integer(a.n3_subjectColumn(), "n3_subjectColumn"));
 			if (! a.n3_propertyColumn().isEmpty())
@@ -87,14 +87,14 @@ public class RdfConfigAnnotation {
 				psb.set(RDF_n3_indentProperty, integer(a.n3_indentProperty(), "n3_indentProperty"));
 			if (! a.n3_widePropertyLen().isEmpty())
 				psb.set(RDF_n3_widePropertyLen, integer(a.n3_widePropertyLen(), "n3_widePropertyLen"));
-			if (! a.n3_abbrevBaseUri().isEmpty())
-				psb.set(RDF_n3_abbrevBaseUri, bool(a.n3_abbrevBaseUri()));
-			if (! a.n3_usePropertySymbols().isEmpty())
-				psb.set(RDF_n3_usePropertySymbols, bool(a.n3_usePropertySymbols()));
-			if (! a.n3_useTripleQuotedStrings().isEmpty())
-				psb.set(RDF_n3_useTripleQuotedStrings, bool(a.n3_useTripleQuotedStrings()));
-			if (! a.n3_useDoubles().isEmpty())
-				psb.set(RDF_n3_useDoubles, bool(a.n3_useDoubles()));
+			if (! a.n3_disableAbbrevBaseUri().isEmpty())
+				psb.set(RDF_n3_disableAbbrevBaseUri, bool(a.n3_disableAbbrevBaseUri()));
+			if (! a.n3_disableUsePropertySymbols().isEmpty())
+				psb.set(RDF_n3_disableUsePropertySymbols, bool(a.n3_disableUsePropertySymbols()));
+			if (! a.n3_disableUseTripleQuotedStrings().isEmpty())
+				psb.set(RDF_n3_disableUseTripleQuotedStrings, bool(a.n3_disableUseTripleQuotedStrings()));
+			if (! a.n3_disableUseDoubles().isEmpty())
+				psb.set(RDF_n3_disableUseDoubles, bool(a.n3_disableUseDoubles()));
 			if (! a.collectionFormat().isEmpty())
 				psb.set(RDF_collectionFormat, string(a.collectionFormat()));
 			if (! a.looseCollections().isEmpty())
@@ -106,8 +106,8 @@ public class RdfConfigAnnotation {
 				psb.set(RDF_addLiteralTypes, bool(a.addLiteralTypes()));
 			if (! a.addRootProperty().isEmpty())
 				psb.set(RDF_addRootProperty, bool(a.addRootProperty()));
-			if (! a.autoDetectNamespaces().isEmpty())
-				psb.set(RDF_autoDetectNamespaces, bool(a.autoDetectNamespaces()));
+			if (! a.disableAutoDetectNamespaces().isEmpty())
+				psb.set(RDF_disableAutoDetectNamespaces, bool(a.disableAutoDetectNamespaces()));
 			if (a.namespaces().length > 0)
 				psb.set(RDF_namespaces, strings(a.namespaces()));
 

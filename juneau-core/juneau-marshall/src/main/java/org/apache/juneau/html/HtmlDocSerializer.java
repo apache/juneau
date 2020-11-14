@@ -802,13 +802,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		aside = getArrayProperty(HTMLDOC_aside, String.class);
 		asideFloat = getProperty(HTMLDOC_asideFloat, AsideFloat.class, AsideFloat.RIGHT);
 		footer = getArrayProperty(HTMLDOC_footer, String.class);
-		nowrap = getBooleanProperty(HTMLDOC_nowrap, false);
+		nowrap = getBooleanProperty(HTMLDOC_nowrap);
 		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
 		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
 		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 
 		Map<String,HtmlWidget> widgets = new HashMap<>();
-		for (HtmlWidget w : getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class, new HtmlWidget[0]))
+		for (HtmlWidget w : getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class))
 			widgets.put(w.getName(), w);
 		this.widgets = Collections.unmodifiableMap(widgets);
 	}

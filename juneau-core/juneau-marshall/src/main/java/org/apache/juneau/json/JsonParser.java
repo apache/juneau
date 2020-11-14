@@ -150,7 +150,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>JSON_validateEnd</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>JSON_validateEnd</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
@@ -215,7 +215,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, JsonCo
 	 */
 	public JsonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		validateEnd = getBooleanProperty(JSON_validateEnd, false);
+		validateEnd = getBooleanProperty(JSON_validateEnd);
 	}
 
 	@Override /* Context */

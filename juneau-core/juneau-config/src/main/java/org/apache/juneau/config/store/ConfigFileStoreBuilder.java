@@ -141,13 +141,13 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_useWatcher}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_enableWatcher}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public ConfigFileStoreBuilder useWatcher() {
-		super.set(FILESTORE_useWatcher, true);
+	public ConfigFileStoreBuilder enableWatcher() {
+		super.set(FILESTORE_enableWatcher);
 		return this;
 	}
 
@@ -178,13 +178,13 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	 * Shortcut for calling <code>useWatcher(<jk>true</jk>)</code>.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_updateOnWrite}
+	 * 	<li class='jf'>{@link ConfigFileStore#FILESTORE_enableUpdateOnWrite}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public ConfigFileStoreBuilder updateOnWrite() {
-		super.set(FILESTORE_updateOnWrite, true);
+	public ConfigFileStoreBuilder enableUpdateOnWrite() {
+		super.set(FILESTORE_enableUpdateOnWrite);
 		return this;
 	}
 
@@ -311,6 +311,12 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -325,6 +331,12 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigFileStoreBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigFileStoreBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 

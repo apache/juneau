@@ -1076,12 +1076,10 @@ public class RestAnnotation {
 			ClassInfo c = ai.getClassOn();
 
 			for (Property p1 : a.properties()) {
-				psb.set(p1.name(), string(p1.value()));  // >>> DEPRECATED - Remove in 9.0 <<<
 				psb.putTo(REST_properties, string(p1.name()), string(p1.value()));
 			}
 
 			for (String p1 : a.flags()) {
-				psb.set(p1, true);  // >>> DEPRECATED - Remove in 9.0 <<<
 				psb.putTo(REST_properties, string(p1), true);
 			}
 

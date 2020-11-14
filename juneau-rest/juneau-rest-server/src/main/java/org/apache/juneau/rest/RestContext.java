@@ -148,7 +148,7 @@ public class RestContext extends BeanContext {
 	 * 			builder.disableAllowBodyParam();
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_disableAllowBodyParam</jsf>, <jk>true</jk>);
+	 * 			builder.set(<jsf>REST_disableAllowBodyParam</jsf>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
@@ -2014,7 +2014,7 @@ public class RestContext extends BeanContext {
 	 * 			builder.renderResponseStackTraces();
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_renderResponseStackTraces</jsf>, <jk>true</jk>);
+	 * 			builder.set(<jsf>REST_renderResponseStackTraces</jsf>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
@@ -3143,7 +3143,7 @@ public class RestContext extends BeanContext {
 	 * 			builder.disableClasspathResourceCaching()
 	 *
 	 * 			<jc>// Same, but using property.</jc>
-	 * 			builder.set(<jsf>REST_disableClasspathResourceCaching</jsf>, <jk>true</jk>);
+	 * 			builder.set(<jsf>REST_disableClasspathResourceCaching</jsf>);
 	 * 		}
 	 *
 	 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
@@ -3635,16 +3635,16 @@ public class RestContext extends BeanContext {
 
 			PropertyStore ps = getPropertyStore();
 
-			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
-			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
+			uriContext = nullIfEmpty(getStringProperty(REST_uriContext));
+			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority));
 			uriResolution = getProperty(REST_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
 			uriRelativity = getProperty(REST_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 
-			allowBodyParam = ! getBooleanProperty(REST_disableAllowBodyParam, false);
+			allowBodyParam = ! getBooleanProperty(REST_disableAllowBodyParam);
 			allowedHeaderParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedHeaderParams, "Accept,Content-Type"));
 			allowedMethodParams = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodParams, "HEAD,OPTIONS"));
 			allowedMethodHeaders = newUnmodifiableSortedCaseInsensitiveSet(getStringPropertyWithNone(REST_allowedMethodHeaders, ""));
-			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
+			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
 			ReflectionMap.Builder<Enablement> deb = ReflectionMap.create(Enablement.class);
@@ -3745,7 +3745,7 @@ public class RestContext extends BeanContext {
 				s.add(sf.getPath());
 			staticFilesPaths = s.toArray(new String[s.size()]);
 
-			Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class, new Tuple2[0]);
+			Tuple2<Class<?>,String>[] mbl = getInstanceArrayProperty(REST_messages, Tuple2.class);
 			Messages msgs = null;
 			for (int i = mbl.length-1; i >= 0; i--)
 				msgs = Messages.create(firstNonNull(mbl[i].getA(), rci.inner())).name(mbl[i].getB()).parent(msgs).build();

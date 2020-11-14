@@ -139,6 +139,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public MsgPackParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public MsgPackParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -153,6 +159,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MsgPackParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MsgPackParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -199,30 +211,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -237,6 +225,24 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MsgPackParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MsgPackParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MsgPackParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MsgPackParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -277,20 +283,20 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public MsgPackParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public MsgPackParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public MsgPackParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -307,8 +313,14 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public MsgPackParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MsgPackParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -343,14 +355,14 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public MsgPackParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MsgPackParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public MsgPackParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

@@ -85,7 +85,7 @@ public class ContextCacheTest {
 
 		a = a2; b = b2; c = c2;
 
-		ps = psb.set("C.f3.b", true).build();
+		ps = psb.set("C.f3.b").build();
 
 		a2 = ContextCache.INSTANCE.create(A.class, ps);
 		b2 = ContextCache.INSTANCE.create(B.class, ps);
@@ -157,7 +157,7 @@ public class ContextCacheTest {
 
 		public B(PropertyStore ps) {
 			super(ps);
-			f2 = getIntegerProperty("B.f2.i", -1);
+			f2 = getIntegerProperty("B.f2.i");
 
 		}
 
@@ -172,7 +172,7 @@ public class ContextCacheTest {
 		public boolean f3;
 		public C(PropertyStore ps) {
 			super(ps);
-			f3 = getBooleanProperty("C.f3.b", false);
+			f3 = getBooleanProperty("C.f3.b");
 		}
 
 		@Override

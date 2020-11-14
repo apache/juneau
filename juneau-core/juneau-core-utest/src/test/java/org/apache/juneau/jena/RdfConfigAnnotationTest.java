@@ -66,21 +66,21 @@ public class RdfConfigAnnotationTest {
 		arp_embedding="$X{true}",
 		arp_errorMode="$X{strict}",
 		arp_iriRules="$X{strict}",
-		autoDetectNamespaces="$X{true}",
+		disableAutoDetectNamespaces="$X{true}",
 		collectionFormat="$X{SEQ}",
 		juneauBpNs="$X{foo:http://foo}",
 		juneauNs="$X{foo:http://foo}",
 		language="$X{N3}",
 		looseCollections="$X{true}",
-		n3_abbrevBaseUri="$X{true}",
+		n3_disableAbbrevBaseUri="$X{true}",
 		n3_indentProperty="$X{1}",
 		n3_minGap="$X{1}",
-		n3_objectLists="$X{true}",
+		n3_disableObjectLists="$X{true}",
 		n3_propertyColumn="$X{1}",
 		n3_subjectColumn="$X{1}",
-		n3_useDoubles="$X{true}",
-		n3_usePropertySymbols="$X{true}",
-		n3_useTripleQuotedStrings="$X{true}",
+		n3_disableUseDoubles="$X{true}",
+		n3_disableUsePropertySymbols="$X{true}",
+		n3_disableUseTripleQuotedStrings="$X{true}",
 		n3_widePropertyLen="$X{1}",
 		namespaces="$X{foo:http://foo}",
 		rdfxml_allowBadUris="$X{true}",
@@ -88,12 +88,12 @@ public class RdfConfigAnnotationTest {
 		rdfxml_blockRules="$X{foo}",
 		rdfxml_longId="$X{true}",
 		rdfxml_relativeUris="$X{absolute}",
-		rdfxml_showDoctypeDeclaration="$X{true}",
+		rdfxml_disableShowDoctypeDeclaration="$X{true}",
 		rdfxml_showXmlDeclaration="$X{true}",
 		rdfxml_tab="$X{1}",
 		rdfxml_xmlBase="$X{foo}",
 		trimWhitespace="$X{true}",
-		useXmlNamespaces="$X{true}"
+		disableUseXmlNamespaces="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
@@ -105,35 +105,35 @@ public class RdfConfigAnnotationTest {
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddLiteralTypes());
 		check("true", x.isAddRootProp());
-		check("true", x.isAutoDetectNamespaces());
+		check("false", x.isAutoDetectNamespaces());
 		check("SEQ", x.getCollectionFormat());
 		check("foo:http://foo", x.getJuneauBpNs());
 		check("foo:http://foo", x.getJuneauNs());
 		check("N3", x.getLanguage());
 		check("true", x.isLooseCollections());
 		check("foo:http://foo", x.getNamespaces());
-		check("true", x.isUseXmlNamespaces());
+		check("false", x.isUseXmlNamespaces());
 
 		Map<String,Object> jp = x.getJenaProperties();
 		check("true", jp.get(RDF_arp_embedding.substring(15)));
 		check("strict", jp.get(RDF_arp_errorMode.substring(15)));
 		check("strict", jp.get(RDF_arp_iriRules.substring(15)));
-		check("true", jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check("true", jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check("1", jp.get(RDF_n3_indentProperty.substring(15)));
 		check("1", jp.get(RDF_n3_minGap.substring(15)));
-		check("true", jp.get(RDF_n3_objectLists.substring(15)));
+		check("true", jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check("1", jp.get(RDF_n3_propertyColumn.substring(15)));
 		check("1", jp.get(RDF_n3_subjectColumn.substring(15)));
-		check("true", jp.get(RDF_n3_useDoubles.substring(15)));
-		check("true", jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check("true", jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check("true", jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check("true", jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check("true", jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check("1", jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check("true", jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check("'", jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check("foo", jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check("true", jp.get(RDF_rdfxml_longId.substring(15)));
 		check("absolute", jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check("true", jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check("true", jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check("true", jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check("1", jp.get(RDF_rdfxml_tab.substring(15)));
 		check("foo", jp.get(RDF_rdfxml_xmlBase.substring(15)));
@@ -154,22 +154,22 @@ public class RdfConfigAnnotationTest {
 		check("true", jp.get(RDF_arp_embedding.substring(15)));
 		check("strict", jp.get(RDF_arp_errorMode.substring(15)));
 		check("strict", jp.get(RDF_arp_iriRules.substring(15)));
-		check("true", jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check("true", jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check("1", jp.get(RDF_n3_indentProperty.substring(15)));
 		check("1", jp.get(RDF_n3_minGap.substring(15)));
-		check("true", jp.get(RDF_n3_objectLists.substring(15)));
+		check("true", jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check("1", jp.get(RDF_n3_propertyColumn.substring(15)));
 		check("1", jp.get(RDF_n3_subjectColumn.substring(15)));
-		check("true", jp.get(RDF_n3_useDoubles.substring(15)));
-		check("true", jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check("true", jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check("true", jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check("true", jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check("true", jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check("1", jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check("true", jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check("'", jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check("foo", jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check("true", jp.get(RDF_rdfxml_longId.substring(15)));
 		check("absolute", jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check("true", jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check("true", jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check("true", jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check("1", jp.get(RDF_rdfxml_tab.substring(15)));
 		check("foo", jp.get(RDF_rdfxml_xmlBase.substring(15)));
@@ -203,22 +203,22 @@ public class RdfConfigAnnotationTest {
 		check(null, jp.get(RDF_arp_embedding.substring(15)));
 		check(null, jp.get(RDF_arp_errorMode.substring(15)));
 		check(null, jp.get(RDF_arp_iriRules.substring(15)));
-		check(null, jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check(null, jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check(null, jp.get(RDF_n3_indentProperty.substring(15)));
 		check(null, jp.get(RDF_n3_minGap.substring(15)));
-		check(null, jp.get(RDF_n3_objectLists.substring(15)));
+		check(null, jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check(null, jp.get(RDF_n3_propertyColumn.substring(15)));
 		check(null, jp.get(RDF_n3_subjectColumn.substring(15)));
-		check(null, jp.get(RDF_n3_useDoubles.substring(15)));
-		check(null, jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check(null, jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check(null, jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check(null, jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check(null, jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check(null, jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check(null, jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check(null, jp.get(RDF_rdfxml_longId.substring(15)));
 		check(null, jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check(null, jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check(null, jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_tab.substring(15)));
 		check(null, jp.get(RDF_rdfxml_xmlBase.substring(15)));
@@ -239,22 +239,22 @@ public class RdfConfigAnnotationTest {
 		check(null, jp.get(RDF_arp_embedding.substring(15)));
 		check(null, jp.get(RDF_arp_errorMode.substring(15)));
 		check(null, jp.get(RDF_arp_iriRules.substring(15)));
-		check(null, jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check(null, jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check(null, jp.get(RDF_n3_indentProperty.substring(15)));
 		check(null, jp.get(RDF_n3_minGap.substring(15)));
-		check(null, jp.get(RDF_n3_objectLists.substring(15)));
+		check(null, jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check(null, jp.get(RDF_n3_propertyColumn.substring(15)));
 		check(null, jp.get(RDF_n3_subjectColumn.substring(15)));
-		check(null, jp.get(RDF_n3_useDoubles.substring(15)));
-		check(null, jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check(null, jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check(null, jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check(null, jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check(null, jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check(null, jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check(null, jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check(null, jp.get(RDF_rdfxml_longId.substring(15)));
 		check(null, jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check(null, jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check(null, jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_tab.substring(15)));
 		check(null, jp.get(RDF_rdfxml_xmlBase.substring(15)));
@@ -287,22 +287,22 @@ public class RdfConfigAnnotationTest {
 		check(null, jp.get(RDF_arp_embedding.substring(15)));
 		check(null, jp.get(RDF_arp_errorMode.substring(15)));
 		check(null, jp.get(RDF_arp_iriRules.substring(15)));
-		check(null, jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check(null, jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check(null, jp.get(RDF_n3_indentProperty.substring(15)));
 		check(null, jp.get(RDF_n3_minGap.substring(15)));
-		check(null, jp.get(RDF_n3_objectLists.substring(15)));
+		check(null, jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check(null, jp.get(RDF_n3_propertyColumn.substring(15)));
 		check(null, jp.get(RDF_n3_subjectColumn.substring(15)));
-		check(null, jp.get(RDF_n3_useDoubles.substring(15)));
-		check(null, jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check(null, jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check(null, jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check(null, jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check(null, jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check(null, jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check(null, jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check(null, jp.get(RDF_rdfxml_longId.substring(15)));
 		check(null, jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check(null, jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check(null, jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_tab.substring(15)));
 		check(null, jp.get(RDF_rdfxml_xmlBase.substring(15)));
@@ -323,22 +323,22 @@ public class RdfConfigAnnotationTest {
 		check(null, jp.get(RDF_arp_embedding.substring(15)));
 		check(null, jp.get(RDF_arp_errorMode.substring(15)));
 		check(null, jp.get(RDF_arp_iriRules.substring(15)));
-		check(null, jp.get(RDF_n3_abbrevBaseUri.substring(15)));
+		check(null, jp.get(RDF_n3_disableAbbrevBaseUri.substring(15)));
 		check(null, jp.get(RDF_n3_indentProperty.substring(15)));
 		check(null, jp.get(RDF_n3_minGap.substring(15)));
-		check(null, jp.get(RDF_n3_objectLists.substring(15)));
+		check(null, jp.get(RDF_n3_disableObjectLists.substring(15)));
 		check(null, jp.get(RDF_n3_propertyColumn.substring(15)));
 		check(null, jp.get(RDF_n3_subjectColumn.substring(15)));
-		check(null, jp.get(RDF_n3_useDoubles.substring(15)));
-		check(null, jp.get(RDF_n3_usePropertySymbols.substring(15)));
-		check(null, jp.get(RDF_n3_useTripleQuotedStrings.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseDoubles.substring(15)));
+		check(null, jp.get(RDF_n3_disableUsePropertySymbols.substring(15)));
+		check(null, jp.get(RDF_n3_disableUseTripleQuotedStrings.substring(15)));
 		check(null, jp.get(RDF_n3_widePropertyLen.substring(15)));
 		check(null, jp.get(RDF_rdfxml_allowBadUris.substring(15)));
 		check(null, jp.get(RDF_rdfxml_attributeQuoteChar.substring(15)));
 		check(null, jp.get(RDF_rdfxml_blockRules.substring(15)));
 		check(null, jp.get(RDF_rdfxml_longId.substring(15)));
 		check(null, jp.get(RDF_rdfxml_relativeUris.substring(15)));
-		check(null, jp.get(RDF_rdfxml_showDoctypeDeclaration.substring(15)));
+		check(null, jp.get(RDF_rdfxml_disableShowDoctypeDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_showXmlDeclaration.substring(15)));
 		check(null, jp.get(RDF_rdfxml_tab.substring(15)));
 		check(null, jp.get(RDF_rdfxml_xmlBase.substring(15)));

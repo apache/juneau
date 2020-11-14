@@ -81,7 +81,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = UonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>UON_decoding</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>UON_decoding</jsf>)
 	 * 		.build();
 	 *
 	 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
@@ -128,7 +128,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = UonParser.
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>UON_validateEnd</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>UON_validateEnd</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Should fail because input has multiple POJOs.</jc>
@@ -257,8 +257,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		this.decoding = getBooleanProperty(UON_decoding, false);
-		this.validateEnd = getBooleanProperty(UON_validateEnd, false);
+		this.decoding = getBooleanProperty(UON_decoding);
+		this.validateEnd = getBooleanProperty(UON_validateEnd);
 	}
 
 	@Override /* Context */

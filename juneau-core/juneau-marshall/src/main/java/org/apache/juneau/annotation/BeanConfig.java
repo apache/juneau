@@ -414,10 +414,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 */
-	String fluentSetters() default "";
+	String findFluentSetters() default "";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
@@ -486,10 +486,10 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableSilentlyIgnoreMissingSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
 	 * </ul>
 	 */
-	String disableSilentlyIgnoreMissingSetters() default "";
+	String disableIgnoreMissingSetters() default "";
 
 	/**
 	 * Configuration property:  Don't ignore transient fields.

@@ -109,7 +109,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public UonParserBuilder validateEnd() {
-		return set(UON_validateEnd, true);
+		return set(UON_validateEnd);
 	}
 
 	// <FluentSetters>
@@ -199,6 +199,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public UonParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public UonParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -213,6 +219,12 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UonParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UonParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -259,30 +271,6 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -297,6 +285,24 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UonParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UonParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UonParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UonParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -337,20 +343,20 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public UonParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public UonParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public UonParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -367,8 +373,14 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public UonParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UonParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -403,14 +415,14 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public UonParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UonParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public UonParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

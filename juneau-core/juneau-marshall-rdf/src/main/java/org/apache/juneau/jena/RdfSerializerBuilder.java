@@ -193,13 +193,11 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder rdfxml_allowBadUris(boolean value) {
-		return set(RDF_rdfxml_allowBadUris, value);
+	public RdfSerializerBuilder rdfxml_allowBadUris() {
+		return set(RDF_rdfxml_allowBadUris);
 	}
 
 	/**
@@ -265,21 +263,19 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>showDoctypeDeclaration</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
-	 * If true, an XML doctype declaration is included in the output.
+	 * If disabled, an XML doctype declaration isn't included in the output.
 	 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder rdfxml_showDoctypeDeclaration(boolean value) {
-		return set(RDF_rdfxml_showDoctypeDeclaration, value);
+	public RdfSerializerBuilder rdfxml_disableShowDoctypeDeclaration() {
+		return set(RDF_rdfxml_disableShowDoctypeDeclaration);
 	}
 
 	/**
@@ -345,18 +341,16 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>objectLists</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
-	 * Print object lists as comma separated lists.
+	 * Don't print object lists as comma separated lists.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder n3_objectLists(boolean value) {
-		return set(RDF_n3_objectLists, value);
+	public RdfSerializerBuilder n3_disableObjectLists() {
+		return set(RDF_n3_disableObjectLists);
 	}
 
 	/**
@@ -421,63 +415,55 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>abbrevBaseURI</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
-	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder n3_abbrevBaseUri(boolean value) {
-		return set(RDF_n3_abbrevBaseUri, value);
+	public RdfSerializerBuilder n3_disableAbbrevBaseUri() {
+		return set(RDF_n3_disableAbbrevBaseUri);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>usePropertySymbols</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
-	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder n3_usePropertySymbols(boolean value) {
-		return set(RDF_n3_usePropertySymbols, value);
+	public RdfSerializerBuilder n3_disableUsePropertySymbols() {
+		return set(RDF_n3_disableUsePropertySymbols);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>useTripleQuotedStrings</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
-	 * Allow the use of <c>"""</c> to delimit long strings.
+	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder n3_useTripleQuotedStrings(boolean value) {
-		return set(RDF_n3_useTripleQuotedStrings, value);
+	public RdfSerializerBuilder n3_disableUseTripleQuotedStrings() {
+		return set(RDF_n3_disableUseTripleQuotedStrings);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>useDoubles</c>.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
-	 * Allow the use doubles as <c>123.456</c>.
+	 * Disallow the use of doubles as <c>123.456</c>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder n3_useDoubles(boolean value) {
-		return set(RDF_n3_useDoubles, value);
+	public RdfSerializerBuilder n3_disableUseDoubles() {
+		return set(RDF_n3_disableUseDoubles);
 	}
 
 	/**
@@ -555,7 +541,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder addLiteralTypes() {
-		return set(RDF_addLiteralTypes, true);
+		return set(RDF_addLiteralTypes);
 	}
 
 	/**
@@ -598,44 +584,24 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder addRootProperty() {
-		return set(RDF_addRootProperty, true);
+		return set(RDF_addRootProperty);
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Auto-detect namespace usage.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Disable auto-detect namespace usage.
 	 *
 	 * <p>
-	 * Detect namespace usage before serialization.
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder autoDetectNamespaces(boolean value) {
-		return set(RDF_autoDetectNamespaces, value);
-	}
-
-	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Auto-detect namespace usage.
-	 *
-	 * <p>
-	 * Detect namespace usage before serialization.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableAutoDetectNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder disableAutoDetectNamespaces() {
-		return set(RDF_autoDetectNamespaces, false);
+		return set(RDF_disableAutoDetectNamespaces);
 	}
 
 	/**
@@ -785,7 +751,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public RdfSerializerBuilder looseCollections() {
-		return set(RDF_looseCollections, true);
+		return set(RDF_looseCollections);
 	}
 
 	/**
@@ -858,44 +824,22 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Reuse XML namespaces when RDF namespaces not specified.
+	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Disable reuse of XML namespaces when RDF namespaces not specified.
 	 *
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will be
+	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
 	 * inherited by the RDF serializers.
 	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	@FluentSetter
-	public RdfSerializerBuilder useXmlNamespaces(boolean value) {
-		return set(RDF_useXmlNamespaces, value);
-	}
-
-	/**
-	 * <i><l>RdfSerializer</l> configuration property:&emsp;</i>  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will be
-	 * inherited by the RDF serializers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableUseXmlNamespaces}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfSerializerBuilder dontUseXmlNamespaces() {
-		return set(RDF_useXmlNamespaces, false);
+	public RdfSerializerBuilder disableUseXmlNamespaces() {
+		return set(RDF_disableUseXmlNamespaces);
 	}
 
 	/**
@@ -1019,6 +963,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RdfSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RdfSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1033,6 +983,12 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RdfSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -1079,30 +1035,6 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -1117,6 +1049,24 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RdfSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -1157,20 +1107,20 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public RdfSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public RdfSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public RdfSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -1187,8 +1137,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public RdfSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -1223,14 +1179,14 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public RdfSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public RdfSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

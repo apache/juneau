@@ -139,6 +139,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -153,6 +159,12 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SimpleJsonParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SimpleJsonParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -199,30 +211,6 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -237,6 +225,24 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SimpleJsonParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SimpleJsonParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SimpleJsonParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SimpleJsonParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -277,20 +283,20 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public SimpleJsonParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public SimpleJsonParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public SimpleJsonParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -307,8 +313,14 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public SimpleJsonParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SimpleJsonParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -343,14 +355,14 @@ public class SimpleJsonParserBuilder extends JsonParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public SimpleJsonParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SimpleJsonParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public SimpleJsonParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

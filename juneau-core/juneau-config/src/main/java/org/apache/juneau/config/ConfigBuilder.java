@@ -280,7 +280,7 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder multiLineValuesOnSeparateLines() {
-		return set(CONFIG_multiLineValuesOnSeparateLines, true);
+		return set(CONFIG_multiLineValuesOnSeparateLines);
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class ConfigBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder readOnly() {
-		return set(CONFIG_readOnly, true);
+		return set(CONFIG_readOnly);
 	}
 
 	// <FluentSetters>
@@ -382,6 +382,12 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -396,6 +402,12 @@ public class ConfigBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 

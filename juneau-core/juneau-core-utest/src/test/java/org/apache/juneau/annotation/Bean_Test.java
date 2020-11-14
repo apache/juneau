@@ -72,7 +72,7 @@ public class Bean_Test {
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
 		AnnotationList al = a2ci.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, null).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, null).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
 
 		String json = js.serialize(A2.create());
@@ -158,7 +158,7 @@ public class Bean_Test {
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
 		AnnotationList al = b2ci.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, null).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, null).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, null).build();
 
 		String json = js.serialize(B2.create());
@@ -228,7 +228,7 @@ public class Bean_Test {
 	@Test
 	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
 		AnnotationList al = dConfig.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
 
 		String json = js.serialize(D1.create());
@@ -241,7 +241,7 @@ public class Bean_Test {
 	@Test
 	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
 		AnnotationList al = dConfig.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
 
 		String json = js.serialize(D2.create());
@@ -254,7 +254,7 @@ public class Bean_Test {
 	@Test
 	public void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
-		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonSerializer js = SimpleJsonSerializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(D1.create());
@@ -267,7 +267,7 @@ public class Bean_Test {
 	@Test
 	public void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
-		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonSerializer js = SimpleJsonSerializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(D2.create());
@@ -345,7 +345,7 @@ public class Bean_Test {
 	@Test
 	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
 		AnnotationList al = eConfig.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
 
 		String json = js.serialize(E1.create());
@@ -358,7 +358,7 @@ public class Bean_Test {
 	@Test
 	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
 		AnnotationList al = eConfig.getAnnotationList();
-		JsonSerializer js = JsonSerializer.create().simple().applyAnnotations(al, vr).build();
+		JsonSerializer js = SimpleJsonSerializer.create().applyAnnotations(al, vr).build();
 		JsonParser jp = JsonParser.create().applyAnnotations(al, vr).build();
 
 		String json = js.serialize(E2.create());
@@ -371,7 +371,7 @@ public class Bean_Test {
 	@Test
 	public void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
-		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonSerializer js = SimpleJsonSerializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(E1.create());
@@ -384,7 +384,7 @@ public class Bean_Test {
 	@Test
 	public void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
 		Bean ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
-		JsonSerializer js = JsonSerializer.create().simple().annotations(ba).build();
+		JsonSerializer js = SimpleJsonSerializer.create().annotations(ba).build();
 		JsonParser jp = JsonParser.create().annotations(ba).build();
 
 		String json = js.serialize(E2.create());

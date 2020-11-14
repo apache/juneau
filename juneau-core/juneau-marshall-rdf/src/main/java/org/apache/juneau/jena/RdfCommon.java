@@ -478,19 +478,19 @@ public interface RdfCommon {
 	public static final String RDF_rdfxml_showXmlDeclaration = PREFIX + ".jena.rdfXml.showXmlDeclaration.s";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>showDoctypeDeclaration</c>.
+	 * Configuration property:  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_showDoctypeDeclaration RDF_rdfxml_showDoctypeDeclaration}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.showDoctypeDeclaration.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_rdfxml_disableShowDoctypeDeclaration RDF_rdfxml_disableShowDoctypeDeclaration}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.rdfXml.disableShowDoctypeDeclaration.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.showDoctypeDeclaration</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_SHOWDOCTYPEDECLARATION</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.rdfXml.disableShowDoctypeDeclaration</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_RDFXML_DISABLESHOWDOCTYPEDECLARATION</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_showDoctypeDeclaration()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#rdfxml_disableShowDoctypeDeclaration()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -501,7 +501,7 @@ public interface RdfCommon {
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 */
-	public static final String RDF_rdfxml_showDoctypeDeclaration = PREFIX + ".jena.rdfXml.showDoctypeDeclaration.b";
+	public static final String RDF_rdfxml_disableShowDoctypeDeclaration = PREFIX + ".jena.rdfXml.disableShowDoctypeDeclaration.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>tab</c>.
@@ -598,19 +598,19 @@ public interface RdfCommon {
 	public static final String RDF_n3_minGap = PREFIX + ".jena.n3.minGap.i";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>objectLists</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_objectLists RDF_n3_objectLists}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.objectLists.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_disableObjectLists RDF_n3_disableObjectLists}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.disableObjectLists.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.objectLists</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_OBJECTLISTS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.disableObjectLists</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_DISABLEOBJECTLISTS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_objectLists()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableObjectLists()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -618,7 +618,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Print object lists as comma separated lists.
 	 */
-	public static final String RDF_n3_objectLists = PREFIX + ".jena.n3.objectLists.b";
+	public static final String RDF_n3_disableObjectLists = PREFIX + ".jena.n3.disableObjectLists.b";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
@@ -714,19 +714,19 @@ public interface RdfCommon {
 	public static final String RDF_n3_widePropertyLen = PREFIX + ".jena.n3.widePropertyLen.i";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>abbrevBaseURI</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableAbbrevBaseUri</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_abbrevBaseUri RDF_n3_abbrevBaseUri}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.abbrevBaseURI.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_disableAbbrevBaseUri RDF_n3_disableAbbrevBaseUri}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.disableAbbrevBaseUri.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.abbrevBaseURI</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_ABBREVBASEURI</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.disableAbbrevBaseUri</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_DISABLEABBREVBASEURI</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_abbrevBaseUri()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableAbbrevBaseUri()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -734,22 +734,22 @@ public interface RdfCommon {
 	 * <p>
 	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 */
-	public static final String RDF_n3_abbrevBaseUri = PREFIX + ".jena.n3.abbrevBaseURI.b";
+	public static final String RDF_n3_disableAbbrevBaseUri = PREFIX + ".jena.n3.disableAbbrevBaseUuri.b";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>usePropertySymbols</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_usePropertySymbols RDF_n3_usePropertySymbols}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.usePropertySymbols.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_disableUsePropertySymbols RDF_n3_disableUsePropertySymbols}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.disableUsePropertySymbols.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.usePropertySymbols</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USEPROPERTYSYMBOLS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.disableUsePropertySymbols</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_DISABLEUSEPROPERTYSYMBOLS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_usePropertySymbols()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUsePropertySymbols()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -757,22 +757,22 @@ public interface RdfCommon {
 	 * <p>
 	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 */
-	public static final String RDF_n3_usePropertySymbols = PREFIX + ".jena.n3.usePropertySymbols.b";
+	public static final String RDF_n3_disableUsePropertySymbols = PREFIX + ".jena.n3.disableUsePropertySymbols.b";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useTripleQuotedStrings</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useTripleQuotedStrings RDF_n3_useTripleQuotedStrings}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useTripleQuotedStrings.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_disableUseTripleQuotedStrings RDF_n3_disableUseTripleQuotedStrings}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.disableUseTripleQuotedStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.useTripleQuotedStrings</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USETRIPLEQUOTEDSTRINGS</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.disableUseTripleQuotedStrings</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_DISABLEUSETRIPLEQUOTEDSTRINGS</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_useTripleQuotedStrings()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUseTripleQuotedStrings()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -780,22 +780,22 @@ public interface RdfCommon {
 	 * <p>
 	 * Allow the use of <c>"""</c> to delimit long strings.
 	 */
-	public static final String RDF_n3_useTripleQuotedStrings = PREFIX + ".jena.n3.useTripleQuotedStrings.b";
+	public static final String RDF_n3_disableUseTripleQuotedStrings = PREFIX + ".jena.n3.disableUseTripleQuotedStrings.b";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useDoubles</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_useDoubles RDF_n3_useDoubles}
-	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.useDoubles.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfCommon#RDF_n3_disableUseDoubles RDF_n3_disableUseDoubles}
+	 * 	<li><b>Name:</b>  <js>"RdfCommon.jena.n3.disableUseDoubles.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.useDoubles</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_USEDOUBLES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfCommon.jena.n3.disableUseDoubles</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFCOMMON_JENA_N3_DISABLEUSEDOUBLES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_useDoubles()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#n3_disableUseDoubles()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -803,7 +803,7 @@ public interface RdfCommon {
 	 * <p>
 	 * Allow the use doubles as <c>123.456</c>.
 	 */
-	public static final String RDF_n3_useDoubles = PREFIX + ".jena.n3.useDoubles.b";
+	public static final String RDF_n3_disableUseDoubles = PREFIX + ".jena.n3.disableUseDoubles.b";
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.

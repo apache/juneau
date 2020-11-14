@@ -36,7 +36,7 @@ public class JsonTest {
 		List<Object> l = new LinkedList<>();
 
 		WriterSerializer s1 = JsonSerializer.create().ssq().keepNullProperties().build();
-		WriterSerializer s2 = JsonSerializer.create().simple().keepNullProperties().build();
+		WriterSerializer s2 = JsonSerializer.create().simpleMode().keepNullProperties().build();
 		String r;
 
 		// Null keys and values
@@ -111,7 +111,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = JsonSerializer.create().simple().keepNullProperties().build();
+		JsonSerializer s = JsonSerializer.create().simpleMode().keepNullProperties().build();
 		String r, r2;
 
 		// [\\]

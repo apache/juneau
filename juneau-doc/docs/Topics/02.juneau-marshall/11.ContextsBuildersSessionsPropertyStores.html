@@ -119,8 +119,8 @@ Contexts, Builders, Sessions, and PropertyStores
 </p>
 <p class='bpcode w800'>
 	<jc>// Two serializers created with identical configurations will always be the same copy.</jc> 
-	WriterSerializer <jv>s1</jv> = JsonSerializer.<jsm>create</jsm>().swaps(MySwap.<jk>class</jk>).simple().build();
-	WriterSerializer <jv>s2</jv> = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).swaps(MySwap.<jk>class</jk>).build();
+	WriterSerializer <jv>s1</jv> = JsonSerializer.<jsm>create</jsm>().swaps(MySwap.<jk>class</jk>).simpleMode().build();
+	WriterSerializer <jv>s2</jv> = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>).swaps(MySwap.<jk>class</jk>).build();
 	<jk>assert</jk>(<jv>s1</jv> == <jv>s2</jv>);
 </p>
 <p>
@@ -138,7 +138,7 @@ Contexts, Builders, Sessions, and PropertyStores
 	PropertyStore <jv>ps</jv> = PropertyStore
 		.<jsm>create</jsm>()
 		.set(<js>"BeanContext.swaps.lo"</js>, MySwap.<jk>class</jk>)
-		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
+		.set(<js>"JsonSerializer.simpleMode.b"</js>)
 		.build();
 </p>
 <p>

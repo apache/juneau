@@ -207,6 +207,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -221,6 +227,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ReaderParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ReaderParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -267,30 +279,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -305,6 +293,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ReaderParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -345,20 +351,20 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public ReaderParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public ReaderParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public ReaderParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -375,8 +381,14 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public ReaderParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ReaderParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -411,14 +423,14 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public ReaderParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ReaderParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public ReaderParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

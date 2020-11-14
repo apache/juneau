@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -102,7 +103,7 @@ public abstract class Context {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_debug</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
@@ -340,10 +341,10 @@ public abstract class Context {
 	public Context(PropertyStore ps, boolean allowReuse) {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
 		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
-		debug = getBooleanProperty(CONTEXT_debug, false);
+		debug = getBooleanProperty(CONTEXT_debug);
 		locale = getInstanceProperty(CONTEXT_locale, Locale.class, Locale.getDefault());
-		timeZone = getInstanceProperty(CONTEXT_timeZone, TimeZone.class, null);
-		mediaType = getInstanceProperty(CONTEXT_mediaType, MediaType.class, null);
+		timeZone = getInstanceProperty(CONTEXT_timeZone, TimeZone.class);
+		mediaType = getInstanceProperty(CONTEXT_mediaType, MediaType.class);
 	}
 
 	/**
@@ -380,6 +381,16 @@ public abstract class Context {
 	}
 
 	/**
+	 * Shortcut for calling <code>getProperty(key, Boolean.<jk>class</jk>, <jk>false</jk>)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <jk>false</jk> if it doesn't exist.
+	 */
+	public final boolean getBooleanProperty(String key) {
+		return getBooleanProperty(key, false);
+	}
+
+	/**
 	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, def)</code>.
 	 *
 	 * @param key The property name.
@@ -388,6 +399,16 @@ public abstract class Context {
 	 */
 	public final Integer getIntegerProperty(String key, Integer def) {
 		return getProperty(key, Integer.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, Integer.<jk>class</jk>, -1)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <c>-1</c> if it doesn't exist.
+	 */
+	public final int getIntegerProperty(String key) {
+		return getIntegerProperty(key, -1);
 	}
 
 	/**
@@ -402,6 +423,16 @@ public abstract class Context {
 	}
 
 	/**
+	 * Shortcut for calling <code>getProperty(key, Long.<jk>class</jk>, -1)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or <c>-1</c> if it doesn't exist.
+	 */
+	public final long getLongProperty(String key) {
+		return getLongProperty(key, -1l);
+	}
+
+	/**
 	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, def)</code>.
 	 *
 	 * @param key The property name.
@@ -410,6 +441,16 @@ public abstract class Context {
 	 */
 	public final String getStringProperty(String key, String def) {
 		return getProperty(key, String.class, def);
+	}
+
+	/**
+	 * Shortcut for calling <code>getProperty(key, String.<jk>class</jk>, <jk>null</jk>)</code>.
+	 *
+	 * @param key The property name.
+	 * @return The property value, or the <jk>null</jk> if it doesn't exist.
+	 */
+	public final String getStringProperty(String key) {
+		return getStringProperty(key, null);
 	}
 
 	/**
@@ -448,11 +489,22 @@ public abstract class Context {
 	}
 
 	/**
+	 * Returns the class property with the specified name.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return The property value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public final <T> Class<? extends T> getClassProperty(String key, Class<T> type) {
+		return getClassProperty(key, type, null);
+	}
+
+	/**
 	 * Returns the array property value with the specified name.
 	 *
 	 * @param key The property name.
 	 * @param eType The class type of the elements in the property.
-	 * @return The property value, or the default value if it doesn't exist.
+	 * @return The property value, or an empty array if it doesn't exist.
 	 */
 	public final <T> T[] getArrayProperty(String key, Class<T> eType) {
 		return propertyStore.getArrayProperty(key, eType);
@@ -643,6 +695,21 @@ public abstract class Context {
 	/**
 	 * Returns an instance of the specified class, string, or object property.
 	 *
+	 * <p>
+	 * If instantiating a class, assumes the class has a no-arg constructor.
+	 * Otherwise, throws a runtime exception.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance or <jk>null</jk> if the property doesn't exist.
+	 */
+	public <T> T getInstanceProperty(String key, Class<T> type) {
+		return getInstanceProperty(key, type, null);
+	}
+
+	/**
+	 * Returns an instance of the specified class, string, or object property.
+	 *
 	 * @param key The property name.
 	 * @param type The class type of the property.
 	 * @param def
@@ -689,6 +756,18 @@ public abstract class Context {
 	 */
 	public <T> T[] getInstanceArrayProperty(String key, Class<T> type, T[] def) {
 		return propertyStore.getInstanceArrayProperty(key, type, def);
+	}
+
+	/**
+	 * Returns the specified property as an array of instantiated objects.
+	 *
+	 * @param key The property name.
+	 * @param type The class type of the property.
+	 * @return A new property instance, or an empty array if it doesn't exist.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T[] getInstanceArrayProperty(String key, Class<T> type) {
+		return propertyStore.getInstanceArrayProperty(key, type, (T[])Array.newInstance(type, 0));
 	}
 
 	/**

@@ -63,7 +63,7 @@ public class RestCallLoggerRule {
 	/**
 	 * Builder class for this object.
 	 */
-	@Bean(fluentSetters=true)
+	@Bean(findFluentSetters=true)
 	public static class Builder {
 		String codes, exceptions;
 		Boolean verbose, debugOnly;

@@ -70,7 +70,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder addNamespaceUrisToRoot() {
-		return set(XML_addNamespaceUrisToRoot, true);
+		return set(XML_addNamespaceUrisToRoot);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder disableAutoDetectNamespaces() {
-		return set(XML_disableAutoDetectNamespaces, true);
+		return set(XML_disableAutoDetectNamespaces);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder enableNamespaces() {
-		return set(XML_enableNamespaces, true);
+		return set(XML_enableNamespaces);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	@FluentSetter
 	public XmlSerializerBuilder ns() {
-		return set(XML_enableNamespaces, true);
+		return set(XML_enableNamespaces);
 	}
 
 	/**
@@ -267,6 +267,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public XmlSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public XmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -281,6 +287,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public XmlSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public XmlSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -327,30 +339,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -365,6 +353,24 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public XmlSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public XmlSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public XmlSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public XmlSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -405,20 +411,20 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public XmlSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public XmlSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public XmlSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -435,8 +441,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public XmlSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public XmlSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -471,14 +483,14 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public XmlSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public XmlSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public XmlSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

@@ -69,7 +69,7 @@ public class JsonConfigurationExample {
 		 */
 		String configurableJson =JsonSerializer
 			.create()  // Create a JsonSerializerBuilder
-			.simple()  // Simple mode
+			.simpleMode()  // Simple mode
 			.ws()  // Use whitespace
 			.sq()  // Use single quotes
 			.build()

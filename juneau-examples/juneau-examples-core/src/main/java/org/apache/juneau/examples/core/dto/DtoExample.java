@@ -17,7 +17,7 @@ import org.apache.juneau.dto.atom.Person;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.HtmlSerializer;
 import org.apache.juneau.http.MediaType;
-import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.json.*;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
@@ -102,7 +102,7 @@ public class DtoExample {
 		 *    ]
 		 * }
 		 */
-		html =  JsonSerializer.create().simple().sq().build().serialize(mainJsp);
+		html =  SimpleJsonSerializer.DEFAULT.serialize(mainJsp);
 
 		Feed feed =
 			feed("tag:juneau.apache.org", "Juneau ATOM specification", "2018-12-15T08:52:05Z")

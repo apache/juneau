@@ -13,7 +13,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.jena.RdfCommon.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -47,9 +46,9 @@ public class CommonParserTest {
 		return RdfSerializer.create()
 			.sq()
 			.addLiteralTypes()
-			.set(RDF_rdfxml_allowBadUris, true)
-			.set(RDF_rdfxml_showDoctypeDeclaration, false)
-			.set(RDF_rdfxml_showXmlDeclaration, false);
+			.rdfxml_allowBadUris()
+			.rdfxml_disableShowDoctypeDeclaration()
+			.rdfxml_showXmlDeclaration("false");
 	}
 
 	//====================================================================================================

@@ -139,6 +139,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsoSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -153,6 +159,12 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsoSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsoSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -199,30 +211,6 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -237,6 +225,24 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -277,20 +283,20 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public JsoSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public JsoSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public JsoSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -307,8 +313,14 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public JsoSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -343,14 +355,14 @@ public class JsoSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public JsoSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public JsoSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

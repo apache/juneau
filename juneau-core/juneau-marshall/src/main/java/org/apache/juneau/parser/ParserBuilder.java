@@ -84,7 +84,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public ParserBuilder autoCloseStreams() {
-		return set(PARSER_autoCloseStreams, true);
+		return set(PARSER_autoCloseStreams);
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public ParserBuilder strict() {
-		return set(PARSER_strict, true);
+		return set(PARSER_strict);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public ParserBuilder trimStrings() {
-		return set(PARSER_trimStrings, true);
+		return set(PARSER_trimStrings);
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public ParserBuilder unbuffered() {
-		return set(PARSER_unbuffered, true);
+		return set(PARSER_unbuffered);
 	}
 
 	// <FluentSetters>
@@ -418,6 +418,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -432,6 +438,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -478,30 +490,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -516,6 +504,24 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -556,20 +562,20 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public ParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public ParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public ParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -586,8 +592,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public ParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -622,14 +634,14 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public ParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public ParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

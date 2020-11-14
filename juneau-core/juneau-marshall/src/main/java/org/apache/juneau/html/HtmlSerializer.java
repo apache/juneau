@@ -716,11 +716,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider, H
 	public HtmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
-		detectLabelParameters = ! getBooleanProperty(HTML_disableDetectLabelParameters, false);
-		detectLinksInStrings = ! getBooleanProperty(HTML_disableDetectLinksInStrings, false);
+		detectLabelParameters = ! getBooleanProperty(HTML_disableDetectLabelParameters);
+		detectLinksInStrings = ! getBooleanProperty(HTML_disableDetectLinksInStrings);
 		labelParameter = getStringProperty(HTML_labelParameter, "label");
-		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
-		addBeanTypes = getBooleanProperty(HTML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
+		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders);
+		addBeanTypes = getBooleanProperty(HTML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
 	}
 
 	@Override /* Context */

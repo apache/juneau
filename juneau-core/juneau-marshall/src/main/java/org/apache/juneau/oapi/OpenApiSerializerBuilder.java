@@ -266,6 +266,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public OpenApiSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -280,6 +286,12 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public OpenApiSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public OpenApiSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -326,30 +338,6 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -364,6 +352,24 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public OpenApiSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -404,20 +410,20 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public OpenApiSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public OpenApiSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public OpenApiSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -434,8 +440,14 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public OpenApiSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public OpenApiSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -470,14 +482,14 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public OpenApiSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public OpenApiSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public OpenApiSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

@@ -135,6 +135,12 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigStoreBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -149,6 +155,12 @@ public abstract class ConfigStoreBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigStoreBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigStoreBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 

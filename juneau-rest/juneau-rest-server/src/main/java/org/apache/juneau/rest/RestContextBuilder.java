@@ -72,7 +72,7 @@ import org.apache.juneau.utils.*;
  * 	<jk>public</jk> MyResource(RestContextBuilder builder) {
  * 			builder
  * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
- * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+ * 				.set(<jsf>PARSER_debug</jsf>);
  * 	}
  *
  * 	<jc>// Option #2 - Use an INIT hook.</jc>
@@ -80,7 +80,7 @@ import org.apache.juneau.utils.*;
  * 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
  * 			builder
  * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
- * 				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+ * 				.set(<jsf>PARSER_debug</jsf>);
  * 	}
  * </p>
  *
@@ -178,7 +178,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
-					set(p, true);
+					set(p);
 			}
 
 		} catch (Exception e) {
@@ -419,7 +419,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder disableAllowBodyParam() {
-		return set(REST_disableAllowBodyParam, true);
+		return set(REST_disableAllowBodyParam);
 	}
 
 	/**
@@ -1323,7 +1323,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder renderResponseStackTraces() {
-		return set(REST_renderResponseStackTraces, true);
+		return set(REST_renderResponseStackTraces);
 	}
 
 	/**
@@ -2228,7 +2228,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	@FluentSetter
 	public RestContextBuilder disableClasspathResourceCaching() {
-		return set(REST_disableClasspathResourceCaching, true);
+		return set(REST_disableClasspathResourceCaching);
 	}
 
 	@Override /* ContextBuilder */
@@ -2236,6 +2236,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		super.set(name, value);
 		this.properties.put(name, value);
 		putTo(REST_properties, name, value);
+		return this;
+	}
+
+	@Override /* ContextBuilder */
+	public RestContextBuilder set(String name) {
+		super.set(name);
+		this.properties.put(name, true);
+		putTo(REST_properties, name, true);
 		return this;
 	}
 
@@ -2340,6 +2348,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		return this;
 	}
 
+	@Override /* GENERATED - ContextBuilder */
+	public RestContextBuilder unset(String name) {
+		super.unset(name);
+		return this;
+	}
+
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder annotations(Annotation...values) {
 		super.annotations(values);
@@ -2383,30 +2397,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -2421,6 +2411,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestContextBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -2461,20 +2469,20 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public RestContextBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public RestContextBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public RestContextBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -2491,8 +2499,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public RestContextBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestContextBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -2527,14 +2541,14 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder fluentSetters() {
-		super.fluentSetters();
+	public RestContextBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestContextBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public RestContextBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

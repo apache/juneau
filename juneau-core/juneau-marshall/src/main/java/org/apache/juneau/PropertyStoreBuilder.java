@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.PropertyStore.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -189,6 +190,33 @@ public class PropertyStoreBuilder {
 			groups.remove(g);
 
 		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>set(key,<jk>true</jk>)</c>.
+	 *
+	 * <p>
+	 * Can only be called on boolean properties.
+	 *
+	 * @param key The configuration property key (e.g <js>"BeanContext.foo.b"</js>).
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder set(String key) {
+		Assertions.assertString(key).msg("Property ''{0}'' is not a boolean.", key).endsWith(".b");
+		return set(key, true);
+	}
+
+	/**
+	 * Shortcut for calling <c>set(key,<jk>null</jk>)</c>.
+	 *
+	 * <p>
+	 * Setting the value to <jk>null</jk> has the identical behavior to removing it.
+	 *
+	 * @param key The configuration property key (e.g <js>"BeanContext.foo.b"</js>).
+	 * @return This object (for method chaining).
+	 */
+	public synchronized PropertyStoreBuilder unset(String key) {
+		return set(key, null);
 	}
 
 	/**

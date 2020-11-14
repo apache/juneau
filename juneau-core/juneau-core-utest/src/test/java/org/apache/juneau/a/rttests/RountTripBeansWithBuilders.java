@@ -57,7 +57,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			return new Builder();
 		}
 
-		@Bean(fluentSetters=true)
+		@Bean(findFluentSetters=true)
 		public static class Builder {
 			private int f1;
 
@@ -83,9 +83,9 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 		assertObject(a).json().is("{f1:1}");
 	}
 
-	@Bean(on="Dummy1", fluentSetters=true)
-	@Bean(on="Builder", fluentSetters=true)
-	@Bean(on="Dummy2", fluentSetters=true)
+	@Bean(on="Dummy1", findFluentSetters=true)
+	@Bean(on="Builder", findFluentSetters=true)
+	@Bean(on="Dummy2", findFluentSetters=true)
 	private static class AcConfig {}
 
 	public static class Ac {
@@ -139,7 +139,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			return new Builder();
 		}
 
-		@Bean(fluentSetters=true)
+		@Bean(findFluentSetters=true)
 		public static class Builder {
 			private A f1;
 
@@ -213,7 +213,7 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			return new Builder();
 		}
 
-		@Bean(fluentSetters=true)
+		@Bean(findFluentSetters=true)
 		public static class Builder {
 			private A[] f1;
 

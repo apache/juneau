@@ -123,7 +123,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSchemaSerializerBuilder allowNestedDescriptions() {
-		return set(JSONSCHEMA_allowNestedDescriptions, true);
+		return set(JSONSCHEMA_allowNestedDescriptions);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSchemaSerializerBuilder allowNestedExamples() {
-		return set(JSONSCHEMA_allowNestedExamples, true);
+		return set(JSONSCHEMA_allowNestedExamples);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	 */
 	@FluentSetter
 	public HtmlSchemaSerializerBuilder useBeanDefs() {
-		return set(JSONSCHEMA_useBeanDefs, true);
+		return set(JSONSCHEMA_useBeanDefs);
 	}
 
 	// <FluentSetters>
@@ -320,6 +320,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlSchemaSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlSchemaSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -334,6 +340,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlSchemaSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlSchemaSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -380,30 +392,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -418,6 +406,24 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -458,20 +464,20 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public HtmlSchemaSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public HtmlSchemaSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public HtmlSchemaSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -488,8 +494,14 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public HtmlSchemaSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -524,14 +536,14 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public HtmlSchemaSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public HtmlSchemaSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

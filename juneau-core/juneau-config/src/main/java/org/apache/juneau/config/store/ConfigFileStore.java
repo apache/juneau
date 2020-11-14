@@ -96,15 +96,15 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_useWatcher FILESTORE_useWatcher}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.useWatcher.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_enableWatcher FILESTORE_enableWatcher}
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.enableWatcher.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.useWatcher</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_USEWATCHER</c>
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.enableWatcher</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_ENABLEWATCHER</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#useWatcher()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#enableWatcher()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -116,7 +116,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * 	<li>Calling {@link #close()} on this object closes the watcher.
 	 * </ul>
 	 */
-	public static final String FILESTORE_useWatcher = PREFIX + ".useWatcher.s";
+	public static final String FILESTORE_enableWatcher = PREFIX + ".enableWatcher.b";
 
 	/**
 	 * Configuration property:  Watcher sensitivity.
@@ -151,15 +151,15 @@ public class ConfigFileStore extends ConfigStore {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_updateOnWrite FILESTORE_updateOnWrite}
-	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.updateOnWrite.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.config.store.ConfigFileStore#FILESTORE_enableUpdateOnWrite FILESTORE_enableUpdateOnWrite}
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.enableUpdateOnWrite.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>ConfigFileStore.updateOnWrite</c>
-	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_UPDATEONWRITE</c>
+	 * 	<li><b>System property:</b>  <c>ConfigFileStore.enableUpdateOnWrite</c>
+	 * 	<li><b>Environment variable:</b>  <c>CONFIGFILESTORE_ENABLEUPDATEONWRITE</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#updateOnWrite()}
+	 * 			<li class='jm'>{@link org.apache.juneau.config.store.ConfigFileStoreBuilder#enableUpdateOnWrite()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -171,7 +171,7 @@ public class ConfigFileStore extends ConfigStore {
 	 * polling watchers.
 	 * <br>This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.
 	 */
-	public static final String FILESTORE_updateOnWrite = PREFIX + ".updateOnWrite.b";
+	public static final String FILESTORE_enableUpdateOnWrite = PREFIX + ".enableUpdateOnWrite.b";
 
 	/**
 	 * Configuration property:  File extensions.
@@ -241,10 +241,10 @@ public class ConfigFileStore extends ConfigStore {
 			dir = new File(getStringProperty(FILESTORE_directory, ".")).getCanonicalFile();
 			dir.mkdirs();
 			charset = getProperty(FILESTORE_charset, Charset.class, Charset.defaultCharset());
-			updateOnWrite = getBooleanProperty(FILESTORE_updateOnWrite, false);
+			updateOnWrite = getBooleanProperty(FILESTORE_enableUpdateOnWrite);
 			extensions = getCdlProperty(FILESTORE_extensions, "cfg");
 			WatcherSensitivity ws = getProperty(FILESTORE_watcherSensitivity, WatcherSensitivity.class, WatcherSensitivity.MEDIUM);
-			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir, ws) : null;
+			watcher = getBooleanProperty(FILESTORE_enableWatcher) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)
 				watcher.start();
 

@@ -190,7 +190,7 @@ public class BeanMeta<T> {
 				if (typePropertyName == null)
 					typePropertyName = ctx.getBeanTypePropertyName();
 
-				fluentSetters = (ctx.isFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
+				fluentSetters = (ctx.isFindFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
 
 				// If @Bean.interfaceClass is specified on the parent class, then we want
 				// to use the properties defined on that class, not the subclass.

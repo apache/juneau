@@ -1910,7 +1910,7 @@ public class BeanMapTest {
 
 	@Test
 	public void testBeanPropertyOrder_usingConfig() throws Exception {
-		WriterSerializer ws = JsonSerializer.create().simple().sq().applyAnnotations(VcConfig.class).build();
+		WriterSerializer ws = SimpleJsonSerializer.create().applyAnnotations(VcConfig.class).build();
 		assertEquals("{a1:'1',a2:'2',a3:'3',a4:'4'}", ws.toString(new V2c()));
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}

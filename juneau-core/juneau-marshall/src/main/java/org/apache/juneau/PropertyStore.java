@@ -63,7 +63,7 @@ import org.apache.juneau.reflect.*;
  * 	PropertyStore ps = PropertyStore
  * 		.<jsm>create</jsm>()
  * 		.set(<js>"BeanContext.swaps.lc"</js>, MySwap.<jk>class</jk>)
- * 		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
+ * 		.set(<js>"JsonSerializer.simpleMode.b"</js>)
  * 		.build();
  * </p>
  *
@@ -208,11 +208,10 @@ public final class PropertyStore {
 		this.hashCode = groups.hashCode();
 	}
 
-	
 	/**
 	 * Returns a subset of this property store consisting of just the specified group names.
-	 * 
-	 * @param groups The group names to include. 
+	 *
+	 * @param groups The group names to include.
 	 * @return A new property store.
 	 */
 	public PropertyStore subset(String[] groups) {

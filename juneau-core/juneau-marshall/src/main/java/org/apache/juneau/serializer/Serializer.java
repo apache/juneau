@@ -108,7 +108,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Our map of beans to serialize.</jc>
@@ -177,7 +177,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_addRootType</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_addRootType</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Our bean to serialize.</jc>
@@ -303,7 +303,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_keepNullProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_keepNullProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Our bean to serialize.</jc>
@@ -358,7 +358,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_sortCollections</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_sortCollections</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted array</jc>
@@ -411,7 +411,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_sortMaps</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_sortMaps</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// An unsorted map.</jc>
@@ -470,7 +470,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_trimEmptyCollections</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_trimEmptyCollections</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an empty array.</jc>
@@ -529,7 +529,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_trimEmptyMaps</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_trimEmptyMaps</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an empty map.</jc>
@@ -581,7 +581,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_trimStrings</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_trimStrings</jsf>)
 	 * 		.build();
 	 *
 	 *	<jc>// A map with space-padded keys/values</jc>
@@ -826,18 +826,18 @@ public abstract class Serializer extends BeanTraverseContext {
 	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 
-		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes, false);
-		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties, false);
-		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
-		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps, false);
-		trimStrings = getBooleanProperty(SERIALIZER_trimStrings, false);
-		sortCollections = getBooleanProperty(SERIALIZER_sortCollections, false);
-		sortMaps = getBooleanProperty(SERIALIZER_sortMaps, false);
-		addRootType = getBooleanProperty(SERIALIZER_addRootType, false);
+		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes);
+		keepNullProperties = getBooleanProperty(SERIALIZER_keepNullProperties);
+		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections);
+		trimEmptyMaps = getBooleanProperty(SERIALIZER_trimEmptyMaps);
+		trimStrings = getBooleanProperty(SERIALIZER_trimStrings);
+		sortCollections = getBooleanProperty(SERIALIZER_sortCollections);
+		sortMaps = getBooleanProperty(SERIALIZER_sortMaps);
+		addRootType = getBooleanProperty(SERIALIZER_addRootType);
 		uriContext = getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.NONE);
 		uriRelativity = getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
-		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class, null);
+		listener = getClassProperty(SERIALIZER_listener, SerializerListener.class);
 
 		this.produces = MediaType.of(produces);
 		this.accept = accept == null ? MediaRanges.of(produces) : MediaRanges.of(accept);

@@ -139,6 +139,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsoParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsoParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -153,6 +159,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsoParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsoParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -199,30 +211,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsoParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -237,6 +225,24 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsoParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -277,20 +283,20 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public JsoParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public JsoParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public JsoParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -307,8 +313,14 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public JsoParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsoParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -343,14 +355,14 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public JsoParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsoParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public JsoParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

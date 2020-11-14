@@ -279,7 +279,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a single property</jc>
@@ -343,7 +343,7 @@ public abstract class WriterSerializer extends Serializer {
 		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
 		streamCharset = getProperty(WSERIALIZER_streamCharset, Charset.class, IOUtils.UTF8);
 		fileCharset = getProperty(WSERIALIZER_fileCharset, Charset.class, Charset.defaultCharset());
-		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);
+		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

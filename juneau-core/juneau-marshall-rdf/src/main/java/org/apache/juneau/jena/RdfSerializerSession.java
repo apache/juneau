@@ -505,7 +505,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @see RdfSerializer#RDF_autoDetectNamespaces
+	 * @see RdfSerializer#RDF_disableAutoDetectNamespaces
 	 * @return
 	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
 	 */
@@ -527,7 +527,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see RdfSerializer#RDF_useXmlNamespaces
+	 * @see RdfSerializer#RDF_disableUseXmlNamespaces
 	 * @return
 	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.

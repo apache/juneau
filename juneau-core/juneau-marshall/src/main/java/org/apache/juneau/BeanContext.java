@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext beanContext = BeanContext
  * 		.<jsm>create</jsm>()
- * 		.set(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+ * 		.set(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
  * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.build();
  * </p>
@@ -612,7 +612,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {}</jc>
@@ -740,7 +740,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>)
 	 * 		.build();
 	 *
 	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
@@ -868,7 +868,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  "bar"</jc>
@@ -933,7 +933,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  "bar"</jc>
@@ -996,7 +996,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -1120,7 +1120,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -1177,7 +1177,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
@@ -1191,20 +1191,20 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_disableSilentlyIgnoreMissingSetters BEAN_disableSilentlyIgnoreMissingSetters}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.disableSilentlyIgnoreMissingSetters.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_disableIgnoreMissingSetters BEAN_disableIgnoreMissingSetters}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.disableIgnoreMissingSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.disableSilentlyIgnoreMissingSetters</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DISABLESILENTLYIGNOREMISSINGSETTERS</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.disableIgnoreMissingSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_DISABLEIGNOREMISSINGSETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableSilentlyIgnoreMissingSetters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableSilentlyIgnoreMissingSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#disableIgnoreMissingSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1226,13 +1226,13 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.disableSilentlyIgnoreMissingSetters()
+	 * 		.disableIgnoreMissingSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreMissingSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a ParseException.</jc>
@@ -1243,7 +1243,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 	 * </ul>
 	 */
-	public static final String BEAN_disableSilentlyIgnoreMissingSetters = PREFIX + ".disableSilentlyIgnoreMissingSetters.b";
+	public static final String BEAN_disableIgnoreMissingSetters = PREFIX + ".disableIgnoreMissingSetters.b";
 
 	/**
 	 * Configuration property:  Don't use interface proxies.
@@ -1281,21 +1281,21 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_fluentSetters BEAN_fluentSetters}
-	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.BeanContext#BEAN_findFluentSetters BEAN_findFluentSetters}
+	 * 	<li><b>Name:</b>  <js>"BeanContext.findFluentSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>BeanContext.fluentSetters</c>
-	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_FLUENTSETTERS</c>
+	 * 	<li><b>System property:</b>  <c>BeanContext.findFluentSetters</c>
+	 * 	<li><b>Environment variable:</b>  <c>BEANCONTEXT_FINDFLUENTSETTERS</c>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#fluentSetters()}
-	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#fluentSetters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
+	 * 			<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#fluentSetters()}
+	 * 			<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#findFluentSetters()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1323,13 +1323,13 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Create a parser that finds fluent setters.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.fluentSetters()
+	 * 		.findFluentSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_fluentSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_findFluentSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse into bean using fluent setter.</jc>
@@ -1338,10 +1338,10 @@ public class BeanContext extends Context implements MetaProvider {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-	 * 	<li>The {@link Bean#fluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+	 * 	<li>The {@link Bean#findFluentSetters() @Bean.findFluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 	 * </ul>
 	 */
-	public static final String BEAN_fluentSetters = PREFIX + ".fluentSetters.b";
+	public static final String BEAN_findFluentSetters = PREFIX + ".findFluentSetters.b";
 
 	/**
 	 * Configuration property:  Ignore invocation errors on getters.
@@ -1389,7 +1389,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Exception is ignored.</jc>
@@ -1444,7 +1444,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Exception is ignored.</jc>
@@ -1497,7 +1497,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
@@ -1753,7 +1753,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
@@ -1912,7 +1912,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useEnumNames</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_useEnumNames</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Enum with overridden toString().</jc>
@@ -1976,7 +1976,7 @@ public class BeanContext extends Context implements MetaProvider {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>)
 	 * 		.build();
 	 * </p>
 	 */
@@ -2035,14 +2035,14 @@ public class BeanContext extends Context implements MetaProvider {
 		useInterfaceProxies,
 		ignoreUnknownBeanProperties,
 		ignoreUnknownNullBeanProperties,
-		silentlyIgnoreMissingSetters,
+		ignoreMissingSetters,
 		ignoreTransientFields,
 		ignoreInvocationExceptionsOnGetters,
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
 		useEnumNames,
 		sortProperties,
-		fluentSetters;
+		findFluentSetters;
 
 	private final Visibility
 		beanConstructorVisibility,
@@ -2109,22 +2109,22 @@ public class BeanContext extends Context implements MetaProvider {
 		}
 		this.annotations = rmb.build();
 
-		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor, false);
-		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable, false);
-		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters, false);
-		beansRequireSomeProperties = ! getBooleanProperty(BEAN_disableBeansRequireSomeProperties, false);
-		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue, false);
-		useEnumNames = getBooleanProperty(BEAN_useEnumNames, false);
-		useInterfaceProxies = ! getBooleanProperty(BEAN_disableInterfaceProxies, false);
-		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties, false);
-		ignoreUnknownNullBeanProperties = ! getBooleanProperty(BEAN_disableIgnoreUnknownNullBeanProperties, false);
-		silentlyIgnoreMissingSetters = ! getBooleanProperty(BEAN_disableSilentlyIgnoreMissingSetters, false);
-		ignoreTransientFields = ! getBooleanProperty(BEAN_disableIgnoreTransientFields, false);
-		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters, false);
-		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters, false);
-		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector, false);
-		sortProperties = getBooleanProperty(BEAN_sortProperties, false);
-		fluentSetters = getBooleanProperty(BEAN_fluentSetters, false);
+		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor);
+		beansRequireSerializable = getBooleanProperty(BEAN_beansRequireSerializable);
+		beansRequireSettersForGetters = getBooleanProperty(BEAN_beansRequireSettersForGetters);
+		beansRequireSomeProperties = ! getBooleanProperty(BEAN_disableBeansRequireSomeProperties);
+		beanMapPutReturnsOldValue = getBooleanProperty(BEAN_beanMapPutReturnsOldValue);
+		useEnumNames = getBooleanProperty(BEAN_useEnumNames);
+		useInterfaceProxies = ! getBooleanProperty(BEAN_disableInterfaceProxies);
+		ignoreUnknownBeanProperties = getBooleanProperty(BEAN_ignoreUnknownBeanProperties);
+		ignoreUnknownNullBeanProperties = ! getBooleanProperty(BEAN_disableIgnoreUnknownNullBeanProperties);
+		ignoreMissingSetters = ! getBooleanProperty(BEAN_disableIgnoreMissingSetters);
+		ignoreTransientFields = ! getBooleanProperty(BEAN_disableIgnoreTransientFields);
+		ignoreInvocationExceptionsOnGetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnGetters);
+		ignoreInvocationExceptionsOnSetters = getBooleanProperty(BEAN_ignoreInvocationExceptionsOnSetters);
+		useJavaBeanIntrospector = getBooleanProperty(BEAN_useJavaBeanIntrospector);
+		sortProperties = getBooleanProperty(BEAN_sortProperties);
+		findFluentSetters = getBooleanProperty(BEAN_findFluentSetters);
 		typePropertyName = getStringProperty(BEAN_typePropertyName, "_type");
 
 		beanConstructorVisibility = getProperty(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
@@ -3339,12 +3339,12 @@ public class BeanContext extends Context implements MetaProvider {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see #BEAN_fluentSetters
+	 * @see #BEAN_findFluentSetters
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
-	public final boolean isFluentSetters() {
-		return fluentSetters;
+	public final boolean isFindFluentSetters() {
+		return findFluentSetters;
 	}
 
 	/**
@@ -3372,12 +3372,12 @@ public class BeanContext extends Context implements MetaProvider {
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see #BEAN_disableSilentlyIgnoreMissingSetters
+	 * @see #BEAN_disableIgnoreMissingSetters
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isSilentlyIgnoreMissingSetters() {
-		return silentlyIgnoreMissingSetters;
+	public final boolean isIgnoreMissingSetters() {
+		return ignoreMissingSetters;
 	}
 
 	/**
@@ -3524,7 +3524,7 @@ public class BeanContext extends Context implements MetaProvider {
 		if (beanToStringSerializer == null) {
 			if (JsonSerializer.DEFAULT == null)
 				return null;
-			this.beanToStringSerializer = JsonSerializer.create().apply(this.getPropertyStore()).sq().simple().build();
+			this.beanToStringSerializer = JsonSerializer.create().apply(this.getPropertyStore()).sq().simpleMode().build();
 		}
 		return beanToStringSerializer;
 	}
@@ -3548,7 +3548,7 @@ public class BeanContext extends Context implements MetaProvider {
 				.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
 				.a("beansRequireSomeProperties", beansRequireSomeProperties)
 				.a("ignoreTransientFields", ignoreTransientFields)
-				.a("silentlyIgnoreMissingSetters", silentlyIgnoreMissingSetters)
+				.a("ignoreMissingSetters", ignoreMissingSetters)
 				.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 				.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 				.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)

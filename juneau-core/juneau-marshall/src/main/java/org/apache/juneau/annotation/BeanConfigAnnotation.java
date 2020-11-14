@@ -72,14 +72,14 @@ public class BeanConfigAnnotation {
 				psb.set(BEAN_typePropertyName, string(a.typePropertyName()));
 			if (! a.debug().isEmpty())
 				psb.set(CONTEXT_debug, bool(a.debug()));
-			if (! a.fluentSetters().isEmpty())
-				psb.set(BEAN_fluentSetters, bool(a.fluentSetters()));
+			if (! a.findFluentSetters().isEmpty())
+				psb.set(BEAN_findFluentSetters, bool(a.findFluentSetters()));
 			if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
 				psb.set(BEAN_ignoreInvocationExceptionsOnGetters, bool(a.ignoreInvocationExceptionsOnGetters()));
 			if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())
 				psb.set(BEAN_ignoreInvocationExceptionsOnSetters, bool(a.ignoreInvocationExceptionsOnSetters()));
-			if (! a.disableSilentlyIgnoreMissingSetters().isEmpty())
-				psb.set(BEAN_disableSilentlyIgnoreMissingSetters, bool(a.disableSilentlyIgnoreMissingSetters()));
+			if (! a.disableIgnoreMissingSetters().isEmpty())
+				psb.set(BEAN_disableIgnoreMissingSetters, bool(a.disableIgnoreMissingSetters()));
 			if (! a.disableIgnoreTransientFields().isEmpty())
 				psb.set(BEAN_disableIgnoreTransientFields, bool(a.disableIgnoreTransientFields()));
 			if (! a.ignoreUnknownBeanProperties().isEmpty())

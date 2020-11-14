@@ -306,7 +306,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			produces,
 			accept
 		);
-		expandedParams = getBooleanProperty(URLENC_expandedParams, false);
+		expandedParams = getBooleanProperty(URLENC_expandedParams);
 	}
 
 	@Override /* Context */

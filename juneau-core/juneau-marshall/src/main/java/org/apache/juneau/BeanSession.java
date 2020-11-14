@@ -1303,12 +1303,12 @@ public class BeanSession extends Session {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see BeanContext#BEAN_fluentSetters
+	 * @see BeanContext#BEAN_findFluentSetters
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
-	public final boolean isFluentSetters() {
-		return ctx.isFluentSetters();
+	public final boolean isFindFluentSetters() {
+		return ctx.isFindFluentSetters();
 	}
 
 	/**
@@ -1336,12 +1336,12 @@ public class BeanSession extends Session {
 	/**
 	 * Configuration property:  Silently ignore missing setters.
 	 *
-	 * @see BeanContext#BEAN_disableSilentlyIgnoreMissingSetters
+	 * @see BeanContext#BEAN_disableIgnoreMissingSetters
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isSilentlyIgnoreMissingSetters() {
-		return ctx.isSilentlyIgnoreMissingSetters();
+	public final boolean isIgnoreMissingSetters() {
+		return ctx.isIgnoreMissingSetters();
 	}
 
 	/**

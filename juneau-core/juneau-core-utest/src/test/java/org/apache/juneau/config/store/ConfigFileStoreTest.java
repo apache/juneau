@@ -139,7 +139,7 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testWatcher_LONGRUNNING() throws Exception {
-		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).enableWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", new ConfigStoreListener() {

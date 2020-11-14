@@ -164,6 +164,12 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RestMethodContextBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RestMethodContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -178,6 +184,12 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestMethodContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestMethodContextBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -224,30 +236,6 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -262,6 +250,24 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestMethodContextBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestMethodContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestMethodContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestMethodContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -302,20 +308,20 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public RestMethodContextBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public RestMethodContextBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public RestMethodContextBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -332,8 +338,14 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public RestMethodContextBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestMethodContextBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -368,14 +380,14 @@ public class RestMethodContextBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder fluentSetters() {
-		super.fluentSetters();
+	public RestMethodContextBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestMethodContextBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public RestMethodContextBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

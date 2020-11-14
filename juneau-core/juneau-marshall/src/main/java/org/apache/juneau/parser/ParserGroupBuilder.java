@@ -166,7 +166,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder autoCloseStreams() {
-		return set(PARSER_autoCloseStreams, true);
+		return set(PARSER_autoCloseStreams);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder strict() {
-		return set(PARSER_strict, true);
+		return set(PARSER_strict);
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder trimStrings() {
-		return set(PARSER_trimStrings, true);
+		return set(PARSER_trimStrings);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder unbuffered() {
-		return set(PARSER_unbuffered, true);
+		return set(PARSER_unbuffered);
 	}
 
 	/**
@@ -457,6 +457,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -471,6 +477,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ParserGroupBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ParserGroupBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -517,30 +529,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -555,6 +543,24 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public ParserGroupBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -595,20 +601,20 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public ParserGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public ParserGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public ParserGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -625,8 +631,14 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public ParserGroupBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public ParserGroupBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -661,14 +673,14 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder fluentSetters() {
-		super.fluentSetters();
+	public ParserGroupBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public ParserGroupBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public ParserGroupBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

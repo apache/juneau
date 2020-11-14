@@ -682,7 +682,7 @@ public final class BeanPropertyMeta {
 			boolean isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
-				if ((value == null && beanContext.isIgnoreUnknownNullBeanProperties()) || beanContext.isSilentlyIgnoreMissingSetters())
+				if ((value == null && beanContext.isIgnoreUnknownNullBeanProperties()) || beanContext.isIgnoreMissingSetters())
 					return null;
 				throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
 			}

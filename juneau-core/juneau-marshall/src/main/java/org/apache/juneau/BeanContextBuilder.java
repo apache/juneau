@@ -41,8 +41,8 @@ import org.apache.juneau.transform.*;
  * <p class='bcode w800'>
  * 	WriterSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()
- * 		.set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
- * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+ * 		.set(<jsf>JSON_simpleMode</jsf>)
+ * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>)
  * 		.set(<jsf>SERIALIZER_quoteChar</jsf>, <js>"'"</js>)
  * 		.build();
  * </p>
@@ -520,7 +520,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beanMapPutReturnsOldValue</jsf>)
 	 * 		.build();
 	 *
 	 * 	BeanMap&lt;MyBean&gt; bm = s.createSession().toBeanMap(<jk>new</jk> MyBean());
@@ -536,7 +536,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beanMapPutReturnsOldValue() {
-		return set(BEAN_beanMapPutReturnsOldValue, true);
+		return set(BEAN_beanMapPutReturnsOldValue);
 	}
 
 	/**
@@ -627,7 +627,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireDefaultConstructor</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  "bar"</jc>
@@ -647,7 +647,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireDefaultConstructor() {
-		return set(BEAN_beansRequireDefaultConstructor, true);
+		return set(BEAN_beansRequireDefaultConstructor);
 	}
 
 	/**
@@ -680,7 +680,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireSerializable</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  "bar"</jc>
@@ -700,7 +700,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireSerializable() {
-		return set(BEAN_beansRequireSerializable, true);
+		return set(BEAN_beansRequireSerializable);
 	}
 
 	/**
@@ -731,7 +731,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_beansRequireSettersForGetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -751,7 +751,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder beansRequireSettersForGetters() {
-		return set(BEAN_beansRequireSettersForGetters, true);
+		return set(BEAN_beansRequireSettersForGetters);
 	}
 
 	/**
@@ -779,7 +779,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableBeansRequireSomeProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {}</jc>
@@ -799,7 +799,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableBeansRequireSomeProperties() {
-		return set(BEAN_disableBeansRequireSomeProperties, true);
+		return set(BEAN_disableBeansRequireSomeProperties);
 	}
 
 	/**
@@ -1534,7 +1534,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		.<jsm>create</jsm>()
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Foo.<jk>class</jk>)
 	 * 		.addTo(<jsf>BEAN_beanDictionary</jsf>, Bar.<jk>class</jk>)
-	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>SERIALIZER_addBeanTypes</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -1755,13 +1755,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that finds fluent setters.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.fluentSetters()
+	 * 		.findFluentSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_fluentSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_findFluentSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse into bean using fluent setter.</jc>
@@ -1770,25 +1770,25 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-	 * 	<li>The {@link Bean#fluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+	 * 	<li>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder fluentSetters() {
-		return set(BEAN_fluentSetters, true);
+	public BeanContextBuilder findFluentSetters() {
+		return set(BEAN_findFluentSetters);
 	}
 
 	/**
 	 * <i><l>BeanContext</l> configuration property:&emsp;</i>  Find fluent setters.
 	 *
 	 * <p>
-	 * Identical to {@link #fluentSetters()} but enables it on a specific class only.
+	 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1800,7 +1800,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that finds fluent setters.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.fluentSetters(MyBean.<jk>class</jk>)
+	 * 		.findFluentSetters(MyBean.<jk>class</jk>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Parse into bean using fluent setter.</jc>
@@ -1808,20 +1808,20 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method is functionally equivalent to using the {@link Bean#fluentSetters()} annotation.
+	 * 	<li>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#fluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 *
 	 * @param on The class that this applies to.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder fluentSetters(Class<?> on) {
-		return prependTo(BEAN_annotations, BeanAnnotation.create(on).fluentSetters(true).build());
+	public BeanContextBuilder findFluentSetters(Class<?> on) {
+		return prependTo(BEAN_annotations, BeanAnnotation.create(on).findFluentSetters(true).build());
 	}
 
 	/**
@@ -1849,7 +1849,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnGetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Exception is ignored.</jc>
@@ -1864,7 +1864,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnGetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnGetters, true);
+		return set(BEAN_ignoreInvocationExceptionsOnGetters);
 	}
 
 	/**
@@ -1892,7 +1892,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreInvocationExceptionsOnSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Exception is ignored.</jc>
@@ -1907,7 +1907,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreInvocationExceptionsOnSetters() {
-		return set(BEAN_ignoreInvocationExceptionsOnSetters, true);
+		return set(BEAN_ignoreInvocationExceptionsOnSetters);
 	}
 
 	/**
@@ -1929,13 +1929,13 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.disableSilentlyIgnoreMissingSetters()
+	 * 		.disableIgnoreMissingSetters()
 	 * 		.build();
 	 *
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableSilentlyIgnoreMissingSetters</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreMissingSetters</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a ParseException.</jc>
@@ -1947,14 +1947,14 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_disableSilentlyIgnoreMissingSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_disableIgnoreMissingSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public BeanContextBuilder disableSilentlyIgnoreMissingSetters() {
-		return set(BEAN_disableSilentlyIgnoreMissingSetters, true);
+	public BeanContextBuilder disableIgnoreMissingSetters() {
+		return set(BEAN_disableIgnoreMissingSetters);
 	}
 
 	/**
@@ -1979,7 +1979,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreTransientFields</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"foo":"foo"}</jc>
@@ -1998,7 +1998,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableIgnoreTransientFields() {
-		return set(BEAN_disableIgnoreTransientFields, true);
+		return set(BEAN_disableIgnoreTransientFields);
 	}
 
 	/**
@@ -2024,7 +2024,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Doesn't throw an exception on unknown 'bar' property.</jc>
@@ -2039,7 +2039,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder ignoreUnknownBeanProperties() {
-		return set(BEAN_ignoreUnknownBeanProperties, true);
+		return set(BEAN_ignoreUnknownBeanProperties);
 	}
 
 	/**
@@ -2065,7 +2065,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_disableIgnoreUnknownNullBeanProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
@@ -2080,7 +2080,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableIgnoreUnknownNullBeanProperties() {
-		return set(BEAN_disableIgnoreUnknownNullBeanProperties, true);
+		return set(BEAN_disableIgnoreUnknownNullBeanProperties);
 	}
 
 	/**
@@ -2520,7 +2520,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
@@ -2539,7 +2539,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder sortProperties() {
-		return set(BEAN_sortProperties, true);
+		return set(BEAN_sortProperties);
 	}
 
 	/**
@@ -2885,7 +2885,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useEnumNames</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_useEnumNames</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Enum with overridden toString().</jc>
@@ -2916,7 +2916,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder useEnumNames() {
-		return set(BEAN_useEnumNames, true);
+		return set(BEAN_useEnumNames);
 	}
 
 	/**
@@ -2935,7 +2935,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder disableInterfaceProxies() {
-		return set(BEAN_disableInterfaceProxies, true);
+		return set(BEAN_disableInterfaceProxies);
 	}
 
 	/**
@@ -2956,7 +2956,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_useJavaBeanIntrospector</jsf>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -2968,7 +2968,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	@FluentSetter
 	public BeanContextBuilder useJavaBeanIntrospector() {
-		return set(BEAN_useJavaBeanIntrospector, true);
+		return set(BEAN_useJavaBeanIntrospector);
 	}
 
 	// <FluentSetters>
@@ -3058,6 +3058,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -3072,6 +3078,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanContextBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 

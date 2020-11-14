@@ -730,9 +730,9 @@ public class BeanConfigTest {
 		p2.disableIgnoreUnknownNullBeanProperties();
 		assertSameCache(p1, p2);
 
-		p1.disableSilentlyIgnoreMissingSetters();
+		p1.disableIgnoreMissingSetters();
 		assertDifferentCache(p1, p2);
-		p2.disableSilentlyIgnoreMissingSetters();
+		p2.disableIgnoreMissingSetters();
 		assertSameCache(p1, p2);
 
 		p1.ignoreInvocationExceptionsOnGetters();

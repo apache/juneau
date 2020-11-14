@@ -460,10 +460,10 @@ public final class Config extends Context implements ConfigEventListener, Writab
 			.contextObject(ConfigVar.SESSION_config, this)
 			.build()
 			.createSession();
-		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength, -1);
+		binaryLineLength = getIntegerProperty(CONFIG_binaryLineLength);
 		binaryFormat = getProperty(CONFIG_binaryFormat, BinaryFormat.class, BinaryFormat.BASE64);
-		multiLineValuesOnSeparateLines = getBooleanProperty(CONFIG_multiLineValuesOnSeparateLines, false);
-		readOnly = getBooleanProperty(CONFIG_readOnly, false);
+		multiLineValuesOnSeparateLines = getBoolean(CONFIG_multiLineValuesOnSeparateLines, false);
+		readOnly = getBoolean(CONFIG_readOnly, false);
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {

@@ -915,18 +915,18 @@ public class PropertyStoreTest {
 		PropertyStoreBuilder b1 = PropertyStore.create(), b2 = PropertyStore.create();
 		PropertyStore ps = null;
 
-		b1.set("A.f1.b", true);
+		b1.set("A.f1.b");
 		b2.set("A.f1.b", new StringBuilder("true"));
 		testEquals(b1, b2);
 
 		testEquals(b1, b1);
 
-		b1.set("A.f1.b", true);
+		b1.set("A.f1.b");
 		b2.set("A.f1.b", new StringBuilder("false"));
 		testNotEquals(b1, b2);
 
 		ps = b1.build();
-		b1.set("A.f1.b", true);
+		b1.set("A.f1.b");
 		assertTrue(ps == b1.build());
 
 		b1.set("A.f1.b", false);
@@ -1678,7 +1678,7 @@ public class PropertyStoreTest {
 	public void testToMutable() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		b.set("A.foo.s", "bar");
-		b.set("A.foo.b", true);
+		b.set("A.foo.b");
 		b.set("A.foo.i", 123);
 		b.set("A.foo.c", String.class);
 		b.set("A.foo.o", "bar");

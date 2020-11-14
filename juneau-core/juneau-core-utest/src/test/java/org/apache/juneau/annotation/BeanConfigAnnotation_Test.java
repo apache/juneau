@@ -121,9 +121,9 @@ public class BeanConfigAnnotation_Test {
 		debug="$X{true}",
 		detectRecursions="$X{true}",
 		disableIgnoreUnknownNullBeanProperties="$X{true}",
-		disableSilentlyIgnoreMissingSetters="$X{true}",
+		disableIgnoreMissingSetters="$X{true}",
 		disableInterfaceProxies="$X{true}",
-		fluentSetters="$X{true}",
+		findFluentSetters="$X{true}",
 		ignoreInvocationExceptionsOnGetters="$X{true}",
 		ignoreInvocationExceptionsOnSetters="$X{true}",
 		ignoreRecursions="$X{true}",
@@ -165,10 +165,10 @@ public class BeanConfigAnnotation_Test {
 		check("foo", bc.getBeanTypePropertyName());
 		check("true", bc.isDebug());
 		check("true", bc.isDetectRecursions());
-		check("true", bc.isFluentSetters());
+		check("true", bc.isFindFluentSetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("true", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("false", bc.isSilentlyIgnoreMissingSetters());
+		check("false", bc.isIgnoreMissingSetters());
 		check("true", bc.isIgnoreRecursions());
 		check("true", bc.isIgnoreUnknownBeanProperties());
 		check("false", bc.isIgnoreUnknownNullBeanProperties());
@@ -212,10 +212,10 @@ public class BeanConfigAnnotation_Test {
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
-		check("false", bc.isFluentSetters());
+		check("false", bc.isFindFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("true", bc.isSilentlyIgnoreMissingSetters());
+		check("true", bc.isIgnoreMissingSetters());
 		check("false", bc.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());
@@ -257,10 +257,10 @@ public class BeanConfigAnnotation_Test {
 		check("_type", bc.getBeanTypePropertyName());
 		check("false", bc.isDebug());
 		check("false", bc.isDetectRecursions());
-		check("false", bc.isFluentSetters());
+		check("false", bc.isFindFluentSetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnGetters());
 		check("false", bc.isIgnoreInvocationExceptionsOnSetters());
-		check("true", bc.isSilentlyIgnoreMissingSetters());
+		check("true", bc.isIgnoreMissingSetters());
 		check("false", bc.isIgnoreRecursions());
 		check("false", bc.isIgnoreUnknownBeanProperties());
 		check("true", bc.isIgnoreUnknownNullBeanProperties());

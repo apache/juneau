@@ -120,7 +120,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions() {
-		return set(JSONSCHEMA_allowNestedDescriptions, true);
+		return set(JSONSCHEMA_allowNestedDescriptions);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder allowNestedExamples() {
-		return set(JSONSCHEMA_allowNestedExamples, true);
+		return set(JSONSCHEMA_allowNestedExamples);
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaGeneratorBuilder useBeanDefs() {
-		return set(JSONSCHEMA_useBeanDefs, true);
+		return set(JSONSCHEMA_useBeanDefs);
 	}
 
 	// <FluentSetters>
@@ -349,6 +349,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -363,6 +369,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaGeneratorBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -409,30 +421,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -447,6 +435,24 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -487,20 +493,20 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public JsonSchemaGeneratorBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public JsonSchemaGeneratorBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public JsonSchemaGeneratorBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -517,8 +523,14 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public JsonSchemaGeneratorBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -553,14 +565,14 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder fluentSetters() {
-		super.fluentSetters();
+	public JsonSchemaGeneratorBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public JsonSchemaGeneratorBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

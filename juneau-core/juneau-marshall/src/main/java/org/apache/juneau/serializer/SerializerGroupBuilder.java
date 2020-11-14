@@ -148,7 +148,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder addBeanTypes() {
-		return set(SERIALIZER_addBeanTypes, true);
+		return set(SERIALIZER_addBeanTypes);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder addRootType() {
-		return set(SERIALIZER_addRootType, true);
+		return set(SERIALIZER_addRootType);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder keepNullProperties() {
-		return set(SERIALIZER_keepNullProperties, true);
+		return set(SERIALIZER_keepNullProperties);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder sortCollections() {
-		return set(SERIALIZER_sortCollections, true);
+		return set(SERIALIZER_sortCollections);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder sortMaps() {
-		return set(SERIALIZER_sortMaps, true);
+		return set(SERIALIZER_sortMaps);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder trimEmptyCollections() {
-		return set(SERIALIZER_trimEmptyCollections, true);
+		return set(SERIALIZER_trimEmptyCollections);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder trimEmptyMaps() {
-		return set(SERIALIZER_trimEmptyMaps, true);
+		return set(SERIALIZER_trimEmptyMaps);
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder trimStrings() {
-		return set(SERIALIZER_trimStrings, true);
+		return set(SERIALIZER_trimStrings);
 	}
 
 	/**
@@ -488,7 +488,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	 */
 	@FluentSetter
 	public SerializerGroupBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace);
 	}
 
 	/**
@@ -595,6 +595,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -609,6 +615,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public SerializerGroupBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public SerializerGroupBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -655,30 +667,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -693,6 +681,24 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public SerializerGroupBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -733,20 +739,20 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public SerializerGroupBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public SerializerGroupBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public SerializerGroupBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -763,8 +769,14 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public SerializerGroupBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public SerializerGroupBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -799,14 +811,14 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder fluentSetters() {
-		super.fluentSetters();
+	public SerializerGroupBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public SerializerGroupBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public SerializerGroupBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

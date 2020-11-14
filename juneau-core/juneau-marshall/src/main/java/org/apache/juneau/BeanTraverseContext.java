@@ -74,7 +74,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_detectRecursions</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEANTRAVERSE_detectRecursions</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
@@ -135,7 +135,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<jc>// Create a serializer ignores recursions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEANTRAVERSE_ignoreRecursions</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
@@ -193,7 +193,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEANTRAVERSE_useWhitespace</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEANTRAVERSE_useWhitespace</jsf>)
 	 * 		.set(<jsf>BEANTRAVERSE_initialDepth</jsf>, 2)
 	 * 		.build();
 	 *
@@ -273,7 +273,7 @@ public abstract class BeanTraverseContext extends BeanContext {
 
 		maxDepth = getIntegerProperty(BEANTRAVERSE_maxDepth, 100);
 		initialDepth = getIntegerProperty(BEANTRAVERSE_initialDepth, 0);
-		ignoreRecursions = getBooleanProperty(BEANTRAVERSE_ignoreRecursions, false);
+		ignoreRecursions = getBooleanProperty(BEANTRAVERSE_ignoreRecursions);
 		detectRecursions = getBooleanProperty(BEANTRAVERSE_detectRecursions, ignoreRecursions);
 	}
 

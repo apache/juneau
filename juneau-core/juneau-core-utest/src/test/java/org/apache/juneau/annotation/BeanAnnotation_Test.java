@@ -36,7 +36,7 @@ public class BeanAnnotation_Test {
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
-		.fluentSetters(true)
+		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
@@ -60,7 +60,7 @@ public class BeanAnnotation_Test {
 		.dictionary(X1.class)
 		.example("example")
 		.excludeProperties("excludeProperties")
-		.fluentSetters(true)
+		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
@@ -87,7 +87,7 @@ public class BeanAnnotation_Test {
 				+ "dictionary:['"+CNAME+"$X1'],"
 				+ "example:'example',"
 				+ "excludeProperties:'excludeProperties',"
-				+ "fluentSetters:true,"
+				+ "findFluentSetters:true,"
 				+ "implClass:'"+CNAME+"$X1',"
 				+ "interceptor:'"+CNAME+"$X2',"
 				+ "interfaceClass:'"+CNAME+"$X1',"
@@ -150,7 +150,7 @@ public class BeanAnnotation_Test {
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",
-		fluentSetters=true,
+		findFluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
@@ -176,7 +176,7 @@ public class BeanAnnotation_Test {
 		dictionary=X1.class,
 		example="example",
 		excludeProperties="excludeProperties",
-		fluentSetters=true,
+		findFluentSetters=true,
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,

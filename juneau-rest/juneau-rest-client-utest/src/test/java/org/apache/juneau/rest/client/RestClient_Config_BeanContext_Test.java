@@ -388,7 +388,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a16_disableIgnorePropertiesWithoutSetters() throws Exception {
 		A16 x = client().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class);
 		assertNull(x.foo);
-		assertThrown(()->client().disableSilentlyIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
+		assertThrown(()->client().disableIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).contains("Setter or public field not defined");
 	}
 
 	public static class A17 {
@@ -445,9 +445,9 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a20_fluentSetters() throws Exception {
-		A20 x = client().fluentSetters().build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
+		A20 x = client().findFluentSetters().build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
 		assertEquals("1",x.getFoo());
-		x = client().fluentSetters(A20.class).build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
+		x = client().findFluentSetters(A20.class).build().post("/echoBody",new StringReader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
 		assertEquals("1",x.getFoo());
 	}
 

@@ -140,6 +140,12 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlStrippedDocSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -154,6 +160,12 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlStrippedDocSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlStrippedDocSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -200,30 +212,6 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -238,6 +226,24 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlStrippedDocSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -278,20 +284,20 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public HtmlStrippedDocSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public HtmlStrippedDocSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public HtmlStrippedDocSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -308,8 +314,14 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public HtmlStrippedDocSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlStrippedDocSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -344,14 +356,14 @@ public class HtmlStrippedDocSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public HtmlStrippedDocSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlStrippedDocSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public HtmlStrippedDocSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

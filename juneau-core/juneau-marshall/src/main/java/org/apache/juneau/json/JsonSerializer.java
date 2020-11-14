@@ -173,7 +173,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.simple()
-	 * 		.set(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>JSON_escapeSolidus</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
@@ -200,7 +200,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simple()}
+	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#simpleMode()}
 	 * 			<li class='jm'>{@link org.apache.juneau.json.JsonSerializerBuilder#ssq()}
 	 * 		</ul>
 	 * </ul>
@@ -378,9 +378,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 
-		simpleMode = getBooleanProperty(JSON_simpleMode, false);
-		escapeSolidus = getBooleanProperty(JSON_escapeSolidus, false);
-		addBeanTypes = getBooleanProperty(JSON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
+		simpleMode = getBooleanProperty(JSON_simpleMode);
+		escapeSolidus = getBooleanProperty(JSON_escapeSolidus);
+		addBeanTypes = getBooleanProperty(JSON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
 	}
 
 	@Override /* Context */

@@ -95,7 +95,7 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 * 	ReaderParser p = RdfParser
 	 * 		.<jsm>create</jsm>()
 	 * 		.xml()
-	 * 		.set(<jsf>RDF_trimWhitespace</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>RDF_trimWhitespace</jsf>)
 	 * 		.build();
 	 * </p>
 	 */
@@ -128,8 +128,8 @@ public class RdfParser extends ReaderParser implements RdfCommon, RdfMetaProvide
 	 */
 	public RdfParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		trimWhitespace = getBooleanProperty(RDF_trimWhitespace, false);
-		looseCollections = getBooleanProperty(RDF_looseCollections, false);
+		trimWhitespace = getBooleanProperty(RDF_trimWhitespace);
+		looseCollections = getBooleanProperty(RDF_looseCollections);
 		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
 		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);

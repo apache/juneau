@@ -513,12 +513,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 */
 	public XmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		autoDetectNamespaces = ! getBooleanProperty(XML_disableAutoDetectNamespaces, false);
-		enableNamespaces = getBooleanProperty(XML_enableNamespaces, false);
-		addNamespaceUrlsToRoot = getBooleanProperty(XML_addNamespaceUrisToRoot, false);
+		autoDetectNamespaces = ! getBooleanProperty(XML_disableAutoDetectNamespaces);
+		enableNamespaces = getBooleanProperty(XML_enableNamespaces);
+		addNamespaceUrlsToRoot = getBooleanProperty(XML_addNamespaceUrisToRoot);
 		defaultNamespace = getInstanceProperty(XML_defaultNamespace, Namespace.class, DEFAULT_JUNEAU_NAMESPACE);
-		addBeanTypes = getBooleanProperty(XML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
-		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, new Namespace[0]);
+		addBeanTypes = getBooleanProperty(XML_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
+		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class);
 	}
 
 	@Override /* Context */

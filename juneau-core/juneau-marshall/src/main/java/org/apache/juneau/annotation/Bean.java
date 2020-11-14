@@ -126,12 +126,9 @@ public @interface Bean {
 	 * <p>
 	 * When <jk>true</jk>, fluent setters will be detected on beans.
 	 *
-	 * <p>
-	 * Fluent setters
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<ja>@Bean</ja>(fluentSetters=<jk>true</jk>)
+	 * 	<ja>@Bean</ja>(findFluentSetters=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public int</jk> getId() {...}
 	 * 		<jk>public</jk> MyBean id(<jk>int</jk> id) {...}
@@ -148,10 +145,10 @@ public @interface Bean {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 */
-	boolean fluentSetters() default false;
+	boolean findFluentSetters() default false;
 
 	/**
 	 * Implementation class.

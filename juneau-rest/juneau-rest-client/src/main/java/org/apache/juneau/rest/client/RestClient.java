@@ -288,7 +288,7 @@ import org.apache.juneau.utils.*;
  * 		.<jsm>create</jsm>()
  * 		.json()
  * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
- * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
+ * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
  * 		.build();
  * </p>
  *
@@ -2010,13 +2010,13 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	@SuppressWarnings("unchecked")
 	protected RestClient(PropertyStore ps) {
 		super(ps);
-		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class, null);
-		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);
+		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class);
+		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
-		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose, false);
+		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose);
 		this.rootUri = StringUtils.nullIfEmpty(getStringProperty(RESTCLIENT_rootUri, "").replaceAll("\\/$", ""));
 		this.leakDetection = getBooleanProperty(RESTCLIENT_leakDetection, isDebug());
-		this.ignoreErrors = getBooleanProperty(RESTCLIENT_ignoreErrors, false);
+		this.ignoreErrors = getBooleanProperty(RESTCLIENT_ignoreErrors);
 		this.logger = getInstanceProperty(RESTCLIENT_logger, Logger.class, Logger.getLogger(RestClient.class.getName()));
 		this.logRequests = getInstanceProperty(RESTCLIENT_logRequests, DetailLevel.class, isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
 		this.logRequestsLevel = getInstanceProperty(RESTCLIENT_logRequestsLevel, Level.class, isDebug() ? Level.WARNING : Level.OFF);
@@ -2090,7 +2090,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 
 		this.callHandler = getInstanceProperty(RESTCLIENT_callHandler, RestCallHandler.class, BasicRestCallHandler.class, ResourceResolver.FUZZY, ps, this);
 
-		this.interceptors = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
+		this.interceptors = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class);
 
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 	}

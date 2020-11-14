@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * All other serializers simply convert it to a simple bean.
  */
 @HtmlLink
-@Bean(fluentSetters=true)
+@Bean(findFluentSetters=true)
 public class LinkString implements Comparable<LinkString> {
 	private String name;
 	private java.net.URI uri;

@@ -74,7 +74,7 @@ public class BeanAnnotation {
 			.dictionary(a.dictionary())
 			.example(r.resolve(a.example()))
 			.excludeProperties(r.resolve(a.excludeProperties()))
-			.fluentSetters(a.fluentSetters())
+			.findFluentSetters(a.findFluentSetters())
 			.implClass(a.implClass())
 			.interceptor(a.interceptor())
 			.interfaceClass(a.interfaceClass())
@@ -109,7 +109,7 @@ public class BeanAnnotation {
 		Class<? extends BeanInterceptor<?>> interceptor=BeanInterceptor.Default.class;
 		Class<? extends PropertyNamer> propertyNamer=BasicPropertyNamer.class;
 		String example="", excludeProperties="", p="", properties="", readOnlyProperties="", ro="", typeName="", typePropertyName="", wo="", writeOnlyProperties="", xp="";
-		boolean fluentSetters, sort;
+		boolean findFluentSetters, sort;
 
 		/**
 		 * Constructor.
@@ -161,13 +161,13 @@ public class BeanAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Bean#fluentSetters()} property on this annotation.
+		 * Sets the {@link Bean#findFluentSetters()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object (for method chaining).
 		 */
-		public Builder fluentSetters(boolean value) {
-			this.fluentSetters = value;
+		public Builder findFluentSetters(boolean value) {
+			this.findFluentSetters = value;
 			return this;
 		}
 
@@ -361,7 +361,7 @@ public class BeanAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Bean {
 
-		private final boolean fluentSetters, sort;
+		private final boolean findFluentSetters, sort;
 		private final Class<? extends BeanInterceptor<?>> interceptor;
 		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> implClass, interfaceClass, stopClass;
@@ -373,7 +373,7 @@ public class BeanAnnotation {
 			this.dictionary = copyOf(b.dictionary);
 			this.example = b.example;
 			this.excludeProperties = b.excludeProperties;
-			this.fluentSetters = b.fluentSetters;
+			this.findFluentSetters = b.findFluentSetters;
 			this.implClass = b.implClass;
 			this.interceptor = b.interceptor;
 			this.interfaceClass = b.interfaceClass;
@@ -408,8 +408,8 @@ public class BeanAnnotation {
 		}
 
 		@Override /* Bean */
-		public boolean fluentSetters() {
-			return fluentSetters;
+		public boolean findFluentSetters() {
+			return findFluentSetters;
 		}
 
 		@Override /* Bean */

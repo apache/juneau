@@ -898,7 +898,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder logToConsole() {
-		return set(RESTCLIENT_logToConsole, true);
+		return set(RESTCLIENT_logToConsole);
 	}
 
 	/**
@@ -2607,7 +2607,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepHttpClientOpen() {
-		return set(RESTCLIENT_keepHttpClientOpen, true);
+		return set(RESTCLIENT_keepHttpClientOpen);
 	}
 
 	/**
@@ -2849,7 +2849,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder leakDetection() {
-		return set(RESTCLIENT_leakDetection, true);
+		return set(RESTCLIENT_leakDetection);
 	}
 
 	/**
@@ -3460,7 +3460,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder detectRecursions() {
-		return set(BEANTRAVERSE_detectRecursions, true);
+		return set(BEANTRAVERSE_detectRecursions);
 	}
 
 	/**
@@ -3512,7 +3512,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ignoreRecursions() {
-		return set(BEANTRAVERSE_ignoreRecursions, true);
+		return set(BEANTRAVERSE_ignoreRecursions);
 	}
 
 	/**
@@ -3649,7 +3649,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addBeanTypes() {
-		return set(SERIALIZER_addBeanTypes, true);
+		return set(SERIALIZER_addBeanTypes);
 	}
 
 	/**
@@ -3702,7 +3702,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder addRootType() {
-		return set(SERIALIZER_addRootType, true);
+		return set(SERIALIZER_addRootType);
 	}
 
 	/**
@@ -3743,7 +3743,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder keepNullProperties() {
-		return set(SERIALIZER_keepNullProperties, true);
+		return set(SERIALIZER_keepNullProperties);
 	}
 
 	/**
@@ -3781,7 +3781,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortCollections() {
-		return set(SERIALIZER_sortCollections, true);
+		return set(SERIALIZER_sortCollections);
 	}
 
 	/**
@@ -3819,7 +3819,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder sortMaps() {
-		return set(SERIALIZER_sortMaps, true);
+		return set(SERIALIZER_sortMaps);
 	}
 
 	/**
@@ -3864,7 +3864,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyCollections() {
-		return set(SERIALIZER_trimEmptyCollections, true);
+		return set(SERIALIZER_trimEmptyCollections);
 	}
 
 	/**
@@ -3908,7 +3908,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimEmptyMaps() {
-		return set(SERIALIZER_trimEmptyMaps, true);
+		return set(SERIALIZER_trimEmptyMaps);
 	}
 
 	/**
@@ -3943,7 +3943,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnWrite() {
-		return set(SERIALIZER_trimStrings, true);
+		return set(SERIALIZER_trimStrings);
 	}
 
 	/**
@@ -4229,7 +4229,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace);
 	}
 
 	/**
@@ -4266,7 +4266,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder ws() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(WSERIALIZER_useWhitespace);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4382,7 +4382,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder strict() {
-		return set(PARSER_strict, true);
+		return set(PARSER_strict);
 	}
 
 	/**
@@ -4419,7 +4419,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder trimStringsOnRead() {
-		return set(PARSER_trimStrings, true);
+		return set(PARSER_trimStrings);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -4729,6 +4729,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -4743,6 +4749,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RestClientBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RestClientBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -4783,30 +4795,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -4821,6 +4809,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RestClientBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -4861,20 +4867,20 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public RestClientBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public RestClientBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public RestClientBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -4891,8 +4897,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public RestClientBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RestClientBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -4915,14 +4927,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder fluentSetters() {
-		super.fluentSetters();
+	public RestClientBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RestClientBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public RestClientBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

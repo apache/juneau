@@ -34,7 +34,7 @@ import org.apache.juneau.jsonschema.annotation.Schema;
  * 	<li class='link'>{@doc RestmPredefinedHelperBeans}
  * </ul>
  */
-@Bean(properties="name,description", fluentSetters=true)
+@Bean(properties="name,description", findFluentSetters=true)
 @Response(schema=@Schema(ignore=true))
 public final class ResourceDescription implements Comparable<ResourceDescription> {
 

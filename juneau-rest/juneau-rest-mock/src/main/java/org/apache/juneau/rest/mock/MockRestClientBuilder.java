@@ -307,6 +307,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -321,6 +327,12 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public MockRestClientBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public MockRestClientBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -361,30 +373,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -399,6 +387,24 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public MockRestClientBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -439,20 +445,20 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public MockRestClientBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public MockRestClientBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public MockRestClientBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -469,8 +475,14 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public MockRestClientBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public MockRestClientBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -493,14 +505,14 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder fluentSetters() {
-		super.fluentSetters();
+	public MockRestClientBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public MockRestClientBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public MockRestClientBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

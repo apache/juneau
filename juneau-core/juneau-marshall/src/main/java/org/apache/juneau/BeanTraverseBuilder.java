@@ -91,7 +91,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder detectRecursions() {
-		return set(BEANTRAVERSE_detectRecursions, true);
+		return set(BEANTRAVERSE_detectRecursions);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public BeanTraverseBuilder ignoreRecursions() {
-		return set(BEANTRAVERSE_ignoreRecursions, true);
+		return set(BEANTRAVERSE_ignoreRecursions);
 	}
 
 	/**
@@ -301,6 +301,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -315,6 +321,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public BeanTraverseBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public BeanTraverseBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -361,30 +373,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -399,6 +387,24 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public BeanTraverseBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -439,20 +445,20 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public BeanTraverseBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public BeanTraverseBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public BeanTraverseBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -469,8 +475,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public BeanTraverseBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public BeanTraverseBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -505,14 +517,14 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder fluentSetters() {
-		super.fluentSetters();
+	public BeanTraverseBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public BeanTraverseBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public BeanTraverseBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

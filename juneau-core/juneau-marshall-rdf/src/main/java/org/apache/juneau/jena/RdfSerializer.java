@@ -152,33 +152,32 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_autoDetectNamespaces RDF_autoDetectNamespaces}
-	 * 	<li><b>Name:</b>  <js>"RdfSerializer.autoDetectNamespaces.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_disableAutoDetectNamespaces RDF_disableAutoDetectNamespaces}
+	 * 	<li><b>Name:</b>  <js>"RdfSerializer.disableAutoDetectNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>RdfSerializer.autoDetectNamespaces</c>
-	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_AUTODETECTNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>System property:</b>  <c>RdfSerializer.disableAutoDetectNamespaces</c>
+	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_DISABLEAUTODETECTNAMESPACES</c>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#autoDetectNamespaces()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#disableAutoDetectNamespaces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#autoDetectNamespaces(boolean)}
 	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableAutoDetectNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * Detect namespace usage before serialization.
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
 	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 */
-	public static final String RDF_autoDetectNamespaces = PREFIX + ".autoDetectNamespaces.b";
+	public static final String RDF_disableAutoDetectNamespaces = PREFIX + ".disableAutoDetectNamespaces.b";
 
 	/**
 	 * Configuration property:  Default namespaces.
@@ -214,29 +213,28 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_useXmlNamespaces RDF_useXmlNamespaces}
-	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.jena.RdfSerializer#RDF_disableUseXmlNamespaces RDF_disableUseXmlNamespaces}
+	 * 	<li><b>Name:</b>  <js>"Rdf.disableUseXmlNamespaces.b"</js>
 	 * 	<li><b>Data type:</b>  <jk>boolean</jk>
-	 * 	<li><b>System property:</b>  <c>Rdf.useXmlNamespaces</c>
+	 * 	<li><b>System property:</b>  <c>Rdf.disableUseXmlNamespaces</c>
 	 * 	<li><b>Environment variable:</b>  <c>RDFSERIALIZER_USEXMLNAMESPACES</c>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
-	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#useXmlNamespaces()}
+	 * 			<li class='ja'>{@link org.apache.juneau.jena.annotation.RdfConfig#disableUseXmlNamespaces()}
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#useXmlNamespaces(boolean)}
-	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#dontUseXmlNamespaces()}
+	 * 			<li class='jm'>{@link org.apache.juneau.jena.RdfSerializerBuilder#disableUseXmlNamespaces()}
 	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
-	public static final String RDF_useXmlNamespaces = PREFIX + ".useXmlNamespaces.b";
+	public static final String RDF_disableUseXmlNamespaces = PREFIX + ".disableUseXmlNamespaces.b";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -292,17 +290,17 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	 */
 	public RdfSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		addLiteralTypes = getBooleanProperty(RDF_addLiteralTypes, false);
-		addRootProperty = getBooleanProperty(RDF_addRootProperty, false);
-		useXmlNamespaces = getBooleanProperty(RDF_useXmlNamespaces, true);
-		looseCollections = getBooleanProperty(RDF_looseCollections, false);
-		autoDetectNamespaces = getBooleanProperty(RDF_autoDetectNamespaces, true);
+		addLiteralTypes = getBooleanProperty(RDF_addLiteralTypes);
+		addRootProperty = getBooleanProperty(RDF_addRootProperty);
+		useXmlNamespaces = ! getBooleanProperty(RDF_disableUseXmlNamespaces);
+		looseCollections = getBooleanProperty(RDF_looseCollections);
+		autoDetectNamespaces = ! getBooleanProperty(RDF_disableAutoDetectNamespaces);
 		rdfLanguage = getStringProperty(RDF_language, "RDF/XML-ABBREV");
 		juneauNs = getProperty(RDF_juneauNs, Namespace.class, DEFAULT_JUNEAU_NS);
 		juneauBpNs = getProperty(RDF_juneauBpNs, Namespace.class, DEFAULT_JUNEAUBP_NS);
 		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
-		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
+		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes));
 
 		ASortedMap<String,Object> m = ASortedMap.of();
 		for (String k : getPropertyKeys("RdfCommon"))
@@ -548,7 +546,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	/**
 	 * Auto-detect namespace usage.
 	 *
-	 * @see #RDF_autoDetectNamespaces
+	 * @see #RDF_disableAutoDetectNamespaces
 	 * @return
 	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
 	 */
@@ -570,7 +568,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon, RdfMet
 	/**
 	 * Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see #RDF_useXmlNamespaces
+	 * @see #RDF_disableUseXmlNamespaces
 	 * @return
 	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.

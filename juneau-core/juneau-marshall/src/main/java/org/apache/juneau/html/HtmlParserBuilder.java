@@ -143,6 +143,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -157,6 +163,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public HtmlParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public HtmlParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -203,30 +215,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -241,6 +229,24 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public HtmlParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -281,20 +287,20 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public HtmlParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public HtmlParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public HtmlParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -311,8 +317,14 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public HtmlParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public HtmlParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -347,14 +359,14 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public HtmlParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public HtmlParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public HtmlParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

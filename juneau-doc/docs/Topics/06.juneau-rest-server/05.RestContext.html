@@ -46,7 +46,7 @@ RestContext
 	<jk>public</jk> MyResource(RestContextBuilder builder) {
 			builder
 				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
-				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+				.set(<jsf>PARSER_debug</jsf>);
 	}
 
 	<jc>// Option #2 - Use an INIT hook.</jc>
@@ -54,7 +54,7 @@ RestContext
 	<jk>public void</jk> init(RestContextBuilder builder) <jk>throws</jk> Exception {
 			builder
 				.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>)
-				.set(<jsf>PARSER_debug</jsf>, <jk>true</jk>);
+				.set(<jsf>PARSER_debug</jsf>);
 	}
 </p>
 <p>

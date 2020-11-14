@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
@@ -108,8 +109,8 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Create a free-form set of properties.</jc>
 	 * 	PropertyStore ps = PropertyStore
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortMaps</jsf>, <jk>true</jk>)
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_sortMaps</jsf>)
+	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a serializer that uses those settings.</jc>
@@ -349,7 +350,7 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_debug</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
@@ -371,7 +372,7 @@ public abstract class ContextBuilder {
 	 */
 	@FluentSetter
 	public ContextBuilder debug() {
-		return set(CONTEXT_debug, true);
+		return set(CONTEXT_debug);
 	}
 
 	/**
@@ -605,8 +606,8 @@ public abstract class ContextBuilder {
 	 * 	<jc>// Same, but use generic set() method.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_sortMaps</jsf>, <jk>true</jk>)
-	 * 		.set(<jsf>BEAN_sortProperties</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_sortMaps</jsf>)
+	 * 		.set(<jsf>BEAN_sortProperties</jsf>)
 	 * 		.build();
 	 * </p>
 	 *
@@ -649,6 +650,31 @@ public abstract class ContextBuilder {
 	@FluentSetter
 	public ContextBuilder set(String name, Object value) {
 		psb.set(name, value);
+		return this;
+	}
+
+	/**
+	 * Convenience method for setting a boolean property to <jk>true</jk>.
+	 *
+	 * @param name The property name.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ContextBuilder set(String name) {
+		Assertions.assertString(name).msg("Property ''{0}'' is not boolean.", name).endsWith(".b");
+		psb.set(name);
+		return this;
+	}
+
+	/**
+	 * Convenience method for setting a property to <jk>null</jk>.
+	 *
+	 * @param name The property name.
+	 * @return This object (for method chaining).
+	 */
+	@FluentSetter
+	public ContextBuilder unset(String name) {
+		psb.unset(name);
 		return this;
 	}
 

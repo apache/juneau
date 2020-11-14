@@ -70,8 +70,8 @@ public class BeanFilterBuilder {
 			if (b.sort())
 				sortProperties(true);
 
-			if (b.fluentSetters())
-				fluentSetters(true);
+			if (b.findFluentSetters())
+				findFluentSetters();
 
 			if (! (b.excludeProperties().isEmpty() && b.xp().isEmpty()))
 				excludeProperties(b.excludeProperties(), b.xp());
@@ -345,40 +345,19 @@ public class BeanFilterBuilder {
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
-	 * 			fluentSetters();
+	 * 			findFluentSetters();
 	 * 		}
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#fluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public BeanFilterBuilder fluentSetters(boolean value) {
-		this.fluentSetters = value;
-		return this;
-	}
-
-	/**
-	 * Configuration property:  Find fluent setters.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>fluentSetters(<jk>true</jk>)</code>.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='ja'>{@link Bean#fluentSetters()}
-	 * 	<li class='jf'>{@link BeanContext#BEAN_fluentSetters}
+	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_findFluentSetters}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder fluentSetters() {
+	public BeanFilterBuilder findFluentSetters() {
 		this.fluentSetters = true;
 		return this;
 	}

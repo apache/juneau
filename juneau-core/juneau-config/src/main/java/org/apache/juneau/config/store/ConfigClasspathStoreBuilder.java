@@ -137,6 +137,12 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public ConfigClasspathStoreBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -151,6 +157,12 @@ public class ConfigClasspathStoreBuilder extends ConfigStoreBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public ConfigClasspathStoreBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public ConfigClasspathStoreBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 

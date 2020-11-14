@@ -264,21 +264,19 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>showDoctypeDeclaration</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
-	 * If true, an XML doctype declaration is included in the output.
+	 * If disabled, an XML doctype declaration isn't included in the output.
 	 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder rdfxml_showDoctypeDeclaration(boolean value) {
-		return set(RDF_rdfxml_showDoctypeDeclaration, value);
+	public RdfParserBuilder rdfxml_disableShowDoctypeDeclaration() {
+		return set(RDF_rdfxml_disableShowDoctypeDeclaration);
 	}
 
 	/**
@@ -344,18 +342,16 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>objectLists</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
-	 * Print object lists as comma separated lists.
+	 * Don't print object lists as comma separated lists.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder n3_objectLists(boolean value) {
-		return set(RDF_n3_objectLists, value);
+	public RdfParserBuilder n3_disableObjectLists() {
+		return set(RDF_n3_disableObjectLists);
 	}
 
 	/**
@@ -420,63 +416,55 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>abbrevBaseURI</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
-	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder n3_abbrevBaseUri(boolean value) {
-		return set(RDF_n3_abbrevBaseUri, value);
+	public RdfParserBuilder n3_disableAbbrevBaseUri() {
+		return set(RDF_n3_disableAbbrevBaseUri);
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>usePropertySymbols</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
-	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder n3_usePropertySymbols(boolean value) {
-		return set(RDF_n3_usePropertySymbols, value);
+	public RdfParserBuilder n3_disableUsePropertySymbols() {
+		return set(RDF_n3_disableUsePropertySymbols);
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>useTripleQuotedStrings</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
-	 * Allow the use of <c>"""</c> to delimit long strings.
+	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder n3_useTripleQuotedStrings(boolean value) {
-		return set(RDF_n3_useTripleQuotedStrings, value);
+	public RdfParserBuilder n3_disableUseTripleQuotedStrings() {
+		return set(RDF_n3_disableUseTripleQuotedStrings);
 	}
 
 	/**
-	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>useDoubles</c>.
+	 * <i><l>RdfParser</l> configuration property:&emsp;</i>  N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
-	 * Allow the use doubles as <c>123.456</c>.
+	 * Disallow the use of doubles as <c>123.456</c>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object (for method chaining).
 	 */
 	@FluentSetter
-	public RdfParserBuilder n3_useDoubles(boolean value) {
-		return set(RDF_n3_useDoubles, value);
+	public RdfParserBuilder n3_disableUseDoubles() {
+		return set(RDF_n3_disableUseDoubles);
 	}
 
 	/**
@@ -656,7 +644,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder looseCollections() {
-		return set(RDF_looseCollections, true);
+		return set(RDF_looseCollections);
 	}
 
 	/**
@@ -727,7 +715,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 */
 	@FluentSetter
 	public RdfParserBuilder trimWhitespace() {
-		return set(RDF_trimWhitespace, true);
+		return set(RDF_trimWhitespace);
 	}
 
 	/**
@@ -859,6 +847,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public RdfParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -873,6 +867,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public RdfParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public RdfParserBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -919,30 +919,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -957,6 +933,24 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public RdfParserBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -997,20 +991,20 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public RdfParserBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public RdfParserBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public RdfParserBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -1027,8 +1021,14 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public RdfParserBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public RdfParserBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -1063,14 +1063,14 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder fluentSetters() {
-		super.fluentSetters();
+	public RdfParserBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public RdfParserBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public RdfParserBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

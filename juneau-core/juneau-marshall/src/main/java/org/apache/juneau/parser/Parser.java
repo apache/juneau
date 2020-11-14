@@ -174,7 +174,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_autoCloseStreams</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>PARSER_autoCloseStreams</jsf>)
 	 * 		.build();
 	 *
 	 * 	Reader r = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
@@ -225,7 +225,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>BEAN_debug</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>BEAN_debug</jsf>)
 	 * 		.set(<jsf>PARSER_debugOutputLines</jsf>, 100)
 	 * 		.build();
 	 *
@@ -374,7 +374,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_strict</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>PARSER_strict</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
@@ -426,7 +426,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_trimStrings</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>PARSER_trimStrings</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// Use it.</jc>
@@ -482,7 +482,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jc>// Same, but use property.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>PARSER_unbuffered</jsf>, <jk>true</jk>)
+	 * 		.set(<jsf>PARSER_unbuffered</jsf>)
 	 * 		.build();
 	 *
 	 * 	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
@@ -539,12 +539,12 @@ public abstract class Parser extends BeanContext {
 	protected Parser(PropertyStore ps, String...consumes) {
 		super(ps);
 
-		trimStrings = getBooleanProperty(PARSER_trimStrings, false);
-		strict = getBooleanProperty(PARSER_strict, false);
-		autoCloseStreams = getBooleanProperty(PARSER_autoCloseStreams, false);
+		trimStrings = getBooleanProperty(PARSER_trimStrings);
+		strict = getBooleanProperty(PARSER_strict);
+		autoCloseStreams = getBooleanProperty(PARSER_autoCloseStreams);
 		debugOutputLines = getIntegerProperty(PARSER_debugOutputLines, 5);
-		unbuffered = getBooleanProperty(PARSER_unbuffered, false);
-		listener = getClassProperty(PARSER_listener, ParserListener.class, null);
+		unbuffered = getBooleanProperty(PARSER_unbuffered);
+		listener = getClassProperty(PARSER_listener, ParserListener.class);
 		this.consumes = new MediaType[consumes.length];
 		for (int i = 0; i < consumes.length; i++) {
 			this.consumes[i] = MediaType.of(consumes[i]);

@@ -326,10 +326,10 @@ public @interface RdfConfig {
 	String rdfxml_showXmlDeclaration() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>showDoctypeDeclaration</c>.
+	 * Configuration property:  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
-	 * If true, an XML doctype declaration is included in the output.
+	 * If true, an XML doctype declaration isn't included in the output.
 	 * <br>This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
 	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
 	 * invocation.
@@ -340,10 +340,10 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_showDoctypeDeclaration}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_rdfxml_disableShowDoctypeDeclaration}
 	 * </ul>
 	 */
-	String rdfxml_showDoctypeDeclaration() default "";
+	String rdfxml_disableShowDoctypeDeclaration() default "";
 
 	/**
 	 * Configuration property:  RDF/XML property: <c>tab</c>.
@@ -416,10 +416,10 @@ public @interface RdfConfig {
 	String n3_minGap() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>objectLists</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
-	 * Print object lists as comma separated lists.
+	 * Don't print object lists as comma separated lists.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -427,10 +427,10 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_objectLists}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableObjectLists}
 	 * </ul>
 	 */
-	String n3_objectLists() default "";
+	String n3_disableObjectLists() default "";
 
 	/**
 	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
@@ -502,10 +502,10 @@ public @interface RdfConfig {
 	String n3_widePropertyLen() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>abbrevBaseURI</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
-	 * Control whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -513,16 +513,16 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_abbrevBaseUri}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableAbbrevBaseUri}
 	 * </ul>
 	 */
-	String n3_abbrevBaseUri() default "";
+	String n3_disableAbbrevBaseUri() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>usePropertySymbols</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
-	 * Control whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -530,16 +530,16 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_usePropertySymbols}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUsePropertySymbols}
 	 * </ul>
 	 */
-	String n3_usePropertySymbols() default "";
+	String n3_disableUsePropertySymbols() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useTripleQuotedStrings</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
-	 * Allow the use of <c>"""</c> to delimit long strings.
+	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -547,16 +547,16 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_useTripleQuotedStrings}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUseTripleQuotedStrings}
 	 * </ul>
 	 */
-	String n3_useTripleQuotedStrings() default "";
+	String n3_disableUseTripleQuotedStrings() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>useDoubles</c>.
+	 * Configuration property:  N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
-	 * Allow the use doubles as <c>123.456</c>.
+	 * Disallow the use doubles as <c>123.456</c>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -564,10 +564,10 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_useDoubles}
+	 * 	<li class='jf'>{@link RdfCommon#RDF_n3_disableUseDoubles}
 	 * </ul>
 	 */
-	String n3_useDoubles() default "";
+	String n3_disableUseDoubles() default "";
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
@@ -711,13 +711,13 @@ public @interface RdfConfig {
 	String addRootProperty() default "";
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Configuration property:  Disable auto-detect namespace usage.
 	 *
 	 * <p>
-	 * Detect namespace usage before serialization.
+	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
 	 * the root element is serialized.
 	 *
 	 * <ul class='notes'>
@@ -726,10 +726,10 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_autoDetectNamespaces}
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableAutoDetectNamespaces}
 	 * </ul>
 	 */
-	String autoDetectNamespaces() default "";
+	String disableAutoDetectNamespaces() default "";
 
 	/**
 	 * Configuration property:  Default namespaces.
@@ -749,7 +749,7 @@ public @interface RdfConfig {
 	String[] namespaces() default {};
 
 	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 * Configuration property:  Disable reuse of XML namespaces when RDF namespaces not specified.
 	 *
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
@@ -759,16 +759,16 @@ public @interface RdfConfig {
 	 * 	<li>
 	 * 		Possible values:
 	 * 		<ul>
-	 * 			<li><js>"true"</js> (default)
-	 * 			<li><js>"false"</js>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
 	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_disableUseXmlNamespaces}
 	 * </ul>
 	 */
-	String useXmlNamespaces() default "";
+	String disableUseXmlNamespaces() default "";
 }

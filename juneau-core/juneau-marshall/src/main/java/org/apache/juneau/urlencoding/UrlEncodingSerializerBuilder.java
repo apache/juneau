@@ -70,7 +70,7 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	 */
 	@FluentSetter
 	public UrlEncodingSerializerBuilder expandedParams() {
-		return set(URLENC_expandedParams, true);
+		return set(URLENC_expandedParams);
 	}
 
 	// <FluentSetters>
@@ -160,6 +160,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -174,6 +180,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public UrlEncodingSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public UrlEncodingSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -220,30 +232,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -258,6 +246,24 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public UrlEncodingSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -298,20 +304,20 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public UrlEncodingSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public UrlEncodingSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -328,8 +334,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public UrlEncodingSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public UrlEncodingSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -364,14 +376,14 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public UrlEncodingSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public UrlEncodingSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public UrlEncodingSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 

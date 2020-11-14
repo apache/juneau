@@ -122,7 +122,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedDescriptions() {
-		return set(JSONSCHEMA_allowNestedDescriptions, true);
+		return set(JSONSCHEMA_allowNestedDescriptions);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder allowNestedExamples() {
-		return set(JSONSCHEMA_allowNestedExamples, true);
+		return set(JSONSCHEMA_allowNestedExamples);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 */
 	@FluentSetter
 	public JsonSchemaSerializerBuilder useBeanDefs() {
-		return set(JSONSCHEMA_useBeanDefs, true);
+		return set(JSONSCHEMA_useBeanDefs);
 	}
 
 	// <FluentSetters>
@@ -319,6 +319,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder set(String name) {
+		super.set(name);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -333,6 +339,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - ContextBuilder */
 	public JsonSchemaSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* GENERATED - ContextBuilder */
+	public JsonSchemaSerializerBuilder unset(String name) {
+		super.unset(name);
 		return this;
 	}
 
@@ -379,30 +391,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder disableBeansRequireSomeProperties() {
-		super.disableBeansRequireSomeProperties();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireDefaultConstructor() {
-		super.beansRequireDefaultConstructor();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSerializable() {
-		super.beansRequireSerializable();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beansRequireSettersForGetters() {
-		super.beansRequireSettersForGetters();
-		return this;
-	}
-
-	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beanProperties(Map<String,Object> values) {
 		super.beanProperties(values);
 		return this;
@@ -417,6 +405,24 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* GENERATED - BeanContextBuilder */
 	public JsonSchemaSerializerBuilder beanProperties(String beanClassName, String properties) {
 		super.beanProperties(beanClassName, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
+		super.beanPropertiesExcludes(values);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		super.beanPropertiesExcludes(beanClass, properties);
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
+		super.beanPropertiesExcludes(beanClassName, properties);
 		return this;
 	}
 
@@ -457,20 +463,20 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanPropertiesExcludes(Map<String,Object> values) {
-		super.beanPropertiesExcludes(values);
+	public JsonSchemaSerializerBuilder beansRequireDefaultConstructor() {
+		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-		super.beanPropertiesExcludes(beanClass, properties);
+	public JsonSchemaSerializerBuilder beansRequireSerializable() {
+		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder beanPropertiesExcludes(String beanClassName, String properties) {
-		super.beanPropertiesExcludes(beanClassName, properties);
+	public JsonSchemaSerializerBuilder beansRequireSettersForGetters() {
+		super.beansRequireSettersForGetters();
 		return this;
 	}
 
@@ -487,8 +493,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder disableSilentlyIgnoreMissingSetters() {
-		super.disableSilentlyIgnoreMissingSetters();
+	public JsonSchemaSerializerBuilder disableBeansRequireSomeProperties() {
+		super.disableBeansRequireSomeProperties();
+		return this;
+	}
+
+	@Override /* GENERATED - BeanContextBuilder */
+	public JsonSchemaSerializerBuilder disableIgnoreMissingSetters() {
+		super.disableIgnoreMissingSetters();
 		return this;
 	}
 
@@ -523,14 +535,14 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder fluentSetters() {
-		super.fluentSetters();
+	public JsonSchemaSerializerBuilder findFluentSetters() {
+		super.findFluentSetters();
 		return this;
 	}
 
 	@Override /* GENERATED - BeanContextBuilder */
-	public JsonSchemaSerializerBuilder fluentSetters(Class<?> on) {
-		super.fluentSetters(on);
+	public JsonSchemaSerializerBuilder findFluentSetters(Class<?> on) {
+		super.findFluentSetters(on);
 		return this;
 	}
 
@@ -799,8 +811,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* GENERATED - JsonSerializerBuilder */
-	public JsonSchemaSerializerBuilder simple() {
-		super.simple();
+	public JsonSchemaSerializerBuilder simpleMode() {
+		super.simpleMode();
 		return this;
 	}
 
