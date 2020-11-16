@@ -35,7 +35,6 @@ import java.lang.annotation.*;
 @Target(ANNOTATION_TYPE)
 @Retention(RUNTIME)
 @Inherited
-@Deprecated
 public @interface Property {
 
 	/**
