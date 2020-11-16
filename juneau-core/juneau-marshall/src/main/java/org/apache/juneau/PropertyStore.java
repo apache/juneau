@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.PropertyStoreBuilder.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -565,6 +566,7 @@ public final class PropertyStore {
 	 * @return A new property instance.
 	 */
 	public <T> T getInstanceProperty(String key, Object outer, Class<T> type, Object def, ResourceResolver resolver, Object...args) {
+		Assertions.assertArgNotNull("type", type);
 		Property p = findProperty(key);
 		if (p != null)
 			return p.asInstance(outer, type, resolver, args);

@@ -25,6 +25,7 @@ import javax.servlet.http.*;
 
 import org.apache.http.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
@@ -223,7 +224,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		MOCKRESTCLIENT_restBeanCtx = PREFIX + "restBeanCtx.o",
 		MOCKRESTCLIENT_servletPath = PREFIX + "servletPath.s",
 		MOCKRESTCLIENT_contextPath = PREFIX + "contextPath.s",
-		MOCKRESTCLIENT_mockHttpClientConnectionManager = PREFIX + "mockHttpClientConnectionManager.o",
 		MOCKRESTCLIENT_pathVars = PREFIX + "pathVars.oms";
 
 
@@ -257,7 +257,10 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		this.contextPath = getStringProperty(MOCKRESTCLIENT_contextPath, "");
 		this.servletPath = getStringProperty(MOCKRESTCLIENT_servletPath, "");
 		this.pathVars = getMapProperty(MOCKRESTCLIENT_pathVars, String.class);
-		getInstanceProperty(MOCKRESTCLIENT_mockHttpClientConnectionManager, MockHttpClientConnectionManager.class).init(this);
+
+		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
+		if (ccm instanceof MockHttpClientConnectionManager)
+			((MockHttpClientConnectionManager)ccm).init(this);
 	}
 
 	private static PropertyStore preInit(PropertyStore ps) {

@@ -16,6 +16,7 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -287,5 +288,20 @@ public class Assertions {
 	 */
 	public static StringAssertion assertReader(Reader r) throws IOException {
 		return new StringAssertion(r == null ? null : IOUtils.read(r));
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
+	 *
+	 * @param <T> The argument data type.
+	 * @param arg The argument name.
+	 * @param o The object to check.
+	 * @return The same argument.
+	 * @throws IllegalArgumentException Constructed exception.
+	 */
+	public static <T> T assertArgNotNull(String arg, T o) throws IllegalArgumentException {
+		if (o == null)
+			throw new BasicIllegalArgumentException("Argument ''{0}'' cannot be null", arg);
+		return o;
 	}
 }

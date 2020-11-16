@@ -72,6 +72,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 */
 	protected MockRestClientBuilder(PropertyStore ps) {
 		super(ps);
+		connectionManager(new MockHttpClientConnectionManager());
 	}
 
 	/**
@@ -81,7 +82,7 @@ public class MockRestClientBuilder extends RestClientBuilder {
 	 * Provided so that this class can be easily subclassed.
 	 */
 	protected MockRestClientBuilder() {
-		super(null);
+		this(null);
 	}
 
 	/**
@@ -214,9 +215,6 @@ public class MockRestClientBuilder extends RestClientBuilder {
 
 	@Override /* ContextBuilder */
 	public <T extends Context> T build(Class<T> c) {
-		MockHttpClientConnectionManager cm = new MockHttpClientConnectionManager();
-		set(MOCKRESTCLIENT_mockHttpClientConnectionManager, cm);
-		connectionManager(cm);
 		return super.build(c);
 	}
 

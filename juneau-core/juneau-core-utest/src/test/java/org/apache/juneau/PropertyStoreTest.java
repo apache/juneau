@@ -1564,6 +1564,7 @@ public class PropertyStoreTest {
 	public void testSet() {
 		PropertyStoreBuilder b = PropertyStore.create();
 		b.set(OMap.of("A.foo", "bar"));
+		b.clear();
 		b.set(OMap.of("A.baz", "qux"));
 		b.add(null);
 		assertObject(b.build()).json().is("{A:{baz:'qux'}}");

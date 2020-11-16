@@ -194,13 +194,15 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a11_set() throws Exception {
-		client(null).set(
+		client(null)
+			.add(
 				AMap.of(
 					JSON_simpleMode,true,
 					WSERIALIZER_quoteChar,"'",
 					MOCKRESTCLIENT_restBean,A.class
 				)
-			).json().build().post("/echoBody",new A11()).run().assertBody().is("{foo:1}")
+			)
+			.json().build().post("/echoBody",new A11()).mediaType("text/json").run().assertBody().is("{foo:1}")
 		;
 	}
 

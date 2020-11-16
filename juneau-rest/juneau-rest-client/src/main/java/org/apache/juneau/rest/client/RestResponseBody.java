@@ -816,10 +816,12 @@ public class RestResponseBody implements HttpEntity {
 			if (type.hasInputStreamMutater())
 				return type.getInputStreamMutater().mutate(asInputStream());
 
-			throw new ParseException(
-				"Unsupported media-type in request header ''Content-Type'': ''{0}''",
-				response.getStringHeader("Content-Type")
-			);
+			ct = response.getStringHeader("Content-Type");
+
+			if (ct == null && client.hasParsers())
+				throw new ParseException("Content-Type not specified in response header.  Cannot find appropriate parser.");
+
+			throw new ParseException("Unsupported media-type in request header ''Content-Type'': ''{0}''", ct);
 
 		} catch (ParseException | IOException e) {
 			response.close();

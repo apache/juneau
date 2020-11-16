@@ -28,7 +28,7 @@ import org.apache.http.protocol.*;
  *
  * This implementation is NOT thread safe.
  */
-class MockHttpClientConnectionManager implements HttpClientConnectionManager {
+final class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	private ConnectionRequest cr;
 
@@ -75,4 +75,15 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	@Override /* HttpClientConnectionManager */
 	public void shutdown() {}
+
+	@Override /* Object */
+	public int hashCode() {
+		return MockHttpClientConnectionManager.class.hashCode();
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		// All MockHttpClientConnectionManagers are considered equal.
+		return o != null && o instanceof MockHttpClientConnectionManager;
+	}
 }

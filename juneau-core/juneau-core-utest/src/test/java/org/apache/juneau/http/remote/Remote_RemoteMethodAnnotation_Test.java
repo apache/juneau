@@ -23,7 +23,6 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -238,7 +237,7 @@ public class Remote_RemoteMethodAnnotation_Test {
 
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
-		D1 x = client(D.class).openApi().build().getRemote(D1.class);
+		D1 x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("foo",IOUtils.read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("foo",IOUtils.read(x.postX3("foo")));
@@ -256,10 +255,6 @@ public class Remote_RemoteMethodAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
-
-	private static RestClientBuilder client(Class<?> c) {
-		return MockRestClient.create(c).simpleJson();
-	}
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
 		return MockRestClient.build(rest).getRemote(t);

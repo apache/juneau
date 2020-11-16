@@ -1093,6 +1093,31 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	public static final String RESTCLIENT_callHandler = PREFIX + "callHandler.o";
 
 	/**
+	 * Configuration property:  Connection manager
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>ID:</b>  {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_connectionManager RESTCLIENT_connectionManager}
+	 * 	<li><b>Name:</b>  <js>"RestClient.connectionManager.o"</js>
+	 * 	<li><b>System property:</b>  <c>RestClient.connectionManager</c>
+	 * 	<li><b>Data type:</b>
+	 * 	<ul>
+	 * 		<li><b>Data type:</b>  {@link org.apache.http.conn.HttpClientConnectionManager}</c>
+	 * 	</ul>
+	 * 	<li><b>Default:</b>  Value returned by {@link org.apache.juneau.rest.client.RestClientBuilder#createConnectionManager()}
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClientBuilder#connectionManager(HttpClientConnectionManager)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Allows you to override the connection manager used by the HTTP client.
+	 */
+	public static final String RESTCLIENT_connectionManager = PREFIX + "connectionManager.o";
+
+	/**
 	 * Configuration property:  Console print stream.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -1953,6 +1978,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	private final HeaderSupplier headers;
 	private final NameValuePairSupplier query, formData;
 	final CloseableHttpClient httpClient;
+	private final HttpClientConnectionManager connectionManager;
 	private final boolean keepHttpClientOpen, leakDetection;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
@@ -2011,6 +2037,7 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	protected RestClient(PropertyStore ps) {
 		super(ps);
 		this.httpClient = getInstanceProperty(RESTCLIENT_httpClient, CloseableHttpClient.class);
+		this.connectionManager = getInstanceProperty(RESTCLIENT_connectionManager, HttpClientConnectionManager.class);
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen);
 		this.errorCodes = getInstanceProperty(RESTCLIENT_errorCodes, Predicate.class, ERROR_CODES_DEFAULT);
 		this.executorServiceShutdownOnClose = getBooleanProperty(RESTCLIENT_executorServiceShutdownOnClose);
@@ -3452,6 +3479,15 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 	}
 
 	/**
+	 * Returns the connection manager if one was specified in the client builder.
+	 *
+	 * @return The connection manager.  May be <jk>null</jk>.
+	 */
+	public HttpClientConnectionManager getHttpClientConnectionManager() {
+		return connectionManager;
+	}
+
+	/**
 	 * Executes HTTP request using the default context.
 	 *
 	 * <ul class='notes'>
@@ -3709,7 +3745,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return s;
 		}
 		List<Serializer> l = serializers.getSerializers();
-		return l.size() == 1 ? l.get(0) : null;
+		return (l.size() == 1 ? l.get(0) : null);
+	}
+
+	boolean hasSerializers() {
+		return ! serializers.getSerializers().isEmpty();
 	}
 
 	/*
@@ -3726,7 +3766,11 @@ public class RestClient extends BeanContext implements HttpClient, Closeable, Re
 				return p;
 		}
 		List<Parser> l = parsers.getParsers();
-		return l.size() == 1 ? l.get(0) : null;
+		return (l.size() == 1 ? l.get(0) : null);
+	}
+
+	boolean hasParsers() {
+		return ! parsers.getParsers().isEmpty();
 	}
 
 	@SuppressWarnings("unchecked")

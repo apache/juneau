@@ -2452,6 +2452,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
+	 * Shortcut for setting the <c>Accept</c> and <c>Content-Type</c> headers on a request.
+	 *
+	 * @param value The new header values.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException Invalid input.
+	 */
+	public RestRequest mediaType(Object value) throws RestCallException {
+		return header("Accept", value).header("Content-Type", value);
+	}
+
+	/**
 	 * Sets the value for the <c>Content-Encoding</c> request header.
 	 *
 	 * <p>
@@ -2868,6 +2879,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (serializer != null)
 					entity = SerializedHttpEntity.of(input2, serializer).schema(requestBodySchema).contentType(contentType);
 				else {
+					if (client.hasSerializers()) {
+						if (contentType == null)
+							throw new RestCallException(null, null, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+						throw new RestCallException(null, null, "No matching serializer for media type ''{0}''", contentType);
+					}
 					if (input2 == null)
 						input2 = "";
 					entity = new StringEntity(BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));

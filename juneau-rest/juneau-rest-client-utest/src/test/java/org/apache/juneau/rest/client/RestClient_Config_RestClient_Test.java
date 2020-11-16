@@ -365,14 +365,22 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a09_marshalls() throws Exception {
-		RestClient x = MockRestClient.create(A.class).marshalls(Xml.DEFAULT,Json.DEFAULT).build();
+		final RestClient x = MockRestClient.create(A.class).marshalls(Xml.DEFAULT,Json.DEFAULT).build();
 
-		x.post("/echoBody",bean).run().assertBody().is("{f:1}");
+		assertThrown(()->x.post("/echoBody",bean).run()).contains("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+
+		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getBody().as(ABean.class)).contains("Content-Type not specified in response header.  Cannot find appropriate parser.");
 
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
 
+		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
 		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
+		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
 	}
 
@@ -395,19 +403,40 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a11_serializers_parsers() throws Exception {
 		@SuppressWarnings("unchecked")
-		RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
+		final RestClient x = MockRestClient.create(A.class).serializers(XmlSerializer.class,JsonSerializer.class).parsers(XmlParser.class,JsonParser.class).build();
 
-		x.post("/echoBody",bean).run().assertBody().is("{f:1}");
+		assertThrown(()->x.post("/echoBody",bean).run()).contains("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+
+		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getBody().as(ABean.class)).contains("Content-Type not specified in response header.  Cannot find appropriate parser.");
+
 		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
+
+		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
 		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
 
-		x = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
-		x.post("/echoBody",bean).run().assertBody().is("{f:1}");
-		b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
+		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
-		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
+
+		final RestClient x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
+
+		assertThrown(()->x2.post("/echoBody",bean).run()).contains("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+
+		assertThrown(()->x2.post("/echoBody",bean).contentType("text/json").run().getBody().as(ABean.class)).contains("Content-Type not specified in response header.  Cannot find appropriate parser.");
+
+		b = x2.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
+		b = x2.post("/echoBody",bean).mediaType("text/xml").run().cacheBody().assertBody().is("<object><f>1</f></object>").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
+		b = x2.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
+		assertObject(b).sameAs(bean);
+
+		b = x2.post("/echoBody",bean).mediaType("text/json").run().cacheBody().assertBody().is("{\"f\":1}").getBody().as(ABean.class);
 		assertObject(b).sameAs(bean);
 	}
 

@@ -96,7 +96,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient httpClient;
-	private HttpClientConnectionManager httpClientConnectionManager;
 	private boolean pooled;
 
 	/**
@@ -799,11 +798,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return The HTTP client to use.
 	 */
 	protected CloseableHttpClient createHttpClient() {
+		Object cm = peek(RESTCLIENT_connectionManager);
 		// Don't call createConnectionManager() if RestClient.setConnectionManager() was called.
-		if (httpClientConnectionManager == null)
+		if (cm == null)
 			httpClientBuilder.setConnectionManager(createConnectionManager());
+		else if (cm instanceof HttpClientConnectionManager)
+			httpClientBuilder.setConnectionManager((HttpClientConnectionManager)cm);
 		else
-			httpClientBuilder.setConnectionManager(httpClientConnectionManager);
+			throw new RuntimeException("Invalid type for RESTCLIENT_connectionManager: " + cm.getClass().getName());
 		return httpClientBuilder.build();
 	}
 
@@ -5284,7 +5286,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	@FluentSetter
 	public RestClientBuilder connectionManager(HttpClientConnectionManager connManager) {
-		this.httpClientConnectionManager = connManager;
+		set(RESTCLIENT_connectionManager, connManager);
 		httpClientBuilder.setConnectionManager(connManager);
 		return this;
 	}
