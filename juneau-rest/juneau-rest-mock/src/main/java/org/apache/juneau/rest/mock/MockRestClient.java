@@ -749,6 +749,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				length = 1024;
 			ByteArrayOutputStream baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
 			entity.writeTo(baos);
+			baos.flush();
 			body = baos.toByteArray();
 		}
 		sreq.get().body(body);

@@ -1847,7 +1847,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	@Override /* ConfigEventListener */
-	public void onConfigChange(ConfigEvents events) {
+	public synchronized void onConfigChange(ConfigEvents events) {
 		for (ConfigEventListener l : listeners)
 			l.onConfigChange(events);
 	}
