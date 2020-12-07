@@ -192,6 +192,7 @@ public class RestResponseBody implements HttpEntity {
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty stream.
 	 * @throws IOException If a stream or illegal state exception was thrown.
 	 */
+	@SuppressWarnings("resource")
 	public InputStream asInputStream() throws IOException {
 		try {
 			if (cache != null)

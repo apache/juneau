@@ -32,7 +32,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.Logging;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;

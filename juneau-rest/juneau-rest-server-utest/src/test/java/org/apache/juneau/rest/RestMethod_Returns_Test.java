@@ -21,7 +21,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;

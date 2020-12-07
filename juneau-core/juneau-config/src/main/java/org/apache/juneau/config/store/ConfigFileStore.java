@@ -253,6 +253,7 @@ public class ConfigFileStore extends ConfigStore {
 		}
 	}
 
+	@SuppressWarnings("cast")
 	@Override /* ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		name = resolveName(name);
@@ -278,7 +279,7 @@ public class ConfigFileStore extends ConfigStore {
 				ByteBuffer buf = ByteBuffer.allocate(1024);
 				StringBuilder sb = new StringBuilder();
 				while (fc.read(buf) != -1) {
-					sb.append(charset.decode((ByteBuffer)(buf.flip())));
+					sb.append(charset.decode((ByteBuffer)((Buffer)(buf.flip())))); // Fixes Java 11 issue involving overridden flip method.
 					buf.clear();
 				}
 				s = sb.toString();

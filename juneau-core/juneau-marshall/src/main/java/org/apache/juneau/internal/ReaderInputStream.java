@@ -19,8 +19,7 @@ package org.apache.juneau.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
+import java.nio.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
@@ -118,7 +117,7 @@ public class ReaderInputStream extends InputStream {
         this.reader = reader;
         this.encoder = encoder;
         this.encoderIn = CharBuffer.allocate(bufferSize);
-        this.encoderIn.flip();
+        ((Buffer)this.encoderIn).flip(); // Fixes Java 11 issue.
         this.encoderOut = ByteBuffer.allocate(128);
         this.encoderOut.flip();
     }

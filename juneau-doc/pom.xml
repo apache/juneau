@@ -34,7 +34,9 @@
 		
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<toolsjar>${java.home}/../lib/tools.jar</toolsjar>
+		
+		<!-- Note:  If you want to build the docs, you have to update the following location for tools.jar -->
+		<toolsjar>/Library/Java/JavaVirtualMachines/sfdc-openjdk1.8.0_212.jdk/Contents/Home/lib/tools.jar</toolsjar>
 	</properties>
 
 	<dependencies>

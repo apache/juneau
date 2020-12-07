@@ -235,15 +235,13 @@ public final class IOUtils {
 	public static byte[] readBytes(InputStream in, int buffSize) throws IOException {
 		if (buffSize == 0)
 			buffSize = 1024;
-	final ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize);
-        try {
-			int nRead;
-			byte[] b = new byte[buffSize];
-			while ((nRead = in.read(b, 0, b.length)) != -1)
-				buff.write(b, 0, nRead);
-			buff.flush();
-			return buff.toByteArray();
-        }
+		ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize);
+		int nRead;
+		byte[] b = new byte[buffSize];
+		while ((nRead = in.read(b, 0, b.length)) != -1)
+			buff.write(b, 0, nRead);
+		buff.flush();
+		return buff.toByteArray();
 	}
 
 	/**
@@ -489,7 +487,10 @@ public final class IOUtils {
 	 * @param os The output stream to close.
 	 */
 	public static void closeQuietly(OutputStream os) {
-
+		try {
+			if (os != null)
+				os.close();
+		} catch (IOException e) {}
 	}
 
 	/**
@@ -516,7 +517,10 @@ public final class IOUtils {
 	 * @param w The writer to close.
 	 */
 	public static void closeQuietly(Writer w) {
-
+		try {
+			if (w != null)
+				w.close();
+		} catch (IOException e) {}
 	}
 
 	/**

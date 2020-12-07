@@ -33,6 +33,7 @@ public class App {
 	 *
 	 * @param args Command-line arguments
 	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(App.class)
 			.initializers(new JuneauRestInitializer(App.class))

@@ -47,8 +47,7 @@ class StaticFiles {
 			String remainder = (p.equals(path) ? "" : p.substring(path.length()));
 			if (remainder.isEmpty() || remainder.startsWith("/")) {
 				String p2 = location + remainder;
-				InputStream is = staticResourceManager.getStream(p2, null);
-				try {
+				try (InputStream is = staticResourceManager.getStream(p2, null)) {
 					if (is != null) {
 						int i = p2.lastIndexOf('/');
 						String name = (i == -1 ? p2 : p2.substring(i+1));

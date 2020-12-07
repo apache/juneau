@@ -24,8 +24,6 @@ import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.remote.RemoteMethod;
-import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.marshall.*;
 import org.junit.*;
 
