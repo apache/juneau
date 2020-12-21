@@ -19,12 +19,12 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-releng</artifactId>
+		<artifactId>juneau</artifactId>
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-all</artifactId>
-	<name>juneau/releng/all</name>
+	<name>juneau/all</name>
 	<description>Apache Juneau UberJar</description>
 	<packaging>jar</packaging>
 

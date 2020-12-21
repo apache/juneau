@@ -120,7 +120,8 @@
 		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
 		<module>juneau-examples</module>
-		<module>juneau-releng</module>
+		<module>juneau-all</module>
+		<module>juneau-distrib</module>
 	</modules>
 
 	<distributionManagement>

@@ -19,13 +19,13 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-releng</artifactId>
+		<artifactId>juneau</artifactId>
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-distrib</artifactId>
 	<packaging>pom</packaging>
-	<name>juneau/releng/distrib</name>
+	<name>juneau/distrib</name>
 	<description>Apache Juneau Distribution</description>
 
 	<build>
