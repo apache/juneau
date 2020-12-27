@@ -16,8 +16,8 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.util.Locale.*;
 
-import org.apache.juneau.cp.test1.*;
-import org.apache.juneau.cp.test2.*;
+import org.apache.juneau.cp.test3.*;
+import org.apache.juneau.cp.test4.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

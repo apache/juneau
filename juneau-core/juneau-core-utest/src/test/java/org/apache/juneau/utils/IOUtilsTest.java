@@ -47,7 +47,6 @@ public class IOUtilsTest {
 	public void testLoadSystemResourceAsString() throws Exception {
 		assertNotNull(loadSystemResourceAsString("test1.txt", "."));
 		assertNull(loadSystemResourceAsString("test2.txt", "."));
-		assertNotNull(loadSystemResourceAsString("test2.txt", ".", "files"));
 		assertNull(loadSystemResourceAsString("test3.txt", "sub"));
 		assertNull(loadSystemResourceAsString("test3.txt", "sub2"));
 		assertNotNull(loadSystemResourceAsString("test3.txt", "."));

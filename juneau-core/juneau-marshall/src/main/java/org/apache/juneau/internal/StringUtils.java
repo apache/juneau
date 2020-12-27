@@ -1914,6 +1914,22 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Trims <js>'/'</js> and space characters from both the start and end of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return A new trimmed string, or the same string if no trimming was necessary.
+	 */
+	public static String trimSlashesAndSpaces(String s) {
+		if (s == null)
+			return null;
+		while (s.length() > 0 && (s.charAt(s.length()-1) == '/' || Character.isWhitespace(s.charAt(s.length()-1))))
+			s = s.substring(0, s.length()-1);
+		while (s.length() > 0 && (s.charAt(0) == '/' || Character.isWhitespace(s.charAt(0))))
+			s = s.substring(1);
+		return s;
+	}
+
+	/**
 	 * Trims <js>'/'</js> characters from the end of the specified string.
 	 *
 	 * @param s The string to trim.

@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.util.Locale.*;
 
-import org.apache.juneau.cp.test2.*;
+import org.apache.juneau.cp.test4.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.junit.*;
